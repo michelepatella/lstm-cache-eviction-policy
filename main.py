@@ -6,7 +6,6 @@ from testing import testing
 from training import training
 from validation import validation
 
-
 # PIPELINE
 # 0. PREPARE CONFIGURATION SETTINGS
 config_settings = prepare_config()
