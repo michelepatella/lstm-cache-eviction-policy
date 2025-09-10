@@ -2,8 +2,7 @@ from training.utils.model_saver import save_model
 from utils.data.AccessLogsDataset import AccessLogsDataset
 from utils.data.dataloader.dataloader_builder import create_data_loader
 from utils.data.dataloader.dataloader_setup import dataloader_setup
-from utils.data.dataloader.dataloader_utils import \
-    extract_targets_from_dataloader
+from utils.data.dataloader.dataloader_utils import extract_targets_from_dataloader
 from utils.data.dataset.dataset_splitter import split_training_set
 from utils.logs.log_utils import info, phase_var
 from utils.model.setup.model_setup import model_setup

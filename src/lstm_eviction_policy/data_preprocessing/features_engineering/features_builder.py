@@ -1,5 +1,6 @@
-from data_preprocessing.features_engineering.features_encoder import \
-    encode_time_trigonometrically
+from data_preprocessing.features_engineering.features_encoder import (
+    encode_time_trigonometrically,
+)
 from utils.logs.log_utils import info
 
 

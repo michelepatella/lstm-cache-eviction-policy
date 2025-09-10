@@ -1,10 +1,15 @@
-from data_generation.generation.requests.dynamic_requests_generator import \
-    generate_dynamic_requests
-from data_generation.generation.requests.static_requests_generator import \
-    generate_static_requests
+from data_generation.generation.requests.dynamic_requests_generator import (
+    generate_dynamic_requests,
+)
+from data_generation.generation.requests.static_requests_generator import (
+    generate_static_requests,
+)
 from data_generation.utils.df_builder import create_dataframe
 from data_generation.visualization.data_generation_plotter import (
-    plot_daily_profile, plot_key_usage_heatmap, plot_zipf_loglog)
+    plot_daily_profile,
+    plot_key_usage_heatmap,
+    plot_zipf_loglog,
+)
 from utils.data.dataset.dataset_saver import save_dataset
 from utils.logs.log_utils import debug, info, phase_var
 

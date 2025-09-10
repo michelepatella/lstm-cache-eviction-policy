@@ -1,9 +1,8 @@
 import yaml
 from yaml import YAMLError
 
-from src.lstm_eviction_policy.config.config_io.config_locator import \
-    get_config_abs_path
-from src.lstm_eviction_policy.utils.logs.log_utils import error, info
+from lstm_eviction_policy.config.config_io.config_locator import get_config_abs_path
+from lstm_eviction_policy.utils.logs.log_utils import error, info
 
 
 def load_config() -> dict:
@@ -31,9 +30,6 @@ def load_config() -> dict:
         with open(abs_config_path, "r") as f:
             config_file = yaml.safe_load(f)
     except (
-        FileNotFoundError,
-        PermissionError,
-        IsADirectoryError,
         OSError,
         YAMLError,
     ) as e:

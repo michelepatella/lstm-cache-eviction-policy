@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from src.lstm_eviction_policy.utils.logs.log_utils import error, info
+from lstm_eviction_policy.utils.logs.log_utils import error, info
 
 
 def get_config_abs_path() -> str:

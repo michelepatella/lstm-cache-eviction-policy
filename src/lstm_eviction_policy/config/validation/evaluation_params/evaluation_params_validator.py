@@ -1,6 +1,7 @@
 from config.config_io.config_reader import get_config
-from config.validation.evaluation_params.evaluation_params_checker import \
-    check_evaluation_params
+from config.validation.evaluation_params.evaluation_params_checker import (
+    check_evaluation_params,
+)
 from utils.logs.log_utils import info
 
 

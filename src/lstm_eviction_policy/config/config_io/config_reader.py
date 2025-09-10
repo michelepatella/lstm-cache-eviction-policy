@@ -1,43 +1,54 @@
-from utils.logs.log_utils import debug, info
+from typing import Any
+
+from lstm_eviction_policy.utils.logs.log_utils import error, info
 
 
-def get_config(config, keys):
+def get_config_param(config: dict, key: str) -> Any:
     """
-    Method to get the config value from the config file.
-    :param keys: Requested keys.
-    :param config: The config object.
-    :return: The config value required.
+    Retrieve a configuration parameter from
+    configuration object.
+
+    This function retrieves a configuration parameter —
+    given its key — from a configuration object containing
+    all the parameters required to run the pipeline.
+
+    Parameters:
+        config (dict): Configuration object
+        key (str): Key of the configuration parameter to be retrieved
+
+    Returns:
+        Any: Value of the configuration parameter corresponding to the specified key.
     """
-    # initial message
-    info("🔄 Config file reading started...")
+    # Default: the key of the parameter
+    # to be retrieve is composed by a single key (itself)
+    keys = [key]
 
-    if isinstance(keys, str):
-        keys = keys.split(".")
+    # Extract all the possible sub-keys contained
+    # by the specified key (e.g., "data.distribution.seed")
+    # is split into [data, distribution, seed]
+    if isinstance(key, str):
+        keys = key.split(".")
 
-    # get the config file
+    # Initialize the dictionary where
+    # to look for the next key's value,
+    # which will be finally set equal to
+    # the value of parameter to be retrieved
     value = config
 
     try:
-        # find the requested key
-        for key in keys:
-            value = value[key]
+        # Retrieve value of specified parameter
+        # starting from the outermost dictionary (e.g., data)
+        # to the innermost one (e.g., seed)
+        for subkey in keys:
+            value = value[subkey]
+    except (KeyError, TypeError) as e:
+        error(
+            f"Failed to retrieve configuration parameter '{key}' from configuration object: {e}"
+        )
+        raise RuntimeError(
+            f"Failed to retrieve configuration parameter '{key}' from configuration object"
+        ) from e
 
-        # debugging
-        debug(f"⚙️ Config value (key-value): ({'.'.join(keys)} - {value}).")
+    info(f"Configuration parameter '{key}' value retrieved: {value}")
 
-        # show a successful message
-        info(f"🟢 {keys} read.")
-
-        return value
-    except KeyError as e:
-        raise KeyError(f"KeyError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except IndexError as e:
-        raise IndexError(f"IndexError: {e}.")
-    except AttributeError as e:
-        raise AttributeError(f"AttributeError: {e}.")
-    except ValueError as e:
-        raise ValueError(f"ValueError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+    return value

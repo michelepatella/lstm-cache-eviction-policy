@@ -1,6 +1,8 @@
 from config.config_io.config_reader import get_config
 from config.validation.model_params.model_params_checker import (
-    check_general_model_params, check_model_params)
+    check_general_model_params,
+    check_model_params,
+)
 from utils.logs.log_utils import info
 
 
