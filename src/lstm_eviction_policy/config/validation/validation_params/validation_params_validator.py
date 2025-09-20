@@ -1,7 +1,9 @@
 from config.config_io.config_reader import get_config
 from config.validation.validation_params.validation_params_checker import (
-    check_cv_params, check_search_space_params,
-    check_validation_early_stopping_params)
+    check_cv_params,
+    check_search_space_params,
+    check_validation_early_stopping_params,
+)
 from utils.logs.log_utils import info
 
 

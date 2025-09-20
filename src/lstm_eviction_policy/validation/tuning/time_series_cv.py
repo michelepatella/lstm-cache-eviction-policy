@@ -1,8 +1,7 @@
 import numpy as np
 from sklearn.model_selection import TimeSeriesSplit
 from utils.data.dataloader.dataloader_builder import create_data_loader
-from utils.data.dataloader.dataloader_utils import \
-    extract_targets_from_dataloader
+from utils.data.dataloader.dataloader_utils import extract_targets_from_dataloader
 from utils.data.dataset.dataset_splitter import split_training_set
 from utils.logs.log_utils import debug, info
 from utils.model.setup.model_setup import model_setup

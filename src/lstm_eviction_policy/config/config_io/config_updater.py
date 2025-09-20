@@ -3,8 +3,7 @@ from typing import Callable
 import yaml
 
 from lstm_eviction_policy.config.config_io.config_loader import load_config
-from lstm_eviction_policy.config.config_io.config_locator import \
-    get_config_abs_path
+from lstm_eviction_policy.config.config_io.config_locator import get_config_abs_path
 from lstm_eviction_policy.utils.logs.log_utils import error, info
 
 

@@ -1,8 +1,7 @@
 import yaml
 from yaml import YAMLError
 
-from lstm_eviction_policy.config.config_io.config_locator import \
-    get_config_abs_path
+from lstm_eviction_policy.config.config_io.config_locator import get_config_abs_path
 from lstm_eviction_policy.utils.logs.log_utils import error, info
 
 

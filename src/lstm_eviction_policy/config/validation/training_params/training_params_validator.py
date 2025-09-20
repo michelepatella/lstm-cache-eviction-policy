@@ -1,7 +1,9 @@
 from config.config_io.config_reader import get_config
 from config.validation.training_params.training_params_checker import (
-    check_general_training_params, check_optimizer_params,
-    check_training_early_stopping_params)
+    check_general_training_params,
+    check_optimizer_params,
+    check_training_early_stopping_params,
+)
 from utils.logs.log_utils import info
 
 

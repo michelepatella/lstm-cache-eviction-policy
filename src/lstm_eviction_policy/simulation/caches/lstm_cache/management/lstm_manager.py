@@ -1,14 +1,15 @@
 import time
 
-from simulation.caches.lstm_cache.key_selection.key_candidates_finder import \
-    find_key_candidates
-from simulation.caches.lstm_cache.management.cold_start_manager import \
-    manage_cold_start
+from simulation.caches.lstm_cache.key_selection.key_candidates_finder import (
+    find_key_candidates,
+)
+from simulation.caches.lstm_cache.management.cold_start_manager import manage_cold_start
 from simulation.caches.utils.key_finder import find_key
 from simulation.caches.utils.seed_seq_extractor import extract_seed_seq
 from simulation.prefetching.autoregression import autoregressive_rollout
-from simulation.prefetching.confidence_interval_calculator import \
-    calculate_confidence_interval
+from simulation.prefetching.confidence_interval_calculator import (
+    calculate_confidence_interval,
+)
 from utils.logs.log_utils import info
 
 

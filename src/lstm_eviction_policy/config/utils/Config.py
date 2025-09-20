@@ -5,6 +5,8 @@ from typing import List
 Data class representing the whole
 configuration settings.
 """
+
+
 @dataclass
 class Config:
     config_file: object

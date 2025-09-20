@@ -1,11 +1,15 @@
-from simulation.evaluation.metrics.eviction_mistake_rate_calculator import \
-    calculate_eviction_mistake_rate
-from simulation.evaluation.metrics.hit_miss_rate_calculator import \
-    calculate_hit_miss_rate
-from simulation.evaluation.metrics.prefetch_hit_rate_calculator import \
-    calculate_prefetch_hit_rate
-from simulation.evaluation.metrics.prefetching_avg_latency_calculator import \
-    calculate_prefetching_avg_latency
+from simulation.evaluation.metrics.eviction_mistake_rate_calculator import (
+    calculate_eviction_mistake_rate,
+)
+from simulation.evaluation.metrics.hit_miss_rate_calculator import (
+    calculate_hit_miss_rate,
+)
+from simulation.evaluation.metrics.prefetch_hit_rate_calculator import (
+    calculate_prefetch_hit_rate,
+)
+from simulation.evaluation.metrics.prefetching_avg_latency_calculator import (
+    calculate_prefetching_avg_latency,
+)
 from utils.logs.log_utils import info
 
 
