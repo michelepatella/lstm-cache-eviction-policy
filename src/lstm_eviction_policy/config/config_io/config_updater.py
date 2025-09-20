@@ -1,102 +1,115 @@
+from typing import Callable
+
 import yaml
-from config.config_io.config_loader import load_config
-from config.config_io.config_locator import get_config_abs_path
-from utils.logs.log_utils import debug, info
+
+from lstm_eviction_policy.config.config_io.config_loader import load_config
+from lstm_eviction_policy.config.config_io.config_locator import \
+    get_config_abs_path
+from lstm_eviction_policy.utils.logs.log_utils import error, info
 
 
-def _merge_config(config, updates):
+def _merge_config(original_config: dict | None, updated_config: dict) -> dict:
     """
-    Method merge an update config with the original config.
-    :param config: The config object.
-    :param updates: The updated config object.
-    :return: The merged config object.
+    Recursively merge an update configuration object
+    into the original configuration object.
+
+    This function takes an original configuration object
+    and an update one, and merges them recursively. If a
+    key exists in both objects, the merge is applied recursively.
+    Otherwise, the update value replaces the original one.
+
+    Parameters:
+        original_config (dict | None): Original configuration object. If none, an empty
+            dictionary is used.
+        updated_config (dict): Configuration object containing updates to
+            apply to the original configuration object.
+
+    Returns:
+        dict: Updated configuration object after merging.
     """
-    # initial message
-    info("🔄 Config merging started...")
+    # Check whether the original
+    # configuration is None, using
+    # an empty dictionary consequently
+    if original_config is None:
+        original_config = {}
 
-    # check if the config is None
-    if config is None:
-        config = {}
-
-    # check if there is something to update
-    if not isinstance(updates, dict):
-        return config
+    # Check whether the updated configuration
+    # object is not a dictionary, returning
+    # the original configuration object consequently
+    if not isinstance(updated_config, dict):
+        error("Updated configuration object must be a dictionary")
+        raise TypeError("Updated configuration object must be a dictionary")
 
     try:
-        # apply merge recursively
-        for key, value in updates.items():
-            # debugging
-            debug(f"⚙️ Merging (key-value): ({key} - {value}).")
-
-            if isinstance(value, dict) and isinstance(config.get(key), dict):
-                _merge_config(config[key], value)
+        for key, value in updated_config.items():
+            # If the current value is a dictionary
+            # and is contained in both objects, apply
+            # merge recursively
+            if isinstance(value, dict) and isinstance(original_config.get(key), dict):
+                original_config[key] = _merge_config(original_config[key], value)
             else:
-                config[key] = value
-    except AttributeError as e:
-        raise AttributeError(f"AttributeError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except KeyError as e:
-        raise KeyError(f"KeyError: {e}.")
+                # Otherwise, extract the
+                # corresponding value
+                original_config[key] = value
     except RecursionError as e:
-        raise RecursionError(f"RecursionError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+        error(f"Failed to merge configuration objects: {e}")
+        raise RuntimeError("Failed to merge configuration objects") from e
 
-    # show a successful message
-    info("🟢 Config merged.")
+    info(f"Configuration objects merged")
 
-    return config
+    return original_config
 
 
-def update_config(updated_config, prepare_config):
+def update_config(updated_config: dict, prepare_config: Callable) -> dict:
     """
-    Method to update the config file.
-    :param prepare_config: Method to validate the config and
-    return the updated config settings.
-    :param updated_config: The updated config to write.
-    :return: The updated config settings.
+    Update the YAML configuration file by merging the
+    updated configuration object into the original one.
+
+    This function takes an updated configuration object and merges
+    it into the original one. Then, runs validation on the entire new
+    configuration object before using it as new settings.
+
+    Parameters:
+        updated_config (dict): Updated configuration object.
+        prepare_config (Callable): Method to run validation on
+            the new configuration object and set it as new settings.
+
+    Returns:
+        dict: Updated, validated configuration object.
     """
-    # initial message
-    info("🔄 Config file updating started...")
+    # Get the absolute path of the YAML
+    # configuration file
+    abs_config_path = get_config_abs_path()
 
-    # get the abs path of the config file
-    config_path = get_config_abs_path()
-
-    # debugging
-    debug(f"⚙️ Updated config to be saved: {updated_config}.")
-
-    # load the original file
+    # Load the original YAML configuration file
     original_config = load_config()
 
-    # merge update configs with config file
+    # Merge updated configuration object into
+    # the original one, and get the resulting
+    # configuration object
     merged_config = _merge_config(original_config, updated_config)
 
     try:
-        # update the config file
-        with open(config_path, "w") as config_file:
+        # Update the YAML configuration file by
+        # overwriting it with the updated version
+        with open(abs_config_path, "w") as config_file:
             yaml.dump(
-                merged_config,
-                config_file,
-                default_flow_style=False,
-                sort_keys=False,
-                allow_unicode=True,
+                merged_config,  # New configuration object
+                config_file,  # Previous configuration object
+                default_flow_style=False,  # Use block style for YAML file
+                sort_keys=False,  # Preserve the original order of the keys
+                allow_unicode=True,  # Allow writing Unicode characters to YAML file
             )
-    except FileNotFoundError as e:
-        raise FileNotFoundError(f"FileNotFoundError: {e}.")
-    except PermissionError as e:
-        raise PermissionError(f"PermissionError: {e}.")
-    except IsADirectoryError as e:
-        raise IsADirectoryError(f"IsADirectoryError: {e}.")
     except OSError as e:
-        raise OSError(f"OSError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+        error(f"Failed to update YAML configuration file at {abs_config_path}: {e}")
+        raise RuntimeError(
+            f"Failed to update YAML configuration file at {abs_config_path}"
+        ) from e
 
-    # show a successful message
-    info("🟢 Config file updated.")
-
-    # re-validate config and get the new settings
+    # Revalidate the updated YAML configuration
+    # file and get the new settings (if everything went well)
     new_config_settings = prepare_config()
+
+    info(f"YAML configuration file updated at {abs_config_path}")
 
     return new_config_settings

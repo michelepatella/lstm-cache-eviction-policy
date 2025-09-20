@@ -1,12 +1,8 @@
 from config.config_io.config_reader import get_config
 from config.validation.data_params.data_params_checker import (
-    check_access_behavior_params,
-    check_dataset_params,
-    check_distribution_params,
-    check_sequence_params,
-    check_temporal_pattern_params,
-    check_zipf_params,
-)
+    check_access_behavior_params, check_dataset_params,
+    check_distribution_params, check_sequence_params,
+    check_temporal_pattern_params, check_zipf_params)
 from utils.logs.log_utils import info
 
 

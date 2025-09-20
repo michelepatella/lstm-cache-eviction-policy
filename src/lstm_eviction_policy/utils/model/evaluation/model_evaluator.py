@@ -1,9 +1,8 @@
 import numpy as np
 from utils.logs.log_utils import debug, info
 from utils.model.evaluation.inference import infer_batch
-from utils.model.evaluation.metrics.model_metrics_calculator import (
-    compute_model_metrics,
-)
+from utils.model.evaluation.metrics.model_metrics_calculator import \
+    compute_model_metrics
 
 
 def evaluate_model(

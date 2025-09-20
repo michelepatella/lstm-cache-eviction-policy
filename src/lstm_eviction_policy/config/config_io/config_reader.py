@@ -13,8 +13,8 @@ def get_config_param(config: dict, key: str) -> Any:
     all the parameters required to run the pipeline.
 
     Parameters:
-        config (dict): Configuration object
-        key (str): Key of the configuration parameter to be retrieved
+        config (dict): Configuration object.
+        key (str): Key of the configuration parameter to be retrieved.
 
     Returns:
         Any: Value of the configuration parameter corresponding to the specified key.

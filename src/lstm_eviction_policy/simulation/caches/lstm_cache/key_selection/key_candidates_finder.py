@@ -1,7 +1,6 @@
 import numpy as np
-from simulation.caches.lstm_cache.key_selection.key_score_calculator import (
-    calculate_key_scores,
-)
+from simulation.caches.lstm_cache.key_selection.key_score_calculator import \
+    calculate_key_scores
 from torch.nn.functional import softmax
 from utils.logs.log_utils import info
 

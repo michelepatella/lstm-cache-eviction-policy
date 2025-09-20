@@ -1,10 +1,8 @@
 import numpy as np
-from data_generation.generation.patterns.access_pattern_generator import (
-    generate_access_pattern,
-)
-from data_generation.generation.patterns.temporal_pattern_generator import (
-    generate_temporal_pattern,
-)
+from data_generation.generation.patterns.access_pattern_generator import \
+    generate_access_pattern
+from data_generation.generation.patterns.temporal_pattern_generator import \
+    generate_temporal_pattern
 from utils.logs.log_utils import debug, info
 
 

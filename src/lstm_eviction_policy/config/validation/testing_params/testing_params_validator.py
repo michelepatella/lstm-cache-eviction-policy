@@ -1,5 +1,6 @@
 from config.config_io.config_reader import get_config
-from config.validation.testing_params.testing_params_checker import check_testing_params
+from config.validation.testing_params.testing_params_checker import \
+    check_testing_params
 from utils.logs.log_utils import info
 
 

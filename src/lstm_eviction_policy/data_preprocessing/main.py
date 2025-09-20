@@ -1,4 +1,5 @@
-from data_preprocessing.features_engineering.features_builder import build_features
+from data_preprocessing.features_engineering.features_builder import \
+    build_features
 from data_preprocessing.utils.dataset_cleaner import remove_missing_values
 from utils.data.dataset.dataset_loader import load_dataset
 from utils.data.dataset.dataset_saver import save_dataset

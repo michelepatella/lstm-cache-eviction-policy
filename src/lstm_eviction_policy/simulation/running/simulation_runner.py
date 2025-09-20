@@ -1,4 +1,5 @@
-from simulation.caches.lstm_cache.management.lstm_manager import manage_lstm_cache
+from simulation.caches.lstm_cache.management.lstm_manager import \
+    manage_lstm_cache
 from simulation.caches.utils.key_finder import find_key
 from simulation.evaluation.cache_evaluator import evaluate_cache
 from simulation.running.simulation_setup import simulation_setup

@@ -1,8 +1,6 @@
 from config.config_io.config_reader import get_config
 from config.validation.simulation_params.simulation_params_checker import (
-    check_simulation_general_params,
-    check_simulation_lstm_cache_params,
-)
+    check_simulation_general_params, check_simulation_lstm_cache_params)
 from utils.logs.log_utils import info
 
 
