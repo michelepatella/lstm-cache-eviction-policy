@@ -16,7 +16,7 @@ class AccessLogsDataset(Dataset):
         info("🔄 Dataset splitting started...")
 
         # debugging
-        debug(f"⚙️ Splitting type: {dataset_type}.")
+        debug(f"⚙️ Splitting mode: {dataset_type}.")
 
         try:
             # define the splitting's index

@@ -18,6 +18,10 @@ def get_config_param(config: dict, key: str) -> Any:
 
     Returns:
         Any: Value of the configuration parameter corresponding to the specified key.
+
+    Raises:
+        RuntimeError: If the requested parameter value cannot be retrieved from
+                      the configuration object due to unexistent or invalid key.
     """
     # Default: the key of the parameter
     # to be retrieve is composed by a single key (itself)

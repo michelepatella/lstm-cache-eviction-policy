@@ -17,11 +17,11 @@ def validate_data_distribution_params(config):
 
     # distribution
     seed = get_config(config, "data.distribution.seed")
-    distribution_type = get_config(config, "data.distribution.type")
+    distribution_type = get_config(config, "data.distribution.mode")
     num_requests = get_config(config, "data.distribution.num_requests")
     num_keys = get_config(config, "data.distribution.num_keys")
-    first_key = get_config(config, "data.distribution.key_range.first_key")
-    last_key = get_config(config, "data.distribution.key_range.last_key") + 1
+    first_key = get_config(config, "data.distribution.key_range.first")
+    last_key = get_config(config, "data.distribution.key_range.last") + 1
 
     # check distribution params
     check_distribution_params(
@@ -46,8 +46,8 @@ def validate_data_access_pattern_zipf_params(config):
     # access pattern
     # zipf
     zipf_alpha = get_config(config, "data.access_pattern.zipf.alpha")
-    zipf_alpha_start = get_config(config, "data.access_pattern.zipf.alpha_start")
-    zipf_alpha_end = get_config(config, "data.access_pattern.zipf.alpha_end")
+    zipf_alpha_start = get_config(config, "data.access_pattern.zipf.alpha_min")
+    zipf_alpha_end = get_config(config, "data.access_pattern.zipf.alpha_max")
     zipf_time_steps = get_config(config, "data.access_pattern.zipf.time_steps")
 
     # check zipf parameters

@@ -26,6 +26,10 @@ def _merge_config(original_config: dict | None, updated_config: dict) -> dict:
 
     Returns:
         dict: Updated configuration object after merging.
+
+    Raises:
+        RuntimeError: If the updated configuration object cannot be merged
+                      into the original one due to excessive recursion depth.
     """
     # Check whether the original
     # configuration is None, using
@@ -76,6 +80,10 @@ def update_config(updated_config: dict, prepare_config: Callable) -> dict:
 
     Returns:
         dict: Updated, validated configuration object.
+
+    Raises:
+        RuntimeError: If the YAML configuration file cannot be updated
+                      due to operating system errors.
     """
     # Get the absolute path of the YAML
     # configuration file

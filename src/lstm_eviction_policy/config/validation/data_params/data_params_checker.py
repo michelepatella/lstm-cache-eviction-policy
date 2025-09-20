@@ -17,7 +17,7 @@ def check_distribution_params(
 
     # check distribution type
     if distribution_type not in {"static", "dynamic"}:
-        raise RuntimeError("'data.distribution.type' must be 'static' or 'dynamic'.")
+        raise RuntimeError("'data.distribution.mode' must be 'static' or 'dynamic'.")
 
     # check integer params with limits
     for name, val, min_val in [
@@ -36,14 +36,14 @@ def check_distribution_params(
         and last_key > first_key
     ):
         raise RuntimeError(
-            "'data.distribution.key_range.first_key' and 'data.distribution.key_range.last_key' "
-            "must be integers with first_key < last_key."
+            "'data.distribution.key_range.first' and 'data.distribution.key_range.last' "
+            "must be integers with first < last."
         )
 
     # check num_keys matches the key range length
     if abs(last_key - first_key) != num_keys:
         raise RuntimeError(
-            "'data.distribution.num_keys' must match the range defined by first_key and last_key."
+            "'data.distribution.num_keys' must match the range defined by data.distribution.first and data.distribution.last."
         )
 
 
@@ -65,14 +65,14 @@ def check_zipf_params(zipf_alpha, zipf_alpha_start, zipf_alpha_end, zipf_time_st
         isinstance(v, float) and v > 0 for v in [zipf_alpha_start, zipf_alpha_end]
     ):
         raise RuntimeError(
-            "'data.access_pattern.zipf.alpha_start' and "
-            "'data.access_pattern.zipf.alpha_end' must be float > 0."
+            "'data.access_pattern.zipf.alpha_min' and "
+            "'data.access_pattern.zipf.alpha_max' must be float > 0."
         )
 
     if zipf_alpha_end < zipf_alpha_start:
         raise RuntimeError(
             "'data.access_pattern.zipf.alpha_end' "
-            "must be >= 'data.access_pattern.zipf.alpha_start'."
+            "must be >= 'data.access_pattern.zipf.alpha_min'."
         )
 
     # check time steps
