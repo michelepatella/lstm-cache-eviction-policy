@@ -1,6 +1,6 @@
 from typing import Any
 
-from lstm_eviction_policy.utils.logs.log_utils import error
+from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
 
 
 def validate_min_max(
@@ -29,11 +29,15 @@ def validate_min_max(
         ValueError: If the least value is greater than or equal to
                     the greatest one.
     """
+    debug(f"Min/Max fields to be validated: {min_field}, {max_field} from {context}")
+
     # Read the least and the greatest fields
     # from the given instance given the
     # corresponding fields
     min_val = getattr(instance, min_field)
     max_val = getattr(instance, max_field)
+
+    debug(f"Min/Max values to be validated: {min_val}, {max_val}")
 
     # Check whether the minimum value is greater
     # than or equal to the maximum one
@@ -41,5 +45,7 @@ def validate_min_max(
         msg = f"{context}{max_field} ({max_val}) must be greater than {context}{min_field} ({min_val})"
         error("%s", msg)
         raise ValueError(msg)
+
+    info(f"{min_field} ({min_val}) and {max_field} ({max_val}) validated for {context}")
 
     return instance

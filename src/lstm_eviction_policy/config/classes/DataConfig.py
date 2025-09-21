@@ -11,7 +11,7 @@ class RequestsConfig(BaseModel):
 
 
 class KeysConfig(BaseModel):
-    min: conint(ge=0)
+    min: conint(gt=0)
     max: conint(gt=0)
 
     @model_validator(mode="after")
@@ -26,10 +26,10 @@ class KeysConfig(BaseModel):
         Returns:
             KeysConfig: Validated model instance.
         """
-        return validate_min_max(self, "min", "max", context="data.distribution.keys.")
+        return validate_min_max(self, "min", "max", context="data.general.keys.")
 
 
-class DistributionConfig(BaseModel):
+class GeneralDataConfig(BaseModel):
     seed: conint(ge=0)
     mode: Literal["static", "dynamic"]
     requests: RequestsConfig
@@ -178,11 +178,11 @@ class DatasetConfig(BaseModel):
 class DataConfig(BaseModel):
     """
     Class representing the data configuration
-    settings including distribution, pattern,
+    settings including general, pattern,
     sequence, and dataset settings.
     """
 
-    distribution: DistributionConfig
+    general: GeneralDataConfig
     pattern: PatternConfig
     sequence: SequenceConfig
     dataset: DatasetConfig

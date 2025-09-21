@@ -2,7 +2,7 @@ import numpy as np
 from utils.logs.log_utils import info
 
 
-def timestamps_to_hours(timestamps):
+def timestamps_seconds_to_hours(timestamps):
     """
     Method to convert timestamps from
     seconds to hours of the day.

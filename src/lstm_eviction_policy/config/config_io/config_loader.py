@@ -1,11 +1,12 @@
 import yaml
 from yaml import YAMLError
 
-from lstm_eviction_policy.config.config_io.config_locator import get_config_abs_path
+from lstm_eviction_policy.config.classes.Config import ConfigDict
+from lstm_eviction_policy.config.utils.config_locator import get_config_abs_path
 from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
 
 
-def load_config() -> dict:
+def load_config() -> ConfigDict:
     """
     Load the YAML configuration file for
     the whole pipeline.
@@ -31,7 +32,7 @@ def load_config() -> dict:
         # file from its absolute path
         with open(abs_config_path, "r") as f:
             config_file = yaml.safe_load(f)
-            debug(f"YAML configuration file content type: {type(config_file)}")
+            debug(f"YAML configuration file content type loaded: {type(config_file)}")
     except (
         OSError,
         YAMLError,

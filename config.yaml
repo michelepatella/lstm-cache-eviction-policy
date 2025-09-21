@@ -1,5 +1,5 @@
 data:
-  distribution:
+  general:
     seed: 42
     mode: static
     requests:

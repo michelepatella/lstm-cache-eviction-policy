@@ -2,12 +2,16 @@ from typing import Callable
 
 import yaml
 
+from lstm_eviction_policy.config.classes.Config import ConfigDict
 from lstm_eviction_policy.config.config_io.config_loader import load_config
-from lstm_eviction_policy.config.config_io.config_locator import get_config_abs_path
+from lstm_eviction_policy.config.utils.config_locator import get_config_abs_path
 from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
 
 
-def _merge_config(original_config: dict | None, updated_config: dict) -> dict:
+def _merge_config(
+    original_config: ConfigDict | None,
+    updated_config: ConfigDict,
+) -> ConfigDict:
     """
     Recursively merge an update configuration object
     into the original configuration object.
@@ -67,7 +71,10 @@ def _merge_config(original_config: dict | None, updated_config: dict) -> dict:
     return original_config
 
 
-def update_config(updated_config: dict, prepare_config: Callable) -> dict:
+def update_config(
+    updated_config: ConfigDict,
+    prepare_config: Callable,
+) -> ConfigDict:
     """
     Update the YAML configuration file by merging the
     updated configuration object into the original one.
@@ -123,8 +130,8 @@ def update_config(updated_config: dict, prepare_config: Callable) -> dict:
 
     # Revalidate the updated YAML configuration
     # file and get the new settings (if everything went well)
-    new_config_settings = prepare_config()
+    updated_config = prepare_config()
 
     info(f"YAML configuration file updated at {abs_config_path}")
 
-    return new_config_settings
+    return updated_config
