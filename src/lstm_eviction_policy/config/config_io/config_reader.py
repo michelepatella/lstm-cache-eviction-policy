@@ -40,7 +40,8 @@ def get_config_param(config: dict, key: str) -> Any:
     value = config
 
     debug(
-        f"Configuration parameter to be retrieved from YAML configuration file: {key}"
+        f"Configuration parameter to be retrieved "
+        f"from YAML configuration file: {key}"
     )
 
     try:
@@ -51,12 +52,9 @@ def get_config_param(config: dict, key: str) -> Any:
             value = value[subkey]
             debug(f"Traversing key '{subkey}', intermediate value: {value}")
     except (KeyError, TypeError) as e:
-        error(
-            f"Failed to retrieve configuration parameter '{key}' from configuration object: {e}"
-        )
-        raise RuntimeError(
-            f"Failed to retrieve configuration parameter '{key}' from configuration object"
-        ) from e
+        msg = f"Failed to retrieve configuration parameter '{key}' from configuration object"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
 
     info(f"Configuration parameter '{key}' value retrieved: {value}")
 

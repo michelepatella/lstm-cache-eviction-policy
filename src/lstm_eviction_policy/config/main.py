@@ -1,5 +1,5 @@
+from lstm_eviction_policy.config.classes.Config import Config
 from lstm_eviction_policy.config.config_io.config_loader import load_config
-from lstm_eviction_policy.config.utils.Config import Config
 from lstm_eviction_policy.utils.logs.log_utils import info, phase_var
 
 

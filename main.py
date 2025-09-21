@@ -1,7 +1,7 @@
-# PIPELINE
-# 0. PREPARE CONFIGURATION SETTINGS
 from lstm_eviction_policy.config import prepare_config
 
+# PIPELINE
+# 0. PREPARE CONFIGURATION SETTINGS
 config_settings = prepare_config()
 
 # 1. GENERATE SYNTHETIC DATA

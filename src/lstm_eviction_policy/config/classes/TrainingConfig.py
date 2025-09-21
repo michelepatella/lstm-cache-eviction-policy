@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic import BaseModel, confloat, conint
 
 
@@ -20,7 +22,7 @@ class OptimizerParamsConfig(BaseModel):
 
 # Training — Optimizer
 class OptimizerConfig(BaseModel):
-    type: str
+    type: Literal["adam", "adamw", "sgd"]
     params: OptimizerParamsConfig
 
 

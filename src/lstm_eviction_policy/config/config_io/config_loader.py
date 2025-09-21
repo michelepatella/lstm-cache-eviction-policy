@@ -36,10 +36,9 @@ def load_config() -> dict:
         OSError,
         YAMLError,
     ) as e:
-        error(f"Failed to load YAML configuration file at {abs_config_path}: {e}")
-        raise RuntimeError(
-            f"Failed to load YAML configuration file at {abs_config_path}"
-        ) from e
+        msg = f"Failed to load YAML configuration file at {abs_config_path}"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
 
     info(f"YAML configuration file loaded from {abs_config_path}")
 

@@ -40,8 +40,9 @@ def _merge_config(original_config: dict | None, updated_config: dict) -> dict:
     # object is not a dictionary, returning
     # the original configuration object consequently
     if not isinstance(updated_config, dict):
-        error("Updated configuration object must be a dictionary")
-        raise TypeError("Updated configuration object must be a dictionary")
+        msg = "Updated configuration object must be a dictionary"
+        error(msg)
+        raise TypeError(msg)
 
     try:
         for key, value in updated_config.items():
@@ -57,8 +58,9 @@ def _merge_config(original_config: dict | None, updated_config: dict) -> dict:
                 # corresponding value
                 original_config[key] = value
     except RecursionError as e:
-        error(f"Failed to merge configuration objects: {e}")
-        raise RuntimeError("Failed to merge configuration objects") from e
+        msg = "Failed to merge configuration objects"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
 
     info(f"Configuration objects merged")
 
@@ -91,7 +93,8 @@ def update_config(updated_config: dict, prepare_config: Callable) -> dict:
     abs_config_path = get_config_abs_path()
 
     debug(
-        f"YAML configuration absolute path where to update configuration: {abs_config_path}"
+        f"YAML configuration absolute path where "
+        f"to update configuration: {abs_config_path}"
     )
 
     # Load the original YAML configuration file
@@ -114,10 +117,9 @@ def update_config(updated_config: dict, prepare_config: Callable) -> dict:
                 allow_unicode=True,  # Allow writing Unicode characters to YAML file
             )
     except OSError as e:
-        error(f"Failed to update YAML configuration file at {abs_config_path}: {e}")
-        raise RuntimeError(
-            f"Failed to update YAML configuration file at {abs_config_path}"
-        ) from e
+        msg = f"Failed to update YAML configuration file at {abs_config_path}"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
 
     # Revalidate the updated YAML configuration
     # file and get the new settings (if everything went well)
