@@ -2,7 +2,7 @@ import yaml
 from yaml import YAMLError
 
 from lstm_eviction_policy.config.config_io.config_locator import get_config_abs_path
-from lstm_eviction_policy.utils.logs.log_utils import error, info
+from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
 
 
 def load_config() -> dict:
@@ -24,11 +24,14 @@ def load_config() -> dict:
     # the YAML configuration file
     abs_config_path = get_config_abs_path()
 
+    debug(f"YAML configuration file absolute path to be loaded: {abs_config_path}")
+
     try:
         # Load the YAML configuration
         # file from its absolute path
         with open(abs_config_path, "r") as f:
             config_file = yaml.safe_load(f)
+            debug(f"YAML configuration file content type: {type(config_file)}")
     except (
         OSError,
         YAMLError,

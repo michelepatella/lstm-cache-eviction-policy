@@ -54,6 +54,7 @@ data:
     paths:
       static: data/static_access_logs.csv
       dynamic: data/dynamic_access_logs.csv
+
 model:
   general:
     features:
@@ -67,6 +68,7 @@ model:
     dropout: 0.3
     bidirectional: false
     proj_size: 0
+
 validation:
   cross_validation:
     folds:
@@ -78,17 +80,13 @@ validation:
     delta: 0.0005
   search_space:
     model:
-      params:
-        hidden_size:
-          range: [ 128, 256 ]
-        num_layers:
-          range: [ 2, 3 ]
-        dropout:
-          range: [ 0.1, 0.3 ]
+      hidden_size_range: [128, 256]
+      num_layers_range: [2, 3]
+      dropout_range: [0.1, 0.3]
     training:
       optimizer:
-        learning_rate:
-          range: [ 0.001, 0.005 ]
+        learning_rate_range: [0.001, 0.005]
+
 training:
   general:
     epochs:
@@ -96,28 +94,32 @@ training:
     batch_size: 64
   optimizer:
     type: adamw
-    learning_rate: 0.005
-    weight_decay: 0.05
-    momentum: 0.9
+    params:
+      learning_rate: 0.005
+      weight_decay: 0.05
+      momentum: 0.9
   early_stopping:
     patience: 20
     delta: 0.0001
+
 testing:
   batch_size: 64
+
 evaluation:
   top_k: 3
+
 inference:
   confidence_intervals:
     level: 0.95
   mc_dropout:
     samples:
       count: 50
+
 simulation:
-  cache:
-    general:
-      dimension: 5
-      ttl: 180
-    lstm:
-      prediction:
-        interval: 5
-      threshold: 0.5
+  general:
+    dimension: 5
+    ttl: 180
+  lstm:
+    prediction:
+      interval: 5
+    threshold: 0.5

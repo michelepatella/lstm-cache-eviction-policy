@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from lstm_eviction_policy.utils.logs.log_utils import error, info
+from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
 
 
 def get_config_abs_path() -> str:
@@ -19,10 +19,15 @@ def get_config_abs_path() -> str:
         RuntimeError: If the absolute path of YAML configuration
                       file cannot be resolved.
     """
+    debug(f"YAML configuration file absolute path resolution from __file__: {__file__}")
+
     try:
         # Resolve the absolute path of
         # YAML configuration file
-        abs_config_path = str(Path(__file__).resolve().parents[3] / "config.yaml")
+        abs_config_path = str(Path(__file__).resolve().parents[4] / "config.yaml")
+        debug(
+            f"Parent directories used to access YAML configuration file: {[p for p in Path(__file__).resolve().parents[:4]]}"
+        )
     except (NameError, TypeError, AttributeError, OSError) as e:
         error(
             f"Failed to resolve YAML configuration absolute path from {__file__}: {e}"

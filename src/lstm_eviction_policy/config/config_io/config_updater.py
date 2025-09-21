@@ -4,7 +4,7 @@ import yaml
 
 from lstm_eviction_policy.config.config_io.config_loader import load_config
 from lstm_eviction_policy.config.config_io.config_locator import get_config_abs_path
-from lstm_eviction_policy.utils.logs.log_utils import error, info
+from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
 
 
 def _merge_config(original_config: dict | None, updated_config: dict) -> dict:
@@ -49,8 +49,10 @@ def _merge_config(original_config: dict | None, updated_config: dict) -> dict:
             # and is contained in both objects, apply
             # merge recursively
             if isinstance(value, dict) and isinstance(original_config.get(key), dict):
+                debug(f"Merging nested key '{key}'")
                 original_config[key] = _merge_config(original_config[key], value)
             else:
+                debug(f"Merging key '{key}': {value}")
                 # Otherwise, extract the
                 # corresponding value
                 original_config[key] = value
@@ -87,6 +89,10 @@ def update_config(updated_config: dict, prepare_config: Callable) -> dict:
     # Get the absolute path of the YAML
     # configuration file
     abs_config_path = get_config_abs_path()
+
+    debug(
+        f"YAML configuration absolute path where to update configuration: {abs_config_path}"
+    )
 
     # Load the original YAML configuration file
     original_config = load_config()

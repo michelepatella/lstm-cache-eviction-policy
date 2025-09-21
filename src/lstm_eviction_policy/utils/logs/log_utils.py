@@ -13,16 +13,16 @@ formatter = logging.Formatter("[%(phase)s] %(levelname)s: %(message)s")
 file_handler = RotatingFileHandler(
     "./logs/log.log", maxBytes=10_000_000, backupCount=100
 )
-file_handler.setLevel(logging.INFO)
+file_handler.setLevel(logging.DEBUG)
 file_handler.setFormatter(formatter)
 
 # show in terminal only ERROR-level logging messages
 stream_handler = logging.StreamHandler()
-stream_handler.setLevel(logging.ERROR)
+stream_handler.setLevel(logging.DEBUG)
 stream_handler.setFormatter(formatter)
 
 # configuration of logging messages
-logging.basicConfig(level=logging.ERROR, handlers=[file_handler, stream_handler])
+logging.basicConfig(level=logging.DEBUG, handlers=[file_handler, stream_handler])
 
 
 def info(msg, *args, **kwargs):

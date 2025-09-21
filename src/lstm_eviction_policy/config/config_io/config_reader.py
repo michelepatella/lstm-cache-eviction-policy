@@ -1,6 +1,6 @@
 from typing import Any
 
-from lstm_eviction_policy.utils.logs.log_utils import error, info
+from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
 
 
 def get_config_param(config: dict, key: str) -> Any:
@@ -39,12 +39,17 @@ def get_config_param(config: dict, key: str) -> Any:
     # the value of parameter to be retrieved
     value = config
 
+    debug(
+        f"Configuration parameter to be retrieved from YAML configuration file: {key}"
+    )
+
     try:
         # Retrieve value of specified parameter
         # starting from the outermost dictionary (e.g., data)
         # to the innermost one (e.g., seed)
         for subkey in keys:
             value = value[subkey]
+            debug(f"Traversing key '{subkey}', intermediate value: {value}")
     except (KeyError, TypeError) as e:
         error(
             f"Failed to retrieve configuration parameter '{key}' from configuration object: {e}"
