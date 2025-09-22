@@ -1,13 +1,13 @@
 import numpy as np
 
 from lstm_eviction_policy.config.classes.Config import Config
-from lstm_eviction_policy.data_generation.generation.patterns.temporal.bursty_scale_setter import (
+from lstm_eviction_policy.data_generation.generation.patterns.temporal.components.bursty_scale_setter import (
     set_bursty_scale,
 )
-from lstm_eviction_policy.data_generation.generation.patterns.temporal.periodic_component_calculator import (
+from lstm_eviction_policy.data_generation.generation.patterns.temporal.components.periodic_component_calculator import (
     calculate_periodic_component,
 )
-from lstm_eviction_policy.data_generation.utils.seconds_to_hours_converter import (
+from lstm_eviction_policy.data_generation.generation.utils.seconds_to_hours_converter import (
     seconds_to_hours,
 )
 from lstm_eviction_policy.utils.logs.log_utils import debug, info

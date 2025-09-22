@@ -2,7 +2,7 @@ from typing import Literal
 
 from pydantic import BaseModel, confloat, conint, model_validator
 
-from lstm_eviction_policy.config.utils.min_max_validator import validate_min_max
+from lstm_eviction_policy.config.classes.utils.min_max_validator import validate_min_max
 
 
 class HoursConfig(BaseModel):

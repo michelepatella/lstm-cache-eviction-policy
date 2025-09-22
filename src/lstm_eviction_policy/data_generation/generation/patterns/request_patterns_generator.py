@@ -9,7 +9,7 @@ from lstm_eviction_policy.data_generation.generation.patterns.access.access_patt
 from lstm_eviction_policy.data_generation.generation.patterns.temporal.temporal_pattern_generator import (
     generate_temporal_pattern,
 )
-from lstm_eviction_policy.data_generation.generation.patterns.temporal.time_updater import (
+from lstm_eviction_policy.data_generation.generation.patterns.utils.time_updater import (
     update_time,
 )
 from lstm_eviction_policy.utils.logs.log_utils import debug, info
@@ -19,6 +19,7 @@ def generate_pattern_requests(
     keys_range: np.ndarray,
     zipf_probs: np.ndarray,
     config: Config,
+    time_step_duration: int = None,
 ) -> tuple[list[int], list[float]]:
     """
     Generate requests according to
@@ -34,6 +35,7 @@ def generate_pattern_requests(
         keys_range (np.ndarray): List of keys to generate requests for.
         zipf_probs (np.ndarray): List of Zipfian probabilities of the given keys.
         config (Config): Configuration object.
+        time_step_duration (int): Optional time step to generate requests for.
 
     Returns:
         tuple[list[int], list[float]]: List of requests along with their
@@ -49,7 +51,11 @@ def generate_pattern_requests(
 
     # Get the number of requests
     # to be generated
-    num_requests = general_data_config.requests.count
+    num_requests = (
+        time_step_duration
+        if time_step_duration is not None
+        else general_data_config.requests.count
+    )
 
     debug(f"Number of requests to be generated: {num_requests}")
 

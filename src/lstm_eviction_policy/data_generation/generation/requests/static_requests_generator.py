@@ -1,20 +1,19 @@
 import numpy as np
-from numpy import ndarray
 
 from lstm_eviction_policy.config.classes.Config import Config
 from lstm_eviction_policy.data_generation.generation.patterns.request_patterns_generator import (
     generate_pattern_requests,
 )
-from lstm_eviction_policy.data_generation.utils.seconds_to_hours_converter import (
+from lstm_eviction_policy.data_generation.generation.utils.seconds_to_hours_converter import (
     seconds_to_hours,
 )
-from lstm_eviction_policy.data_generation.utils.zipf_props_calculator import (
+from lstm_eviction_policy.data_generation.generation.utils.zipf_props_calculator import (
     calculate_zipf_probs,
 )
 from lstm_eviction_policy.utils.logs.log_utils import debug, info
 
 
-def generate_static_requests(config: Config) -> tuple[list[int], ndarray]:
+def generate_static_requests(config: Config) -> tuple[list[int], np.ndarray]:
     """
     Generate static requests and corresponding
     timestamps in hours.

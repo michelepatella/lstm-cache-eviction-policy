@@ -2,7 +2,9 @@ import yaml
 from yaml import YAMLError
 
 from lstm_eviction_policy.config.classes.Config import ConfigDict
-from lstm_eviction_policy.config.utils.config_locator import get_config_abs_path
+from lstm_eviction_policy.config.config_io.utils.config_locator import (
+    get_config_abs_path,
+)
 from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
 
 

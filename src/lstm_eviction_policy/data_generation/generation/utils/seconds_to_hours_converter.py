@@ -2,7 +2,7 @@ from datetime import timedelta
 
 import numpy as np
 
-from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
+from lstm_eviction_policy.utils.logs.log_utils import error, info
 
 
 def seconds_to_hours(timestamps_seconds: list[float]) -> np.ndarray:

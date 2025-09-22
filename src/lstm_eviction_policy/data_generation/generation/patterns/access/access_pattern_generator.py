@@ -1,22 +1,22 @@
 import numpy as np
 
 from lstm_eviction_policy.config.classes.Config import Config
-from lstm_eviction_policy.data_generation.generation.patterns.access.cycle_pattern_generator import (
+from lstm_eviction_policy.data_generation.generation.patterns.access.patterns.cycle_pattern_generator import (
     generate_cycle_pattern,
 )
-from lstm_eviction_policy.data_generation.generation.patterns.access.distortion_pattern_generator import (
+from lstm_eviction_policy.data_generation.generation.patterns.access.patterns.distortion_pattern_generator import (
     generate_distortion_pattern,
 )
-from lstm_eviction_policy.data_generation.generation.patterns.access.memory_fallback_pattern_generator import (
+from lstm_eviction_policy.data_generation.generation.patterns.access.patterns.memory_fallback_pattern_generator import (
     generate_memory_fallback_pattern,
 )
-from lstm_eviction_policy.data_generation.generation.patterns.access.repetition_pattern_generator import (
+from lstm_eviction_policy.data_generation.generation.patterns.access.patterns.repetition_pattern_generator import (
     generate_repetition_pattern,
 )
-from lstm_eviction_policy.data_generation.generation.patterns.access.toggle_pattern_generator import (
+from lstm_eviction_policy.data_generation.generation.patterns.access.patterns.toggle_pattern_generator import (
     generate_toggle_pattern,
 )
-from lstm_eviction_policy.data_generation.utils.seconds_to_hours_converter import (
+from lstm_eviction_policy.data_generation.generation.utils.seconds_to_hours_converter import (
     seconds_to_hours,
 )
 from lstm_eviction_policy.utils.logs.log_utils import debug, info
