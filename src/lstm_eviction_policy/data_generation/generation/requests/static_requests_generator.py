@@ -4,7 +4,7 @@ from lstm_eviction_policy.config.classes.Config import Config
 from lstm_eviction_policy.data_generation.generation.patterns.request_patterns_generator import (
     generate_pattern_requests,
 )
-from lstm_eviction_policy.data_generation.utils.timestamp_converter import (
+from lstm_eviction_policy.data_generation.utils.timestamps_converter import (
     timestamps_seconds_to_hours,
 )
 from lstm_eviction_policy.data_generation.utils.zipf_props_calculator import (
