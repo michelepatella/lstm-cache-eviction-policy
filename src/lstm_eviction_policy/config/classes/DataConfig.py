@@ -5,6 +5,11 @@ from pydantic import BaseModel, confloat, conint, model_validator
 from lstm_eviction_policy.config.utils.min_max_validator import validate_min_max
 
 
+class HoursConfig(BaseModel):
+    start: conint(ge=0, le=23)
+    end: conint(ge=0, le=23)
+
+
 # Data — Distribution
 class RequestsConfig(BaseModel):
     count: conint(gt=0)
@@ -51,14 +56,35 @@ class ZipfConfig(BaseModel):
 class RepetitionConfig(BaseModel):
     interval: conint(gt=0)
     offset: conint(gt=0)
+    hours: HoursConfig
+
+
+class ToggleOffsetsConfig(BaseModel):
+    forward: int
+    backward: int
+
+
+class ToggleBaseRequestsConfig(BaseModel):
+    first: conint(gt=0)
+    second: conint(gt=0)
 
 
 class ToggleConfig(BaseModel):
     interval: conint(gt=0)
+    hours: HoursConfig
+    base_requests: ToggleBaseRequestsConfig
+    offsets: ToggleOffsetsConfig
+
+
+class DistortionOffsetsConfig(BaseModel):
+    history: int
+    correction: int
 
 
 class DistortionConfig(BaseModel):
     interval: conint(gt=0)
+    hours: HoursConfig
+    offsets: DistortionOffsetsConfig
 
 
 class NoiseConfig(BaseModel):
@@ -91,6 +117,7 @@ class CycleConfig(BaseModel):
     base: conint(gt=0)
     mod: conint(gt=0)
     divisor: conint(gt=0)
+    hours: HoursConfig
 
 
 class BehaviorConfig(BaseModel):

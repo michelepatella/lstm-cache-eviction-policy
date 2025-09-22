@@ -19,14 +19,35 @@ data:
         repetition:
           interval: 7
           offset: 3
+          hours:
+            start: 5
+            end: 9
         toggle:
           interval: 10
+          hours:
+            start: 9
+            end: 12
+          base_requests:
+            first: 1
+            second: 2
+          offsets:
+            forward: 1
+            backward: -2
         cycle:
           base: 5
           mod: 3
           divisor: 50
+          hours:
+            start: 12
+            end: 18
         distortion:
           interval: 4
+          hours:
+            start: 18
+            end: 23
+          offsets:
+            history: -4
+            correction: 2
         noise:
           min: -2
           max: 3

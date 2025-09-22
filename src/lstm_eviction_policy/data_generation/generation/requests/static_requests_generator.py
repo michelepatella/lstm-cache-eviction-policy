@@ -36,10 +36,11 @@ def generate_static_requests(config: Config) -> tuple[list[int], ndarray]:
                                        a list of floats (i.e., corresponding
                                        timestamps in hours).
     """
+    keys_config = config.data.general.keys
     # Retrieve the least and the greatest
     # keys (i.e., the first and the last ones)
-    min_key = config.data.general.keys.min
-    max_key = config.data.general.keys.max
+    min_key = keys_config.min
+    max_key = keys_config.max
 
     # Get the range of all possible keys
     keys_range = np.arange(min_key, max_key)

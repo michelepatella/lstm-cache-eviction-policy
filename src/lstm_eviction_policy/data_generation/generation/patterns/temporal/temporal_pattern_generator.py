@@ -33,21 +33,20 @@ def generate_temporal_pattern(current_seconds_in_day: float, config: Config) -> 
         float: Delta time for current seconds in day.
     """
     debug(
-        f"Current seconds in day: {current_seconds_in_day} for which to calculate temporal pattern"
+        f"Current seconds in day: {current_seconds_in_day} for temporal pattern generation"
     )
 
     # Move from current seconds to
     # current hour in day
     current_hour_in_day = float(seconds_to_hours([current_seconds_in_day])[0])
 
-    debug(
-        f"Current hour in day: {current_hour_in_day} for which to calculate temporal pattern"
-    )
+    debug(f"Current hour in day: {current_hour_in_day} for temporal pattern generation")
 
+    periodic_pattern_config = config.pattern.temporal.periodic
     # Get scale and amplitude for
     # periodic component generation
-    periodic_scale = config.pattern.temporal.periodic.scale
-    periodic_amplitude = config.pattern.temporal.periodic.amplitude
+    periodic_scale = periodic_pattern_config.scale
+    periodic_amplitude = periodic_pattern_config.amplitude
 
     # Calculate a periodic component for
     # current hour in day
@@ -55,12 +54,13 @@ def generate_temporal_pattern(current_seconds_in_day: float, config: Config) -> 
         periodic_scale, periodic_amplitude, current_hour_in_day
     )
 
+    burstiness_pattern_config = config.pattern.temporal.periodic
     # Get burst high and low for burstiness,
     # as well as burst start and end hours
-    burst_high = config.pattern.temporal.burstiness.high
-    burst_low = config.pattern.temporal.burstiness.low
-    burst_start_hour = config.pattern.temporal.burstiness.hours.start
-    burst_end_hour = config.pattern.temporal.burstiness.hours.end
+    burst_high = burstiness_pattern_config.high
+    burst_low = burstiness_pattern_config.low
+    burst_start_hour = burstiness_pattern_config.hours.start
+    burst_end_hour = burstiness_pattern_config.hours.end
 
     # Set bursty scale
     bursty_scale = set_bursty_scale(

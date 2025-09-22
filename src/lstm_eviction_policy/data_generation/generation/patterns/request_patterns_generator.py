@@ -31,8 +31,8 @@ def generate_pattern_requests(
     given keys, strongly affected by Zipfian distribution.
 
     Parameters:
-        keys_range (ndarray): List of keys to generate requests for.
-        zipf_probs (ndarray): List of Zipfian probabilities of the given keys.
+        keys_range (np.ndarray): List of keys to generate requests for.
+        zipf_probs (np.ndarray): List of Zipfian probabilities of the given keys.
         config (Config): Configuration object.
 
     Returns:
@@ -45,9 +45,11 @@ def generate_pattern_requests(
     current_day = 0  # Get start from day zero
     current_seconds_in_day = 0.0  # Get start from midnight (second zero)
 
+    general_data_config = config.data.general
+
     # Get the number of requests
     # to be generated
-    num_requests = config.data.general.requests.count
+    num_requests = general_data_config.requests.count
 
     debug(f"Number of requests to be generated: {num_requests}")
 
@@ -58,7 +60,7 @@ def generate_pattern_requests(
 
     # Define a seed to make the
     # generation process deterministic
-    seed = config.data.general.seed
+    seed = general_data_config.seed
     np.random.seed(seed)
 
     debug(f"Seed for requests generation: {seed}")
