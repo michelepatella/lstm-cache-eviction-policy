@@ -28,10 +28,10 @@ def get_config_abs_path() -> str:
         # Resolve the absolute path of
         # YAML configuration file
         resolved_path = Path(__file__).resolve()
-        abs_config_path = str(resolved_path.parents[4] / "config.yaml")
+        abs_config_path = str(resolved_path.parents[5] / "config.yaml")
         debug(
             f"Parent directories used to resolve absolute path of YAML configuration file: "
-            f"{[p for p in resolved_path.parents[:4]]}"
+            f"{[p for p in resolved_path.parents[:5]]}"
         )
     except (NameError, TypeError, AttributeError, OSError) as e:
         msg = f"Failed to resolve YAML configuration absolute path from {__file__}"
