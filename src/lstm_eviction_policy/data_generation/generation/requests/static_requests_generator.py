@@ -1,11 +1,12 @@
 import numpy as np
+from numpy import ndarray
 
 from lstm_eviction_policy.config.classes.Config import Config
 from lstm_eviction_policy.data_generation.generation.patterns.request_patterns_generator import (
     generate_pattern_requests,
 )
-from lstm_eviction_policy.data_generation.utils.timestamps_converter import (
-    timestamps_seconds_to_hours,
+from lstm_eviction_policy.data_generation.utils.seconds_to_hours_converter import (
+    seconds_to_hours,
 )
 from lstm_eviction_policy.data_generation.utils.zipf_props_calculator import (
     calculate_zipf_probs,
@@ -13,7 +14,7 @@ from lstm_eviction_policy.data_generation.utils.zipf_props_calculator import (
 from lstm_eviction_policy.utils.logs.log_utils import debug, info
 
 
-def generate_static_requests(config: Config) -> tuple[list[int], list[float]]:
+def generate_static_requests(config: Config) -> tuple[list[int], ndarray]:
     """
     Generate static requests and corresponding
     timestamps in hours.
@@ -30,7 +31,7 @@ def generate_static_requests(config: Config) -> tuple[list[int], list[float]]:
         config (Config): Configuration object.
 
     Returns:
-        tuple[list[int], list[float]]: A tuple containing a list of
+        tuple[list[int], ndarray]: A tuple containing a list of
                                        integers (i.e., keys requested) and
                                        a list of floats (i.e., corresponding
                                        timestamps in hours).
@@ -50,8 +51,6 @@ def generate_static_requests(config: Config) -> tuple[list[int], list[float]]:
     # Retrieve fixed Zipfian parameter
     fixed_alpha = config.data.pattern.access.zipf.alpha.fixed
 
-    debug(f"Fixed Zipfian parameter for static requests generation: {fixed_alpha}")
-
     # Calculate Zipfian probabilities for all
     # the keys — ranging from min to max — given
     # a fixed Zipfian parameter
@@ -65,7 +64,7 @@ def generate_static_requests(config: Config) -> tuple[list[int], list[float]]:
 
     # Move from timestamps in seconds to
     # timestamps in hours
-    timestamps_hours = timestamps_seconds_to_hours(timestamps_seconds)
+    timestamps_hours = seconds_to_hours(timestamps_seconds)
 
     info(f"{len(requests)} static requests generated for {len(keys_range)} keys")
 

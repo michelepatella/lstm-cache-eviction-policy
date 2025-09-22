@@ -3,6 +3,16 @@ from datetime import timedelta
 import numpy as np
 
 from lstm_eviction_policy.config.classes.Config import Config
+from lstm_eviction_policy.data_generation.generation.patterns.access.access_pattern_generator import (
+    generate_access_pattern,
+)
+from lstm_eviction_policy.data_generation.generation.patterns.temporal.temporal_pattern_generator import (
+    generate_temporal_pattern,
+)
+from lstm_eviction_policy.data_generation.generation.patterns.temporal.time_updater import (
+    update_time,
+)
+from lstm_eviction_policy.utils.logs.log_utils import debug, info
 
 
 def generate_pattern_requests(
@@ -10,67 +20,85 @@ def generate_pattern_requests(
     zipf_probs: np.ndarray,
     config: Config,
 ) -> tuple[list[int], list[float]]:
+    """
+    Generate requests according to
+    specific access and temporal patterns.
+
+    This function generates requests along
+    with their corresponding timestamps in seconds
+    (i.e., absolute time of the requests), according
+    to specific access and temporal patterns involving
+    given keys, strongly affected by Zipfian distribution.
+
+    Parameters:
+        keys_range (ndarray): List of keys to generate requests for.
+        zipf_probs (ndarray): List of Zipfian probabilities of the given keys.
+        config (Config): Configuration object.
+
+    Returns:
+        tuple[list[int], list[float]]: List of requests along with their
+                                       corresponding timestamps.
+    """
     # Initialize data
-    timestamps_seconds = [0.0]
     requests = []
-    day = 0
-    time_in_day = 0.0
+    timestamps_seconds = [0.0]  # Get start from timestamp zero
+    current_day = 0  # Get start from day zero
+    current_seconds_in_day = 0.0  # Get start from midnight (second zero)
+
+    # Get the number of requests
+    # to be generated
+    num_requests = config.data.general.requests.count
+
+    debug(f"Number of requests to be generated: {num_requests}")
 
     # Define day as period in seconds
-    # (24 hours, 60 minutes, 60 seconds)
     period = timedelta(days=1).total_seconds()
 
-    try:
-        # to make the process deterministic
-        np.random.seed(config.seed)
+    debug(f"Period of requests generation: {period}")
 
-        # for each request
-        for i in range(num_requests):
-            # generate the delta time
-            delta_t = generate_temporal_pattern(
-                [timestamps_seconds[-1] % period], period, config
-            )
+    # Define a seed to make the
+    # generation process deterministic
+    seed = config.data.general.seed
+    np.random.seed(seed)
 
-            if time_in_day + delta_t > period:
-                day += 1
-                time_in_day = (time_in_day + delta_t) - period
-            else:
-                time_in_day += delta_t
-            total_time = day * period + time_in_day
+    debug(f"Seed for requests generation: {seed}")
 
-            # generate request
-            request = generate_access_pattern(
-                zipf_probs,
-                keys_range,
-                total_time,
-                requests,
-                config,
-            )
+    # For each request to be generated
+    for i in range(num_requests):
+        debug(
+            f"Request generation for day {current_day}, seconds: {current_seconds_in_day}"
+        )
 
-            # store data
-            requests.append(request)
-            timestamps_seconds.append(total_time)
+        # Generate delta time (i.e., gap between
+        # two consecutive requests in seconds)
+        delta_t = generate_temporal_pattern(current_seconds_in_day, config)
 
-            # debugging
-            debug(f"⚙️ Number of request generated: {i+1}.")
-            debug(f"⚙️ Request generated: {request}.")
-            debug(f"⚙️ Timestamps generated: {timestamps_seconds}.")
-    except ValueError as e:
-        raise ValueError(f"ValueError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except IndexError as e:
-        raise IndexError(f"IndexError: {e}.")
-    except ZeroDivisionError as e:
-        raise ZeroDivisionError(f"ZeroDivisionError: {e}.")
-    except AttributeError as e:
-        raise AttributeError(f"AttributeError: {e}.")
-    except MemoryError as e:
-        raise MemoryError(f"MemoryError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+        # Update time (current seconds in day and
+        # current day)
+        current_seconds_in_day, current_day = update_time(
+            current_seconds_in_day, current_day, period, delta_t
+        )
 
-    # show a successful message
-    info(f"🟢 Pattern requests generated.")
+        # Get current absolute seconds of the
+        # request to be generated
+        current_abs_seconds = current_day * period + current_seconds_in_day
+
+        # Generate a request (i.e., accessed key)
+        request = generate_access_pattern(
+            zipf_probs,
+            keys_range,
+            current_abs_seconds,
+            requests,
+            config,
+        )
+
+        # Store new request and corresponding
+        # timestamp in seconds (absolute seconds)
+        requests.append(request)
+        timestamps_seconds.append(current_abs_seconds)
+
+        debug(f"Generated request {request} at absolute seconds {current_abs_seconds}")
+
+    info("Pattern requests generated")
 
     return requests, timestamps_seconds

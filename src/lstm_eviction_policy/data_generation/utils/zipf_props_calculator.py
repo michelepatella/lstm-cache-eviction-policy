@@ -42,10 +42,9 @@ def calculate_zipf_probs(keys: np.ndarray, alpha: float) -> np.ndarray:
     debug(
         f"Sum of Zipfian key probabilities after normalization: {np.sum(zipf_probs_normalized)}"
     )
-    debug(
-        f"Number of keys: {len(keys)}, Number of Zipfian probabilities: {len(zipf_probs_normalized)}"
-    )
 
-    info("Zipfian probabilities calculated")
+    info(
+        f"{len(zipf_probs_normalized)} Zipfian probabilities calculated for {len(keys)} keys"
+    )
 
     return zipf_probs_normalized
