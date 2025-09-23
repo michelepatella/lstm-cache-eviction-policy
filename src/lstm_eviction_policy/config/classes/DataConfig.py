@@ -1,13 +1,21 @@
-from typing import Literal
-
 from pydantic import BaseModel, confloat, conint, model_validator
 
-from lstm_eviction_policy.config.classes.utils.min_max_validator import validate_min_max
+from const import (
+    ALLOWED_DATA_DISTRIBUTION_MODES,
+    MAX_HOUR,
+    MIN_HOUR,
+)
+from lstm_eviction_policy.config.classes.validation.choice_field_validator import (
+    validate_choice_field,
+)
+from lstm_eviction_policy.config.classes.validation.min_max_validator import (
+    validate_min_max,
+)
 
 
 class HoursConfig(BaseModel):
-    start: conint(ge=0, le=23)
-    end: conint(ge=0, le=23)
+    start: conint(ge=MIN_HOUR, le=MAX_HOUR)
+    end: conint(ge=MIN_HOUR, le=MAX_HOUR)
 
 
 # Data — Distribution
@@ -36,9 +44,28 @@ class KeysConfig(BaseModel):
 
 class GeneralDataConfig(BaseModel):
     seed: conint(ge=0)
-    mode: Literal["static", "dynamic"]
+    mode: str
     requests: RequestsConfig
     keys: KeysConfig
+
+    @model_validator(mode="after")
+    def check_data_distribution_mode(self: "GeneralDataConfig") -> "GeneralDataConfig":
+        """
+        Check whether data distribution
+        mode is valid or not.
+
+        This function validates the data
+        distribution mode.
+
+        Parameters:
+            self (GeneralDataConfig): Current model instance.
+
+        Returns:
+            GeneralDataConfig: Validated model instance.
+        """
+        return validate_choice_field(
+            self, self.mode, ALLOWED_DATA_DISTRIBUTION_MODES, "data.general.mode"
+        )
 
 
 # Data — Pattern
@@ -135,8 +162,8 @@ class AccessConfig(BaseModel):
 
 
 class BurstinessHoursConfig(BaseModel):
-    start: conint(ge=0, le=23)
-    end: conint(ge=0, le=23)
+    start: conint(ge=MIN_HOUR, le=MAX_HOUR)
+    end: conint(ge=MIN_HOUR, le=MAX_HOUR)
 
 
 class BurstinessConfig(BaseModel):

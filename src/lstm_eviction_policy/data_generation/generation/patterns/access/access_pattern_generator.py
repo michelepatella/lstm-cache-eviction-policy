@@ -75,8 +75,8 @@ def generate_access_pattern(
 
     # Prepare toggle pattern configuration
     toggle_interval = behavior_config.toggle.interval
-    toggle_first_base_request = behavior_config.toggle.base_request.first
-    toggle_second_base_request = behavior_config.toggle.base_request.second
+    toggle_first_base_request = behavior_config.toggle.base_requests.first
+    toggle_second_base_request = behavior_config.toggle.base_requests.second
     toggle_forward = behavior_config.toggle.offsets.forward
     toggle_backward = behavior_config.toggle.offsets.backward
     toggle_start = behavior_config.toggle.hours.start

@@ -39,7 +39,7 @@ def merge_config(
     # the original configuration object consequently
     if not isinstance(updated_config, dict):
         msg = "Updated configuration object must be a dictionary"
-        error(msg)
+        error("%s", msg)
         raise TypeError(msg)
 
     try:
