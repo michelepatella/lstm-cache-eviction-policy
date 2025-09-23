@@ -33,7 +33,7 @@ def generate_dynamic_requests(config: Config) -> tuple[list[int], np.ndarray]:
     steps = zipf_config.steps
 
     debug(
-        f"Dynamic alpha values generation from {alpha_min} to {alpha_max}, in {steps} steps."
+        f"Dynamic alpha values generation from {alpha_min} to {alpha_max}, in {steps} steps"
     )
 
     # Generate evenly spaced alpha

@@ -14,7 +14,7 @@ def data_preprocessing(config_settings):
     info("🔄 Data preprocessing started...")
 
     # set the variable indicating the state of the process
-    phase_var.set("data_preprocessing")
+    phase_var.set("data preprocessing")
 
     # load the dataset
     df = load_dataset(config_settings)

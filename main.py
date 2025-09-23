@@ -1,23 +1,24 @@
 from lstm_eviction_policy.config import prepare_config
+from lstm_eviction_policy.data_generation import data_generation
 
 # PIPELINE
 # 0. PREPARE CONFIGURATION SETTINGS
-config_settings = prepare_config()
+config = prepare_config()
 
 # 1. GENERATE SYNTHETIC DATA
-# data_generation(config_settings)
+data_generation(config)
 
 # 2. PREPROCESS GENERATED DATA
-# data_preprocessing(config_settings)
+# data_preprocessing(config)
 
 # 3. FIND THE BEST HYPERPARAMETERS
-# config_settings = validation(config_settings)
+# config = validation(config)
 
 # 4. TRAIN THE MODEL
-# training(config_settings)
+# training(config)
 
 # 5. TEST THE STANDALONE MODEL
-# testing(config_settings)
+# testing(config)
 
 # 6. COMPARE THE FRAMEWORK AGAINST BASELINE CACHES
-# run_simulations(config_settings)
+# run_simulations(config)
