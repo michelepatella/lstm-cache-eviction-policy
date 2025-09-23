@@ -3,26 +3,68 @@ from collections import Counter
 import numpy as np
 from matplotlib import pyplot as plt
 
+from const import (
+    FIGURE_LABEL_FONT_SIZE,
+    FIGURE_SIZE,
+    FIGURE_TITLE_FONT_SIZE,
+    ZIPF_LOGLOG_PLOT_MARKER,
+    ZIPF_LOGLOG_PLOT_TITLE,
+    ZIPF_LOGLOG_PLOT_X_LABEL,
+    ZIPF_LOGLOG_PLOT_Y_LABEL,
+)
+from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
+
 
 def plot_zipf_loglog(requests: list[int]) -> None:
-    # Count how many keys are
-    # involved in generated requests
-    key_counts = Counter(requests)
+    """
+    Plot Zipfian distribution via log-log.
 
-    # Get key access frequencies
-    key_frequencies = np.array(sorted(key_counts.values(), reverse=True))
+    This function plots Zipfian distribution
+    of key accesses via log-log. The generated
+    plot should highlight much more key accesses to
+    the first keys than those to later ones.
 
-    # Define ranks ranging from
-    # the first place to the last one
-    ranks = np.arange(1, len(key_frequencies) + 1)
+    Parameters:
+        requests (list[int]): List of key accesses.
 
-    # Plot the Zipfian distribution
-    # log-log plot
-    plt.figure()
-    plt.loglog(ranks, key_frequencies, marker="o")
-    plt.title("Zipf Distribution (Log-Log)", fontsize=18)
-    plt.xlabel("Key", fontsize=16)
-    plt.ylabel("Frequency", fontsize=16)
-    plt.tight_layout()
-    plt.show()
-    plt.close()
+    Returns:
+        None
+
+    Raises:
+        ValueError: If list of requests is empty or has
+                    one or more negative values.
+        TypeError: If list of requests is not iterable or
+                   is composed of non-iterable items.
+    """
+    try:
+        # Count how many keys are
+        # involved in generated requests
+        key_counts = Counter(requests)
+
+        debug(f"Number of keys for Zipf log-log plot: {key_counts}")
+
+        # Get key access frequencies
+        key_frequencies = np.array(sorted(key_counts.values(), reverse=True))
+
+        debug(f"Key frequencies for Zipf log-log plot: {key_frequencies}")
+
+        # Define ranks ranging from
+        # the first place to the last one
+        ranks = np.arange(1, len(key_frequencies) + 1)
+
+        # Plot the Zipfian distribution
+        # log-log
+        plt.figure(figsize=(FIGURE_SIZE, FIGURE_SIZE))
+        plt.loglog(ranks, key_frequencies, marker=ZIPF_LOGLOG_PLOT_MARKER)
+        plt.title(ZIPF_LOGLOG_PLOT_TITLE, fontsize=FIGURE_TITLE_FONT_SIZE)
+        plt.xlabel(ZIPF_LOGLOG_PLOT_X_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
+        plt.ylabel(ZIPF_LOGLOG_PLOT_Y_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
+        plt.tight_layout()
+        plt.show()
+        plt.close()
+
+        info("Zipf log-log plotted")
+    except (ValueError, TypeError) as e:
+        msg = "Failed to plot Zipf log-log"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e

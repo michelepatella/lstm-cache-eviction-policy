@@ -53,7 +53,7 @@ def generate_memory_fallback_pattern(
         # according to Zipfian key probabilities
         requested_key = np.random.choice(keys_range, p=zipf_probs)
 
-        debug(f"Requested key selected by fallback pattern")
+        debug("Requested key selected by fallback pattern")
 
     info(f"(Memory/fallback pattern) Key requested: {requested_key}")
 

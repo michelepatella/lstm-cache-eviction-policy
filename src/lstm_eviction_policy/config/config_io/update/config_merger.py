@@ -60,6 +60,6 @@ def merge_config(
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 
-    info(f"Configuration objects merged")
+    info("Configuration objects merged")
 
     return original_config

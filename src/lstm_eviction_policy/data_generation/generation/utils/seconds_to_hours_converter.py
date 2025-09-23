@@ -31,7 +31,7 @@ def seconds_to_hours(timestamps_seconds: list[float]) -> np.ndarray:
         # by total amount of seconds in hour
         timestamps_hours = np.array(timestamps_seconds, dtype=float) / SECONDS_IN_HOUR
     except TypeError as e:
-        msg = f"Failed to convert timestamps from seconds to hours"
+        msg = "Failed to convert timestamps from seconds to hours"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 

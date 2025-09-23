@@ -19,10 +19,6 @@ def save_dataset(df: pd.DataFrame, dataset_path: str) -> None:
         None
 
     Raises:
-        FileNotFoundError: If the specified path where
-                           to save the dataset does not exist.
-        PermissionError: If saving the dataset at specified
-                         path is not permitted.
         OSError: Generic operating system error while
                  saving the dataset at specified path.
     """
@@ -33,7 +29,7 @@ def save_dataset(df: pd.DataFrame, dataset_path: str) -> None:
         # to CSV file, and save it to
         # retrieved path
         df.to_csv(dataset_path, index=False)
-    except (FileNotFoundError, PermissionError, OSError) as e:
+    except OSError as e:
         msg = f"Failed to save dataset at {dataset_path}"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e

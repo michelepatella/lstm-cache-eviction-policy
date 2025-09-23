@@ -171,6 +171,6 @@ def generate_access_pattern(
             zipf_probs,
         )
 
-    info(f"Requests access pattern generated")
+    info("Requests access pattern generated")
 
     return requested_key

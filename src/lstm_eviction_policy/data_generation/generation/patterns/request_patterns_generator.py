@@ -72,7 +72,7 @@ def generate_pattern_requests(
     debug(f"Seed for requests generation: {seed}")
 
     # For each request to be generated
-    for i in range(num_requests):
+    for _ in range(num_requests):
         debug(
             f"Request generation for day {current_day}, seconds: {current_seconds_in_day}"
         )
