@@ -52,6 +52,7 @@ DAILY_PROFILE_PLOT_EDGE_COLOR = "black"
 DAILY_PROFILE_PLOT_TITLE = "Distribution of Requests Over Day"
 DAILY_PROFILE_PLOT_X_LABEL = "Hour of Day"
 DAILY_PROFILE_PLOT_Y_LABEL = "Number of Requests"
+DAILY_PROFILE_PLOT_STEP = 1
 
 # Key usage heatmap
 KEY_USAGE_HEATMAP_ASPECT: Literal["equal", "auto"] = "auto"
@@ -60,4 +61,4 @@ KEY_USAGE_HEATMAP_TITLE = "Heatmap of Key Access Frequency by Hour of Day"
 KEY_USAGE_HEATMAP_COLORBAR_LABEL = "Access Count"
 KEY_USAGE_HEATMAP_X_LABEL = "Key"
 KEY_USAGE_HEATMAP_Y_LABEL = "Hour of Day"
-KEY_USAGE_HEATMAP_ROTATION = 90
+KEY_USAGE_HEATMAP_ROTATION = 45

@@ -5,6 +5,7 @@ from const import (
     DAILY_PROFILE_PLOT_ALIGN,
     DAILY_PROFILE_PLOT_BIN_SIZE,
     DAILY_PROFILE_PLOT_EDGE_COLOR,
+    DAILY_PROFILE_PLOT_STEP,
     DAILY_PROFILE_PLOT_TITLE,
     DAILY_PROFILE_PLOT_X_LABEL,
     DAILY_PROFILE_PLOT_Y_LABEL,
@@ -74,7 +75,7 @@ def plot_daily_profile(timestamps_hours: np.ndarray) -> None:
         plt.xlabel(DAILY_PROFILE_PLOT_X_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
         plt.ylabel(DAILY_PROFILE_PLOT_Y_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
         plt.xticks(
-            np.arange(MIN_HOUR, MAX_HOUR + 1, step=DAILY_PROFILE_PLOT_BIN_SIZE),
+            np.arange(MIN_HOUR, MAX_HOUR + 1, step=DAILY_PROFILE_PLOT_STEP),
             fontsize=FIGURE_LABEL_FONT_SIZE,
         )
         plt.tight_layout()
