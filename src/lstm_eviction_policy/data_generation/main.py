@@ -4,7 +4,9 @@ from const import (
     REQUEST_COLUMN_NAME,
     TIMESTAMP_COLUMN_NAME,
 )
-from lstm_eviction_policy.config.classes.Config import Config
+from lstm_eviction_policy.config.classes.Config import (
+    Config,
+)
 from lstm_eviction_policy.data_generation.generation.requests.dynamic_requests_generator import (
     generate_dynamic_requests,
 )
@@ -14,7 +16,9 @@ from lstm_eviction_policy.data_generation.generation.requests.static_requests_ge
 from lstm_eviction_policy.data_generation.utils.dataframe_builder import (
     create_dataframe,
 )
-from lstm_eviction_policy.data_generation.utils.dataset_saver import save_dataset
+from lstm_eviction_policy.data_generation.utils.dataset_saver import (
+    save_dataset,
+)
 from lstm_eviction_policy.data_generation.visualization.daily_profile_plotter import (
     plot_daily_profile,
 )
@@ -24,10 +28,14 @@ from lstm_eviction_policy.data_generation.visualization.key_usage_heatmap_plotte
 from lstm_eviction_policy.data_generation.visualization.zipf_loglog_plotter import (
     plot_zipf_loglog,
 )
-from lstm_eviction_policy.utils.logs.log_utils import debug, info, phase_var
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    info,
+    phase_var,
+)
 
 
-def data_generation(config: Config) -> None:
+def generate_data(config: Config) -> None:
     """
     Generate data according
     to a specified data distribution mode.
@@ -62,17 +70,9 @@ def data_generation(config: Config) -> None:
     if data_distribution_mode == DATA_DISTRIBUTION_STATIC_MODE:
         # Static requests generation
         requests, timestamps_hours = generate_static_requests(config)
-
-        # Set the path where to save
-        # the dataset later
-        dataset_path = config.data.dataset.paths.static
     else:
         # Dynamic requests generation
         requests, timestamps_hours = generate_dynamic_requests(config)
-
-        # Set the path where to save
-        # the dataset later
-        dataset_path = config.data.dataset.paths.dynamic
 
     # Create a dataframe where each row is composed of
     # a timestamp and the corresponding request
@@ -85,7 +85,7 @@ def data_generation(config: Config) -> None:
 
     # Save just created dataframe
     # as dataset
-    save_dataset(df, dataset_path)
+    save_dataset(df, config)
 
     # Show data generation -related plots
     plot_zipf_loglog(requests)

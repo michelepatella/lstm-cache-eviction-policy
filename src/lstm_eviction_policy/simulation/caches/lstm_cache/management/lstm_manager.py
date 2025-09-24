@@ -3,10 +3,18 @@ import time
 from simulation.caches.lstm_cache.key_selection.key_candidates_finder import (
     find_key_candidates,
 )
-from simulation.caches.lstm_cache.management.cold_start_manager import manage_cold_start
-from simulation.caches.utils.key_finder import find_key
-from simulation.caches.utils.seed_seq_extractor import extract_seed_seq
-from simulation.prefetching.autoregression import autoregressive_rollout
+from simulation.caches.lstm_cache.management.cold_start_manager import (
+    manage_cold_start,
+)
+from simulation.caches.utils.key_finder import (
+    find_key,
+)
+from simulation.caches.utils.seed_seq_extractor import (
+    extract_seed_seq,
+)
+from simulation.prefetching.autoregression import (
+    autoregressive_rollout,
+)
 from simulation.prefetching.confidence_interval_calculator import (
     calculate_confidence_interval,
 )
@@ -50,7 +58,11 @@ def manage_lstm_cache(
         # if it's not time to prefetch (no enough data)
         if current_idx < config_settings.seq_len:
             # handle cold start
-            manage_cold_start(cache, current_time, config_settings)
+            manage_cold_start(
+                cache,
+                current_time,
+                config_settings,
+            )
 
         elif (
             current_idx >= config_settings.seq_len
@@ -72,20 +84,31 @@ def manage_lstm_cache(
 
             # it's time to prefetch
             # extract seed sequence
-            seed_seq = extract_seed_seq(current_idx, testing_set, config_settings)
+            seed_seq = extract_seed_seq(
+                current_idx,
+                testing_set,
+                config_settings,
+            )
 
             # compute rollout
             (all_outputs, all_vars) = autoregressive_rollout(
-                model, seed_seq, device, config_settings
+                model,
+                seed_seq,
+                device,
+                config_settings,
             )
 
             # calculate CIs related to the predictions
             (lower_ci, upper_ci) = calculate_confidence_interval(
-                all_outputs, all_vars, config_settings
+                all_outputs,
+                all_vars,
+                config_settings,
             )
 
             # identify keys and scores thereof
-            (keys, scores) = find_key_candidates(all_outputs, upper_ci, lower_ci)
+            (keys, scores) = find_key_candidates(
+                all_outputs, upper_ci, lower_ci
+            )
 
             # put the keys into the cache
             for k in keys:
@@ -116,6 +139,9 @@ def manage_lstm_cache(
     info(f"🟢 LSTM-based cache policy management completed.")
 
     if start_time is not None:
-        return (time.perf_counter() - start_time, num_insertion)
+        return (
+            time.perf_counter() - start_time,
+            num_insertion,
+        )
     else:
         return (0, num_insertion)

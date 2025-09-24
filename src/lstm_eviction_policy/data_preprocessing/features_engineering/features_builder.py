@@ -1,39 +1,59 @@
-from data_preprocessing.features_engineering.features_encoder import (
+import pandas as pd
+
+from lstm_eviction_policy.data_preprocessing.features_engineering.features_encoder import (
     encode_time_trigonometrically,
 )
-from utils.logs.log_utils import info
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    error,
+    info,
+)
 
 
-def build_features(df, time_column, target_column):
+def build_features(
+    df: pd.DataFrame,
+    time_column: str,
+    target_column: str,
+) -> pd.DataFrame:
     """
-    Method to orchestrate feature engineering.
-    :param df: The original dataframe.
-    :param time_column: The time column.
-    :param target_column: The target column.
-    :return: The final dataframe.
-    """
-    # show initial message
-    info("🔄 Feature engineering started...")
+    Build dataset features with time
+    encoding and target reordering.
 
+    This function applies trigonometric encoding to the specified
+    time column, creating sine and cosine features to represent
+    cyclical time. It then reorders the columns so that the
+    target column appears last, keeping feature columns first.
+
+    Parameters:
+        df (pd.DataFrame): Dataset containing the time and target columns.
+        time_column (str): Name of the time column to encode trigonometrically.
+        target_column (str): Name of the target column to place at the end.
+
+    Returns:
+        pd.DataFrame: New dataset with trigonometric time features
+                      and target column reordered as the last column.
+
+    Raises:
+        KeyError: If the time or target column does not exist in the dataset.
+        TypeError: If the dataframe or columns are not of the expected type.
+    """
     try:
-        # build new features
-        df = encode_time_trigonometrically(df, time_column)
+        # Encode time trigonometrically
+        new_df = encode_time_trigonometrically(df, time_column)
 
-        # reorder column s.t. target column is the last one
-        features = [col for col in df.columns if col != target_column]
-        df = df[features + [target_column]]
+        # Reorder columns so that
+        # target column is the last one
+        features = [col for col in new_df.columns if col != target_column]
+        new_df = new_df[features + [target_column]]
 
-        # show successful message
-        info("🟢 Feature engineering completed.")
+        debug(f"Dataset feature columns: {features}")
+        debug(f"Dataset target column: {target_column}")
+        debug(f"Dataset columns after re-ordering: {new_df.columns}")
 
-        return df
-    except KeyError as e:
-        raise KeyError(f"KeyError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except ValueError as e:
-        raise ValueError(f"ValueError: {e}.")
-    except AttributeError as e:
-        raise AttributeError(f"AttributeError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+        info("Dataset features built")
+
+        return new_df
+    except (KeyError, TypeError) as e:
+        msg = "Failed to build dataset features"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e

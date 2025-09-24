@@ -1,7 +1,13 @@
-from utils.data.dataloader.dataloader_utils import extract_targets_from_dataloader
+from utils.data.dataloader.dataloader_utils import (
+    extract_targets_from_dataloader,
+)
 from utils.logs.log_utils import info
-from utils.model.setup.model_loader import load_model
-from utils.model.setup.model_setup import model_setup
+from utils.model.setup.model_loader import (
+    load_model,
+)
+from utils.model.setup.model_setup import (
+    model_setup,
+)
 
 
 def trained_model_setup(loader, config_settings):

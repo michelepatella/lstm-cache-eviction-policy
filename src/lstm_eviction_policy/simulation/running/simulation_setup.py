@@ -1,7 +1,13 @@
-from utils.data.AccessLogsDataset import AccessLogsDataset
-from utils.data.dataloader.dataloader_setup import dataloader_setup
+from utils.data.AccessLogsDataset import (
+    AccessLogsDataset,
+)
+from utils.data.dataloader.dataloader_setup import (
+    dataloader_setup,
+)
 from utils.logs.log_utils import info
-from utils.model.setup.trained_model_setup import trained_model_setup
+from utils.model.setup.trained_model_setup import (
+    trained_model_setup,
+)
 
 
 def simulation_setup(policy_name, config_settings):
@@ -16,7 +22,11 @@ def simulation_setup(policy_name, config_settings):
 
     # initialize data
     (device, criterion, model) = None, None, None
-    counters = {"hits": 0, "misses": 0, "hits_cold_start": 0}
+    counters = {
+        "hits": 0,
+        "misses": 0,
+        "hits_cold_start": 0,
+    }
     timeline = []
     recent_hits = []
     prefetching_latency = []

@@ -1,3 +1,3 @@
-from .main import data_preprocessing
+from .main import preprocess_data
 
-__all__ = ["data_preprocessing"]
+__all__ = ["preprocess_data"]

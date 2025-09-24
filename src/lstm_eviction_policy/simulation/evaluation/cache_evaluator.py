@@ -13,7 +13,12 @@ from simulation.evaluation.metrics.prefetching_avg_latency_calculator import (
 from utils.logs.log_utils import info
 
 
-def evaluate_cache(counters, tot_prefetch, autoregressive_latencies, metrics_logger):
+def evaluate_cache(
+    counters,
+    tot_prefetch,
+    autoregressive_latencies,
+    metrics_logger,
+):
     """
     Method to orchestrate cache metrics calculation.
     :param counters: A counter used while simulating a cache policy.
@@ -30,7 +35,8 @@ def evaluate_cache(counters, tot_prefetch, autoregressive_latencies, metrics_log
 
     # component evaluation
     prefetch_hit_rate = calculate_prefetch_hit_rate(
-        counters["hits"] - counters["hits_cold_start"], tot_prefetch
+        counters["hits"] - counters["hits_cold_start"],
+        tot_prefetch,
     )
     eviction_mistake_rate = calculate_eviction_mistake_rate(metrics_logger)
 

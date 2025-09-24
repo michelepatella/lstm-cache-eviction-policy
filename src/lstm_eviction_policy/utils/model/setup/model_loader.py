@@ -19,7 +19,10 @@ def load_model(model, device, config_settings):
     try:
         # load the model
         model.load_state_dict(
-            torch.load(config_settings.model_save_path, map_location=device)
+            torch.load(
+                config_settings.model_save_path,
+                map_location=device,
+            )
         )
     except FileNotFoundError as e:
         raise FileNotFoundError(f"FileNotFoundError: {e}.")

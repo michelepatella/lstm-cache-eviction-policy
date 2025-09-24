@@ -1,15 +1,22 @@
-from lstm_eviction_policy.config import prepare_config
-from lstm_eviction_policy.data_generation import data_generation
+from lstm_eviction_policy.config import (
+    prepare_config,
+)
+from lstm_eviction_policy.data_generation import (
+    generate_data,
+)
+from lstm_eviction_policy.data_preprocessing import (
+    preprocess_data,
+)
 
 # PIPELINE
 # 0. PREPARE CONFIGURATION SETTINGS
 config = prepare_config()
 
 # 1. GENERATE SYNTHETIC DATA
-data_generation(config)
+generate_data(config)
 
 # 2. PREPROCESS GENERATED DATA
-# data_preprocessing(config)
+preprocess_data(config)
 
 # 3. FIND THE BEST HYPERPARAMETERS
 # config = validation(config)

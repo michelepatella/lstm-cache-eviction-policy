@@ -11,7 +11,9 @@ formatter = logging.Formatter("[%(phase)s] %(levelname)s: %(message)s")
 
 # all logging messages from INFO-level must be written in a file
 file_handler = RotatingFileHandler(
-    "./logs/log.log", maxBytes=10_000_000, backupCount=100
+    "./logs/log.log",
+    maxBytes=10_000_000,
+    backupCount=100,
 )
 file_handler.setLevel(logging.DEBUG)
 file_handler.setFormatter(formatter)
@@ -22,7 +24,10 @@ stream_handler.setLevel(logging.DEBUG)
 stream_handler.setFormatter(formatter)
 
 # configuration of logging messages
-logging.basicConfig(level=logging.DEBUG, handlers=[file_handler, stream_handler])
+logging.basicConfig(
+    level=logging.DEBUG,
+    handlers=[file_handler, stream_handler],
+)
 
 
 def info(msg, *args, **kwargs):
@@ -34,7 +39,12 @@ def info(msg, *args, **kwargs):
     :return:
     """
     try:
-        logging.info(msg, *args, extra={"phase": phase_var.get()}, **kwargs)
+        logging.info(
+            msg,
+            *args,
+            extra={"phase": phase_var.get()},
+            **kwargs,
+        )
     except KeyError as e:
         raise KeyError(f"KeyError: {e}.")
     except ValueError as e:
@@ -58,7 +68,12 @@ def error(msg, *args, **kwargs):
     :return:
     """
     try:
-        logging.error(msg, *args, extra={"phase": phase_var.get()}, **kwargs)
+        logging.error(
+            msg,
+            *args,
+            extra={"phase": phase_var.get()},
+            **kwargs,
+        )
     except KeyError as e:
         raise KeyError(f"KeyError: {e}.")
     except ValueError as e:
@@ -82,7 +97,12 @@ def debug(msg, *args, **kwargs):
     :return:
     """
     try:
-        logging.debug(msg, *args, extra={"phase": phase_var.get()}, **kwargs)
+        logging.debug(
+            msg,
+            *args,
+            extra={"phase": phase_var.get()},
+            **kwargs,
+        )
     except KeyError as e:
         raise KeyError(f"KeyError: {e}.")
     except ValueError as e:

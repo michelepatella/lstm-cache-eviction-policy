@@ -17,7 +17,10 @@ def save_model(model, config_settings):
         debug(f"⚙️ Path to save the model: {config_settings.model_save_path}.")
 
         # save the model
-        torch.save(model.state_dict(), config_settings.model_save_path)
+        torch.save(
+            model.state_dict(),
+            config_settings.model_save_path,
+        )
     except KeyError as e:
         raise KeyError(f"KeyError: {e}.")
     except TypeError as e:

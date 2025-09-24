@@ -1,4 +1,6 @@
-from utils.data.AccessLogsDataset import AccessLogsDataset
+from utils.data.AccessLogsDataset import (
+    AccessLogsDataset,
+)
 from utils.logs.log_utils import info
 
 
@@ -35,7 +37,9 @@ def extract_seed_seq(current_idx, testing_set, config_settings):
             return
 
         # extract seed from the testing window
-        seed_seq = testing_window_dataset.__getitem__(len(testing_window_dataset) - 1)
+        seed_seq = testing_window_dataset.__getitem__(
+            len(testing_window_dataset) - 1
+        )
     except NameError as e:
         raise NameError(f"NameError: {e}.")
     except AttributeError as e:

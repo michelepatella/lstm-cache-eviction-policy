@@ -3,10 +3,16 @@ from typing import Sequence, Union
 import numpy as np
 import pandas as pd
 
-from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    error,
+    info,
+)
 
 
-def create_dataframe(columns: dict[str, Union[Sequence, np.ndarray]]) -> pd.DataFrame:
+def create_dataframe(
+    columns: dict[str, Union[Sequence, np.ndarray]],
+) -> pd.DataFrame:
     """
     Create dataframe for the given columns.
 
@@ -40,6 +46,8 @@ def create_dataframe(columns: dict[str, Union[Sequence, np.ndarray]]) -> pd.Data
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 
-    info(f"Dataframe created with {len(df)} rows and {len(df.columns)} columns")
+    info(
+        f"Dataframe created with {len(df)} rows and {len(df.columns)} columns"
+    )
 
     return df

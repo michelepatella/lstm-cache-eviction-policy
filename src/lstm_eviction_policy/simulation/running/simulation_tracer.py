@@ -1,7 +1,14 @@
 from utils.logs.log_utils import info
 
 
-def trace_hits_misses(counters, prev_hits, recent_hits, window, idx, timeline):
+def trace_hits_misses(
+    counters,
+    prev_hits,
+    recent_hits,
+    window,
+    idx,
+    timeline,
+):
     """
     Method to trace hits and misses over time.
     :param counters: A counter used while simulating the cache policy.

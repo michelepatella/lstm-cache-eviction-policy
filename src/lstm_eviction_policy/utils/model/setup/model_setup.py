@@ -1,11 +1,20 @@
 import torch
 from utils.logs.log_utils import debug, info
 from utils.model.LSTM import LSTM
-from utils.model.utils.class_weights_calculator import calculate_class_weights
-from utils.model.utils.optimizer_builder import build_optimizer
+from utils.model.utils.class_weights_calculator import (
+    calculate_class_weights,
+)
+from utils.model.utils.optimizer_builder import (
+    build_optimizer,
+)
 
 
-def model_setup(model_params, learning_rate, targets, config_settings):
+def model_setup(
+    model_params,
+    learning_rate,
+    targets,
+    config_settings,
+):
     """
     Method to set up the training and testing processes.
     :param model_params: The model parameters.

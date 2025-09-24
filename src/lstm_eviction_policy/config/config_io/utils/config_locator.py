@@ -1,7 +1,14 @@
 from pathlib import Path
 
-from const import CONFIG_FILE_NAME, CONFIG_FILE_PARENT_LEVEL
-from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
+from const import (
+    CONFIG_FILE_NAME,
+    CONFIG_FILE_PARENT_LEVEL,
+)
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    error,
+    info,
+)
 
 
 def get_config_abs_path() -> str:
@@ -36,8 +43,13 @@ def get_config_abs_path() -> str:
             f"Parent directories used to resolve absolute path of YAML configuration file: "
             f"{[p for p in resolved_path.parents[:CONFIG_FILE_PARENT_LEVEL]]}"
         )
-    except (NameError, TypeError, AttributeError, OSError) as e:
-        msg = f"Failed to resolve YAML configuration absolute path from {__file__}"
+    except (
+        NameError,
+        TypeError,
+        AttributeError,
+        OSError,
+    ) as e:
+        msg = "Failed to resolve YAML configuration absolute path"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 

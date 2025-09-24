@@ -1,9 +1,14 @@
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import (
+    classification_report,
+    confusion_matrix,
+)
 from utils.logs.log_utils import info
 from utils.model.evaluation.metrics.kappa_statistic_calculator import (
     calculate_kappa_statistic,
 )
-from utils.model.evaluation.metrics.top_k_calculator import calculate_top_k_accuracy
+from utils.model.evaluation.metrics.top_k_calculator import (
+    calculate_top_k_accuracy,
+)
 
 
 def compute_model_metrics(targets, predictions, outputs, config_settings):
@@ -21,11 +26,16 @@ def compute_model_metrics(targets, predictions, outputs, config_settings):
     try:
         # class-wise metrics
         class_report = classification_report(
-            targets, predictions, output_dict=True, zero_division=0
+            targets,
+            predictions,
+            output_dict=True,
+            zero_division=0,
         )
 
         # calculate the top-k accuracy
-        top_k_accuracy = calculate_top_k_accuracy(targets, outputs, config_settings)
+        top_k_accuracy = calculate_top_k_accuracy(
+            targets, outputs, config_settings
+        )
 
         # compute the confusion matrix
         conf_matrix = confusion_matrix(targets, predictions)

@@ -1,6 +1,9 @@
 import numpy as np
 
-from lstm_eviction_policy.utils.logs.log_utils import debug, info
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    info,
+)
 
 
 def generate_distortion_pattern(

@@ -19,7 +19,11 @@ def calculate_top_k_accuracy(targets, outputs, config_settings):
 
         # extract top-k predictions
         top_k_preds = (
-            torch.topk(outputs_tensor, k=config_settings.top_k, dim=1)
+            torch.topk(
+                outputs_tensor,
+                k=config_settings.top_k,
+                dim=1,
+            )
             .indices.cpu()
             .numpy()
         )

@@ -1,6 +1,9 @@
 import numpy as np
 
-from lstm_eviction_policy.utils.logs.log_utils import debug, info
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    info,
+)
 
 
 def generate_memory_fallback_pattern(
@@ -40,7 +43,9 @@ def generate_memory_fallback_pattern(
     debug(f"Memory interval for memory/fallback pattern: {memory_interval}")
 
     # Based on the memory interval
-    if (requests_count % memory_interval == 0) and (requests_count > memory_offset):
+    if (requests_count % memory_interval == 0) and (
+        requests_count > memory_offset
+    ):
         # Requested key as the one requested
         # memory offset steps back in the history
         requested_key = requests[-memory_offset]

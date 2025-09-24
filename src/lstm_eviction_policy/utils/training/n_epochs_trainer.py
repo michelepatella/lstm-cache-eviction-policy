@@ -1,10 +1,16 @@
 import copy
 
 from tqdm import tqdm
-from training.utils.EarlyStopping import EarlyStopping
+from training.utils.EarlyStopping import (
+    EarlyStopping,
+)
 from utils.logs.log_utils import debug, info
-from utils.model.evaluation.model_evaluator import evaluate_model
-from utils.training.one_epoch_trainer import train_one_epoch
+from utils.model.evaluation.model_evaluator import (
+    evaluate_model,
+)
+from utils.training.one_epoch_trainer import (
+    train_one_epoch,
+)
 
 
 def train_n_epochs(
@@ -60,7 +66,13 @@ def train_n_epochs(
         # n-epochs learning
         for _ in tqdm(range(1, epochs + 1), desc="Training"):
             # train the model
-            train_one_epoch(model, training_loader, optimizer, criterion, device)
+            train_one_epoch(
+                model,
+                training_loader,
+                optimizer,
+                criterion,
+                device,
+            )
 
             # increase number of epochs by one
             num_epochs_run += 1
@@ -68,7 +80,11 @@ def train_n_epochs(
             if validation_loader is not None:
                 # get the validation average loss
                 avg_loss, *_ = evaluate_model(
-                    model, validation_loader, criterion, device, config_settings
+                    model,
+                    validation_loader,
+                    criterion,
+                    device,
+                    config_settings,
                 )
                 tot_loss = tot_loss + avg_loss
 

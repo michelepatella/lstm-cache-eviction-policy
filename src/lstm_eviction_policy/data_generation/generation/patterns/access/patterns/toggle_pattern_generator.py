@@ -1,4 +1,7 @@
-from lstm_eviction_policy.utils.logs.log_utils import debug, info
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    info,
+)
 
 
 def generate_toggle_pattern(
@@ -69,7 +72,11 @@ def generate_toggle_pattern(
         # second base request steps before, adding
         # backward offset
         requested_key = (
-            (requests[-toggle_second_base_request] - first_key + toggle_backward)
+            (
+                requests[-toggle_second_base_request]
+                - first_key
+                + toggle_backward
+            )
             % keys_range_size
         ) + first_key
 

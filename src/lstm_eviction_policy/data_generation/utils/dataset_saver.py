@@ -1,9 +1,19 @@
 import pandas as pd
 
-from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
+from lstm_eviction_policy.config.classes.Config import (
+    Config,
+)
+from lstm_eviction_policy.utils.data.dataset.dataset_locator import (
+    get_dataset_path,
+)
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    error,
+    info,
+)
 
 
-def save_dataset(df: pd.DataFrame, dataset_path: str) -> None:
+def save_dataset(df: pd.DataFrame, config: Config) -> None:
     """
     Save Pandas dataframe to CSV dataset.
 
@@ -13,7 +23,7 @@ def save_dataset(df: pd.DataFrame, dataset_path: str) -> None:
     Parameters:
         df (pd.DataFrame): Pandas dataframe to be saved as
                            CSV dataset.
-        dataset_path (str): Path where to save the dataset.
+        config (Config): Configuration object.
 
     Returns:
         None
@@ -22,7 +32,11 @@ def save_dataset(df: pd.DataFrame, dataset_path: str) -> None:
         OSError: Generic operating system error while
                  saving the dataset at specified path.
     """
-    debug(f"Path where to save the dataset: {dataset_path}")
+    # Retrieve path where
+    # to save dataset
+    dataset_path = get_dataset_path(config)
+
+    debug(f"Path where to save dataset: {dataset_path}")
 
     try:
         # Convert Pandas dataframe
@@ -30,7 +44,7 @@ def save_dataset(df: pd.DataFrame, dataset_path: str) -> None:
         # retrieved path
         df.to_csv(dataset_path, index=False)
     except OSError as e:
-        msg = f"Failed to save dataset at {dataset_path}"
+        msg = "Failed to save dataset"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 

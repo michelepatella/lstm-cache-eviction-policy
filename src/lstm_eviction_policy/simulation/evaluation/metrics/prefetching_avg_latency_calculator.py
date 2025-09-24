@@ -1,7 +1,9 @@
 from utils.logs.log_utils import info
 
 
-def calculate_prefetching_avg_latency(autoregressive_latencies):
+def calculate_prefetching_avg_latency(
+    autoregressive_latencies,
+):
     """
     Method to calculate prefetching average latency.
     :return: Prefetching average latency.
@@ -21,7 +23,9 @@ def calculate_prefetching_avg_latency(autoregressive_latencies):
             ]
             if valid_latencies:
                 # calculate average prefetching latency
-                avg_prefetching_latency = sum(valid_latencies) / len(valid_latencies)
+                avg_prefetching_latency = sum(valid_latencies) / len(
+                    valid_latencies
+                )
     except TypeError as e:
         raise TypeError(f"TypeError: {e}.")
     except ZeroDivisionError as e:

@@ -15,10 +15,16 @@ from const import (
     MAX_HOUR,
     MIN_HOUR,
 )
-from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    error,
+    info,
+)
 
 
-def plot_daily_profile(timestamps_hours: np.ndarray) -> None:
+def plot_daily_profile(
+    timestamps_hours: np.ndarray,
+) -> None:
     """
     Plot daily profile of requests.
 
@@ -71,11 +77,24 @@ def plot_daily_profile(timestamps_hours: np.ndarray) -> None:
             align=DAILY_PROFILE_PLOT_ALIGN,
             edgecolor=DAILY_PROFILE_PLOT_EDGE_COLOR,
         )
-        plt.title(DAILY_PROFILE_PLOT_TITLE, fontsize=FIGURE_TITLE_FONT_SIZE)
-        plt.xlabel(DAILY_PROFILE_PLOT_X_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
-        plt.ylabel(DAILY_PROFILE_PLOT_Y_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
+        plt.title(
+            DAILY_PROFILE_PLOT_TITLE,
+            fontsize=FIGURE_TITLE_FONT_SIZE,
+        )
+        plt.xlabel(
+            DAILY_PROFILE_PLOT_X_LABEL,
+            fontsize=FIGURE_LABEL_FONT_SIZE,
+        )
+        plt.ylabel(
+            DAILY_PROFILE_PLOT_Y_LABEL,
+            fontsize=FIGURE_LABEL_FONT_SIZE,
+        )
         plt.xticks(
-            np.arange(MIN_HOUR, MAX_HOUR + 1, step=DAILY_PROFILE_PLOT_STEP),
+            np.arange(
+                MIN_HOUR,
+                MAX_HOUR + 1,
+                step=DAILY_PROFILE_PLOT_STEP,
+            ),
             fontsize=FIGURE_LABEL_FONT_SIZE,
         )
         plt.tight_layout()
@@ -83,7 +102,11 @@ def plot_daily_profile(timestamps_hours: np.ndarray) -> None:
         plt.close()
 
         info("Daily profile plotted")
-    except (ZeroDivisionError, ValueError, TypeError) as e:
+    except (
+        ZeroDivisionError,
+        ValueError,
+        TypeError,
+    ) as e:
         msg = "Failed to plot daily profile"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e

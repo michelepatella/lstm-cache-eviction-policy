@@ -166,7 +166,10 @@ class LSTM(nn.Module):
 
         try:
             # concatenate embedding layer with the other features
-            x = torch.cat((x_features, embedded_keys), dim=-1)
+            x = torch.cat(
+                (x_features, embedded_keys),
+                dim=-1,
+            )
         except RuntimeError as e:
             raise RuntimeError(f"RuntimeError: {e}.")
         except TypeError as e:

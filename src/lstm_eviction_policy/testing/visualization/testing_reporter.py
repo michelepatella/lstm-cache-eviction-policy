@@ -2,7 +2,11 @@ from utils.logs.log_utils import info
 
 
 def generate_model_evaluation_report(
-    metrics, top_k_accuracy, kappa_statistic, avg_loss, config_settings
+    metrics,
+    top_k_accuracy,
+    kappa_statistic,
+    avg_loss,
+    config_settings,
 ):
     """
     Method to show an evaluation report.
@@ -27,7 +31,9 @@ def generate_model_evaluation_report(
         print(
             f"Top-{config_settings.top_k} Accuracy:                         {top_k_accuracy:.4f}\n"
         )
-        print(f"Kappa Statistic:                        {kappa_statistic:.4f}\n")
+        print(
+            f"Kappa Statistic:                        {kappa_statistic:.4f}\n"
+        )
 
         # class report per class
         print("Class Report per Class:\n")
@@ -43,7 +49,9 @@ def generate_model_evaluation_report(
         # summary of metrics
         print("\nSummary:\n")
         # accuracy
-        print(f"Accuracy:                     {metrics.get('accuracy', 0):.4f}")
+        print(
+            f"Accuracy:                     {metrics.get('accuracy', 0):.4f}"
+        )
         # macro avg
         macro = metrics.get("macro avg", {})
         print(f"Macro Avg Precision:          {macro.get('precision', 0):.4f}")
@@ -51,9 +59,13 @@ def generate_model_evaluation_report(
         print(f"Macro Avg F1-Score:           {macro.get('f1-score', 0):.4f}")
         # weighted avg
         weighted = metrics.get("weighted avg", {})
-        print(f"Weighted Avg Precision:       {weighted.get('precision', 0):.4f}")
+        print(
+            f"Weighted Avg Precision:       {weighted.get('precision', 0):.4f}"
+        )
         print(f"Weighted Avg Recall:          {weighted.get('recall', 0):.4f}")
-        print(f"Weighted Avg F1-Score:        {weighted.get('f1-score', 0):.4f}")
+        print(
+            f"Weighted Avg F1-Score:        {weighted.get('f1-score', 0):.4f}"
+        )
 
         print("\n" + "=" * 85 + "\n")
     except TypeError as e:

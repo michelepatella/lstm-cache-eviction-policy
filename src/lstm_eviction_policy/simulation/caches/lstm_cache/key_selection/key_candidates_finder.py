@@ -43,7 +43,12 @@ def find_key_candidates(all_outputs, upper_ci, lower_ci):
         conf_matrix = (conf_matrix - min_conf) / conf_range
 
         # calculate scores for the keys
-        scores = calculate_key_scores(num_keys, num_steps, prob_matrix, conf_matrix)
+        scores = calculate_key_scores(
+            num_keys,
+            num_steps,
+            prob_matrix,
+            conf_matrix,
+        )
 
         # select the keys
         keys = list(scores.keys())

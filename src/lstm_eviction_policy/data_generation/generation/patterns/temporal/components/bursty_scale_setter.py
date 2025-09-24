@@ -1,4 +1,7 @@
-from lstm_eviction_policy.utils.logs.log_utils import debug, info
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    info,
+)
 
 
 def set_bursty_scale(

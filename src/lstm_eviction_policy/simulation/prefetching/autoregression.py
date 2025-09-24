@@ -2,7 +2,9 @@ import math
 
 import torch
 from utils.logs.log_utils import debug, info
-from utils.model.forward.mc.mc_forward_runner import mc_forward_passes
+from utils.model.forward.mc.mc_forward_runner import (
+    mc_forward_passes,
+)
 
 
 def autoregressive_rollout(model, seed_sequence, device, config_settings):
@@ -55,14 +57,26 @@ def autoregressive_rollout(model, seed_sequence, device, config_settings):
             pred_key = outputs_mean.argmax(dim=-1).unsqueeze(1)
 
             # add a new step using the predicted key
-            x_keys_seq = torch.cat([x_keys_seq[:, 1:], pred_key], dim=1)
+            x_keys_seq = torch.cat(
+                [x_keys_seq[:, 1:], pred_key],
+                dim=1,
+            )
 
             # update features
             last_time = (last_time + delta_t) % (2 * math.pi)
             new_cos = math.cos(last_time)
             new_sin = math.sin(last_time)
-            new_feature = torch.tensor([[new_sin, new_cos]], device=device).unsqueeze(0)
-            x_features_seq = torch.cat([x_features_seq[:, 1:, :], new_feature], dim=1)
+            new_feature = torch.tensor(
+                [[new_sin, new_cos]],
+                device=device,
+            ).unsqueeze(0)
+            x_features_seq = torch.cat(
+                [
+                    x_features_seq[:, 1:, :],
+                    new_feature,
+                ],
+                dim=1,
+            )
 
             # debugging
             debug(f"⚙️ Step: {i}.")

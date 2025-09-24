@@ -1,6 +1,8 @@
 import random
 
-from simulation.caches.utils.BaseCache import BaseCache
+from simulation.caches.utils.BaseCache import (
+    BaseCache,
+)
 from utils.logs.log_utils import debug, info
 
 
@@ -58,7 +60,9 @@ class RandomCache(BaseCache):
             self.metrics_logger.log_put(key, current_time, self.ttl)
 
             # debugging
-            debug(f"⚙️Key {key} cached with expiration time: {self.expiry[key]}.")
+            debug(
+                f"⚙️Key {key} cached with expiration time: {self.expiry[key]}."
+            )
         except AttributeError as e:
             raise AttributeError(f"AttributeError: {e}.")
         except TypeError as e:

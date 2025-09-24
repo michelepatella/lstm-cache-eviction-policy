@@ -1,13 +1,20 @@
 import numpy as np
 
-from lstm_eviction_policy.config.classes.Config import Config
+from lstm_eviction_policy.config.classes.Config import (
+    Config,
+)
 from lstm_eviction_policy.data_generation.generation.requests.utils.request_generator_helper import (
     generate_requests_helper,
 )
-from lstm_eviction_policy.utils.logs.log_utils import debug, info
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    info,
+)
 
 
-def generate_dynamic_requests(config: Config) -> tuple[list[int], np.ndarray]:
+def generate_dynamic_requests(
+    config: Config,
+) -> tuple[list[int], np.ndarray]:
     """
     Generate dynamic requests and
     corresponding timestamps in hours.

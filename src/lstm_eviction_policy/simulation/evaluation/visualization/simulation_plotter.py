@@ -22,10 +22,19 @@ def plot_hit_miss_rate_over_time(results):
             timeline = result["timeline"]
             x = [point["index"] for point in timeline]
             y_hit = [point["instant_hit_rate"] for point in timeline]
-            plt.plot(x, y_hit, label=f"{policy} (hit)", linestyle="--", alpha=0.7)
+            plt.plot(
+                x,
+                y_hit,
+                label=f"{policy} (hit)",
+                linestyle="--",
+                alpha=0.7,
+            )
 
         # plot hit rate
-        plt.title("Instant Hit Rate Over Time", fontsize=18)
+        plt.title(
+            "Instant Hit Rate Over Time",
+            fontsize=18,
+        )
         plt.xlabel("Request Index", fontsize=16)
         plt.ylabel("Hit Rate (%)", fontsize=16)
         plt.legend()
@@ -38,10 +47,19 @@ def plot_hit_miss_rate_over_time(results):
             timeline = result["timeline"]
             x = [point["index"] for point in timeline]
             y_miss = [100 - point["instant_hit_rate"] for point in timeline]
-            plt.plot(x, y_miss, label=f"{policy} (miss)", linestyle="-", alpha=0.7)
+            plt.plot(
+                x,
+                y_miss,
+                label=f"{policy} (miss)",
+                linestyle="-",
+                alpha=0.7,
+            )
 
         # plot miss rate
-        plt.title("Instant Miss Rate Over Time", fontsize=18)
+        plt.title(
+            "Instant Miss Rate Over Time",
+            fontsize=18,
+        )
         plt.xlabel("Request Index", fontsize=16)
         plt.ylabel("Miss Rate (%)", fontsize=16)
         plt.legend()

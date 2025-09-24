@@ -1,10 +1,17 @@
 from typing import Any, List
 
-from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    error,
+    info,
+)
 
 
 def validate_choice_field(
-    instance: Any, field_value: Any, allowed_field_values: List[Any], context: str
+    instance: Any,
+    field_value: Any,
+    allowed_field_values: List[Any],
+    context: str,
 ) -> Any:
     """
     Check whether a choice field

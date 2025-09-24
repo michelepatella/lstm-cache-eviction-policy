@@ -1,4 +1,9 @@
-from pydantic import BaseModel, confloat, conint, model_validator
+from pydantic import (
+    BaseModel,
+    confloat,
+    conint,
+    model_validator,
+)
 
 from const import ALLOWED_TRAINING_OPTIMIZERS
 from lstm_eviction_policy.config.classes.validation.choice_field_validator import (
@@ -29,7 +34,9 @@ class OptimizerConfig(BaseModel):
     params: OptimizerParamsConfig
 
     @model_validator(mode="after")
-    def check_data_distribution_mode(self: "OptimizerConfig") -> "OptimizerConfig":
+    def check_data_distribution_mode(
+        self: "OptimizerConfig",
+    ) -> "OptimizerConfig":
         """
         Check whether optimizer is valid or not.
 
@@ -43,7 +50,10 @@ class OptimizerConfig(BaseModel):
             OptimizerConfig: Validated model instance.
         """
         return validate_choice_field(
-            self, self.type, ALLOWED_TRAINING_OPTIMIZERS, "training.optimizer.type"
+            self,
+            self.type,
+            ALLOWED_TRAINING_OPTIMIZERS,
+            "training.optimizer.type",
         )
 
 

@@ -1,13 +1,20 @@
 import numpy as np
 from utils.logs.log_utils import debug, info
-from utils.model.evaluation.inference import infer_batch
+from utils.model.evaluation.inference import (
+    infer_batch,
+)
 from utils.model.evaluation.metrics.model_metrics_calculator import (
     compute_model_metrics,
 )
 
 
 def evaluate_model(
-    model, loader, criterion, device, config_settings, compute_metrics=False
+    model,
+    loader,
+    criterion,
+    device,
+    config_settings,
+    compute_metrics=False,
 ):
     """
     Method to orchestrate the model evaluation on a loader.
@@ -24,8 +31,18 @@ def evaluate_model(
     info("🔄 Model's evaluation started...")
 
     # infer the batch
-    (total_loss, all_preds, all_targets, all_outputs, all_vars) = infer_batch(
-        model, loader, criterion, device, config_settings
+    (
+        total_loss,
+        all_preds,
+        all_targets,
+        all_outputs,
+        all_vars,
+    ) = infer_batch(
+        model,
+        loader,
+        criterion,
+        device,
+        config_settings,
     )
 
     # debugging
@@ -39,7 +56,10 @@ def evaluate_model(
     if compute_metrics:
         # compute metrics
         metrics = compute_model_metrics(
-            all_targets, all_preds, all_outputs, config_settings
+            all_targets,
+            all_preds,
+            all_outputs,
+            config_settings,
         )
 
         # show results
@@ -56,4 +76,10 @@ def evaluate_model(
     # show a successful message
     info("🟢 Model's evaluation completed.")
 
-    return (avg_loss, metrics, all_outputs, all_targets, all_vars)
+    return (
+        avg_loss,
+        metrics,
+        all_outputs,
+        all_targets,
+        all_vars,
+    )

@@ -1,7 +1,14 @@
 from const import PIPELINE_PHASE_CONFIGURATION
-from lstm_eviction_policy.config.classes.Config import Config
-from lstm_eviction_policy.config.config_io.config_loader import load_config
-from lstm_eviction_policy.utils.logs.log_utils import info, phase_var
+from lstm_eviction_policy.config.classes.Config import (
+    Config,
+)
+from lstm_eviction_policy.config.config_io.config_loader import (
+    load_config,
+)
+from lstm_eviction_policy.utils.logs.log_utils import (
+    info,
+    phase_var,
+)
 
 
 def prepare_config() -> Config:
@@ -27,6 +34,6 @@ def prepare_config() -> Config:
     # Validate and parse YAML configuration file
     config = Config(**config_file)
 
-    info("Configuration loaded and validated")
+    info("Configuration loading and validation completed")
 
     return config

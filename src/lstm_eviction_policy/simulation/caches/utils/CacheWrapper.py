@@ -1,4 +1,6 @@
-from simulation.caches.utils.BaseCache import BaseCache
+from simulation.caches.utils.BaseCache import (
+    BaseCache,
+)
 from utils.logs.log_utils import debug, info
 
 

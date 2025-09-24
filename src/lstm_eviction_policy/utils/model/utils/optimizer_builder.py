@@ -20,7 +20,10 @@ def build_optimizer(model, learning_rate, config_settings):
     try:
         # define the optimizer
         if config_settings.optimizer_type == "adam":
-            optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+            optimizer = torch.optim.Adam(
+                model.parameters(),
+                lr=learning_rate,
+            )
         elif config_settings.optimizer_type == "adamw":
             optimizer = torch.optim.AdamW(
                 model.parameters(),
@@ -29,7 +32,9 @@ def build_optimizer(model, learning_rate, config_settings):
             )
         else:
             optimizer = torch.optim.SGD(
-                model.parameters(), lr=learning_rate, momentum=config_settings.momentum
+                model.parameters(),
+                lr=learning_rate,
+                momentum=config_settings.momentum,
             )
     except ValueError as e:
         raise ValueError(f"ValueError: {e}.")

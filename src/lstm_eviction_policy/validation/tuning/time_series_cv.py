@@ -1,11 +1,23 @@
 import numpy as np
-from sklearn.model_selection import TimeSeriesSplit
-from utils.data.dataloader.dataloader_builder import create_data_loader
-from utils.data.dataloader.dataloader_utils import extract_targets_from_dataloader
-from utils.data.dataset.dataset_splitter import split_training_set
+from sklearn.model_selection import (
+    TimeSeriesSplit,
+)
+from utils.data.dataloader.dataloader_builder import (
+    create_data_loader,
+)
+from utils.data.dataloader.dataloader_utils import (
+    extract_targets_from_dataloader,
+)
+from utils.data.dataset.dataset_splitter import (
+    split_training_set,
+)
 from utils.logs.log_utils import debug, info
-from utils.model.setup.model_setup import model_setup
-from utils.training.n_epochs_trainer import train_n_epochs
+from utils.model.setup.model_setup import (
+    model_setup,
+)
+from utils.training.n_epochs_trainer import (
+    train_n_epochs,
+)
 
 
 def compute_time_series_cv(training_set, params, config_settings):
@@ -53,19 +65,30 @@ def compute_time_series_cv(training_set, params, config_settings):
 
         # debugging
         debug(f"⚙️ Training size (Time series CV): {len(training_dataset)}.")
-        debug(f"⚙️ Validation size (Time series CV): {len(validation_dataset)}.")
+        debug(
+            f"⚙️ Validation size (Time series CV): {len(validation_dataset)}."
+        )
 
         # create training and validation loaders
         training_loader = create_data_loader(
-            training_dataset, config_settings.training_batch_size, True
+            training_dataset,
+            config_settings.training_batch_size,
+            True,
         )
         validation_loader = create_data_loader(
-            validation_dataset, config_settings.training_batch_size, False
+            validation_dataset,
+            config_settings.training_batch_size,
+            False,
         )
 
         try:
             # setup for training
-            device, criterion, model, optimizer = model_setup(
+            (
+                device,
+                criterion,
+                model,
+                optimizer,
+            ) = model_setup(
                 params["model"]["params"],
                 params["training"]["optimizer"]["learning_rate"],
                 extract_targets_from_dataloader(training_loader),

@@ -1,6 +1,9 @@
 import numpy as np
 
-from lstm_eviction_policy.utils.logs.log_utils import debug, info
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    info,
+)
 
 
 def generate_repetition_pattern(
@@ -49,7 +52,9 @@ def generate_repetition_pattern(
         # a subset of initial keys
         requested_key = np.random.choice(keys_range[:slice_length])
 
-        debug(f"Random repetition pattern access among the first {slice_length} keys")
+        debug(
+            f"Random repetition pattern access among the first {slice_length} keys"
+        )
 
     info(f"(Repetition pattern) Key requested: {requested_key}")
 

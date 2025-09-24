@@ -1,8 +1,14 @@
-from lstm_eviction_policy.utils.logs.log_utils import debug, info
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    info,
+)
 
 
 def update_time(
-    current_seconds_in_day: float, current_day: int, period: float, delta_t: float
+    current_seconds_in_day: float,
+    current_day: int,
+    period: float,
+    delta_t: float,
 ) -> tuple[float, int]:
     """
     Update time (current seconds in day and

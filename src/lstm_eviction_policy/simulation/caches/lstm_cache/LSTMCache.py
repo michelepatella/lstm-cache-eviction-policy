@@ -1,11 +1,18 @@
 import random
 
-from simulation.caches.utils.BaseCache import BaseCache
+from simulation.caches.utils.BaseCache import (
+    BaseCache,
+)
 from utils.logs.log_utils import debug, info
 
 
 class LSTMCache(BaseCache):
-    def __init__(self, cache_class, metrics_logger, config_settings):
+    def __init__(
+        self,
+        cache_class,
+        metrics_logger,
+        config_settings,
+    ):
         """
         Method to initialize the LSTM cache.
         :param config_settings: The configuration settings.
@@ -16,7 +23,11 @@ class LSTMCache(BaseCache):
         info("🔄 LSTM-based cache initialization started...")
 
         # initialize data
-        super().__init__(cache_class, metrics_logger, config_settings)
+        super().__init__(
+            cache_class,
+            metrics_logger,
+            config_settings,
+        )
         try:
             self.threshold_score = config_settings.threshold_score
         except AttributeError as e:
@@ -140,7 +151,14 @@ class LSTMCache(BaseCache):
         # print a successful message
         info("🟢 LSTM-based cache key inserted.")
 
-    def put(self, key, score, current_time, cold_start=False, config_settings=None):
+    def put(
+        self,
+        key,
+        score,
+        current_time,
+        cold_start=False,
+        config_settings=None,
+    ):
         """
         Method to put a key in the LSTM-based cache. It contains
         logic for prefetching and eviction.
@@ -186,7 +204,8 @@ class LSTMCache(BaseCache):
                 if key not in self.store and len(self.store) >= self.maxsize:
                     # evict the key with the lowest score
                     key_to_evict = min(
-                        self.store.keys(), key=lambda k: self.scores.get(k, 0)
+                        self.store.keys(),
+                        key=lambda k: self.scores.get(k, 0),
                     )
 
                     # debugging
@@ -199,13 +218,18 @@ class LSTMCache(BaseCache):
                         self.evict_key(key_to_evict)
 
                         # trace event
-                        self.metrics_logger.log_eviction(key_to_evict, current_time)
+                        self.metrics_logger.log_eviction(
+                            key_to_evict,
+                            current_time,
+                        )
 
                 # put the key
                 self._put_key(key, score, current_time)
 
                 # trace events
-                self.metrics_logger.log_prefetch_prediction(current_time, [key])
+                self.metrics_logger.log_prefetch_prediction(
+                    current_time, [key]
+                )
 
                 # print a successful message
                 info("🟢 Key inserted.")

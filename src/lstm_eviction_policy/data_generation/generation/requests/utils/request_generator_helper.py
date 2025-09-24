@@ -1,6 +1,8 @@
 import numpy as np
 
-from lstm_eviction_policy.config.classes.Config import Config
+from lstm_eviction_policy.config.classes.Config import (
+    Config,
+)
 from lstm_eviction_policy.data_generation.generation.patterns.request_patterns_generator import (
     generate_pattern_requests,
 )
@@ -10,11 +12,15 @@ from lstm_eviction_policy.data_generation.generation.utils.seconds_to_hours_conv
 from lstm_eviction_policy.data_generation.generation.utils.zipf_props_calculator import (
     calculate_zipf_probs,
 )
-from lstm_eviction_policy.utils.logs.log_utils import debug, info
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    info,
+)
 
 
 def generate_requests_helper(
-    config: Config, alpha_range: list[float] = None
+    config: Config,
+    alpha_range: list[float] = None,
 ) -> tuple[list[int], np.ndarray]:
     """
     Generate requests according
@@ -57,7 +63,9 @@ def generate_requests_helper(
         num_requests = config.data.general.requests.count
         time_step_duration = num_requests // len(alpha_range)
 
-        debug(f"Time step duration for dynamic data generation: {time_step_duration}")
+        debug(
+            f"Time step duration for dynamic data generation: {time_step_duration}"
+        )
 
     requests = []
     timestamps_seconds = []
@@ -71,11 +79,19 @@ def generate_requests_helper(
 
         # Generate requests and timestamps
         # for current alpha / time step
-        current_requests, current_timestamps_seconds = generate_pattern_requests(
-            keys_range, zipf_probs, config, time_step_duration=time_step_duration
+        (
+            current_requests,
+            current_timestamps_seconds,
+        ) = generate_pattern_requests(
+            keys_range,
+            zipf_probs,
+            config,
+            time_step_duration=time_step_duration,
         )
 
-        info(f"{len(current_requests)} requests generated for alpha value: {alpha}")
+        info(
+            f"{len(current_requests)} requests generated for alpha value: {alpha}"
+        )
 
         # Store generated requests and timestamps
         requests.extend(current_requests)

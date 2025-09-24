@@ -12,7 +12,11 @@ from const import (
     ZIPF_LOGLOG_PLOT_X_LABEL,
     ZIPF_LOGLOG_PLOT_Y_LABEL,
 )
-from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    error,
+    info,
+)
 
 
 def plot_zipf_loglog(requests: list[int]) -> None:
@@ -55,10 +59,23 @@ def plot_zipf_loglog(requests: list[int]) -> None:
         # Plot the Zipfian distribution
         # log-log
         plt.figure(figsize=(FIGURE_SIZE, FIGURE_SIZE))
-        plt.loglog(ranks, key_frequencies, marker=ZIPF_LOGLOG_PLOT_MARKER)
-        plt.title(ZIPF_LOGLOG_PLOT_TITLE, fontsize=FIGURE_TITLE_FONT_SIZE)
-        plt.xlabel(ZIPF_LOGLOG_PLOT_X_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
-        plt.ylabel(ZIPF_LOGLOG_PLOT_Y_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
+        plt.loglog(
+            ranks,
+            key_frequencies,
+            marker=ZIPF_LOGLOG_PLOT_MARKER,
+        )
+        plt.title(
+            ZIPF_LOGLOG_PLOT_TITLE,
+            fontsize=FIGURE_TITLE_FONT_SIZE,
+        )
+        plt.xlabel(
+            ZIPF_LOGLOG_PLOT_X_LABEL,
+            fontsize=FIGURE_LABEL_FONT_SIZE,
+        )
+        plt.ylabel(
+            ZIPF_LOGLOG_PLOT_Y_LABEL,
+            fontsize=FIGURE_LABEL_FONT_SIZE,
+        )
         plt.tight_layout()
         plt.show()
         plt.close()

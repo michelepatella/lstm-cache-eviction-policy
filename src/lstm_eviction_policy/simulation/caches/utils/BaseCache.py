@@ -4,7 +4,12 @@ from utils.logs.log_utils import debug, info
 
 
 class BaseCache(ABC):
-    def __init__(self, cache_class, metrics_logger, config_settings):
+    def __init__(
+        self,
+        cache_class,
+        metrics_logger,
+        config_settings,
+    ):
         """
         Method to initialize the base cache class.
         :param cache_class: The cache class.
@@ -18,7 +23,8 @@ class BaseCache(ABC):
         try:
             if cache_class is not None:
                 self.cache = cache_class(
-                    config_settings.cache_size, callback=self._on_evict
+                    config_settings.cache_size,
+                    callback=self._on_evict,
                 )
             else:
                 self.cache = None
@@ -79,7 +85,9 @@ class BaseCache(ABC):
         try:
             # identify expired keys
             expired_keys = [
-                k for k, exp_time in self.expiry.items() if exp_time < current_time
+                k
+                for k, exp_time in self.expiry.items()
+                if exp_time < current_time
             ]
 
             # remove expired keys

@@ -1,8 +1,9 @@
-from datetime import timedelta
-
 import numpy as np
 
-from lstm_eviction_policy.config.classes.Config import Config
+from const import PERIOD
+from lstm_eviction_policy.config.classes.Config import (
+    Config,
+)
 from lstm_eviction_policy.data_generation.generation.patterns.access.access_pattern_generator import (
     generate_access_pattern,
 )
@@ -12,7 +13,10 @@ from lstm_eviction_policy.data_generation.generation.patterns.temporal.temporal_
 from lstm_eviction_policy.data_generation.generation.patterns.utils.time_updater import (
     update_time,
 )
-from lstm_eviction_policy.utils.logs.log_utils import debug, info
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    info,
+)
 
 
 def generate_pattern_requests(
@@ -59,10 +63,7 @@ def generate_pattern_requests(
 
     debug(f"Number of requests to be generated: {num_requests}")
 
-    # Define day as period in seconds
-    period = timedelta(days=1).total_seconds()
-
-    debug(f"Period of requests generation: {period}")
+    debug(f"Period of requests generation: {PERIOD}")
 
     # Define a seed to make the
     # generation process deterministic
@@ -84,12 +85,15 @@ def generate_pattern_requests(
         # Update time (current seconds in day and
         # current day)
         current_seconds_in_day, current_day = update_time(
-            current_seconds_in_day, current_day, period, delta_t
+            current_seconds_in_day,
+            current_day,
+            PERIOD,
+            delta_t,
         )
 
         # Get current absolute seconds of the
         # request to be generated
-        current_abs_seconds = current_day * period + current_seconds_in_day
+        current_abs_seconds = current_day * PERIOD + current_seconds_in_day
 
         # Generate a request (i.e., accessed key)
         request = generate_access_pattern(
@@ -105,7 +109,9 @@ def generate_pattern_requests(
         requests.append(request)
         timestamps_seconds.append(current_abs_seconds)
 
-        debug(f"Generated request {request} at absolute seconds {current_abs_seconds}")
+        debug(
+            f"Generated request {request} at absolute seconds {current_abs_seconds}"
+        )
 
     info("Pattern requests generated")
 

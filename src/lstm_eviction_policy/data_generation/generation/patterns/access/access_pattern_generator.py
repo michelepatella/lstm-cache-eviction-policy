@@ -1,6 +1,8 @@
 import numpy as np
 
-from lstm_eviction_policy.config.classes.Config import Config
+from lstm_eviction_policy.config.classes.Config import (
+    Config,
+)
 from lstm_eviction_policy.data_generation.generation.patterns.access.patterns.cycle_pattern_generator import (
     generate_cycle_pattern,
 )
@@ -19,7 +21,10 @@ from lstm_eviction_policy.data_generation.generation.patterns.access.patterns.to
 from lstm_eviction_policy.data_generation.generation.utils.seconds_to_hours_converter import (
     seconds_to_hours,
 )
-from lstm_eviction_policy.utils.logs.log_utils import debug, info
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    info,
+)
 
 
 def generate_access_pattern(
@@ -53,7 +58,9 @@ def generate_access_pattern(
     # Get the current hour in day
     current_hour_in_day = float(seconds_to_hours([current_abs_seconds])[0])
 
-    debug(f"Current hour in day for access pattern generation: {current_hour_in_day}")
+    debug(
+        f"Current hour in day for access pattern generation: {current_hour_in_day}"
+    )
 
     # Prepare general configuration
     first_key = int(keys_range[0])
@@ -120,7 +127,11 @@ def generate_access_pattern(
 
     # Toggle pattern
     elif (toggle_start <= current_hour_in_day < toggle_end) and (
-        requests_count > max(abs(toggle_backward), abs(toggle_forward))
+        requests_count
+        > max(
+            abs(toggle_backward),
+            abs(toggle_forward),
+        )
     ):
         requested_key = generate_toggle_pattern(
             toggle_interval,
@@ -135,7 +146,9 @@ def generate_access_pattern(
         )
 
     # Cycle pattern
-    elif (cycle_start <= current_hour_in_day < cycle_end) and (requests_count > 0):
+    elif (cycle_start <= current_hour_in_day < cycle_end) and (
+        requests_count > 0
+    ):
         requested_key = generate_cycle_pattern(
             cycle_base,
             cycle_divisor,

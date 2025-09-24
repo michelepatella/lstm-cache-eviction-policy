@@ -1,6 +1,8 @@
 import numpy as np
 
-from lstm_eviction_policy.config.classes.Config import Config
+from lstm_eviction_policy.config.classes.Config import (
+    Config,
+)
 from lstm_eviction_policy.data_generation.generation.patterns.temporal.components.bursty_scale_setter import (
     set_bursty_scale,
 )
@@ -10,10 +12,15 @@ from lstm_eviction_policy.data_generation.generation.patterns.temporal.component
 from lstm_eviction_policy.data_generation.generation.utils.seconds_to_hours_converter import (
     seconds_to_hours,
 )
-from lstm_eviction_policy.utils.logs.log_utils import debug, info
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    info,
+)
 
 
-def generate_temporal_pattern(current_seconds_in_day: float, config: Config) -> float:
+def generate_temporal_pattern(
+    current_seconds_in_day: float, config: Config
+) -> float:
     """
     Generate temporal pattern for current seconds in day.
 
@@ -40,7 +47,9 @@ def generate_temporal_pattern(current_seconds_in_day: float, config: Config) -> 
     # current hour in day
     current_hour_in_day = float(seconds_to_hours([current_seconds_in_day])[0])
 
-    debug(f"Current hour in day: {current_hour_in_day} for temporal pattern generation")
+    debug(
+        f"Current hour in day: {current_hour_in_day} for temporal pattern generation"
+    )
 
     periodic_pattern_config = config.data.pattern.temporal.periodic
     # Get scale and amplitude for
@@ -51,7 +60,9 @@ def generate_temporal_pattern(current_seconds_in_day: float, config: Config) -> 
     # Calculate a periodic component for
     # current hour in day
     periodic_component = calculate_periodic_component(
-        periodic_scale, periodic_amplitude, current_hour_in_day
+        periodic_scale,
+        periodic_amplitude,
+        current_hour_in_day,
     )
 
     burstiness_pattern_config = config.data.pattern.temporal.burstiness
@@ -64,7 +75,11 @@ def generate_temporal_pattern(current_seconds_in_day: float, config: Config) -> 
 
     # Set bursty scale
     bursty_scale = set_bursty_scale(
-        burst_high, burst_low, burst_start_hour, burst_end_hour, current_hour_in_day
+        burst_high,
+        burst_low,
+        burst_start_hour,
+        burst_end_hour,
+        current_hour_in_day,
     )
 
     # Use the min between high and low
@@ -77,7 +92,10 @@ def generate_temporal_pattern(current_seconds_in_day: float, config: Config) -> 
     # Combine periodic component and bursty
     # scale to get the frequency scale (i.e., mean
     # interval in seconds between consecutive requests)
-    freq_scale = max(min_freq_scale, periodic_component * bursty_scale)
+    freq_scale = max(
+        min_freq_scale,
+        periodic_component * bursty_scale,
+    )
 
     debug(f"Frequency scale for temporal pattern: {freq_scale}")
 

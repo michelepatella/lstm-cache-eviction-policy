@@ -1,4 +1,9 @@
-from pydantic import BaseModel, confloat, conint, model_validator
+from pydantic import (
+    BaseModel,
+    confloat,
+    conint,
+    model_validator,
+)
 
 from const import (
     ALLOWED_DATA_DISTRIBUTION_MODES,
@@ -28,7 +33,9 @@ class KeysConfig(BaseModel):
     max: conint(gt=0)
 
     @model_validator(mode="after")
-    def check_min_max_keys(self: "KeysConfig") -> "KeysConfig":
+    def check_min_max_keys(
+        self: "KeysConfig",
+    ) -> "KeysConfig":
         """
         Check whether the least key is greater than
         or equal to the greatest key or not.
@@ -39,7 +46,12 @@ class KeysConfig(BaseModel):
         Returns:
             KeysConfig: Validated model instance.
         """
-        return validate_min_max(self, "min", "max", context="data.general.keys.")
+        return validate_min_max(
+            self,
+            "min",
+            "max",
+            context="data.general.keys.",
+        )
 
 
 class GeneralDataConfig(BaseModel):
@@ -49,7 +61,9 @@ class GeneralDataConfig(BaseModel):
     keys: KeysConfig
 
     @model_validator(mode="after")
-    def check_data_distribution_mode(self: "GeneralDataConfig") -> "GeneralDataConfig":
+    def check_data_distribution_mode(
+        self: "GeneralDataConfig",
+    ) -> "GeneralDataConfig":
         """
         Check whether data distribution
         mode is valid or not.
@@ -64,7 +78,10 @@ class GeneralDataConfig(BaseModel):
             GeneralDataConfig: Validated model instance.
         """
         return validate_choice_field(
-            self, self.mode, ALLOWED_DATA_DISTRIBUTION_MODES, "data.general.mode"
+            self,
+            self.mode,
+            ALLOWED_DATA_DISTRIBUTION_MODES,
+            "data.general.mode",
         )
 
 
@@ -119,7 +136,9 @@ class NoiseConfig(BaseModel):
     max: int
 
     @model_validator(mode="after")
-    def check_min_max_noises(self: "NoiseConfig") -> "NoiseConfig":
+    def check_min_max_noises(
+        self: "NoiseConfig",
+    ) -> "NoiseConfig":
         """
         Check whether the least noise value is
         greater than or equal to the greatest one or not.
@@ -131,7 +150,10 @@ class NoiseConfig(BaseModel):
             NoiseConfig: Validated model instance.
         """
         return validate_min_max(
-            self, "min", "max", context="data.pattern.access.behavior.noise."
+            self,
+            "min",
+            "max",
+            context="data.pattern.access.behavior.noise.",
         )
 
 
@@ -172,7 +194,9 @@ class BurstinessConfig(BaseModel):
     hours: BurstinessHoursConfig
 
     @model_validator(mode="after")
-    def check_high_low_bursts(self: "BurstinessConfig") -> "BurstinessConfig":
+    def check_high_low_bursts(
+        self: "BurstinessConfig",
+    ) -> "BurstinessConfig":
         """
         Check whether the highest burst value is
         greater than or equal to the lowest one or not.
@@ -184,7 +208,10 @@ class BurstinessConfig(BaseModel):
             BurstinessConfig: Validated model instance.
         """
         return validate_min_max(
-            self, "high", "low", context="data.pattern.temporal.burstiness."
+            self,
+            "high",
+            "low",
+            context="data.pattern.temporal.burstiness.",
         )
 
 

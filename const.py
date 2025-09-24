@@ -1,3 +1,4 @@
+from datetime import timedelta
 from typing import Literal
 
 # Configuration
@@ -7,8 +8,12 @@ CONFIG_FILE_PARENT_LEVEL = 5
 # Pipeline phases constants
 PIPELINE_PHASE_CONFIGURATION = "configuration"
 PIPELINE_PHASE_DATA_GENERATION = "data generation"
+PIPELINE_PHASE_DATA_PREPROCESSING = "data preprocessing"
 
 # Time
+PERIOD = timedelta(days=1).total_seconds()
+SECONDS_IN_HOUR = timedelta(hours=1).total_seconds()
+HOURS_IN_DAY = timedelta(days=1).total_seconds() / SECONDS_IN_HOUR
 MIN_HOUR = 0
 MAX_HOUR = 23
 
@@ -33,6 +38,8 @@ ALLOWED_DATA_DISTRIBUTION_MODES = [
 # Dataset
 TIMESTAMP_COLUMN_NAME = "timestamp"
 REQUEST_COLUMN_NAME = "request"
+SIN_TIME_COLUMN_NAME = "sin_time"
+COS_TIME_COLUMN_NAME = "cos_time"
 
 # Figures
 FIGURE_SIZE = 12

@@ -1,9 +1,15 @@
-from utils.data.dataloader.dataloader_builder import create_data_loader
+from utils.data.dataloader.dataloader_builder import (
+    create_data_loader,
+)
 from utils.logs.log_utils import debug, info
 
 
 def dataloader_setup(
-    loader_type, batch_size, shuffle, config_settings, AccessLogsDataset
+    loader_type,
+    batch_size,
+    shuffle,
+    config_settings,
+    AccessLogsDataset,
 ):
     """
     Method to prepare the data loader for the training and testing.
@@ -26,7 +32,11 @@ def dataloader_setup(
         dataset = AccessLogsDataset(loader_type, config_settings)
 
         # create the data loader starting from the dataset
-        loader = create_data_loader(dataset, batch_size=batch_size, shuffle=shuffle)
+        loader = create_data_loader(
+            dataset,
+            batch_size=batch_size,
+            shuffle=shuffle,
+        )
     except FileNotFoundError as e:
         raise FileNotFoundError(f"FileNotFoundError: {e}.")
     except IOError as e:

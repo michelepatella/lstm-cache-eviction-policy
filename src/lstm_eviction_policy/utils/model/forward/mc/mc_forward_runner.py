@@ -1,10 +1,20 @@
 import torch
 from utils.logs.log_utils import info
-from utils.model.forward.forward_runner import compute_forward
-from utils.model.forward.mc.mc_dropout_activator import enable_mc_dropout
+from utils.model.forward.forward_runner import (
+    compute_forward,
+)
+from utils.model.forward.mc.mc_dropout_activator import (
+    enable_mc_dropout,
+)
 
 
-def mc_forward_passes(model, inputs, device, config_settings, mc_dropout_samples=1):
+def mc_forward_passes(
+    model,
+    inputs,
+    device,
+    config_settings,
+    mc_dropout_samples=1,
+):
     """
     Method to perform forward passes with MC dropout (if enabled).
     :param model: The model for which to perform forward passes.
@@ -35,7 +45,12 @@ def mc_forward_passes(model, inputs, device, config_settings, mc_dropout_samples
                     isinstance(inputs, tuple)
                     and len(inputs) == config_settings.num_features + 1
                 ):
-                    _, outputs = compute_forward(inputs, model, None, device)
+                    _, outputs = compute_forward(
+                        inputs,
+                        model,
+                        None,
+                        device,
+                    )
                 else:
                     outputs = model(*inputs)
 
@@ -64,4 +79,8 @@ def mc_forward_passes(model, inputs, device, config_settings, mc_dropout_samples
     # show a successful message
     info("🟢 MC forward passes computed.")
 
-    return (outputs_mean, outputs_var, outputs_mc_tensor)
+    return (
+        outputs_mean,
+        outputs_var,
+        outputs_mc_tensor,
+    )

@@ -1,8 +1,14 @@
 from tqdm import tqdm
 from utils.logs.log_utils import debug, info
-from validation.best_params.best_params_updater import check_and_update_best_params
-from validation.search_space.search_space_combinator import get_parameters_combination
-from validation.tuning.time_series_cv import compute_time_series_cv
+from validation.best_params.best_params_updater import (
+    check_and_update_best_params,
+)
+from validation.search_space.search_space_combinator import (
+    get_parameters_combination,
+)
+from validation.tuning.time_series_cv import (
+    compute_time_series_cv,
+)
 
 
 def compute_grid_search(training_set, config_settings):
@@ -26,17 +32,27 @@ def compute_grid_search(training_set, config_settings):
     param_combinations = get_parameters_combination(config_settings)
 
     # grid search
-    with tqdm(total=len(param_combinations), desc="🔍 Grid Search Progress") as pbar:
+    with tqdm(
+        total=len(param_combinations),
+        desc="🔍 Grid Search Progress",
+    ) as pbar:
         for params in param_combinations:
             # debugging
             debug(f"⚙️ Evaluating combination: {params}")
 
             # perform the time series CV
-            avg_loss = compute_time_series_cv(training_set, params, config_settings)
+            avg_loss = compute_time_series_cv(
+                training_set,
+                params,
+                config_settings,
+            )
 
             # check the avg loss and eventually update the best parameters
             best_avg_loss, best_params = check_and_update_best_params(
-                avg_loss, best_avg_loss, params, best_params
+                avg_loss,
+                best_avg_loss,
+                params,
+                best_params,
             )
 
             # update the progress bar

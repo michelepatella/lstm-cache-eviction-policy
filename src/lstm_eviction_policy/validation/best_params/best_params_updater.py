@@ -26,8 +26,12 @@ def check_and_update_best_params(
     try:
         # check avg loss and best avg loss
         if avg_loss is None or not isinstance(avg_loss, (float, int)):
-            raise ValueError(f" avg_loss must be a float or int. Received: {avg_loss}.")
-        if best_avg_loss is not None and not isinstance(best_avg_loss, (float, int)):
+            raise ValueError(
+                f" avg_loss must be a float or int. Received: {avg_loss}."
+            )
+        if best_avg_loss is not None and not isinstance(
+            best_avg_loss, (float, int)
+        ):
             raise ValueError(
                 f" best_avg_loss must be a float or int. Received: {best_avg_loss}."
             )
@@ -53,7 +57,10 @@ def check_and_update_best_params(
             )
             info(f"🆕 Updated best average loss: {best_avg_loss}")
         else:
-            info("ℹ️ No best average loss improvement, best " "parameters not updated.")
+            info(
+                "ℹ️ No best average loss improvement, best "
+                "parameters not updated."
+            )
     except ValueError as e:
         raise ValueError(f"ValueError: {e}.")
 

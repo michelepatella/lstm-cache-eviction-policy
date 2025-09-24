@@ -1,5 +1,11 @@
-from lstm_eviction_policy.config.classes.Config import ConfigDict
-from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
+from lstm_eviction_policy.config.classes.Config import (
+    ConfigDict,
+)
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    error,
+    info,
+)
 
 
 def merge_config(
@@ -47,9 +53,14 @@ def merge_config(
             # If the current value is a dictionary
             # and is contained in both objects, apply
             # merge recursively
-            if isinstance(value, dict) and isinstance(original_config.get(key), dict):
+            if isinstance(value, dict) and isinstance(
+                original_config.get(key), dict
+            ):
                 debug(f"Merging nested key '{key}'")
-                original_config[key] = merge_config(original_config[key], value)
+                original_config[key] = merge_config(
+                    original_config[key],
+                    value,
+                )
             else:
                 debug(f"Merging key '{key}': {value}")
                 # Otherwise, extract the

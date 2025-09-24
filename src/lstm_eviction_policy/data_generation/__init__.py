@@ -1,3 +1,3 @@
-from .main import data_generation
+from .main import generate_data
 
-__all__ = ["data_generation"]
+__all__ = ["generate_data"]

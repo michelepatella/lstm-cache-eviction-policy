@@ -1,6 +1,8 @@
 import torch
 from torch.utils.data import Dataset
-from utils.data.dataset.dataset_loader import load_dataset
+from utils.data.dataset.dataset_loader import (
+    load_dataset,
+)
 from utils.logs.log_utils import debug, info
 
 
@@ -156,17 +158,22 @@ class AccessLogsDataset(Dataset):
 
             # extract numerical features
             x_features = torch.tensor(
-                seq_data[self.features].values.astype(float), dtype=torch.float
+                seq_data[self.features].values.astype(float),
+                dtype=torch.float,
             )
 
             # extract key IDs
             x_keys = torch.tensor(
-                seq_data[self.target].values.astype(int), dtype=torch.long
+                seq_data[self.target].values.astype(int),
+                dtype=torch.long,
             )
 
             # extract target
             target_row = self.data.iloc[idx + self.seq_len]
-            y_key = torch.tensor(int(target_row[self.target]), dtype=torch.long)
+            y_key = torch.tensor(
+                int(target_row[self.target]),
+                dtype=torch.long,
+            )
 
             # debugging
             debug(f"⚙️ Feature vector shape: {x_features.shape}.")

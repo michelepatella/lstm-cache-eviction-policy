@@ -1,7 +1,7 @@
 data:
   general:
     seed: 42
-    mode: static
+    mode: dynamic
     requests:
       count: 30000
     keys:

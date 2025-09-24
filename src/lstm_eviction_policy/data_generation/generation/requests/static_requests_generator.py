@@ -1,13 +1,19 @@
 import numpy as np
 
-from lstm_eviction_policy.config.classes.Config import Config
+from lstm_eviction_policy.config.classes.Config import (
+    Config,
+)
 from lstm_eviction_policy.data_generation.generation.requests.utils.request_generator_helper import (
     generate_requests_helper,
 )
-from lstm_eviction_policy.utils.logs.log_utils import info
+from lstm_eviction_policy.utils.logs.log_utils import (
+    info,
+)
 
 
-def generate_static_requests(config: Config) -> tuple[list[int], np.ndarray]:
+def generate_static_requests(
+    config: Config,
+) -> tuple[list[int], np.ndarray]:
     """
     Generate static requests and
     corresponding timestamps in hours.

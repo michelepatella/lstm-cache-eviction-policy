@@ -19,7 +19,11 @@ def create_data_loader(dataset, batch_size, shuffle=False):
 
     try:
         # define the loader
-        loader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
+        loader = DataLoader(
+            dataset,
+            batch_size=batch_size,
+            shuffle=shuffle,
+        )
     except TypeError as e:
         raise TypeError(f"TypeError: {e}.")
     except ValueError as e:

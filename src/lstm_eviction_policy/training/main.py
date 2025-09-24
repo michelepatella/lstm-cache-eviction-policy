@@ -1,12 +1,26 @@
 from training.utils.model_saver import save_model
-from utils.data.AccessLogsDataset import AccessLogsDataset
-from utils.data.dataloader.dataloader_builder import create_data_loader
-from utils.data.dataloader.dataloader_setup import dataloader_setup
-from utils.data.dataloader.dataloader_utils import extract_targets_from_dataloader
-from utils.data.dataset.dataset_splitter import split_training_set
+from utils.data.AccessLogsDataset import (
+    AccessLogsDataset,
+)
+from utils.data.dataloader.dataloader_builder import (
+    create_data_loader,
+)
+from utils.data.dataloader.dataloader_setup import (
+    dataloader_setup,
+)
+from utils.data.dataloader.dataloader_utils import (
+    extract_targets_from_dataloader,
+)
+from utils.data.dataset.dataset_splitter import (
+    split_training_set,
+)
 from utils.logs.log_utils import info, phase_var
-from utils.model.setup.model_setup import model_setup
-from utils.training.n_epochs_trainer import train_n_epochs
+from utils.model.setup.model_setup import (
+    model_setup,
+)
+from utils.training.n_epochs_trainer import (
+    train_n_epochs,
+)
 
 
 def training(config_settings):
@@ -37,10 +51,14 @@ def training(config_settings):
 
     # create a loader for each set
     training_loader = create_data_loader(
-        final_training_set, config_settings.training_batch_size, True
+        final_training_set,
+        config_settings.training_batch_size,
+        True,
     )
     validation_loader = create_data_loader(
-        final_validation_set, config_settings.training_batch_size, False
+        final_validation_set,
+        config_settings.training_batch_size,
+        False,
     )
 
     # setup for training

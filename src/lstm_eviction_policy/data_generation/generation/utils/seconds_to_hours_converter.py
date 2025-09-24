@@ -1,11 +1,15 @@
-from datetime import timedelta
-
 import numpy as np
 
-from lstm_eviction_policy.utils.logs.log_utils import error, info
+from const import SECONDS_IN_HOUR
+from lstm_eviction_policy.utils.logs.log_utils import (
+    error,
+    info,
+)
 
 
-def seconds_to_hours(timestamps_seconds: list[float]) -> np.ndarray:
+def seconds_to_hours(
+    timestamps_seconds: list[float],
+) -> np.ndarray:
     """
     Convert timestamps from seconds to hours.
 
@@ -24,12 +28,11 @@ def seconds_to_hours(timestamps_seconds: list[float]) -> np.ndarray:
                    is not a list of numbers.
     """
     try:
-        # Get the total amount of seconds in hour
-        SECONDS_IN_HOUR = timedelta(hours=1).total_seconds()
-
         # Move from timestamps in seconds to hours, diving
         # by total amount of seconds in hour
-        timestamps_hours = np.array(timestamps_seconds, dtype=float) / SECONDS_IN_HOUR
+        timestamps_hours = (
+            np.array(timestamps_seconds, dtype=float) / SECONDS_IN_HOUR
+        )
     except TypeError as e:
         msg = "Failed to convert timestamps from seconds to hours"
         error("%s: %s", msg, e)

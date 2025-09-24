@@ -15,12 +15,20 @@ from const import (
     MAX_HOUR,
     MIN_HOUR,
 )
-from lstm_eviction_policy.config.classes.Config import Config
-from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
+from lstm_eviction_policy.config.classes.Config import (
+    Config,
+)
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    error,
+    info,
+)
 
 
 def plot_key_usage_heatmap(
-    requests: list[int], timestamps_hours: np.ndarray, config: Config
+    requests: list[int],
+    timestamps_hours: np.ndarray,
+    config: Config,
 ) -> None:
     """
     Plot key usage heatmap over hours of the day.
@@ -58,7 +66,10 @@ def plot_key_usage_heatmap(
         debug(f"Key usage heatmap shape (hours x keys): {heatmap.shape}")
 
         # Fill heatmap
-        for current_request, current_timestamp_hour in zip(requests, timestamps_hours):
+        for (
+            current_request,
+            current_timestamp_hour,
+        ) in zip(requests, timestamps_hours):
             # Force current timestamp to
             # be an integer representing hour
             current_timestamp_hour_int = int(current_timestamp_hour)
@@ -74,22 +85,36 @@ def plot_key_usage_heatmap(
             # within the predefined range time and
             # corresponding requested key is also
             # within the predefined range
-            if (MIN_HOUR <= current_timestamp_hour_int < MIN_HOUR + num_hours) and (
-                0 <= requested_key_idx < num_keys
-            ):
+            if (
+                MIN_HOUR <= current_timestamp_hour_int < MIN_HOUR + num_hours
+            ) and (0 <= requested_key_idx < num_keys):
                 # Increment the current heatmap
                 # position by one
-                heatmap[current_timestamp_hour_int - MIN_HOUR, requested_key_idx] += 1
+                heatmap[
+                    current_timestamp_hour_int - MIN_HOUR,
+                    requested_key_idx,
+                ] += 1
 
         # Plot key usage heatmap
         plt.figure(figsize=(FIGURE_SIZE, FIGURE_SIZE))
         plt.imshow(
-            heatmap, aspect=KEY_USAGE_HEATMAP_ASPECT, cmap=KEY_USAGE_HEATMAP_CMAP
+            heatmap,
+            aspect=KEY_USAGE_HEATMAP_ASPECT,
+            cmap=KEY_USAGE_HEATMAP_CMAP,
         )
-        plt.title(KEY_USAGE_HEATMAP_TITLE, fontsize=FIGURE_TITLE_FONT_SIZE)
+        plt.title(
+            KEY_USAGE_HEATMAP_TITLE,
+            fontsize=FIGURE_TITLE_FONT_SIZE,
+        )
         plt.colorbar(label=KEY_USAGE_HEATMAP_COLORBAR_LABEL)
-        plt.xlabel(KEY_USAGE_HEATMAP_X_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
-        plt.ylabel(KEY_USAGE_HEATMAP_Y_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
+        plt.xlabel(
+            KEY_USAGE_HEATMAP_X_LABEL,
+            fontsize=FIGURE_LABEL_FONT_SIZE,
+        )
+        plt.ylabel(
+            KEY_USAGE_HEATMAP_Y_LABEL,
+            fontsize=FIGURE_LABEL_FONT_SIZE,
+        )
         plt.yticks(
             ticks=np.arange(num_hours),
             labels=[f"{h}:00" for h in range(MIN_HOUR, MAX_HOUR + 1)],

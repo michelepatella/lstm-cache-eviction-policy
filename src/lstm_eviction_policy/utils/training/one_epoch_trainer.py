@@ -1,10 +1,20 @@
 from tqdm import tqdm
-from training.utils.backward_runner import compute_backward
+from training.utils.backward_runner import (
+    compute_backward,
+)
 from utils.logs.log_utils import info
-from utils.model.forward.forward_runner import compute_forward
+from utils.model.forward.forward_runner import (
+    compute_forward,
+)
 
 
-def train_one_epoch(model, training_loader, optimizer, criterion, device):
+def train_one_epoch(
+    model,
+    training_loader,
+    optimizer,
+    criterion,
+    device,
+):
     """
     Method to train the model one epoch.
     :param model: Model to be trained.
@@ -18,17 +28,28 @@ def train_one_epoch(model, training_loader, optimizer, criterion, device):
     info("🔄 Epoch training started...")
 
     # to show the progress bar
-    training_loader = tqdm(training_loader, desc="🧠 Training Progress", leave=False)
+    training_loader = tqdm(
+        training_loader,
+        desc="🧠 Training Progress",
+        leave=False,
+    )
     try:
         model.train()
 
-        for x_features, x_keys, y_key in training_loader:
+        for (
+            x_features,
+            x_keys,
+            y_key,
+        ) in training_loader:
             # reset the gradients
             optimizer.zero_grad()
 
             # forward pass
             loss, _ = compute_forward(
-                (x_features, x_keys, y_key), model, criterion, device
+                (x_features, x_keys, y_key),
+                model,
+                criterion,
+                device,
             )
 
             # check loss

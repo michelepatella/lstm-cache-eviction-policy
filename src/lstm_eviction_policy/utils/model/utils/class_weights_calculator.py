@@ -20,7 +20,9 @@ def calculate_class_weights(targets, config_settings):
 
         # be sure targets is a numpy array and shift them
         targets = (
-            targets.cpu().numpy() if isinstance(targets, torch.Tensor) else targets
+            targets.cpu().numpy()
+            if isinstance(targets, torch.Tensor)
+            else targets
         )
 
         # get the classes appearing in target list
@@ -31,11 +33,16 @@ def calculate_class_weights(targets, config_settings):
 
         # compute the class weights
         computed_weights = compute_class_weight(
-            class_weight="balanced", classes=present_classes, y=targets
+            class_weight="balanced",
+            classes=present_classes,
+            y=targets,
         )
 
         # initialize weights to 1.0
-        class_weights = np.ones(config_settings.num_keys, dtype=np.float32)
+        class_weights = np.ones(
+            config_settings.num_keys,
+            dtype=np.float32,
+        )
 
         # update weights for appearing classes
         for cls, weight in zip(present_classes, computed_weights):

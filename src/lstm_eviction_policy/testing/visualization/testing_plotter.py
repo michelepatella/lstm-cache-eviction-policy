@@ -1,7 +1,10 @@
 import numpy as np
 import seaborn as sns
 from matplotlib import pyplot as plt
-from sklearn.metrics import average_precision_score, precision_recall_curve
+from sklearn.metrics import (
+    average_precision_score,
+    precision_recall_curve,
+)
 from sklearn.preprocessing import label_binarize
 from utils.logs.log_utils import info
 
@@ -19,19 +22,32 @@ def plot_precision_recall_curve(targets, outputs, num_keys):
 
     try:
         # get the one-hot version of the outputs
-        targets_bin = np.array(label_binarize(targets, classes=np.arange(num_keys)))
+        targets_bin = np.array(
+            label_binarize(
+                targets,
+                classes=np.arange(num_keys),
+            )
+        )
 
         outputs = np.array(outputs)
 
         # precision-recall curve one vs the rest
         for i in range(num_keys):
             precision, recall, _ = precision_recall_curve(
-                targets_bin[:, i], outputs[:, i]
+                targets_bin[:, i],
+                outputs[:, i],
             )
-            avg_precision = average_precision_score(targets_bin[:, i], outputs[:, i])
+            avg_precision = average_precision_score(
+                targets_bin[:, i],
+                outputs[:, i],
+            )
 
             # plot the curve
-            plt.plot(recall, precision, label=f"Class {i} (AP = {avg_precision:.2f})")
+            plt.plot(
+                recall,
+                precision,
+                label=f"Class {i} (AP = {avg_precision:.2f})",
+            )
 
         plt.xlabel("Recall", fontsize=16)
         plt.ylabel("Precision", fontsize=16)

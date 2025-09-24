@@ -1,6 +1,9 @@
 import numpy as np
 
-from lstm_eviction_policy.utils.logs.log_utils import debug, info
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    info,
+)
 
 
 def generate_cycle_pattern(
@@ -32,8 +35,12 @@ def generate_cycle_pattern(
     Returns:
       int: Index of the next accessed key.
     """
-    debug(f"Cycle base to determine cycle length in cycle pattern: {cycle_base}")
-    debug(f"Cycle divisor to determine cycle length in cycle pattern: {cycle_divisor}")
+    debug(
+        f"Cycle base to determine cycle length in cycle pattern: {cycle_base}"
+    )
+    debug(
+        f"Cycle divisor to determine cycle length in cycle pattern: {cycle_divisor}"
+    )
     debug(f"Cycle mod to determine cycle length in cycle pattern: {cycle_mod}")
 
     # Calculate the cycle length dynamically,

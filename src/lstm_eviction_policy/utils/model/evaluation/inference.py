@@ -1,10 +1,17 @@
 import torch
 from utils.logs.log_utils import debug, info
-from utils.model.forward.mc.mc_forward_runner import mc_forward_passes
+from utils.model.forward.mc.mc_forward_runner import (
+    mc_forward_passes,
+)
 
 
 def infer_batch(
-    model, loader, criterion, device, config_settings, mc_dropout_samples=1
+    model,
+    loader,
+    criterion,
+    device,
+    config_settings,
+    mc_dropout_samples=1,
 ):
     """
     Method to infer the batch.
@@ -27,14 +34,22 @@ def infer_batch(
 
     # initialize data
     total_loss = 0.0
-    (all_preds, all_targets, all_outputs) = [], [], []
+    (all_preds, all_targets, all_outputs) = (
+        [],
+        [],
+        [],
+    )
     all_vars = []
 
     model.eval()
 
     try:
         with torch.no_grad():
-            for x_features, x_keys, y_key in loader:
+            for (
+                x_features,
+                x_keys,
+                y_key,
+            ) in loader:
                 # debugging
                 debug(f"⚙️ Batch x_features shape: {x_features.shape}.")
                 debug(f"⚙️ Batch x_keys shape: {x_keys.shape}.")
@@ -47,7 +62,11 @@ def infer_batch(
 
                 (outputs_mean, outputs_var, _) = mc_forward_passes(
                     model,
-                    (x_features, x_keys, y_key),
+                    (
+                        x_features,
+                        x_keys,
+                        y_key,
+                    ),
                     device,
                     config_settings,
                     mc_dropout_samples,
@@ -92,4 +111,10 @@ def infer_batch(
     # show a successful message
     info("🟢 Batch inferred.")
 
-    return (total_loss, all_preds, all_targets, all_outputs, all_vars)
+    return (
+        total_loss,
+        all_preds,
+        all_targets,
+        all_outputs,
+        all_vars,
+    )

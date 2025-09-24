@@ -3,7 +3,10 @@ from utils.logs.log_utils import info
 
 
 def split_training_set(
-    training_set, config_settings, training_indices=None, validation_indices=None
+    training_set,
+    config_settings,
+    training_indices=None,
+    validation_indices=None,
 ):
     """
     Method to split the dataset into training and validation sets.
@@ -25,12 +28,17 @@ def split_training_set(
             training_size = int(
                 (1.0 - config_settings.validation_perc) * total_training_size
             )
-            validation_size = int(config_settings.validation_perc * total_training_size)
+            validation_size = int(
+                config_settings.validation_perc * total_training_size
+            )
 
             # create indexes for training and validation
             training_indices = list(range(0, training_size))
             validation_indices = list(
-                range(training_size, training_size + validation_size)
+                range(
+                    training_size,
+                    training_size + validation_size,
+                )
             )
 
         # split the training set into training and validation set
@@ -52,4 +60,7 @@ def split_training_set(
     # show a successful message
     info("🟢 Training set split.")
 
-    return (final_training_set, final_validation_set)
+    return (
+        final_training_set,
+        final_validation_set,
+    )

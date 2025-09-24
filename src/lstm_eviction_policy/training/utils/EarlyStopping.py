@@ -1,5 +1,9 @@
 import numpy as np
-from utils.logs.log_utils import debug, info, phase_var
+from utils.logs.log_utils import (
+    debug,
+    info,
+    phase_var,
+)
 
 
 class EarlyStopping:

@@ -1,12 +1,16 @@
-from datetime import timedelta
-
 import numpy as np
 
-from lstm_eviction_policy.utils.logs.log_utils import debug, info
+from const import HOURS_IN_DAY
+from lstm_eviction_policy.utils.logs.log_utils import (
+    debug,
+    info,
+)
 
 
 def calculate_periodic_component(
-    scale: int, amplitude: int, current_hour_in_day: float
+    scale: int,
+    amplitude: int,
+    current_hour_in_day: float,
 ) -> float:
     """
     Calculate the periodic component given
@@ -25,10 +29,6 @@ def calculate_periodic_component(
     Returns:
         float: Periodic component for current hour in day.
     """
-    # Get the seconds in hour to get the hours in day
-    SECONDS_IN_HOUR = timedelta(hours=1).total_seconds()
-    HOURS_IN_DAY = timedelta(days=1).total_seconds() / SECONDS_IN_HOUR
-
     debug(f"Scale for calculating periodic component: {scale}")
     debug(f"Amplitude for calculating periodic component: {amplitude}")
 

@@ -2,8 +2,12 @@ import copy
 import itertools
 
 from utils.logs.log_utils import debug, info
-from validation.search_space.searc_space_setter import set_nested_dict
-from validation.search_space.search_space_flattener import flatten_search_space
+from validation.search_space.searc_space_setter import (
+    set_nested_dict,
+)
+from validation.search_space.search_space_flattener import (
+    flatten_search_space,
+)
 
 
 def get_parameters_combination(config_settings):
@@ -19,7 +23,10 @@ def get_parameters_combination(config_settings):
 
     try:
         # iterate over all the sections in the search space
-        for section, params_dict in config_settings.search_space.items():
+        for (
+            section,
+            params_dict,
+        ) in config_settings.search_space.items():
             # make the sections flatten
             flat_params = flatten_search_space(params_dict)
 
@@ -58,7 +65,9 @@ def get_parameters_combination(config_settings):
             param_combinations.append(full_dict)
 
         # debugging
-        debug(f"⚙️ Total parameter combinations found: {len(param_combinations)}")
+        debug(
+            f"⚙️ Total parameter combinations found: {len(param_combinations)}"
+        )
 
         # check if there is at least a parameter combination found
         if not param_combinations:
