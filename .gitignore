@@ -52,6 +52,7 @@ coverage.xml
 
 .ipynb_checkpoints/
 
+*.log.*
 *.log
 
 *.tmp
