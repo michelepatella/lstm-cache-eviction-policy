@@ -2,6 +2,7 @@ import numpy as np
 
 from lstm_eviction_policy.utils.logs.log_utils import (
     debug,
+    error,
     info,
 )
 
@@ -43,9 +44,19 @@ def generate_distortion_pattern(
         noise_max (int): Maximum noise value to add to the last key.
 
     Returns:
-      int: Index of the next accessed key.
+        int: Index of the next accessed key.
+
+    Raises:
+        ValueError: If requests is an empty list.
     """
     debug(f"Interval for distortion pattern: {distortion_interval}")
+
+    # Check whether requests list
+    # is empty
+    if not requests:
+        msg = "Requests list is empty, cannot generate distortion pattern"
+        error("%s", msg)
+        raise ValueError(msg)
 
     # Based on a distortion interval
     if requests_count % distortion_interval == 0:

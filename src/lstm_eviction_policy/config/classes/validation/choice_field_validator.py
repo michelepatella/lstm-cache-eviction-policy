@@ -33,9 +33,18 @@ def validate_choice_field(
     Raises:
         ValueError: If the choice field is not valid (i.e.,
                     is not a value among allowed ones).
+        TypeError: If allowed field values data structure is
+                   not a list.
     """
     debug(f"Field value to be validated: {field_value}:")
     debug(f"Allowed field values: {allowed_field_values}:")
+
+    # Check whether allowed field values
+    # is not a list
+    if not isinstance(allowed_field_values, list):
+        msg = f"Allowed field values the must be a list ({context})"
+        error("%s", msg)
+        raise TypeError(msg)
 
     # Check whether the field value has not
     # allowed type

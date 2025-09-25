@@ -1,5 +1,6 @@
 from lstm_eviction_policy.utils.logs.log_utils import (
     debug,
+    error,
     info,
 )
 
@@ -41,8 +42,25 @@ def generate_toggle_pattern(
 
     Returns:
         int: Index of the next accessed key.
+
+    Raises:
+        ValueError: If toggle first or second base request is
+                    greater than the total number of requests.
     """
     debug(f"Toggle interval to determine the toggle state: {toggle_interval}")
+
+    # Check whether first and second toggle
+    # base requests are greater than the total
+    # number of requests
+    if (toggle_first_base_request > len(requests)) or (
+        toggle_second_base_request > len(requests)
+    ):
+        msg = (
+            f"Toggle first and second base request ({toggle_first_base_request, toggle_second_base_request})"
+            f" must be less than or equal to the number of requests ({len(requests)})."
+        )
+        error("%s", msg)
+        raise ValueError(msg)
 
     # Get the toggle state (binary)
     toggle = (requests_count // toggle_interval) % 2

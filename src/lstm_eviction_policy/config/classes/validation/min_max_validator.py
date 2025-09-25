@@ -35,25 +35,39 @@ def validate_min_max(
     Raises:
         ValueError: If the least value is greater than or equal to
                     the greatest one.
+        AttributeError: If min/max fields specified do not exist
+                        for the provided context.
+        TypeError: If the min/max comparison failed (e.g., due to
+                   invalid type comparison).
     """
     debug(
         f"Min/Max fields to be validated: {min_field}, {max_field} from {context}"
     )
 
-    # Read the least and the greatest fields
-    # from the given instance given the
-    # corresponding fields
-    min_val = getattr(instance, min_field)
-    max_val = getattr(instance, max_field)
+    try:
+        # Read the least and the greatest fields
+        # from the given instance given the
+        # corresponding fields
+        min_val = getattr(instance, min_field)
+        max_val = getattr(instance, max_field)
+    except AttributeError as e:
+        msg = "Failed to read min/max fields"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
 
     debug(f"Min/Max values to be validated: {min_val}, {max_val}")
 
-    # Check whether the minimum value is greater
-    # than or equal to the maximum one
-    if max_val <= min_val:
-        msg = f"{context}{max_field} ({max_val}) must be greater than {context}{min_field} ({min_val})"
-        error("%s", msg)
-        raise ValueError(msg)
+    try:
+        # Check whether the minimum value is greater
+        # than or equal to the maximum one
+        if max_val <= min_val:
+            msg = f"{context}{max_field} ({max_val}) must be greater than {context}{min_field} ({min_val})"
+            error("%s", msg)
+            raise ValueError(msg)
+    except TypeError as e:
+        msg = "Failed to compare min/max values"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
 
     info(
         f"{min_field} ({min_val}) and {max_field} ({max_val}) validated for {context}"
