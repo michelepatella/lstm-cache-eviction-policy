@@ -35,10 +35,9 @@ def plot_zipf_loglog(requests: list[int]) -> None:
         None
 
     Raises:
-        ValueError: If list of requests is empty or has
-                    one or more negative values.
-        TypeError: If list of requests is not iterable or
-                   is composed of non-iterable items.
+        RuntimeError: If an error occurs while plotting Zipf log-log, e.g.:
+            * If the list of requests is empty or contains one or more negative values.
+            * If the list of requests is not iterable or contains non-iterable items.
     """
     try:
         # Count how many keys are

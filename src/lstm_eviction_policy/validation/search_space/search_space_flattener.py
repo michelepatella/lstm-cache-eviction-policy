@@ -1,12 +1,12 @@
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 from const import VALIDATION_PARAMS_SUFFIX
 from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
 
 
 def flatten_search_space(
-    nested_dict: Dict[str, List[int | float]], parent_key: Tuple[str, ...] = ()
-) -> List[Tuple[Tuple[str, ...], List[int | float]]]:
+    nested_dict: Dict[str, Any], parent_key: Tuple[str, ...] = ()
+) -> List[Tuple[Tuple[str, ...], Any]]:
     """
     Recursively flatten a nested search space dictionary.
 
@@ -15,27 +15,25 @@ def flatten_search_space(
     the corresponding list of possible values.
 
     Parameters:
-        nested_dict (Dict[str, List[int | float]]): The search space
-                                                    dictionary to flatten.
-        parent_key (Tuple[str, ...], optional): Accumulated key path from
-                                                previous recursion levels.
+        nested_dict (Dict[str, Any]): The search space dictionary to flatten.
+        parent_key (Tuple[str, ...]): Accumulated key path from
+                                      previous recursion levels.
 
     Returns:
-        List[Tuple[Tuple[str, ...], List[int | float]]]: List of tuples containing
-                                                               the key path and its associated
-                                                               list of values.
+        List[Tuple[Tuple[str, ...], Any]]: List of tuples containing
+                                           the key path and its associated
+                                           list of values.
 
     Raises:
-        TypeError: If a non-iterable value is encountered
-                   where a dict is expected.
-        RecursionError: If recursion depth exceeds the Python limit.
-        AttributeError: If the input dictionary does not
-                        have expected attributes.
+        RuntimeError: If an error occurs while flattening the search space, e.g.:
+            * If a non-iterable value is encountered where a dict is expected.
+            * If recursion depth exceeds the Python limit.
+            * If the input dictionary does not have expected attributes.
     """
     debug(f"Flattening search space at level: {parent_key}")
 
     # Initialize list of items
-    items: List[Tuple[Tuple[str, ...], List[int | float]]] = []
+    items: List[Tuple[Tuple[str, ...], Any]] = []
 
     try:
         for k, v in nested_dict.items():

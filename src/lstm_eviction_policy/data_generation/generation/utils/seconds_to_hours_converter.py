@@ -24,8 +24,8 @@ def seconds_to_hours(
         np.ndarray: List of timestamps in hours just converted.
 
     Raises:
-        TypeError: If the received timestamps in seconds list
-                   is not a list of numbers.
+        RuntimeError: If the received timestamps in seconds list
+                      is not a list of numbers.
     """
     try:
         # Move from timestamps in seconds to hours, diving

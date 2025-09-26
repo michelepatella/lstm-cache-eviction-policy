@@ -34,8 +34,9 @@ def build_features(
                       and target column reordered as the last column.
 
     Raises:
-        KeyError: If the time or target column does not exist in the dataset.
-        TypeError: If the dataframe or columns are not of the expected type.
+        RuntimeError: If an error occurs while building features, e.g.:
+            * If the time or target column does not exist in the dataset.
+            * If the dataframe or columns are not of the expected type.
     """
     try:
         # Encode time trigonometrically

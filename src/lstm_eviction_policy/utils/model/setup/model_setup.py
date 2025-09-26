@@ -1,10 +1,11 @@
 import torch
-from utils.logs.log_utils import debug, info
-from utils.model.LSTM import LSTM
-from utils.model.utils.class_weights_calculator import (
+
+from lstm_eviction_policy.utils.logs.log_utils import debug, info
+from lstm_eviction_policy.utils.model.LSTM import LSTM
+from lstm_eviction_policy.utils.model.utils.class_weights_calculator import (
     calculate_class_weights,
 )
-from utils.model.utils.optimizer_builder import (
+from lstm_eviction_policy.utils.model.utils.optimizer_builder import (
     build_optimizer,
 )
 

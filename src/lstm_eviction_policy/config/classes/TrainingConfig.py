@@ -19,6 +19,7 @@ class TrainingGeneralEpochsConfig(BaseModel):
 class TrainingGeneralConfig(BaseModel):
     epochs: TrainingGeneralEpochsConfig
     batch_size: conint(gt=0)
+    shuffle: bool
 
 
 # Training — Optimizer — Params

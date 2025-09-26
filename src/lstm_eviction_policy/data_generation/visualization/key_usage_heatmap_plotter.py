@@ -45,10 +45,11 @@ def plot_key_usage_heatmap(
         None
 
     Raises:
-        ValueError: If requests or timestamps data
-                    contain invalid values or mismatched lengths.
-        TypeError: If requests data is not iterable or timestamps data is not
-                   a NumPy array of numeric values.
+        RuntimeError: If an error occurs while plotting key usage heatmap, e.g.:
+            * If requests or timestamps data contain invalid
+              values or mismatched lengths.
+            * If requests data is not iterable or timestamps data is not a
+              NumPy array of numeric values.
     """
     try:
         # Retrieve both min and max keys

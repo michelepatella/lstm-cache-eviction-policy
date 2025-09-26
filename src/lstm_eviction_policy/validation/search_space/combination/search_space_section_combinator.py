@@ -1,5 +1,5 @@
 import itertools
-from typing import Dict, List
+from typing import Any, Dict, List
 
 from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
 from lstm_eviction_policy.validation.search_space.searc_space_setter import (
@@ -11,22 +11,23 @@ from lstm_eviction_policy.validation.search_space.search_space_flattener import 
 
 
 def get_section_combinations(
-    section: str, params_dict: Dict[str, List[int | float]]
-) -> List[Dict[str, List[int | float]]]:
+    section: str, params_dict: Dict[str, Any]
+) -> List[Dict[str, Any]]:
     """
     Generate all possible parameter combinations for a single section.
 
     Parameters:
         section (str): Section name in the search space.
-        params_dict (Dict[str, List[int | float]]): Section parameters.
+        params_dict (Dict[str, Any]): Section parameters.
 
     Returns:
-        List[Dict[str, List[int | float]]]: All possible parameter combinations
-                                            for the section.
+        List[Dict[str, Any]]: All possible parameter combinations
+                              for the section.
 
     Raises:
-        TypeError: If params_dict is not iterable.
         ValueError: If no combination could be generated.
+        RuntimeError: If an error while generating all section parameters combinations occurs, e.g.:
+            * If params_dict is not iterable.
     """
     try:
         # Flatten the section

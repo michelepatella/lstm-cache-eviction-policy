@@ -23,8 +23,8 @@ def get_dataset_path(config: Config) -> str:
         str: Dataset path.
 
     Raises:
-        AttributeError: If configuration object has
-                        unexpected structure.
+        RuntimeError: If configuration object has
+                      unexpected structure.
     """
     try:
         # Retrieve data distribution mode

@@ -33,12 +33,9 @@ def validate_min_max(
         Any: Validated model instance.
 
     Raises:
-        ValueError: If the least value is greater than or equal to
-                    the greatest one.
-        AttributeError: If min/max fields specified do not exist
-                        for the provided context.
-        TypeError: If the min/max comparison failed (e.g., due to
-                   invalid type comparison).
+        ValueError: If the minimum value is greater than or equal to the maximum.
+        RuntimeError: If an unexpected error occurs, e.g., attribute missing or
+                      invalid type comparison.
     """
     debug(
         f"Min/Max fields to be validated: {min_field}, {max_field} from {context}"

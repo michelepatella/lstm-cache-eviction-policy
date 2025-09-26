@@ -1,5 +1,6 @@
 import torch
-from utils.logs.log_utils import debug, info
+
+from lstm_eviction_policy.utils.logs.log_utils import debug, info
 
 
 def extract_targets_from_dataloader(data_loader):

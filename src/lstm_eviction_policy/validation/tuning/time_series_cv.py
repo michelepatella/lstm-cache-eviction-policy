@@ -1,149 +1,157 @@
+from typing import Any, Dict, List
+
 import numpy as np
-from sklearn.model_selection import (
-    TimeSeriesSplit,
-)
-from utils.data.dataloader.dataloader_builder import (
+from box import Box
+from sklearn.model_selection import TimeSeriesSplit
+
+from lstm_eviction_policy.config.classes.Config import Config
+from lstm_eviction_policy.utils.data.AccessLogsDataset import AccessLogsDataset
+from lstm_eviction_policy.utils.data.dataloader.data_loader_builder import (
     create_data_loader,
 )
-from utils.data.dataloader.dataloader_utils import (
+from lstm_eviction_policy.utils.data.dataloader.dataloader_utils import (
     extract_targets_from_dataloader,
 )
-from utils.data.dataset.dataset_splitter import (
+from lstm_eviction_policy.utils.data.dataset.dataset_splitter import (
     split_training_set,
 )
-from utils.logs.log_utils import debug, info
-from utils.model.setup.model_setup import (
-    model_setup,
-)
-from utils.training.n_epochs_trainer import (
-    train_n_epochs,
-)
+from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
+from lstm_eviction_policy.utils.model.setup.model_setup import model_setup
+from lstm_eviction_policy.utils.training.n_epochs_trainer import train_n_epochs
 
 
-def compute_time_series_cv(training_set, params, config_settings):
+def compute_time_series_cv(
+    training_set: AccessLogsDataset,
+    params: Dict[str, Any],
+    config: Config,
+) -> float:
     """
-    Method to compute Time Series cross-validation.
-    :param training_set: The training set on which to
-    perform the time series cross-validation.
-    :param params: The hyperparameters of the model.
-    :param config_settings: The configuration settings.
-    :return: The final average loss.
+    Compute Time Series Cross-Validation (CV) average loss.
+
+    This function splits the training set using time series cross-validation,
+    trains a model for each fold, and calculates the average loss across folds.
+
+    Parameters:
+        training_set (AccessLogsDataset): Dataset to perform CV on.
+        params (Dict[str, Any]): Hyperparameter configuration
+                                 for model and training.
+        config (Config): Configuration object.
+
+    Returns:
+        float: Average loss across all CV folds.
+
+    Raises:
+        RuntimeError: If an error occurs during CV computation e.g.:
+            * TimeSeriesSplit creation.
+            * Dataset splitting.
+            * DataLoader creation.
+            * Model setup.
+            * Model training.
+            * Final average loss computation.
     """
-    # initial message
-    info("🔄 Time Series Cross-Validation started...")
+    # Get the number of training set samples
+    num_samples = len(training_set)
+
+    debug(
+        f"Number of samples in training set for time series cross-validation: {num_samples}"
+    )
+
+    # Prepare configuration
+    cv_num_folds = config.validation.cross_validation.folds
+    training_shuffle = config.training.general.shuffle
+    validation_shuffle = config.validation.general.shuffle
+
+    debug(f"Number of folds for time series cross-validation: {cv_num_folds}")
 
     try:
-        # get the no. of samples in the dataset
-        n_samples = len(training_set)
-
-        # debugging
-        debug(f"⚙️ No. of samples in the training set: {n_samples}.")
-
-        # setup for Time Series Split
-        tscv = TimeSeriesSplit(n_splits=config_settings.cv_num_folds)
+        # Instantiate time series split object
+        tscv = TimeSeriesSplit(n_splits=cv_num_folds)
+        fold_losses: List[float] = []
     except ValueError as e:
-        raise ValueError(f"ValueError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+        msg = "Failed to instantiate TimeSeriesSplit"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
 
-    fold_losses = []
-    # iterate over the training set
-    for train_idx, val_idx in tscv.split(np.arange(n_samples)):
-        # debugging
-        debug(f"⚙️ Training idx (Time series CV): {train_idx}.")
-        debug(f"⚙️ Validation idx (Time series CV): {val_idx}.")
-
-        # define training and validation sets
-        training_dataset, validation_dataset = split_training_set(
-            training_set,
-            config_settings,
-            training_indices=train_idx,
-            validation_indices=val_idx,
-        )
-
-        # debugging
-        debug(f"⚙️ Training size (Time series CV): {len(training_dataset)}.")
-        debug(
-            f"⚙️ Validation size (Time series CV): {len(validation_dataset)}."
-        )
-
-        # create training and validation loaders
-        training_loader = create_data_loader(
-            training_dataset,
-            config_settings.training_batch_size,
-            True,
-        )
-        validation_loader = create_data_loader(
-            validation_dataset,
-            config_settings.training_batch_size,
-            False,
-        )
-
+    # For each fold
+    for fold_idx, (train_idx, val_idx) in enumerate(
+        tscv.split(np.arange(num_samples)), start=1
+    ):
         try:
-            # setup for training
-            (
-                device,
-                criterion,
-                model,
-                optimizer,
-            ) = model_setup(
-                params["model"]["params"],
-                params["training"]["optimizer"]["learning_rate"],
-                extract_targets_from_dataloader(training_loader),
-                config_settings,
+            # Box parameters
+            params_box = Box(params)
+
+            debug(f"Fold {fold_idx}, training index: {train_idx}")
+            debug(f"Fold {fold_idx}, validation index: {val_idx}")
+
+            # Split the whole training set into training
+            # and validation sets
+            training_dataset, validation_dataset = split_training_set(
+                training_set,
+                config,
+                training_idx=train_idx,
+                validation_idx=val_idx,
             )
-        except KeyError as e:
-            raise KeyError(f"KeyError: {e}.")
-        except TypeError as e:
-            raise TypeError(f"TypeError: {e}.")
-        except AttributeError as e:
-            raise AttributeError(f"AttributeError: {e}.")
-        except ValueError as e:
-            raise ValueError(f"ValueError: {e}.")
-        except Exception as e:
-            raise RuntimeError(f"RuntimeError: {e}.")
 
-        # train the model
-        avg_loss, _ = train_n_epochs(
-            config_settings.validation_num_epochs,
-            model,
-            training_loader,
-            optimizer,
-            criterion,
-            device,
-            config_settings,
-            validation_loader=validation_loader,
-            early_stopping=True,
-        )
+            debug(f"Fold {fold_idx}, training size: {len(training_dataset)}")
+            debug(
+                f"Fold {fold_idx}, validation size: {len(validation_dataset)}"
+            )
 
-        try:
-            # save avg loss
+            # Create DataLoaders both for
+            # training and validation sets
+            training_loader = create_data_loader(
+                training_dataset,
+                config.training_batch_size,
+                shuffle=training_shuffle,
+            )
+            validation_loader = create_data_loader(
+                validation_dataset,
+                config.training_batch_size,
+                shuffle=validation_shuffle,
+            )
+
+            # Extract targets from dataset
+            targets = extract_targets_from_dataloader(training_loader)
+
+            # Setup model
+            device, criterion, model, optimizer = model_setup(
+                params_box.model,
+                params_box.training.optimizer.learning_rate,
+                targets,
+                config,
+            )
+
+            # Train model
+            avg_loss, _ = train_n_epochs(
+                config.validation_num_epochs,
+                model,
+                training_loader,
+                optimizer,
+                criterion,
+                device,
+                config,
+                validation_loader=validation_loader,
+                early_stopping=True,
+            )
+
+            # Record fold average loss
             if avg_loss is not None:
                 fold_losses.append(avg_loss)
-        except NameError as e:
-            raise NameError(f"NameError: {e}.")
-        except AttributeError as e:
-            raise AttributeError(f"AttributeError: {e}.")
-        except TypeError as e:
-            raise TypeError(f"TypeError: {e}.")
-        except Exception as e:
-            raise RuntimeError(f"RuntimeError: {e}.")
+                debug(f"Fold {fold_idx}, average loss: {avg_loss}")
+        except (IndexError, ValueError, TypeError, RuntimeError) as e:
+            msg = "Failed to compute time series cross-validation"
+            error("%s: %s", msg, e)
+            raise RuntimeError(msg) from e
 
-    # show a successful message
-    info("🟢 Time Series Cross-Validation completed.")
-
+    # Compute final average
     try:
-        # calculate the average of loss
-        final_avg_loss = np.mean(fold_losses)
-    except NameError as e:
-        raise NameError(f"NameError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except ValueError as e:
-        raise ValueError(f"ValueError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+        final_avg_loss = float(np.mean(fold_losses))
+        debug(f"Final average loss across all folds: {final_avg_loss}")
+    except (TypeError, ValueError) as e:
+        msg = "Failed to compute final average loss across all folds"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
+
+    info("Time series cross-validation completed")
 
     return final_avg_loss

@@ -30,11 +30,10 @@ def report_dataset_cleaning(
         None
 
     Raises:
-        AttributeError: If one or both of datasets received
-                        are not Pandas DataFrame.
-        TypeError: If one or both of datasets received are
-                   of incompatible type with operation used
-                   to calculate their lengths.
+        RuntimeError: If an error occurs while reporting dataset cleaning, e.g.:
+            * If one or both of datasets received are not Pandas DataFrame.
+            * If one or both of datasets received are of incompatible type
+              with operations used to calculate their lengths.
     """
     try:
         # Calculate original dataset size

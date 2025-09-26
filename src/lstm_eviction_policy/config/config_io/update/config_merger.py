@@ -31,6 +31,8 @@ def merge_config(
         dict: Updated configuration object after merging.
 
     Raises:
+        TypeError: If the updated configuration objects is not
+                   a dictionary.
         RuntimeError: If the updated configuration object cannot be merged
                       into the original one due to excessive recursion depth.
     """

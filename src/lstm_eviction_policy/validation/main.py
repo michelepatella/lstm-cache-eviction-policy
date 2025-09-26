@@ -4,10 +4,13 @@ from lstm_eviction_policy.utils.data.AccessLogsDataset import AccessLogsDataset
 from lstm_eviction_policy.utils.data.dataloader.data_loader_setup import (
     data_loader_setup,
 )
-from lstm_eviction_policy.utils.logs.log_utils import phase_var
+from lstm_eviction_policy.utils.logs.log_utils import info, phase_var
+from lstm_eviction_policy.validation.tuning.grid_search_optimizer import (
+    compute_grid_search,
+)
 
 
-def validation(config: Config):
+def validate_model(config: Config):
     # Set the new pipeline state
     phase_var.set(PIPELINE_PHASE_VALIDATION)
 
@@ -24,13 +27,13 @@ def validation(config: Config):
         AccessLogsDataset,
     )
 
-    # grid search for best parameters
+    # Compute grid search for best parameters
     best_params = compute_grid_search(training_set, config)
 
-    # set the best parameters and get new config settings
-    new_config_settings = save_best_params(best_params, config)
+    # Set the best parameters and
+    # get new config settings
+    new_config = save_best_params(best_params, config)
 
-    # print a successful message
-    info("✅ Validation successfully completed.")
+    info("Validation completed")
 
-    return new_config_settings
+    return new_config

@@ -34,9 +34,10 @@ def encode_time_trigonometrically(
                       sine and cosine features.
 
     Raises:
-        KeyError: If the specified time column does not exist in the dataset.
-        TypeError: If the time column contains non-numeric values.
-        ZeroDivisionError: If the period is set to zero.
+        RuntimeError: If an error occurs while encoding time trigonometrically, e.g.:
+            * If the specified time column does not exist in the dataset.
+            * If the time column contains non-numeric values.
+            * If the period is set to zero.
     """
     try:
         debug(f"Time column to be encoded trigonometrically: {time_column}")

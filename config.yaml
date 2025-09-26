@@ -116,6 +116,7 @@ training:
     epochs:
       count: 500
     batch_size: 64
+    shuffle: true
   optimizer:
     type: adamw
     params:

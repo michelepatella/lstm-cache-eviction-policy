@@ -32,13 +32,10 @@ def remove_invalid_values(df: pd.DataFrame, config: Config) -> pd.DataFrame:
         pd.DataFrame: Dataset without invalid values.
 
     Raises:
-        AttributeError: If dataset to be validated is
-                        not a pd.DataFrame, or columns
-                        to validate do not exist.
-        KeyError: If columns to be validated do not exist
-                  in the dataset.
-        TypeError: If dataset to be validated is not a pd.DataFrame
-                   or is not iterable.
+        RuntimeError: If an error occurs while removing invalid values from dataset, e.g.:
+            * If dataset to be validated is not a Pandas DataFrame.
+            * If columns to validate do not exist in the dataset.
+            * If dataset is not iterable or of incompatible type.
     """
     try:
         # Retrieve min and max keys

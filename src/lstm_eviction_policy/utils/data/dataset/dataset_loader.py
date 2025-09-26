@@ -29,10 +29,10 @@ def load_dataset(config: Config) -> pd.DataFrame:
         pd.DataFrame: Dataset loaded.
 
     Raises:
-        OSError: If a generic I/O error occurred.
-        pd.errors.EmptyDataError: If dataset file is empty.
-        pd.errors.ParserError: If an error parsing dataset file
-                               occurred.
+        RuntimeError: If an error occurs while loading the dataset, e.g.:
+            * Generic I/O error.
+            * The dataset file is empty.
+            * An error occurred while parsing the dataset file.
     """
     # Retrieve path to load dataset from
     dataset_path = get_dataset_path(config)

@@ -39,12 +39,10 @@ def plot_daily_profile(
         None
 
     Raises:
-        Raises:
-        ValueError: If timestamps list is empty, contains negative values,
-                    or non-numeric entries.
-        TypeError: If timestamps data structure is not a numpy
-                   array or list-like.
-        ZeroDivisionError: If bin size is set to zero.
+        RuntimeError: If an error occurs while plotting daily profile, e.g.:
+            * If timestamps list is empty, contains negative values, or non-numeric entries.
+            * If timestamps data structure is not a numpy array or list-like.
+            * If bin size is set to zero.
     """
     try:
         # Define the number of bins to

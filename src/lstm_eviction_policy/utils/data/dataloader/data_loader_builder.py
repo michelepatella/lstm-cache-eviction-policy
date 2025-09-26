@@ -1,11 +1,11 @@
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, Subset
 
 from lstm_eviction_policy.utils.data.AccessLogsDataset import AccessLogsDataset
 from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
 
 
 def create_data_loader(
-    dataset: AccessLogsDataset, batch_size: int, shuffle: bool
+    dataset: AccessLogsDataset | Subset, batch_size: int, shuffle: bool
 ) -> DataLoader:
     """
     Create a data loader for the given dataset.
@@ -14,7 +14,7 @@ def create_data_loader(
     applying specified settings including batch size and shuffling.
 
     Parameters:
-        dataset (AccessLogsDataset): The dataset instance to create the
+        dataset (AccessLogsDataset | Subset): The dataset instance to create the
                                      data loader for.
         batch_size (int): The batch size to use for the data loader.
         shuffle (bool): Whether to shuffle the data loader.
@@ -23,11 +23,9 @@ def create_data_loader(
         DataLoader: The data loader created.
 
     Raises:
-        TypeError: If dataset object is not compatible
-                   with torch.utils.data.Dataset, or batch size
-                   or shuffle are not of correct type.
-        ValueError: If one or more parameters (e.g., batch size)
-                    are not valid.
+        RuntimeError: If an error occurs while creating the data loader, e.g.:
+            * If dataset object is not compatible with torch.utils.data.Dataset.
+            * If batch size or shuffle parameters are of incorrect type or invalid.
     """
     debug(f"Batch size for the data loader to be created: {batch_size}")
     debug(f"Shuffle for the data loader to be created: {shuffle}")

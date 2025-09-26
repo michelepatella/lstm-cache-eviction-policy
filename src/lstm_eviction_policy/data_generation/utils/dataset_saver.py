@@ -29,8 +29,8 @@ def save_dataset(df: pd.DataFrame, config: Config) -> None:
         None
 
     Raises:
-        OSError: Generic operating system error while
-                 saving the dataset at specified path.
+        RuntimeError: Generic operating system error while
+                      saving the dataset at specified path.
     """
     # Retrieve path where
     # to save dataset

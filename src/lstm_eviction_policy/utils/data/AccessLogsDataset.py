@@ -39,10 +39,11 @@ class AccessLogsDataset(Dataset):
             None
 
         Raises:
-            AttributeError: If self.data is not a Pandas DataFrame.
-            TypeError: If self.data length or train % is of wrong type.
-            ValueError: If self.data length or train % cannot be converted to int.
-            IndexError: If the split index is out of bounds for self.data.
+            RuntimeError: If an error occurs during dataset splitting, e.g.:
+                * self.data is not a Pandas DataFrame.
+                * self.data length or train % is of wrong type.
+                * self.data length or train % cannot be converted to int.
+                * the split index is out of bounds for self.data.
         """
         debug(f"Dataset splitting type: {dataset_type}")
 
@@ -95,9 +96,10 @@ class AccessLogsDataset(Dataset):
             None
 
         Raises:
-            AttributeError: If data is not a Pandas DataFrame.
-            TypeError: If data columns or sequence length are of wrong type.
-            IndexError: If data does not contain any columns.
+            RuntimeError: If an error occurs while setting dataset fields, e.g.:
+                * data is not a Pandas DataFrame
+                * data columns or sequence length are of wrong type
+                * data does not contain any columns
         """
         try:
             # Extract column names
@@ -149,13 +151,11 @@ class AccessLogsDataset(Dataset):
             None
 
         Raises:
-            KeyError: If the dataset loaded is empty.
-            ValueError: If there is a value on the target column
-                        that cannot be converted to integer.
-            TypeError: If there is a value on the target column
-                       which is not compatible with astype(int).
-            AttributeError: If the dataset loaded is not a Pandas DataFrame
-                            or has not the attribute columns.
+            RuntimeError: If an error occurs while initializing the dataset, e.g.:
+                * dataset loaded is empty
+                * a value on the target column cannot be converted to integer
+                * a value on the target column is not compatible with astype(int)
+                * dataset loaded is not a Pandas DataFrame or missing columns attribute
         """
         debug(f"AccessLogsDataset type to be initialized: {dataset_type}")
 
@@ -197,10 +197,10 @@ class AccessLogsDataset(Dataset):
             int: Number of available sequences in the dataset.
 
         Raises:
-            AttributeError: If self.data or self.seq_len is not properly set.
-            TypeError: If self.data is not iterable or sequence
-                       length is not an integer.
-            ValueError: If calculated length is negative.
+            RuntimeError: If an error occurs while calculating dataset length, e.g.:
+                * self.data or self.seq_len is not properly set
+                * self.data is not iterable or sequence length is not an integer
+                * calculated length is negative
         """
         try:
             # Calculate the dataset length by
@@ -245,12 +245,12 @@ class AccessLogsDataset(Dataset):
                 - y_key (torch.Tensor): Tensor of the next key (single value)
 
         Raises:
-            IndexError: If the requested index goes out of bounds.
-            KeyError: If feature or target columns are missing.
-            TypeError: If data types in features/target are invalid.
-            ValueError: If conversion to int/float fails.
-            AttributeError: If self.data, self.features, or self.target
-                            are not set properly.
+            RuntimeError: If an error occurs while retrieving a dataset item, e.g.:
+                * The requested index goes out of bounds
+                * Feature or target columns are missing
+                * Data types in features/target are invalid
+                * Conversion to int/float fails
+                * self.data, self.features, or self.target are not set properly
         """
         debug(f"Index of item to be retrieved: {idx}")
 
@@ -312,9 +312,10 @@ class AccessLogsDataset(Dataset):
             AccessLogsDataset: Initialized dataset instance.
 
         Raises:
-            AttributeError: If dataframe does not have expected attributes.
-            TypeError: If provided dataframe is not a Pandas DataFrame.
-            IndexError: If dataframe does not contain any columns.
+            RuntimeError: If an error occurs while instantiating from dataframe, e.g.:
+                * The dataframe does not have expected attributes
+                * The provided object is not a Pandas DataFrame
+                * The dataframe does not contain any columns
         """
         debug(
             f"Dataframe shape to be instantiated as AccessLogsDataset: {df.shape}"

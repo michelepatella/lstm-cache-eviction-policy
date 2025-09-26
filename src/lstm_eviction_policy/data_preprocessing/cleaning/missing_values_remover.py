@@ -26,8 +26,8 @@ def remove_missing_values(
         pd.DataFrame: Dataset without missing values.
 
     Raises:
-        AttributeError: If dataframe to be cleaned is
-                        not a pd.DataFrame.
+        RuntimeError: If dataframe to be cleaned is
+                      not a pd.DataFrame.
     """
     try:
         # Remove rows with missing values

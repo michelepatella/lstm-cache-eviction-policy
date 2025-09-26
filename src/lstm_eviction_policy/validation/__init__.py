@@ -1,3 +1,3 @@
-from .main import validation
+from .main import validate_model
 
-__all__ = ["validation"]
+__all__ = ["validate_model"]

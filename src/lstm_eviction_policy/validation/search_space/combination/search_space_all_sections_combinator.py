@@ -1,26 +1,27 @@
 import copy
 import itertools
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
 
 
 def get_all_sections_combinations(
-    section_combinations: List[Tuple[str, List[Dict[str, List[int | float]]]]],
-) -> List[Dict[str, List[int | float]]]:
+    section_combinations: List[Tuple[str, Any]],
+) -> List[Dict[str, Any]]:
     """
     Combine parameter combinations from all
     sections into full configurations.
 
     Parameters:
-        section_combinations (List[Tuple[str, List[Dict[str, List[int | float]]]]]):
+        section_combinations (List[Tuple[str, Any]]):
             Section name and its combinations.
 
     Returns:
-        List[Dict[str, List[int | float]]]: List of fully combined parameter dictionaries.
+        List[Dict[str, Any]]: List of fully combined parameter dictionaries.
 
     Raises:
         ValueError: If no full combinations could be generated.
+        RuntimeError: If an error while combining section parameters occurs.
     """
     try:
         # Generate all possible combinations

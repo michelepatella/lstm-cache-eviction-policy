@@ -1,10 +1,10 @@
-from typing import Dict, List, Sequence
+from typing import Any, Dict, Sequence
 
 from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
 
 
 def set_nested_dict(
-    nested_dict: Dict[str, dict | int | float | List[int | float]],
+    nested_dict: Dict[str, Any],
     keys: Sequence[str],
     value: int | float,
 ) -> None:
@@ -16,7 +16,7 @@ def set_nested_dict(
     dictionaries if needed, and sets the value at the last key.
 
     Parameters:
-        nested_dict (Dict[str, dict | int | float | List[int | float]]): Dictionary to update.
+        nested_dict (Dict[str, Any]): Dictionary to update.
         keys (Sequence[str]): Sequence of nested keys leading to the value.
         value (int | float): Value to set at the nested location.
 
@@ -24,10 +24,10 @@ def set_nested_dict(
         None
 
     Raises:
-        TypeError: If nested dictionary is not a dictionary or
-                   keys is not iterable.
-        IndexError: If keys sequence is empty.
-        KeyError: If assignment fails due to an invalid key.
+        RuntimeError: If an error occurs while setting a nested dictionary value, e.g.:
+            * If nested dictionary is not a dictionary or keys is not iterable.
+            * If keys sequence is empty.
+            * If assignment fails due to an invalid key.
     """
     try:
         # Initialization

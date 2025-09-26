@@ -1,60 +1,74 @@
+from typing import Any, Dict
+
+from tqdm import tqdm
+
+from lstm_eviction_policy.config.classes.Config import Config
+from lstm_eviction_policy.utils.data.AccessLogsDataset import AccessLogsDataset
 from lstm_eviction_policy.utils.logs.log_utils import debug, info
+from lstm_eviction_policy.validation.best_params.best_params_updater import (
+    check_and_update_best_params,
+)
+from lstm_eviction_policy.validation.search_space.combination.search_space_combinator import (
+    get_parameters_combination,
+)
+from lstm_eviction_policy.validation.tuning.time_series_cv import (
+    compute_time_series_cv,
+)
 
 
-def compute_grid_search(training_set, config_settings):
+def compute_grid_search(
+    training_set: AccessLogsDataset, config: Config
+) -> Dict[str, Any]:
     """
-    Method to compute grid search to find the best parameters.
-    :param training_set: The training set.
-    :param config_settings: The configuration settings.
-    :return: The best parameters.
+    Perform grid search to find the
+    best hyperparameter configuration.
+
+    This function iterates over all parameter
+    combinations generated from the search space, evaluates
+    each combination using time-series cross-validation, and
+    selects the one with the lowest average loss.
+
+    Parameters:
+        training_set (AccessLogsDataset): Training dataset to be used
+                                          in CV evaluation.
+        config (Config): Configuration object.
+
+    Returns:
+        Dict[str, Any]: Dictionary containing the best parameters found.
     """
-    # initial message
-    info("🔄 Grid Search started...")
+    debug(f"Training set size for grid search: {len(training_set)}")
 
-    # debugging
-    debug(f"⚙️ Training set size: {len(training_set)}.")
+    # Initialize best tracking variables
+    best_params: Dict[str, Any] = {}
+    best_avg_loss: float = float("inf")
 
-    # initialize the best parameters and average loss
-    best_params = {}
-    best_avg_loss = float("inf")
+    # Retrieve parameter combinations
+    param_combinations = get_parameters_combination(config)
 
-    # get the parameters combination
-    param_combinations = get_parameters_combination(config_settings)
-
-    # grid search
+    # Iterate over all parameter combinations
     with tqdm(
         total=len(param_combinations),
-        desc="🔍 Grid Search Progress",
+        desc="Grid Search Progress",
     ) as pbar:
         for params in param_combinations:
-            # debugging
-            debug(f"⚙️ Evaluating combination: {params}")
+            debug(f"Evaluating parameter combination: {params}")
 
-            # perform the time series CV
-            avg_loss = compute_time_series_cv(
-                training_set,
-                params,
-                config_settings,
-            )
+            # Perform time series CV
+            avg_loss = compute_time_series_cv(training_set, params, config)
 
-            # check the avg loss and eventually update the best parameters
+            debug(f"Average loss for current combination: {avg_loss}")
+
+            # Update the best parameters
+            # if improvement found
             best_avg_loss, best_params = check_and_update_best_params(
-                avg_loss,
-                best_avg_loss,
-                params,
-                best_params,
+                avg_loss, best_avg_loss, params, best_params
             )
 
-            # update the progress bar
             pbar.update(1)
 
-    # print the best parameters found
-    info(f"🏆 Best parameters found: {best_params}")
+    info(f"Best parameters found: {best_params}")
+    info(f"Best average loss found: {best_avg_loss}")
 
-    # print the best average loss
-    info(f"🏆 Best avg loss found: {best_avg_loss}")
-
-    # show a successful message
-    info("🟢 Grid Search completed.")
+    info("Grid Search completed")
 
     return best_params

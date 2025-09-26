@@ -24,13 +24,13 @@ def create_dataframe(
                                                           dataframe for.
 
     Returns:
-        pd.DataFrame: Pandas dataframe created
-                      from the given columns.
+        pd.DataFrame: Pandas dataframe created from the given columns.
 
     Raises:
-        ValueError: If columns have not the same length.
-        TypeError: If columns have a format such that cannot be
-                   converted for creating a Pandas dataframe.
+        RuntimeError: If an error occurs while creating the DataFrame, e.g.:
+            * The columns have not the same length.
+            * The columns have a format that cannot be
+              converted to create a Pandas DataFrame.
     """
     debug(f"Columns number of dataframe to be created: {len(columns)}")
     debug(

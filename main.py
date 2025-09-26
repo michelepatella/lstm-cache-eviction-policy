@@ -7,6 +7,7 @@ from lstm_eviction_policy.data_generation import (
 from lstm_eviction_policy.data_preprocessing import (
     preprocess_data,
 )
+from lstm_eviction_policy.validation import validate_model
 
 # PIPELINE
 # 0. PREPARE CONFIGURATION SETTINGS
@@ -19,7 +20,7 @@ generate_data(config)
 preprocess_data(config)
 
 # 3. FIND THE BEST HYPERPARAMETERS
-# config = validation(config)
+config = validate_model(config)
 
 # 4. TRAIN THE MODEL
 # training(config)

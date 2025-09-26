@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Any, Dict, List
 
 from lstm_eviction_policy.config.classes.Config import Config
 from lstm_eviction_policy.utils.logs.log_utils import error, info
@@ -12,7 +12,7 @@ from lstm_eviction_policy.validation.search_space.combination.search_space_secti
 
 def get_parameters_combination(
     config: Config,
-) -> List[Dict[str, List[int | float]]]:
+) -> List[Dict[str, Any]]:
     """
     Generate all possible parameter combinations from the search space.
 
@@ -25,20 +25,22 @@ def get_parameters_combination(
         config (Config): Configuration object.
 
     Returns:
-        List[Dict[str, List[int | float]]]: List of nested dictionaries
-                                            representing all parameter combinations.
+        List[Dict[str, Any]]: List of nested dictionaries
+                              representing all parameter combinations.
 
     Raises:
-        KeyError: If expected keys are missing in the search space.
-        TypeError: If search space or keys are of invalid type.
-        ValueError: If no parameter combinations could be generated.
+        RuntimeError: If an error occurs while generating parameter combinations, e.g.:
+            * Expected keys are missing in the search space.
+            * Search space or keys are of invalid type.
+            * No parameter combinations could be generated.
     """
     try:
         section_combinations = []
 
         # Generate combinations per section
         # and save them
-        for section, params_dict in config.search_space.items():
+        search_space = config.validation.search_space.model_dump()
+        for section, params_dict in search_space.items():
             section_values = get_section_combinations(section, params_dict)
             section_combinations.append((section, section_values))
 
