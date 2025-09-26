@@ -12,11 +12,29 @@ PIPELINE_PHASE_DATA_PREPROCESSING = "data preprocessing"
 PIPELINE_PHASE_VALIDATION = "validation"
 
 # Time
+MIN_HOUR = 0
+MAX_HOUR = 23
 PERIOD = timedelta(days=1).total_seconds()
 SECONDS_IN_HOUR = timedelta(hours=1).total_seconds()
 HOURS_IN_DAY = timedelta(days=1).total_seconds() / SECONDS_IN_HOUR
-MIN_HOUR = 0
-MAX_HOUR = 23
+
+# Data distribution
+DATA_DISTRIBUTION_STATIC_MODE = "static"
+DATA_DISTRIBUTION_DYNAMIC_MODE = "dynamic"
+ALLOWED_DATA_DISTRIBUTION_MODES = [
+    DATA_DISTRIBUTION_STATIC_MODE,
+    DATA_DISTRIBUTION_DYNAMIC_MODE,
+]
+
+# Dataset Splitting
+TRAINING_SPLIT_TYPE = "training"
+TESTING_SPLIT_TYPE = "testing"
+
+# Dataset columns
+TIMESTAMP_COLUMN_NAME = "timestamp"
+REQUEST_COLUMN_NAME = "request"
+SIN_TIME_COLUMN_NAME = "sin_time"
+COS_TIME_COLUMN_NAME = "cos_time"
 
 # Training
 TRAINING_OPTIMIZER_ADAM = "adam"
@@ -28,21 +46,8 @@ ALLOWED_TRAINING_OPTIMIZERS = [
     TRAINING_OPTIMIZER_SGD,
 ]
 
-# Data distribution
-DATA_DISTRIBUTION_STATIC_MODE = "static"
-DATA_DISTRIBUTION_DYNAMIC_MODE = "dynamic"
-ALLOWED_DATA_DISTRIBUTION_MODES = [
-    DATA_DISTRIBUTION_STATIC_MODE,
-    DATA_DISTRIBUTION_DYNAMIC_MODE,
-]
-
-# Dataset
-TRAINING_SPLIT_TYPE = "training"
-TESTING_SPLIT_TYPE = "testing"
-TIMESTAMP_COLUMN_NAME = "timestamp"
-REQUEST_COLUMN_NAME = "request"
-SIN_TIME_COLUMN_NAME = "sin_time"
-COS_TIME_COLUMN_NAME = "cos_time"
+# Validation
+VALIDATION_PARAMS_SUFFIX = "_range"
 
 # Figures
 FIGURE_SIZE = 12

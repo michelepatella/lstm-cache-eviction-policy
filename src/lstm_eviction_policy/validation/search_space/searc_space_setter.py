@@ -1,45 +1,60 @@
-from utils.logs.log_utils import info
+from typing import Dict, List, Sequence
+
+from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
 
 
-def set_nested_dict(d, keys, value):
+def set_nested_dict(
+    nested_dict: Dict[str, dict | int | float | List[int | float]],
+    keys: Sequence[str],
+    value: int | float,
+) -> None:
     """
-    Method to set a value in a nested dictionary
-    given a list of keys.
-    :param d: The dictionary to update.
-    :param keys: The list of nested keys.
-    :param value: The value to set.
-    :return:
-    """
-    # initial message
-    info("🔄 Nested dictionary setting started...")
+    Set a value in a nested dictionary given a sequence of keys.
 
+    This function traverses a nested dictionary according
+    to the provided sequence of keys, creating intermediate
+    dictionaries if needed, and sets the value at the last key.
+
+    Parameters:
+        nested_dict (Dict[str, dict | int | float | List[int | float]]): Dictionary to update.
+        keys (Sequence[str]): Sequence of nested keys leading to the value.
+        value (int | float): Value to set at the nested location.
+
+    Returns:
+        None
+
+    Raises:
+        TypeError: If nested dictionary is not a dictionary or
+                   keys is not iterable.
+        IndexError: If keys sequence is empty.
+        KeyError: If assignment fails due to an invalid key.
+    """
     try:
-        # current dictionary initialized to the
-        # starting dictionary
-        current = d
+        # Initialization
+        current_dict = nested_dict
 
-        # iterate over all the keys except the last one
-        # to go down the nested levels
-        for k in keys[:-1]:
-            # if there is not the key, or
-            # it is not a dictionary, make it one
-            if k not in current or not isinstance(current[k], dict):
-                current[k] = {}
+        # Iterate over all the keys except
+        # the last one to go down the nested levels
+        for key in keys[:-1]:
+            # If the current key is not in the
+            # current dictionary or this latter is not
+            # a dictionary, make it one
+            if key not in current_dict or not isinstance(
+                current_dict[key], dict
+            ):
+                current_dict[key] = {}
 
-            # go down a level more
-            current = current[k]
+            # Go down a level more
+            current_dict = current_dict[key]
 
-        # set the desired value in the last position
-        # indicate by the sequence
-        current[keys[-1]] = value
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except IndexError as e:
-        raise IndexError(f"IndexError: {e}.")
-    except KeyError as e:
-        raise KeyError(f"KeyError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+        # Set the desired value in the last
+        # position
+        current_dict[keys[-1]] = value
 
-    # show a successful message
-    info("🟢 Nested dictionary setting completed.")
+        debug(f"Set value at nested key path: {keys} -> {value}")
+    except (TypeError, IndexError, KeyError) as e:
+        msg = f"Failed to set value in nested dictionary"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
+
+    info("Nested dictionary setting completed")

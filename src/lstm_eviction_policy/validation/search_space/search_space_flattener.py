@@ -1,46 +1,64 @@
-from utils.logs.log_utils import info
+from typing import Dict, List, Tuple
+
+from const import VALIDATION_PARAMS_SUFFIX
+from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
 
 
-def flatten_search_space(d, parent_key=()):
+def flatten_search_space(
+    nested_dict: Dict[str, List[int | float]], parent_key: Tuple[str, ...] = ()
+) -> List[Tuple[Tuple[str, ...], List[int | float]]]:
     """
-    Method to make the search space flatten recursively.
-    :param d: The search space dictionary.
-    :param parent_key: The key path accumulated so far.
-    :return: A list of tuples where each tuple contains
-    a key path and its associated list of values.
+    Recursively flatten a nested search space dictionary.
+
+    This function converts a nested dictionary representing the search space
+    into a flat list of tuples, where each tuple contains a key path and
+    the corresponding list of possible values.
+
+    Parameters:
+        nested_dict (Dict[str, List[int | float]]): The search space
+                                                    dictionary to flatten.
+        parent_key (Tuple[str, ...], optional): Accumulated key path from
+                                                previous recursion levels.
+
+    Returns:
+        List[Tuple[Tuple[str, ...], List[int | float]]]: List of tuples containing
+                                                               the key path and its associated
+                                                               list of values.
+
+    Raises:
+        TypeError: If a non-iterable value is encountered
+                   where a dict is expected.
+        RecursionError: If recursion depth exceeds the Python limit.
+        AttributeError: If the input dictionary does not
+                        have expected attributes.
     """
-    # initial message
-    info("🔄 Search space flatting started...")
+    debug(f"Flattening search space at level: {parent_key}")
+
+    # Initialize list of items
+    items: List[Tuple[Tuple[str, ...], List[int | float]]] = []
 
     try:
-        items = []
-        for k, v in d.items():
-            # extrapolate the name of the parameter
-            clean_key = k.replace("_range", "")
-
-            # build the new key (tuple with the name of the parameter)
+        for k, v in nested_dict.items():
+            # Clean parameter name by removing suffix
+            clean_key = k.replace(VALIDATION_PARAMS_SUFFIX, "")
             new_key = parent_key + (clean_key,)
 
-            # if the new value is another dictionary
-            # apply recursively this method
             if isinstance(v, dict):
+                # Recurse into nested dictionary
                 items.extend(flatten_search_space(v, new_key))
             else:
-                # convert the value to list
-                values = v if isinstance(v, list) else [v]
+                # Save item
+                items.append((new_key, v))
 
-                # add the couple (key, values) to the final list
-                items.append((new_key, values))
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except RecursionError as e:
-        raise RecursionError(f"RecursionError: {e}.")
-    except AttributeError as e:
-        raise AttributeError(f"AttributeError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+                debug(f"Added flattened key: {new_key} -> values: {v}")
 
-    # show a successful message
-    info("🟢 Search space flatten.")
+    except (TypeError, RecursionError, AttributeError) as e:
+        msg = f"Failed to flatten search space"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
+
+    debug(f"Flattened items at level {parent_key}: {items}")
+
+    info("Search space flattening completed")
 
     return items
