@@ -1,35 +1,47 @@
 import torch
+from torch.utils.data import DataLoader
 
-from lstm_eviction_policy.utils.logs.log_utils import debug, info
+from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
 
 
-def extract_targets_from_dataloader(data_loader):
+def extract_targets_from_dataloader(data_loader: DataLoader) -> torch.Tensor:
     """
-    Method to extract the targets from the data loader.
-    :param data_loader: The data loader from which to extract the targets.
-    :return: All the extracted targets.
-    """
-    # initial message
-    info("🔄 Target extraction from loader started...")
+    Extract all target tensors from a data
+    loader and concatenate them.
 
+    This function iterates through a DataLoader and collects
+    all target tensors. The collected targets are then concatenated
+    into a single tensor.
+
+    Parameters:
+        data_loader (DataLoader): DataLoader instance from which
+                                  to extract targets.
+
+    Returns:
+        torch.Tensor: Concatenated tensor of all targets.
+
+    Raises:
+        RuntimeError: If an error occurs during target extraction, e.g.:
+            * Dataset yields unexpected batch structure.
+            * Any error during tensor concatenation.
+    """
     try:
+        # Initialization
         all_targets = []
-        # extract targets from data loader
+
+        # Extract all targets from data loader
         for _, _, targets in data_loader:
             all_targets.append(targets)
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except ValueError as e:
-        raise ValueError(f"ValueError: {e}.")
-    except IndexError as e:
-        raise IndexError(f"IndexError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
 
-    # debugging
-    debug(f"⚙️ Target extracted: {all_targets}.")
+        # Concatenate extracted targets
+        concatenated_targets = torch.cat(all_targets)
 
-    # show a successful message
-    info("🟢 Target extracted from loader.")
+        debug(f"Concatenated targets shape: {concatenated_targets.shape}")
+    except (TypeError, ValueError, IndexError) as e:
+        msg = "Failed to extract targets from data loader"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
 
-    return torch.cat(all_targets)
+    info("Target extraction from data loader completed")
+
+    return concatenated_targets
