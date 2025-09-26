@@ -46,6 +46,6 @@ def data_loader_setup(
         shuffle=shuffle,
     )
 
-    info(f"Data loader setup completed")
+    info("Data loader setup completed")
 
     return dataset, data_loader

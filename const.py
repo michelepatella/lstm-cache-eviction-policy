@@ -5,6 +5,11 @@ from typing import Literal
 CONFIG_FILE_NAME = "config.yaml"
 CONFIG_FILE_PARENT_LEVEL = 5
 
+SECTIONS_WITH_PARAMS = {
+    "model": "params",
+    "training.optimizer": "params",
+}
+
 # Pipeline phases constants
 PIPELINE_PHASE_CONFIGURATION = "configuration"
 PIPELINE_PHASE_DATA_GENERATION = "data generation"

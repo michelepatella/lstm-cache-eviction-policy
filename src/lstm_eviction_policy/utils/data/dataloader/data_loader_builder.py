@@ -42,6 +42,6 @@ def create_data_loader(
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 
-    info(f"Data loader created")
+    info("Data loader created")
 
     return loader

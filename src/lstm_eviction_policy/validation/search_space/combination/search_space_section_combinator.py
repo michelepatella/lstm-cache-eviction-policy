@@ -1,12 +1,16 @@
 import itertools
 from typing import Any, Dict, List
 
+from const import SECTIONS_WITH_PARAMS
 from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
-from lstm_eviction_policy.validation.search_space.searc_space_setter import (
-    set_nested_dict,
-)
 from lstm_eviction_policy.validation.search_space.search_space_flattener import (
     flatten_search_space,
+)
+from lstm_eviction_policy.validation.search_space.search_space_setter import (
+    set_nested_dict,
+)
+from lstm_eviction_policy.validation.search_space.section_params_wrapper import (
+    wrap_section_params,
 )
 
 
@@ -49,6 +53,12 @@ def get_section_combinations(
                 # Set nested key-value pairs to reconstruct
                 # original structure
                 set_nested_dict(combo, key_path, value)
+
+            # Wrap section parameters ensuring
+            # consistent representation with respect to
+            # those of configuration object
+            combo = wrap_section_params(combo, section, SECTIONS_WITH_PARAMS)
+
             section_values.append(combo)
 
         debug(

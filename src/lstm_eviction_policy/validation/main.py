@@ -5,12 +5,29 @@ from lstm_eviction_policy.utils.data.dataloader.data_loader_setup import (
     data_loader_setup,
 )
 from lstm_eviction_policy.utils.logs.log_utils import info, phase_var
+from lstm_eviction_policy.validation.best_params.best_params_saver import (
+    save_best_params,
+)
 from lstm_eviction_policy.validation.tuning.grid_search_optimizer import (
     compute_grid_search,
 )
 
 
-def validate_model(config: Config):
+def validate_model(config: Config) -> Config:
+    """
+    Validate model to find the best hyperparameters.
+
+    This function validates the model, by orchestrating
+    hyperparameter tuning (via time series cross-validation with
+    grid search), and saving the best hyperparameters found
+    in a new configuration.
+
+    Parameters:
+        config (Config): Current configuration object.
+
+    Returns:
+        Config: Updated configuration object (with the best hyperparameters).
+    """
     # Set the new pipeline state
     phase_var.set(PIPELINE_PHASE_VALIDATION)
 
@@ -30,10 +47,10 @@ def validate_model(config: Config):
     # Compute grid search for best parameters
     best_params = compute_grid_search(training_set, config)
 
-    # Set the best parameters and
-    # get new config settings
+    # Save the best parameters and
+    # get new configuration
     new_config = save_best_params(best_params, config)
 
-    info("Validation completed")
+    info("Model validation completed")
 
     return new_config

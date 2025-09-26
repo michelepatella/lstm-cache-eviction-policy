@@ -71,7 +71,7 @@ class AccessLogsDataset(Dataset):
 
             debug(f"Dataset shape after splitting: {self.data.shape}")
         except (TypeError, IndexError, AttributeError) as e:
-            msg = f"Failed to split dataset"
+            msg = "Failed to split dataset"
             error("%s: %s", msg, e)
             raise RuntimeError(msg) from e
 
@@ -284,7 +284,7 @@ class AccessLogsDataset(Dataset):
             ValueError,
             AttributeError,
         ) as e:
-            msg = f"Failed to retrieve dataset item"
+            msg = "Failed to retrieve dataset item"
             error("%s: %s", msg, e)
             raise RuntimeError(msg) from e
 

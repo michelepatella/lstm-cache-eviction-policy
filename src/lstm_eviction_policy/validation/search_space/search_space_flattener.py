@@ -51,7 +51,7 @@ def flatten_search_space(
                 debug(f"Added flattened key: {new_key} -> values: {v}")
 
     except (TypeError, RecursionError, AttributeError) as e:
-        msg = f"Failed to flatten search space"
+        msg = "Failed to flatten search space"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 

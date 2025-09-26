@@ -1,64 +1,87 @@
-from config import prepare_config
-from config.config_io.config_updater import (
-    update_config,
-)
-from utils.logs.log_utils import debug, info
+from typing import Any, Dict
+
+from box import Box
+
+from lstm_eviction_policy.config.classes.Config import Config
+from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
 
 
-def save_best_params(best_params, config_settings):
+def save_best_params(best_params: Dict[str, Any], config: Config) -> Config:
     """
-    Method to save the best parameters to a config file.
-    :param best_params: Best parameters found.
-    :param config_settings: Configuration settings.
-    :return: The new configuration settings.
-    """
-    # initial message
-    info("🔄 Best parameter saving started...")
+    Save the best parameters to the configuration.
 
-    # debugging
-    debug(f"⚙️ Best params to save: {best_params}.")
+    This function updates the provided configuration
+    object with the best parameters found during optimization.
+
+    Parameters:
+        best_params (Dict[str, Any]): Best parameters found.
+        config (Config): Current configuration object.
+
+    Returns:
+        Config: Updated configuration object.
+    """
+    debug(f"Best params to save: {best_params}")
 
     try:
-        # update all the parameters
-        for (
-            section,
-            params,
-        ) in best_params.items():
-            # check section and fields (and subfields, if any)
-            if section not in config_settings.config_file:
-                raise KeyError(f" Section '{section}' not found in config.")
-            if not isinstance(params, dict):
-                raise ValueError(
-                    f" Parameters for section '{section}' must be a dict. "
-                    f"Received: {type(params)}."
-                )
-            if not isinstance(
-                config_settings.config_file[section],
-                dict,
-            ):
-                raise ValueError(
-                    f" Config section '{section}' must be a dict. "
-                    f"Found: {type(config_settings.config_file[section])}."
-                )
 
-            # update parameter
-            config_settings.config_file[section].update(params)
-    except KeyError as e:
-        raise KeyError(f"KeyError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except ValueError as e:
-        raise ValueError(f"ValueError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+        def _apply_updates(
+            obj: Any, updates: Dict[str, Any], path: str = ""
+        ) -> None:
+            """
+            Recursively apply updates to a Pydantic model or dictionary.
 
-    # update the best parameters on the config file
-    new_config_settings = update_config(
-        config_settings.config_file,
-        prepare_config,
-    )
+            Parameters:
+                obj (Any): The current Pydantic model or dictionary to update.
+                updates (Dict[str, Any]): Dictionary of updates to apply.
+                path (str): Dot-separated path for logging purposes.
 
-    # show a successful message
-    info("🟢 Best parameters saved.")
+            Returns:
+                None
 
-    return new_config_settings
+            Raises:
+                RuntimeError: If an error occurs during parameter saving, e.g.:
+                    * Section not found in configuration.
+                    * Field in section not found.
+            """
+            # Build full path through keys
+            # and values
+            for key, value in updates.items():
+                full_path = f"{path}.{key}" if path else key
+
+                # If the value is a dictionary, recurse into it
+                if isinstance(value, dict):
+                    # Check whether the current object
+                    # has not the specified key as attribute
+                    if not hasattr(obj, key):
+                        msg = (
+                            f"Section '{full_path}' not found in configuration"
+                        )
+                        error("%s", msg)
+                        raise KeyError(msg)
+
+                    # Apply updates recursively
+                    _apply_updates(getattr(obj, key), value, full_path)
+                else:
+                    # Update the actual value if field exists
+                    if not hasattr(obj, key):
+                        msg = f"Field '{full_path}' not found in configuration"
+                        error("%s", msg)
+                        raise KeyError(msg)
+
+                    # If it exists, update it
+                    setattr(obj, key, value)
+                    debug(f"(Best params) '{full_path}' updated -> {value}")
+
+        # Use Box for best params
+        best_params_box = Box(best_params)
+
+        # Apply updates recursively
+        _apply_updates(config, best_params_box.to_dict())
+
+        info("Saved best parameters in configuration")
+    except (KeyError, ValueError, TypeError, AttributeError) as e:
+        msg = "Failed to save best parameters in configuration"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
+
+    return config

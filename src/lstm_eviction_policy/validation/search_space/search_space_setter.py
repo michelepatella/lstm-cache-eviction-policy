@@ -53,7 +53,7 @@ def set_nested_dict(
 
         debug(f"Set value at nested key path: {keys} -> {value}")
     except (TypeError, IndexError, KeyError) as e:
-        msg = f"Failed to set value in nested dictionary"
+        msg = "Failed to set value in nested dictionary"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 
