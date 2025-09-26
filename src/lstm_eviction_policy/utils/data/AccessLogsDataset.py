@@ -1,205 +1,339 @@
+from typing import Type
+
+import pandas as pd
 import torch
 from torch.utils.data import Dataset
-from utils.data.dataset.dataset_loader import (
-    load_dataset,
-)
-from utils.logs.log_utils import debug, info
+
+from const import TRAINING_SPLIT_TYPE
+from lstm_eviction_policy.config.classes.Config import Config
+from lstm_eviction_policy.utils.data.dataset.dataset_loader import load_dataset
+from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
 
 
 class AccessLogsDataset(Dataset):
-    def _split_dataset(self, dataset_type, config_settings):
-        """
-        Method to split the dataset based on the dataset type requested.
-        :param dataset_type: The dataset type requested ("training" or "testing").
-        :param config_settings: The configuration settings.
-        :return:
-        """
-        # initial message
-        info("🔄 Dataset splitting started...")
+    """
+    Dataset class for access logs, compatible with PyTorch.
 
-        # debugging
-        debug(f"⚙️ Splitting mode: {dataset_type}.")
+    This class manages sequential access logs for LSTM model. It handles
+    loading, preprocessing, and splitting of the dataset into training
+    and testing sets. Each dataset instance provides feature sequences
+    and target keys for sequence modeling.
+    """
+
+    def _split_dataset(
+        self: "AccessLogsDataset", dataset_type: str, config: Config
+    ) -> None:
+        """
+        Split the dataset based on the requested dataset type.
+
+        This function splits the dataset into either training
+        or testing portions according to the train percentage
+        defined in the configuration.
+
+        Parameters:
+            self (AccessLogsDataset): Instance of AccessLogsDataset.
+            dataset_type (str): The dataset type to split (e.g., "training").
+            config (Config): Configuration object.
+
+        Returns:
+            None
+
+        Raises:
+            AttributeError: If self.data is not a Pandas DataFrame.
+            TypeError: If self.data length or train % is of wrong type.
+            ValueError: If self.data length or train % cannot be converted to int.
+            IndexError: If the split index is out of bounds for self.data.
+        """
+        debug(f"Dataset splitting type: {dataset_type}")
 
         try:
-            # define the splitting's index
-            split_idx = int(len(self.data) * config_settings.training_perc)
-        except AttributeError as e:
-            raise AttributeError(f"AttributeError: {e}.")
-        except TypeError as e:
-            raise TypeError(f"TypeError: {e}.")
-        except ValueError as e:
-            raise ValueError(f"ValueError: {e}.")
-        except Exception as e:
-            raise RuntimeError(f"RuntimeError: {e}.")
+            # Calculate split index based on the train %
+            train_perc = config.data.dataset.split.train
+            dataset_split_idx = int(len(self.data) * train_perc)
 
-        # debugging
-        debug(f"⚙️ Split index: {split_idx}.")
+            debug(f"Dataset split index calculated: {dataset_split_idx}")
+        except (AttributeError, TypeError, ValueError) as e:
+            msg = "Failed to calculate dataset split index"
+            error("%s: %s", msg, e)
+            raise RuntimeError(msg) from e
 
-        # split the dataset
         try:
-            if dataset_type == "training":
-                self.data = self.data[:split_idx]
+            # Perform dataset split
+            if dataset_type == TRAINING_SPLIT_TYPE:
+                # Training -> Take the first dataset
+                # split index elements
+                self.data = self.data[:dataset_split_idx]
             else:
-                self.data = self.data[split_idx:]
-        except TypeError as e:
-            raise TypeError(f"TypeError: {e}.")
-        except IndexError as e:
-            raise IndexError(f"IndexError: {e}.")
-        except AttributeError as e:
-            raise AttributeError(f"AttributeError: {e}.")
-        except Exception as e:
-            raise RuntimeError(f"RuntimeError: {e}.")
+                # Testing (Otherwise) -> Take the last dataset
+                # split index elements
+                self.data = self.data[dataset_split_idx:]
 
-        # show a successful message
-        info("🟢 Dataset split.")
+            debug(f"Dataset shape after splitting: {self.data.shape}")
+        except (TypeError, IndexError, AttributeError) as e:
+            msg = f"Failed to split dataset"
+            error("%s: %s", msg, e)
+            raise RuntimeError(msg) from e
 
-    def _set_fields(self, data, config_settings):
+        info("Dataset split")
+
+    def _set_fields(
+        self: "AccessLogsDataset", data: "pd.DataFrame", config: Config
+    ) -> None:
         """
-        Method to set the fields of the dataset.
-        :param data: The data from which the fields are extracted.
-        :param config_settings: The configuration settings.
-        :return:
-        """
-        # initial message
-        info("🔄 AccessLogsDataset fields setting started...")
+        Set the feature, target, and sequence length fields of the dataset.
 
+        This function sets the dataset columns, identifies feature columns
+        and target column (assuming target is the last column), and retrieves
+        the sequence length from the configuration.
+
+        Parameters:
+            self (AccessLogsDataset): Instance of AccessLogsDataset.
+            data (pd.DataFrame): Dataset from which fields are extracted.
+            config (Config): Configuration object.
+
+        Returns:
+            None
+
+        Raises:
+            AttributeError: If data is not a Pandas DataFrame.
+            TypeError: If data columns or sequence length are of wrong type.
+            IndexError: If data does not contain any columns.
+        """
         try:
+            # Extract column names
             self.columns = data.columns.tolist()
 
-            # assuming target is the last column
-            self.features = self.columns[:-1]
-            self.target = self.columns[-1]
-
-            self.seq_len = config_settings.seq_len
-
-            # debugging
-            debug(f"⚙️ Dataset columns: {self.columns}.")
-            debug(f"⚙️ Feature(s): {self.features}.")
-            debug(f"⚙️ Target: {self.target}.")
-            debug(f"⚙️ Sequence length: {self.seq_len}.")
-        except AttributeError as e:
-            raise AttributeError(f"AttributeError: {e}.")
-        except TypeError as e:
-            raise TypeError(f"TypeError: {e}.")
-        except IndexError as e:
-            raise IndexError(f"IndexError: {e}.")
-        except Exception as e:
-            raise RuntimeError(f"RuntimeError: {e}.")
-
-        # show a successful message
-        info("🟢 AccessLogsDataset fields set.")
-
-    def __init__(self, dataset_type, config_settings):
-        """
-        Method to instantiate the access logs dataset.
-        :param dataset_type: The type of dataset requested ("training" or "testing").
-        :param config_settings: The configuration settings.
-        """
-        # initial message
-        info("🔄 AccessLogsDataset initialization started...")
-
-        # load the dataset
-        df = load_dataset(config_settings)
-
-        # debugging
-        debug(f"⚙️ Dataset shape: {df.shape}.")
+            debug(f"Dataset columns extracted: {self.columns}")
+        except (AttributeError, TypeError) as e:
+            msg = "Failed to extract dataset columns"
+            error("%s: %s", msg, e)
+            raise RuntimeError(msg) from e
 
         try:
-            # shift target column (requests)
+            # Identify features and target
+            self.features = self.columns[
+                :-1
+            ]  # All the columns except the last one
+            self.target = self.columns[-1]  # Only the last one
+
+            # Retrieve sequence length
+            self.seq_len = config.data.sequence.length
+
+            debug(f"Feature dataset columns: {self.features}")
+            debug(f"Target dataset column: {self.target}")
+            debug(f"Sequence length: {self.seq_len}")
+        except (IndexError, AttributeError, TypeError) as e:
+            msg = "Failed to set dataset fields"
+            error("%s: %s", msg, e)
+            raise RuntimeError(msg) from e
+
+        info("Dataset fields set")
+
+    def __init__(
+        self: "AccessLogsDataset", dataset_type: str, config: Config
+    ) -> None:
+        """
+        Initialize the AccessLogsDataset class.
+
+        This function initializes the AccessLogsDataset class,
+        for a given dataset type, by loading dataset, preparing
+        and setting data, and splitting the dataset.
+
+        Parameters:
+            self (AccessLogsDataset): AccessLogsDataset class.
+            dataset_type (str): The dataset type requested to
+                                be created (e.g. "training").
+            config (Config): Configuration object.
+
+        Returns:
+            None
+
+        Raises:
+            KeyError: If the dataset loaded is empty.
+            ValueError: If there is a value on the target column
+                        that cannot be converted to integer.
+            TypeError: If there is a value on the target column
+                       which is not compatible with astype(int).
+            AttributeError: If the dataset loaded is not a Pandas DataFrame
+                            or has not the attribute columns.
+        """
+        debug(f"AccessLogsDataset type to be initialized: {dataset_type}")
+
+        # Load the dataset
+        df = load_dataset(config)
+
+        try:
+            # Shift target column (requests),
+            # ensuring requests keys are in range
+            # (min_key - 1, max_key - 1)
             df[df.columns[-1]] = df[df.columns[-1]].astype(int) - 1
-            # set data
-            self.data = df.copy()
-        except AttributeError as e:
-            raise AttributeError(f"AttributeError: {e}.")
-        except KeyError as e:
-            raise KeyError(f"KeyError: {e}.")
-        except ValueError as e:
-            raise ValueError(f"ValueError: {e}.")
-        except TypeError as e:
-            raise TypeError(f"TypeError: {e}.")
-        except IndexError as e:
-            raise IndexError(f"IndexError: {e}.")
-        except MemoryError as e:
-            raise MemoryError(f"MemoryError: {e}.")
-        except Exception as e:
-            raise RuntimeError(f"RuntimeError: {e}.")
+        except (KeyError, ValueError, TypeError, AttributeError) as e:
+            msg = "Failed to initialize AccessLogsDataset"
+            error("%s: %s", msg, e)
+            raise RuntimeError(msg) from e
 
-        # split the dataset to assign data properly
-        self._split_dataset(dataset_type, config_settings)
+        # Set data
+        self.data = df.copy()
 
-        # set the fields of the dataset
-        self._set_fields(self.data, config_settings)
+        # Split the dataset to assign data properly
+        self._split_dataset(dataset_type, config)
 
-        # show a successful message
-        info("🟢 AccessLogsDataset initialized.")
+        # Set the fields of the dataset
+        self._set_fields(self.data, config)
 
-    def __len__(self):
+        info("AccessLogsDataset initialized")
+
+    def __len__(self: "AccessLogsDataset") -> int:
         """
-        Method to return the length of the access logs dataset.
-        :return: The length of the access logs dataset.
-        """
-        return len(self.data) - self.seq_len
+        Return the effective length of the access logs dataset.
 
-    def __getitem__(self, idx):
-        """
-        Method to return features and the next value in the sequence.
-        :param idx: The index of the access logs dataset.
-        :return: The numerical features and the key.
-        """
-        # initial message
-        info("🔄 AccessLogsDataset item retrieval started...")
+        This method calculates the number of sequences
+        available in the dataset based on the sequence length.
 
-        # debugging
-        debug(f"⚙️ Getting item at index: {idx}.")
+        Parameters:
+            self (AccessLogsDataset): AccessLogsDataset class.
+
+        Returns:
+            int: Number of available sequences in the dataset.
+
+        Raises:
+            AttributeError: If self.data or self.seq_len is not properly set.
+            TypeError: If self.data is not iterable or sequence
+                       length is not an integer.
+            ValueError: If calculated length is negative.
+        """
+        try:
+            # Calculate the dataset length by
+            # removing from available data the
+            # sequence length
+            dataset_length = len(self.data) - self.seq_len
+
+            debug(f"Calculated dataset length: {dataset_length}")
+
+            # Check whether the dataset
+            # length is negative
+            if dataset_length < 0:
+                msg = "Calculated dataset length is negative"
+                error("%s", msg)
+                raise RuntimeError(msg)
+
+            return dataset_length
+        except (AttributeError, TypeError, ValueError) as e:
+            msg = "Failed to get dataset length"
+            error("%s: %s", msg, e)
+            raise RuntimeError(msg) from e
+
+    def __getitem__(
+        self: "AccessLogsDataset", idx: int
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        """
+        Retrieve a sequence of features and the next target key.
+
+        This method extracts a feature sequence of length
+        equal to those of sequence and the corresponding
+        next key in the dataset.
+
+        Parameters:
+            self (AccessLogsDataset): AccessLogsDataset class.
+            idx (int): Index of the starting row for the sequence.
+
+        Returns:
+            Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+                - x_features (torch.Tensor): Tensor of numerical
+                                             features of shape (seq_len, num_features)
+                - x_keys (torch.Tensor): Tensor of keys in the sequence (seq_len,)
+                - y_key (torch.Tensor): Tensor of the next key (single value)
+
+        Raises:
+            IndexError: If the requested index goes out of bounds.
+            KeyError: If feature or target columns are missing.
+            TypeError: If data types in features/target are invalid.
+            ValueError: If conversion to int/float fails.
+            AttributeError: If self.data, self.features, or self.target
+                            are not set properly.
+        """
+        debug(f"Index of item to be retrieved: {idx}")
 
         try:
-            # get the feature sequence of length seq_len
+            # Extract feature sequence
             seq_data = self.data.iloc[idx : idx + self.seq_len]
 
-            # extract numerical features
+            # Convert features to float tensor
             x_features = torch.tensor(
-                seq_data[self.features].values.astype(float),
-                dtype=torch.float,
+                seq_data[self.features].values.astype(float), dtype=torch.float
             )
 
-            # extract key IDs
+            # Convert keys to long tensor
             x_keys = torch.tensor(
-                seq_data[self.target].values.astype(int),
-                dtype=torch.long,
+                seq_data[self.target].values.astype(int), dtype=torch.long
             )
 
-            # extract target
+            # Get next target key
             target_row = self.data.iloc[idx + self.seq_len]
             y_key = torch.tensor(
-                int(target_row[self.target]),
-                dtype=torch.long,
+                int(target_row[self.target]), dtype=torch.long
             )
 
-            # debugging
-            debug(f"⚙️ Feature vector shape: {x_features.shape}.")
-            debug(f"⚙️ Key shape: {x_keys.shape}")
-            debug(f"⚙️ Target: {y_key.item()}.")
-        except IndexError as e:
-            raise IndexError(f"IndexError: {e}.")
-        except KeyError as e:
-            raise KeyError(f"KeyError: {e}.")
-        except ValueError as e:
-            raise ValueError(f"ValueError: {e}.")
-        except TypeError as e:
-            raise TypeError(f"TypeError: {e}.")
-        except AttributeError as e:
-            raise AttributeError(f"AttributeError: {e}.")
-        except Exception as e:
-            raise RuntimeError(f"RuntimeError: {e}.")
+            debug(f"Feature tensor shape: {x_features.shape}")
+            debug(f"Key tensor shape: {x_keys.shape}")
+            debug(f"Target key: {y_key.item()}")
+        except (
+            IndexError,
+            KeyError,
+            TypeError,
+            ValueError,
+            AttributeError,
+        ) as e:
+            msg = f"Failed to retrieve dataset item"
+            error("%s: %s", msg, e)
+            raise RuntimeError(msg) from e
 
-        # show a successful message
-        info("🟢 AccessLogsDataset retrieved.")
+        info("AccessLogsDataset item retrieved")
 
-        return (x_features, x_keys, y_key)
+        return x_features, x_keys, y_key
 
     @classmethod
-    def from_dataframe(cls, df, config_settings):
-        instance = cls.__new__(cls)
-        instance.data = df.copy()
-        instance._set_fields(df, config_settings)
+    def from_dataframe(
+        cls: "Type[AccessLogsDataset]", df: "pd.DataFrame", config: Config
+    ) -> "AccessLogsDataset":
+        """
+        Instantiate AccessLogsDataset from an existing dataframe.
+
+        This method creates an instance of AccessLogsDataset using a
+        preloaded dataframe, copying its content and setting the
+        necessary fields (features, target, sequence length).
+
+        Parameters:
+            cls (AccessLogsDataset): AccessLogsDataset class.
+            df (pd.DataFrame): Preloaded dataframe containing dataset.
+            config (Config): Configuration object.
+
+        Returns:
+            AccessLogsDataset: Initialized dataset instance.
+
+        Raises:
+            AttributeError: If dataframe does not have expected attributes.
+            TypeError: If provided dataframe is not a Pandas DataFrame.
+            IndexError: If dataframe does not contain any columns.
+        """
+        debug(
+            f"Dataframe shape to be instantiated as AccessLogsDataset: {df.shape}"
+        )
+
+        try:
+            # Create a new dataset instance
+            instance = cls.__new__(cls)
+
+            # Copy the dataframe to the instance
+            instance.data = df.copy()
+
+            # Set dataset fields
+            instance._set_fields(df, config)
+        except (AttributeError, TypeError, IndexError) as e:
+            msg = "Failed to instantiate AccessLogsDataset from dataframe"
+            error("%s: %s", msg, e)
+            raise RuntimeError(msg) from e
+
+        info("AccessLogsDataset instantiated from dataframe")
+
         return instance

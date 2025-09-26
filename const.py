@@ -9,6 +9,7 @@ CONFIG_FILE_PARENT_LEVEL = 5
 PIPELINE_PHASE_CONFIGURATION = "configuration"
 PIPELINE_PHASE_DATA_GENERATION = "data generation"
 PIPELINE_PHASE_DATA_PREPROCESSING = "data preprocessing"
+PIPELINE_PHASE_VALIDATION = "validation"
 
 # Time
 PERIOD = timedelta(days=1).total_seconds()
@@ -36,6 +37,8 @@ ALLOWED_DATA_DISTRIBUTION_MODES = [
 ]
 
 # Dataset
+TRAINING_SPLIT_TYPE = "training"
+TESTING_SPLIT_TYPE = "testing"
 TIMESTAMP_COLUMN_NAME = "timestamp"
 REQUEST_COLUMN_NAME = "request"
 SIN_TIME_COLUMN_NAME = "sin_time"

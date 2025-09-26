@@ -1,44 +1,34 @@
-from utils.data.AccessLogsDataset import (
-    AccessLogsDataset,
+from const import PIPELINE_PHASE_VALIDATION, TRAINING_SPLIT_TYPE
+from lstm_eviction_policy.config.classes.Config import Config
+from lstm_eviction_policy.utils.data.AccessLogsDataset import AccessLogsDataset
+from lstm_eviction_policy.utils.data.dataloader.data_loader_setup import (
+    data_loader_setup,
 )
-from utils.data.dataloader.dataloader_setup import (
-    dataloader_setup,
-)
-from utils.logs.log_utils import info, phase_var
-from validation.best_params.best_params_saver import (
-    save_best_params,
-)
-from validation.tuning.grid_search_optimizer import (
-    compute_grid_search,
-)
+from lstm_eviction_policy.utils.logs.log_utils import phase_var
 
 
-def validation(config_settings):
-    """
-    Method to orchestrate the validation of the model.
-    :param config_settings: The configuration settings.
-    :return: The new configuration settings.
-    """
-    # initial message
-    info("🔄 Validation started...")
+def validation(config: Config):
+    # Set the new pipeline state
+    phase_var.set(PIPELINE_PHASE_VALIDATION)
 
-    # set the variable indicating the state of the process
-    phase_var.set("validation")
+    # Prepare configuration
+    batch_size = config.validation.general.batch_size
+    shuffle = config.validation.general.shuffle
 
-    # load the training set
-    training_set, _ = dataloader_setup(
-        "training",
-        config_settings.training_batch_size,
-        False,
-        config_settings,
+    # Load the training set
+    training_set, _ = data_loader_setup(
+        TRAINING_SPLIT_TYPE,
+        batch_size,
+        shuffle,
+        config,
         AccessLogsDataset,
     )
 
     # grid search for best parameters
-    best_params = compute_grid_search(training_set, config_settings)
+    best_params = compute_grid_search(training_set, config)
 
     # set the best parameters and get new config settings
-    new_config_settings = save_best_params(best_params, config_settings)
+    new_config_settings = save_best_params(best_params, config)
 
     # print a successful message
     info("✅ Validation successfully completed.")

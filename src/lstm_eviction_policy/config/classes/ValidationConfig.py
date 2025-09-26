@@ -3,6 +3,12 @@ from typing import List
 from pydantic import BaseModel, confloat, conint
 
 
+# Validation — General
+class GeneralValidationConfig(BaseModel):
+    batch_size: conint(gt=0)
+    shuffle: bool
+
+
 # Validation — Cross validation — Folds & Epochs
 class FoldsConfig(BaseModel):
     count: conint(gt=1)
@@ -52,6 +58,7 @@ class ValidationConfig(BaseModel):
     stopping, and search space settings.
     """
 
+    general: GeneralValidationConfig
     cross_validation: CrossValidationConfig
     early_stopping: EarlyStoppingValidationConfig
     search_space: SearchSpaceConfig

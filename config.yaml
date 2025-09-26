@@ -91,6 +91,9 @@ model:
     proj_size: 0
 
 validation:
+  general:
+    batch_size: 64
+    shuffle: false
   cross_validation:
     folds:
       count: 10
