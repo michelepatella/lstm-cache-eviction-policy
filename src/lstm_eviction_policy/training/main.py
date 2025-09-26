@@ -78,7 +78,6 @@ def training(config_settings):
         criterion,
         device,
         config_settings,
-        early_stopping=True,
         validation_loader=validation_loader,
     )
 

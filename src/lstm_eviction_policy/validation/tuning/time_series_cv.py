@@ -131,7 +131,6 @@ def compute_time_series_cv(
                 device,
                 config,
                 validation_loader=validation_loader,
-                early_stopping=True,
             )
 
             # Record fold average loss

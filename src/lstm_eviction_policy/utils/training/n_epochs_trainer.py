@@ -21,7 +21,6 @@ def train_n_epochs(
     criterion,
     device,
     config_settings,
-    early_stopping=False,
     validation_loader=None,
 ):
     """
@@ -46,7 +45,6 @@ def train_n_epochs(
     debug(f"⚙️ Optimizer to use: {optimizer}.")
     debug(f"⚙️ Criterion to use: {criterion}.")
     debug(f"⚙️ Device to use: {device}.")
-    debug(f"⚙️ Early stopping: {'Enabled' if early_stopping else 'Disabled'}.")
     debug(
         f"⚙️ Validation loader: {'Received' if validation_loader is not None else 'Not received'}."
     )
@@ -59,9 +57,8 @@ def train_n_epochs(
         best_loss = float("inf")
         es = None
 
-        # instantiate early stopping object (if needed)
-        if early_stopping:
-            es = EarlyStopping(config_settings)
+        # instantiate early stopping object
+        es = EarlyStopping(config_settings)
 
         # n-epochs learning
         for _ in tqdm(range(1, epochs + 1), desc="Training"):
@@ -94,13 +91,13 @@ def train_n_epochs(
                     best_model_wts = copy.deepcopy(model.state_dict())
 
                 # early stopping logic
-                if early_stopping and avg_loss is not None:
-                    es(avg_loss)
-                    # check whether to stop
-                    if es.early_stop:
-                        info("🛑 Early stopping triggered.")
-                        info("🟢 Train n-epochs completed.")
-                        break
+                es(avg_loss)
+                # check whether to stop
+                if es.early_stop:
+                    info("🛑 Early stopping triggered.")
+                    info("🟢 Train n-epochs completed.")
+                    break
+
 
         # show the best validation loss obtained
         info(f"🏆 Best validation loss achieved: {best_loss}")
@@ -130,6 +127,6 @@ def train_n_epochs(
 
     # check if the avg loss needs to be returned
     if validation_loader:
-        return (best_loss, model)
+        return best_loss, model
     else:
         return None, model
