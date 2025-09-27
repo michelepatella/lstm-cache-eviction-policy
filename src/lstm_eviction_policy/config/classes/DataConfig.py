@@ -14,7 +14,7 @@ from lstm_eviction_policy.config.classes.validation.choice_field_validator impor
     validate_choice_field,
 )
 from lstm_eviction_policy.config.classes.validation.min_max_validator import (
-    validate_min_max,
+    are_min_max_valid,
 )
 
 
@@ -46,12 +46,14 @@ class KeysConfig(BaseModel):
         Returns:
             KeysConfig: Validated model instance.
         """
-        return validate_min_max(
-            self,
-            "min",
-            "max",
-            context="data.general.keys.",
+        # Check min/max validity
+        are_min_max_valid(
+            self.min,
+            self.max,
+            context="data.general.keys",
         )
+
+        return self
 
 
 class GeneralDataConfig(BaseModel):
@@ -149,12 +151,13 @@ class NoiseConfig(BaseModel):
         Returns:
             NoiseConfig: Validated model instance.
         """
-        return validate_min_max(
-            self,
-            "min",
-            "max",
-            context="data.pattern.access.behavior.noise.",
+        are_min_max_valid(
+            self.min,
+            self.max,
+            context="data.pattern.access.behavior.noise",
         )
+
+        return self
 
 
 class MemoryConfig(BaseModel):
@@ -207,12 +210,15 @@ class BurstinessConfig(BaseModel):
         Returns:
             BurstinessConfig: Validated model instance.
         """
-        return validate_min_max(
-            self,
-            "high",
-            "low",
-            context="data.pattern.temporal.burstiness.",
+        # Check min/max validity
+        are_min_max_valid(
+            self.high,
+            self.low,
+            context="data.pattern.temporal.burstiness",
         )
+
+        return self
+
 
 
 class PeriodicConfig(BaseModel):
