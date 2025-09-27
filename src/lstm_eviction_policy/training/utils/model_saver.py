@@ -1,40 +1,33 @@
 import torch
-from utils.logs.log_utils import debug, info
+from torch.nn import Module
+
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.error_logger import error
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
-def save_model(model, config_settings):
+def save_model(model: Module, model_save_path: str) -> None:
     """
-    Method to save a model.
-    :param model: The model to be saved.
-    :param config_settings: The configuration settings.
-    :return:
+    Save a PyTorch model to the specified path.
+
+    Parameters:
+        model (Module): The PyTorch model to save.
+        model_save_path (str): File path to save the model.
+
+    Returns:
+        None
+
+    Raises:
+        RuntimeError: If saving fails, e.g.:
+            * If path to save the model is invalid or inaccessible.
     """
-    # initial message
-    info("🔄 Model saving started...")
+    debug(f"Path to save the model: {model_save_path}")
 
     try:
-        # debugging
-        debug(f"⚙️ Path to save the model: {config_settings.model_save_path}.")
+        torch.save(model.state_dict(), model_save_path)
+    except (FileNotFoundError, PermissionError) as e:
+        msg = "Failed to save model"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
 
-        # save the model
-        torch.save(
-            model.state_dict(),
-            config_settings.model_save_path,
-        )
-    except KeyError as e:
-        raise KeyError(f"KeyError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except ValueError as e:
-        raise ValueError(f"ValueError: {e}.")
-    except AttributeError as e:
-        raise AttributeError(f"AttributeError: {e}.")
-    except FileNotFoundError as e:
-        raise FileNotFoundError(f"FileNotFoundError: {e}.")
-    except PermissionError as e:
-        raise PermissionError(f"PermissionError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
-
-    # show a successful message
-    info(f"🟢 Model save to '{config_settings.model_save_path}'.")
+    info(f"Model saved to '{model_save_path}'")

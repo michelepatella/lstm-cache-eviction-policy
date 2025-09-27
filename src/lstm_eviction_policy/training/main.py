@@ -1,90 +1,104 @@
-from training.utils.model_saver import save_model
-from utils.data.AccessLogsDataset import (
-    AccessLogsDataset,
-)
-from utils.data.dataloader.dataloader_builder import (
+from const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE
+from lstm_eviction_policy.config.classes.Config import Config
+from lstm_eviction_policy.training.utils.model_saver import save_model
+from lstm_eviction_policy.utils.data.AccessLogsDataset import AccessLogsDataset
+from lstm_eviction_policy.utils.data.dataloader.data_loader_builder import (
     create_data_loader,
 )
-from utils.data.dataloader.dataloader_setup import (
-    dataloader_setup,
+from lstm_eviction_policy.utils.data.dataloader.data_loader_setup import (
+    data_loader_setup,
 )
-from utils.data.dataloader.dataloader_utils import (
-    extract_targets_from_dataloader,
+from lstm_eviction_policy.utils.data.dataloader.data_loader_targets_extractor import (
+    extract_targets_from_data_loader,
 )
-from utils.data.dataset.dataset_splitter import (
+from lstm_eviction_policy.utils.data.dataset.dataset_splitter import (
     split_training_set,
 )
-from utils.logs.log_utils import info, phase_var
-from utils.model.setup.model_setup import (
-    model_setup,
-)
-from utils.training.n_epochs_trainer import (
-    train_n_epochs,
-)
-
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 from lstm_eviction_policy.utils.logs.logs_setup import logs_phase
+from lstm_eviction_policy.utils.model.setup.model_setup import model_setup
+from lstm_eviction_policy.utils.training.n_epochs_trainer import train_n_epochs
 
 
-def training(config_settings):
+def train_model(config: Config) -> None:
     """
-    Method to train the LSTM model.
-    :param config_settings: The configuration settings.
-    :return:
+    Train LSTM model.
+
+    This function trains the LSTM model, by orchestrating
+    model and training setup, as well as training itself.
+    The best model found during training process is saved
+    for further usage.
+
+    Parameters:
+        config (Config): Configuration object.
+
+    Returns:
+        None
     """
-    # initial message
-    info("🔄 Training started...")
+    # Set the new pipeline state
+    logs_phase.set(LOGS_TRAINING_PHASE)
 
-    # set the variable indicating the state of the process
-    logs_phase.set("training")
+    # Prepare configuration
+    training_batch_size = config.training.general.batch_size
+    training_shuffle = config.training.general.shuffle
+    validation_batch_size = config.validation.general.batch_size
+    validation_shuffle = config.validation.general.shuffle
+    model_params = config.model.params
+    learning_rate = config.training.optimizer.params.learning_rate
+    training_num_epochs = config.training.general.epochs.count
+    model_save_path = config.model.general.path
 
-    # dataloader setup
-    training_set, training_loader = dataloader_setup(
-        "training",
-        config_settings.training_batch_size,
-        False,
-        config_settings,
+    # Load the training set and the
+    # training loader
+    training_set, training_loader = data_loader_setup(
+        TRAINING_SPLIT_TYPE,
+        training_batch_size,
+        training_shuffle,
+        config,
         AccessLogsDataset,
     )
 
-    # split training set into training and validation sets
-    (final_training_set, final_validation_set) = split_training_set(
-        training_set, config_settings
-    )
+    # Split training set into training
+    # and validation sets
+    training_set, validation_set = split_training_set(training_set, config)
 
-    # create a loader for each set
+    # Create a loader both for
+    # training and validation sets
     training_loader = create_data_loader(
-        final_training_set,
-        config_settings.training_batch_size,
-        True,
+        training_set,
+        training_batch_size,
+        training_shuffle,
     )
     validation_loader = create_data_loader(
-        final_validation_set,
-        config_settings.training_batch_size,
-        False,
+        validation_set,
+        validation_batch_size,
+        validation_shuffle,
     )
 
-    # setup for training
+    # Extract targets from training loader
+    targets = extract_targets_from_data_loader(training_loader)
+
+    # Model setup for training
     device, criterion, model, optimizer = model_setup(
-        config_settings.model_params,
-        config_settings.learning_rate,
-        extract_targets_from_dataloader(training_loader),
-        config_settings,
+        model_params,
+        learning_rate,
+        targets,
+        config,
     )
 
-    # train the model
+    # Train the model
     _, model = train_n_epochs(
-        config_settings.training_num_epochs,
+        training_num_epochs,
         model,
         training_loader,
         optimizer,
         criterion,
         device,
-        config_settings,
+        config,
         validation_loader=validation_loader,
     )
 
-    # save the best model trained
-    save_model(model, config_settings)
+    # Save the best model trained
+    save_model(model, model_save_path)
 
-    # print a successful message
-    info("✅ Training successfully completed.")
+    info("Model training completed")

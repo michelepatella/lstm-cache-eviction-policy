@@ -55,7 +55,6 @@ def train_n_epochs(
         num_epochs_run = 0
         best_model_wts = copy.deepcopy(model.state_dict())
         best_loss = float("inf")
-        es = None
 
         # instantiate early stopping object
         es = EarlyStopping(config_settings)

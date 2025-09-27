@@ -242,7 +242,7 @@ class SequenceConfig(BaseModel):
 
 # Data — Dataset
 class SplitConfig(BaseModel):
-    train: confloat(ge=0, le=1)
+    training: confloat(ge=0, le=1)
     validation: confloat(ge=0, le=1)
 
 

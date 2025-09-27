@@ -33,14 +33,14 @@ def validate_model(config: Config) -> Config:
     logs_phase.set(LOGS_VALIDATION_PHASE)
 
     # Prepare configuration
-    batch_size = config.validation.general.batch_size
-    shuffle = config.validation.general.shuffle
+    validation_batch_size = config.validation.general.batch_size
+    validation_shuffle = config.validation.general.shuffle
 
     # Load the training set
     training_set, _ = data_loader_setup(
         TRAINING_SPLIT_TYPE,
-        batch_size,
-        shuffle,
+        validation_batch_size,
+        validation_shuffle,
         config,
         AccessLogsDataset,
     )

@@ -20,6 +20,7 @@ LOGS_CONFIGURATION_PHASE = "configuration"
 LOGS_DATA_GENERATION_PHASE = "data generation"
 LOGS_DATA_PREPROCESSING_PHASE = "data preprocessing"
 LOGS_VALIDATION_PHASE = "validation"
+LOGS_TRAINING_PHASE = "training"
 
 # Time
 MIN_HOUR = 0

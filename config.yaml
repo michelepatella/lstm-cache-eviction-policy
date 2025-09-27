@@ -70,7 +70,7 @@ data:
       dimension: 32
   dataset:
     split:
-      train: 0.7
+      training: 0.7
       validation: 0.25
     paths:
       static: data/static_access_logs.csv
