@@ -44,6 +44,4 @@ def are_min_max_valid(
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 
-    info(
-        f"{min_val} and {max_val} validated for {context}"
-    )
+    info(f"{min_val} and {max_val} validated for {context}")

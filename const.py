@@ -37,7 +37,7 @@ ALLOWED_DATA_DISTRIBUTION_MODES = [
     DATA_DISTRIBUTION_DYNAMIC_MODE,
 ]
 
-# Dataset Splitting
+# Dataset splitting
 TRAINING_SPLIT_TYPE = "training"
 TESTING_SPLIT_TYPE = "testing"
 
@@ -46,6 +46,10 @@ TIMESTAMP_COLUMN_NAME = "timestamp"
 REQUEST_COLUMN_NAME = "request"
 SIN_TIME_COLUMN_NAME = "sin_time"
 COS_TIME_COLUMN_NAME = "cos_time"
+
+# Data preprocessing
+MISSING_VALUES_REMOVAL_DROPNA_AXIS = 0
+MISSING_VALUES_REMOVAL_DROPNA_HOW: Literal["any", "all"] = "any"
 
 # Training
 TRAINING_OPTIMIZER_ADAM = "adam"

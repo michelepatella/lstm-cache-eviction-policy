@@ -1,5 +1,9 @@
 import pandas as pd
 
+from const import (
+    MISSING_VALUES_REMOVAL_DROPNA_AXIS,
+    MISSING_VALUES_REMOVAL_DROPNA_HOW,
+)
 from lstm_eviction_policy.data_preprocessing.utils.dataset_cleaning_reporter import (
     report_dataset_cleaning,
 )
@@ -29,7 +33,10 @@ def remove_missing_values(
     """
     try:
         # Remove rows with missing values
-        new_df = df.dropna(axis=0, how="any")
+        new_df = df.dropna(
+            axis=MISSING_VALUES_REMOVAL_DROPNA_AXIS,
+            how=MISSING_VALUES_REMOVAL_DROPNA_HOW,
+        )
 
         # For missing values report
         report_dataset_cleaning(df, new_df, "Missing values removal")

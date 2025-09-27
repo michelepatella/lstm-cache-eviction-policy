@@ -220,7 +220,6 @@ class BurstinessConfig(BaseModel):
         return self
 
 
-
 class PeriodicConfig(BaseModel):
     scale: conint(gt=0)
     amplitude: conint(ge=0)

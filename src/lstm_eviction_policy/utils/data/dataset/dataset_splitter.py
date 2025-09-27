@@ -12,8 +12,8 @@ from lstm_eviction_policy.utils.logs.levels.info_logger import info
 def split_training_set(
     training_set: AccessLogsDataset,
     config: Config,
-    training_idx: int = None,
-    validation_idx: int = None,
+    training_idx: list[int] | None = None,
+    validation_idx: list[int] | None = None,
 ) -> Tuple[Subset, Subset]:
     """
     Split the dataset into training and validation sets.
@@ -25,8 +25,8 @@ def split_training_set(
     Parameters:
         training_set (AccessLogsDataset): The dataset to split.
         config (Config): Configuration object.
-        training_idx (int): Optional training set index.
-        validation_idx (int): Optional validation set index.
+        training_idx (list[int] | None): Optional training set index.
+        validation_idx (list[int] | None): Optional validation set index.
 
     Returns:
         Tuple[Subset, Subset]: Training and validation subsets.

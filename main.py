@@ -10,13 +10,13 @@ setup_logs()
 config = prepare_config()
 
 # 2. GENERATE SYNTHETIC DATA
-#generate_data(config)
+# generate_data(config)
 
 # 3. PREPROCESS GENERATED DATA
-#preprocess_data(config)
+# preprocess_data(config)
 
 # 4. FIND THE BEST HYPERPARAMETERS
-#config = validate_model(config)
+# config = validate_model(config)
 
 # 5. TRAIN THE MODEL
 # training(config)

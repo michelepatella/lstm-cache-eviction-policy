@@ -32,7 +32,8 @@ def extract_targets_from_data_loader(data_loader: DataLoader) -> torch.Tensor:
         all_targets = []
 
         # Extract all targets from data loader
-        for _, _, targets in data_loader:
+        for batch in data_loader:
+            targets = batch[-1]
             all_targets.append(targets)
 
         # Concatenate extracted targets

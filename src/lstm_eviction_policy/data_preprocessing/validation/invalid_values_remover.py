@@ -50,8 +50,7 @@ def remove_invalid_values(df: pd.DataFrame, config: Config) -> pd.DataFrame:
         # Filter out rows having valid
         # timestamp values only
         valid_timestamp_rows = pd.to_numeric(
-            df[TIMESTAMP_COLUMN_NAME],
-            errors="coerce",
+            new_df[TIMESTAMP_COLUMN_NAME]
         ).notna()
         new_df = new_df[valid_timestamp_rows]
 

@@ -21,7 +21,7 @@ def prepare_config() -> Config:
 
     Returns:
         Config: Class representing the configuration settings of
-            the entire pipeline.
+                the entire pipeline.
     """
     # Set the new pipeline state
     logs_phase.set(LOGS_CONFIGURATION_PHASE)

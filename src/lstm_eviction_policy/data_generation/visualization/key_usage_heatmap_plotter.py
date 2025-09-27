@@ -15,18 +15,16 @@ from const import (
     MAX_HOUR,
     MIN_HOUR,
 )
-from lstm_eviction_policy.config.classes.Config import (
-    Config,
-)
 from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
 from lstm_eviction_policy.utils.logs.levels.error_logger import error
 from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
 def plot_key_usage_heatmap(
+    min_key: int,
+    max_key: int,
     requests: list[int],
     timestamps_hours: np.ndarray,
-    config: Config,
 ) -> None:
     """
     Plot key usage heatmap over hours of the day.
@@ -35,9 +33,10 @@ def plot_key_usage_heatmap(
     of accesses for each key across the hours of the day.
 
     Parameters:
+        min_key (int): The lowest key.
+        max_key (int): The greatest key.
         requests (list[int]): List of key accesses.
         timestamps_hours (np.ndarray): Array of request timestamps in hours.
-        config (Config): Configuration object.
 
     Returns:
         None
@@ -50,10 +49,6 @@ def plot_key_usage_heatmap(
               NumPy array of numeric values.
     """
     try:
-        # Retrieve both min and max keys
-        min_key = config.data.general.keys.min
-        max_key = config.data.general.keys.max
-
         # Initialize heatmap
         num_hours = MAX_HOUR - MIN_HOUR + 1
         num_keys = max_key - min_key + 1

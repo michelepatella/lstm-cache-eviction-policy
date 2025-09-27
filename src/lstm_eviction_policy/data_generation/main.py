@@ -57,9 +57,10 @@ def generate_data(config: Config) -> None:
     # Set the new pipeline state
     logs_phase.set(LOGS_DATA_GENERATION_PHASE)
 
-    # Get the data distribution
-    # mode (static or dynamic)
+    # Prepare configuration
     data_distribution_mode = config.data.general.mode
+    min_key = config.data.general.keys.min
+    max_key = config.data.general.keys.max
 
     debug(f"Data distribution mode: {data_distribution_mode}")
 
@@ -88,6 +89,6 @@ def generate_data(config: Config) -> None:
     # Show data generation -related plots
     plot_zipf_loglog(requests)
     plot_daily_profile(timestamps_hours)
-    plot_key_usage_heatmap(requests, timestamps_hours, config)
+    plot_key_usage_heatmap(min_key, max_key, requests, timestamps_hours)
 
     info("Data generation completed")
