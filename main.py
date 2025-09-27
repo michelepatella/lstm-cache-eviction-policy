@@ -1,7 +1,7 @@
-from lstm_eviction_policy.config import (
+from pipeline.config import (
     prepare_config,
 )
-from lstm_eviction_policy.utils.logs.logs_setup import setup_logs
+from pipeline.utils.logs.logs_setup import setup_logs
 
 # 0. LOGS SETUP
 setup_logs()
