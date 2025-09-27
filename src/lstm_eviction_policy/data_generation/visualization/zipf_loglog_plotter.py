@@ -12,11 +12,9 @@ from const import (
     ZIPF_LOGLOG_PLOT_X_LABEL,
     ZIPF_LOGLOG_PLOT_Y_LABEL,
 )
-from lstm_eviction_policy.utils.logs.log_utils import (
-    debug,
-    error,
-    info,
-)
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.error_logger import error
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
 def plot_zipf_loglog(requests: list[int]) -> None:

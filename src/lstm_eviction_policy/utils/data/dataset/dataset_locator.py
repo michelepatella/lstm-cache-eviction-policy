@@ -2,11 +2,9 @@ from const import DATA_DISTRIBUTION_STATIC_MODE
 from lstm_eviction_policy.config.classes.Config import (
     Config,
 )
-from lstm_eviction_policy.utils.logs.log_utils import (
-    debug,
-    error,
-    info,
-)
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.error_logger import error
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
 def get_dataset_path(config: Config) -> str:

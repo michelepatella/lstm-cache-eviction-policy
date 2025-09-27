@@ -1,10 +1,12 @@
 import torch
 from torch.utils.data import DataLoader
 
-from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.error_logger import error
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
-def extract_targets_from_dataloader(data_loader: DataLoader) -> torch.Tensor:
+def extract_targets_from_data_loader(data_loader: DataLoader) -> torch.Tensor:
     """
     Extract all target tensors from a data
     loader and concatenate them.

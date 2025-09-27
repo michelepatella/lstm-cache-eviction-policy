@@ -3,10 +3,8 @@ import pandas as pd
 from lstm_eviction_policy.data_preprocessing.utils.dataset_cleaning_reporter import (
     report_dataset_cleaning,
 )
-from lstm_eviction_policy.utils.logs.log_utils import (
-    error,
-    info,
-)
+from lstm_eviction_policy.utils.logs.levels.error_logger import error
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
 def remove_duplicates(df: pd.DataFrame, subset: list[str]) -> pd.DataFrame:

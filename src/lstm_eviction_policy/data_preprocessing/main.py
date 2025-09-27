@@ -1,5 +1,5 @@
 from const import (
-    PIPELINE_PHASE_DATA_PREPROCESSING,
+    LOGS_DATA_PREPROCESSING_PHASE,
     REQUEST_COLUMN_NAME,
     TIMESTAMP_COLUMN_NAME,
 )
@@ -24,10 +24,8 @@ from lstm_eviction_policy.data_preprocessing.validation.invalid_values_remover i
 from lstm_eviction_policy.utils.data.dataset.dataset_loader import (
     load_dataset,
 )
-from lstm_eviction_policy.utils.logs.log_utils import (
-    info,
-    phase_var,
-)
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
+from lstm_eviction_policy.utils.logs.logs_setup import logs_phase
 
 
 def preprocess_data(config: Config) -> None:
@@ -47,7 +45,7 @@ def preprocess_data(config: Config) -> None:
         None
     """
     # Set the new pipeline state
-    phase_var.set(PIPELINE_PHASE_DATA_PREPROCESSING)
+    logs_phase.set(LOGS_DATA_PREPROCESSING_PHASE)
 
     # Load the dataset
     df = load_dataset(config)

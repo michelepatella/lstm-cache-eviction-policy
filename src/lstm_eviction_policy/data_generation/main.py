@@ -1,6 +1,6 @@
 from const import (
     DATA_DISTRIBUTION_STATIC_MODE,
-    PIPELINE_PHASE_DATA_GENERATION,
+    LOGS_DATA_GENERATION_PHASE,
     REQUEST_COLUMN_NAME,
     TIMESTAMP_COLUMN_NAME,
 )
@@ -28,11 +28,9 @@ from lstm_eviction_policy.data_generation.visualization.key_usage_heatmap_plotte
 from lstm_eviction_policy.data_generation.visualization.zipf_loglog_plotter import (
     plot_zipf_loglog,
 )
-from lstm_eviction_policy.utils.logs.log_utils import (
-    debug,
-    info,
-    phase_var,
-)
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
+from lstm_eviction_policy.utils.logs.logs_setup import logs_phase
 
 
 def generate_data(config: Config) -> None:
@@ -57,7 +55,7 @@ def generate_data(config: Config) -> None:
         None
     """
     # Set the new pipeline state
-    phase_var.set(PIPELINE_PHASE_DATA_GENERATION)
+    logs_phase.set(LOGS_DATA_GENERATION_PHASE)
 
     # Get the data distribution
     # mode (static or dynamic)

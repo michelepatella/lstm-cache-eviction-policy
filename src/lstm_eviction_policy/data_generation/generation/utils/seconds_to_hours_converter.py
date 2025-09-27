@@ -1,10 +1,8 @@
 import numpy as np
 
 from const import SECONDS_IN_HOUR
-from lstm_eviction_policy.utils.logs.log_utils import (
-    error,
-    info,
-)
+from lstm_eviction_policy.utils.logs.levels.error_logger import error
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
 def seconds_to_hours(

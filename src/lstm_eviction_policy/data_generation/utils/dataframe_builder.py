@@ -3,11 +3,9 @@ from typing import Sequence, Union
 import numpy as np
 import pandas as pd
 
-from lstm_eviction_policy.utils.logs.log_utils import (
-    debug,
-    error,
-    info,
-)
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.error_logger import error
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
 def create_dataframe(

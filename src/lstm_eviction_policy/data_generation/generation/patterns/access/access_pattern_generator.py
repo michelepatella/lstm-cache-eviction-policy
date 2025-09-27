@@ -21,10 +21,8 @@ from lstm_eviction_policy.data_generation.generation.patterns.access.patterns.to
 from lstm_eviction_policy.data_generation.generation.utils.seconds_to_hours_converter import (
     seconds_to_hours,
 )
-from lstm_eviction_policy.utils.logs.log_utils import (
-    debug,
-    info,
-)
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
 def generate_access_pattern(

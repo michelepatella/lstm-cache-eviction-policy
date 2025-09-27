@@ -1,14 +1,12 @@
-from const import PIPELINE_PHASE_CONFIGURATION
+from const import LOGS_CONFIGURATION_PHASE
 from lstm_eviction_policy.config.classes.Config import (
     Config,
 )
 from lstm_eviction_policy.config.config_io.config_loader import (
     load_config,
 )
-from lstm_eviction_policy.utils.logs.log_utils import (
-    info,
-    phase_var,
-)
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
+from lstm_eviction_policy.utils.logs.logs_setup import logs_phase
 
 
 def prepare_config() -> Config:
@@ -26,7 +24,7 @@ def prepare_config() -> Config:
             the entire pipeline.
     """
     # Set the new pipeline state
-    phase_var.set(PIPELINE_PHASE_CONFIGURATION)
+    logs_phase.set(LOGS_CONFIGURATION_PHASE)
 
     # Load the YAML configuration file
     config_file = load_config()

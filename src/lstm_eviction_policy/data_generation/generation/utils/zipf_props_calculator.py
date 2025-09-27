@@ -1,9 +1,7 @@
 import numpy as np
 
-from lstm_eviction_policy.utils.logs.log_utils import (
-    debug,
-    info,
-)
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
 def calculate_zipf_probs(keys: np.ndarray, alpha: float) -> np.ndarray:

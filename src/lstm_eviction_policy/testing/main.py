@@ -12,13 +12,15 @@ from utils.data.AccessLogsDataset import (
 from utils.data.dataloader.dataloader_setup import (
     dataloader_setup,
 )
-from utils.logs.log_utils import info, phase_var
+from utils.logs.log_utils import info
 from utils.model.evaluation.model_evaluator import (
     evaluate_model,
 )
 from utils.model.setup.trained_model_setup import (
     trained_model_setup,
 )
+
+from lstm_eviction_policy.utils.logs.logs_setup import logs_phase
 
 
 def testing(config_settings):
@@ -31,7 +33,7 @@ def testing(config_settings):
     info("🔄 Testing started...")
 
     # set the variable indicating the state of the process
-    phase_var.set("testing")
+    logs_phase.set("testing")
 
     # dataloader setup
     _, testing_loader = dataloader_setup(

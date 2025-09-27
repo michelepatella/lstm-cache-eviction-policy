@@ -14,11 +14,9 @@ from lstm_eviction_policy.config.config_io.update.config_merger import (
 from lstm_eviction_policy.config.config_io.utils.config_locator import (
     get_config_abs_path,
 )
-from lstm_eviction_policy.utils.logs.log_utils import (
-    debug,
-    error,
-    info,
-)
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.error_logger import error
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
 def update_config(

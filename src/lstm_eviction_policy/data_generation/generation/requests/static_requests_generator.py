@@ -6,9 +6,7 @@ from lstm_eviction_policy.config.classes.Config import (
 from lstm_eviction_policy.data_generation.generation.requests.utils.request_generator_helper import (
     generate_requests_helper,
 )
-from lstm_eviction_policy.utils.logs.log_utils import (
-    info,
-)
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
 def generate_static_requests(

@@ -98,7 +98,6 @@ def train_n_epochs(
                     info("🟢 Train n-epochs completed.")
                     break
 
-
         # show the best validation loss obtained
         info(f"🏆 Best validation loss achieved: {best_loss}")
         info(f"ℹ️ No. of epochs run: {num_epochs_run}")

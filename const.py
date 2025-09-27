@@ -1,20 +1,25 @@
+import logging
 from datetime import timedelta
 from typing import Literal
 
 # Configuration
 CONFIG_FILE_NAME = "config.yaml"
 CONFIG_FILE_PARENT_LEVEL = 5
-
 SECTIONS_WITH_PARAMS = {
     "model": "params",
     "training.optimizer": "params",
 }
 
-# Pipeline phases constants
-PIPELINE_PHASE_CONFIGURATION = "configuration"
-PIPELINE_PHASE_DATA_GENERATION = "data generation"
-PIPELINE_PHASE_DATA_PREPROCESSING = "data preprocessing"
-PIPELINE_PHASE_VALIDATION = "validation"
+# Logs
+LOGS_FORMAT = "[%(phase)s] %(levelname)s: %(message)s"
+LOGS_SAVE_PATH = "./logs/log.log"
+LOGS_MAX_BYTES = 10_000_000
+LOGS_BACKUP_COUNT = 100
+LOGS_DEFAULT_LEVEL = logging.INFO
+LOGS_CONFIGURATION_PHASE = "configuration"
+LOGS_DATA_GENERATION_PHASE = "data generation"
+LOGS_DATA_PREPROCESSING_PHASE = "data preprocessing"
+LOGS_VALIDATION_PHASE = "validation"
 
 # Time
 MIN_HOUR = 0

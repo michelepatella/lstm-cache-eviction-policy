@@ -1,9 +1,7 @@
 import pandas as pd
 
-from lstm_eviction_policy.utils.logs.log_utils import (
-    debug,
-    error,
-)
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.error_logger import error
 
 
 def report_dataset_cleaning(

@@ -5,7 +5,7 @@ from lstm_eviction_policy.utils.data.AccessLogsDataset import AccessLogsDataset
 from lstm_eviction_policy.utils.data.dataloader.data_loader_builder import (
     create_data_loader,
 )
-from lstm_eviction_policy.utils.logs.log_utils import info
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
 def data_loader_setup(

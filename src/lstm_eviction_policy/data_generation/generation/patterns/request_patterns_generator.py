@@ -13,10 +13,8 @@ from lstm_eviction_policy.data_generation.generation.patterns.temporal.temporal_
 from lstm_eviction_policy.data_generation.generation.patterns.utils.time_updater import (
     update_time,
 )
-from lstm_eviction_policy.utils.logs.log_utils import (
-    debug,
-    info,
-)
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
 def generate_pattern_requests(

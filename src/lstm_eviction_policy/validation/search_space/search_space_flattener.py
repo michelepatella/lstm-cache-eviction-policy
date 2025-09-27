@@ -1,7 +1,9 @@
 from typing import Any, Dict, List, Tuple
 
 from const import VALIDATION_PARAMS_SUFFIX
-from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.error_logger import error
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
 def flatten_search_space(

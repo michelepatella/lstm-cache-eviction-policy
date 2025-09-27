@@ -4,7 +4,8 @@ from tqdm import tqdm
 
 from lstm_eviction_policy.config.classes.Config import Config
 from lstm_eviction_policy.utils.data.AccessLogsDataset import AccessLogsDataset
-from lstm_eviction_policy.utils.logs.log_utils import debug, info
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 from lstm_eviction_policy.validation.best_params.best_params_updater import (
     check_and_update_best_params,
 )

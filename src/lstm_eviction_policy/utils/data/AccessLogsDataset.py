@@ -7,7 +7,9 @@ from torch.utils.data import Dataset
 from const import TRAINING_SPLIT_TYPE
 from lstm_eviction_policy.config.classes.Config import Config
 from lstm_eviction_policy.utils.data.dataset.dataset_loader import load_dataset
-from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.error_logger import error
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
 class AccessLogsDataset(Dataset):

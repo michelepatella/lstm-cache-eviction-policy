@@ -3,7 +3,9 @@ from typing import Any, Dict
 from box import Box
 
 from lstm_eviction_policy.config.classes.Config import Config
-from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.error_logger import error
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
 def save_best_params(best_params: Dict[str, Any], config: Config) -> Config:

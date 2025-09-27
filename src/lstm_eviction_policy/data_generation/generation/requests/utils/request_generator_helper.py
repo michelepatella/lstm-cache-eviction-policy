@@ -12,10 +12,8 @@ from lstm_eviction_policy.data_generation.generation.utils.seconds_to_hours_conv
 from lstm_eviction_policy.data_generation.generation.utils.zipf_props_calculator import (
     calculate_zipf_probs,
 )
-from lstm_eviction_policy.utils.logs.log_utils import (
-    debug,
-    info,
-)
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
 def generate_requests_helper(

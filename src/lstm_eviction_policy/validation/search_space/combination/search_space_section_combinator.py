@@ -2,7 +2,9 @@ import itertools
 from typing import Any, Dict, List
 
 from const import SECTIONS_WITH_PARAMS
-from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.error_logger import error
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 from lstm_eviction_policy.validation.search_space.search_space_flattener import (
     flatten_search_space,
 )

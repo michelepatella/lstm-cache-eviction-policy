@@ -1,6 +1,7 @@
 import torch
 
-from lstm_eviction_policy.utils.logs.log_utils import debug, info
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 from lstm_eviction_policy.utils.model.LSTM import LSTM
 from lstm_eviction_policy.utils.model.utils.class_weights_calculator import (
     calculate_class_weights,

@@ -10,10 +10,8 @@ from lstm_eviction_policy.config.classes.Config import (
 from lstm_eviction_policy.data_preprocessing.utils.dataset_cleaning_reporter import (
     report_dataset_cleaning,
 )
-from lstm_eviction_policy.utils.logs.log_utils import (
-    error,
-    info,
-)
+from lstm_eviction_policy.utils.logs.levels.error_logger import error
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
 def remove_invalid_values(df: pd.DataFrame, config: Config) -> pd.DataFrame:

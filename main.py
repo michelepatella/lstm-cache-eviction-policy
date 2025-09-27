@@ -7,26 +7,29 @@ from lstm_eviction_policy.data_generation import (
 from lstm_eviction_policy.data_preprocessing import (
     preprocess_data,
 )
+from lstm_eviction_policy.utils.logs.logs_setup import setup_logs
 from lstm_eviction_policy.validation import validate_model
 
-# PIPELINE
-# 0. PREPARE CONFIGURATION SETTINGS
+# 0. LOGS SETUP
+setup_logs()
+
+# 1. PREPARE CONFIGURATION SETTINGS
 config = prepare_config()
 
-# 1. GENERATE SYNTHETIC DATA
+# 2. GENERATE SYNTHETIC DATA
 generate_data(config)
 
-# 2. PREPROCESS GENERATED DATA
+# 3. PREPROCESS GENERATED DATA
 preprocess_data(config)
 
-# 3. FIND THE BEST HYPERPARAMETERS
+# 4. FIND THE BEST HYPERPARAMETERS
 config = validate_model(config)
 
-# 4. TRAIN THE MODEL
+# 5. TRAIN THE MODEL
 # training(config)
 
-# 5. TEST THE STANDALONE MODEL
+# 6. TEST THE STANDALONE MODEL
 # testing(config)
 
-# 6. COMPARE THE FRAMEWORK AGAINST BASELINE CACHES
+# 7. COMPARE THE FRAMEWORK AGAINST BASELINE CACHES
 # run_simulations(config)

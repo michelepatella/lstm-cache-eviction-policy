@@ -4,11 +4,9 @@ from const import (
     CONFIG_FILE_NAME,
     CONFIG_FILE_PARENT_LEVEL,
 )
-from lstm_eviction_policy.utils.logs.log_utils import (
-    debug,
-    error,
-    info,
-)
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.error_logger import error
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 
 
 def get_config_abs_path() -> str:

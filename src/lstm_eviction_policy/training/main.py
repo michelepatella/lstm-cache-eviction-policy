@@ -22,6 +22,8 @@ from utils.training.n_epochs_trainer import (
     train_n_epochs,
 )
 
+from lstm_eviction_policy.utils.logs.logs_setup import logs_phase
+
 
 def training(config_settings):
     """
@@ -33,7 +35,7 @@ def training(config_settings):
     info("🔄 Training started...")
 
     # set the variable indicating the state of the process
-    phase_var.set("training")
+    logs_phase.set("training")
 
     # dataloader setup
     training_set, training_loader = dataloader_setup(

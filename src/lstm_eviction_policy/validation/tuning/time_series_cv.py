@@ -9,13 +9,15 @@ from lstm_eviction_policy.utils.data.AccessLogsDataset import AccessLogsDataset
 from lstm_eviction_policy.utils.data.dataloader.data_loader_builder import (
     create_data_loader,
 )
-from lstm_eviction_policy.utils.data.dataloader.dataloader_utils import (
-    extract_targets_from_dataloader,
+from lstm_eviction_policy.utils.data.dataloader.data_loader_targets_extractor import (
+    extract_targets_from_data_loader,
 )
 from lstm_eviction_policy.utils.data.dataset.dataset_splitter import (
     split_training_set,
 )
-from lstm_eviction_policy.utils.logs.log_utils import debug, error, info
+from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
+from lstm_eviction_policy.utils.logs.levels.error_logger import error
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 from lstm_eviction_policy.utils.model.setup.model_setup import model_setup
 from lstm_eviction_policy.utils.training.n_epochs_trainer import train_n_epochs
 
@@ -111,7 +113,7 @@ def compute_time_series_cv(
             )
 
             # Extract targets from dataset
-            targets = extract_targets_from_dataloader(training_loader)
+            targets = extract_targets_from_data_loader(training_loader)
 
             # Setup model
             device, criterion, model, optimizer = model_setup(

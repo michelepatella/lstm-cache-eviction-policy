@@ -1,7 +1,8 @@
 from typing import Any, Dict, List
 
 from lstm_eviction_policy.config.classes.Config import Config
-from lstm_eviction_policy.utils.logs.log_utils import error, info
+from lstm_eviction_policy.utils.logs.levels.error_logger import error
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
 from lstm_eviction_policy.validation.search_space.combination.search_space_all_sections_combinator import (
     get_all_sections_combinations,
 )

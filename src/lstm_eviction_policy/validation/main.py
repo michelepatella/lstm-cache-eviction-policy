@@ -1,10 +1,11 @@
-from const import PIPELINE_PHASE_VALIDATION, TRAINING_SPLIT_TYPE
+from const import LOGS_VALIDATION_PHASE, TRAINING_SPLIT_TYPE
 from lstm_eviction_policy.config.classes.Config import Config
 from lstm_eviction_policy.utils.data.AccessLogsDataset import AccessLogsDataset
 from lstm_eviction_policy.utils.data.dataloader.data_loader_setup import (
     data_loader_setup,
 )
-from lstm_eviction_policy.utils.logs.log_utils import info, phase_var
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
+from lstm_eviction_policy.utils.logs.logs_setup import logs_phase
 from lstm_eviction_policy.validation.best_params.best_params_saver import (
     save_best_params,
 )
@@ -29,7 +30,7 @@ def validate_model(config: Config) -> Config:
         Config: Updated configuration object (with the best hyperparameters).
     """
     # Set the new pipeline state
-    phase_var.set(PIPELINE_PHASE_VALIDATION)
+    logs_phase.set(LOGS_VALIDATION_PHASE)
 
     # Prepare configuration
     batch_size = config.validation.general.batch_size
