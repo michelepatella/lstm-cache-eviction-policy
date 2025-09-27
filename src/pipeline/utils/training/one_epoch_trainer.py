@@ -1,79 +1,109 @@
+import torch
+from torch import nn
+from torch.optim import Optimizer
+from torch.utils.data import DataLoader
 from tqdm import tqdm
-from training.utils.backward_runner import (
+
+from pipeline.utils.logs.levels.debug_logger import debug
+from pipeline.utils.logs.levels.error_logger import error
+from pipeline.utils.logs.levels.info_logger import info
+from pipeline.utils.model.backpropagation.backward_runner import (
     compute_backward,
 )
-from utils.logs.log_utils import info
-from utils.model.forward.forward_runner import (
-    compute_forward,
-)
+from pipeline.utils.model.backpropagation.forward_runner import compute_forward
 
 
 def train_one_epoch(
-    model,
-    training_loader,
-    optimizer,
-    criterion,
-    device,
-):
+    model: torch.nn.Module,
+    training_loader: DataLoader,
+    optimizer: Optimizer,
+    criterion: nn.Module,
+    device: torch.device,
+    epoch: int,
+) -> None:
     """
-    Method to train the model one epoch.
-    :param model: Model to be trained.
-    :param training_loader: Training data loader.
-    :param optimizer: Optimizer to be used.
-    :param criterion: The loss function.
-    :param device: Device to be used.
-    :return:
-    """
-    # initial message
-    info("🔄 Epoch training started...")
+    Train the model for a single epoch.
 
-    # to show the progress bar
+    This function performs one full pass over the training set.
+    For each batch in the training set this function performs both
+    a forward pass — to obtain predictions and loss — as well
+    as a backward pass — to calculate the gradients of loss and update
+    the weights through optimizer consequently.
+
+    Parameters:
+        model (torch.nn.Module): The model to train.
+        training_loader (DataLoader): DataLoader providing training batches.
+        optimizer (Optimizer): Optimizer used to update model parameters.
+        criterion (nn.Module): Loss function used to compute the loss.
+        device (torch.device): Device on which training is performed.
+        epoch (int): Current epoch number for logging and progress display.
+
+    Returns:
+        None
+
+    Raises:
+        RuntimeError: If an error occurs during processing of a batch e.g.:
+            * Invalid batch shapes.
+            * Type errors.
+            * Loss computation failure.
+    """
+    debug(
+        f"One-epoch training configuration:\n"
+        f"- Current epoch number: {epoch}\n"
+        f"- Training loader size: {len(training_loader)}\n"
+        f"- Optimizer: {optimizer}\n"
+        f"- Criterion: {criterion}\n"
+        f"- Device: {device}"
+    )
+
+    # To display the one-epoch progress
     training_loader = tqdm(
         training_loader,
-        desc="🧠 Training Progress",
+        desc=f"Epoch {epoch}",
         leave=False,
     )
-    try:
-        model.train()
 
-        for (
-            x_features,
-            x_keys,
-            y_key,
-        ) in training_loader:
-            # reset the gradients
+    # Set the model to training mode
+    model.train()
+
+    # For each batch in the training loader
+    # run backpropagation algorithm
+    for batch in training_loader:
+        try:
+            debug(
+                f"Current batch shapes during one-epoch training: {[t.shape for t in batch]}"
+            )
+
+            # Reset the gradients
             optimizer.zero_grad()
 
-            # forward pass
+            # Compute the forward pass
+            # (to calculate the output — moving from
+            # input layer to output layer — and the loss
+            # after comparing model prediction with expected one)
             loss, _ = compute_forward(
-                (x_features, x_keys, y_key),
+                batch,
                 model,
                 criterion,
                 device,
             )
 
-            # check loss
-            if loss is None:
-                raise ValueError(
-                    "Error while training the model due to None loss returned."
-                )
+            debug(
+                f"Current batch loss during one-epoch training: {loss.item()}"
+            )
 
-            # backward pass
+            # Compute backward pass
+            # (to calculate the gradients of loss with
+            # respect to the weights and update weights
+            # consequently)
             compute_backward(loss, optimizer)
 
+            # Update progress bar and show
+            # the current loss
             training_loader.set_postfix(loss=loss.item())
-    except AttributeError as e:
-        raise AttributeError(f"AttributeError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except ValueError as e:
-        raise ValueError(f"ValueError: {e}.")
-    except StopIteration as e:
-        raise StopIteration(f"StopIteration: {e}.")
-    except AssertionError as e:
-        raise AssertionError(f"AssertionError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+        except (TypeError, AttributeError, ValueError) as e:
+            msg = "Failed to compute one-epoch training"
+            error("%s: %s", msg, e)
+            raise RuntimeError(msg) from e
 
-    # show a successful message
-    info("🟢 Epoch training completed.")
+    info("One-epoch training completed")

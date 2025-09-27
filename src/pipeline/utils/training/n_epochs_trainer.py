@@ -55,7 +55,7 @@ def train_n_epochs(
         RuntimeError: If an error occurs while deep copying the model weights.
     """
     debug(
-        f"Training configuration:\n"
+        f"General training configuration:\n"
         f"- Number of epochs: {num_epochs}\n"
         f"- Training loader size: {len(training_loader)}\n"
         f"- Validation loader size: {len(validation_loader)}\n"
@@ -85,7 +85,9 @@ def train_n_epochs(
         debug(f"Epoch started: {epoch}")
 
         # Train one epoch
-        train_one_epoch(model, training_loader, optimizer, criterion, device)
+        train_one_epoch(
+            model, training_loader, optimizer, criterion, device, epoch
+        )
 
         # Increase the number of epochs run
         num_epochs_run += 1
