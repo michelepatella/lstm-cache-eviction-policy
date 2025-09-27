@@ -1,8 +1,8 @@
 from const import (
     DATA_DISTRIBUTION_STATIC_MODE,
     LOGS_DATA_GENERATION_PHASE,
-    REQUEST_COLUMN_NAME,
-    TIMESTAMP_COLUMN_NAME,
+    REQUEST_COLUMN,
+    TIMESTAMP_COLUMN,
 )
 from lstm_eviction_policy.config.classes.Config import (
     Config,
@@ -77,8 +77,8 @@ def generate_data(config: Config) -> None:
     # a timestamp and the corresponding request
     df = create_dataframe(
         {
-            TIMESTAMP_COLUMN_NAME: timestamps_hours[: len(requests)],
-            REQUEST_COLUMN_NAME: requests,
+            TIMESTAMP_COLUMN: timestamps_hours[: len(requests)],
+            REQUEST_COLUMN: requests,
         }
     )
 

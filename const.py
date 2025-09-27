@@ -5,7 +5,7 @@ from typing import Literal
 # Configuration
 CONFIG_FILE_NAME = "config.yaml"
 CONFIG_FILE_PARENT_LEVEL = 5
-SECTIONS_WITH_PARAMS = {
+CONFIG_SECTIONS_WITH_PARAMS = {
     "model": "params",
     "training.optimizer": "params",
 }
@@ -21,6 +21,7 @@ LOGS_DATA_GENERATION_PHASE = "data generation"
 LOGS_DATA_PREPROCESSING_PHASE = "data preprocessing"
 LOGS_VALIDATION_PHASE = "validation"
 LOGS_TRAINING_PHASE = "training"
+LOGS_TESTING_PHASE = "testing"
 
 # Time
 MIN_HOUR = 0
@@ -32,33 +33,30 @@ HOURS_IN_DAY = timedelta(days=1).total_seconds() / SECONDS_IN_HOUR
 # Data distribution
 DATA_DISTRIBUTION_STATIC_MODE = "static"
 DATA_DISTRIBUTION_DYNAMIC_MODE = "dynamic"
-ALLOWED_DATA_DISTRIBUTION_MODES = [
+DATA_DISTRIBUTION_MODES = [
     DATA_DISTRIBUTION_STATIC_MODE,
     DATA_DISTRIBUTION_DYNAMIC_MODE,
 ]
 
-# Dataset splitting
+# Dataset columns
+TIMESTAMP_COLUMN = "timestamp"
+REQUEST_COLUMN = "request"
+SIN_TIME_COLUMN = "sin_time"
+COS_TIME_COLUMN = "cos_time"
+
+# Dataset split
 TRAINING_SPLIT_TYPE = "training"
 TESTING_SPLIT_TYPE = "testing"
-
-# Dataset columns
-TIMESTAMP_COLUMN_NAME = "timestamp"
-REQUEST_COLUMN_NAME = "request"
-SIN_TIME_COLUMN_NAME = "sin_time"
-COS_TIME_COLUMN_NAME = "cos_time"
 
 # Data preprocessing
 MISSING_VALUES_REMOVAL_DROPNA_AXIS = 0
 MISSING_VALUES_REMOVAL_DROPNA_HOW: Literal["any", "all"] = "any"
 
 # Training
-TRAINING_OPTIMIZER_ADAM = "adam"
-TRAINING_OPTIMIZER_ADAMW = "adamw"
-TRAINING_OPTIMIZER_SGD = "sgd"
-ALLOWED_TRAINING_OPTIMIZERS = [
-    TRAINING_OPTIMIZER_ADAM,
-    TRAINING_OPTIMIZER_ADAMW,
-    TRAINING_OPTIMIZER_SGD,
+TRAINING_OPTIMIZERS = [
+    "adam",
+    "adamw",
+    "sgd",
 ]
 
 # Validation
@@ -92,3 +90,16 @@ KEY_USAGE_HEATMAP_COLORBAR_LABEL = "Access Count"
 KEY_USAGE_HEATMAP_X_LABEL = "Key"
 KEY_USAGE_HEATMAP_Y_LABEL = "Hour of Day"
 KEY_USAGE_HEATMAP_ROTATION = 45
+
+# Precision-recall curve
+PRECISION_RECALL_CURVE_TITLE = "Precision-Recall Curve"
+PRECISION_RECALL_CURVE_CLASS_LABEL = "Class"
+PRECISION_RECALL_CURVE_X_LABEL = "Recall"
+PRECISION_RECALL_CURVE_Y_LABEL = "Precision"
+
+# Confusion matrix plot
+CONFUSION_MATRIX_PLOT_TITLE = "Confusion Matrix"
+CONFUSION_MATRIX_PLOT_X_LABEL = "Predicted Key"
+CONFUSION_MATRIX_PLOT_Y_LABEL = "True Key"
+CONFUSION_MATRIX_PLOT_ANNOT = True
+CONFUSION_MATRIX_PLOT_FMT = "d"

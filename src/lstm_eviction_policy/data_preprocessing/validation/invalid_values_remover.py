@@ -1,8 +1,8 @@
 import pandas as pd
 
 from const import (
-    REQUEST_COLUMN_NAME,
-    TIMESTAMP_COLUMN_NAME,
+    REQUEST_COLUMN,
+    TIMESTAMP_COLUMN,
 )
 from lstm_eviction_policy.config.classes.Config import (
     Config,
@@ -42,16 +42,14 @@ def remove_invalid_values(df: pd.DataFrame, config: Config) -> pd.DataFrame:
 
         # Filter out rows having valid
         # request values only
-        valid_request_rows = df[REQUEST_COLUMN_NAME].apply(
+        valid_request_rows = df[REQUEST_COLUMN].apply(
             lambda x: isinstance(x, int) and min_key <= x <= max_key
         )
         new_df = df[valid_request_rows]
 
         # Filter out rows having valid
         # timestamp values only
-        valid_timestamp_rows = pd.to_numeric(
-            new_df[TIMESTAMP_COLUMN_NAME]
-        ).notna()
+        valid_timestamp_rows = pd.to_numeric(new_df[TIMESTAMP_COLUMN]).notna()
         new_df = new_df[valid_timestamp_rows]
 
         # Report for invalid values removal

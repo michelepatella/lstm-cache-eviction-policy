@@ -1,57 +1,70 @@
 import torch
-from testing.visualization.testing_plotter import (
+from box import Box
+
+from const import LOGS_TESTING_PHASE, TESTING_SPLIT_TYPE
+from lstm_eviction_policy.config.classes.Config import Config
+from lstm_eviction_policy.testing.visualization.confusion_matrix_plotter import (
     plot_confusion_matrix,
-    plot_precision_recall_curve,
 )
-from testing.visualization.testing_reporter import (
+from lstm_eviction_policy.testing.visualization.model_evaluation_reporter import (
     generate_model_evaluation_report,
 )
-from utils.data.AccessLogsDataset import (
-    AccessLogsDataset,
+from lstm_eviction_policy.testing.visualization.precision_recall_curve_plotter import (
+    plot_precision_recall_curve,
 )
-from utils.data.dataloader.dataloader_setup import (
-    dataloader_setup,
+from lstm_eviction_policy.utils.data.AccessLogsDataset import AccessLogsDataset
+from lstm_eviction_policy.utils.data.dataloader.data_loader_setup import (
+    data_loader_setup,
 )
-from utils.logs.log_utils import info
-from utils.model.evaluation.model_evaluator import (
+from lstm_eviction_policy.utils.logs.levels.info_logger import info
+from lstm_eviction_policy.utils.logs.logs_setup import logs_phase
+from lstm_eviction_policy.utils.model.evaluation.model_evaluator import (
     evaluate_model,
 )
-from utils.model.setup.trained_model_setup import (
+from lstm_eviction_policy.utils.model.setup.trained_model_setup import (
     trained_model_setup,
 )
 
-from lstm_eviction_policy.utils.logs.logs_setup import logs_phase
 
-
-def testing(config_settings):
+def test_model(config: Config) -> None:
     """
-    Method to test the model.
-    :param config_settings: The configuration settings.
-    :return:
+    Test the trained model.
+
+    This function tests the trained model on the
+    testing set. Results are shown via report and
+    plots providing model performance insights.
+
+    Parameters:
+        config (Config): Configuration object.
+
+    Returns:
+        None
     """
-    # initial message
-    info("🔄 Testing started...")
+    # Set the new pipeline state
+    logs_phase.set(LOGS_TESTING_PHASE)
 
-    # set the variable indicating the state of the process
-    logs_phase.set("testing")
+    # Prepare configuration
+    testing_batch_size = config.testing.batch_size
+    testing_shuffle = config.testing.shuffle
+    num_keys = config.data.general.keys.max - config.data.general.keys.min + 1
+    top_k = config.evaluation.top_k
 
-    # dataloader setup
-    _, testing_loader = dataloader_setup(
-        "testing",
-        config_settings.testing_batch_size,
-        False,
-        config_settings,
+    # Setup testing data loader
+    _, testing_loader = data_loader_setup(
+        TESTING_SPLIT_TYPE,
+        testing_batch_size,
+        testing_shuffle,
+        config,
         AccessLogsDataset,
     )
 
-    # setup for testing
-    (device, criterion, model) = trained_model_setup(
-        testing_loader, config_settings
-    )
+    # Trained model setup for testing
+    device, criterion, model = trained_model_setup(testing_loader, config)
 
+    # Set model in evaluation phase
     model.eval()
 
-    # evaluate the model
+    # Evaluate model
     (
         avg_loss,
         metrics,
@@ -63,39 +76,34 @@ def testing(config_settings):
         testing_loader,
         criterion,
         device,
-        config_settings,
+        config,
         compute_metrics=True,
     )
 
-    try:
-        # show results
-        generate_model_evaluation_report(
-            metrics["class_report"],
-            metrics["top_k_accuracy"],
-            metrics["kappa_statistic"],
-            avg_loss,
-            config_settings,
-        )
+    # Box for model evaluation metrics
+    metrics = Box(metrics)
 
-        # show some plots
-        plot_precision_recall_curve(
-            all_targets,
-            torch.stack(all_outputs).numpy(),
-            config_settings.num_keys,
-        )
-        plot_confusion_matrix(metrics["confusion_matrix"])
-    except KeyError as e:
-        raise KeyError(f"KeyError: {e}.")
-    except NameError as e:
-        raise NameError(f"NameError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except AttributeError as e:
-        raise AttributeError(f"AttributeError: {e}.")
-    except ValueError as e:
-        raise ValueError(f"ValueError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+    # Show report to display testing results
+    generate_model_evaluation_report(
+        metrics.class_report,
+        metrics.top_k_accuracy,
+        metrics.kappa_statistic,
+        avg_loss,
+        top_k,
+    )
 
-    # print a successful message
-    info("✅ Testing completed.")
+    # Given all the outputs, transform them
+    # into an unic tensor with an additional
+    # dimension, converting the resulting tensor
+    # into a numpy array
+    stacked_outputs = torch.stack(all_outputs).numpy()
+
+    # Show testing-related plots
+    plot_precision_recall_curve(
+        all_targets,
+        stacked_outputs,
+        num_keys,
+    )
+    plot_confusion_matrix(metrics.confusion_matrix)
+
+    info("Model testing completed")

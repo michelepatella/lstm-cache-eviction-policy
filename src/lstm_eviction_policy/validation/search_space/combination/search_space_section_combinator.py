@@ -1,7 +1,7 @@
 import itertools
 from typing import Any, Dict, List
 
-from const import SECTIONS_WITH_PARAMS
+from const import CONFIG_SECTIONS_WITH_PARAMS
 from lstm_eviction_policy.utils.logs.levels.debug_logger import debug
 from lstm_eviction_policy.utils.logs.levels.error_logger import error
 from lstm_eviction_policy.utils.logs.levels.info_logger import info
@@ -59,7 +59,9 @@ def get_section_combinations(
             # Wrap section parameters ensuring
             # consistent representation with respect to
             # those of configuration object
-            combo = wrap_section_params(combo, section, SECTIONS_WITH_PARAMS)
+            combo = wrap_section_params(
+                combo, section, CONFIG_SECTIONS_WITH_PARAMS
+            )
 
             section_values.append(combo)
 

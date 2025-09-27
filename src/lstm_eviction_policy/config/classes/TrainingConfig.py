@@ -5,7 +5,7 @@ from pydantic import (
     model_validator,
 )
 
-from const import ALLOWED_TRAINING_OPTIMIZERS
+from const import TRAINING_OPTIMIZERS
 from lstm_eviction_policy.config.classes.validation.choice_field_validator import (
     validate_choice_field,
 )
@@ -53,7 +53,7 @@ class OptimizerConfig(BaseModel):
         return validate_choice_field(
             self,
             self.type,
-            ALLOWED_TRAINING_OPTIMIZERS,
+            TRAINING_OPTIMIZERS,
             "training.optimizer.type",
         )
 

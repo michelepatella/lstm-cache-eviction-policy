@@ -8,3 +8,4 @@ class TestingConfig(BaseModel):
     """
 
     batch_size: conint(gt=0)
+    shuffle: bool

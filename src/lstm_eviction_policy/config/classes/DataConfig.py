@@ -6,7 +6,7 @@ from pydantic import (
 )
 
 from const import (
-    ALLOWED_DATA_DISTRIBUTION_MODES,
+    DATA_DISTRIBUTION_MODES,
     MAX_HOUR,
     MIN_HOUR,
 )
@@ -82,7 +82,7 @@ class GeneralDataConfig(BaseModel):
         return validate_choice_field(
             self,
             self.mode,
-            ALLOWED_DATA_DISTRIBUTION_MODES,
+            DATA_DISTRIBUTION_MODES,
             "data.general.mode",
         )
 

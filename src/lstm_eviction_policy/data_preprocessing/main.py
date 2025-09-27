@@ -1,7 +1,7 @@
 from const import (
     LOGS_DATA_PREPROCESSING_PHASE,
-    REQUEST_COLUMN_NAME,
-    TIMESTAMP_COLUMN_NAME,
+    REQUEST_COLUMN,
+    TIMESTAMP_COLUMN,
 )
 from lstm_eviction_policy.config.classes.Config import (
     Config,
@@ -54,7 +54,7 @@ def preprocess_data(config: Config) -> None:
     df = remove_missing_values(df)
 
     # Remove duplicates
-    df = remove_duplicates(df, [TIMESTAMP_COLUMN_NAME])
+    df = remove_duplicates(df, [TIMESTAMP_COLUMN])
 
     # Remove invalid values
     df = remove_invalid_values(df, config)
@@ -62,8 +62,8 @@ def preprocess_data(config: Config) -> None:
     # Build new features
     df = build_features(
         df,
-        TIMESTAMP_COLUMN_NAME,
-        REQUEST_COLUMN_NAME,
+        TIMESTAMP_COLUMN,
+        REQUEST_COLUMN,
     )
 
     # Save preprocessed dataset

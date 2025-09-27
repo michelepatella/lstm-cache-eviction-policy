@@ -129,6 +129,7 @@ training:
 
 testing:
   batch_size: 64
+  shuffle: false
 
 evaluation:
   top_k: 3
