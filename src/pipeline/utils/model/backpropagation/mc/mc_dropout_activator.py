@@ -1,31 +1,40 @@
 import torch
-from utils.logs.log_utils import debug, info
+
+from pipeline.utils.logs.levels.error_logger import error
+from pipeline.utils.logs.levels.info_logger import info
 
 
-def enable_mc_dropout(model):
+def enable_mc_dropout(model: torch.nn.Module) -> None:
     """
-    Method to enable MC dropout.
-    :param model: The model for which to enable MC dropout.
-    :return:
-    """
-    # initial message
-    info("🔄 MC dropout enabling started...")
+    Enable Monte Carlo (MC) Dropout for inference.
 
+    This function sets all dropout layers of the given model
+    to training mode, allowing stochastic dropout to be applied
+    during inference.
+
+    Parameters:
+        model (torch.nn.Module): The PyTorch model in which to
+                                 enable MC Dropout.
+
+    Returns:
+        None
+
+    Raises:
+        RuntimeError: If an error occurs while enabling MC Dropout, e.g.:
+            * If the received model is of type torch.nn.Module.
+    """
     try:
         for module in model.modules():
             if isinstance(module, torch.nn.Dropout):
+                # Enable MC dropout by setting the
+                # model to training mode during inference
                 module.train()
-                # debugging
-                debug(f"⚙️ Dropout enabled.")
-
-        # set dropout enabled
-        model.use_mc_dropout = True
     except AttributeError as e:
-        raise AttributeError(f"AttributeError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+        msg = "Failed to enable MC dropout for model"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
 
-    # show a successful message
-    info("🟢 MC dropout enabled.")
+    # Set a flag indicating MC Dropout is active
+    model.use_mc_dropout = True
+
+    info("MC Dropout enabled for model")
