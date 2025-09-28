@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import numpy as np
 
 from const import PERIOD
@@ -22,7 +24,7 @@ def generate_pattern_requests(
     zipf_probs: np.ndarray,
     config: Config,
     time_step_duration: int = None,
-) -> tuple[list[int], list[float]]:
+) -> Tuple[list[int], list[float]]:
     """
     Generate requests according to
     specific access and temporal patterns.
@@ -40,7 +42,7 @@ def generate_pattern_requests(
         time_step_duration (int): Optional time step to generate requests for.
 
     Returns:
-        tuple[list[int], list[float]]: List of requests along with their
+        Tuple[list[int], list[float]]: List of requests along with their
                                        corresponding timestamps.
     """
     # Initialize data

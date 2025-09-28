@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, Tuple
 
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.error_logger import error
@@ -10,7 +10,7 @@ def check_and_update_best_params(
     best_avg_loss: float | None,
     curr_params: Dict[str, Any],
     best_params: Dict[str, Any],
-) -> tuple[float, Dict[str, Any]]:
+) -> Tuple[float, Dict[str, Any]]:
     """
     Check and update the best parameters
     based on the average loss.
@@ -28,7 +28,7 @@ def check_and_update_best_params(
         best_params (Dict[str, Any]): Best parameter set found so far.
 
     Returns:
-        tuple[float, Dict[str, Any]]: Updated best average loss and
+        Tuple[float, Dict[str, Any]]: Updated best average loss and
                                       best parameter set.
 
     Raises:

@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Tuple, Type
 
 import pandas as pd
 import torch
@@ -227,7 +227,7 @@ class AccessLogsDataset(Dataset):
 
     def __getitem__(
         self: "AccessLogsDataset", idx: int
-    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """
         Retrieve a sequence of features and the next target key.
 
@@ -240,11 +240,10 @@ class AccessLogsDataset(Dataset):
             idx (int): Index of the starting row for the sequence.
 
         Returns:
-            Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-                - x_features (torch.Tensor): Tensor of numerical
-                                             features of shape (seq_len, num_features)
-                - x_keys (torch.Tensor): Tensor of keys in the sequence (seq_len,)
-                - y_key (torch.Tensor): Tensor of the next key (single value)
+            Tuple[torch.Tensor, torch.Tensor, torch.Tensor]: Tuple containing a tensor of
+                                                             numerical features, a tensor
+                                                             of keys in the  sequence,
+                                                             and a tensor for the next key.
 
         Raises:
             RuntimeError: If an error occurs while retrieving a dataset item, e.g.:

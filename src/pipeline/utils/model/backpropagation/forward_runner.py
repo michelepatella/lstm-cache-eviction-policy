@@ -1,75 +1,70 @@
-from utils.logs.log_utils import debug, info
+from typing import Optional, Tuple
+
+import torch
+from torch import nn
+
+from pipeline.utils.logs.levels.debug_logger import debug
+from pipeline.utils.logs.levels.info_logger import info
 
 
-def compute_forward(batch, model, criterion, device):
+def compute_forward(
+    inputs,
+    model: nn.Module,
+    criterion: Optional[nn.Module],
+    device: torch.device,
+) -> Tuple[Optional[torch.Tensor], torch.Tensor]:
     """
-    Method to compute forward pass and loss based on batch of data.
-    :param batch: The batch of data to process.
-    :param model: The model to use.
-    :param criterion: The loss function.
-    :param device: The device to use.
-    :return: The loss function (if computed) and the outputs for the batch.
+    Compute a forward pass through the model.
+
+    This function handles both training and inference:
+        - If `inputs` is a tuple of length `num_features + 1`, it unpacks
+          features, keys, and target, moves them to the specified device,
+          and computes model outputs.
+        - If `criterion` is provided, computes the loss using the model outputs
+          and target.
+
+    Parameters:
+        inputs: Model inputs, either a tuple including the target or inputs ready for model.
+        model (nn.Module): The PyTorch model to evaluate.
+        criterion (Optional[nn.Module]): Loss function. If None, loss is not computed.
+        device (torch.device): Device on which to perform computations.
+
+    Returns:
+        Tuple[Optional[torch.Tensor], torch.Tensor]:
+            - loss: Computed loss (None if criterion is None).
+            - outputs: Model outputs.
     """
-    # initial message
-    info("🔄 Forward pass started...")
+    # Check if inputs include target
+    if isinstance(inputs, tuple) and len(inputs) == model.num_features + 1:
+        x_features, x_keys, y_key = inputs
 
-    # try unpack data
-    try:
-        # unpack data
-        x_features, x_keys, y_key = batch
-
-        # debugging
-        debug(f"⚙️ Target batch: {y_key}.")
-    except ValueError as e:
-        raise ValueError(f"ValueError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
-
-    try:
-        # move data to the device
+        # Move to device
         x_features = x_features.to(device)
         x_keys = x_keys.to(device)
         y_key = y_key.to(device)
-    except AttributeError as e:
-        raise AttributeError(f"AttributeError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
 
-    try:
-        # calculate the outputs
+        # Forward pass
         outputs = model(x_features, x_keys)
 
-        # debugging
-        debug(f"⚙️ Input batch shape: {x_features.shape}.")
-        debug(f"⚙️ Input keys shape: {x_keys.shape}")
-        debug(f"⚙️ Model output shape: {outputs.shape}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except AttributeError as e:
-        raise AttributeError(f"AttributeError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+        debug(f"Input features shape: {x_features.shape}")
+        debug(f"Input keys shape: {x_keys.shape}")
+        debug(f"Target batch shape: {y_key.shape}")
+        debug(f"Model output shape: {outputs.shape}")
 
+    else:
+        # Assume inputs are directly compatible with model
+        outputs = model(*inputs)
+        debug(f"Model output shape: {outputs.shape}")
+
+    # Compute loss if criterion provided
     loss = None
     if criterion is not None:
         try:
-            # calculate the loss and update the total one
             loss = criterion(outputs, y_key)
-
-            # debugging
-            debug(f"⚙️ Loss: {loss.item()}.")
-        except TypeError as e:
-            raise TypeError(f"TypeError: {e}.")
-        except ValueError as e:
-            raise ValueError(f"ValueError: {e}.")
+            debug(f"Loss computed: {loss.item()}")
         except Exception as e:
-            raise RuntimeError(f"RuntimeError: {e}.")
+            raise RuntimeError(f"Failed to compute loss: {e}") from e
 
-    # show a successful message
-    info("🟢 Forward pass computed.")
+    info("Forward pass completed")
 
     return loss, outputs

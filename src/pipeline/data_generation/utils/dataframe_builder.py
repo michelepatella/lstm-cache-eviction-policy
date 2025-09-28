@@ -1,4 +1,4 @@
-from typing import Sequence, Union
+from typing import Dict, Sequence, Union
 
 import numpy as np
 import pandas as pd
@@ -9,7 +9,7 @@ from pipeline.utils.logs.levels.info_logger import info
 
 
 def create_dataframe(
-    columns: dict[str, Union[Sequence, np.ndarray]],
+    columns: Dict[str, Union[Sequence, np.ndarray]],
 ) -> pd.DataFrame:
     """
     Create dataframe for the given columns.
@@ -18,7 +18,7 @@ def create_dataframe(
     from the given columns.
 
     Parameters:
-        columns (dict[str, Union[Sequence, np.ndarray]]): Columns to create
+        columns (Dict[str, Union[Sequence, np.ndarray]]): Columns to create
                                                           dataframe for.
 
     Returns:

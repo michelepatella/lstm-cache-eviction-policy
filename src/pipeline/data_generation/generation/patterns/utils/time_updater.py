@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.info_logger import info
 
@@ -7,7 +9,7 @@ def update_time(
     current_day: int,
     period: float,
     delta_t: float,
-) -> tuple[float, int]:
+) -> Tuple[float, int]:
     """
     Update time (current seconds in day and
     current day) according to delta time.
@@ -24,7 +26,7 @@ def update_time(
         delta_t (float): Gap between the current request and the next one.
 
     Returns:
-        tuple[float, int]: Tuple of current seconds in day and
+        Tuple[float, int]: Tuple of current seconds in day and
                            current day updated.
     """
     debug(

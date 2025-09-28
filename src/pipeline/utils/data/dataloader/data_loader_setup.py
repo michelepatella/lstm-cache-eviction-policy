@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from torch.utils.data import DataLoader
 
 from pipeline.config.classes.Config import Config
@@ -14,7 +16,7 @@ def data_loader_setup(
     shuffle: bool,
     config: Config,
     dataset_class: type[AccessLogsDataset],
-) -> tuple[AccessLogsDataset, DataLoader]:
+) -> Tuple[AccessLogsDataset, DataLoader]:
     """
     Set up a data loader for further usage.
 
@@ -33,7 +35,7 @@ def data_loader_setup(
                                                  data loader.
 
     Returns:
-        tuple[AccessLogsDataset, DataLoader]: Tuple of dataset instance
+        Tuple[AccessLogsDataset, DataLoader]: Tuple of dataset instance
                                               and data loader created.
     """
     # Get a dataset instance
