@@ -1,28 +1,28 @@
-from utils.logs.log_utils import info
+from torch import nn
+from torch.optim import Optimizer
+
+from pipeline.utils.logs.levels.info_logger import info
 
 
-def compute_backward(loss, optimizer):
+def compute_backward(loss: nn.Module, optimizer: Optimizer) -> None:
     """
-    Method to compute backward pass.
-    :param loss: The loss to back propagate.
-    :param optimizer: The optimizer to use.
-    :return:
+    Perform a backward pass and update model parameters.
+
+    This function computes gradients via backpropagation
+    from the provided loss and updates the model parameters
+    using the given optimizer.
+
+    Parameters:
+        loss (nn.Module): Loss tensor from which to compute gradients.
+        optimizer (Optimizer): Optimizer used to update model parameters.
+
+    Returns:
+        None
     """
-    # initial message
-    info("🔄 Backward pass started...")
+    # Compute gradients
+    loss.backward()
 
-    try:
-        # backward pass
-        loss.backward()
+    # Update model parameters
+    optimizer.step()
 
-        # optimize backward pass
-        optimizer.step()
-    except AttributeError as e:
-        raise AttributeError(f"AttributeError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
-
-    # show a successful message
-    info("🟢 Backward pass computed.")
+    info("Backward pass completed")
