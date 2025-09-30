@@ -1,9 +1,10 @@
 hardware:
   device: cpu
+
 data:
   general:
     seed: 42
-    mode: dynamic
+    mode: static
     requests:
       count: 30000
     keys:
@@ -82,7 +83,7 @@ model:
   general:
     features:
       count: 2
-    path: model/trained_lstm.pt
+    path: model/trained_lstm(static).pt
   params:
     hidden_size: 128
     num_layers: 2

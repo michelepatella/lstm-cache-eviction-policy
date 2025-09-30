@@ -1,62 +1,69 @@
+from typing import List
+
 import torch
-from utils.logs.log_utils import info
+from torch import Tensor
+
+from pipeline.utils.logs.levels.debug_logger import debug
+from pipeline.utils.logs.levels.error_logger import error
+from pipeline.utils.logs.levels.info_logger import info
 
 
-def calculate_top_k_accuracy(targets, outputs, config_settings):
+def calculate_top_k_accuracy(
+    targets: List[int],
+    outputs: Tensor,
+    top_k: int,
+) -> float:
     """
-    To calculate the top-k accuracy of the predictions.
-    :param targets: The targets.
-    :param outputs: The outputs of the model.
-    :param config_settings: The configuration settings.
-    :return: The top k-accuracy of the predictions.
-    """
-    # initial message
-    info("🔄 Top-k accuracy computation started...")
+    Compute top-k accuracy for a multi-class classification task.
 
+    This function calculates the proportion of samples for which
+    the true label is among the top-K predicted labels.
+
+    Parameters:
+        targets (List[int]): Ground truth class labels.
+        outputs (Tensor): Model outputs.
+        top_k (int): Number of top predictions to consider for accuracy.
+
+    Returns:
+        float: Top-k accuracy.
+
+    Raises:
+        RuntimeError: If an error occurs while computing top-k accuracy, e.g.,:
+            * Outputs tensor has incompatible shape.
+            * Top-k value is larger than number of classes.
+            * Number of targets differs from number of predictions.
+            * Targets or outputs are of incompatible type.
+            * Targets list is empty.
+    """
     try:
-        # prepare data
-        outputs_tensor = torch.stack(outputs)
+        debug(f"Targets length: {len(targets)}")
+        debug(f"Outputs shape: {outputs.shape}")
 
-        # extract top-k predictions
-        top_k_preds = (
-            torch.topk(
-                outputs_tensor,
-                k=config_settings.top_k,
-                dim=1,
-            )
-            .indices.cpu()
-            .numpy()
+        # Extract top-k predictions
+        top_k_predictions = (
+            torch.topk(outputs, k=top_k, dim=1).indices.cpu().numpy()
         )
 
-        # initialize the no. of correct predictions
-        correct = 0
+        debug(f"Top-{top_k} predictions shape: {top_k_predictions.shape}")
 
-        # count the correct predictions
-        for i in range(len(targets)):
-            # get the top-k predictions
-            top_k_i = top_k_preds[i][: config_settings.top_k]
+        # Count correct predictions
+        correct_predictions = 0
+        for i, target in enumerate(targets):
+            # Whether the current target is in the
+            # top-k predicted keys
+            if target in top_k_predictions[i][:top_k]:
+                correct_predictions += 1
+            debug(
+                f"Sample {i}: target={target}, top-k={top_k_predictions[i][:top_k]}, correct={target in top_k_predictions[i][:top_k]}"
+            )
 
-            # check if the target is contained into the
-            # top-k predictions
-            if targets[i] in top_k_i:
-                correct += 1
+        # Compute accuracy
+        top_k_accuracy = correct_predictions / len(targets)
 
-        # calculate the accuracy
-        accuracy = correct / len(targets)
-    except RuntimeError as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
-    except IndexError as e:
-        raise IndexError(f"IndexError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except ZeroDivisionError as e:
-        raise ZeroDivisionError(f"ZeroDivisionError: {e}.")
-    except ValueError as e:
-        raise ValueError(f"ValueError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+        info(f"Top-{top_k} accuracy computed: {top_k_accuracy:.4f}")
+    except (RuntimeError, IndexError, TypeError, ZeroDivisionError) as e:
+        msg = "Failed to compute top-k accuracy"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
 
-    # show a successful message
-    info("🟢 Top-k accuracy computed.")
-
-    return accuracy
+    return top_k_accuracy
