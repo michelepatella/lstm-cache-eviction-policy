@@ -8,6 +8,7 @@ from pipeline.config.classes.DataConfig import (
 from pipeline.config.classes.EvaluationConfig import (
     EvaluationConfig,
 )
+from pipeline.config.classes.HardwareConfig import HardwareConfig
 from pipeline.config.classes.InferenceConfig import (
     InferenceConfig,
 )
@@ -46,6 +47,7 @@ class Config(BaseModel):
     configuration settings.
     """
 
+    hardware: HardwareConfig
     data: DataConfig
     model: ModelConfig
     validation: ValidationConfig

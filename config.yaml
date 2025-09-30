@@ -1,3 +1,5 @@
+hardware:
+  device: cpu
 data:
   general:
     seed: 42

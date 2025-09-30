@@ -30,6 +30,9 @@ PERIOD = timedelta(days=1).total_seconds()
 SECONDS_IN_HOUR = timedelta(hours=1).total_seconds()
 HOURS_IN_DAY = timedelta(days=1).total_seconds() / SECONDS_IN_HOUR
 
+# Hardware
+DEVICES = ["cpu", "cuda", "mps"]
+
 # Data distribution
 DATA_DISTRIBUTION_STATIC_MODE = "static"
 DATA_DISTRIBUTION_DYNAMIC_MODE = "dynamic"
