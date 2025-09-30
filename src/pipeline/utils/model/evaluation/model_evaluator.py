@@ -1,6 +1,7 @@
 from typing import Dict, List, Tuple
 
 import torch
+from torch import Tensor
 from torch.utils.data import DataLoader
 
 from const import COMPUTE_METRICS_DEFAULT
@@ -21,8 +22,8 @@ def evaluate_model(
     device: torch.device,
     config: Config,
     compute_metrics: bool = COMPUTE_METRICS_DEFAULT,
-) -> Tuple[
-    float, Dict[str, int | float] | None, torch.Tensor, List[int], List[float]
+) -> tuple[
+    float, Dict[str, int | float] | None, List[Tensor], List[int], List[Tensor]
 ]:
     """
     Evaluate a model on a given data loader.
@@ -59,7 +60,7 @@ def evaluate_model(
         all_targets,
         all_outputs,
         all_vars,
-    ) = infer_batch(model, data_loader, criterion, device, config)
+    ) = infer_batch(model, data_loader, criterion, device)
 
     try:
         debug(f"Total loss accumulated: {total_loss:.4f}")

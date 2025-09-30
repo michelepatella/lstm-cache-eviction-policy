@@ -1,116 +1,110 @@
+from typing import List, Tuple
+
 import torch
+from torch.utils.data import DataLoader
+
+from const import MC_DROPOUT_SAMPLES_DEFAULT
+from pipeline.utils.logs.levels.debug_logger import debug
+from pipeline.utils.logs.levels.error_logger import error
+from pipeline.utils.logs.levels.info_logger import info
+from pipeline.utils.model.backpropagation.mc.mc_forward_runner import (
+    mc_forward_passes,
+)
 
 
 def infer_batch(
-    model,
-    loader,
-    criterion,
-    device,
-    config_settings,
-    mc_dropout_samples=1,
-):
+    model: torch.nn.Module,
+    data_loader: DataLoader,
+    criterion: torch.nn.Module,
+    device: torch.device,
+) -> Tuple[
+    float, List[int], List[int], List[torch.Tensor], List[torch.Tensor]
+]:
     """
-    Method to infer the batch.
-    :param model: The model to be used.
-    :param loader: The dataloader.
-    :param criterion: The loss function.
-    :param device: The device to be used.
-    :param config_settings: The configuration settings.
-    :param mc_dropout_samples: The number of MC dropout
-    samples (=1 means no MC dropout).
-    :return: The total loss, all the predictions,
-    all the targets, all the outputs returned by the model and the variances.
+    Perform inference on a data loader using MC Dropout forward passes.
+
+    This function iterates over the data loader, computes model outputs
+    using multiple stochastic forward passes (MC Dropout), calculates the
+    loss per batch, and accumulates predictions, targets, outputs, and
+    variances.
+
+    Parameters:
+        model (torch.nn.Module): The model to perform inference with.
+        data_loader (DataLoader): DataLoader providing batches of data.
+        criterion (torch.nn.Module): Loss function for computing batch loss.
+        device (torch.device): Device on which to perform computation.
+
+    Returns:
+        Tuple[float, List[int], List[int], List[torch.Tensor], List[torch.Tensor]]:
+            Tuple containing sum of batch losses, predicted class indices per sample,
+            ground truth labels per sample, model outputs per batch, and variances
+            from MC dropout.
+
+    Raises:
+        RuntimeError: If an error occurs during batch processing, e.g.,
+            * Batch unpacking fails.
+            * Moving tensors to device fails.
+            * Forward pass or loss computation fails.
+            * Argmax or conversion to NumPy fails.
     """
-    # initial message
-    info("🔄 Batch inference started...")
-
-    # debugging
-    debug(f"⚙️ Input loader batch size: {len(loader)}.")
-    debug(f"⚙️ MC dropout samples: {mc_dropout_samples}.")
-
-    # initialize data
+    # Initialization
     total_loss = 0.0
-    (all_preds, all_targets, all_outputs) = (
-        [],
-        [],
-        [],
-    )
-    all_vars = []
+    all_predictions: List[int] = []
+    all_targets: List[int] = []
+    all_outputs: List[torch.Tensor] = []
+    all_vars: List[torch.Tensor] = []
 
-    model.eval()
+    with torch.no_grad():
+        for batch_idx, batch in enumerate(data_loader):
+            try:
+                batch: Tuple[torch.Tensor, torch.Tensor, torch.Tensor]
 
-    try:
-        with torch.no_grad():
-            for (
-                x_features,
-                x_keys,
-                y_key,
-            ) in loader:
-                # debugging
-                debug(f"⚙️ Batch x_features shape: {x_features.shape}.")
-                debug(f"⚙️ Batch x_keys shape: {x_keys.shape}.")
-                debug(f"⚙️ Batch y_key shape: {y_key.shape}.")
+                # Unpack batch
+                features, keys, targets = batch
 
-                # move features and key on device
-                x_features = x_features.to(device)
-                x_keys = x_keys.to(device)
-                y_key = y_key.to(device)
-
-                (outputs_mean, outputs_var, _) = mc_forward_passes(
-                    model,
-                    (
-                        x_features,
-                        x_keys,
-                        y_key,
-                    ),
-                    device,
-                    config_settings,
-                    mc_dropout_samples,
+                debug(
+                    f"Processing batch {batch_idx}: features shape: {features.shape}, "
+                    f"keys shape: {keys.shape}, targets shape: {targets.shape}"
                 )
 
+                # Move tensors to device
+                features, keys, targets = (
+                    features.to(device),
+                    keys.to(device),
+                    targets.to(device),
+                )
+
+                # Perform MC Dropout forward passes
+                outputs_mean, outputs_var, _ = mc_forward_passes(
+                    model,
+                    (features, keys, targets),
+                    device,
+                    MC_DROPOUT_SAMPLES_DEFAULT,
+                )
+
+                debug(f"Outputs mean shape: {outputs_mean.shape}")
+
+                # Collect variance if available
                 if outputs_var is not None:
                     all_vars.extend(outputs_var.cpu())
+                    debug(f"Outputs variance shape: {outputs_var.shape}")
 
-                # compute the loss
-                loss = criterion(outputs_mean, y_key)
-
-                # debugging
-                debug(f"⚙️ Loss computed: {loss}.")
-
-                # check the loss
-                if loss is None:
-                    raise ValueError(
-                        "Error while computing average loss due to loss equals None."
-                    )
-
-                # update the total loss
+                # Compute batch loss
+                loss = criterion(outputs_mean, targets)
                 total_loss += loss.item()
 
-                # store predictions and target for metrics
-                preds = torch.argmax(outputs_mean, dim=1)
-                all_preds.extend(preds.cpu().numpy())
-                all_targets.extend(y_key.cpu().numpy())
+                debug(f"Batch {batch_idx} loss: {loss.item():.4f}")
+
+                # Store predictions, targets, and outputs
+                predictions = torch.argmax(outputs_mean, dim=1)
+                all_predictions.extend(predictions.cpu().numpy())
+                all_targets.extend(targets.cpu().numpy())
                 all_outputs.extend(outputs_mean.cpu())
-    except IndexError as e:
-        raise IndexError(f"IndexError: {e}.")
-    except ValueError as e:
-        raise ValueError(f"ValueError: {e}.")
-    except KeyError as e:
-        raise KeyError(f"KeyError: {e}.")
-    except AttributeError as e:
-        raise AttributeError(f"AttributeError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+            except (IndexError, ValueError, RuntimeError, TypeError) as e:
+                msg = "Failed to infer batch"
+                error("%s: %s", msg, e)
+                raise RuntimeError(msg) from e
 
-    # show a successful message
-    info("🟢 Batch inferred.")
+    info("Batch inference completed")
 
-    return (
-        total_loss,
-        all_preds,
-        all_targets,
-        all_outputs,
-        all_vars,
-    )
+    return total_loss, all_predictions, all_targets, all_outputs, all_vars

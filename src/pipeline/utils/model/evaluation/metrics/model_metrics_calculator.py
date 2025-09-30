@@ -27,7 +27,7 @@ from pipeline.utils.model.evaluation.metrics.top_k_calculator import (
 def compute_model_metrics(
     targets: List[int],
     predictions: List[int],
-    outputs: torch.Tensor,
+    outputs: List[torch.Tensor],
     config: Config,
 ) -> Dict[str, int | float]:
     """
@@ -43,7 +43,7 @@ def compute_model_metrics(
     Parameters:
         targets (List[int]): Ground truth class labels.
         predictions (List[int]): Predicted class labels.
-        outputs (torch.Tensor): Model outputs.
+        outputs (List[torch.Tensor]): Model outputs.
         config (Config): Configuration object.
 
     Returns:
