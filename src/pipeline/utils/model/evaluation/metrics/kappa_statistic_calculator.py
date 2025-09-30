@@ -41,6 +41,6 @@ def calculate_cohen_kappa_score(
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 
-    info(f"Cohen's kappa score calculated: {kappa:.4f}")
+    info(f"Cohen's kappa score calculated")
 
     return kappa
