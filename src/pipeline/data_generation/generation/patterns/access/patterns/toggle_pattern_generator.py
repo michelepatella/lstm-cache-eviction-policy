@@ -1,3 +1,5 @@
+from typing import List
+
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.error_logger import error
 from pipeline.utils.logs.levels.info_logger import info
@@ -9,7 +11,7 @@ def generate_toggle_pattern(
     toggle_backward: int,
     toggle_first_base_request: int,
     toggle_second_base_request: int,
-    requests: list[int],
+    requests: List[int],
     requests_count: int,
     first_key: int,
     keys_range_size: int,
@@ -33,7 +35,7 @@ def generate_toggle_pattern(
                                          for forward state.
         toggle_second_base_request (int): Steps back to pick the key
                                           for backward state.
-        requests (list[int]): List of keys requested so far.
+        requests (List[int]): List of keys requested so far.
         requests_count (int): Number of requests generated so far.
         first_key (int): Minimum key in the range.
         keys_range_size (int): Total number of available keys.

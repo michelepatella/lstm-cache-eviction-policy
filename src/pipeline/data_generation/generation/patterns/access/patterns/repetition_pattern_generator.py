@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 
 from pipeline.utils.logs.levels.debug_logger import debug
@@ -8,7 +10,7 @@ def generate_repetition_pattern(
     repetition_interval: int,
     repetition_offset: int,
     requests_count: int,
-    requests: list[int],
+    requests: List[int],
     keys_range: np.ndarray,
     num_keys: int,
 ) -> int:
@@ -28,7 +30,7 @@ def generate_repetition_pattern(
         repetition_offset (int): Integer determining how many steps back
                                  in requests to pick the next key.
         requests_count (int): Number of requests generated so far.
-        requests (list[int]): List of requests generated so far.
+        requests (List[int]): List of requests generated so far.
         keys_range (np.array): List of keys.
         num_keys (int): Total number of keys.
 

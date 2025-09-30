@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import List, Tuple
 
 import numpy as np
 
@@ -13,7 +13,7 @@ from pipeline.utils.logs.levels.info_logger import info
 
 def generate_static_requests(
     config: Config,
-) -> Tuple[list[int], np.ndarray]:
+) -> Tuple[List[int], np.ndarray]:
     """
     Generate static requests and
     corresponding timestamps in hours.
@@ -27,7 +27,7 @@ def generate_static_requests(
         config (Config): Configuration object.
 
     Returns:
-        Tuple[list[int], np.ndarray]: Keys requested and corresponding
+        Tuple[List[int], np.ndarray]: Keys requested and corresponding
                                       timestamps in hours.
     """
     # Use common helper to generate

@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 
 from pipeline.config.classes.Config import (
@@ -29,7 +31,7 @@ def generate_access_pattern(
     zipf_probs: np.ndarray,
     keys_range: np.ndarray,
     current_abs_seconds: float,
-    requests: list[int],
+    requests: List[int],
     config: Config,
 ) -> int:
     """
@@ -47,7 +49,7 @@ def generate_access_pattern(
                                  for keys.
         keys_range (np.ndarray): List of all available keys.
         current_abs_seconds (float): Current absolute time in seconds.
-        requests (list[int]): List of keys requested so far.
+        requests (List[int]): List of keys requested so far.
         config (Config): Configuration object.
 
     Returns:

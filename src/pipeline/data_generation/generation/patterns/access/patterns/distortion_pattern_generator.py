@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 
 from pipeline.utils.logs.levels.debug_logger import debug
@@ -9,7 +11,7 @@ def generate_distortion_pattern(
     distortion_interval: int,
     distortion_history: int,
     distortion_correction: int,
-    requests: list[int],
+    requests: List[int],
     requests_count: int,
     keys_range_size: int,
     first_key: int,
@@ -34,7 +36,7 @@ def generate_distortion_pattern(
         distortion_history (int): Steps back in the requests history
                                   to pick the key for correction.
         distortion_correction (int): Offset to apply during corrective access.
-        requests (list[int]): List of keys requested so far.
+        requests (List[int]): List of keys requested so far.
         requests_count (int): Number of requests generated so far.
         keys_range_size (int): Total number of available keys.
         first_key (int): Minimum key in the range.

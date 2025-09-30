@@ -1,3 +1,5 @@
+from typing import List
+
 import pandas as pd
 
 from pipeline.data_preprocessing.utils.dataset_cleaning_reporter import (
@@ -7,7 +9,7 @@ from pipeline.utils.logs.levels.error_logger import error
 from pipeline.utils.logs.levels.info_logger import info
 
 
-def remove_duplicates(df: pd.DataFrame, subset: list[str]) -> pd.DataFrame:
+def remove_duplicates(df: pd.DataFrame, subset: List[str]) -> pd.DataFrame:
     """
     Remove duplicates from dataset.
 
@@ -17,7 +19,7 @@ def remove_duplicates(df: pd.DataFrame, subset: list[str]) -> pd.DataFrame:
 
     Parameters:
         df (pd.DataFrame): Dataset to remove duplicates from.
-        subset (list[str]): Column(s) of dataset to remove
+        subset (List[str]): Column(s) of dataset to remove
                             duplicates from.
 
     Returns:

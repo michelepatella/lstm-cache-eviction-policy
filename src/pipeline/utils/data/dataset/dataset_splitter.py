@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import List, Tuple
 
 from torch.utils.data import Subset
 
@@ -12,8 +12,8 @@ from pipeline.utils.logs.levels.info_logger import info
 def split_training_set(
     training_set: AccessLogsDataset,
     config: Config,
-    training_idx: list[int] | None = None,
-    validation_idx: list[int] | None = None,
+    training_idx: List[int] | None = None,
+    validation_idx: List[int] | None = None,
 ) -> Tuple[Subset, Subset]:
     """
     Split the dataset into training and validation sets.
@@ -25,8 +25,8 @@ def split_training_set(
     Parameters:
         training_set (AccessLogsDataset): The dataset to split.
         config (Config): Configuration object.
-        training_idx (list[int] | None): Optional training set index.
-        validation_idx (list[int] | None): Optional validation set index.
+        training_idx (List[int] | None): Optional training set index.
+        validation_idx (List[int] | None): Optional validation set index.
 
     Returns:
         Tuple[Subset, Subset]: Training and validation subsets.

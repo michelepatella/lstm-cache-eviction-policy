@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 
 from pipeline.utils.logs.levels.debug_logger import debug
@@ -8,7 +10,7 @@ from pipeline.utils.logs.levels.info_logger import info
 def generate_memory_fallback_pattern(
     memory_interval: int,
     memory_offset: int,
-    requests: list[int],
+    requests: List[int],
     requests_count: int,
     keys_range: np.ndarray,
     zipf_probs: np.ndarray,
@@ -30,7 +32,7 @@ def generate_memory_fallback_pattern(
                                memory-based accesses.
         memory_offset (int): Steps back in request history to
                              pick the key.
-        requests (list[int]): List of keys requested so far.
+        requests (List[int]): List of keys requested so far.
         requests_count (int): Number of requests generated so far.
         keys_range (np.ndarray): List of available keys.
         zipf_probs (np.ndarray): List of normalized Zipfian probabilities

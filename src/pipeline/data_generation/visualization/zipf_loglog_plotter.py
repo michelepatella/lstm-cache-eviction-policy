@@ -1,4 +1,5 @@
 from collections import Counter
+from typing import List
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -17,7 +18,7 @@ from pipeline.utils.logs.levels.error_logger import error
 from pipeline.utils.logs.levels.info_logger import info
 
 
-def plot_zipf_loglog(requests: list[int]) -> None:
+def plot_zipf_loglog(requests: List[int]) -> None:
     """
     Plot Zipfian distribution via log-log.
 
@@ -27,7 +28,7 @@ def plot_zipf_loglog(requests: list[int]) -> None:
     the first keys than those to later ones.
 
     Parameters:
-        requests (list[int]): List of key accesses.
+        requests (List[int]): List of key accesses.
 
     Returns:
         None

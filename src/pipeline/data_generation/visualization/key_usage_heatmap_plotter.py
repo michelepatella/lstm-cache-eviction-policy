@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -23,7 +25,7 @@ from pipeline.utils.logs.levels.info_logger import info
 def plot_key_usage_heatmap(
     min_key: int,
     max_key: int,
-    requests: list[int],
+    requests: List[int],
     timestamps_hours: np.ndarray,
 ) -> None:
     """
@@ -35,7 +37,7 @@ def plot_key_usage_heatmap(
     Parameters:
         min_key (int): The lowest key.
         max_key (int): The greatest key.
-        requests (list[int]): List of key accesses.
+        requests (List[int]): List of key accesses.
         timestamps_hours (np.ndarray): Array of request timestamps in hours.
 
     Returns:

@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import List, Tuple
 
 import numpy as np
 
@@ -20,8 +20,8 @@ from pipeline.utils.logs.levels.info_logger import info
 
 def generate_requests_helper(
     config: Config,
-    alpha_range: list[float] = None,
-) -> Tuple[list[int], np.ndarray]:
+    alpha_range: List[float] = None,
+) -> Tuple[List[int], np.ndarray]:
     """
     Generate requests according
     to static or dynamic Zipfian distributions.
@@ -34,11 +34,11 @@ def generate_requests_helper(
 
     Parameters:
         config (Config): Configuration object.
-        alpha_range (list[float]): Optional list of alpha parameters
+        alpha_range (List[float]): Optional list of alpha parameters
                                    for dynamic requests.
 
     Returns:
-        Tuple[list[int], np.ndarray]: Generated requests and timestamps in hours.
+        Tuple[List[int], np.ndarray]: Generated requests and timestamps in hours.
     """
     # Retrieve keys range from configuration
     keys_config = config.data.general.keys

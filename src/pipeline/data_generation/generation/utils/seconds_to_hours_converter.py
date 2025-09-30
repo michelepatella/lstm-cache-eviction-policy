@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 
 from const import SECONDS_IN_HOUR
@@ -6,7 +8,7 @@ from pipeline.utils.logs.levels.info_logger import info
 
 
 def seconds_to_hours(
-    timestamps_seconds: list[float],
+    timestamps_seconds: List[float],
 ) -> np.ndarray:
     """
     Convert timestamps from seconds to hours.
@@ -15,7 +17,7 @@ def seconds_to_hours(
     seconds to hours.
 
     Parameters:
-        timestamps_seconds (list[float]): List of timestamps in seconds to be
+        timestamps_seconds (List[float]): List of timestamps in seconds to be
                                           converted.
 
     Returns:
