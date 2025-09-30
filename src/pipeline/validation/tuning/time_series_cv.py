@@ -18,8 +18,8 @@ from pipeline.utils.data.dataset.dataset_splitter import (
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.error_logger import error
 from pipeline.utils.logs.levels.info_logger import info
-from pipeline.utils.model.setup.model_training_setup import (
-    model_training_setup,
+from pipeline.utils.model.setup.model_components_setup import (
+    setup_model_components,
 )
 from pipeline.utils.training.n_epochs_trainer import train_n_epochs
 
@@ -118,7 +118,7 @@ def compute_time_series_cv(
             targets = extract_targets_from_data_loader(training_loader)
 
             # Setup model
-            device, criterion, model, optimizer = model_training_setup(
+            device, criterion, model, optimizer = setup_model_components(
                 params_box.model,
                 params_box.training.optimizer.learning_rate,
                 targets,

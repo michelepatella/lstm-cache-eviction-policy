@@ -1,37 +1,50 @@
-from utils.data.dataloader.dataloader_utils import (
-    extract_targets_from_dataloader,
+from torch.utils.data import DataLoader
+
+from pipeline.config.classes.Config import Config
+from pipeline.utils.data.dataloader.data_loader_targets_extractor import (
+    extract_targets_from_data_loader,
 )
-from utils.logs.log_utils import info
-from utils.model.setup.model_loader import (
-    load_model,
+from pipeline.utils.logs.levels.info_logger import info
+from pipeline.utils.model.setup.model_components_setup import (
+    setup_model_components,
 )
-from utils.model.setup.model_setup import (
-    model_setup,
-)
+from pipeline.utils.model.setup.model_loader import load_model
 
 
-def trained_model_setup(loader, config_settings):
+def trained_model_setup(data_loader: DataLoader, config: Config):
     """
-    Method to set up the trained model.
-    :param loader: The loader to be used.
-    :param config_settings: The configuration settings.
-    :return: The device to use, the loss function, and the model.
-    """
-    # initial message
-    info("🔄 Trained model setup started...")
+    Prepare a trained model for further usage.
 
-    # setup for the model
-    device, criterion, model, _ = model_setup(
-        config_settings.model_params,
-        config_settings.learning_rate,
-        extract_targets_from_dataloader(loader),
-        config_settings,
+    This function sets up the model components, extracts the target labels
+    from the provided data loader, initializes the model with the correct device,
+    loss function, and loads pre-trained weights.
+
+    Parameters:
+        data_loader (DataLoader): DataLoader containing the dataset to be used.
+        config (Config): Configuration object.
+
+    Returns:
+        Tuple[torch.device, nn.Module, nn.Module]: Tuple containing the device on which
+                                                   the model is loaded, loss function initialized
+                                                   with class weights, and pre-trained model.
+    """
+    # Prepare configuration
+    model_params = config.model.params
+    learning_rate = config.training.optimizer.params.learning_rate
+    model_path = config.model.general.path
+
+    # Extract targets from
+    # provided data loader
+    targets = extract_targets_from_data_loader(data_loader)
+
+    # Setup for model components
+    device, criterion, model, _ = setup_model_components(
+        model_params, learning_rate, targets, config
     )
 
-    # load the trained model
-    model = load_model(model, device, config_settings)
+    # Load the trained model
+    model = load_model(model, device, model_path)
 
-    # show a successful message
-    info("🟢 Trained model setup completed.")
+    info("Trained model setup completed")
 
-    return (device, criterion, model)
+    return device, criterion, model

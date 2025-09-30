@@ -1,10 +1,9 @@
-from typing import Dict
-
 import torch
 from torch import nn
 from torch.optim import Optimizer
 
 from pipeline.config.classes.Config import Config
+from pipeline.config.classes.ModelConfig import ModelParamsConfig
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.error_logger import error
 from pipeline.utils.logs.levels.info_logger import info
@@ -15,24 +14,25 @@ from pipeline.utils.model.utils.LSTM import LSTM
 from pipeline.utils.model.utils.optimizer_builder import build_optimizer
 
 
-def model_training_setup(
-    model_params: Dict[int | float | bool],
+def setup_model_components(
+    model_params: ModelParamsConfig,
     learning_rate: float,
     targets: torch.Tensor,
     config: Config,
 ) -> tuple[torch.device, nn.Module, nn.Module, Optimizer]:
     """
-    Set up the model training process.
+    Set up the model components for
+    further usage.
 
     This function performs all steps required to prepare
-    a PyTorch LSTM model for training:
+    PyTorch LSTM model components:
         - Selects device
         - Defines the CrossEntropyLoss with computed class weights
         - Instantiates the LSTM model and moves it to the device
         - Builds the optimizer for the model parameters
 
     Parameters:
-        model_params (Dict[int | float | bool]): Dictionary containing model
+        model_params (ModelParamsConfig): Dictionary containing model
                                                  hyperparameters.
         learning_rate (float): Learning rate for the optimizer.
         targets (torch.Tensor): Tensor of target labels for
@@ -47,6 +47,12 @@ def model_training_setup(
                                                               model on the selected device,
                                                               and optimizer configured for
                                                               the model parameters.
+    Raises:
+        RuntimeError: If an error occurs while setting up the model components, e.g.,:
+            * Failed to select device due to unsupported device type.
+            * Failed to define the loss function due to incompatible
+              class weights or device issues.
+            * Failed to move the model to the device.
     """
     # Prepare configuration
     device_type = config.hardware.device
