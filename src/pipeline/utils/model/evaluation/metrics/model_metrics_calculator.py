@@ -1,63 +1,106 @@
+from typing import Dict, List
+
+import torch
 from sklearn.metrics import (
     classification_report,
     confusion_matrix,
 )
-from utils.logs.log_utils import info
-from utils.model.evaluation.metrics.kappa_statistic_calculator import (
-    calculate_kappa_statistic,
+
+from const import (
+    MODEL_METRICS_CLASS_REPORT_NAME,
+    MODEL_METRICS_COHEN_KAPPA_SCORE,
+    MODEL_METRICS_CONFUSION_MATRIX,
+    MODEL_METRICS_TOP_K_ACCURACY,
 )
-from utils.model.evaluation.metrics.top_k_calculator import (
+from pipeline.config.classes.Config import Config
+from pipeline.utils.logs.levels.debug_logger import debug
+from pipeline.utils.logs.levels.error_logger import error
+from pipeline.utils.logs.levels.info_logger import info
+from pipeline.utils.model.evaluation.metrics.kappa_statistic_calculator import (
+    calculate_cohen_kappa_score,
+)
+from pipeline.utils.model.evaluation.metrics.top_k_calculator import (
     calculate_top_k_accuracy,
 )
 
 
-def compute_model_metrics(targets, predictions, outputs, config_settings):
+def compute_model_metrics(
+    targets: List[int],
+    predictions: List[int],
+    outputs: torch.Tensor,
+    config: Config,
+) -> Dict[str, int | float]:
     """
-    Method to compute metrics based on predictions and targets.
-    :param targets: The targets.
-    :param predictions: Predictions from model.
-    :param outputs: Probabilities from model.
-    :param config_settings: The configuration settings.
-    :return: The computed metrics.
+    Compute evaluation metrics for a model.
+
+    This function calculates multiple evaluation metrics for
+    a model, including:
+        - Class-wise precision, recall, f1-score (class report).
+        - Top-k accuracy.
+        - Confusion matrix.
+        - Cohen’s kappa score.
+
+    Parameters:
+        targets (List[int]): Ground truth class labels.
+        predictions (List[int]): Predicted class labels.
+        outputs (torch.Tensor): Model outputs.
+        config (Config): Configuration object.
+
+    Returns:
+        Dict[str, int | float]: Dictionary containing class report with precision,
+                                recall, f1-score, top-k accuracy, confusion matrix, and
+                                Cohen's kappa score.
+
+    Raises:
+        RuntimeError: If an error occurs while computing model metrics, e.g.,:
+            * Failed to compute class report due to mismatched lengths or invalid inputs.
+            * Failed to compute confusion matrix due to mismatched lengths or invalid inputs.
     """
-    # initial message
-    info("🔄 Metrics computation started...")
+    # Prepare configuration
+    top_k = config.evaluation.top_k
+
+    debug(f"Targets length: {len(targets)}")
+    debug(f"Predictions length: {len(predictions)}")
+    debug(f"Outputs shape: {outputs.shape}")
+    debug(f"Configured top-k: {top_k}")
 
     try:
-        # class-wise metrics
+        # Compute class report
         class_report = classification_report(
             targets,
             predictions,
             output_dict=True,
             zero_division=0,
         )
+    except (ValueError, TypeError) as e:
+        msg = "Failed to compute class report"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
 
-        # calculate the top-k accuracy
-        top_k_accuracy = calculate_top_k_accuracy(
-            targets, outputs, config_settings
-        )
+    # Calculate top-k accuracy
+    top_k_accuracy = calculate_top_k_accuracy(targets, outputs, top_k)
 
-        # compute the confusion matrix
+    try:
+        # Get confusion matrix
         conf_matrix = confusion_matrix(targets, predictions)
 
-        # calculate kappa statistic
-        kappa_statistic = calculate_kappa_statistic(targets, predictions)
-    except ValueError as e:
-        raise ValueError(f"ValueError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+        debug(f"Confusion matrix shape: {conf_matrix.shape}")
+    except (ValueError, TypeError) as e:
+        msg = "Failed to get confusion matrix"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
 
-    # collect metrics
+    # Calculate Cohen's kappa score
+    cohen_kappa_score = calculate_cohen_kappa_score(targets, predictions)
+
+    # Collect metrics in a dictionary
     metrics = {
-        "class_report": class_report,
-        "top_k_accuracy": top_k_accuracy,
-        "confusion_matrix": conf_matrix.tolist(),
-        "kappa_statistic": kappa_statistic,
+        MODEL_METRICS_CLASS_REPORT_NAME: class_report,
+        MODEL_METRICS_TOP_K_ACCURACY: top_k_accuracy,
+        MODEL_METRICS_CONFUSION_MATRIX: conf_matrix.tolist(),
+        MODEL_METRICS_COHEN_KAPPA_SCORE: cohen_kappa_score,
     }
 
-    # show a successful message
-    info("🟢 Metrics computed.")
+    info("Model metrics computed")
 
     return metrics

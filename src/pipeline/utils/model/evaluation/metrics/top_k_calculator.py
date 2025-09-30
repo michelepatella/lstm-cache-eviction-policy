@@ -1,7 +1,6 @@
 from typing import List
 
 import torch
-from torch import Tensor
 
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.error_logger import error
@@ -10,7 +9,7 @@ from pipeline.utils.logs.levels.info_logger import info
 
 def calculate_top_k_accuracy(
     targets: List[int],
-    outputs: Tensor,
+    outputs: torch.Tensor,
     top_k: int,
 ) -> float:
     """
