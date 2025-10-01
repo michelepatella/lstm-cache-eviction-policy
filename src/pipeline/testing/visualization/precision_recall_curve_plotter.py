@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.metrics import precision_recall_curve
@@ -16,7 +18,7 @@ from pipeline.utils.logs.levels.info_logger import info
 
 
 def plot_precision_recall_curve(
-    targets: np.ndarray, outputs: np.ndarray, num_keys: int
+    targets: List[int], outputs: np.ndarray, num_keys: int
 ) -> None:
     """
     Plot precision-recall curves.
@@ -26,7 +28,7 @@ def plot_precision_recall_curve(
     all the targets and the model predictions.
 
     Parameters:
-        targets (np.ndarray): True class labels (1D array).
+        targets (List[int]): True class labels (1D array).
         outputs (np.ndarray): Model outputs/probabilities (2D array).
         num_keys (int): Number of keys (i.e., classes).
 
@@ -34,7 +36,7 @@ def plot_precision_recall_curve(
         None
     """
     debug(
-        f"Targets and outputs shape for precision-recall curve: {targets.shape}, {outputs.shape}"
+        f"Targets and outputs length for precision-recall curve: {len(targets)}, {len(outputs)}"
     )
     debug(f"Number of keys for precision-recall curve: {num_keys}")
 

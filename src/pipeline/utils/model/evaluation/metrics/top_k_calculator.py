@@ -9,7 +9,7 @@ from pipeline.utils.logs.levels.info_logger import info
 
 def calculate_top_k_accuracy(
     targets: List[int],
-    outputs: torch.Tensor,
+    outputs: List[torch.Tensor],
     top_k: int,
 ) -> float:
     """
@@ -20,7 +20,7 @@ def calculate_top_k_accuracy(
 
     Parameters:
         targets (List[int]): Ground truth class labels.
-        outputs (Tensor): Model outputs.
+        outputs (List[torch.Tensor]): Model outputs.
         top_k (int): Number of top predictions to consider for accuracy.
 
     Returns:
@@ -36,11 +36,14 @@ def calculate_top_k_accuracy(
     """
     try:
         debug(f"Targets length: {len(targets)}")
-        debug(f"Outputs shape: {outputs.shape}")
+        debug(f"Outputs length: {len(outputs)}")
+
+        # Concatenate outputs in a single tensor
+        outputs_tensor = torch.cat(outputs, dim=0)
 
         # Extract top-k predictions
         top_k_predictions = (
-            torch.topk(outputs, k=top_k, dim=1).indices.cpu().numpy()
+            torch.topk(outputs_tensor, k=top_k, dim=1).indices.cpu().numpy()
         )
 
         debug(f"Top-{top_k} predictions shape: {top_k_predictions.shape}")

@@ -61,7 +61,7 @@ def compute_model_metrics(
 
     debug(f"Targets length: {len(targets)}")
     debug(f"Predictions length: {len(predictions)}")
-    debug(f"Outputs shape: {outputs.shape}")
+    debug(f"Outputs length: {len(outputs)}")
     debug(f"Configured top-k: {top_k}")
 
     try:

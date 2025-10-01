@@ -1,6 +1,5 @@
 from box import Box
 
-from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.info_logger import info
 
 
