@@ -74,16 +74,8 @@ def mc_forward_passes(
         for i in range(mc_dropout_samples):
             # Compute forward pass and get the
             # model outputs
-            if (
-                    isinstance(inputs, tuple) and
-                    len(inputs) == num_features + 1
-            ):
-                _, outputs = compute_forward(
-                    inputs,
-                    model,
-                    None,
-                    device
-                )
+            if isinstance(inputs, tuple) and len(inputs) == num_features + 1:
+                _, outputs = compute_forward(inputs, model, None, device)
             else:
                 outputs = model(*inputs)
 

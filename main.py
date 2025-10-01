@@ -14,7 +14,7 @@ setup_logs()
 config = prepare_config()
 
 # 2. GENERATE SYNTHETIC DATA
-#generate_data(config)
+generate_data(config)
 
 # 3. PREPROCESS GENERATED DATA
 preprocess_data(config)
@@ -23,7 +23,7 @@ preprocess_data(config)
 # config = validate_model(config)
 
 # 5. TRAIN THE MODEL
-#train_model(config)
+train_model(config)
 
 # 6. TEST THE STANDALONE MODEL
 test_model(config)

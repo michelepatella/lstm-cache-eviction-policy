@@ -2,6 +2,7 @@ from typing import List
 
 import numpy as np
 
+from const import PERIOD, SECONDS_IN_HOUR
 from pipeline.config.classes.Config import (
     Config,
 )
@@ -19,9 +20,6 @@ from pipeline.data_generation.generation.patterns.access.patterns.repetition_pat
 )
 from pipeline.data_generation.generation.patterns.access.patterns.toggle_pattern_generator import (
     generate_toggle_pattern,
-)
-from pipeline.data_generation.generation.utils.seconds_to_hours_converter import (
-    seconds_to_hours,
 )
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.info_logger import info
@@ -56,7 +54,7 @@ def generate_access_pattern(
         int: Index of the next key to be accessed.
     """
     # Get the current hour in day
-    current_hour_in_day = float(seconds_to_hours([current_abs_seconds])[0])
+    current_hour_in_day = (current_abs_seconds % PERIOD) / SECONDS_IN_HOUR
 
     debug(
         f"Current hour in day for access pattern generation: {current_hour_in_day}"
@@ -65,7 +63,7 @@ def generate_access_pattern(
     # Prepare general configuration
     first_key = int(keys_range[0])
     num_keys = len(keys_range)
-    keys_range_size = len(keys_range) - 1
+    keys_range_size = len(keys_range)
     requests_count = len(requests)
 
     debug(

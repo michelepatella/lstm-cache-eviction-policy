@@ -2,8 +2,14 @@ import torch
 from box import Box
 from sklearn.metrics import cohen_kappa_score
 
-from const import LOGS_TESTING_PHASE, TESTING_SPLIT_TYPE, MODEL_METRICS_CLASS_REPORT_NAME, MODEL_METRICS_TOP_K_ACCURACY, \
-    MODEL_METRICS_COHEN_KAPPA_SCORE, MODEL_METRICS_CONFUSION_MATRIX
+from const import (
+    LOGS_TESTING_PHASE,
+    MODEL_METRICS_CLASS_REPORT_NAME,
+    MODEL_METRICS_COHEN_KAPPA_SCORE,
+    MODEL_METRICS_CONFUSION_MATRIX,
+    MODEL_METRICS_TOP_K_ACCURACY,
+    TESTING_SPLIT_TYPE,
+)
 from pipeline.config.classes.Config import Config
 from pipeline.testing.visualization.confusion_matrix_plotter import (
     plot_confusion_matrix,

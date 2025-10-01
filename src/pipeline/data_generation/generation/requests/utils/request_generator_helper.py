@@ -2,14 +2,12 @@ from typing import List, Tuple
 
 import numpy as np
 
+from const import PERIOD, SECONDS_IN_HOUR
 from pipeline.config.classes.Config import (
     Config,
 )
 from pipeline.data_generation.generation.patterns.request_patterns_generator import (
     generate_pattern_requests,
-)
-from pipeline.data_generation.generation.utils.seconds_to_hours_converter import (
-    seconds_to_hours,
 )
 from pipeline.data_generation.generation.utils.zipf_props_calculator import (
     calculate_zipf_probs,
@@ -98,6 +96,8 @@ def generate_requests_helper(
         timestamps_seconds.extend(current_timestamps_seconds)
 
     # Convert timestamps from seconds to hours
-    timestamps_hours = seconds_to_hours(timestamps_seconds)
+    timestamps_hours = (
+        np.array(timestamps_seconds) % PERIOD
+    ) / SECONDS_IN_HOUR
 
     return requests, timestamps_hours

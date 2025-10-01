@@ -49,9 +49,7 @@ def split_training_set(
             debug(f"Total training set size: {total_training_size}")
 
             # Calculate training and validation sizes
-            training_size = int(
-                (1.0 - validation_perc) * total_training_size
-            )
+            training_size = int((1.0 - validation_perc) * total_training_size)
             validation_size = int(validation_perc * total_training_size)
 
             debug(

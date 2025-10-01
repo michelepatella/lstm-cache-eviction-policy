@@ -3,7 +3,8 @@ import pandas as pd
 
 from const import (
     COS_TIME_COLUMN,
-    SIN_TIME_COLUMN, HOURS_IN_DAY,
+    HOURS_IN_DAY,
+    SIN_TIME_COLUMN,
 )
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.error_logger import error

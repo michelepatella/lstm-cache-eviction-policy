@@ -1,5 +1,6 @@
 import numpy as np
 
+from const import SECONDS_IN_HOUR
 from pipeline.config.classes.Config import (
     Config,
 )
@@ -8,9 +9,6 @@ from pipeline.data_generation.generation.patterns.temporal.components.bursty_sca
 )
 from pipeline.data_generation.generation.patterns.temporal.components.periodic_component_calculator import (
     calculate_periodic_component,
-)
-from pipeline.data_generation.generation.utils.seconds_to_hours_converter import (
-    seconds_to_hours,
 )
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.info_logger import info
@@ -43,7 +41,7 @@ def generate_temporal_pattern(
 
     # Move from current seconds to
     # current hour in day
-    current_hour_in_day = float(seconds_to_hours([current_seconds_in_day])[0])
+    current_hour_in_day = current_seconds_in_day / SECONDS_IN_HOUR
 
     debug(
         f"Current hour in day: {current_hour_in_day} for temporal pattern generation"
