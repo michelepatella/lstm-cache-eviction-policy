@@ -75,6 +75,9 @@ MODEL_METRICS_TOP_K_ACCURACY = "top_k_accuracy"
 MODEL_METRICS_CONFUSION_MATRIX = "confusion_matrix"
 MODEL_METRICS_COHEN_KAPPA_SCORE = "cohen_kappa_score"
 
+# Class weight
+CLASS_WEIGHT_TYPE = "balanced"
+
 # Figures
 FIGURE_SIZE = 12
 FIGURE_TITLE_FONT_SIZE = 18

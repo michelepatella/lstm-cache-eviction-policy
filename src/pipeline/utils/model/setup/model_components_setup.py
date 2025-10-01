@@ -8,7 +8,7 @@ from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.error_logger import error
 from pipeline.utils.logs.levels.info_logger import info
 from pipeline.utils.model.utils.class_weights_calculator import (
-    calculate_class_weights,
+    calculate_class_weight,
 )
 from pipeline.utils.model.utils.LSTM import LSTM
 from pipeline.utils.model.utils.optimizer_builder import build_optimizer
@@ -70,7 +70,7 @@ def setup_model_components(
         raise RuntimeError(msg) from e
 
     # Compute class weights
-    class_weights = calculate_class_weights(targets, num_keys)
+    class_weights = calculate_class_weight(targets, num_keys)
 
     debug(f"Class weights computed: {class_weights}, for {num_keys} keys")
 

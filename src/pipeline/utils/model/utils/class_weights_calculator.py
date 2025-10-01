@@ -1,62 +1,70 @@
 import numpy as np
-import torch
 from sklearn.utils import compute_class_weight
-from utils.logs.log_utils import debug, info
+from torch import Tensor
+
+from const import CLASS_WEIGHT_TYPE
+from pipeline.utils.logs.levels.debug_logger import debug
+from pipeline.utils.logs.levels.error_logger import error
+from pipeline.utils.logs.levels.info_logger import info
 
 
-def calculate_class_weights(targets, config_settings):
+def calculate_class_weight(
+    targets: Tensor,
+    num_keys: int,
+) -> np.ndarray:
     """
-    Method to calculate the class weights.
-    :param targets: The targets for which to calculate the class weights.
-    :param config_settings: The configuration settings.
-    :return: The class weights calculated.
-    """
-    # initial message
-    info("🔄 Class weights calculation started...")
+    Compute balanced class weight for targets.
 
+    This function ensures that classes which appear less frequently
+    are assigned higher weights, useful for imbalanced classification.
+
+    Parameters:
+        targets (Tensor): Target labels.
+        num_keys (int): Number of classes (i.e., keys).
+
+    Returns:
+        np.ndarray: Array of class weights.
+
+    Raises:
+        RuntimeError: If an error occurs during computation, e.g.:
+            * Targets cannot be converted to a NumPy array.
+            * Computation of class weight fails.
+    """
     try:
-        # debugging
-        debug(f"⚙️ Number of classes: {config_settings.num_keys}.")
+        # Convert targets to NumPy array
+        targets_array = targets.cpu().numpy()
 
-        # be sure targets is a numpy array and shift them
-        targets = (
-            targets.cpu().numpy()
-            if isinstance(targets, torch.Tensor)
-            else targets
+        debug(
+            f"Targets converted to NumPy array with shape: {targets_array.shape}"
         )
 
-        # get the classes appearing in target list
-        present_classes = np.unique(targets)
+        # Identify present classes in targets
+        present_classes = np.unique(targets_array)
 
-        # debugging
-        debug(f"⚙️ Present classes: {present_classes}.")
+        debug(f"Present classes in targets: {present_classes}")
 
-        # compute the class weights
-        computed_weights = compute_class_weight(
-            class_weight="balanced",
+        # Compute class weight for present classes
+        weights = compute_class_weight(
+            class_weight=CLASS_WEIGHT_TYPE,
             classes=present_classes,
-            y=targets,
+            y=targets_array,
         )
 
-        # initialize weights to 1.0
-        class_weights = np.ones(
-            config_settings.num_keys,
-            dtype=np.float32,
-        )
+        debug(f"Weights for present classes: {weights}")
 
-        # update weights for appearing classes
-        for cls, weight in zip(present_classes, computed_weights):
+        # Initialize full class weights array
+        class_weights = np.ones(num_keys, dtype=np.float32)
+
+        # Update weights for appearing classes
+        for cls, weight in zip(present_classes, weights):
             class_weights[cls] = weight
-    except ValueError as e:
-        raise ValueError(f"ValueError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except IndexError as e:
-        raise IndexError(f"IndexError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
 
-    # show a successful message
-    info("🟢 Class weights calculated.")
+        debug(f"Class weight array: {class_weights}")
 
-    return class_weights
+        info("Class weight calculation completed")
+
+        return class_weights
+    except (ValueError, TypeError, AttributeError, IndexError) as e:
+        msg = "Failed to calculate class weight"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
