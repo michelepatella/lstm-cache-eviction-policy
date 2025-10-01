@@ -3,8 +3,7 @@ import pandas as pd
 
 from const import (
     COS_TIME_COLUMN,
-    PERIOD,
-    SIN_TIME_COLUMN,
+    SIN_TIME_COLUMN, HOURS_IN_DAY,
 )
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.error_logger import error
@@ -45,7 +44,7 @@ def encode_time_trigonometrically(
 
         # Normalize time to [0, 2pi] so that
         # to have time in cycle
-        time_in_cycle = (df[time_column] % PERIOD) / PERIOD
+        time_in_cycle = (df[time_column] % HOURS_IN_DAY) / HOURS_IN_DAY
 
         debug(
             f"(Time after normalization) Min: {time_in_cycle.min()}, Max: {time_in_cycle.max()}"

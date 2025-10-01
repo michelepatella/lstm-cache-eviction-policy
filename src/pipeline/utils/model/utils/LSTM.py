@@ -5,6 +5,7 @@ import torch.nn as nn
 
 from const import LSTM_PARAMETERS, MC_DROPOUT_DEFAULT
 from pipeline.config.classes.Config import Config
+from pipeline.config.classes.ModelConfig import ModelParamsConfig
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.error_logger import error
 from pipeline.utils.logs.levels.info_logger import info
@@ -12,7 +13,7 @@ from pipeline.utils.logs.levels.info_logger import info
 
 class LSTM(nn.Module):
     def _set_fields(
-        self: "LSTM", params: Dict[str, int | float | bool], config: Config
+        self: "LSTM", params: ModelParamsConfig, config: Config
     ) -> None:
         """
         Set LSTM model fields.
@@ -22,7 +23,7 @@ class LSTM(nn.Module):
 
         Parameters:
             self ("LSTM"): Current class instance.
-            params (Dict[str, int | float | bool]): Parameters specified for the model.
+            params (ModelParamsConfig): Parameters specified for the model.
             config (Config): Configuration object.
 
         Returns:
@@ -91,7 +92,7 @@ class LSTM(nn.Module):
             raise RuntimeError(msg) from e
 
     def __init__(
-        self: "LSTM", params: Dict[str, int | float | bool], config: Config
+        self: "LSTM", params: ModelParamsConfig, config: Config
     ) -> None:
         """
         Initialize the LSTM model.
@@ -103,7 +104,7 @@ class LSTM(nn.Module):
 
         Parameters:
             self ("LSTM"): Current class instance.
-            params (Dict[str, int | float | bool]): Model parameters.
+            params (ModelParamsConfig: Model parameters.
             config (Config): Configuration object.
 
         Returns:

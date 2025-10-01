@@ -44,7 +44,7 @@ def generate_requests_helper(
     keys_config = config.data.general.keys
     min_key = keys_config.min
     max_key = keys_config.max
-    keys_range = np.arange(min_key, max_key)
+    keys_range = np.arange(min_key, max_key + 1)
 
     debug(
         f"Requests generation for keys range: [{min_key}, {max_key}] (total: {len(keys_range)} keys)"

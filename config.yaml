@@ -1,5 +1,5 @@
 hardware:
-  device: cpu
+  device: mps
 
 data:
   general:

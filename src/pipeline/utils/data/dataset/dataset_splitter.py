@@ -37,6 +37,9 @@ def split_training_set(
             * Provided indices are out of bounds.
     """
     try:
+        # Prepare configuration
+        validation_perc = config.data.dataset.split.validation
+
         # If both or one of the two index is not
         # provided, calculate them
         if training_idx is None or validation_idx is None:
@@ -47,9 +50,9 @@ def split_training_set(
 
             # Calculate training and validation sizes
             training_size = int(
-                (1.0 - config.validation_perc) * total_training_size
+                (1.0 - validation_perc) * total_training_size
             )
-            validation_size = int(config.validation_perc * total_training_size)
+            validation_size = int(validation_perc * total_training_size)
 
             debug(
                 f"Calculated training size: {training_size}, validation size: {validation_size}"

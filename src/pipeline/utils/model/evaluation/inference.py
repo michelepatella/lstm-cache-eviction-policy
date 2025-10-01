@@ -4,6 +4,7 @@ import torch
 from torch.utils.data import DataLoader
 
 from const import MC_DROPOUT_SAMPLES_DEFAULT
+from pipeline.config.classes.Config import Config
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.error_logger import error
 from pipeline.utils.logs.levels.info_logger import info
@@ -17,6 +18,7 @@ def infer_batch(
     data_loader: DataLoader,
     criterion: torch.nn.Module,
     device: torch.device,
+    config: Config
 ) -> Tuple[
     float, List[int], List[int], List[torch.Tensor], List[torch.Tensor]
 ]:
@@ -33,6 +35,7 @@ def infer_batch(
         data_loader (DataLoader): DataLoader providing batches of data.
         criterion (torch.nn.Module): Loss function for computing batch loss.
         device (torch.device): Device on which to perform computation.
+        config (Config): Configuration object.
 
     Returns:
         Tuple[float, List[int], List[int], List[torch.Tensor], List[torch.Tensor]]:
@@ -47,6 +50,9 @@ def infer_batch(
             * Forward pass or loss computation fails.
             * Argmax or conversion to NumPy fails.
     """
+    # Prepare configuration
+    num_features = config.model.general.features.count
+
     # Initialization
     total_loss = 0.0
     all_predictions: List[int] = []
@@ -79,6 +85,7 @@ def infer_batch(
                     model,
                     (features, keys, targets),
                     device,
+                    num_features,
                     MC_DROPOUT_SAMPLES_DEFAULT,
                 )
 

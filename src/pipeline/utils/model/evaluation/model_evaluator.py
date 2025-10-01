@@ -60,7 +60,7 @@ def evaluate_model(
         all_targets,
         all_outputs,
         all_vars,
-    ) = infer_batch(model, data_loader, criterion, device)
+    ) = infer_batch(model, data_loader, criterion, device, config)
 
     try:
         debug(f"Total loss accumulated: {total_loss:.4f}")

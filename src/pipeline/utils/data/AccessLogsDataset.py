@@ -289,8 +289,6 @@ class AccessLogsDataset(Dataset):
             error("%s: %s", msg, e)
             raise RuntimeError(msg) from e
 
-        info("AccessLogsDataset item retrieved")
-
         return x_features, x_keys, y_key
 
     @classmethod

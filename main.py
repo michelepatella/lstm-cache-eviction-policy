@@ -4,6 +4,7 @@ from pipeline.config import (
 from pipeline.data_generation import generate_data
 from pipeline.data_preprocessing import preprocess_data
 from pipeline.testing import test_model
+from pipeline.training import train_model
 from pipeline.utils.logs.logs_setup import setup_logs
 
 # 0. LOGS SETUP
@@ -16,13 +17,13 @@ config = prepare_config()
 #generate_data(config)
 
 # 3. PREPROCESS GENERATED DATA
-#preprocess_data(config)
+preprocess_data(config)
 
 # 4. FIND THE BEST HYPERPARAMETERS
 # config = validate_model(config)
 
 # 5. TRAIN THE MODEL
-# training(config)
+#train_model(config)
 
 # 6. TEST THE STANDALONE MODEL
 test_model(config)

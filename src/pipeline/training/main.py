@@ -55,7 +55,7 @@ def train_model(config: Config) -> None:
     training_set, training_loader = data_loader_setup(
         TRAINING_SPLIT_TYPE,
         training_batch_size,
-        training_shuffle,
+        validation_shuffle,
         config,
         AccessLogsDataset,
     )

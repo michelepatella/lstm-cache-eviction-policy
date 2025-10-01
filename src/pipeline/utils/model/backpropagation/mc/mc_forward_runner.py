@@ -19,6 +19,7 @@ def mc_forward_passes(
         Tuple[torch.Tensor, torch.Tensor],
     ],
     device: torch.device,
+    num_features: int,
     mc_dropout_samples: int = MC_DROPOUT_SAMPLES_DEFAULT,
 ) -> Tuple[torch.Tensor, torch.Tensor | None, torch.Tensor]:
     """
@@ -36,6 +37,7 @@ def mc_forward_passes(
             Tuple[torch.Tensor, torch.Tensor],
         ]): Model inputs.
         device (torch.device): Device on which to run the forward passes.
+        num_features (int): Number of features to use.
         mc_dropout_samples (int): Number of MC Dropout samples to perform.
 
     Returns:
@@ -72,7 +74,18 @@ def mc_forward_passes(
         for i in range(mc_dropout_samples):
             # Compute forward pass and get the
             # model outputs
-            _, outputs = compute_forward(inputs, model, None, device)
+            if (
+                    isinstance(inputs, tuple) and
+                    len(inputs) == num_features + 1
+            ):
+                _, outputs = compute_forward(
+                    inputs,
+                    model,
+                    None,
+                    device
+                )
+            else:
+                outputs = model(*inputs)
 
             # Save the current model outputs
             outputs_mc.append(outputs.unsqueeze(0))

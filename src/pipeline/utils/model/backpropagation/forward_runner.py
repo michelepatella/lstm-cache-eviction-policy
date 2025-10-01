@@ -44,34 +44,24 @@ def compute_forward(
     Raises:
         RuntimeError: If an error occurs while calculating the loss.
     """
-    y_key = None
+    # Unpack inputs
+    x_features, x_keys, y_key = inputs
 
-    # Check if inputs include target
-    if isinstance(inputs, tuple) and len(inputs) == model.num_features + 1:
-        # Unpack the input
-        x_features, x_keys, y_key = inputs
+    debug(f"Input features shape: {x_features.shape}")
+    debug(f"Input keys shape: {x_keys.shape}")
+    debug(f"Target batch shape: {y_key.shape}")
 
-        debug(f"Input features shape: {x_features.shape}")
-        debug(f"Input keys shape: {x_keys.shape}")
-        debug(f"Target batch shape: {y_key.shape}")
+    # Move to device
+    x_features = x_features.to(device)
+    x_keys = x_keys.to(device)
+    y_key = y_key.to(device)
 
-        # Move to device
-        x_features = x_features.to(device)
-        x_keys = x_keys.to(device)
-        y_key = y_key.to(device)
+    debug(f"Inputs moved to device: {device}")
 
-        debug(f"Inputs moved to device: {device}")
+    # Forward pass
+    outputs = model(x_features, x_keys)
 
-        # Forward pass
-        outputs = model(x_features, x_keys)
-
-        debug(f"Model output shape: {outputs.shape}")
-    else:
-        # Assume inputs are directly
-        # compatible with model
-        outputs = model(*inputs)
-
-        debug(f"Model output shape: {outputs.shape}")
+    debug(f"Model output shape: {outputs.shape}")
 
     try:
         # Compute loss if criterion and target provided
