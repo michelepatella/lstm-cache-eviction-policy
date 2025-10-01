@@ -97,7 +97,7 @@ def setup_model_components(
         raise RuntimeError(msg) from e
 
     # Build optimizer
-    optimizer = build_optimizer(model, learning_rate, optimizer_type)
+    optimizer = build_optimizer(model, learning_rate, optimizer_type, config)
 
     debug(f"Optimizer created: {optimizer}")
 

@@ -1,55 +1,81 @@
 import torch
-from utils.logs.log_utils import debug, info
+from torch import nn
+from torch.optim import Optimizer
+
+from const import ADAM_OPTIMIZER, ADAMW_OPTIMIZER
+from pipeline.config.classes.Config import Config
+from pipeline.utils.logs.levels.debug_logger import debug
+from pipeline.utils.logs.levels.error_logger import error
+from pipeline.utils.logs.levels.info_logger import info
 
 
-def build_optimizer(model, learning_rate, config_settings):
+def build_optimizer(
+    model: nn.Module, learning_rate: float, optimizer_type: str, config: Config
+) -> Optimizer:
     """
-    Method to build the optimizer.
-    :param model: Model for which the optimizer will be built.
-    :param learning_rate: Learning rate.
-    :param config_settings: The configuration settings.
-    :return: The created optimizer.
+    Build an optimizer for the given model.
+
+    This function creates an optimizer based on the provided type.
+    Supports 'adam', 'adamw', and 'sgd' optimizers.
+
+    Parameters:
+        model (nn.Module): The model for which to create the optimizer.
+        learning_rate (float): Learning rate for the optimizer.
+        optimizer_type (str): Optimizer type to be instantiated.
+        config (Config): Configuration object.
+
+    Returns:
+        Optimizer: Initialized optimizer.
+
+    Raises:
+        RuntimeError: If an error occurs while initializing optimizer e.g.,:
+            * Model parameters are not valid for optimizer.
+            * Invalid numeric parameters.
     """
-    # initial message
-    info("🔄 Optimizer building started...")
-
-    # debugging
-    debug(f"⚙️ Learning rate: {learning_rate}.")
-    debug(f"⚙️ Optimizer type: {config_settings.optimizer_type}.")
-
     try:
-        # define the optimizer
-        if config_settings.optimizer_type == "adam":
-            optimizer = torch.optim.Adam(
-                model.parameters(),
-                lr=learning_rate,
-            )
-        elif config_settings.optimizer_type == "adamw":
-            optimizer = torch.optim.AdamW(
-                model.parameters(),
-                lr=learning_rate,
-                weight_decay=config_settings.weight_decay,
-            )
-        else:
-            optimizer = torch.optim.SGD(
-                model.parameters(),
-                lr=learning_rate,
-                momentum=config_settings.momentum,
-            )
-    except ValueError as e:
-        raise ValueError(f"ValueError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except UnboundLocalError as e:
-        raise UnboundLocalError(f"UnboundLocalError: {e}.")
-    except KeyError as e:
-        raise KeyError(f"KeyError: {e}.")
-    except AssertionError as e:
-        raise AssertionError(f"AssertionError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+        debug(f"Optimizer type: {optimizer_type}")
+        debug(f"Learning rate for optimizer: {learning_rate}")
 
-    # show a successful message
-    info("🟢 Optimizer building completed.")
+        # Retrieve model parameters
+        model_params = model.parameters()
+
+        if optimizer_type == ADAM_OPTIMIZER:
+            # Instantiate Adam optimizer
+            optimizer = torch.optim.Adam(
+                model_params,
+                lr=learning_rate,
+            )
+
+            debug("Adam optimizer selected")
+        elif optimizer_type == ADAMW_OPTIMIZER:
+            # Retrieve weight decay
+            weight_decay = config.training.optimizer.params.weight_decay
+
+            # Instantiate AdamW optimizer
+            optimizer = torch.optim.AdamW(
+                model_params,
+                lr=learning_rate,
+                weight_decay=weight_decay,
+            )
+
+            debug(f"AdamW optimizer selected, weight decay: {weight_decay}")
+        else:
+            # Retrieve momentum
+            momentum = config.training.optimizer.params.momentum
+
+            # Instantiate SGD
+            optimizer = torch.optim.SGD(
+                model_params,
+                lr=learning_rate,
+                momentum=momentum,
+            )
+
+            debug(f"SGD optimizer selected, momentum: {momentum}")
+    except (TypeError, ValueError) as e:
+        msg = "Failed to build optimizer"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
+
+    info("Optimizer built")
 
     return optimizer

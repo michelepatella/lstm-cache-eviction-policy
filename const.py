@@ -56,10 +56,14 @@ MISSING_VALUES_REMOVAL_DROPNA_AXIS = 0
 MISSING_VALUES_REMOVAL_DROPNA_HOW: Literal["any", "all"] = "any"
 
 # Training
+ADAM_OPTIMIZER = "adam"
+ADAMW_OPTIMIZER = "adamw"
+SGD_OPTIMIZER = "sgd"
+
 TRAINING_OPTIMIZERS = [
-    "adam",
-    "adamw",
-    "sgd",
+    ADAM_OPTIMIZER,
+    ADAMW_OPTIMIZER,
+    SGD_OPTIMIZER,
 ]
 
 # Validation
