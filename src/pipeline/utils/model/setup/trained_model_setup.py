@@ -1,3 +1,7 @@
+from typing import Tuple
+
+import torch
+from torch import nn
 from torch.utils.data import DataLoader
 
 from pipeline.config.classes.Config import Config
@@ -11,7 +15,9 @@ from pipeline.utils.model.setup.model_components_setup import (
 from pipeline.utils.model.setup.model_loader import load_model
 
 
-def trained_model_setup(data_loader: DataLoader, config: Config):
+def trained_model_setup(
+    data_loader: DataLoader, config: Config
+) -> Tuple[torch.device, nn.Module, nn.Module]:
     """
     Prepare a trained model for further usage.
 
