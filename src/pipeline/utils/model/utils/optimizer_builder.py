@@ -28,7 +28,7 @@ def build_optimizer(
         Optimizer: Initialized optimizer.
 
     Raises:
-        RuntimeError: If an error occurs while initializing optimizer e.g.,:
+        RuntimeError: If an error occurs while initializing optimizer e.g.:
             * Model parameters are not valid for optimizer.
             * Invalid numeric parameters.
     """

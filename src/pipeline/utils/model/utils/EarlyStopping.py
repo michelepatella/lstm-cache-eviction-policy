@@ -19,6 +19,10 @@ class EarlyStopping:
         """
         Initialize EarlyStopping with configuration.
 
+        This function initializes EarlyStopping, setting
+        patience and delta, as well as initializing the best
+        average loss, counter, and early stropping triggering flag.
+
         Parameters:
             self ("EarlyStopping"): Current class instance.
             config (Config): Configuration object.

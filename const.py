@@ -82,6 +82,18 @@ MODEL_METRICS_COHEN_KAPPA_SCORE = "cohen_kappa_score"
 # Class weight
 CLASS_WEIGHT_TYPE = "balanced"
 
+# Model
+LSTM_PARAMETERS = [
+    "hidden_size",
+    "num_layers",
+    "bias",
+    "batch_first",
+    "dropout",
+    "bidirectional",
+    "proj_size",
+]
+MC_DROPOUT_DEFAULT = False
+
 # Figures
 FIGURE_SIZE = 12
 FIGURE_TITLE_FONT_SIZE = 18

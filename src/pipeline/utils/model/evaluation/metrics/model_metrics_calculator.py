@@ -52,7 +52,7 @@ def compute_model_metrics(
                                 Cohen's kappa score.
 
     Raises:
-        RuntimeError: If an error occurs while computing model metrics, e.g.,:
+        RuntimeError: If an error occurs while computing model metrics, e.g.:
             * Failed to compute class report due to mismatched lengths or invalid inputs.
             * Failed to compute confusion matrix due to mismatched lengths or invalid inputs.
     """

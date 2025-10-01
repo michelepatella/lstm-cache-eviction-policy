@@ -48,7 +48,7 @@ def setup_model_components(
                                                               and optimizer configured for
                                                               the model parameters.
     Raises:
-        RuntimeError: If an error occurs while setting up the model components, e.g.,:
+        RuntimeError: If an error occurs while setting up the model components, e.g.:
             * Failed to select device due to unsupported device type.
             * Failed to define the loss function due to incompatible
               class weights or device issues.

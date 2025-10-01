@@ -35,6 +35,6 @@ def enable_mc_dropout(model: torch.nn.Module) -> None:
         raise RuntimeError(msg) from e
 
     # Set a flag indicating MC Dropout is active
-    model.use_mc_dropout = True
+    model.mc_dropout = True
 
     info("MC Dropout enabled for model")

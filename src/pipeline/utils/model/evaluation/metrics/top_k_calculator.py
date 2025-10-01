@@ -27,7 +27,7 @@ def calculate_top_k_accuracy(
         float: Top-k accuracy.
 
     Raises:
-        RuntimeError: If an error occurs while computing top-k accuracy, e.g.,:
+        RuntimeError: If an error occurs while computing top-k accuracy, e.g.:
             * Outputs tensor has incompatible shape.
             * Top-k value is larger than number of classes.
             * Number of targets differs from number of predictions.

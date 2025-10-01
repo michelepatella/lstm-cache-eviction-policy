@@ -41,7 +41,7 @@ def infer_batch(
             from MC dropout.
 
     Raises:
-        RuntimeError: If an error occurs during batch processing, e.g.,
+        RuntimeError: If an error occurs during batch processing, e.g.:
             * Batch unpacking fails.
             * Moving tensors to device fails.
             * Forward pass or loss computation fails.
