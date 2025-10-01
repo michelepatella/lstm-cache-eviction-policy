@@ -71,6 +71,11 @@ class LSTM(nn.Module):
 
             debug(f"Input size for LSTM model: {self.input_size}")
 
+            # Set number of features
+            self.num_features = num_features
+
+            debug(f"Number of features for LSTM model: {self.num_features}")
+
             # Apply embedding with specified dimension
             self.embedding_dim = embedding_dim
             self.embedding = nn.Embedding(self.num_keys, self.embedding_dim)

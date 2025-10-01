@@ -83,7 +83,7 @@ model:
   general:
     features:
       count: 2
-    path: model/trained_lstm(static).pt
+    path: models/trained_lstm(static).pt
   params:
     hidden_size: 128
     num_layers: 2

@@ -38,13 +38,11 @@ def calculate_top_k_accuracy(
         debug(f"Targets length: {len(targets)}")
         debug(f"Outputs length: {len(outputs)}")
 
-        # Concatenate outputs in a single tensor
-        outputs_tensor = torch.cat(outputs, dim=0)
+        # Stack outputs in a single 2D tensor
+        outputs_tensor = torch.stack(outputs, dim=0)
 
-        # Extract top-k predictions
-        top_k_predictions = (
-            torch.topk(outputs_tensor, k=top_k, dim=1).indices.cpu().numpy()
-        )
+        # Extract top-k predictions along the class dimension
+        top_k_predictions = torch.topk(outputs_tensor, k=top_k, dim=1).indices.cpu().numpy()
 
         debug(f"Top-{top_k} predictions shape: {top_k_predictions.shape}")
 

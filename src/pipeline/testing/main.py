@@ -1,7 +1,9 @@
 import torch
 from box import Box
+from sklearn.metrics import cohen_kappa_score
 
-from const import LOGS_TESTING_PHASE, TESTING_SPLIT_TYPE
+from const import LOGS_TESTING_PHASE, TESTING_SPLIT_TYPE, MODEL_METRICS_CLASS_REPORT_NAME, MODEL_METRICS_TOP_K_ACCURACY, \
+    MODEL_METRICS_COHEN_KAPPA_SCORE, MODEL_METRICS_CONFUSION_MATRIX
 from pipeline.config.classes.Config import Config
 from pipeline.testing.visualization.confusion_matrix_plotter import (
     plot_confusion_matrix,
@@ -83,11 +85,17 @@ def test_model(config: Config) -> None:
     # Box for model evaluation metrics
     metrics = Box(metrics)
 
+    # Retrieve metrics
+    class_report = getattr(metrics, MODEL_METRICS_CLASS_REPORT_NAME)
+    top_k_accuracy = getattr(metrics, MODEL_METRICS_TOP_K_ACCURACY)
+    kappa_score = getattr(metrics, MODEL_METRICS_COHEN_KAPPA_SCORE)
+    confusion_matrix = getattr(metrics, MODEL_METRICS_CONFUSION_MATRIX)
+
     # Show report to display testing results
     generate_model_evaluation_report(
-        metrics.class_report,
-        metrics.top_k_accuracy,
-        metrics.kappa_statistic,
+        class_report,
+        top_k_accuracy,
+        kappa_score,
         avg_loss,
         top_k,
     )
@@ -104,6 +112,6 @@ def test_model(config: Config) -> None:
         stacked_outputs,
         num_keys,
     )
-    plot_confusion_matrix(metrics.confusion_matrix)
+    plot_confusion_matrix(confusion_matrix)
 
     info("Model testing completed")
