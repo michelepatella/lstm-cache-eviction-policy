@@ -151,7 +151,8 @@ class LSTM(nn.Module):
         self.fc = nn.Linear(self.hidden_size, self.num_keys)
 
         debug(
-            f"Fully connected layer instantiated (in_features={self.hidden_size}, out_features={self.num_keys})"
+            f"Fully connected layer instantiated (in_features={self.hidden_size},"
+            f" out_features={self.num_keys})"
         )
 
         info("LSTM model initialized")

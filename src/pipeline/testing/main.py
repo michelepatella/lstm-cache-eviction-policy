@@ -1,5 +1,5 @@
 import torch
-from box import Box
+from box.box import Box
 
 from const import (
     LOGS_TESTING_PHASE,

@@ -263,7 +263,7 @@ class DatasetProcessedPathsConfig(BaseModel):
 
 class DatasetPathsConfig(BaseModel):
     raw: DatasetRawPathsConfig
-    preprocessed: DatasetProcessedPathsConfig
+    processed: DatasetProcessedPathsConfig
 
 
 class DatasetConfig(BaseModel):

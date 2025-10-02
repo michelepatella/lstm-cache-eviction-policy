@@ -1,4 +1,4 @@
-from box import Box
+from box.box import Box
 
 from pipeline.utils.logs.levels.info_logger import info
 

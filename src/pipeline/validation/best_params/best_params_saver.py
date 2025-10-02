@@ -1,6 +1,6 @@
 from typing import Any, Dict
 
-from box import Box
+from box.box import Box
 
 from pipeline.config.classes.Config import Config
 from pipeline.utils.logs.levels.debug_logger import debug
