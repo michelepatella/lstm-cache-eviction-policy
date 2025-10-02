@@ -1,4 +1,4 @@
-from const import DATA_DISTRIBUTION_STATIC_MODE
+from const import DATA_DISTRIBUTION_STATIC_MODE, DATASET_RAW_TYPE
 from pipeline.config.classes.Config import (
     Config,
 )
@@ -7,7 +7,7 @@ from pipeline.utils.logs.levels.error_logger import error
 from pipeline.utils.logs.levels.info_logger import info
 
 
-def get_dataset_path(config: Config) -> str:
+def get_dataset_path(dataset_type: str, config: Config) -> str:
     """
     Retrieve the dataset path.
 
@@ -15,6 +15,7 @@ def get_dataset_path(config: Config) -> str:
     dynamically, based on data distribution mode.
 
     Parameters:
+        dataset_type (str): Type of dataset requested (raw or preprocessed).
         config (Config): Configuration object.
 
     Returns:
@@ -36,10 +37,21 @@ def get_dataset_path(config: Config) -> str:
         # data distribution mode
         if data_distribution_mode == DATA_DISTRIBUTION_STATIC_MODE:
             # For static data distribution mode
-            dataset_path = config.data.dataset.paths.static
+            if dataset_type == DATASET_RAW_TYPE:
+                # For raw dataset
+                dataset_path = config.data.dataset.paths.raw.static
+            else:
+                # For preprocessed dataset
+                dataset_path = config.data.dataset.paths.preprocessed.static
         else:
             # For dynamic data distribution mode
-            dataset_path = config.data.dataset.paths.dynamic
+            # For static data distribution mode
+            if dataset_type == DATASET_RAW_TYPE:
+                # For raw dataset
+                dataset_path = config.data.dataset.paths.raw.dynamic
+            else:
+                # For preprocessed dataset
+                dataset_path = config.data.dataset.paths.preprocessed.dynamic
 
         info(f"Dataset path retrieved: {dataset_path}")
 

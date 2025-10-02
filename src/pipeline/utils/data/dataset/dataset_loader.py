@@ -11,7 +11,7 @@ from pipeline.utils.logs.levels.error_logger import error
 from pipeline.utils.logs.levels.info_logger import info
 
 
-def load_dataset(config: Config) -> pd.DataFrame:
+def load_dataset(dataset_type: str, config: Config) -> pd.DataFrame:
     """
     Load existing dataset.
 
@@ -21,6 +21,7 @@ def load_dataset(config: Config) -> pd.DataFrame:
     pandas DataFrame.
 
     Parameters:
+        dataset_type (str): Dataset type to be loaded.
         config (Config): Configuration object.
 
     Returns:
@@ -33,7 +34,7 @@ def load_dataset(config: Config) -> pd.DataFrame:
             * An error occurred while parsing the dataset file.
     """
     # Retrieve path to load dataset from
-    dataset_path = get_dataset_path(config)
+    dataset_path = get_dataset_path(dataset_type, config)
 
     debug(f"Path to load dataset from: {dataset_path}")
 

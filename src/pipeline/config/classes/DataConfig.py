@@ -251,9 +251,19 @@ class SplitConfig(BaseModel):
     validation: confloat(ge=0, le=1)
 
 
-class DatasetPathsConfig(BaseModel):
+class DatasetRawPathsConfig(BaseModel):
     static: str
     dynamic: str
+
+
+class DatasetPreprocessedPathsConfig(BaseModel):
+    static: str
+    dynamic: str
+
+
+class DatasetPathsConfig(BaseModel):
+    raw: DatasetRawPathsConfig
+    preprocessed: DatasetPreprocessedPathsConfig
 
 
 class DatasetConfig(BaseModel):

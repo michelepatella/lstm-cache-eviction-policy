@@ -11,7 +11,7 @@ from pipeline.utils.logs.levels.error_logger import error
 from pipeline.utils.logs.levels.info_logger import info
 
 
-def save_dataset(df: pd.DataFrame, config: Config) -> None:
+def save_dataset(df: pd.DataFrame, dataset_type: str, config: Config) -> None:
     """
     Save Pandas dataframe to CSV dataset.
 
@@ -21,6 +21,7 @@ def save_dataset(df: pd.DataFrame, config: Config) -> None:
     Parameters:
         df (pd.DataFrame): Pandas dataframe to be saved as
                            CSV dataset.
+        dataset_type (str): Dataset type to be saved.
         config (Config): Configuration object.
 
     Returns:
@@ -32,7 +33,7 @@ def save_dataset(df: pd.DataFrame, config: Config) -> None:
     """
     # Retrieve path where
     # to save dataset
-    dataset_path = get_dataset_path(config)
+    dataset_path = get_dataset_path(dataset_type, config)
 
     debug(f"Path where to save dataset: {dataset_path}")
 

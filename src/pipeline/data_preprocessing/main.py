@@ -1,7 +1,7 @@
 from const import (
     LOGS_DATA_PREPROCESSING_PHASE,
     REQUEST_COLUMN,
-    TIMESTAMP_COLUMN,
+    TIMESTAMP_COLUMN, DATASET_PREPROCESSED_TYPE, DATASET_RAW_TYPE,
 )
 from pipeline.config.classes.Config import (
     Config,
@@ -48,7 +48,7 @@ def preprocess_data(config: Config) -> None:
     logs_phase.set(LOGS_DATA_PREPROCESSING_PHASE)
 
     # Load the dataset
-    df = load_dataset(config)
+    df = load_dataset(DATASET_RAW_TYPE, config)
 
     # Remove missing values
     df = remove_missing_values(df)
@@ -67,6 +67,6 @@ def preprocess_data(config: Config) -> None:
     )
 
     # Save preprocessed dataset
-    save_dataset(df, config)
+    save_dataset(df, DATASET_PREPROCESSED_TYPE, config)
 
     info("Data preprocessing completed")

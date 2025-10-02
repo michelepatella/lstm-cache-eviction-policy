@@ -41,6 +41,10 @@ DATA_DISTRIBUTION_MODES = [
     DATA_DISTRIBUTION_DYNAMIC_MODE,
 ]
 
+# Dataset types
+DATASET_RAW_TYPE = "raw"
+DATASET_PREPROCESSED_TYPE = "preprocessed"
+
 # Dataset columns
 TIMESTAMP_COLUMN = "timestamp"
 REQUEST_COLUMN = "request"

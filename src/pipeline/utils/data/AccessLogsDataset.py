@@ -4,7 +4,7 @@ import pandas as pd
 import torch
 from torch.utils.data import Dataset
 
-from const import TRAINING_SPLIT_TYPE
+from const import TRAINING_SPLIT_TYPE, DATASET_PREPROCESSED_TYPE
 from pipeline.config.classes.Config import Config
 from pipeline.utils.data.dataset.dataset_loader import load_dataset
 from pipeline.utils.logs.levels.debug_logger import debug
@@ -162,7 +162,7 @@ class AccessLogsDataset(Dataset):
         debug(f"AccessLogsDataset type to be initialized: {dataset_type}")
 
         # Load the dataset
-        df = load_dataset(config)
+        df = load_dataset(DATASET_PREPROCESSED_TYPE, config)
 
         try:
             # Shift target column (requests),
