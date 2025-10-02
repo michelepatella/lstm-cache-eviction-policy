@@ -1,6 +1,5 @@
 import torch
 from box import Box
-from sklearn.metrics import cohen_kappa_score
 
 from const import (
     LOGS_TESTING_PHASE,

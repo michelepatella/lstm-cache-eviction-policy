@@ -22,7 +22,7 @@ def evaluate_model(
     device: torch.device,
     config: Config,
     compute_metrics: bool = COMPUTE_METRICS_DEFAULT,
-) -> tuple[
+) -> Tuple[
     float, Dict[str, int | float] | None, List[Tensor], List[int], List[Tensor]
 ]:
     """

@@ -42,7 +42,7 @@ def get_dataset_path(dataset_type: str, config: Config) -> str:
                 dataset_path = config.data.dataset.paths.raw.static
             else:
                 # For preprocessed dataset
-                dataset_path = config.data.dataset.paths.preprocessed.static
+                dataset_path = config.data.dataset.paths.processed.static
         else:
             # For dynamic data distribution mode
             # For static data distribution mode
@@ -51,7 +51,7 @@ def get_dataset_path(dataset_type: str, config: Config) -> str:
                 dataset_path = config.data.dataset.paths.raw.dynamic
             else:
                 # For preprocessed dataset
-                dataset_path = config.data.dataset.paths.preprocessed.dynamic
+                dataset_path = config.data.dataset.paths.processed.dynamic
 
         info(f"Dataset path retrieved: {dataset_path}")
 

@@ -30,6 +30,6 @@ def info(msg: str, *args: Any, **kwargs: Any) -> None:
             **kwargs,
         )
     except (TypeError, ValueError, KeyError) as e:
-        msg_err = f"Failed to log info message"
+        msg_err = "Failed to log info message"
         error("%s: %s", msg_err, e)
         raise RuntimeError(msg_err) from e

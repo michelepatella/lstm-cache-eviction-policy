@@ -1,7 +1,9 @@
 from const import (
     LOGS_DATA_PREPROCESSING_PHASE,
     REQUEST_COLUMN,
-    TIMESTAMP_COLUMN, DATASET_PREPROCESSED_TYPE, DATASET_RAW_TYPE,
+    TIMESTAMP_COLUMN,
+    DATASET_PREPROCESSED_TYPE,
+    DATASET_RAW_TYPE,
 )
 from pipeline.config.classes.Config import (
     Config,

@@ -1,5 +1,3 @@
-from typing import Dict
-
 import torch
 import torch.nn as nn
 
@@ -133,7 +131,7 @@ class LSTM(nn.Module):
         )
 
         debug(
-            f"LSTM model settings:\n"
+            "LSTM model settings:\n"
             + f"input_size={self.input_size}\n"
             + f"hidden_size={self.hidden_size}\n"
             + f"num_layers={self.num_layers}\n"

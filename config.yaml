@@ -79,9 +79,9 @@ data:
       raw:
         static: data/raw/static_raw_dataset.csv
         dynamic: data/raw/dynamic_raw_dataset.csv
-      preprocessed:
-        static: data/preprocessed/static_preprocessed_dataset.csv
-        dynamic: data/preprocessed/dynamic_preprocessed_dataset.csv
+      processed:
+        static: data/processed/static_processed_dataset.csv
+        dynamic: data/processed/dynamic_processed_dataset.csv
 
 model:
   general:

@@ -63,7 +63,7 @@ class EarlyStopping:
         info("EarlyStopping initialized")
 
         debug(
-            f"EarlyStopping initial settings:\n"
+            "EarlyStopping initial settings:\n"
             + f"Patience: {self.patience}\n"
             + f"Delta: {self.delta}\n"
             + f"Best average loss: {self.best_avg_loss}\n"
@@ -113,4 +113,4 @@ class EarlyStopping:
 
                 debug("Patience exceeded: early stopping triggered")
 
-        info(f"Early stopping check completed")
+        info("Early stopping check completed")

@@ -256,14 +256,14 @@ class DatasetRawPathsConfig(BaseModel):
     dynamic: str
 
 
-class DatasetPreprocessedPathsConfig(BaseModel):
+class DatasetProcessedPathsConfig(BaseModel):
     static: str
     dynamic: str
 
 
 class DatasetPathsConfig(BaseModel):
     raw: DatasetRawPathsConfig
-    preprocessed: DatasetPreprocessedPathsConfig
+    preprocessed: DatasetProcessedPathsConfig
 
 
 class DatasetConfig(BaseModel):

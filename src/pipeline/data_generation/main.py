@@ -2,7 +2,8 @@ from const import (
     DATA_DISTRIBUTION_STATIC_MODE,
     LOGS_DATA_GENERATION_PHASE,
     REQUEST_COLUMN,
-    TIMESTAMP_COLUMN, DATASET_RAW_TYPE,
+    TIMESTAMP_COLUMN,
+    DATASET_RAW_TYPE,
 )
 from pipeline.config.classes.Config import (
     Config,
@@ -84,7 +85,7 @@ def generate_data(config: Config) -> None:
 
     # Save just created dataframe
     # as dataset
-    save_dataset(df, DATASET_RAW_TYPE,config)
+    save_dataset(df, DATASET_RAW_TYPE, config)
 
     # Show data generation -related plots
     plot_zipf_loglog(requests)
