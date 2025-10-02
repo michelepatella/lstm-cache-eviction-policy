@@ -1,6 +1,7 @@
 import math
 
-from utils.logs.log_utils import debug, info
+from pipeline.utils.logs.levels.debug_logger import debug
+from pipeline.utils.logs.levels.info_logger import info
 
 
 def preprocess_row(row):

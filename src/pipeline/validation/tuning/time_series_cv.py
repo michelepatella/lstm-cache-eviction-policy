@@ -12,9 +12,7 @@ from pipeline.utils.data.dataloader.data_loader_builder import (
 from pipeline.utils.data.dataloader.data_loader_targets_extractor import (
     extract_targets_from_data_loader,
 )
-from pipeline.utils.data.dataset.dataset_splitter import (
-    split_training_set,
-)
+from pipeline.utils.data.dataset.dataset_splitter import split_training_set
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.error_logger import error
 from pipeline.utils.logs.levels.info_logger import info

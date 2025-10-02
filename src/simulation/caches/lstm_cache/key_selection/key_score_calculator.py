@@ -1,4 +1,4 @@
-from utils.logs.log_utils import info
+from pipeline.utils.logs.levels.info_logger import info
 
 
 def calculate_key_scores(num_keys, num_steps, prob_matrix, conf_matrix):

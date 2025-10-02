@@ -1,12 +1,8 @@
 import yaml
 from yaml import YAMLError
 
-from pipeline.config.classes.Config import (
-    ConfigDict,
-)
-from pipeline.config.config_io.utils.config_locator import (
-    get_config_abs_path,
-)
+from pipeline.config.classes.Config import ConfigDict
+from pipeline.config.config_io.utils.config_locator import get_config_abs_path
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.error_logger import error
 from pipeline.utils.logs.levels.info_logger import info

@@ -1,6 +1,4 @@
-from pipeline.config.classes.Config import (
-    ConfigDict,
-)
+from pipeline.config.classes.Config import ConfigDict
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.error_logger import error
 from pipeline.utils.logs.levels.info_logger import info

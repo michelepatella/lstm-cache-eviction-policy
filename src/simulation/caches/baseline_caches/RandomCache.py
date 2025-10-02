@@ -1,9 +1,8 @@
 import random
 
-from simulation.caches.utils.BaseCache import (
-    BaseCache,
-)
-from utils.logs.log_utils import debug, info
+from pipeline.utils.logs.levels.debug_logger import debug
+from pipeline.utils.logs.levels.info_logger import info
+from simulation.caches.utils.BaseCache import BaseCache
 
 
 class RandomCache(BaseCache):

@@ -1,3 +1,4 @@
+from pipeline.utils.logs.levels.info_logger import info
 from simulation.evaluation.metrics.eviction_mistake_rate_calculator import (
     calculate_eviction_mistake_rate,
 )
@@ -10,7 +11,6 @@ from simulation.evaluation.metrics.prefetch_hit_rate_calculator import (
 from simulation.evaluation.metrics.prefetching_avg_latency_calculator import (
     calculate_prefetching_avg_latency,
 )
-from utils.logs.log_utils import info
 
 
 def evaluate_cache(

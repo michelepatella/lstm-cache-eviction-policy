@@ -1,15 +1,6 @@
-from pydantic import (
-    BaseModel,
-    confloat,
-    conint,
-    model_validator,
-)
+from pydantic import BaseModel, confloat, conint, model_validator
 
-from const import (
-    DATA_DISTRIBUTION_MODES,
-    MAX_HOUR,
-    MIN_HOUR,
-)
+from const import DATA_DISTRIBUTION_MODES, MAX_HOUR, MIN_HOUR
 from pipeline.config.classes.validation.choice_field_validator import (
     validate_choice_field,
 )

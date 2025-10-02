@@ -1,16 +1,12 @@
 from const import (
+    DATASET_PREPROCESSED_TYPE,
+    DATASET_RAW_TYPE,
     LOGS_DATA_PREPROCESSING_PHASE,
     REQUEST_COLUMN,
     TIMESTAMP_COLUMN,
-    DATASET_PREPROCESSED_TYPE,
-    DATASET_RAW_TYPE,
 )
-from pipeline.config.classes.Config import (
-    Config,
-)
-from pipeline.data_generation.utils.dataset_saver import (
-    save_dataset,
-)
+from pipeline.config.classes.Config import Config
+from pipeline.data_generation.utils.dataset_saver import save_dataset
 from pipeline.data_preprocessing.cleaning.duplicates_remover import (
     remove_duplicates,
 )
@@ -23,9 +19,7 @@ from pipeline.data_preprocessing.features_engineering.features_builder import (
 from pipeline.data_preprocessing.validation.invalid_values_remover import (
     remove_invalid_values,
 )
-from pipeline.utils.data.dataset.dataset_loader import (
-    load_dataset,
-)
+from pipeline.utils.data.dataset.dataset_loader import load_dataset
 from pipeline.utils.logs.levels.info_logger import info
 from pipeline.utils.logs.logs_setup import logs_phase
 

@@ -3,9 +3,7 @@ from typing import List, Tuple
 import numpy as np
 
 from const import PERIOD
-from pipeline.config.classes.Config import (
-    Config,
-)
+from pipeline.config.classes.Config import Config
 from pipeline.data_generation.generation.patterns.access.access_pattern_generator import (
     generate_access_pattern,
 )

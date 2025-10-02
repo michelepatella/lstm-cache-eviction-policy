@@ -1,10 +1,7 @@
 from typing import Dict, List
 
 import torch
-from sklearn.metrics import (
-    classification_report,
-    confusion_matrix,
-)
+from sklearn.metrics import classification_report, confusion_matrix
 
 from const import (
     MODEL_METRICS_CLASS_REPORT_NAME,

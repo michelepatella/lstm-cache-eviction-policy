@@ -1,9 +1,6 @@
 from pathlib import Path
 
-from const import (
-    CONFIG_FILE_NAME,
-    CONFIG_FILE_PARENT_LEVEL,
-)
+from const import CONFIG_FILE_NAME, CONFIG_FILE_PARENT_LEVEL
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.error_logger import error
 from pipeline.utils.logs.levels.info_logger import info

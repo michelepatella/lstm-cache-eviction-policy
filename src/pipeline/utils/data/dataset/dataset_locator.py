@@ -1,7 +1,5 @@
 from const import DATA_DISTRIBUTION_STATIC_MODE, DATASET_RAW_TYPE
-from pipeline.config.classes.Config import (
-    Config,
-)
+from pipeline.config.classes.Config import Config
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.error_logger import error
 from pipeline.utils.logs.levels.info_logger import info

@@ -4,7 +4,7 @@ import pandas as pd
 import torch
 from torch.utils.data import Dataset
 
-from const import TRAINING_SPLIT_TYPE, DATASET_PREPROCESSED_TYPE
+from const import DATASET_PREPROCESSED_TYPE, TRAINING_SPLIT_TYPE
 from pipeline.config.classes.Config import Config
 from pipeline.utils.data.dataset.dataset_loader import load_dataset
 from pipeline.utils.logs.levels.debug_logger import debug

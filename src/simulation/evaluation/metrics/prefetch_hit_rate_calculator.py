@@ -1,4 +1,4 @@
-from utils.logs.log_utils import info
+from pipeline.utils.logs.levels.info_logger import info
 
 
 def calculate_prefetch_hit_rate(

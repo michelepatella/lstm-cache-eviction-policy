@@ -3,9 +3,7 @@ from typing import List, Tuple
 import numpy as np
 
 from const import PERIOD, SECONDS_IN_HOUR
-from pipeline.config.classes.Config import (
-    Config,
-)
+from pipeline.config.classes.Config import Config
 from pipeline.data_generation.generation.patterns.request_patterns_generator import (
     generate_pattern_requests,
 )

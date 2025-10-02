@@ -5,15 +5,11 @@ from pipeline.utils.data.AccessLogsDataset import AccessLogsDataset
 from pipeline.utils.data.dataloader.data_loader_builder import (
     create_data_loader,
 )
-from pipeline.utils.data.dataloader.data_loader_setup import (
-    data_loader_setup,
-)
+from pipeline.utils.data.dataloader.data_loader_setup import data_loader_setup
 from pipeline.utils.data.dataloader.data_loader_targets_extractor import (
     extract_targets_from_data_loader,
 )
-from pipeline.utils.data.dataset.dataset_splitter import (
-    split_training_set,
-)
+from pipeline.utils.data.dataset.dataset_splitter import split_training_set
 from pipeline.utils.logs.levels.info_logger import info
 from pipeline.utils.logs.logs_setup import logs_phase
 from pipeline.utils.model.setup.model_components_setup import (

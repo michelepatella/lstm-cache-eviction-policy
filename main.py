@@ -5,26 +5,26 @@ from pipeline.testing import test_model
 from pipeline.training import train_model
 from pipeline.utils.logs.logs_setup import setup_logs
 
-#0. LOGS SETUP
+# 0. LOGS SETUP
 setup_logs()
 
-#1. PREPARE CONFIGURATION SETTINGS
+# 1. PREPARE CONFIGURATION SETTINGS
 config = prepare_config()
 
-#2. GENERATE SYNTHETIC DATA
+# 2. GENERATE SYNTHETIC DATA
 generate_data(config)
 
-#3. PREPROCESS GENERATED DATA
+# 3. PREPROCESS GENERATED DATA
 preprocess_data(config)
 
-#4. FIND THE BEST HYPERPARAMETERS
-#config = validate_model(config)
+# 4. FIND THE BEST HYPERPARAMETERS
+# config = validate_model(config)
 
-#5. TRAIN THE MODEL
+# 5. TRAIN THE MODEL
 train_model(config)
 
-#6. TEST THE STANDALONE MODEL
+# 6. TEST THE STANDALONE MODEL
 test_model(config)
 
-#7. COMPARE THE FRAMEWORK AGAINST BASELINE CACHES
-#run_simulations(config)
+# 7. COMPARE THE FRAMEWORK AGAINST BASELINE CACHES
+# run_simulations(config)

@@ -1,11 +1,7 @@
 import pandas as pd
 
-from pipeline.config.classes.Config import (
-    Config,
-)
-from pipeline.utils.data.dataset.dataset_locator import (
-    get_dataset_path,
-)
+from pipeline.config.classes.Config import Config
+from pipeline.utils.data.dataset.dataset_locator import get_dataset_path
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.error_logger import error
 from pipeline.utils.logs.levels.info_logger import info

@@ -1,9 +1,7 @@
 import numpy as np
 
 from const import SECONDS_IN_HOUR
-from pipeline.config.classes.Config import (
-    Config,
-)
+from pipeline.config.classes.Config import Config
 from pipeline.data_generation.generation.patterns.temporal.components.bursty_scale_setter import (
     set_bursty_scale,
 )

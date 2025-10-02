@@ -1,12 +1,7 @@
 import pandas as pd
 
-from const import (
-    REQUEST_COLUMN,
-    TIMESTAMP_COLUMN,
-)
-from pipeline.config.classes.Config import (
-    Config,
-)
+from const import REQUEST_COLUMN, TIMESTAMP_COLUMN
+from pipeline.config.classes.Config import Config
 from pipeline.data_preprocessing.utils.dataset_cleaning_reporter import (
     report_dataset_cleaning,
 )

@@ -4,9 +4,7 @@ from torch.utils.data import DataLoader
 
 from pipeline.config.classes.Config import Config
 from pipeline.utils.data.AccessLogsDataset import AccessLogsDataset
-from pipeline.utils.data.dataloader.data_loader_builder import (
-    create_data_loader,
-)
+from pipeline.utils.data.dataloader.data_loader_builder import create_data_loader
 from pipeline.utils.logs.levels.info_logger import info
 
 

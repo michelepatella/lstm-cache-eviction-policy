@@ -1,9 +1,4 @@
-from pydantic import (
-    BaseModel,
-    confloat,
-    conint,
-    model_validator,
-)
+from pydantic import BaseModel, confloat, conint, model_validator
 
 from const import TRAINING_OPTIMIZERS
 from pipeline.config.classes.validation.choice_field_validator import (

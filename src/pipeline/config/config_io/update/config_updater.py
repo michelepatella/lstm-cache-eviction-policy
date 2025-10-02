@@ -2,18 +2,10 @@ from typing import Callable
 
 import yaml
 
-from pipeline.config.classes.Config import (
-    ConfigDict,
-)
-from pipeline.config.config_io.config_loader import (
-    load_config,
-)
-from pipeline.config.config_io.update.config_merger import (
-    merge_config,
-)
-from pipeline.config.config_io.utils.config_locator import (
-    get_config_abs_path,
-)
+from pipeline.config.classes.Config import ConfigDict
+from pipeline.config.config_io.config_loader import load_config
+from pipeline.config.config_io.update.config_merger import merge_config
+from pipeline.config.config_io.utils.config_locator import get_config_abs_path
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.error_logger import error
 from pipeline.utils.logs.levels.info_logger import info

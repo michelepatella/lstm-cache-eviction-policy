@@ -1,6 +1,6 @@
 import random
 
-from utils.logs.log_utils import info
+from pipeline.utils.logs.levels.info_logger import info
 
 
 def manage_cold_start(cache, current_time, config_settings):

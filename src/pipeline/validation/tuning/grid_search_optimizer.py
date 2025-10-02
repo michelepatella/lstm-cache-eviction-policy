@@ -12,9 +12,7 @@ from pipeline.validation.best_params.best_params_updater import (
 from pipeline.validation.search_space.combination.search_space_combinator import (
     get_parameters_combination,
 )
-from pipeline.validation.tuning.time_series_cv import (
-    compute_time_series_cv,
-)
+from pipeline.validation.tuning.time_series_cv import compute_time_series_cv
 
 
 def compute_grid_search(

@@ -1,10 +1,6 @@
 from const import LOGS_CONFIGURATION_PHASE
-from pipeline.config.classes.Config import (
-    Config,
-)
-from pipeline.config.config_io.config_loader import (
-    load_config,
-)
+from pipeline.config.classes.Config import Config
+from pipeline.config.config_io.config_loader import load_config
 from pipeline.utils.logs.levels.info_logger import info
 from pipeline.utils.logs.logs_setup import logs_phase
 
