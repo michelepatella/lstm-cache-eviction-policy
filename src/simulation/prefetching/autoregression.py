@@ -4,7 +4,9 @@ import torch
 
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.info_logger import info
-from pipeline.utils.model.backpropagation.mc.mc_forward_runner import mc_forward_passes
+from pipeline.utils.model.backpropagation.mc.mc_forward_runner import (
+    mc_forward_passes,
+)
 
 
 def autoregressive_rollout(model, seed_sequence, device, config_settings):

@@ -43,7 +43,8 @@ def get_all_sections_combinations(
             param_combinations.append(full_dict)
 
         debug(
-            f"Total parameter combinations across all sections: {len(param_combinations)}"
+            f"Total parameter combinations "
+            f"across all sections: {len(param_combinations)}"
         )
 
         # Check whether no parameter

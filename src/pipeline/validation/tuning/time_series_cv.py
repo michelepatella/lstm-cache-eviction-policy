@@ -55,7 +55,8 @@ def compute_time_series_cv(
     num_samples = len(training_set)
 
     debug(
-        f"Number of samples in training set for time series cross-validation: {num_samples}"
+        f"Number of samples in training set "
+        f"for time series cross-validation: {num_samples}"
     )
 
     # Prepare configuration

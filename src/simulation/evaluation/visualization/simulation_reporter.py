@@ -18,8 +18,10 @@ def generate_caches_evaluation_report(results):
 
         # header with additional metrics
         header = (
-            f"{'Policy':<25} | {'Hit Rate (%)':>12} | {'Miss Rate (%)':>13} | "
-            f"{'Avg Prefetching Latency (s)':>27} | {'Eviction Mistake Rate (%)':>26} | "
+            f"{'Policy':<25} | {'Hit Rate (%)':>12} | "
+            f"{'Miss Rate (%)':>13} | "
+            f"{'Avg Prefetching Latency (s)':>27} | "
+            f"{'Eviction Mistake Rate (%)':>26} | "
             f"{'Prefetch Hit Rate (%)':>22}"
         )
         print(header)

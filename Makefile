@@ -16,15 +16,19 @@ update-deps:
 
 # Formatting
 format:
-	black .
+	black src
 
 # (Imports) Sorting
 sort-imports:
-	isort .
+	isort src
 
 # Linting
 lint:
-	flake8 .
+	flake8 src
+
+# Typing
+type-check:
+	mypy src
 
 # ----------------------------
 # Documentation

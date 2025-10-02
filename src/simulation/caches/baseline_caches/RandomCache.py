@@ -30,7 +30,8 @@ class RandomCache(BaseCache):
 
                 # debugging
                 debug(
-                    f"⚙️ Key {key} already cached, new expiration time: {self.expiry[key]}."
+                    f"⚙️ Key {key} already cached, "
+                    f"new expiration time: {self.expiry[key]}."
                 )
 
                 # print a successful message

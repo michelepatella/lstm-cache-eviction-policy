@@ -28,7 +28,8 @@ def encode_time_trigonometrically(
                       sine and cosine features.
 
     Raises:
-        RuntimeError: If an error occurs while encoding time trigonometrically, e.g.:
+        RuntimeError: If an error occurs while
+                      encoding time trigonometrically, e.g.:
             * If the specified time column does not exist in the dataset.
             * If the time column contains non-numeric values.
             * If the period is set to zero.
@@ -36,7 +37,9 @@ def encode_time_trigonometrically(
     try:
         debug(f"Time column to be encoded trigonometrically: {time_column}")
         debug(
-            f"(Time before normalization) Min: {df[time_column].min()}, Max: {df[time_column].max()}"
+            f"(Time before normalization) Min:"
+            f" {df[time_column].min()}, "
+            f"Max: {df[time_column].max()}"
         )
 
         # Normalize time to [0, 2pi] so that
@@ -44,7 +47,9 @@ def encode_time_trigonometrically(
         time_in_cycle = (df[time_column] % HOURS_IN_DAY) / HOURS_IN_DAY
 
         debug(
-            f"(Time after normalization) Min: {time_in_cycle.min()}, Max: {time_in_cycle.max()}"
+            f"(Time after normalization) Min:"
+            f" {time_in_cycle.min()}, "
+            f"Max: {time_in_cycle.max()}"
         )
 
         # Use normalized time in cycle
@@ -64,7 +69,8 @@ def encode_time_trigonometrically(
         new_df = df.drop(columns=[time_column])
 
         debug(
-            f"Dataset columns after trigonometric time encoding: {new_df.columns}"
+            f"Dataset columns after trigonometric"
+            f" time encoding: {new_df.columns}"
         )
 
         info("Time encoded trigonometrically")

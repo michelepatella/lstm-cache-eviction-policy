@@ -33,7 +33,8 @@ def generate_static_requests(
     requests, timestamps_hours = generate_requests_helper(config)
 
     info(
-        f"{len(requests)} static requests and {len(timestamps_hours)} timestamps in hours generated"
+        f"{len(requests)} static requests and "
+        f"{len(timestamps_hours)} timestamps in hours generated"
     )
 
     return requests, timestamps_hours

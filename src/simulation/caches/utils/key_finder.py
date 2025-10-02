@@ -11,7 +11,7 @@ def find_key(cache, key, current_time, counters):
     :return:
     """
     # initial message
-    info(f"🔄 Key search started...")
+    info("🔄 Key search started...")
 
     try:
         # check if the cache contains the key
@@ -20,14 +20,14 @@ def find_key(cache, key, current_time, counters):
             counters["hits"] += 1
             info(f"ℹ️ Time: {current_time:.2f} | Key: {key} | HIT")
             # print a successful message
-            info(f"🟢 Key search completed.")
+            info("🟢 Key search completed.")
             return True
         else:
             # increment cache misses
             counters["misses"] += 1
             info(f"ℹ️ Time: {current_time:.2f} | Key: {key} | MISS")
             # print a successful message
-            info(f"🟢 Key search completed.")
+            info("🟢 Key search completed.")
             return False
     except NameError as e:
         raise NameError(f"NameError: {e}.")

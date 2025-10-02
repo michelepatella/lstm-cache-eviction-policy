@@ -53,7 +53,8 @@ def split_training_set(
             validation_size = int(validation_perc * total_training_size)
 
             debug(
-                f"Calculated training size: {training_size}, validation size: {validation_size}"
+                f"Calculated training size: {training_size},"
+                f" validation size: {validation_size}"
             )
 
             # generate training and validation indices
@@ -63,11 +64,13 @@ def split_training_set(
             )
 
             debug(
-                f"Calculated training index: {training_idx}, validation index: {validation_idx}"
+                f"Calculated training index: {training_idx},"
+                f" validation index: {validation_idx}"
             )
         else:
             debug(
-                f"Provided training index: {training_idx}, validation index: {validation_idx}"
+                f"Provided training index: {training_idx}, "
+                f"validation index: {validation_idx}"
             )
 
         # Create Subset objects both for

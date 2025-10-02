@@ -98,7 +98,8 @@ class AccessLogsDataset(Dataset):
             None
 
         Raises:
-            RuntimeError: If an error occurs while setting dataset fields, e.g.:
+            RuntimeError: If an error occurs while
+                          setting dataset fields, e.g.:
                 * data is not a Pandas DataFrame
                 * data columns or sequence length are of wrong type
                 * data does not contain any columns
@@ -153,11 +154,15 @@ class AccessLogsDataset(Dataset):
             None
 
         Raises:
-            RuntimeError: If an error occurs while initializing the dataset, e.g.:
+            RuntimeError: If an error occurs while
+                          initializing the dataset, e.g.:
                 * dataset loaded is empty
-                * a value on the target column cannot be converted to integer
-                * a value on the target column is not compatible with astype(int)
-                * dataset loaded is not a Pandas DataFrame or missing columns attribute
+                  a value on the target column
+                  cannot be converted to integer
+                * a value on the target column is not
+                  compatible with astype(int)
+                * dataset loaded is not a Pandas DataFrame
+                  or missing columns attribute
         """
         debug(f"AccessLogsDataset type to be initialized: {dataset_type}")
 
@@ -196,12 +201,16 @@ class AccessLogsDataset(Dataset):
             self (AccessLogsDataset): AccessLogsDataset class.
 
         Returns:
-            int: Number of available sequences in the dataset.
+            int: Number of available sequences
+                 in the dataset.
 
         Raises:
-            RuntimeError: If an error occurs while calculating dataset length, e.g.:
-                * self.data or self.seq_len is not properly set
-                * self.data is not iterable or sequence length is not an integer
+            RuntimeError: If an error occurs while
+                          calculating dataset length, e.g.:
+                * self.data or self.seq_len is
+                  not properly set
+                * self.data is not iterable or sequence
+                  length is not an integer
                 * calculated length is negative
         """
         try:
@@ -237,27 +246,32 @@ class AccessLogsDataset(Dataset):
 
         Parameters:
             self (AccessLogsDataset): AccessLogsDataset class.
-            idx (int): Index of the starting row for the sequence.
+            idx (int): Index of the starting row
+                       for the sequence.
 
         Returns:
-            Tuple[torch.Tensor, torch.Tensor, torch.Tensor]: Tuple containing a tensor of
-                                                             numerical features, a tensor
-                                                             of keys in the  sequence,
-                                                             and a tensor for the next key.
+            Tuple[
+                torch.Tensor, torch.Tensor, torch.Tensor
+            ]: Tuple containing a tensor of
+               numerical features, a tensor
+               of keys in the  sequence,
+               and a tensor for the next key.
 
         Raises:
-            RuntimeError: If an error occurs while retrieving a dataset item, e.g.:
+            RuntimeError: If an error occurs while
+                          retrieving a dataset item, e.g.:
                 * The requested index goes out of bounds
                 * Feature or target columns are missing
                 * Data types in features/target are invalid
                 * Conversion to int/float fails
-                * self.data, self.features, or self.target are not set properly
+                * self.data, self.features, or self.target
+                  are not set properly
         """
         debug(f"Index of item to be retrieved: {idx}")
 
         try:
             # Extract feature sequence
-            seq_data = self.data.iloc[idx : idx + self.seq_len]
+            seq_data = self.data.iloc[idx:idx + self.seq_len]
 
             # Convert features to float tensor
             x_features = torch.tensor(
@@ -311,13 +325,15 @@ class AccessLogsDataset(Dataset):
             AccessLogsDataset: Initialized dataset instance.
 
         Raises:
-            RuntimeError: If an error occurs while instantiating from dataframe, e.g.:
+            RuntimeError: If an error occurs while
+                          instantiating from dataframe, e.g.:
                 * The dataframe does not have expected attributes
                 * The provided object is not a Pandas DataFrame
                 * The dataframe does not contain any columns
         """
         debug(
-            f"Dataframe shape to be instantiated as AccessLogsDataset: {df.shape}"
+            f"Dataframe shape to be instantiated"
+            f" as AccessLogsDataset: {df.shape}"
         )
 
         try:

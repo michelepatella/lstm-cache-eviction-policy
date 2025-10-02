@@ -47,7 +47,10 @@ def validate_choice_field(
     # Check whether the field value has not
     # allowed type
     if field_value not in allowed_field_values:
-        msg = f"{context} must be one of the following values: {allowed_field_values}"
+        msg = (
+            f"{context} must be one of the following"
+            f" values: {allowed_field_values}"
+        )
         error("%s", msg)
         raise ValueError(msg)
 

@@ -17,9 +17,11 @@ def wrap_section_params(
     and nested sections.
 
     Parameters:
-        combo (Dict[str, Any]): Parameter combination dictionary for the section.
+        combo (Dict[str, Any]): Parameter combination
+                                dictionary for the section.
         section (str): Section name (top-level or nested).
-        wrapper_map (Dict[str, str]): Mapping of section names to wrapper keys.
+        wrapper_map (Dict[str, str]): Mapping of section
+                                      names to wrapper keys.
 
     Returns:
         Dict[str, Any]: The modified parameter dictionary with wrapper applied.
@@ -43,7 +45,10 @@ def wrap_section_params(
                 # Traverse nested dictionary levels
                 for k in keys[:-1]:
                     if k not in target or not isinstance(target[k], dict):
-                        msg = f"Nested key '{k}' not found or not a dictionary in combo"
+                        msg = (
+                            f"Nested key '{k}' not found "
+                            f"or not a dictionary in combo"
+                        )
                         error("%s", msg)
                         raise KeyError(msg)
                     target = target[k]
@@ -52,7 +57,10 @@ def wrap_section_params(
                 if keys[-1] not in target or not isinstance(
                     target[keys[-1]], dict
                 ):
-                    msg = f"Final nested key '{keys[-1]}' not found or not a dictionary in combo"
+                    msg = (
+                        f"Final nested key '{keys[-1]}' "
+                        f"not found or not a dictionary in combo"
+                    )
                     error("%s", msg)
                     raise KeyError(msg)
                 target[keys[-1]] = {wrapper: target[keys[-1]]}

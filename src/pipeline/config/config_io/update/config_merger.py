@@ -18,8 +18,9 @@ def merge_config(
     Otherwise, the update value replaces the original one.
 
     Parameters:
-        original_config (dict | None): Original configuration object. If none, an empty
-            dictionary is used.
+        original_config (dict | None): Original configuration
+                                       object. If none, an empty
+                                       dictionary is used.
         updated_config (dict): Configuration object containing updates to
             apply to the original configuration object.
 

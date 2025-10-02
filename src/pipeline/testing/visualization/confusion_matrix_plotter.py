@@ -31,7 +31,8 @@ def plot_confusion_matrix(confusion_matrix: dict) -> None:
     """
     debug(f"Confusion matrix shape: {np.array(confusion_matrix).shape}")
     debug(
-        f"Confusion matrix min: {np.min(confusion_matrix)}, max: {np.max(confusion_matrix)}"
+        f"Confusion matrix min: {np.min(confusion_matrix)},"
+        f" max: {np.max(confusion_matrix)}"
     )
 
     # Plot confusion matrix

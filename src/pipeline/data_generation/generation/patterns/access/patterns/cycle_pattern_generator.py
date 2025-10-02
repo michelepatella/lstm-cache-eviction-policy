@@ -37,7 +37,8 @@ def generate_cycle_pattern(
         f"Cycle base to determine cycle length in cycle pattern: {cycle_base}"
     )
     debug(
-        f"Cycle divisor to determine cycle length in cycle pattern: {cycle_divisor}"
+        f"Cycle divisor to determine cycle"
+        f" length in cycle pattern: {cycle_divisor}"
     )
     debug(f"Cycle mod to determine cycle length in cycle pattern: {cycle_mod}")
 

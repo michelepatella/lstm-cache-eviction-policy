@@ -36,7 +36,8 @@ def plot_precision_recall_curve(
         None
     """
     debug(
-        f"Targets and outputs length for precision-recall curve: {len(targets)}, {len(outputs)}"
+        f"Targets and outputs length for "
+        f"precision-recall curve: {len(targets)}, {len(outputs)}"
     )
     debug(f"Number of keys for precision-recall curve: {num_keys}")
 

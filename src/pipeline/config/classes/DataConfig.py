@@ -10,18 +10,18 @@ from pipeline.config.classes.validation.min_max_validator import (
 
 
 class HoursConfig(BaseModel):
-    start: conint(ge=MIN_HOUR, le=MAX_HOUR)
-    end: conint(ge=MIN_HOUR, le=MAX_HOUR)
+    start: conint(ge=MIN_HOUR, le=MAX_HOUR)  # type: ignore[valid-type]
+    end: conint(ge=MIN_HOUR, le=MAX_HOUR)  # type: ignore[valid-type]
 
 
 # Data — Distribution
 class RequestsConfig(BaseModel):
-    count: conint(gt=0)
+    count: conint(gt=0)  # type: ignore[valid-type]
 
 
 class KeysConfig(BaseModel):
-    min: conint(gt=0)
-    max: conint(gt=0)
+    min: conint(gt=0)  # type: ignore[valid-type]
+    max: conint(gt=0)  # type: ignore[valid-type]
 
     @model_validator(mode="after")
     def check_min_max_keys(
@@ -48,7 +48,7 @@ class KeysConfig(BaseModel):
 
 
 class GeneralDataConfig(BaseModel):
-    seed: conint(ge=0)
+    seed: conint(ge=0)  # type: ignore[valid-type]
     mode: str
     requests: RequestsConfig
     keys: KeysConfig
@@ -80,19 +80,19 @@ class GeneralDataConfig(BaseModel):
 
 # Data — Pattern
 class ZipfAlphaConfig(BaseModel):
-    fixed: confloat(gt=0)
-    min: confloat(gt=0)
-    max: confloat(gt=0)
+    fixed: confloat(gt=0)  # type: ignore[valid-type]
+    min: confloat(gt=0)  # type: ignore[valid-type]
+    max: confloat(gt=0)  # type: ignore[valid-type]
 
 
 class ZipfConfig(BaseModel):
     alpha: ZipfAlphaConfig
-    steps: conint(gt=0)
+    steps: conint(gt=0)  # type: ignore[valid-type]
 
 
 class RepetitionConfig(BaseModel):
-    interval: conint(gt=0)
-    offset: conint(gt=0)
+    interval: conint(gt=0)  # type: ignore[valid-type]
+    offset: conint(gt=0)  # type: ignore[valid-type]
     hours: HoursConfig
 
 
@@ -102,12 +102,12 @@ class ToggleOffsetsConfig(BaseModel):
 
 
 class ToggleBaseRequestsConfig(BaseModel):
-    first: conint(gt=0)
-    second: conint(gt=0)
+    first: conint(gt=0)  # type: ignore[valid-type]
+    second: conint(gt=0)  # type: ignore[valid-type]
 
 
 class ToggleConfig(BaseModel):
-    interval: conint(gt=0)
+    interval: conint(gt=0)  # type: ignore[valid-type]
     hours: HoursConfig
     base_requests: ToggleBaseRequestsConfig
     offsets: ToggleOffsetsConfig
@@ -119,7 +119,7 @@ class DistortionOffsetsConfig(BaseModel):
 
 
 class DistortionConfig(BaseModel):
-    interval: conint(gt=0)
+    interval: conint(gt=0)  # type: ignore[valid-type]
     hours: HoursConfig
     offsets: DistortionOffsetsConfig
 
@@ -152,14 +152,14 @@ class NoiseConfig(BaseModel):
 
 
 class MemoryConfig(BaseModel):
-    interval: conint(gt=0)
-    offset: conint(gt=0)
+    interval: conint(gt=0)  # type: ignore[valid-type]
+    offset: conint(gt=0)  # type: ignore[valid-type]
 
 
 class CycleConfig(BaseModel):
-    base: conint(gt=0)
-    mod: conint(gt=0)
-    divisor: conint(gt=0)
+    base: conint(gt=0)  # type: ignore[valid-type]
+    mod: conint(gt=0)  # type: ignore[valid-type]
+    divisor: conint(gt=0)  # type: ignore[valid-type]
     hours: HoursConfig
 
 
@@ -178,13 +178,13 @@ class AccessConfig(BaseModel):
 
 
 class BurstinessHoursConfig(BaseModel):
-    start: conint(ge=MIN_HOUR, le=MAX_HOUR)
-    end: conint(ge=MIN_HOUR, le=MAX_HOUR)
+    start: conint(ge=MIN_HOUR, le=MAX_HOUR)  # type: ignore[valid-type]
+    end: conint(ge=MIN_HOUR, le=MAX_HOUR)  # type: ignore[valid-type]
 
 
 class BurstinessConfig(BaseModel):
-    high: confloat(gt=0)
-    low: confloat(gt=0)
+    high: confloat(gt=0)  # type: ignore[valid-type]
+    low: confloat(gt=0)  # type: ignore[valid-type]
     hours: BurstinessHoursConfig
 
     @model_validator(mode="after")
@@ -212,8 +212,8 @@ class BurstinessConfig(BaseModel):
 
 
 class PeriodicConfig(BaseModel):
-    scale: conint(gt=0)
-    amplitude: conint(ge=0)
+    scale: conint(gt=0)  # type: ignore[valid-type]
+    amplitude: conint(ge=0)  # type: ignore[valid-type]
 
 
 class TemporalConfig(BaseModel):
@@ -228,18 +228,18 @@ class PatternConfig(BaseModel):
 
 # Data — Sequence
 class EmbeddingConfig(BaseModel):
-    dimension: conint(gt=0)
+    dimension: conint(gt=0)  # type: ignore[valid-type]
 
 
 class SequenceConfig(BaseModel):
-    length: conint(gt=0)
+    length: conint(gt=0)  # type: ignore[valid-type]
     embedding: EmbeddingConfig
 
 
 # Data — Dataset
 class SplitConfig(BaseModel):
-    training: confloat(ge=0, le=1)
-    validation: confloat(ge=0, le=1)
+    training: confloat(ge=0, le=1)  # type: ignore[valid-type]
+    validation: confloat(ge=0, le=1)  # type: ignore[valid-type]
 
 
 class DatasetRawPathsConfig(BaseModel):

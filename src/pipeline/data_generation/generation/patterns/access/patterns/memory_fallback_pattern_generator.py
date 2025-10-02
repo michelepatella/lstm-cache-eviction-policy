@@ -52,7 +52,10 @@ def generate_memory_fallback_pattern(
     if len(zipf_probs) != len(keys_range) or not np.isclose(
         zipf_probs.sum(), 1.0
     ):
-        msg = "Invalid Zipfian probabilities, cannot generate memory/fallback pattern"
+        msg = (
+            "Invalid Zipfian probabilities, "
+            "cannot generate memory/fallback pattern"
+        )
         error("%s", msg)
         raise ValueError(msg)
 
@@ -65,7 +68,8 @@ def generate_memory_fallback_pattern(
         requested_key = requests[-memory_offset]
 
         debug(
-            f"Requested key selected looking at {memory_offset} steps back in the history"
+            f"Requested key selected looking "
+            f"at {memory_offset} steps back in the history"
         )
     else:
         # Determine the requested key randomly,

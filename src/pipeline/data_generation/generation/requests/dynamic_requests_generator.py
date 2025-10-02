@@ -38,7 +38,8 @@ def generate_dynamic_requests(
     steps = zipf_config.steps
 
     debug(
-        f"Dynamic alpha values generation from {alpha_min} to {alpha_max}, in {steps} steps"
+        f"Dynamic alpha values generation from"
+        f" {alpha_min} to {alpha_max}, in {steps} steps"
     )
 
     # Generate evenly spaced alpha
@@ -54,7 +55,8 @@ def generate_dynamic_requests(
     )
 
     info(
-        f"{len(requests)} dynamic requests and {len(timestamps_hours)} timestamps in hours generated"
+        f"{len(requests)} dynamic requests and"
+        f" {len(timestamps_hours)} timestamps in hours generated"
     )
 
     return requests, timestamps_hours

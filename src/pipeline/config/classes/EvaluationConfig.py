@@ -7,4 +7,4 @@ class EvaluationConfig(BaseModel):
     settings.
     """
 
-    top_k: conint(gt=0)
+    top_k: conint(gt=0)  # type: ignore[valid-type]

@@ -30,7 +30,8 @@ def get_parameters_combination(
                               representing all parameter combinations.
 
     Raises:
-        RuntimeError: If an error occurs while generating parameter combinations, e.g.:
+        RuntimeError: If an error occurs while
+                      generating parameter combinations, e.g.:
             * Expected keys are missing in the search space.
             * Search space or keys are of invalid type.
             * No parameter combinations could be generated.

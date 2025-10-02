@@ -25,7 +25,8 @@ def are_min_max_valid(
         None
 
     Raises:
-        ValueError: If the minimum value is greater than or equal to the maximum.
+        ValueError: If the minimum value is greater
+                    than or equal to the maximum.
         RuntimeError: If an error occurs during validation.
     """
     debug(

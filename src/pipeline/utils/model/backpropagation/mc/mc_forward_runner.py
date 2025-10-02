@@ -27,7 +27,8 @@ def mc_forward_passes(
 
     This function executes one or more forward passes through the model.
     If the given number of Monte Carlo dropout samples is greater than default
-    value, MC Dropout is enabled and multiple stochastic passes are performed to
+    value, MC Dropout is enabled and multiple
+    stochastic passes are performed to
     estimate predictive uncertainty.
 
     Parameters:
@@ -41,15 +42,17 @@ def mc_forward_passes(
         mc_dropout_samples (int): Number of MC Dropout samples to perform.
 
     Returns:
-        Tuple[torch.Tensor, torch.Tensor | None, torch.Tensor]: Tuple containing a tensor for mean
-                                                                of outputs across one or more MC
-                                                                samples, a tensor for variance of
-                                                                outputs across one or more MC
-                                                                (computed if and only if the provided
-                                                                number of Monte Carlo dropout samples
-                                                                is greater than default value), and a
-                                                                tensor of all MC outputs concatenated
-                                                                along a new dimension.
+        Tuple[
+        torch.Tensor, torch.Tensor | None, torch.Tensor
+        ]: Tuple containing a tensor for mean
+           of outputs across one or more MC
+           samples, a tensor for variance of
+           outputs across one or more MC
+           (computed if and only if the provided
+           number of Monte Carlo dropout samples
+           is greater than default value), and a
+           tensor of all MC outputs concatenated
+           along a new dimension.
     """
     # Enable MC Dropout if more than one MC
     # dropout sample
@@ -83,7 +86,8 @@ def mc_forward_passes(
             outputs_mc.append(outputs.unsqueeze(0))
 
             debug(
-                f"MC sample {i + 1}/{mc_dropout_samples} completed, outputs shape: {outputs.shape}"
+                f"MC sample {i + 1}/{mc_dropout_samples} "
+                f"completed, outputs shape: {outputs.shape}"
             )
 
     # Aggregate outputs

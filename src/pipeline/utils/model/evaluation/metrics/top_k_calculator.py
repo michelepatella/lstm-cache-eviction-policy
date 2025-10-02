@@ -56,7 +56,8 @@ def calculate_top_k_accuracy(
             if target in top_k_predictions[i][:top_k]:
                 correct_predictions += 1
             debug(
-                f"Sample {i}: target={target}, top-k={top_k_predictions[i][:top_k]}, "
+                f"Sample {i}: target={target}, "
+                f"top-k={top_k_predictions[i][:top_k]}, "
                 f"correct={target in top_k_predictions[i][:top_k]}"
             )
 

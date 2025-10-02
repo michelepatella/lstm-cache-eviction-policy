@@ -56,8 +56,10 @@ def generate_toggle_pattern(
         toggle_second_base_request > len(requests)
     ):
         msg = (
-            f"Toggle first and second base request ({toggle_first_base_request, toggle_second_base_request})"
-            f" must be less than or equal to the number of requests ({len(requests)})."
+            f"Toggle first and second base request"
+            f" ({toggle_first_base_request, toggle_second_base_request})"
+            f" must be less than or equal to the number"
+            f" of requests ({len(requests)})."
         )
         error("%s", msg)
         raise ValueError(msg)
@@ -67,10 +69,12 @@ def generate_toggle_pattern(
 
     debug(f"Toggle state: {toggle}")
     debug(
-        f"Toggle forward offset: {toggle_forward}, backward offset: {toggle_backward}"
+        f"Toggle forward offset: {toggle_forward},"
+        f" backward offset: {toggle_backward}"
     )
     debug(
-        f"Toggle base requests: {toggle_first_base_request} (forward), {toggle_second_base_request} (backward)"
+        f"Toggle base requests: {toggle_first_base_request}"
+        f" (forward), {toggle_second_base_request} (backward)"
     )
 
     # Determine the requested key

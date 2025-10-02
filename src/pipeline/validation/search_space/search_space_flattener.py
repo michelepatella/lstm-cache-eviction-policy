@@ -27,10 +27,13 @@ def flatten_search_space(
                                            list of values.
 
     Raises:
-        RuntimeError: If an error occurs while flattening the search space, e.g.:
-            * If a non-iterable value is encountered where a dict is expected.
+        RuntimeError: If an error occurs while
+                      flattening the search space, e.g.:
+            * If a non-iterable value is
+              encountered where a dict is expected.
             * If recursion depth exceeds the Python limit.
-            * If the input dictionary does not have expected attributes.
+            * If the input dictionary does not
+              have expected attributes.
     """
     debug(f"Flattening search space at level: {parent_key}")
 

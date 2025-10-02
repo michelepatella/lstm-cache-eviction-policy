@@ -22,7 +22,8 @@ def trained_model_setup(
     Prepare a trained model for further usage.
 
     This function sets up the model components, extracts the target labels
-    from the provided data loader, initializes the model with the correct device,
+    from the provided data loader, initializes
+    the model with the correct device,
     loss function, and loads pre-trained weights.
 
     Parameters:
@@ -30,9 +31,11 @@ def trained_model_setup(
         config (Config): Configuration object.
 
     Returns:
-        Tuple[torch.device, nn.Module, nn.Module]: Tuple containing the device on which
-                                                   the model is loaded, loss function initialized
-                                                   with class weights, and pre-trained model.
+        Tuple[
+        torch.device, nn.Module, nn.Module
+        ]: Tuple containing the device on which
+           the model is loaded, loss function initialized
+           with class weights, and pre-trained model.
     """
     # Prepare configuration
     model_params = config.model.params

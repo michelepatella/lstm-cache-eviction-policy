@@ -53,7 +53,8 @@ def generate_repetition_pattern(
         requested_key = np.random.choice(keys_range[:slice_length])
 
         debug(
-            f"Random repetition pattern access among the first {slice_length} keys"
+            f"Random repetition pattern access "
+            f"among the first {slice_length} keys"
         )
 
     info(f"(Repetition pattern) Key requested: {requested_key}")

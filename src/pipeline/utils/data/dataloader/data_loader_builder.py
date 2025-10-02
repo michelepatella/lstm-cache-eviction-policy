@@ -16,8 +16,9 @@ def create_data_loader(
     applying specified settings including batch size and shuffling.
 
     Parameters:
-        dataset (AccessLogsDataset | Subset): The dataset instance to create the
-                                     data loader for.
+        dataset (AccessLogsDataset | Subset): The dataset instance
+                                              to create the
+                                              data loader for.
         batch_size (int): The batch size to use for the data loader.
         shuffle (bool): Whether to shuffle the data loader.
 
@@ -25,9 +26,12 @@ def create_data_loader(
         DataLoader: The data loader created.
 
     Raises:
-        RuntimeError: If an error occurs while creating the data loader, e.g.:
-            * If dataset object is not compatible with torch.utils.data.Dataset.
-            * If batch size or shuffle parameters are of incorrect type or invalid.
+        RuntimeError: If an error occurs while creating
+                      the data loader, e.g.:
+            * If dataset object is not compatible
+              with torch.utils.data.Dataset.
+            * If batch size or shuffle parameters
+              are of incorrect type or invalid.
     """
     debug(f"Batch size for the data loader to be created: {batch_size}")
     debug(f"Shuffle for the data loader to be created: {shuffle}")

@@ -19,7 +19,8 @@ def load_model(
     Parameters:
         model (nn.Module): The PyTorch model instance.
         device (torch.device): Device on which to map the model weights.
-        model_path (str): Path to the file containing the model state dictionary.
+        model_path (str): Path to the file containing
+                          the model state dictionary.
 
     Returns:
         nn.Module: The model with loaded weights.

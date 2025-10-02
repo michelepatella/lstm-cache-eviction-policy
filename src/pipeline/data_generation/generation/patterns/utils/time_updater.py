@@ -30,7 +30,8 @@ def update_time(
                            current day updated.
     """
     debug(
-        f"Current seconds in day: {current_seconds_in_day}, and current day: {current_day} to be updated"
+        f"Current seconds in day: {current_seconds_in_day},"
+        f" and current day: {current_day} to be updated"
     )
     debug(f"Period used to update time: {period}")
     debug(f"Delta time used to update time: {delta_t}")
@@ -51,7 +52,8 @@ def update_time(
         current_seconds_in_day += delta_t
 
     info(
-        f"Time updated (current seconds in day: {current_seconds_in_day}, current day: {current_day})"
+        f"Time updated (current seconds in day:"
+        f" {current_seconds_in_day}, current day: {current_day})"
     )
 
     return current_seconds_in_day, current_day

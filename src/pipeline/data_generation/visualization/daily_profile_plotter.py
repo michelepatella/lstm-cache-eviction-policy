@@ -38,7 +38,8 @@ def plot_daily_profile(
 
     Raises:
         RuntimeError: If an error occurs while plotting daily profile, e.g.:
-            * If timestamps list is empty, contains negative values, or non-numeric entries.
+            * If timestamps list is empty, contains
+              negative values, or non-numeric entries.
             * If timestamps data structure is not a numpy array or list-like.
             * If bin size is set to zero.
     """

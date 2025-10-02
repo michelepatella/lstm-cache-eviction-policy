@@ -38,9 +38,14 @@ def infer_batch(
         config (Config): Configuration object.
 
     Returns:
-        Tuple[float, List[int], List[int], List[torch.Tensor], List[torch.Tensor]]:
-            Tuple containing sum of batch losses, predicted class indices per sample,
-            ground truth labels per sample, model outputs per batch, and variances
+        Tuple[
+        float, List[int], List[int],
+        List[torch.Tensor], List[torch.Tensor
+        ]]:
+            Tuple containing sum of batch losses,
+            predicted class indices per sample,
+            ground truth labels per sample, model
+            outputs per batch, and variances
             from MC dropout.
 
     Raises:
@@ -69,8 +74,10 @@ def infer_batch(
                 features, keys, targets = batch
 
                 debug(
-                    f"Processing batch {batch_idx}: features shape: {features.shape}, "
-                    f"keys shape: {keys.shape}, targets shape: {targets.shape}"
+                    f"Processing batch {batch_idx}: "
+                    f"features shape: {features.shape}, "
+                    f"keys shape: {keys.shape},"
+                    f" targets shape: {targets.shape}"
                 )
 
                 # Move tensors to device

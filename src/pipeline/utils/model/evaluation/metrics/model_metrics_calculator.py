@@ -44,14 +44,19 @@ def compute_model_metrics(
         config (Config): Configuration object.
 
     Returns:
-        Dict[str, int | float]: Dictionary containing class report with precision,
-                                recall, f1-score, top-k accuracy, confusion matrix, and
+        Dict[str, int | float]: Dictionary containing class
+                                report with precision,
+                                recall, f1-score, top-k accuracy,
+                                confusion matrix, and
                                 Cohen's kappa score.
 
     Raises:
-        RuntimeError: If an error occurs while computing model metrics, e.g.:
-            * Failed to compute class report due to mismatched lengths or invalid inputs.
-            * Failed to compute confusion matrix due to mismatched lengths or invalid inputs.
+        RuntimeError: If an error occurs while
+                      computing model metrics, e.g.:
+            * Failed to compute class report due to
+              mismatched lengths or invalid inputs.
+            * Failed to compute confusion matrix due
+              to mismatched lengths or invalid inputs.
     """
     # Prepare configuration
     top_k = config.evaluation.top_k

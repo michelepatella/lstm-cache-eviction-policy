@@ -55,7 +55,8 @@ def generate_access_pattern(
     current_hour_in_day = (current_abs_seconds % PERIOD) / SECONDS_IN_HOUR
 
     debug(
-        f"Current hour in day for access pattern generation: {current_hour_in_day}"
+        f"Current hour in day for access "
+        f"pattern generation: {current_hour_in_day}"
     )
 
     # Prepare general configuration
@@ -65,7 +66,9 @@ def generate_access_pattern(
     requests_count = len(requests)
 
     debug(
-        f"Requests generated so far: {requests_count}, for {num_keys} keys, ranging from {first_key} to {first_key+keys_range_size}"
+        f"Requests generated so far: {requests_count}, "
+        f"for {num_keys} keys, ranging from {first_key}"
+        f" to {first_key+keys_range_size}"
     )
 
     behavior_config = config.data.pattern.access.behavior

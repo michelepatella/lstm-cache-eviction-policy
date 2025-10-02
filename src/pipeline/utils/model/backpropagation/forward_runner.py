@@ -21,25 +21,31 @@ def compute_forward(
     Compute a forward pass through the model.
 
     This function handles both training and inference:
-        - If the input is a tuple of length equals number of features plus target,
-          it unpacks features, keys, and target, moves them to the specified device,
+        - If the input is a tuple of length
+          equals number of features plus target,
+          it unpacks features, keys, and target,
+          moves them to the specified device,
           and computes model outputs.
-        - If a criterion is provided, computes the loss using the model outputs
-          and target.
+        - If a criterion is provided, computes the
+          loss using the model outputs and target.
 
     Parameters:
         inputs (Union[
             Tuple[torch.Tensor, torch.Tensor, torch.Tensor],
             Tuple[torch.Tensor, torch.Tensor],
-        ]): Model inputs, either a tuple including the target or inputs ready for model.
+        ]): Model inputs, either a tuple including the
+            target or inputs ready for model.
         model (nn.Module): The PyTorch model to compute forward pass for.
-        criterion (nn.Module | None): Loss function. If None, loss is not computed.
-        device (torch.device): Device on which to perform computations.
+        criterion (nn.Module | None): Loss function.
+                                      If None, loss is not computed.
+        device (torch.device): Device on which to perform
+                               computations.
 
     Returns:
-        Tuple[torch.Tensor | None, torch.Tensor]: Tuple containing computed loss
-                                                  (None if criterion is None) and
-                                                  model outputs.
+        Tuple[torch.Tensor | None,
+        torch.Tensor]: Tuple containing computed loss
+                       (None if criterion is None) and
+                       model outputs.
 
     Raises:
         RuntimeError: If an error occurs while calculating the loss.

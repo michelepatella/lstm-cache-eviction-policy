@@ -30,7 +30,8 @@ def calculate_zipf_probs(keys: np.ndarray, alpha: float) -> np.ndarray:
     zipf_probs = 1.0 / np.power(keys, alpha)
 
     debug(
-        f"(Before normalization) Zipfian probabilities range: [{np.min(zipf_probs)}, {np.max(zipf_probs)}]"
+        f"(Before normalization) Zipfian probabilities "
+        f"range: [{np.min(zipf_probs)}, {np.max(zipf_probs)}]"
     )
 
     # Normalize probabilities to
@@ -38,14 +39,18 @@ def calculate_zipf_probs(keys: np.ndarray, alpha: float) -> np.ndarray:
     zipf_probs_normalized = zipf_probs / np.sum(zipf_probs)
 
     debug(
-        f"(After normalization) Zipfian probabilities range: [{np.min(zipf_probs_normalized)}, {np.max(zipf_probs_normalized)}]"
+        f"(After normalization) Zipfian probabilities"
+        f" range: [{np.min(zipf_probs_normalized)},"
+        f" {np.max(zipf_probs_normalized)}]"
     )
     debug(
-        f"Sum of Zipfian key probabilities after normalization: {np.sum(zipf_probs_normalized)}"
+        f"Sum of Zipfian key probabilities"
+        f" after normalization: {np.sum(zipf_probs_normalized)}"
     )
 
     info(
-        f"{len(zipf_probs_normalized)} Zipfian probabilities calculated for {len(keys)} keys"
+        f"{len(zipf_probs_normalized)} Zipfian "
+        f"probabilities calculated for {len(keys)} keys"
     )
 
     return zipf_probs_normalized

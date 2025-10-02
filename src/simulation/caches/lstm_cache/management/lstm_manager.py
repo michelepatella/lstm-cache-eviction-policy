@@ -40,7 +40,7 @@ def manage_lstm_cache(
     :return:
     """
     # initial message
-    info(f"🔄 LSTM-based cache policy management started...")
+    info("🔄 LSTM-based cache policy management started...")
 
     try:
         start_time = None
@@ -130,7 +130,7 @@ def manage_lstm_cache(
         raise RuntimeError(f"RuntimeError: {e}.")
 
     # print a successful message
-    info(f"🟢 LSTM-based cache policy management completed.")
+    info("🟢 LSTM-based cache policy management completed.")
 
     if start_time is not None:
         return (

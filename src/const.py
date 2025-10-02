@@ -1,10 +1,13 @@
 import logging
 from datetime import timedelta
+from pathlib import Path
 from typing import Literal
+
+# Project
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 # Configuration
 CONFIG_FILE_NAME = "config.yaml"
-CONFIG_FILE_PARENT_LEVEL = 5
 CONFIG_SECTIONS_WITH_PARAMS = {
     "model": "params",
     "training.optimizer": "params",
@@ -12,7 +15,7 @@ CONFIG_SECTIONS_WITH_PARAMS = {
 
 # Logs
 LOGS_FORMAT = "[%(phase)s] %(levelname)s: %(message)s"
-LOGS_SAVE_PATH = "./logs/log.log"
+LOGS_SAVE_PATH = "../../logs/log.log"
 LOGS_MAX_BYTES = 10_000_000
 LOGS_BACKUP_COUNT = 100
 LOGS_DEFAULT_LEVEL = logging.INFO
@@ -41,17 +44,13 @@ DATA_DISTRIBUTION_MODES = [
     DATA_DISTRIBUTION_DYNAMIC_MODE,
 ]
 
-# Dataset types
+# Dataset
 DATASET_RAW_TYPE = "raw"
 DATASET_PREPROCESSED_TYPE = "preprocessed"
-
-# Dataset columns
 TIMESTAMP_COLUMN = "timestamp"
 REQUEST_COLUMN = "request"
 SIN_TIME_COLUMN = "sin_time"
 COS_TIME_COLUMN = "cos_time"
-
-# Dataset split
 TRAINING_SPLIT_TYPE = "training"
 TESTING_SPLIT_TYPE = "testing"
 

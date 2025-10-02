@@ -36,7 +36,8 @@ def calculate_periodic_component(
     )
 
     info(
-        f"Periodic component: {periodic_component}, calculated for hour in day: {current_hour_in_day}"
+        f"Periodic component: {periodic_component}, "
+        f"calculated for hour in day: {current_hour_in_day}"
     )
 
     return periodic_component

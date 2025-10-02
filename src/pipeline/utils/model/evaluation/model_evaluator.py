@@ -43,15 +43,22 @@ def evaluate_model(
                                 in addition to loss.
 
     Returns:
-        Tuple[float, Dict[str, int | float] | None, torch.Tensor, List[int], List[float]]:
-            Tuple containing the average loss, (optionally) a dictionary of
-            evaluation metrics, model outputs, ground truth labels, and
+        Tuple[
+        float, Dict[str, int | float] | None,
+        torch.Tensor, List[int], List[float]
+        ]:
+            Tuple containing the average loss,
+            (optionally) a dictionary of
+            evaluation metrics, model outputs,
+            ground truth labels, and
             variances from MC dropout (if applicable).
 
     Raises:
-        RuntimeError: If an error occurs during the calculation of average loss, e.g.:
+        RuntimeError: If an error occurs during the
+                      calculation of average loss, e.g.:
             * Division by zero if the data loader is empty.
-            * Invalid type or attribute error when accessing the data loader length.
+            * Invalid type or attribute error when
+              accessing the data loader length.
     """
     # Perform inference
     (

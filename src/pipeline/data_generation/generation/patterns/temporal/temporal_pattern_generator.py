@@ -34,7 +34,8 @@ def generate_temporal_pattern(
         float: Delta time for current seconds in day.
     """
     debug(
-        f"Current seconds in day: {current_seconds_in_day} for temporal pattern generation"
+        f"Current seconds in day: {current_seconds_in_day}"
+        f" for temporal pattern generation"
     )
 
     # Move from current seconds to
@@ -42,7 +43,8 @@ def generate_temporal_pattern(
     current_hour_in_day = current_seconds_in_day / SECONDS_IN_HOUR
 
     debug(
-        f"Current hour in day: {current_hour_in_day} for temporal pattern generation"
+        f"Current hour in day: {current_hour_in_day} "
+        f"for temporal pattern generation"
     )
 
     periodic_pattern_config = config.data.pattern.temporal.periodic
@@ -99,7 +101,8 @@ def generate_temporal_pattern(
     delta_t = np.random.exponential(scale=freq_scale)
 
     info(
-        f"Delta time: {delta_t}, calculated for current hour in day: {current_hour_in_day}"
+        f"Delta time: {delta_t}, calculated for"
+        f" current hour in day: {current_hour_in_day}"
     )
 
     return delta_t

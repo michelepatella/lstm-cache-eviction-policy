@@ -7,5 +7,5 @@ class TestingConfig(BaseModel):
     settings.
     """
 
-    batch_size: conint(gt=0)
+    batch_size: conint(gt=0)  # type: ignore[valid-type]
     shuffle: bool

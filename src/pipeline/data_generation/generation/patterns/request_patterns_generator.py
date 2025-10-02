@@ -35,7 +35,8 @@ def generate_pattern_requests(
 
     Parameters:
         keys_range (np.ndarray): List of keys to generate requests for.
-        zipf_probs (np.ndarray): List of Zipfian probabilities of the given keys.
+        zipf_probs (np.ndarray): List of Zipfian probabilities
+                                 of the given keys.
         config (Config): Configuration object.
         time_step_duration (int): Optional time step to generate requests for.
 
@@ -73,7 +74,8 @@ def generate_pattern_requests(
     # For each request to be generated
     for _ in range(num_requests):
         debug(
-            f"Request generation for day {current_day}, seconds: {current_seconds_in_day}"
+            f"Request generation for day {current_day},"
+            f" seconds: {current_seconds_in_day}"
         )
 
         # Generate delta time (i.e., gap between
@@ -108,7 +110,8 @@ def generate_pattern_requests(
         timestamps_seconds.append(current_abs_seconds)
 
         debug(
-            f"Generated request {request} at absolute seconds {current_abs_seconds}"
+            f"Generated request {request} at "
+            f"absolute seconds {current_abs_seconds}"
         )
 
     info("Pattern requests generated")

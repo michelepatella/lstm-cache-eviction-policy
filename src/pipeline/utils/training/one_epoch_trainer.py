@@ -71,7 +71,8 @@ def train_one_epoch(
     for batch in training_loader:
         try:
             debug(
-                f"Current batch shapes during one-epoch training: {[t.shape for t in batch]}"
+                f"Current batch shapes during "
+                f"one-epoch training: {[t.shape for t in batch]}"
             )
 
             # Reset the gradients

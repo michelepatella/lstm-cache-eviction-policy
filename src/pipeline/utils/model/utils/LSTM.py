@@ -54,7 +54,8 @@ class LSTM(nn.Module):
                     config_value = getattr(model_params, param)
 
                     debug(
-                        f"'{param}' not found or None, using config value: {config_value}"
+                        f"'{param}' not found or None,"
+                        f" using config value: {config_value}"
                     )
 
                     # Set the value specified by configuration
@@ -80,7 +81,8 @@ class LSTM(nn.Module):
             self.embedding = nn.Embedding(self.num_keys, self.embedding_dim)
 
             debug(
-                f"Embedding layer for LSTM model instantiated with dimension: {self.embedding_dim}"
+                f"Embedding layer for LSTM model"
+                f" instantiated with dimension: {self.embedding_dim}"
             )
 
             info("LSTM fields set")
@@ -151,7 +153,8 @@ class LSTM(nn.Module):
         self.fc = nn.Linear(self.hidden_size, self.num_keys)
 
         debug(
-            f"Fully connected layer instantiated (in_features={self.hidden_size},"
+            f"Fully connected layer instantiated"
+            f" (in_features={self.hidden_size},"
             f" out_features={self.num_keys})"
         )
 
@@ -171,17 +174,22 @@ class LSTM(nn.Module):
             x_keys (torch.Tensor): Keys tensor for the current batch.
 
         Returns:
-            torch.Tensor: Concatenated input tensor ready for LSTM.
+            torch.Tensor: Concatenated input
+                          tensor ready for LSTM.
 
         Raises:
-            RuntimeError: If an error occurs while building the LSTM input, e.g.:
-                * Keys contains out-of-range values for embedding lookup.
-                * Features or embedded keys are of incompatible shape for concatenation.
+            RuntimeError: If an error occurs while
+                          building the LSTM input, e.g.:
+                * Keys contains out-of-range values
+                  for embedding lookup.
+                * Features or embedded keys are of
+                  incompatible shape for concatenation.
                 * Features or keys are of invalid type (non-tensor).
         """
         try:
             debug(
-                f"Features shape: {x_features.shape}, keys shape: {x_keys.shape}"
+                f"Features shape: {x_features.shape}, "
+                f"keys shape: {x_keys.shape}"
             )
 
             # Pass keys through the embedding layer
@@ -213,23 +221,32 @@ class LSTM(nn.Module):
         applies MC dropout, and finally computes logits using a linear layer.
 
         Parameters:
-            x_features (torch.Tensor): Input features tensor for the current batch.
-            x_keys (torch.Tensor): Input keys tensor for the current batch.
+            x_features (torch.Tensor): Input features tensor
+                                       for the current batch.
+            x_keys (torch.Tensor): Input keys tensor
+                                   for the current batch.
 
         Returns:
             torch.Tensor: Logits computed by the LSTM model.
 
         Raises:
-            RuntimeError: If an error occurs during the forward pass, e.g.:
-                * LSTM input construction fails due to incompatible shapes or types.
-                * LSTM computation fails due to invalid input dimensions.
+            RuntimeError: If an error occurs during
+                          the forward pass, e.g.:
+                * LSTM input construction fails due
+                  to incompatible shapes or types.
+                * LSTM computation fails due to
+                  invalid input dimensions.
                 * MC dropout layer application fails.
-                * Fully-connected layer computation fails due to invalid tensor shape.
-                * Indexing fails when extracting the last timestep of LSTM output.
+                * Fully-connected layer computation
+                  fails due to invalid tensor shape.
+                * Indexing fails when extracting the
+                  last timestep of LSTM output.
         """
         try:
             debug(
-                f"LSTM forward pass with features shape: {x_features.shape}, keys shape: {x_keys.shape}"
+                f"LSTM forward pass with features"
+                f" shape: {x_features.shape}, "
+                f"keys shape: {x_keys.shape}"
             )
 
             # Build LSTM input for current batch

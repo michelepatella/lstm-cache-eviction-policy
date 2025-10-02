@@ -8,20 +8,20 @@ from pipeline.config.classes.validation.choice_field_validator import (
 
 # Training — General
 class TrainingGeneralEpochsConfig(BaseModel):
-    count: conint(gt=0)
+    count: conint(gt=0)  # type: ignore[valid-type]
 
 
 class TrainingGeneralConfig(BaseModel):
     epochs: TrainingGeneralEpochsConfig
-    batch_size: conint(gt=0)
+    batch_size: conint(gt=0)  # type: ignore[valid-type]
     shuffle: bool
 
 
 # Training — Optimizer — Params
 class OptimizerParamsConfig(BaseModel):
-    learning_rate: confloat(gt=0)
-    weight_decay: confloat(ge=0)
-    momentum: confloat(ge=0, le=1)
+    learning_rate: confloat(gt=0)  # type: ignore[valid-type]
+    weight_decay: confloat(ge=0)  # type: ignore[valid-type]
+    momentum: confloat(ge=0, le=1)  # type: ignore[valid-type]
 
 
 # Training — Optimizer
@@ -55,8 +55,8 @@ class OptimizerConfig(BaseModel):
 
 # Training — Early stopping
 class EarlyStoppingTrainingConfig(BaseModel):
-    patience: conint(ge=0)
-    delta: confloat(ge=0)
+    patience: conint(ge=0)  # type: ignore[valid-type]
+    delta: confloat(ge=0)  # type: ignore[valid-type]
 
 
 class TrainingConfig(BaseModel):

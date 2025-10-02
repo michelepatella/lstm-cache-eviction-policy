@@ -65,7 +65,8 @@ class LSTMCache(BaseCache):
 
             # debugging
             debug(
-                f"⚙️ Key {key} already cached, new expiration time: {self.expiry[key]}."
+                f"⚙️ Key {key} already cached, "
+                f"new expiration time: {self.expiry[key]}."
             )
             # print a successful message
             info("🟢 Cold start managed.")
@@ -240,7 +241,8 @@ class LSTMCache(BaseCache):
 
                 # debugging
                 debug(
-                    f"⚙️ Key {key} put in the cache with expiration time: {self.expiry[key]}."
+                    f"⚙️ Key {key} put in the cache "
+                    f"with expiration time: {self.expiry[key]}."
                 )
 
                 # print a successful message

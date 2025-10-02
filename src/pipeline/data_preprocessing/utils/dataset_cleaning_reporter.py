@@ -28,7 +28,8 @@ def report_dataset_cleaning(
         None
 
     Raises:
-        RuntimeError: If an error occurs while reporting dataset cleaning, e.g.:
+        RuntimeError: If an error occurs while
+                      reporting dataset cleaning, e.g.:
             * If one or both of datasets received are not Pandas DataFrame.
             * If one or both of datasets received are of incompatible type
               with operations used to calculate their lengths.

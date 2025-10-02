@@ -28,7 +28,8 @@ def load_config() -> ConfigDict:
     abs_config_path = get_config_abs_path()
 
     debug(
-        f"YAML configuration file absolute path to be loaded: {abs_config_path}"
+        f"YAML configuration file absolute path "
+        f"to be loaded: {abs_config_path}"
     )
 
     try:
@@ -37,7 +38,8 @@ def load_config() -> ConfigDict:
         with open(abs_config_path, "r") as f:
             config_file = yaml.safe_load(f)
             debug(
-                f"YAML configuration file content type loaded: {type(config_file)}"
+                f"YAML configuration file content"
+                f" type loaded: {type(config_file)}"
             )
     except (
         OSError,

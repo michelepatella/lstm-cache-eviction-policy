@@ -35,8 +35,10 @@ def plot_zipf_loglog(requests: List[int]) -> None:
 
     Raises:
         RuntimeError: If an error occurs while plotting Zipf log-log, e.g.:
-            * If the list of requests is empty or contains one or more negative values.
-            * If the list of requests is not iterable or contains non-iterable items.
+            * If the list of requests is empty or
+              contains one or more negative values.
+            * If the list of requests is not
+              iterable or contains non-iterable items.
     """
     try:
         # Count how many keys are

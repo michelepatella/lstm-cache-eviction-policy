@@ -1,4 +1,4 @@
-from const import DATA_DISTRIBUTION_STATIC_MODE, DATASET_RAW_TYPE
+from const import DATA_DISTRIBUTION_STATIC_MODE, DATASET_RAW_TYPE, PROJECT_ROOT
 from pipeline.config.classes.Config import Config
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.error_logger import error
@@ -28,7 +28,8 @@ def get_dataset_path(dataset_type: str, config: Config) -> str:
         data_distribution_mode = config.data.general.mode
 
         debug(
-            f"Data distribution mode for loading dataset: {data_distribution_mode}"
+            f"Data distribution mode for "
+            f"loading dataset: {data_distribution_mode}"
         )
 
         # Determine dataset path based on
@@ -53,7 +54,7 @@ def get_dataset_path(dataset_type: str, config: Config) -> str:
 
         info(f"Dataset path retrieved: {dataset_path}")
 
-        return dataset_path
+        return PROJECT_ROOT / dataset_path
     except AttributeError as e:
         msg = "Failed to retrieve dataset path"
         error("%s: %s", msg, e)

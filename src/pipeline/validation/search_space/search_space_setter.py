@@ -26,8 +26,10 @@ def set_nested_dict(
         None
 
     Raises:
-        RuntimeError: If an error occurs while setting a nested dictionary value, e.g.:
-            * If nested dictionary is not a dictionary or keys is not iterable.
+        RuntimeError: If an error occurs while setting
+                      a nested dictionary value, e.g.:
+            * If nested dictionary is not a
+              dictionary or keys is not iterable.
             * If keys sequence is empty.
             * If assignment fails due to an invalid key.
     """

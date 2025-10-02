@@ -34,7 +34,8 @@ def generate_requests_helper(
                                    for dynamic requests.
 
     Returns:
-        Tuple[List[int], np.ndarray]: Generated requests and timestamps in hours.
+        Tuple[List[int], np.ndarray]: Generated requests and
+                                      timestamps in hours.
     """
     # Retrieve keys range from configuration
     keys_config = config.data.general.keys
@@ -43,7 +44,8 @@ def generate_requests_helper(
     keys_range = np.arange(min_key, max_key + 1)
 
     debug(
-        f"Requests generation for keys range: [{min_key}, {max_key}] (total: {len(keys_range)} keys)"
+        f"Requests generation for keys range: [{min_key},"
+        f" {max_key}] (total: {len(keys_range)} keys)"
     )
 
     # If no alpha range is provided
@@ -60,7 +62,8 @@ def generate_requests_helper(
         time_step_duration = num_requests // len(alpha_range)
 
         debug(
-            f"Time step duration for dynamic data generation: {time_step_duration}"
+            f"Time step duration for dynamic "
+            f"data generation: {time_step_duration}"
         )
 
     requests = []
@@ -86,7 +89,8 @@ def generate_requests_helper(
         )
 
         info(
-            f"{len(current_requests)} requests generated for alpha value: {alpha}"
+            f"{len(current_requests)} requests generated "
+            f"for alpha value: {alpha}"
         )
 
         # Store generated requests and timestamps

@@ -48,8 +48,10 @@ def train_n_epochs(
         config (Config): Configuration object.
 
     Returns:
-        Tuple[float, torch.nn.Module]: Tuple containing the best average loss achieved
-                                       during training and the best trained model.
+        Tuple[float, torch.nn.Module]: Tuple containing the best
+                                       average loss achieved
+                                       during training and the
+                                       best trained model.
 
     Raises:
         RuntimeError: If an error occurs while deep copying the model weights.

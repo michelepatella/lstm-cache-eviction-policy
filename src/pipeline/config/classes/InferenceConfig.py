@@ -3,12 +3,12 @@ from pydantic import BaseModel, confloat, conint
 
 # Inference — Confidence Intervals
 class ConfidenceIntervalsConfig(BaseModel):
-    level: confloat(ge=0, le=1)
+    level: confloat(ge=0, le=1)  # type: ignore[valid-type]
 
 
 # Inference — MC Dropout
 class MCDropoutSamplesConfig(BaseModel):
-    count: conint(gt=0)
+    count: conint(gt=0)  # type: ignore[valid-type]
 
 
 class MCDropoutConfig(BaseModel):

@@ -32,7 +32,9 @@ def get_section_combinations(
 
     Raises:
         ValueError: If no combination could be generated.
-        RuntimeError: If an error while generating all section parameters combinations occurs, e.g.:
+        RuntimeError: If an error while generating
+                      all section parameters combinations
+                      occurs, e.g.:
             * If params_dict is not iterable.
     """
     try:
@@ -50,7 +52,7 @@ def get_section_combinations(
         # for the current section
         section_values = []
         for values in combinations:
-            combo = {}
+            combo: Dict[str, Any] = {}
             for key_path, value in zip(keys, values):
                 # Set nested key-value pairs to reconstruct
                 # original structure

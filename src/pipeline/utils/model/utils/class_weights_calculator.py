@@ -35,7 +35,8 @@ def calculate_class_weight(
         targets_array = targets.cpu().numpy()
 
         debug(
-            f"Targets converted to NumPy array with shape: {targets_array.shape}"
+            f"Targets converted to NumPy array "
+            f"with shape: {targets_array.shape}"
         )
 
         # Identify present classes in targets

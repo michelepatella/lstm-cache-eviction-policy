@@ -40,7 +40,8 @@ def set_bursty_scale(
         bursty_scale = burst_low
 
     info(
-        f"Bursty scale: {bursty_scale}, set for current hour in day: {current_hour_in_day}"
+        f"Bursty scale: {bursty_scale}, set for"
+        f" current hour in day: {current_hour_in_day}"
     )
 
     return bursty_scale

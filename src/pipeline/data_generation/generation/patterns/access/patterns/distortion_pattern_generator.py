@@ -69,7 +69,9 @@ def generate_distortion_pattern(
         ) + first_key
 
         debug(
-            f"Regular distorted key access with history: {distortion_history}, and correction: {distortion_correction}"
+            f"Regular distorted key access with"
+            f" history: {distortion_history}, and "
+            f"correction: {distortion_correction}"
         )
     else:
         # Make a noisy key request by
@@ -81,7 +83,8 @@ def generate_distortion_pattern(
         ) + first_key
 
         debug(
-            f"Noisy distorted key access with noise: {noise} (within: {noise_min}, {noise_max})"
+            f"Noisy distorted key access with "
+            f"noise: {noise} (within: {noise_min}, {noise_max})"
         )
 
     info(f"(Distortion pattern) Key requested: {requested_key}")

@@ -57,11 +57,16 @@ def update_config(
         # overwriting it with the updated version
         with open(abs_config_path, "w") as config_file:
             yaml.dump(
-                merged_config,  # New configuration object
-                config_file,  # Previous configuration object
-                default_flow_style=False,  # Use block style for YAML file
-                sort_keys=False,  # Preserve the original order of the keys
-                allow_unicode=True,  # Allow writing Unicode characters to YAML file
+                # New configuration object
+                merged_config,
+                # Previous configuration object
+                config_file,
+                # Use block style for YAML file
+                default_flow_style=False,
+                # Preserve the original order of the keys
+                sort_keys=False,
+                # Allow writing Unicode characters to YAML file
+                allow_unicode=True,
             )
     except OSError as e:
         msg = "Failed to update YAML configuration file"

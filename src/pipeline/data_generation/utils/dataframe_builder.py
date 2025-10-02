@@ -32,7 +32,8 @@ def create_dataframe(
     """
     debug(f"Columns number of dataframe to be created: {len(columns)}")
     debug(
-        f"Amount of data for dataframe to be created: {sum(len(v) for v in columns.values())}"
+        f"Amount of data for dataframe to be"
+        f" created: {sum(len(v) for v in columns.values())}"
     )
 
     try:

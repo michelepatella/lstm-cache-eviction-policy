@@ -44,7 +44,8 @@ def plot_key_usage_heatmap(
         None
 
     Raises:
-        RuntimeError: If an error occurs while plotting key usage heatmap, e.g.:
+        RuntimeError: If an error occurs while
+                      plotting key usage heatmap, e.g.:
             * If requests or timestamps data contain invalid
               values or mismatched lengths.
             * If requests data is not iterable or timestamps data is not a
@@ -74,7 +75,9 @@ def plot_key_usage_heatmap(
             requested_key_idx = current_request - min_key
 
             debug(
-                f"Current request: {current_request}, hour: {current_timestamp_hour_int}, index in heatmap: {requested_key_idx}"
+                f"Current request: {current_request}, "
+                f"hour: {current_timestamp_hour_int}, "
+                f"index in heatmap: {requested_key_idx}"
             )
 
             # Check whether the current timestamp is
