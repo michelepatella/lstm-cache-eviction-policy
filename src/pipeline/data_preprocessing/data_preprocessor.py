@@ -15,7 +15,7 @@ from pipeline.data_preprocessing.removal.invalid_values_remover import (
 )
 from pipeline.data_preprocessing.removal.missing_values_remover import remove_missing_values
 from pipeline.utils.dataset.saver import save_dataset
-from utils.data.dataset.loader import load_dataset
+from utils.dataset.loader import load_dataset
 from utils.logs.levels.info_logger import info
 from utils.logs.initializer import logs_phase
 

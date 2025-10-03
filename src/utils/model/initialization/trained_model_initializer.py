@@ -5,7 +5,7 @@ from torch import nn
 from torch.utils.data import DataLoader
 
 from pipeline.config.classes.Config import Config
-from utils.data.data_loader.targets_extractor import (
+from utils.data_loader.targets_extractor import (
     extract_targets_from_data_loader,
 )
 from utils.logs.levels.info_logger import info

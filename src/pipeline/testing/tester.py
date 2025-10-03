@@ -19,12 +19,12 @@ from pipeline.testing.visualization.report.model_evaluation_reporter import (
 from pipeline.testing.visualization.plots.precision_recall_curve_plotter import (
     plot_precision_recall_curve,
 )
-from utils.data.AccessLogsDataset import AccessLogsDataset
+from utils.dataset.AccessLogsDataset import AccessLogsDataset
 from utils.logs.levels.info_logger import info
 from utils.logs.initializer import logs_phase
 from pipeline.utils.evaluation.evaluator import evaluate_model
 from utils.model.initialization.trained_model_initializer import initialize_trained_model
-from utils.data.data_loader.initializer import initialize_data_loader
+from utils.data_loader.initializer import initialize_data_loader
 
 
 def test_model(config: Config) -> None:

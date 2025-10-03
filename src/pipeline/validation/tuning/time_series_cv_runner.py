@@ -6,11 +6,11 @@ from sklearn.model_selection import TimeSeriesSplit
 
 from pipeline.config.classes.Config import Config
 from pipeline.utils.dataset.splitter import split_training_set
-from utils.data.AccessLogsDataset import AccessLogsDataset
-from utils.data.data_loader.builder import (
+from utils.dataset.AccessLogsDataset import AccessLogsDataset
+from utils.data_loader.builder import (
     create_data_loader,
 )
-from utils.data.data_loader.targets_extractor import (
+from utils.data_loader.targets_extractor import (
     extract_targets_from_data_loader,
 )
 from utils.logs.levels.debug_logger import debug

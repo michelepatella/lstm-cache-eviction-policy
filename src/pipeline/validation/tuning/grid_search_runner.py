@@ -3,7 +3,7 @@ from typing import Any, Dict
 from tqdm import tqdm
 
 from pipeline.config.classes.Config import Config
-from utils.data.AccessLogsDataset import AccessLogsDataset
+from utils.dataset.AccessLogsDataset import AccessLogsDataset
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
 from pipeline.validation.best_params.updater import (

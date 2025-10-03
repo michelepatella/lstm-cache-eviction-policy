@@ -1,7 +1,7 @@
 from const import LOGS_VALIDATION_PHASE, TRAINING_SPLIT_TYPE
 from pipeline.config.classes.Config import Config
-from utils.data.AccessLogsDataset import AccessLogsDataset
-from utils.data.data_loader.initializer import initialize_data_loader
+from utils.dataset.AccessLogsDataset import AccessLogsDataset
+from utils.data_loader.initializer import initialize_data_loader
 from utils.logs.levels.info_logger import info
 from utils.logs.initializer import logs_phase
 from pipeline.validation.best_params.saver import save_best_params

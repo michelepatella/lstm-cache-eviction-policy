@@ -1,4 +1,4 @@
-from utils.data.AccessLogsDataset import AccessLogsDataset
+from utils.dataset.AccessLogsDataset import AccessLogsDataset
 from utils.logs.levels.info_logger import info
 
 

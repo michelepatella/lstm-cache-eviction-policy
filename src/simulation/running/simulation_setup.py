@@ -1,7 +1,7 @@
-from utils.data.AccessLogsDataset import AccessLogsDataset
+from utils.dataset.AccessLogsDataset import AccessLogsDataset
 from utils.logs.levels.info_logger import info
 from utils.model.initialization.trained_model_initializer import initialize_trained_model
-from utils.data.data_loader.initializer import initialize_data_loader
+from utils.data_loader.initializer import initialize_data_loader
 
 
 def simulation_setup(policy_name, config_settings):
