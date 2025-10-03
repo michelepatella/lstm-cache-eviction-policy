@@ -104,6 +104,6 @@ def initialize_model_components(
 
     debug(f"Optimizer created: {optimizer}")
 
-    info("Model training setup completed")
+    info("Model training initialization completed")
 
     return device, criterion, model, optimizer

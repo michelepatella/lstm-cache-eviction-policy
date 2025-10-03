@@ -1,6 +1,6 @@
 from utils.data.AccessLogsDataset import AccessLogsDataset
 from utils.logs.levels.info_logger import info
-from utils.model.initialization.trained_model_initializer import trained_model_setup
+from utils.model.initialization.trained_model_initializer import initialize_trained_model
 from utils.data.data_loader.initializer import initialize_data_loader
 
 
@@ -38,7 +38,7 @@ def simulation_setup(policy_name, config_settings):
     # initial model setup, in case of LSTM cache
     if policy_name == "LSTM":
         # setup for lstm cache
-        (device, criterion, model) = trained_model_setup(
+        (device, criterion, model) = initialize_trained_model(
             testing_loader, config_settings
         )
 

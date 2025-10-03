@@ -23,7 +23,7 @@ from utils.data.AccessLogsDataset import AccessLogsDataset
 from utils.logs.levels.info_logger import info
 from utils.logs.initializer import logs_phase
 from pipeline.utils.evaluation.evaluator import evaluate_model
-from utils.model.initialization.trained_model_initializer import trained_model_setup
+from utils.model.initialization.trained_model_initializer import initialize_trained_model
 from utils.data.data_loader.initializer import initialize_data_loader
 
 
@@ -60,7 +60,7 @@ def test_model(config: Config) -> None:
     )
 
     # Trained model setup for testing
-    device, criterion, model = trained_model_setup(testing_loader, config)
+    device, criterion, model = initialize_trained_model(testing_loader, config)
 
     # Set model in evaluation phase
     model.eval()

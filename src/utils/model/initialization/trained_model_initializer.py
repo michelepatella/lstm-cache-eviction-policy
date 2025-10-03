@@ -15,7 +15,7 @@ from utils.model.initialization.model_components_initializer import (
 from utils.model.initialization.utils.model_loader import load_model
 
 
-def trained_model_setup(
+def initialize_trained_model(
     data_loader: DataLoader, config: Config
 ) -> Tuple[torch.device, nn.Module, nn.Module]:
     """
@@ -54,6 +54,6 @@ def trained_model_setup(
     # Load the trained model
     model = load_model(model, device, model_path)
 
-    info("Trained model setup completed")
+    info("Trained model initialization completed")
 
     return device, criterion, model
