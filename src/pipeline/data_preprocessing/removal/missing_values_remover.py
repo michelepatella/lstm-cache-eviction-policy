@@ -4,7 +4,9 @@ from const import (
     MISSING_VALUES_REMOVAL_DROPNA_AXIS,
     MISSING_VALUES_REMOVAL_DROPNA_HOW,
 )
-from pipeline.data_preprocessing.visualization.report.dataset_removal_reporter import report_dataset_removal
+from pipeline.data_preprocessing.visualization.report.dataset_removal_reporter import (
+    report_dataset_removal,
+)
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 

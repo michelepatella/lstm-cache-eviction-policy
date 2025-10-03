@@ -2,7 +2,9 @@ import pandas as pd
 
 from const import REQUEST_COLUMN, TIMESTAMP_COLUMN
 from pipeline.config.classes.Config import Config
-from pipeline.data_preprocessing.visualization.report.dataset_removal_reporter import report_dataset_removal
+from pipeline.data_preprocessing.visualization.report.dataset_removal_reporter import (
+    report_dataset_removal,
+)
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 

@@ -10,8 +10,8 @@ from utils.logs.levels.info_logger import info
 from utils.model.initialization.utils.class_weights_calculator import (
     calculate_class_weight,
 )
-from utils.model.LSTM import LSTM
 from utils.model.initialization.utils.optimizer_builder import build_optimizer
+from utils.model.LSTM import LSTM
 
 
 def initialize_model_components(

@@ -40,7 +40,7 @@ el.replaceWith(d);
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="src.pipeline.testing.main" href="main.html">src.pipeline.testing.main</a></code></dt>
+<dt><code class="name"><a title="src.pipeline.testing.tester" href="tester.html">src.pipeline.testing.tester</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -87,7 +87,7 @@ el.replaceWith(d);
     top_k = config.evaluation.top_k
 
     # Setup testing data loader
-    _, testing_loader = data_loader_setup(
+    _, testing_loader = initialize_data_loader(
         TESTING_SPLIT_TYPE,
         testing_batch_size,
         testing_shuffle,
@@ -96,7 +96,7 @@ el.replaceWith(d);
     )
 
     # Trained model setup for testing
-    device, criterion, model = trained_model_setup(testing_loader, config)
+    device, criterion, model = initialize_trained_model(testing_loader, config)
 
     # Set model in evaluation phase
     model.eval()
@@ -177,7 +177,7 @@ plots providing model performance insights.</p>
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="src.pipeline.testing.main" href="main.html">src.pipeline.testing.main</a></code></li>
+<li><code><a title="src.pipeline.testing.tester" href="tester.html">src.pipeline.testing.tester</a></code></li>
 <li><code><a title="src.pipeline.testing.visualization" href="visualization/index.html">src.pipeline.testing.visualization</a></code></li>
 </ul>
 </li>

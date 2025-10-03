@@ -15,7 +15,7 @@ CONFIG_SECTIONS_WITH_PARAMS = {
 
 # Logs
 LOGS_FORMAT = "[%(phase)s] %(levelname)s: %(message)s"
-LOGS_SAVE_PATH = "../logs/log.log"
+LOGS_SAVE_PATH = PROJECT_ROOT / "logs" / "log.log"
 LOGS_MAX_BYTES = 10_000_000
 LOGS_BACKUP_COUNT = 100
 LOGS_DEFAULT_LEVEL = logging.INFO

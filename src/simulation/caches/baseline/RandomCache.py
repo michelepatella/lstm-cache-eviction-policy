@@ -1,0 +1,80 @@
+import random
+
+from simulation.caches.utils.BaseCache import BaseCache
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
+
+
+class RandomCache(BaseCache):
+    def put(self, key, current_time):
+        """
+        Method to put a key in the random cache.
+        :param key: The key to put.
+        :param current_time: The current time.
+        :return:
+        """
+        # initial message
+        info("🔄 Key insertion started...")
+
+        try:
+            # clean up the cache removing expired keys
+            self._remove_expired_keys(current_time)
+
+            # check if the key is in cache
+            if self.contains(key, current_time):
+                # update expiration time of the key
+                self.expiry[key] = current_time + self.ttl
+
+                # trace event
+                self.metrics_logger.log_put(key, current_time, self.ttl)
+
+                # debugging
+                debug(
+                    f"⚙️ Key {key} already cached, "
+                    f"new expiration time: {self.expiry[key]}."
+                )
+
+                # print a successful message
+                info("🟢 Key inserted.")
+
+                return
+
+            # check if the cache is full
+            elif len(self.store) >= self.maxsize:
+                # evict a key randomly
+                evict_key = random.choice(list(self.store.keys()))
+                self.store.pop(evict_key)
+                self.expiry.pop(evict_key)
+
+                # debugging
+                debug(f"⚙️ Full cache, evicting: {evict_key}.")
+
+                # trace event
+                self.metrics_logger.log_eviction(evict_key, current_time)
+
+            # store the new key
+            self.store[key] = key
+            self.expiry[key] = current_time + self.ttl
+
+            # trace event
+            self.metrics_logger.log_put(key, current_time, self.ttl)
+
+            # debugging
+            debug(
+                f"⚙️Key {key} cached with expiration time: {self.expiry[key]}."
+            )
+        except AttributeError as e:
+            raise AttributeError(f"AttributeError: {e}.")
+        except TypeError as e:
+            raise TypeError(f"TypeError: {e}.")
+        except KeyError as e:
+            raise KeyError(f"KeyError: {e}.")
+        except IndexError as e:
+            raise IndexError(f"IndexError: {e}.")
+        except ValueError as e:
+            raise ValueError(f"ValueError: {e}.")
+        except Exception as e:
+            raise RuntimeError(f"RuntimeError: {e}.")
+
+        # print a successful message
+        info("🟢 Key inserted.")

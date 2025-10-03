@@ -44,15 +44,15 @@ el.replaceWith(d);
 <dd>
 <div class="desc"></div>
 </dd>
-<dt><code class="name"><a title="src.pipeline.validation.main" href="main.html">src.pipeline.validation.main</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
 <dt><code class="name"><a title="src.pipeline.validation.search_space" href="search_space/index.html">src.pipeline.validation.search_space</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 <dt><code class="name"><a title="src.pipeline.validation.tuning" href="tuning/index.html">src.pipeline.validation.tuning</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="src.pipeline.validation.validator" href="validator.html">src.pipeline.validation.validator</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -94,7 +94,7 @@ el.replaceWith(d);
     validation_shuffle = config.validation.general.shuffle
 
     # Load the training set
-    training_set, _ = data_loader_setup(
+    training_set, _ = initialize_data_loader(
         TRAINING_SPLIT_TYPE,
         validation_batch_size,
         validation_shuffle,
@@ -144,9 +144,9 @@ in a new configuration.</p>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
 <li><code><a title="src.pipeline.validation.best_params" href="best_params/index.html">src.pipeline.validation.best_params</a></code></li>
-<li><code><a title="src.pipeline.validation.main" href="main.html">src.pipeline.validation.main</a></code></li>
 <li><code><a title="src.pipeline.validation.search_space" href="search_space/index.html">src.pipeline.validation.search_space</a></code></li>
 <li><code><a title="src.pipeline.validation.tuning" href="tuning/index.html">src.pipeline.validation.tuning</a></code></li>
+<li><code><a title="src.pipeline.validation.validator" href="validator.html">src.pipeline.validation.validator</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>

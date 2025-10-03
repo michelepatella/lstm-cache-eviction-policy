@@ -23,9 +23,9 @@ from pipeline.data_generation.visualization.plots.zipf_loglog_plotter import (
     plot_zipf_loglog,
 )
 from pipeline.utils.dataset.saver import save_dataset
+from utils.logs.initializer import logs_phase
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
-from utils.logs.initializer import logs_phase
 
 
 def generate_data(config: Config) -> None:

@@ -4,11 +4,13 @@ from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from pipeline.utils.training.backpropagation.backward_runner import compute_backward
+from pipeline.utils.training.backpropagation.backward_runner import (
+    compute_backward,
+)
+from utils.backpropagation.forward_runner import compute_forward
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
-from utils.backpropagation.forward_runner import compute_forward
 
 
 def train_one_epoch(

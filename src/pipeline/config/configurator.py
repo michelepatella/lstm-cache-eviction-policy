@@ -1,8 +1,8 @@
 from const import LOGS_CONFIGURATION_PHASE
 from pipeline.config.classes.Config import Config
 from pipeline.config.io.loader import load_config
-from utils.logs.levels.info_logger import info
 from utils.logs.initializer import logs_phase
+from utils.logs.levels.info_logger import info
 
 
 def prepare_config() -> Config:

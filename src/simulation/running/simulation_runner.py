@@ -1,8 +1,6 @@
 from tqdm import tqdm
 
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
-from simulation.caches.lstm_cache.management.lstm_manager import (
+from simulation.caches.lstm.management.lstm_manager import (
     manage_lstm_cache,
 )
 from simulation.caches.utils.key_finder import find_key
@@ -10,6 +8,8 @@ from simulation.evaluation.cache_evaluator import evaluate_cache
 from simulation.running.simulation_setup import simulation_setup
 from simulation.running.simulation_tracer import trace_hits_misses
 from simulation.utils.row_preprocessor import preprocess_row
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 
 
 def run_cache_simulation(

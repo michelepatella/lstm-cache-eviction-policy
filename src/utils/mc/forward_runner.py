@@ -4,9 +4,9 @@ import torch
 from torch import nn
 
 from const import MC_DROPOUT_SAMPLES_DEFAULT
+from utils.backpropagation.forward_runner import compute_forward
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
-from utils.backpropagation.forward_runner import compute_forward
 from utils.mc.dropout_activator import (
     enable_mc_dropout,
 )

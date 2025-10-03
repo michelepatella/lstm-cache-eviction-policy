@@ -271,7 +271,7 @@ class AccessLogsDataset(Dataset):
 
         try:
             # Extract feature sequence
-            seq_data = self.data.iloc[idx:idx + self.seq_len]
+            seq_data = self.data.iloc[idx: idx + self.seq_len]
 
             # Convert features to float tensor
             x_features = torch.tensor(

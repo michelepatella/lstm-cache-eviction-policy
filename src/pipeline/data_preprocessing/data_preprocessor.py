@@ -9,15 +9,19 @@ from pipeline.config.classes.Config import Config
 from pipeline.data_preprocessing.features.builder import (
     build_features,
 )
-from pipeline.data_preprocessing.removal.duplicates_remover import remove_duplicates
+from pipeline.data_preprocessing.removal.duplicates_remover import (
+    remove_duplicates,
+)
 from pipeline.data_preprocessing.removal.invalid_values_remover import (
     remove_invalid_values,
 )
-from pipeline.data_preprocessing.removal.missing_values_remover import remove_missing_values
+from pipeline.data_preprocessing.removal.missing_values_remover import (
+    remove_missing_values,
+)
 from pipeline.utils.dataset.saver import save_dataset
 from utils.dataset.loader import load_dataset
-from utils.logs.levels.info_logger import info
 from utils.logs.initializer import logs_phase
+from utils.logs.levels.info_logger import info
 
 
 def preprocess_data(config: Config) -> None:

@@ -2,9 +2,6 @@ import itertools
 from typing import Any, Dict, List
 
 from const import CONFIG_SECTIONS_WITH_PARAMS
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
 from pipeline.validation.search_space.flattener import (
     flatten_search_space,
 )
@@ -14,6 +11,9 @@ from pipeline.validation.search_space.setter import (
 from pipeline.validation.search_space.utils.section_params_wrapper import (
     wrap_section_params,
 )
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
 
 
 def get_single_section_combinations(

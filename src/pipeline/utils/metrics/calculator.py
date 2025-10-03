@@ -10,15 +10,15 @@ from const import (
     MODEL_METRICS_TOP_K_ACCURACY,
 )
 from pipeline.config.classes.Config import Config
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
 from pipeline.utils.metrics.utils.cohen_kappa_score_calculator import (
     calculate_cohen_kappa_score,
 )
 from pipeline.utils.metrics.utils.top_k_accuracy_calculator import (
     calculate_top_k_accuracy,
 )
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
 
 
 def compute_model_metrics(

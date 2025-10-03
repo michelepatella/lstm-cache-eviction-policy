@@ -13,18 +13,20 @@ from pipeline.config.classes.Config import Config
 from pipeline.testing.visualization.plots.confusion_matrix_plotter import (
     plot_confusion_matrix,
 )
-from pipeline.testing.visualization.report.model_evaluation_reporter import (
-    generate_model_evaluation_report,
-)
 from pipeline.testing.visualization.plots.precision_recall_curve_plotter import (
     plot_precision_recall_curve,
 )
-from utils.dataset.AccessLogsDataset import AccessLogsDataset
-from utils.logs.levels.info_logger import info
-from utils.logs.initializer import logs_phase
+from pipeline.testing.visualization.report.model_evaluation_reporter import (
+    generate_model_evaluation_report,
+)
 from pipeline.utils.evaluation.evaluator import evaluate_model
-from utils.model.initialization.trained_model_initializer import initialize_trained_model
 from utils.data_loader.initializer import initialize_data_loader
+from utils.dataset.AccessLogsDataset import AccessLogsDataset
+from utils.logs.initializer import logs_phase
+from utils.logs.levels.info_logger import info
+from utils.model.initialization.trained_model_initializer import (
+    initialize_trained_model,
+)
 
 
 def test_model(config: Config) -> None:

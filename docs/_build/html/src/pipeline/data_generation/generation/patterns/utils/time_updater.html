@@ -78,7 +78,8 @@ el.replaceWith(d);
                            current day updated.
     &#34;&#34;&#34;
     debug(
-        f&#34;Current seconds in day: {current_seconds_in_day}, and current day: {current_day} to be updated&#34;
+        f&#34;Current seconds in day: {current_seconds_in_day},&#34;
+        f&#34; and current day: {current_day} to be updated&#34;
     )
     debug(f&#34;Period used to update time: {period}&#34;)
     debug(f&#34;Delta time used to update time: {delta_t}&#34;)
@@ -99,7 +100,8 @@ el.replaceWith(d);
         current_seconds_in_day += delta_t
 
     info(
-        f&#34;Time updated (current seconds in day: {current_seconds_in_day}, current day: {current_day})&#34;
+        f&#34;Time updated (current seconds in day:&#34;
+        f&#34; {current_seconds_in_day}, current day: {current_day})&#34;
     )
 
     return current_seconds_in_day, current_day</code></pre>

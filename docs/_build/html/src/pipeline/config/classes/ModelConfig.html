@@ -56,7 +56,7 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class FeaturesConfig(BaseModel):
-    count: conint(gt=0)</code></pre>
+    count: conint(gt=0)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>
@@ -263,13 +263,13 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class ModelParamsConfig(BaseModel):
-    hidden_size: conint(gt=0)
-    num_layers: conint(gt=0)
+    hidden_size: conint(gt=0)  # type: ignore[valid-type]
+    num_layers: conint(gt=0)  # type: ignore[valid-type]
     bias: bool
     batch_first: bool
-    dropout: confloat(ge=0, lt=1)
+    dropout: confloat(ge=0, lt=1)  # type: ignore[valid-type]
     bidirectional: bool
-    proj_size: conint(ge=0)</code></pre>
+    proj_size: conint(ge=0)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>

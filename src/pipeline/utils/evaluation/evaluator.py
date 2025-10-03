@@ -6,13 +6,13 @@ from torch.utils.data import DataLoader
 
 from const import COMPUTE_METRICS_DEFAULT
 from pipeline.config.classes.Config import Config
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
 from pipeline.utils.inference.inferrer import infer_batch
 from pipeline.utils.metrics.calculator import (
     compute_model_metrics,
 )
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
 
 
 def evaluate_model(

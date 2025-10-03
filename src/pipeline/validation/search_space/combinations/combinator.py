@@ -1,14 +1,14 @@
 from typing import Any, Dict, List
 
 from pipeline.config.classes.Config import Config
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
 from pipeline.validation.search_space.combinations.utils.all_sections_combinator import (
     get_all_sections_combinations,
 )
 from pipeline.validation.search_space.combinations.utils.single_section_combinator import (
     get_single_section_combinations,
 )
+from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
 
 
 def get_parameters_combination(
@@ -43,7 +43,9 @@ def get_parameters_combination(
         # and save them
         search_space = config.validation.search_space.model_dump()
         for section, params_dict in search_space.items():
-            section_values = get_single_section_combinations(section, params_dict)
+            section_values = get_single_section_combinations(
+                section, params_dict
+            )
             section_combinations.append((section, section_values))
 
         # Combine all sections into

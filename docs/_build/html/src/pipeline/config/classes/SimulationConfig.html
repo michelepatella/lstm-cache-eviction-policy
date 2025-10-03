@@ -56,8 +56,8 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class CacheGeneralConfig(BaseModel):
-    dimension: conint(gt=0)
-    ttl: conint(gt=0)</code></pre>
+    dimension: conint(gt=0)  # type: ignore[valid-type]
+    ttl: conint(gt=0)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>
@@ -141,7 +141,7 @@ validated to form a valid model.</p>
 </summary>
 <pre><code class="python">class LSTMCacheConfig(BaseModel):
     prediction: LSTMCachePredictionConfig
-    threshold: confloat(ge=0, le=1)</code></pre>
+    threshold: confloat(ge=0, le=1)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>
@@ -224,7 +224,7 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class LSTMCachePredictionConfig(BaseModel):
-    interval: conint(gt=0)</code></pre>
+    interval: conint(gt=0)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>

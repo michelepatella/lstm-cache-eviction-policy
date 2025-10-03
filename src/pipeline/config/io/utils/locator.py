@@ -23,12 +23,9 @@ def get_config_abs_path() -> str:
     try:
         # Resolve the absolute path of
         # YAML configuration file
-        abs_config_path = str(
-            PROJECT_ROOT / CONFIG_FILE_NAME
-        )
+        abs_config_path = str(PROJECT_ROOT / CONFIG_FILE_NAME)
 
-        debug(f"YAML configuration file absolute"
-              f" path: {abs_config_path}")
+        debug(f"YAML configuration file absolute" f" path: {abs_config_path}")
     except (
         NameError,
         TypeError,

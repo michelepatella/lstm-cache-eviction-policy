@@ -110,7 +110,8 @@ el.replaceWith(d);
     for batch in training_loader:
         try:
             debug(
-                f&#34;Current batch shapes during one-epoch training: {[t.shape for t in batch]}&#34;
+                f&#34;Current batch shapes during &#34;
+                f&#34;one-epoch training: {[t.shape for t in batch]}&#34;
             )
 
             # Reset the gradients

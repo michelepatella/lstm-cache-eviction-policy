@@ -1,8 +1,8 @@
 import logging
 from typing import Any
 
-from utils.logs.levels.error_logger import error
 from utils.logs.initializer import logs_phase
+from utils.logs.levels.error_logger import error
 
 
 def debug(msg: str, *args: Any, **kwargs: Any) -> None:

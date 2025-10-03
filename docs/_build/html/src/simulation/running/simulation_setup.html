@@ -72,12 +72,12 @@ el.replaceWith(d);
     timeline = []
     recent_hits = []
     prefetching_latency = []
-    window = config_settings.prediction_interval
+    window = config_settings.simulation.lstm.prediction.interval
 
     # get the testing set
-    (testing_set, testing_loader) = data_loader_setup(
+    (testing_set, testing_loader) = initialize_data_loader(
         &#34;testing&#34;,
-        config_settings.testing_batch_size,
+        config_settings.testing.batch_size,
         False,
         config_settings,
         AccessLogsDataset,
@@ -86,7 +86,7 @@ el.replaceWith(d);
     # initial model setup, in case of LSTM cache
     if policy_name == &#34;LSTM&#34;:
         # setup for lstm cache
-        (device, criterion, model) = trained_model_setup(
+        (device, criterion, model) = initialize_trained_model(
             testing_loader, config_settings
         )
 

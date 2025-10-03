@@ -40,7 +40,7 @@ el.replaceWith(d);
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="src.pipeline.training.main" href="main.html">src.pipeline.training.main</a></code></dt>
+<dt><code class="name"><a title="src.pipeline.training.trainer" href="trainer.html">src.pipeline.training.trainer</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -93,7 +93,7 @@ el.replaceWith(d);
 
     # Load the training set and the
     # training loader
-    training_set, training_loader = data_loader_setup(
+    training_set, training_loader = initialize_data_loader(
         TRAINING_SPLIT_TYPE,
         training_batch_size,
         validation_shuffle,
@@ -122,7 +122,7 @@ el.replaceWith(d);
     targets = extract_targets_from_data_loader(training_loader)
 
     # Model setup for training
-    device, criterion, model, optimizer = setup_model_components(
+    device, criterion, model, optimizer = initialize_model_components(
         model_params,
         learning_rate,
         targets,
@@ -173,7 +173,7 @@ for further usage.</p>
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="src.pipeline.training.main" href="main.html">src.pipeline.training.main</a></code></li>
+<li><code><a title="src.pipeline.training.trainer" href="trainer.html">src.pipeline.training.trainer</a></code></li>
 <li><code><a title="src.pipeline.training.utils" href="utils/index.html">src.pipeline.training.utils</a></code></li>
 </ul>
 </li>

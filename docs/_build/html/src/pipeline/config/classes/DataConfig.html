@@ -244,8 +244,8 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class BurstinessConfig(BaseModel):
-    high: confloat(gt=0)
-    low: confloat(gt=0)
+    high: confloat(gt=0)  # type: ignore[valid-type]
+    low: confloat(gt=0)  # type: ignore[valid-type]
     hours: BurstinessHoursConfig
 
     @model_validator(mode=&#34;after&#34;)
@@ -400,8 +400,8 @@ greater than or equal to the lowest one or not.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class BurstinessHoursConfig(BaseModel):
-    start: conint(ge=MIN_HOUR, le=MAX_HOUR)
-    end: conint(ge=MIN_HOUR, le=MAX_HOUR)</code></pre>
+    start: conint(ge=MIN_HOUR, le=MAX_HOUR)  # type: ignore[valid-type]
+    end: conint(ge=MIN_HOUR, le=MAX_HOUR)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>
@@ -484,9 +484,9 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class CycleConfig(BaseModel):
-    base: conint(gt=0)
-    mod: conint(gt=0)
-    divisor: conint(gt=0)
+    base: conint(gt=0)  # type: ignore[valid-type]
+    mod: conint(gt=0)  # type: ignore[valid-type]
+    divisor: conint(gt=0)  # type: ignore[valid-type]
     hours: HoursConfig</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
@@ -970,7 +970,7 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class DistortionConfig(BaseModel):
-    interval: conint(gt=0)
+    interval: conint(gt=0)  # type: ignore[valid-type]
     hours: HoursConfig
     offsets: DistortionOffsetsConfig</code></pre>
 </details>
@@ -1143,7 +1143,7 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class EmbeddingConfig(BaseModel):
-    dimension: conint(gt=0)</code></pre>
+    dimension: conint(gt=0)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>
@@ -1222,7 +1222,7 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class GeneralDataConfig(BaseModel):
-    seed: conint(ge=0)
+    seed: conint(ge=0)  # type: ignore[valid-type]
     mode: str
     requests: RequestsConfig
     keys: KeysConfig
@@ -1387,8 +1387,8 @@ distribution mode.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class HoursConfig(BaseModel):
-    start: conint(ge=MIN_HOUR, le=MAX_HOUR)
-    end: conint(ge=MIN_HOUR, le=MAX_HOUR)</code></pre>
+    start: conint(ge=MIN_HOUR, le=MAX_HOUR)  # type: ignore[valid-type]
+    end: conint(ge=MIN_HOUR, le=MAX_HOUR)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>
@@ -1471,8 +1471,8 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class KeysConfig(BaseModel):
-    min: conint(gt=0)
-    max: conint(gt=0)
+    min: conint(gt=0)  # type: ignore[valid-type]
+    max: conint(gt=0)  # type: ignore[valid-type]
 
     @model_validator(mode=&#34;after&#34;)
     def check_min_max_keys(
@@ -1622,8 +1622,8 @@ or equal to the greatest key or not.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class MemoryConfig(BaseModel):
-    interval: conint(gt=0)
-    offset: conint(gt=0)</code></pre>
+    interval: conint(gt=0)  # type: ignore[valid-type]
+    offset: conint(gt=0)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>
@@ -1939,8 +1939,8 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class PeriodicConfig(BaseModel):
-    scale: conint(gt=0)
-    amplitude: conint(ge=0)</code></pre>
+    scale: conint(gt=0)  # type: ignore[valid-type]
+    amplitude: conint(ge=0)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>
@@ -2023,8 +2023,8 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class RepetitionConfig(BaseModel):
-    interval: conint(gt=0)
-    offset: conint(gt=0)
+    interval: conint(gt=0)  # type: ignore[valid-type]
+    offset: conint(gt=0)  # type: ignore[valid-type]
     hours: HoursConfig</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
@@ -2112,7 +2112,7 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class RequestsConfig(BaseModel):
-    count: conint(gt=0)</code></pre>
+    count: conint(gt=0)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>
@@ -2191,7 +2191,7 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class SequenceConfig(BaseModel):
-    length: conint(gt=0)
+    length: conint(gt=0)  # type: ignore[valid-type]
     embedding: EmbeddingConfig</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
@@ -2275,8 +2275,8 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class SplitConfig(BaseModel):
-    training: confloat(ge=0, le=1)
-    validation: confloat(ge=0, le=1)</code></pre>
+    training: confloat(ge=0, le=1)  # type: ignore[valid-type]
+    validation: confloat(ge=0, le=1)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>
@@ -2443,8 +2443,8 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class ToggleBaseRequestsConfig(BaseModel):
-    first: conint(gt=0)
-    second: conint(gt=0)</code></pre>
+    first: conint(gt=0)  # type: ignore[valid-type]
+    second: conint(gt=0)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>
@@ -2527,7 +2527,7 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class ToggleConfig(BaseModel):
-    interval: conint(gt=0)
+    interval: conint(gt=0)  # type: ignore[valid-type]
     hours: HoursConfig
     base_requests: ToggleBaseRequestsConfig
     offsets: ToggleOffsetsConfig</code></pre>
@@ -2705,9 +2705,9 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class ZipfAlphaConfig(BaseModel):
-    fixed: confloat(gt=0)
-    min: confloat(gt=0)
-    max: confloat(gt=0)</code></pre>
+    fixed: confloat(gt=0)  # type: ignore[valid-type]
+    min: confloat(gt=0)  # type: ignore[valid-type]
+    max: confloat(gt=0)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>
@@ -2795,7 +2795,7 @@ validated to form a valid model.</p>
 </summary>
 <pre><code class="python">class ZipfConfig(BaseModel):
     alpha: ZipfAlphaConfig
-    steps: conint(gt=0)</code></pre>
+    steps: conint(gt=0)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>

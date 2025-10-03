@@ -56,8 +56,8 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class EarlyStoppingTrainingConfig(BaseModel):
-    patience: conint(ge=0)
-    delta: confloat(ge=0)</code></pre>
+    patience: conint(ge=0)  # type: ignore[valid-type]
+    delta: confloat(ge=0)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>
@@ -292,9 +292,9 @@ optimizer specified.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class OptimizerParamsConfig(BaseModel):
-    learning_rate: confloat(gt=0)
-    weight_decay: confloat(ge=0)
-    momentum: confloat(ge=0, le=1)</code></pre>
+    learning_rate: confloat(gt=0)  # type: ignore[valid-type]
+    weight_decay: confloat(ge=0)  # type: ignore[valid-type]
+    momentum: confloat(ge=0, le=1)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>
@@ -433,7 +433,7 @@ validated to form a valid model.</p>
 </summary>
 <pre><code class="python">class TrainingGeneralConfig(BaseModel):
     epochs: TrainingGeneralEpochsConfig
-    batch_size: conint(gt=0)
+    batch_size: conint(gt=0)  # type: ignore[valid-type]
     shuffle: bool</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
@@ -521,7 +521,7 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class TrainingGeneralEpochsConfig(BaseModel):
-    count: conint(gt=0)</code></pre>
+    count: conint(gt=0)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>

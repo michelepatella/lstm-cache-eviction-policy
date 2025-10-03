@@ -1,6 +1,6 @@
+from simulation.caches.utils.BaseCache import BaseCache
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
-from simulation.caches.utils.BaseCache import BaseCache
 
 
 class CacheWrapper(BaseCache):

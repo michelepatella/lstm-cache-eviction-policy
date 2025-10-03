@@ -94,7 +94,10 @@ el.replaceWith(d);
     # Check whether the field value has not
     # allowed type
     if field_value not in allowed_field_values:
-        msg = f&#34;{context} must be one of the following values: {allowed_field_values}&#34;
+        msg = (
+            f&#34;{context} must be one of the following&#34;
+            f&#34; values: {allowed_field_values}&#34;
+        )
         error(&#34;%s&#34;, msg)
         raise ValueError(msg)
 

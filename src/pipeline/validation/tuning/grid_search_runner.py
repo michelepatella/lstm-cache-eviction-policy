@@ -3,16 +3,18 @@ from typing import Any, Dict
 from tqdm import tqdm
 
 from pipeline.config.classes.Config import Config
-from utils.dataset.AccessLogsDataset import AccessLogsDataset
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
 from pipeline.validation.best_params.updater import (
     check_and_update_best_params,
 )
 from pipeline.validation.search_space.combinations.combinator import (
     get_parameters_combination,
 )
-from pipeline.validation.tuning.time_series_cv_runner import compute_time_series_cv
+from pipeline.validation.tuning.time_series_cv_runner import (
+    compute_time_series_cv,
+)
+from utils.dataset.AccessLogsDataset import AccessLogsDataset
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 
 
 def compute_grid_search(

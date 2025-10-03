@@ -140,8 +140,8 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class EarlyStoppingValidationConfig(BaseModel):
-    patience: conint(ge=0)
-    delta: confloat(ge=0)</code></pre>
+    patience: conint(ge=0)  # type: ignore[valid-type]
+    delta: confloat(ge=0)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>
@@ -224,7 +224,7 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class EpochsConfig(BaseModel):
-    count: conint(gt=0)</code></pre>
+    count: conint(gt=0)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>
@@ -303,7 +303,7 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class FoldsConfig(BaseModel):
-    count: conint(gt=1)</code></pre>
+    count: conint(gt=1)  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>
@@ -382,7 +382,7 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class GeneralValidationConfig(BaseModel):
-    batch_size: conint(gt=0)
+    batch_size: conint(gt=0)  # type: ignore[valid-type]
     shuffle: bool</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
@@ -466,9 +466,9 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class ModelSearchSpaceConfig(BaseModel):
-    hidden_size_range: List[conint(gt=0)]
-    num_layers_range: List[conint(gt=0)]
-    dropout_range: List[confloat(ge=0, lt=1)]</code></pre>
+    hidden_size_range: List[conint(gt=0)]  # type: ignore[valid-type]
+    num_layers_range: List[conint(gt=0)]  # type: ignore[valid-type]
+    dropout_range: List[confloat(ge=0, lt=1)]  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>
@@ -718,7 +718,7 @@ validated to form a valid model.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class TrainingSearchSpaceOptimizerConfig(BaseModel):
-    learning_rate_range: List[confloat(gt=0)]</code></pre>
+    learning_rate_range: List[confloat(gt=0)]  # type: ignore[valid-type]</code></pre>
 </details>
 <div class="desc"><div class="admonition abstract">
 <p class="admonition-title">Usage Documentation</p>

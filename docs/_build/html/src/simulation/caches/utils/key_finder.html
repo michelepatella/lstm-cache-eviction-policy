@@ -62,7 +62,7 @@ el.replaceWith(d);
     :return:
     &#34;&#34;&#34;
     # initial message
-    info(f&#34;🔄 Key search started...&#34;)
+    info(&#34;🔄 Key search started...&#34;)
 
     try:
         # check if the cache contains the key
@@ -71,14 +71,14 @@ el.replaceWith(d);
             counters[&#34;hits&#34;] += 1
             info(f&#34;ℹ️ Time: {current_time:.2f} | Key: {key} | HIT&#34;)
             # print a successful message
-            info(f&#34;🟢 Key search completed.&#34;)
+            info(&#34;🟢 Key search completed.&#34;)
             return True
         else:
             # increment cache misses
             counters[&#34;misses&#34;] += 1
             info(f&#34;ℹ️ Time: {current_time:.2f} | Key: {key} | MISS&#34;)
             # print a successful message
-            info(f&#34;🟢 Key search completed.&#34;)
+            info(&#34;🟢 Key search completed.&#34;)
             return False
     except NameError as e:
         raise NameError(f&#34;NameError: {e}.&#34;)
