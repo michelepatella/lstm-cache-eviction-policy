@@ -18,7 +18,7 @@ def calculate_confidence_interval(all_outputs, all_vars, config_settings):
 
     try:
         # calculate the z-score
-        z_score = norm.ppf(1 - (1 - config_settings.confidence_level) / 2)
+        z_score = norm.ppf(1 - (1 - config_settings.inference.confidence_intervals.level) / 2)
 
         # debugging
         debug(f"⚙️ Z-score for CIs: {z_score}.")

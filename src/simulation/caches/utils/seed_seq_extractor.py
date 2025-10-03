@@ -16,12 +16,12 @@ def extract_seed_seq(current_idx, testing_set, config_settings):
 
     try:
         # define a mobile window sliding over the testing set
-        start_idx = current_idx - config_settings.seq_len + 1
+        start_idx = current_idx - config_settings.data.sequence.length + 1
         end_idx = current_idx + 1
         testing_window_df = testing_set.data.iloc[start_idx : end_idx + 1]
 
         # check if enough data contained in the sliding window
-        if len(testing_window_df) < config_settings.seq_len:
+        if len(testing_window_df) < config_settings.data.sequence.length:
             return
 
         # create a dataset from the sliding window

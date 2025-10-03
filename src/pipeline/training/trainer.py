@@ -2,13 +2,6 @@ from const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE
 from pipeline.config.classes.Config import Config
 from pipeline.training.utils.model_saver import save_model
 from pipeline.utils.data.AccessLogsDataset import AccessLogsDataset
-from pipeline.utils.data.dataloader.data_loader_builder import (
-    create_data_loader,
-)
-from pipeline.utils.data.dataloader.data_loader_setup import data_loader_setup
-from pipeline.utils.data.dataloader.data_loader_targets_extractor import (
-    extract_targets_from_data_loader,
-)
 from pipeline.utils.data.dataset.dataset_splitter import split_training_set
 from pipeline.utils.logs.levels.info_logger import info
 from pipeline.utils.logs.logs_setup import logs_phase
@@ -16,6 +9,9 @@ from pipeline.utils.model.setup.model_components_setup import (
     setup_model_components,
 )
 from pipeline.utils.training.n_epochs_trainer import train_n_epochs
+from utils.data.data_loader.data_loader_builder import create_data_loader
+from utils.data.data_loader.data_loader_setup import data_loader_setup
+from utils.data.data_loader.data_loader_targets_extractor import extract_targets_from_data_loader
 
 
 def train_model(config: Config) -> None:

@@ -1,7 +1,7 @@
 from pipeline.utils.data.AccessLogsDataset import AccessLogsDataset
-from pipeline.utils.data.dataloader.data_loader_setup import data_loader_setup
 from pipeline.utils.logs.levels.info_logger import info
 from pipeline.utils.model.setup.trained_model_setup import trained_model_setup
+from utils.data.data_loader.data_loader_setup import data_loader_setup
 
 
 def simulation_setup(policy_name, config_settings):
@@ -24,12 +24,12 @@ def simulation_setup(policy_name, config_settings):
     timeline = []
     recent_hits = []
     prefetching_latency = []
-    window = config_settings.prediction_interval
+    window = config_settings.simulation.lstm.prediction.interval
 
     # get the testing set
     (testing_set, testing_loader) = data_loader_setup(
         "testing",
-        config_settings.testing_batch_size,
+        config_settings.testing.batch_size,
         False,
         config_settings,
         AccessLogsDataset,

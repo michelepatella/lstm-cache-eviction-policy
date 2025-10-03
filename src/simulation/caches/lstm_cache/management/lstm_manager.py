@@ -50,7 +50,7 @@ def manage_lstm_cache(
         _ = find_key(cache, key, current_time, counters)
 
         # if it's not time to prefetch (no enough data)
-        if current_idx < config_settings.seq_len:
+        if current_idx < config_settings.data.sequence.length:
             # handle cold start
             manage_cold_start(
                 cache,
@@ -59,13 +59,13 @@ def manage_lstm_cache(
             )
 
         elif (
-            current_idx >= config_settings.seq_len
-            and current_idx % config_settings.prediction_interval == 0
+            current_idx >= config_settings.data.sequence.length
+            and current_idx % config_settings.simulation.lstm.prediction.interval == 0
         ):
             # if it's the first time we do prefetch
             # save the number of hits of random policy
             # during cold start
-            if current_idx == config_settings.seq_len:
+            if current_idx == config_settings.data.sequence.length:
                 # count the no. of hits during cold start
                 counters["hits_cold_start"] = counters["hits"]
 

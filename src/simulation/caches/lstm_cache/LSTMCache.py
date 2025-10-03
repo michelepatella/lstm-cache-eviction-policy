@@ -28,7 +28,7 @@ class LSTMCache(BaseCache):
             config_settings,
         )
         try:
-            self.threshold_score = config_settings.threshold_score
+            self.threshold_score = config_settings.simulation.lstm.threshold
         except AttributeError as e:
             raise AttributeError(f"AttributeError: {e}.")
         except TypeError as e:

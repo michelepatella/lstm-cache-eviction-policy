@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from const import CONFIG_FILE_NAME, PROJECT_ROOT
 from pipeline.utils.logs.levels.debug_logger import debug
 from pipeline.utils.logs.levels.error_logger import error

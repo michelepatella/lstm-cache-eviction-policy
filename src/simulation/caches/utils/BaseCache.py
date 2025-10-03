@@ -24,13 +24,13 @@ class BaseCache(ABC):
         try:
             if cache_class is not None:
                 self.cache = cache_class(
-                    config_settings.cache_size,
+                    config_settings.simulation.general.dimension,
                     callback=self._on_evict,
                 )
             else:
                 self.cache = None
-            self.maxsize = config_settings.cache_size
-            self.ttl = config_settings.ttl
+            self.maxsize = config_settings.simulation.general.dimension
+            self.ttl = config_settings.simulation.general.ttl
             self.metrics_logger = metrics_logger
             self.store = {}
             self.expiry = {}

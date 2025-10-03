@@ -16,11 +16,11 @@ def manage_cold_start(cache, current_time, config_settings):
 
     try:
         # select random keys
-        all_possible_keys = list(range(config_settings.num_keys))
+        all_possible_keys = list(range(config_settings.data.general.keys.max - config_settings.data.general.keys.min + 1))
         random_keys = random.sample(
             all_possible_keys,
             min(
-                config_settings.cache_size,
+                config_settings.simulation.general.dimension,
                 len(all_possible_keys),
             ),
         )

@@ -1,3 +1,3 @@
-from .main import train_model
+from .trainer import train_model
 
 __all__ = ["train_model"]

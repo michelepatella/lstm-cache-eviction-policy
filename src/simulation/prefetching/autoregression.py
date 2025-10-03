@@ -38,14 +38,14 @@ def autoregressive_rollout(model, seed_sequence, device, config_settings):
         delta_t = (2 / 1440) * (2 * math.pi)
 
         # for each future sequence
-        for i in range(config_settings.prediction_interval):
+        for i in range(config_settings.simulation.lstm.prediction.interval):
             # compute MC forward pass
             (outputs_mean, outputs_var, _) = mc_forward_passes(
                 model,
                 (x_features_seq, x_keys_seq),
                 device,
                 config_settings,
-                config_settings.mc_dropout_num_samples,
+                config_settings.inference.mc_dropout.samples.count,
             )
 
             # store outputs and variances
