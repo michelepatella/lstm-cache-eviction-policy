@@ -1,4 +1,4 @@
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.info_logger import info
 from simulation.caches.baseline_caches.FIFOCache import FIFOCache
 from simulation.caches.baseline_caches.LFUCache import LFUCache
 from simulation.caches.baseline_caches.LRUCache import LRUCache

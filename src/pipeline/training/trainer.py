@@ -1,17 +1,17 @@
 from const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE
 from pipeline.config.classes.Config import Config
 from pipeline.training.utils.model_saver import save_model
-from pipeline.utils.data.AccessLogsDataset import AccessLogsDataset
-from pipeline.utils.data.dataset.dataset_splitter import split_training_set
-from pipeline.utils.logs.levels.info_logger import info
-from pipeline.utils.logs.logs_setup import logs_phase
-from pipeline.utils.model.setup.model_components_setup import (
-    setup_model_components,
+from pipeline.utils.dataset.splitter import split_training_set
+from utils.data.AccessLogsDataset import AccessLogsDataset
+from utils.logs.levels.info_logger import info
+from utils.logs.initializer import logs_phase
+from utils.model.initialization.model_components_initializer import (
+    initialize_model_components,
 )
 from pipeline.utils.training.n_epochs_trainer import train_n_epochs
-from utils.data.data_loader.data_loader_builder import create_data_loader
-from utils.data.data_loader.data_loader_setup import data_loader_setup
-from utils.data.data_loader.data_loader_targets_extractor import extract_targets_from_data_loader
+from utils.data.data_loader.builder import create_data_loader
+from utils.data.data_loader.initializer import initialize_data_loader
+from utils.data.data_loader.targets_extractor import extract_targets_from_data_loader
 
 
 def train_model(config: Config) -> None:
@@ -44,7 +44,7 @@ def train_model(config: Config) -> None:
 
     # Load the training set and the
     # training loader
-    training_set, training_loader = data_loader_setup(
+    training_set, training_loader = initialize_data_loader(
         TRAINING_SPLIT_TYPE,
         training_batch_size,
         validation_shuffle,
@@ -73,7 +73,7 @@ def train_model(config: Config) -> None:
     targets = extract_targets_from_data_loader(training_loader)
 
     # Model setup for training
-    device, criterion, model, optimizer = setup_model_components(
+    device, criterion, model, optimizer = initialize_model_components(
         model_params,
         learning_rate,
         targets,

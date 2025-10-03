@@ -10,21 +10,21 @@ from const import (
     TESTING_SPLIT_TYPE,
 )
 from pipeline.config.classes.Config import Config
-from pipeline.testing.visualization.confusion_matrix_plotter import (
+from pipeline.testing.visualization.plots.confusion_matrix_plotter import (
     plot_confusion_matrix,
 )
-from pipeline.testing.visualization.model_evaluation_reporter import (
+from pipeline.testing.visualization.report.model_evaluation_reporter import (
     generate_model_evaluation_report,
 )
-from pipeline.testing.visualization.precision_recall_curve_plotter import (
+from pipeline.testing.visualization.plots.precision_recall_curve_plotter import (
     plot_precision_recall_curve,
 )
-from pipeline.utils.data.AccessLogsDataset import AccessLogsDataset
-from pipeline.utils.logs.levels.info_logger import info
-from pipeline.utils.logs.logs_setup import logs_phase
-from pipeline.utils.model.evaluation.model_evaluator import evaluate_model
-from pipeline.utils.model.setup.trained_model_setup import trained_model_setup
-from utils.data.data_loader.data_loader_setup import data_loader_setup
+from utils.data.AccessLogsDataset import AccessLogsDataset
+from utils.logs.levels.info_logger import info
+from utils.logs.initializer import logs_phase
+from pipeline.utils.evaluation.evaluator import evaluate_model
+from utils.model.initialization.trained_model_initializer import trained_model_setup
+from utils.data.data_loader.initializer import initialize_data_loader
 
 
 def test_model(config: Config) -> None:
@@ -51,7 +51,7 @@ def test_model(config: Config) -> None:
     top_k = config.evaluation.top_k
 
     # Setup testing data loader
-    _, testing_loader = data_loader_setup(
+    _, testing_loader = initialize_data_loader(
         TESTING_SPLIT_TYPE,
         testing_batch_size,
         testing_shuffle,

@@ -1,4 +1,4 @@
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.info_logger import info
 
 
 def generate_caches_evaluation_report(results):

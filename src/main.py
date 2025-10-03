@@ -1,13 +1,9 @@
 from pipeline.config import prepare_config
-from pipeline.data_generation import generate_data
-from pipeline.data_preprocessing import preprocess_data
-from pipeline.testing import test_model
-from pipeline.training import train_model
-from pipeline.utils.logs.logs_setup import setup_logs
+from utils.logs.initializer import initialize_logs
 from simulation import run_simulations
 
 # 0. LOGS SETUP
-setup_logs()
+initialize_logs()
 
 # 1. PREPARE CONFIGURATION SETTINGS
 config = prepare_config()

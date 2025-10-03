@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 
 
 class BaseCache(ABC):

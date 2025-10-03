@@ -1,5 +1,5 @@
-from pipeline.utils.data.AccessLogsDataset import AccessLogsDataset
-from pipeline.utils.logs.levels.info_logger import info
+from utils.data.AccessLogsDataset import AccessLogsDataset
+from utils.logs.levels.info_logger import info
 
 
 def extract_seed_seq(current_idx, testing_set, config_settings):

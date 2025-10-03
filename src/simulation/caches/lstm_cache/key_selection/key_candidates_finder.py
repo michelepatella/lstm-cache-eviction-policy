@@ -1,7 +1,7 @@
 import numpy as np
 from torch.nn.functional import softmax
 
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.info_logger import info
 from simulation.caches.lstm_cache.key_selection.key_score_calculator import (
     calculate_key_scores,
 )

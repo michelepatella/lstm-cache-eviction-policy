@@ -1,4 +1,4 @@
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.info_logger import info
 from simulation.evaluation.metrics.eviction_mistake_rate_calculator import (
     calculate_eviction_mistake_rate,
 )

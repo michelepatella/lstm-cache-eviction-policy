@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.info_logger import info
 
 
 def plot_hit_miss_rate_over_time(results):

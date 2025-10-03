@@ -77,11 +77,11 @@ data:
       validation: 0.25
     paths:
       raw:
-        static: data/raw/static_raw_dataset.csv
-        dynamic: data/raw/dynamic_raw_dataset.csv
+        static: data/raw/static_dataset.csv
+        dynamic: data/raw/dynamic_dataset.csv
       processed:
-        static: data/processed/static_processed_dataset.csv
-        dynamic: data/processed/dynamic_processed_dataset.csv
+        static: data/processed/static_dataset.csv
+        dynamic: data/processed/dynamic_dataset.csv
 
 model:
   general:

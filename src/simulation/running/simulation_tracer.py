@@ -1,4 +1,4 @@
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.info_logger import info
 
 
 def trace_hits_misses(

@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.info_logger import info
 
 
 class CacheMetricsLogger:

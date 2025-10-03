@@ -1,7 +1,7 @@
-from pipeline.utils.data.AccessLogsDataset import AccessLogsDataset
-from pipeline.utils.logs.levels.info_logger import info
-from pipeline.utils.model.setup.trained_model_setup import trained_model_setup
-from utils.data.data_loader.data_loader_setup import data_loader_setup
+from utils.data.AccessLogsDataset import AccessLogsDataset
+from utils.logs.levels.info_logger import info
+from utils.model.initialization.trained_model_initializer import trained_model_setup
+from utils.data.data_loader.initializer import initialize_data_loader
 
 
 def simulation_setup(policy_name, config_settings):
@@ -27,7 +27,7 @@ def simulation_setup(policy_name, config_settings):
     window = config_settings.simulation.lstm.prediction.interval
 
     # get the testing set
-    (testing_set, testing_loader) = data_loader_setup(
+    (testing_set, testing_loader) = initialize_data_loader(
         "testing",
         config_settings.testing.batch_size,
         False,

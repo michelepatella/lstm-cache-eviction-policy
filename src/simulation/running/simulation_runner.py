@@ -1,7 +1,7 @@
 from tqdm import tqdm
 
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 from simulation.caches.lstm_cache.management.lstm_manager import (
     manage_lstm_cache,
 )

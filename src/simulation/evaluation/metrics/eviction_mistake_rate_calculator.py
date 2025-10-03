@@ -1,4 +1,4 @@
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.info_logger import info
 
 
 def calculate_eviction_mistake_rate(metrics_logger, mistake_window=300):

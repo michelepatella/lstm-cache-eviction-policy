@@ -1,6 +1,6 @@
 import time
 
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.info_logger import info
 from simulation.caches.lstm_cache.key_selection.key_candidates_finder import (
     find_key_candidates,
 )

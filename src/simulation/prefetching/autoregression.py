@@ -2,9 +2,9 @@ import math
 
 import torch
 
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.info_logger import info
-from pipeline.utils.model.backpropagation.mc.mc_forward_runner import (
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
+from utils.mc.forward_runner import (
     mc_forward_passes,
 )
 
