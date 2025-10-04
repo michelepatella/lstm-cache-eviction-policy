@@ -202,7 +202,10 @@ class FIFOCache(Cache):
         # is not found)
         item = self._data.pop(key, None)
 
-        debug(f"FIFO cache item popped: {item}, for key: {key}")
+        if item is not None:
+            debug(f"FIFO cache item popped: {item}, for key: {key}")
+        else:
+            debug(f"FIFO cache pop attempted for non-existent key: {key}")
 
         return item
 
