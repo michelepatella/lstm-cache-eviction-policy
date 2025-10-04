@@ -2,6 +2,7 @@ from pipeline.config import prepare_config
 from simulation import run_simulations
 from utils.logs.initializer import initialize_logs
 
+
 def main():
     # 0. LOGS SETUP
     initialize_logs()

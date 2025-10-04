@@ -86,7 +86,7 @@ class FIFOCache(Cache):
 
         This function, given a key and its item, updates
         or inserts the provided item for the key in the
-        FIFO cache (depending on the key is cached or not).
+        FIFO cache (depending on whether the key is cached or not).
 
         Parameters:
             self ("FIFOCache"): Current class instance.
@@ -117,8 +117,7 @@ class FIFOCache(Cache):
                     f" for key: {oldest_key}"
                 )
 
-                # Callback (if any) to
-                # keep track of the event
+                # Callback (if provided)
                 if self.callback:
                     self.callback(oldest_key)
 
