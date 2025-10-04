@@ -2,79 +2,94 @@ import random
 
 from simulation.caches.utils.BaseCache import BaseCache
 from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
+from utils.logs.levels.error_logger import error
 
 
 class RandomCache(BaseCache):
-    def put(self, key, current_time):
-        """
-        Method to put a key in the random cache.
-        :param key: The key to put.
-        :param current_time: The current time.
-        :return:
-        """
-        # initial message
-        info("🔄 Key insertion started...")
+    """
+    Random cache implementation.
 
+    This cache evicts a random item when the
+    maximum size is reached. Each cached key
+    also has an expiration time based on the
+    configured TTL (Time-To-Live).
+    """
+
+    def put(self: "RandomCache", key: int, current_time: float) -> None:
+        """
+        Insert or update a key in the Random cache.
+
+        This function inserts a key into the cache, updates
+        its expiration time if already cached, and evicts
+        a random key if the cache is full.
+
+        Parameters:
+            self ("RandomCache"): Current class instance.
+            key (int): Key to insert or update.
+            current_time (float): Current timestamp for
+                                  TTL management.
+
+        Returns:
+            None
+
+        Raises:
+            RuntimeError: If an error occurs while putting
+                          a key into the random cache e.g.:
+                            * If some fields don't exist.
+                            * If key or current time are
+                              of wrong type.
+                            * If a non-existent key is popped.
+                            * If trying to select a random key
+                              from an empty list.
+        """
         try:
-            # clean up the cache removing expired keys
+            # Remove expired keys before insertion
             self._remove_expired_keys(current_time)
 
-            # check if the key is in cache
+            # Check if key already exists in cache
             if self.contains(key, current_time):
-                # update expiration time of the key
+                # Update TTL
                 self.expiry[key] = current_time + self.ttl
 
-                # trace event
-                self.metrics_logger.log_put(key, current_time, self.ttl)
-
-                # debugging
                 debug(
-                    f"⚙️ Key {key} already cached, "
-                    f"new expiration time: {self.expiry[key]}."
+                    f"Random cache key already cached updated: {key}, "
+                    f"new expiration time: {self.expiry[key]}"
                 )
 
-                # print a successful message
-                info("🟢 Key inserted.")
+                # Trace event
+                self.metrics_logger.log_put(key, current_time, self.ttl)
 
+                # Exit
                 return
 
-            # check if the cache is full
-            elif len(self.store) >= self.maxsize:
-                # evict a key randomly
+            # Check whether the cache is full
+            if len(self.store) >= self.maxsize:
+                # Evict a random key among those
+                # stored in the cache
                 evict_key = random.choice(list(self.store.keys()))
+
+                # Evict selected key
                 self.store.pop(evict_key)
                 self.expiry.pop(evict_key)
 
-                # debugging
-                debug(f"⚙️ Full cache, evicting: {evict_key}.")
+                debug(f"Random cache full, evicted key: {evict_key}")
 
-                # trace event
+                # Trace event
                 self.metrics_logger.log_eviction(evict_key, current_time)
 
-            # store the new key
+            # Insert new key along with
+            # its expiration time
             self.store[key] = key
             self.expiry[key] = current_time + self.ttl
 
-            # trace event
-            self.metrics_logger.log_put(key, current_time, self.ttl)
-
-            # debugging
             debug(
-                f"⚙️Key {key} cached with expiration time: {self.expiry[key]}."
+                f"Random cache key inserted: {key}, "
+                f"expiration time: {self.expiry[key]}"
             )
-        except AttributeError as e:
-            raise AttributeError(f"AttributeError: {e}.")
-        except TypeError as e:
-            raise TypeError(f"TypeError: {e}.")
-        except KeyError as e:
-            raise KeyError(f"KeyError: {e}.")
-        except IndexError as e:
-            raise IndexError(f"IndexError: {e}.")
-        except ValueError as e:
-            raise ValueError(f"ValueError: {e}.")
-        except Exception as e:
-            raise RuntimeError(f"RuntimeError: {e}.")
 
-        # print a successful message
-        info("🟢 Key inserted.")
+            # Trace event
+            self.metrics_logger.log_put(key, current_time, self.ttl)
+        except (AttributeError, TypeError, KeyError, ValueError) as e:
+            msg = "Random cache put failed"
+            error("%s: %s", msg, e)
+            raise RuntimeError(msg) from e

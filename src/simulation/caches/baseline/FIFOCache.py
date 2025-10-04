@@ -45,8 +45,6 @@ class FIFOCache(Cache):
         self._data = OrderedDict()
         self.callback = callback
 
-        info("FIFO cache initialized")
-
     def __getitem__(self: "FIFOCache", key: int) -> Any:
         """
         Retrieve a key item from the FIFO cache.

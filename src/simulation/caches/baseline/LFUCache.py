@@ -46,8 +46,6 @@ class LFUCache(Cache):
         self._freq: defaultdict[int, int] = defaultdict(int)
         self.callback = callback
 
-        info("LFU cache initialized")
-
     def __getitem__(self: "LFUCache", key: int) -> Any:
         """
         Retrieve a key item from the LFU cache.
