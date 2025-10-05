@@ -17,6 +17,15 @@ class LSTMCacheConfig(BaseModel):
     threshold: confloat(ge=0, le=1)  # type: ignore[valid-type]
 
 
+# Simulation — Evaluation — Mistake Rate
+class MistakeRateConfig(BaseModel):
+    window: conint(gt=0)  # type: ignore[valid-type]
+
+
+class EvaluationConfig(BaseModel):
+    mistake_rate: MistakeRateConfig
+
+
 class SimulationConfig(BaseModel):
     """
     Class representing the simulation configuration
@@ -25,3 +34,4 @@ class SimulationConfig(BaseModel):
 
     general: CacheGeneralConfig
     lstm: LSTMCacheConfig
+    evaluation: EvaluationConfig

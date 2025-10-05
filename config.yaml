@@ -156,3 +156,6 @@ simulation:
     prediction:
       interval: 5
     threshold: 0.5
+  evaluation:
+    mistake_rate:
+      window: 3000

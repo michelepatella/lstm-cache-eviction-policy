@@ -1,47 +1,69 @@
+from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
+from utils.simulation.classes.CacheMetricsLogger import CacheMetricsLogger
 
 
-def calculate_eviction_mistake_rate(metrics_logger, mistake_window=300):
+def calculate_eviction_mistake_rate(
+    metrics_logger: CacheMetricsLogger, mistake_window: int
+) -> float:
     """
-    Method to compute eviction mistake rate.
-    :param metrics_logger: The metrics logger.
-    :param mistake_window: The mistake window to consider.
-    :return: The eviction mistake rate.
+    Calculate the eviction mistake rate within a
+    given temporal window.
+
+    This function calculates the eviction mistake rate,
+    within a provided temporal window. An eviction mistake
+    occurs when a key that was evicted from the cache
+    is accessed again within the specified temporal window.
+
+    Parameters:
+        metrics_logger (CacheMetricsLogger): Object tracking cache events
+                                             (evictions and accesses).
+        mistake_window (int): Temporal window to consider future
+                              accesses as mistakes.
+
+    Returns:
+        float: Eviction mistake rate.
     """
-    # initial message
-    info("🔄 Eviction mistake rate calculation started...")
+    debug(f"Eviction mistake rate with window: {mistake_window}")
 
-    try:
-        # initialize data
-        mistakes = 0
-        total_eviction_events = 0
+    # Initialize counters
+    tot_eviction_mistakes = 0
+    tot_eviction_events = 0
 
-        # count mistakes within a temporal window
-        for (
-            key,
-            eviction_times,
-        ) in metrics_logger.evicted_keys.items():
-            for eviction_time in eviction_times:
-                total_eviction_events += 1
-                # look for any future access after the current eviction
-                future_accesses = [
-                    t
-                    for t in metrics_logger.access_events.get(key, [])
-                    if t > eviction_time
-                    and (t - eviction_time) <= mistake_window
-                ]
-                if future_accesses:
-                    mistakes += 1
-    except AttributeError as e:
-        raise AttributeError(f"AttributeError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except ZeroDivisionError as e:
-        raise ZeroDivisionError(f"ZeroDivisionError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+    # Iterate over all evicted keys and their eviction times
+    for key, eviction_times in metrics_logger.evicted_keys.items():
+        for eviction_time in eviction_times:
+            # Increase eviction events by one
+            tot_eviction_events += 1
 
-    # show a successful message
-    info("🟢 Eviction mistake rate computed.")
+            # Find future accesses within
+            # the mistake window
+            future_accesses = [
+                t
+                for t in metrics_logger.access_events.get(key, [])
+                if eviction_time < t <= eviction_time + mistake_window
+            ]
 
-    return mistakes / total_eviction_events if total_eviction_events > 0 else 0
+            # If there is at least one
+            # future access within the
+            # mistake window
+            if future_accesses:
+                # Increase eviction mistake by one
+                tot_eviction_mistakes += 1
+
+                debug(
+                    f"Eviction mistake detected for key: {key}, "
+                    f"eviction time: {eviction_time}, "
+                    f"future access(es): {future_accesses}"
+                )
+
+    # Compute eviction mistake rate
+    eviction_mistake_rate = (
+        tot_eviction_mistakes / tot_eviction_events
+        if tot_eviction_events > 0
+        else 0
+    )
+
+    info(f"Eviction mistake rate calculated: {eviction_mistake_rate}")
+
+    return eviction_mistake_rate
