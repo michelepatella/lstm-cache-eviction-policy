@@ -45,6 +45,8 @@ class FIFOCache(Cache):
         self._data = OrderedDict()
         self.callback = callback
 
+        info("FIFO cache initialized")
+
     def __getitem__(self: "FIFOCache", key: int) -> Any:
         """
         Retrieve a key item from the FIFO cache.
@@ -70,7 +72,7 @@ class FIFOCache(Cache):
 
             item = self._data[key]
 
-            debug(f"FIFO cache item retrieved: {item}," f" for key: {key}")
+            debug(f"FIFO cache item retrieved: {item}, for key: {key}")
 
             return item
         except KeyError as e:
@@ -99,7 +101,7 @@ class FIFOCache(Cache):
             # Update key item in the cache
             self._data[key] = item
 
-            debug(f"FIFO cache item updated: {item}," f" for key: {key}")
+            debug(f"FIFO cache item updated: {item}, for key: {key}")
         else:
             # If the key is not cached but
             # there is no space enough to
@@ -123,7 +125,7 @@ class FIFOCache(Cache):
             # along with its item
             self._data[key] = item
 
-            debug(f"FIFO cache item inserted: {item}," f" for key: {key}")
+            debug(f"FIFO cache item inserted: {item}, for key: {key}")
 
     def __delitem__(self: "FIFOCache", key: int) -> None:
         """

@@ -1,197 +1,224 @@
 from abc import ABC, abstractmethod
+from typing import Any
 
+from pipeline.config.classes.Config import Config
+from simulation.caches.utils.CacheMetricsLogger import CacheMetricsLogger
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
 
 
 class BaseCache(ABC):
+    """
+    Abstract base class for all cache implementations.
+
+    This class provides common functionalities such as:
+    - TTL (Time-To-Live) management
+    - Expired key removal
+    - Metrics logging
+    """
+
     def __init__(
-        self,
-        cache_class,
-        metrics_logger,
-        config_settings,
-    ):
+        self: "BaseCache",
+        cache_class: Any,
+        metrics_logger: CacheMetricsLogger,
+        config: Config,
+    ) -> None:
         """
-        Method to initialize the base cache class.
-        :param cache_class: The cache class.
-        :param metrics_logger: The metrics logger object.
-        :param config_settings: The configuration settings.
-        """
-        # initial message
-        info("🔄 Base cache initialization started...")
+        Initialize the BaseCache.
 
-        # initialize data
-        try:
-            if cache_class is not None:
-                self.cache = cache_class(
-                    config_settings.simulation.general.dimension,
-                    callback=self._on_evict,
-                )
+        This function sets up the cache, metrics logger,
+        TTL, maximum size, and auxiliary data structures.
+
+        Parameters:
+            self (BaseCache): Current class instance.
+            cache_class (Any): Class implementing a cache.
+            metrics_logger (CacheMetricsLogger): Object to log cache
+                                                 events.
+            config (Config): Configuration object.
+
+        Returns:
+            None
+        """
+        # Prepare configuration
+        dimension = config.simulation.general.dimension
+        ttl = config.simulation.general.ttl
+
+        debug(f"BaseCache dimension: {dimension}")
+        debug(f"BaseCache TTL: {ttl}")
+
+        # Initialize cache and fields
+        self.cache = (
+            cache_class(
+                dimension,
+                callback=self._on_evict,
+            )
+            if cache_class is not None
+            else None
+        )
+        self.maxsize = dimension
+        self.ttl = ttl
+        self.metrics_logger = metrics_logger
+        self.store = {}
+        self.expiry = {}
+        self.scores = {}
+        self._last_put_time = None
+
+        info("BaseCache initialized")
+
+    def _is_expired(self: "BaseCache", key: int, current_time: float) -> bool:
+        """
+        Check if a key has expired based on its TTL.
+
+        This function, given a key and the current time,
+        checks whether a key has expired, based on the
+        TTL. The function returns True if the key
+        has expired, False otherwise.
+
+        Parameters:
+            self (BaseCache): Current class instance.
+            key (int): Key to check expiration for.
+            current_time (float): Current timestamp.
+
+        Returns:
+            bool: True if key has expired, False otherwise.
+        """
+        # Check whether the key has expired,
+        # provided it is stored in the cache
+        expired = key in self.expiry and self.expiry[key] < current_time
+
+        debug(
+            f"Key {key} expired BaseCache check: {expired},"
+            f" at time: {current_time}"
+        )
+
+        return expired
+
+    def _remove_expired_keys(self: "BaseCache", current_time: float) -> None:
+        """
+        Remove all expired keys from the cache.
+
+        This function, given the current time, removes
+        all the expired keys from the cache, based on TTL.
+
+        Parameters:
+            self (BaseCache): Current class instance.
+            current_time (float): Current timestamp.
+
+        Returns:
+            None
+        """
+        # Identify expired keys
+        expired_keys = [
+            k for k, exp in self.expiry.items() if exp < current_time
+        ]
+
+        debug(f"Expired keys to be removed from BaseCache: {expired_keys}")
+
+        # Remove all the expired keys
+        for k in expired_keys:
+            # Remove key from cache/store
+            if self.cache is not None:
+                self.cache.pop(k, None)
             else:
-                self.cache = None
-            self.maxsize = config_settings.simulation.general.dimension
-            self.ttl = config_settings.simulation.general.ttl
-            self.metrics_logger = metrics_logger
-            self.store = {}
-            self.expiry = {}
-            self.scores = {}
-            self._last_put_time = None
-        except AttributeError as e:
-            raise AttributeError(f"AttributeError: {e}.")
-        except TypeError as e:
-            raise TypeError(f"TypeError: {e}.")
-        except NameError as e:
-            raise NameError(f"NameError: {e}.")
-        except ValueError as e:
-            raise ValueError(f"ValueError: {e}.")
-        except Exception as e:
-            raise RuntimeError(f"RuntimeError: {e}.")
+                self.store.pop(k, None)
 
-        # print a successful message
-        info("🟢 Base cache initialized.")
+            # Remove TTL and scores (if any)
+            self.expiry.pop(k, None)
+            if self.scores is not None:
+                self.scores.pop(k, None)
 
-    def _is_expired(self, key, current_time):
+            # Trace eviction
+            self.metrics_logger.log_eviction(k, current_time)
+
+            debug(
+                f"Expired key removed from BaseCache: {k},"
+                f" at time: {current_time}"
+            )
+
+    def contains(self: "BaseCache", key: int, current_time: float) -> bool:
         """
-        Method to check if a key is expired.
-        :param key: The key to check.
-        :param current_time: The current time.
-        :return: True if the key is expired, False otherwise.
+        Check if a key exists in the cache and is
+        not expired.
+
+        This function, given a key and the current time,
+        checks whether a key exists in the cache and is not
+        expired, returning True if both condition are verified,
+        False otherwise.
+
+        Parameters:
+            self (BaseCache): Current class instance.
+            key (int): Key to check.
+            current_time (float): Current timestamp.
+
+        Returns:
+            bool: True if key exists and is valid,
+                  False otherwise.
         """
-        # initial message
-        info("🔄 Expiration check started...")
+        debug(f"Key containment in BaseCache check for: {key}")
 
-        try:
-            # print a successful message
-            info("🟢 Expiration check finished.")
+        # Trace the get event
+        self.metrics_logger.log_get(key, current_time)
 
-            return key in self.expiry and self.expiry[key] < current_time
-        except AttributeError as e:
-            raise AttributeError(f"AttributeError: {e}.")
-        except TypeError as e:
-            raise TypeError(f"TypeError: {e}.")
-        except KeyError as e:
-            raise KeyError(f"KeyError: {e}.")
-        except Exception as e:
-            raise RuntimeError(f"RuntimeError: {e}.")
+        # Check whether the key is
+        # in the cache/store and is not expired
+        in_cache = (
+            self.cache is not None
+            and key in self.cache
+            and not self._is_expired(key, current_time)
+        ) or (key in self.store and not self._is_expired(key, current_time))
 
-    def _remove_expired_keys(self, current_time):
+        debug(f"Key {key} in BaseCache (and valid): {in_cache}")
+
+        return in_cache
+
+    def _on_evict(self: "BaseCache", key: int) -> None:
         """
-        Method to remove expired keys from the cache.
-        :param current_time: The current time.
-        :return:
+        Callback triggered when a key is evicted
+        from BaseCache.
+
+        This function represents a callback triggered
+        when a key is evicted from BaseCache. The
+        callback removes expiration time for the evicted
+        key as well as logs the eviction event.
+
+        Parameters:
+            self (BaseCache): Current class instance.
+            key (int): Key that was evicted.
+
+        Returns:
+            None
         """
-        # initial message
-        info("🔄 Expired key removal started...")
+        # Remove expiration time
+        # of the evicted key
+        self.expiry.pop(key, None)
 
-        try:
-            # identify expired keys
-            expired_keys = [
-                k
-                for k, exp_time in self.expiry.items()
-                if exp_time < current_time
-            ]
+        # Trace eviction event
+        self.metrics_logger.log_eviction(key, self._last_put_time)
 
-            # remove expired keys
-            for k in expired_keys:
-                if self.cache is not None:
-                    self.cache.pop(k, None)
-                else:
-                    self.store.pop(k, None)
-                self.expiry.pop(k, None)
-
-                if self.scores is not None:
-                    self.scores.pop(k, None)
-
-                # trace event
-                self.metrics_logger.log_eviction(k, current_time)
-        except AttributeError as e:
-            raise AttributeError(f"AttributeError: {e}.")
-        except TypeError as e:
-            raise TypeError(f"TypeError: {e}.")
-        except NameError as e:
-            raise NameError(f"NameError: {e}.")
-        except KeyError as e:
-            raise KeyError(f"KeyError: {e}.")
-        except ValueError as e:
-            raise ValueError(f"ValueError: {e}.")
-        except Exception as e:
-            raise RuntimeError(f"RuntimeError: {e}.")
-
-        # print a successful message
-        info("🟢 Expired key removed.")
-
-    def contains(self, key, current_time):
-        """
-        Method to check if a key is in the cache.
-        :param key: The key to check.
-        :param current_time: The current time.
-        :return: True if the key is in the cache and
-        is not expired, False otherwise.
-        """
-        # initial message
-        info("🔄 Key access started...")
-
-        try:
-            # trace event
-            self.metrics_logger.log_get(key, current_time)
-
-            # check if the key is in the cache
-            if (
-                self.cache is not None
-                and key in self.cache
-                and not self._is_expired(key, current_time)
-            ):
-                _ = self.cache[key]
-
-                # debugging
-                debug(f"⚙️Key: {key} contained in cache.")
-                # print a successful message
-                info("🟢 Key access finished.")
-
-                return True
-            elif key in self.store and not self._is_expired(key, current_time):
-                # debugging
-                debug(f"⚙️Key: {key} not contained in cache.")
-                # print a successful message
-                info("🟢 Key access finished.")
-
-                return True
-            else:
-                # print a successful message
-                info("🟢 Key access finished.")
-
-                return False
-        except AttributeError as e:
-            raise AttributeError(f"AttributeError: {e}.")
-        except TypeError as e:
-            raise TypeError(f"TypeError: {e}.")
-        except KeyError as e:
-            raise KeyError(f"KeyError: {e}.")
-        except Exception as e:
-            raise RuntimeError(f"RuntimeError: {e}.")
-
-    def _on_evict(self, key):
-        """
-        Callback triggered by cachetools when a key is evicted.
-        :param key: The key to evict.
-        :return:
-        """
-        try:
-            # evict key
-            self.expiry.pop(key, None)
-
-            # trace event
-            self.metrics_logger.log_eviction(key, self._last_put_time)
-            debug(f"⚙️ Key {key} evicted by cachetools.")
-        except Exception as e:
-            raise RuntimeError(f"RuntimeError: {e}")
+        debug(f"Key {key} evicted from BaseCache")
 
     @abstractmethod
-    def put(self, *args, **kwargs):
+    def put(self: "BaseCache", *args: Any, **kwargs: Any) -> None:
         """
-        Each strategy defines its own put method.
-        :param self:
-        :param args:
-        :param kwargs:
-        :return:
+        Insert a key into the cache.
+
+        This function represents an abstract method
+        managing key items insertion in the cache.
+        Each cache eviction strategy must implement
+        its own put method.
+
+        Parameters:
+            self ("BaseCache"): Current class instance.
+            *args (Any): Positional arguments required
+                         by the specific cache strategy.
+            **kwargs (Any): Keyword arguments required
+                            by the specific cache strategy.
+
+        Returns:
+            None
+
+        Raises:
+            NotImplementedError: If the method is not
+                                 implemented by the subclass.
         """
+        raise NotImplementedError()

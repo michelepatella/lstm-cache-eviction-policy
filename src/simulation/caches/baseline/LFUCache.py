@@ -46,6 +46,8 @@ class LFUCache(Cache):
         self._freq: defaultdict[int, int] = defaultdict(int)
         self.callback = callback
 
+        info("LFU cache initialized")
+
     def __getitem__(self: "LFUCache", key: int) -> Any:
         """
         Retrieve a key item from the LFU cache.
@@ -65,7 +67,7 @@ class LFUCache(Cache):
             RuntimeError: If the key does not exist in the LFU cache.
         """
         try:
-            debug(f"Key to retrieve item " f"from LFU cache for: {key}")
+            debug(f"Key to retrieve item from LFU cache for: {key}")
 
             # Retrieve key item
             item = self._data[key]

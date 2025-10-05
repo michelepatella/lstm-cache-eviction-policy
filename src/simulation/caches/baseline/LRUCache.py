@@ -45,6 +45,8 @@ class LRUCache(Cache):
         self._data: OrderedDict[int, Any] = OrderedDict()
         self.callback = callback
 
+        info("LRU cache initialized")
+
     def __getitem__(self: "LRUCache", key: int) -> Any:
         """
         Retrieve a key item from the LRU cache.
