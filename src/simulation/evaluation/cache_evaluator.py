@@ -4,8 +4,8 @@ from simulation.evaluation.metrics.eviction_mistake_rate_calculator import (
 from simulation.evaluation.metrics.hit_miss_rate_calculator import (
     calculate_hit_miss_rate,
 )
-from simulation.evaluation.metrics.prefetching_avg_latency_calculator import (
-    calculate_prefetching_avg_latency,
+from simulation.evaluation.metrics.avg_cache_latency_calculator import (
+    calculate_avg_cache_latency,
 )
 from utils.logs.levels.info_logger import info
 
@@ -34,7 +34,7 @@ def evaluate_cache(
     eviction_mistake_rate = calculate_eviction_mistake_rate(metrics_logger)
 
     # calculate avg prefetching average
-    avg_prefetching_latency = calculate_prefetching_avg_latency(
+    avg_prefetching_latency = calculate_avg_cache_latency(
         autoregressive_latencies
     )
 
