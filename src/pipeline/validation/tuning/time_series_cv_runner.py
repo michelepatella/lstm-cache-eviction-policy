@@ -4,7 +4,7 @@ import numpy as np
 from box import Box
 from sklearn.model_selection import TimeSeriesSplit
 
-from pipeline.config.classes.Config import Config
+from config.classes.Config import Config
 from pipeline.utils.dataset.splitter import split_training_set
 from pipeline.utils.training.n_epochs_trainer import train_n_epochs
 from utils.data_loader.builder import (

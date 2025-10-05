@@ -2,7 +2,7 @@ from typing import Any, Dict
 
 from tqdm import tqdm
 
-from pipeline.config.classes.Config import Config
+from config.classes.Config import Config
 from pipeline.validation.best_params.updater import (
     check_and_update_best_params,
 )

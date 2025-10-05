@@ -2,8 +2,8 @@ from typing import List
 
 import numpy as np
 
+from config.classes.Config import Config
 from const import PERIOD, SECONDS_IN_HOUR
-from pipeline.config.classes.Config import Config
 from pipeline.data_generation.generation.patterns.access.components.cycle_generator import (
     generate_cycle_pattern,
 )

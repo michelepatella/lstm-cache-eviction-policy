@@ -7,7 +7,7 @@ from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from pipeline.config.classes.Config import Config
+from config.classes.Config import Config
 from pipeline.utils.evaluation.evaluator import evaluate_model
 from pipeline.utils.training.callbacks.EarlyStopping import EarlyStopping
 from pipeline.utils.training.one_epoch_trainer import train_one_epoch

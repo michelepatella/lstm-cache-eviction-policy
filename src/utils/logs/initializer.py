@@ -8,11 +8,15 @@ from const import (
     LOGS_FORMAT,
     LOGS_MAX_BYTES,
     LOGS_SAVE_PATH,
+    LOGS_PHASE_NAME,
+    LOGS_PHASE_DEFAULT,
 )
 
 # Contextual variable indicating
 # the current phase
-logs_phase = contextvars.ContextVar("phase", default="unknown")
+logs_phase = contextvars.ContextVar(
+    LOGS_PHASE_NAME, default=LOGS_PHASE_DEFAULT
+)
 
 
 def initialize_logs() -> None:

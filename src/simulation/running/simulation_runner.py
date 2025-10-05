@@ -1,9 +1,9 @@
 from tqdm import tqdm
 
-from simulation.caches.lstm.management.lstm_manager import (
+from lstm_cache_eviction_policy.management.lstm_manager import (
     manage_lstm_cache,
 )
-from simulation.caches.utils.key_finder import find_key
+from utils.simulation.key_finder import search_key_in_cache
 from simulation.evaluation.cache_evaluator import evaluate_cache
 from simulation.running.simulation_setup import simulation_setup
 from simulation.running.simulation_tracer import trace_hits_misses
@@ -105,7 +105,7 @@ def run_cache_simulation(
         # if the traditional cache (LRU, LFU, FIFO, or RANDOM) is being used
         else:
             # search the key into the cache
-            is_hit = find_key(cache, key, current_time, counters)
+            is_hit = search_key_in_cache(cache, key, current_time, counters)
 
             if not is_hit:
                 # put a key in cache

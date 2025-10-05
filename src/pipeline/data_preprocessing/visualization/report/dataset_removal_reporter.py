@@ -12,7 +12,7 @@ def report_dataset_removal(
     """
     Report dataset removal information.
 
-    This function reports dataset remoavl
+    This function reports dataset removal
     intermediate results to keep track of number
     of rows removed from dataset after applying
     a specific cleaning operation.

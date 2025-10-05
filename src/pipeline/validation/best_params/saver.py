@@ -2,7 +2,7 @@ from typing import Any, Dict
 
 from box.box import Box
 
-from pipeline.config.classes.Config import Config
+from config.classes.Config import Config
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info

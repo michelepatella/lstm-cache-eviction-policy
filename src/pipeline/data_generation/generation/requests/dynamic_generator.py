@@ -2,7 +2,7 @@ from typing import List, Tuple
 
 import numpy as np
 
-from pipeline.config.classes.Config import Config
+from config.classes.Config import Config
 from pipeline.data_generation.generation.requests.help.generation_helper import (
     generate_requests_helper,
 )

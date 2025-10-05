@@ -5,7 +5,7 @@ from const import (
     REQUEST_COLUMN,
     TIMESTAMP_COLUMN,
 )
-from pipeline.config.classes.Config import Config
+from config.classes.Config import Config
 from pipeline.data_generation.generation.requests.dynamic_generator import (
     generate_dynamic_requests,
 )
@@ -49,7 +49,7 @@ def generate_data(config: Config) -> None:
     Returns:
         None
     """
-    # Set the new pipeline state
+    # Set the new state
     logs_phase.set(LOGS_DATA_GENERATION_PHASE)
 
     # Prepare configuration
@@ -82,8 +82,10 @@ def generate_data(config: Config) -> None:
     save_dataset(df, DATASET_RAW_TYPE, config)
 
     # Show data generation -related plots
-    plot_zipf_loglog(requests)
-    plot_daily_profile(timestamps_hours)
-    plot_key_usage_heatmap(min_key, max_key, requests, timestamps_hours)
+    plot_zipf_loglog(requests, data_distribution_mode)
+    plot_daily_profile(timestamps_hours, data_distribution_mode)
+    plot_key_usage_heatmap(
+        min_key, max_key, requests, timestamps_hours, data_distribution_mode
+    )
 
     info("Data generation completed")

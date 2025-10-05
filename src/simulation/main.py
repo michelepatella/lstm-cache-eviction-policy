@@ -2,8 +2,10 @@ from simulation.caches.baseline.FIFOCache import FIFOCache
 from simulation.caches.baseline.LFUCache import LFUCache
 from simulation.caches.baseline.LRUCache import LRUCache
 from simulation.caches.baseline.RandomCache import RandomCache
-from simulation.caches.lstm.LSTMCache import LSTMCache
-from simulation.caches.utils.CacheMetricsLogger import CacheMetricsLogger
+from lstm_cache_eviction_policy.LSTMCache import LSTMCache
+from utils.simulation.classes.CacheMetricsLogger import (
+    CacheMetricsLogger,
+)
 from simulation.caches.utils.CacheWrapper import CacheWrapper
 from simulation.evaluation.visualization.simulation_plotter import (
     plot_hit_miss_rate_over_time,

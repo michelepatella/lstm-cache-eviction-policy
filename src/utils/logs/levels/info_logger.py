@@ -1,6 +1,7 @@
 import logging
 from typing import Any
 
+from const import LOGS_PHASE_NAME
 from utils.logs.initializer import logs_phase
 from utils.logs.levels.error_logger import error
 
@@ -26,7 +27,7 @@ def info(msg: str, *args: Any, **kwargs: Any) -> None:
         logging.info(
             msg,
             *args,
-            extra={"phase": logs_phase.get()},
+            extra={LOGS_PHASE_NAME: logs_phase.get()},
             **kwargs,
         )
     except (TypeError, ValueError, KeyError) as e:

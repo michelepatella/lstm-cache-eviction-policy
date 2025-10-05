@@ -3,6 +3,7 @@ from datetime import timedelta
 from pathlib import Path
 from typing import Literal
 
+
 # Project
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
@@ -14,6 +15,8 @@ CONFIG_SECTIONS_WITH_PARAMS = {
 }
 
 # Logs
+LOGS_PHASE_NAME = "phase"
+LOGS_PHASE_DEFAULT = "unknown"
 LOGS_FORMAT = "[%(phase)s] %(levelname)s: %(message)s"
 LOGS_SAVE_PATH = PROJECT_ROOT / "logs" / "log.log"
 LOGS_MAX_BYTES = 10_000_000
@@ -27,6 +30,9 @@ LOGS_TRAINING_PHASE = "training"
 LOGS_TESTING_PHASE = "testing"
 
 # Time
+TIMESTAMPS_START = [0.0]
+CURRENT_DAY_START = 0
+CURRENT_SECONDS_IN_DAY_START = 0.0
 MIN_HOUR = 0
 MAX_HOUR = 23
 PERIOD = timedelta(days=1).total_seconds()
@@ -97,18 +103,29 @@ LSTM_PARAMETERS = [
 ]
 MC_DROPOUT_DEFAULT = False
 
+# Simulation metrics
+HIT_COUNTER_NAME = "hit"
+MISS_COUNTER_NAME = "miss"
+
+# Reports
+PLOTS_SAVE_PATH = PROJECT_ROOT / "reports" / "plots"
+RESULTS_SAVE_PATH = PROJECT_ROOT / "reports" / "results"
+METRICS_SAVE_PATH_NAME = "lstm_metrics.json"
+
 # Figures
 FIGURE_SIZE = 12
 FIGURE_TITLE_FONT_SIZE = 18
 FIGURE_LABEL_FONT_SIZE = 16
 
 # Zipf log-log plot
+ZIPF_LOGLOG_SAVE_PATH_NAME = "zipf_log_log.png"
 ZIPF_LOGLOG_PLOT_MARKER = "o"
 ZIPF_LOGLOG_PLOT_TITLE = "Zipf Distribution (Log-Log)"
 ZIPF_LOGLOG_PLOT_X_LABEL = "Key"
 ZIPF_LOGLOG_PLOT_Y_LABEL = "Frequency"
 
 # Daily profile plot
+DAILY_PROFILE_SAVE_PATH_NAME = "daily_profile.png"
 DAILY_PROFILE_PLOT_BIN_SIZE = 0.5
 DAILY_PROFILE_PLOT_ALIGN: Literal["center", "edge"] = "center"
 DAILY_PROFILE_PLOT_EDGE_COLOR = "black"
@@ -118,6 +135,7 @@ DAILY_PROFILE_PLOT_Y_LABEL = "Number of Requests"
 DAILY_PROFILE_PLOT_STEP = 1
 
 # Key usage heatmap
+KEY_USAGE_SAVE_PATH_NAME = "key_usage.png"
 KEY_USAGE_HEATMAP_ASPECT: Literal["equal", "auto"] = "auto"
 KEY_USAGE_HEATMAP_CMAP = "turbo"
 KEY_USAGE_HEATMAP_TITLE = "Heatmap of Key Access Frequency by Hour of Day"
@@ -127,12 +145,14 @@ KEY_USAGE_HEATMAP_Y_LABEL = "Hour of Day"
 KEY_USAGE_HEATMAP_ROTATION = 45
 
 # Precision-recall curve
+PRECISION_RECALL_CURVE_SAVE_PATH_NAME = "precision_recall_curve.png"
 PRECISION_RECALL_CURVE_TITLE = "Precision-Recall Curve"
 PRECISION_RECALL_CURVE_CLASS_LABEL = "Class"
 PRECISION_RECALL_CURVE_X_LABEL = "Recall"
 PRECISION_RECALL_CURVE_Y_LABEL = "Precision"
 
 # Confusion matrix plot
+CONFUSION_MATRIX_SAVE_PATH_NAME = "confusion_matrix.png"
 CONFUSION_MATRIX_PLOT_TITLE = "Confusion Matrix"
 CONFUSION_MATRIX_PLOT_X_LABEL = "Predicted Key"
 CONFUSION_MATRIX_PLOT_Y_LABEL = "True Key"

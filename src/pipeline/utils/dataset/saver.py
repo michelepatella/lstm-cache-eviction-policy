@@ -1,6 +1,6 @@
 import pandas as pd
 
-from pipeline.config.classes.Config import Config
+from config.classes.Config import Config
 from utils.dataset.locator import get_dataset_path
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error

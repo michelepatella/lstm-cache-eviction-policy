@@ -5,7 +5,7 @@ from const import (
     REQUEST_COLUMN,
     TIMESTAMP_COLUMN,
 )
-from pipeline.config.classes.Config import Config
+from config.classes.Config import Config
 from pipeline.data_preprocessing.features.builder import (
     build_features,
 )
@@ -40,7 +40,7 @@ def preprocess_data(config: Config) -> None:
     Returns:
         None
     """
-    # Set the new pipeline state
+    # Set the new state
     logs_phase.set(LOGS_DATA_PREPROCESSING_PHASE)
 
     # Load the dataset

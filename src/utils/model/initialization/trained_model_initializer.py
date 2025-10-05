@@ -4,7 +4,7 @@ import torch
 from torch import nn
 from torch.utils.data import DataLoader
 
-from pipeline.config.classes.Config import Config
+from config.classes.Config import Config
 from utils.data_loader.targets_extractor import (
     extract_targets_from_data_loader,
 )

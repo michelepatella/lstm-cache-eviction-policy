@@ -1,5 +1,5 @@
 from const import LOGS_VALIDATION_PHASE, TRAINING_SPLIT_TYPE
-from pipeline.config.classes.Config import Config
+from config.classes.Config import Config
 from pipeline.validation.best_params.saver import save_best_params
 from pipeline.validation.tuning.grid_search_runner import (
     compute_grid_search,
@@ -25,7 +25,7 @@ def validate_model(config: Config) -> Config:
     Returns:
         Config: Updated configuration object (with the best hyperparameters).
     """
-    # Set the new pipeline state
+    # Set the new state
     logs_phase.set(LOGS_VALIDATION_PHASE)
 
     # Prepare configuration

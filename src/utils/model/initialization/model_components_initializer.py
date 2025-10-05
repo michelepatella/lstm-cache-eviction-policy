@@ -2,8 +2,8 @@ import torch
 from torch import nn
 from torch.optim import Optimizer
 
-from pipeline.config.classes.Config import Config
-from pipeline.config.classes.ModelConfig import ModelParamsConfig
+from config.classes.Config import Config
+from config.classes.ModelConfig import ModelParamsConfig
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info

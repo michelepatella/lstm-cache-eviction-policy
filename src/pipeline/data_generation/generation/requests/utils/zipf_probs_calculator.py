@@ -20,8 +20,8 @@ def calculate_zipf_probs(keys: np.ndarray, alpha: float) -> np.ndarray:
         alpha (float): The Zipfian parameter which governs its distribution.
 
     Returns:
-        np.ndarray: List of Zipfian probabilities — which sum to 1 — for all
-              the given keys.
+        np.ndarray: List of Zipfian probabilities — which sum to 1 —
+                    for all the given keys.
     """
     debug(f"Zipfian parameter for probabilities calculation: {alpha}")
 

@@ -1,6 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
+from config.classes.Config import Config
 from const import (
     DAILY_PROFILE_PLOT_ALIGN,
     DAILY_PROFILE_PLOT_BIN_SIZE,
@@ -14,6 +15,8 @@ from const import (
     FIGURE_TITLE_FONT_SIZE,
     MAX_HOUR,
     MIN_HOUR,
+    PLOTS_SAVE_PATH,
+    DAILY_PROFILE_SAVE_PATH_NAME,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
@@ -21,7 +24,7 @@ from utils.logs.levels.info_logger import info
 
 
 def plot_daily_profile(
-    timestamps_hours: np.ndarray,
+    timestamps_hours: np.ndarray, data_distribution_mode: str
 ) -> None:
     """
     Plot daily profile of requests.
@@ -32,6 +35,7 @@ def plot_daily_profile(
 
     Parameters:
         timestamps_hours (np.ndarray): Timestamp in hours of requests.
+        data_distribution_mode (str): Data distribution mode.
 
     Returns:
         None
@@ -95,6 +99,11 @@ def plot_daily_profile(
             fontsize=FIGURE_LABEL_FONT_SIZE,
         )
         plt.tight_layout()
+        plt.savefig(
+            PLOTS_SAVE_PATH
+            / data_distribution_mode
+            / DAILY_PROFILE_SAVE_PATH_NAME
+        )
         plt.show()
         plt.close()
 

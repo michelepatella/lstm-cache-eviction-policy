@@ -1,19 +1,26 @@
 from typing import Dict, List
 
 import torch
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import confusion_matrix
 
+from config.classes.Config import Config
 from const import (
     MODEL_METRICS_CLASS_REPORT_NAME,
     MODEL_METRICS_COHEN_KAPPA_SCORE,
     MODEL_METRICS_CONFUSION_MATRIX,
     MODEL_METRICS_TOP_K_ACCURACY,
 )
-from pipeline.config.classes.Config import Config
-from pipeline.utils.metrics.utils.cohen_kappa_score_calculator import (
+from pipeline.utils.metrics.components.class_report_generator import (
+    generate_class_report,
+)
+
+from pipeline.utils.metrics.components.cohen_kappa_score_calculator import (
     calculate_cohen_kappa_score,
 )
-from pipeline.utils.metrics.utils.top_k_accuracy_calculator import (
+from pipeline.utils.metrics.components.confusion_matrix_generator import (
+    generate_confusion_matrix,
+)
+from pipeline.utils.metrics.components.top_k_accuracy_calculator import (
     calculate_top_k_accuracy,
 )
 from utils.logs.levels.debug_logger import debug
@@ -66,31 +73,14 @@ def compute_model_metrics(
     debug(f"Outputs length: {len(outputs)}")
     debug(f"Configured top-k: {top_k}")
 
-    try:
-        # Compute class report
-        class_report = classification_report(
-            targets,
-            predictions,
-            output_dict=True,
-            zero_division=0,
-        )
-    except (ValueError, TypeError) as e:
-        msg = "Failed to compute class report"
-        error("%s: %s", msg, e)
-        raise RuntimeError(msg) from e
+    # Generate a class report
+    class_report = generate_class_report(targets, predictions)
 
     # Calculate top-k accuracy
     top_k_accuracy = calculate_top_k_accuracy(targets, outputs, top_k)
 
-    try:
-        # Get confusion matrix
-        conf_matrix = confusion_matrix(targets, predictions)
-
-        debug(f"Confusion matrix shape: {conf_matrix.shape}")
-    except (ValueError, TypeError) as e:
-        msg = "Failed to get confusion matrix"
-        error("%s: %s", msg, e)
-        raise RuntimeError(msg) from e
+    # Generate confusion matrix
+    conf_matrix = generate_confusion_matrix(targets, predictions)
 
     # Calculate Cohen's kappa score
     cohen_kappa_score = calculate_cohen_kappa_score(targets, predictions)

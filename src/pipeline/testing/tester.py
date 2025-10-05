@@ -9,7 +9,7 @@ from const import (
     MODEL_METRICS_TOP_K_ACCURACY,
     TESTING_SPLIT_TYPE,
 )
-from pipeline.config.classes.Config import Config
+from config.classes.Config import Config
 from pipeline.testing.visualization.plots.confusion_matrix_plotter import (
     plot_confusion_matrix,
 )
@@ -22,6 +22,7 @@ from pipeline.testing.visualization.report.model_evaluation_reporter import (
 from pipeline.utils.evaluation.evaluator import evaluate_model
 from utils.data_loader.initializer import initialize_data_loader
 from utils.dataset.AccessLogsDataset import AccessLogsDataset
+
 from utils.logs.initializer import logs_phase
 from utils.logs.levels.info_logger import info
 from utils.model.initialization.trained_model_initializer import (
@@ -43,10 +44,11 @@ def test_model(config: Config) -> None:
     Returns:
         None
     """
-    # Set the new pipeline state
+    # Set the new state
     logs_phase.set(LOGS_TESTING_PHASE)
 
     # Prepare configuration
+    data_distribution_mode = config.data.general.mode
     testing_batch_size = config.testing.batch_size
     testing_shuffle = config.testing.shuffle
     num_keys = config.data.general.keys.max - config.data.general.keys.min + 1
@@ -80,6 +82,7 @@ def test_model(config: Config) -> None:
         criterion,
         device,
         config,
+        data_distribution_mode,
         compute_metrics=True,
     )
 
@@ -109,10 +112,8 @@ def test_model(config: Config) -> None:
 
     # Show testing-related plots
     plot_precision_recall_curve(
-        all_targets,
-        stacked_outputs,
-        num_keys,
+        all_targets, stacked_outputs, num_keys, data_distribution_mode
     )
-    plot_confusion_matrix(confusion_matrix)
+    plot_confusion_matrix(confusion_matrix, data_distribution_mode)
 
     info("Model testing completed")

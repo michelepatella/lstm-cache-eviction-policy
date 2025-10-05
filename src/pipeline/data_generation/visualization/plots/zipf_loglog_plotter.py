@@ -12,13 +12,15 @@ from const import (
     ZIPF_LOGLOG_PLOT_TITLE,
     ZIPF_LOGLOG_PLOT_X_LABEL,
     ZIPF_LOGLOG_PLOT_Y_LABEL,
+    PLOTS_SAVE_PATH,
+    ZIPF_LOGLOG_SAVE_PATH_NAME,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
 
-def plot_zipf_loglog(requests: List[int]) -> None:
+def plot_zipf_loglog(requests: List[int], data_distribution_mode: str) -> None:
     """
     Plot Zipfian distribution via log-log.
 
@@ -29,6 +31,7 @@ def plot_zipf_loglog(requests: List[int]) -> None:
 
     Parameters:
         requests (List[int]): List of key accesses.
+        data_distribution_mode (str): Data distribution mode.
 
     Returns:
         None
@@ -77,6 +80,11 @@ def plot_zipf_loglog(requests: List[int]) -> None:
             fontsize=FIGURE_LABEL_FONT_SIZE,
         )
         plt.tight_layout()
+        plt.savefig(
+            PLOTS_SAVE_PATH
+            / data_distribution_mode
+            / ZIPF_LOGLOG_SAVE_PATH_NAME
+        )
         plt.show()
         plt.close()
 

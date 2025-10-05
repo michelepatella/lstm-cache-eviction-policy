@@ -2,8 +2,13 @@ from typing import List, Tuple
 
 import numpy as np
 
-from const import PERIOD
-from pipeline.config.classes.Config import Config
+from config.classes.Config import Config
+from const import (
+    PERIOD,
+    TIMESTAMPS_START,
+    CURRENT_DAY_START,
+    CURRENT_SECONDS_IN_DAY_START,
+)
 from pipeline.data_generation.generation.patterns.access.generator import (
     generate_access_pattern,
 )
@@ -46,9 +51,11 @@ def generate_pattern_requests(
     """
     # Initialize data
     requests = []
-    timestamps_seconds = [0.0]  # Get start from timestamp zero
-    current_day = 0  # Get start from day zero
-    current_seconds_in_day = 0.0  # Get start from midnight (second zero)
+    timestamps_seconds = TIMESTAMPS_START  # Get start from timestamp zero
+    current_day = CURRENT_DAY_START  # Get start from day zero
+    current_seconds_in_day = (
+        CURRENT_SECONDS_IN_DAY_START  # Get start from midnight (second zero)
+    )
 
     general_data_config = config.data.general
 

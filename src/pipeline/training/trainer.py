@@ -1,5 +1,5 @@
 from const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE
-from pipeline.config.classes.Config import Config
+from config.classes.Config import Config
 from pipeline.training.utils.model_saver import save_model
 from pipeline.utils.dataset.splitter import split_training_set
 from pipeline.utils.training.n_epochs_trainer import train_n_epochs
@@ -31,7 +31,7 @@ def train_model(config: Config) -> None:
     Returns:
         None
     """
-    # Set the new pipeline state
+    # Set the new state
     logs_phase.set(LOGS_TRAINING_PHASE)
 
     # Prepare configuration

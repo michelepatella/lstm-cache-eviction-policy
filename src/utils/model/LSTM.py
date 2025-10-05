@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 
 from const import LSTM_PARAMETERS, MC_DROPOUT_DEFAULT
-from pipeline.config.classes.Config import Config
-from pipeline.config.classes.ModelConfig import ModelParamsConfig
+from config.classes.Config import Config
+from config.classes.ModelConfig import ModelParamsConfig
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
@@ -112,7 +112,7 @@ class LSTM(nn.Module):
         """
         super(LSTM, self).__init__()
 
-        # Set MC dropout flag
+        # Set MC dropout default flag
         self.mc_dropout = MC_DROPOUT_DEFAULT
 
         debug(f"MC dropout set to default: {self.mc_dropout}")
