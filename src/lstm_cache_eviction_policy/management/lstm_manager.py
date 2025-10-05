@@ -6,10 +6,10 @@ from lstm_cache_eviction_policy.key_selection.key_candidates_finder import (
 from lstm_cache_eviction_policy.management.cold_start_manager import (
     manage_cold_start,
 )
-from utils.simulation.key_finder import search_key_in_cache
+from utils.simulation.key_in_cache_searcher import search_key_in_cache
 from lstm_cache_eviction_policy.seed_seq_extractor import extract_seed_seq
-from simulation.prefetching.autoregression import autoregressive_rollout
-from simulation.prefetching.confidence_interval_calculator import (
+from lstm_cache_eviction_policy.autoregression import autoregressive_rollout
+from lstm_cache_eviction_policy.confidence_interval_calculator import (
     calculate_confidence_interval,
 )
 from utils.logs.levels.info_logger import info

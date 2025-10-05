@@ -3,7 +3,7 @@ from simulation.caches.baseline.LFUCache import LFUCache
 from simulation.caches.baseline.LRUCache import LRUCache
 from simulation.caches.baseline.RandomCache import RandomCache
 from lstm_cache_eviction_policy.LSTMCache import LSTMCache
-from utils.simulation.classes.CacheMetricsLogger import (
+from simulation.utils.CacheMetricsLogger import (
     CacheMetricsLogger,
 )
 from simulation.caches.utils.CacheWrapper import CacheWrapper

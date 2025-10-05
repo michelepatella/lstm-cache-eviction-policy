@@ -3,7 +3,7 @@ from tqdm import tqdm
 from lstm_cache_eviction_policy.management.lstm_manager import (
     manage_lstm_cache,
 )
-from utils.simulation.key_finder import search_key_in_cache
+from utils.simulation.key_in_cache_searcher import search_key_in_cache
 from simulation.evaluation.cache_evaluator import evaluate_cache
 from simulation.running.simulation_setup import simulation_setup
 from simulation.running.simulation_tracer import trace_hits_misses

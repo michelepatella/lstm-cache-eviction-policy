@@ -1,4 +1,4 @@
-from utils.simulation.classes.BaseCache import BaseCache
+from utils.simulation.BaseCache import BaseCache
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 
