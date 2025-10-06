@@ -12,7 +12,7 @@ from const import (
 )
 from pipeline.utils.inference.inferrer import infer_batch
 from pipeline.utils.metrics.calculator import (
-    compute_model_metrics,
+    calculate_model_metrics,
 )
 from utils.json.saver import save_json
 from utils.logs.levels.debug_logger import debug
@@ -92,7 +92,7 @@ def evaluate_model(
     # Compute metrics if requested
     metrics = None
     if compute_metrics:
-        metrics = compute_model_metrics(
+        metrics = calculate_model_metrics(
             all_targets,
             all_predictions,
             all_outputs,

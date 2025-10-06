@@ -1,27 +1,27 @@
 from typing import Dict, List, Tuple
 
 from config.classes.Config import Config
-from simulation.evaluation.metrics.eviction_mistake_rate_calculator import (
+from simulation.metrics.components.eviction_mistake_rate_calculator import (
     calculate_eviction_mistake_rate,
 )
-from simulation.evaluation.metrics.hit_miss_rate_calculator import (
+from simulation.metrics.components.hit_miss_rate_calculator import (
     calculate_hit_miss_rate,
 )
-from simulation.evaluation.metrics.avg_cache_latency_calculator import (
+from simulation.metrics.components.avg_cache_latency_calculator import (
     calculate_avg_cache_latency,
 )
 from simulation.utils.CacheMetricsLogger import CacheMetricsLogger
 from utils.logs.levels.info_logger import info
 
 
-def evaluate_cache(
+def calculate_cache_simulation_metrics(
     counters: Dict[str, int],
     cache_latencies: List[float],
     metrics_logger: CacheMetricsLogger,
     config: Config,
 ) -> Tuple[float, float, float, float]:
     """
-    Evaluate cache performance metrics.
+    Calculate cache simulation metrics.
 
     This function calculates the main performance metrics for a cache
     simulation, including hit rate, miss rate, eviction mistake rate,
@@ -57,7 +57,7 @@ def evaluate_cache(
     # Calculate average cache latency
     avg_cache_latency = calculate_avg_cache_latency(cache_latencies)
 
-    info("Cache metrics calculated")
+    info("Cache simulation metrics calculated")
 
     return (
         hit_rate,

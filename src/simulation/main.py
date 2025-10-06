@@ -7,10 +7,10 @@ from simulation.utils.CacheMetricsLogger import (
     CacheMetricsLogger,
 )
 from simulation.caches.utils.CacheWrapper import CacheWrapper
-from simulation.evaluation.visualization.plots.hit_miss_rates_plotter import (
+from simulation.visualization.plots.hit_miss_rates_plotter import (
     plot_hit_miss_rate,
 )
-from simulation.evaluation.visualization.report.simulation_reporter import (
+from simulation.visualization.report.simulation_reporter import (
     generate_simulation_report,
 )
 from simulation.running.simulation_runner import run_cache_simulation

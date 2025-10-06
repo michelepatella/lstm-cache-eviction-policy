@@ -4,85 +4,50 @@ from lstm_cache_eviction_policy.management.lstm_manager import (
     manage_lstm_cache,
 )
 from utils.simulation.key_in_cache_searcher import search_key_in_cache
-from simulation.evaluation.cache_evaluator import evaluate_cache
-from simulation.running.simulation_setup import simulation_setup
+from simulation.metrics.calculator import calculate_cache_simulation_metrics
+from simulation.initialization.initializer import initialize_simulation
 from simulation.running.simulation_tracer import trace_hits_misses
 from simulation.utils.row_preprocessor import preprocess_row
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
 
 
 def run_cache_simulation(
     cache,
     policy_name,
     metrics_logger,
-    config_settings,
+    config,
 ):
-    """
-    Method to simulate a cache policy.
-    :param cache: The cache object to simulate.
-    :param policy_name: The cache policy name to use.
-    :param metrics_logger: The metrics logger.
-    :param config_settings: The configuration settings.
-    :return: The hit rate and miss rate in terms of %.
-    """
-    # initial message
-    info(f"🔄 {policy_name} policy simulation started...")
-
-    # debugging
-    debug(f"⚙️ Policy: {policy_name}.")
-
-    # setup for simulation
+    # Setup for simulation
     (
         counters,
         timeline,
         recent_hits,
-        autoregressive_latencies,
+        cache_latencies,
         window,
         testing_set,
         testing_loader,
         device,
         criterion,
         model,
-    ) = simulation_setup(policy_name, config_settings)
+    ) = initialize_simulation(policy_name, config)
 
-    tot_prefetch = 0
     # for each request
     for idx in tqdm(
         range(len(testing_set)),
         desc=f"Simulating {policy_name}",
     ):
-        try:
-            # extract the row from the dataset
-            row = testing_set[idx]
+        # extract the row from the dataset
+        row = testing_set[idx]
 
-            # keep track of the no. of hits so far
-            prev_hits = counters["hits"]
-        except NameError as e:
-            raise NameError(f"NameError: {e}.")
-        except IndexError as e:
-            raise IndexError(f"IndexError: {e}.")
-        except TypeError as e:
-            raise TypeError(f"TypeError: {e}.")
-        except KeyError as e:
-            raise KeyError(f"KeyError: {e}.")
-        except AttributeError as e:
-            raise AttributeError(f"AttributeError: {e}.")
-        except ValueError as e:
-            raise ValueError(f"ValueError: {e}.")
-        except Exception as e:
-            raise RuntimeError(f"RuntimeError: {e}.")
+        # keep track of the no. of hits so far
+        prev_hits = counters["hits"]
 
         # extrapolate timestamp and key from the row
-        (current_time, key) = preprocess_row(row)
-
-        # debugging
-        debug(f"⚙️ Current time: {current_time} - Key: {key}.")
+        current_time, key = preprocess_row(row)
 
         # if the LSTM cache is being used
         if policy_name == "LSTM":
             (
-                autoregressive_latency,
+                cache_latency,
                 num_prefetch,
             ) = manage_lstm_cache(
                 cache,
@@ -93,14 +58,11 @@ def run_cache_simulation(
                 device,
                 model,
                 testing_set,
-                config_settings,
+                config,
             )
 
-            # update no. of prefetch
-            tot_prefetch += num_prefetch
-
             # store cache latency
-            autoregressive_latencies.append(autoregressive_latency)
+            cache_latencies.append(cache_latency)
 
         # if the traditional cache (LRU, LFU, FIFO, or RANDOM) is being used
         else:
@@ -125,17 +87,11 @@ def run_cache_simulation(
     (
         hit_rate,
         miss_rate,
-        prefetch_hit_rate,
         eviction_mistake_rate,
-        avg_prefetching_latency,
-    ) = evaluate_cache(
-        counters,
-        autoregressive_latencies,
-        metrics_logger,
+        avg_cache_latency,
+    ) = calculate_cache_simulation_metrics(
+        counters, cache_latencies, metrics_logger, config
     )
-
-    # print a successful message
-    info(f"🟢 {policy_name} policy simulation completed.")
 
     return {
         "policy": policy_name,
@@ -143,8 +99,7 @@ def run_cache_simulation(
         "miss_rate": miss_rate,
         "hits": counters["hits"],
         "misses": counters["misses"],
-        "avg_prefetching_latency": avg_prefetching_latency,
+        "avg_prefetching_latency": avg_cache_latency,
         "timeline": timeline,
-        "prefetch_hit_rate": prefetch_hit_rate,
         "eviction_mistake_rate": eviction_mistake_rate,
     }

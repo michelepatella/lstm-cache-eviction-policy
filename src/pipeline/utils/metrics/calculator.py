@@ -1,7 +1,6 @@
 from typing import Dict, List
 
 import torch
-from sklearn.metrics import confusion_matrix
 
 from config.classes.Config import Config
 from const import (
@@ -24,18 +23,17 @@ from pipeline.utils.metrics.components.top_k_accuracy_calculator import (
     calculate_top_k_accuracy,
 )
 from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
 
-def compute_model_metrics(
+def calculate_model_metrics(
     targets: List[int],
     predictions: List[int],
     outputs: List[torch.Tensor],
     config: Config,
 ) -> Dict[str, int | float]:
     """
-    Compute evaluation metrics for a model.
+    Calculate evaluation metrics for a model.
 
     This function calculates multiple evaluation metrics for
     a model, including:
@@ -93,6 +91,6 @@ def compute_model_metrics(
         MODEL_METRICS_COHEN_KAPPA_SCORE: cohen_kappa_score,
     }
 
-    info("Model metrics computed")
+    info("Model metrics calculated")
 
     return metrics
