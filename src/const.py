@@ -125,7 +125,8 @@ RANDOM_CACHE_NAME = "RANDOM"
 # Reports
 PLOTS_SAVE_PATH = PROJECT_ROOT / "reports" / "plots"
 RESULTS_SAVE_PATH = PROJECT_ROOT / "reports" / "results"
-METRICS_SAVE_PATH_NAME = "lstm_metrics.json"
+LSTM_RESULTS_SAVE_PATH_NAME = "lstm_results.json"
+SIMULATION_RESULTS_SAVE_PATH_NAME = "simulation_results.json"
 
 # Figures
 FIGURE_SIZE = 12

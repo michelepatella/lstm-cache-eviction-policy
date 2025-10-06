@@ -8,7 +8,7 @@ from config.classes.Config import Config
 from const import (
     COMPUTE_METRICS_DEFAULT,
     RESULTS_SAVE_PATH,
-    METRICS_SAVE_PATH_NAME,
+    LSTM_RESULTS_SAVE_PATH_NAME,
 )
 from pipeline.utils.inference.inferrer import infer_batch
 from pipeline.utils.metrics.calculator import (
@@ -104,7 +104,7 @@ def evaluate_model(
             metrics_save_path = (
                 RESULTS_SAVE_PATH
                 / data_distribution_mode
-                / METRICS_SAVE_PATH_NAME
+                / LSTM_RESULTS_SAVE_PATH_NAME
             )
             save_json(metrics, metrics_save_path)
 

@@ -1,12 +1,12 @@
 import json
-from typing import Dict
+from typing import Dict, List
 
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
 from utils.logs.levels.error_logger import error
 
 
-def save_json(data_dict: Dict, path: str) -> None:
+def save_json(data_dict: Dict | List[Dict], path: str) -> None:
     """
     Save a data dictionary as a JSON file.
 
@@ -14,9 +14,8 @@ def save_json(data_dict: Dict, path: str) -> None:
     JSON file to the provided path.
 
     Parameters:
-        data_dict (Dict): Data dictionary to save.
-        path (str): File path where the JSON will
-                     be saved.
+        data_dict (Dict | List[Dict]): Data to save.
+        path (str): File path where the JSON will be saved.
 
     Returns:
         None

@@ -10,8 +10,6 @@ from const import (
     FIGURE_TITLE_FONT_SIZE,
     FIGURE_LABEL_FONT_SIZE,
     HIT_MISS_RATE_SUBPLOT_X_LABEL,
-    HIT_MISS_RATES_PLOT_SAVE_PATH_NAME,
-    PLOTS_SAVE_PATH,
     HIT_MISS_RATES_PLOT_NUM_ROWS,
     HIT_MISS_RATES_PLOT_NUM_COLS,
     HIT_MISS_RATES_SUBPLOTS,
@@ -27,7 +25,7 @@ from utils.logs.levels.error_logger import error
 
 def plot_hit_miss_rate(
     results: List[Dict[str, Any]],
-    data_distribution_mode: str,
+    save_path: str,
 ) -> None:
     """
     Plot the evolution of hit and miss rates over time
@@ -39,7 +37,7 @@ def plot_hit_miss_rate(
 
     Parameters:
         results (List[Dict[str, Any]]): List of simulation results.
-        data_distribution_mode (str): Data distribution mode.
+        save_path (str): Path where to save the figure.
 
     Returns:
         None
@@ -107,11 +105,6 @@ def plot_hit_miss_rate(
             )
             axes[i].legend()
 
-        save_path = (
-            PLOTS_SAVE_PATH
-            / data_distribution_mode
-            / HIT_MISS_RATES_PLOT_SAVE_PATH_NAME
-        )
         plt.savefig(save_path)
 
         plt.show()
