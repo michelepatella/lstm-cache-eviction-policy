@@ -10,7 +10,7 @@ from simulation.metrics.components.hit_miss_rate_calculator import (
 from simulation.metrics.components.avg_cache_latency_calculator import (
     calculate_avg_cache_latency,
 )
-from simulation.utils.CacheMetricsLogger import CacheMetricsLogger
+from utils.simulation.classes.CacheMetricsLogger import CacheMetricsLogger
 from utils.logs.levels.info_logger import info
 
 

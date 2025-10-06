@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from config.classes.Config import Config
-from simulation.utils.CacheMetricsLogger import (
+from utils.simulation.classes.CacheMetricsLogger import (
     CacheMetricsLogger,
 )
 from utils.logs.levels.debug_logger import debug

@@ -1,5 +1,6 @@
 from tqdm import tqdm
 
+from const import HIT_COUNTER_NAME
 from lstm_cache_eviction_policy.management.lstm_manager import (
     manage_lstm_cache,
 )
@@ -7,12 +8,12 @@ from utils.simulation.key_in_cache_searcher import search_key_in_cache
 from simulation.metrics.calculator import calculate_cache_simulation_metrics
 from simulation.initialization.initializer import initialize_simulation
 from simulation.running.simulation_tracer import trace_hits_misses
-from simulation.utils.row_preprocessor import preprocess_row
+from simulation.utils.time_key_from_row_extractor import preprocess_row
 
 
 def run_cache_simulation(
     cache,
-    policy_name,
+    policy,
     metrics_logger,
     config,
 ):
@@ -22,30 +23,29 @@ def run_cache_simulation(
         timeline,
         recent_hits,
         cache_latencies,
-        window,
         testing_set,
         testing_loader,
-        device,
-        criterion,
-        model,
-    ) = initialize_simulation(policy_name, config)
+    ) = initialize_simulation(config)
 
-    # for each request
+    # Iterate over testing set, assuming each
+    # row represents a request to be satisfied
     for idx in tqdm(
         range(len(testing_set)),
-        desc=f"Simulating {policy_name}",
+        desc=f"Simulating {policy}",
     ):
-        # extract the row from the dataset
+        # Extract the current row
+        # from the dataset
         row = testing_set[idx]
 
-        # keep track of the no. of hits so far
-        prev_hits = counters["hits"]
+        # Get the number of hits so far
+        prev_hits_count = counters[HIT_COUNTER_NAME]
 
-        # extrapolate timestamp and key from the row
+        # Extrapolate current time and requested
+        # key from the current row
         current_time, key = preprocess_row(row)
 
         # if the LSTM cache is being used
-        if policy_name == "LSTM":
+        if policy == "LSTM":
             (
                 cache_latency,
                 num_prefetch,
@@ -76,7 +76,7 @@ def run_cache_simulation(
         # update number of hits and misses
         (recent_hits, timeline) = trace_hits_misses(
             counters,
-            prev_hits,
+            prev_hits_count,
             recent_hits,
             window,
             idx,
@@ -94,7 +94,7 @@ def run_cache_simulation(
     )
 
     return {
-        "policy": policy_name,
+        "policy": policy,
         "hit_rate": hit_rate,
         "miss_rate": miss_rate,
         "hits": counters["hits"],
