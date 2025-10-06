@@ -13,13 +13,13 @@ from pipeline.data_generation.generation.requests.static_generator import (
     generate_static_requests,
 )
 from pipeline.data_generation.utils.dataframe_builder import create_dataframe
-from pipeline.data_generation.visualization.plots.daily_profile_plotter import (
+from pipeline.data_generation.visualization.plotting.daily_profile_plotter import (
     plot_daily_profile,
 )
-from pipeline.data_generation.visualization.plots.key_usage_heatmap_plotter import (
+from pipeline.data_generation.visualization.plotting.key_usage_heatmap_plotter import (
     plot_key_usage_heatmap,
 )
-from pipeline.data_generation.visualization.plots.zipf_loglog_plotter import (
+from pipeline.data_generation.visualization.plotting.zipf_loglog_plotter import (
     plot_zipf_loglog,
 )
 from pipeline.utils.dataset.saver import save_dataset

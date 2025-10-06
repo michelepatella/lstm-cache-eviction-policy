@@ -1,88 +1,97 @@
-from simulation.caches.baseline.FIFOCache import FIFOCache
-from simulation.caches.baseline.LFUCache import LFUCache
-from simulation.caches.baseline.LRUCache import LRUCache
-from simulation.caches.baseline.RandomCache import RandomCache
+from config.classes.Config import Config
 from lstm_cache_eviction_policy.LSTMCache import LSTMCache
+from simulation.baseline_caches.FIFOCache import FIFOCache
+from simulation.baseline_caches.LFUCache import LFUCache
+from simulation.baseline_caches.LRUCache import LRUCache
+from simulation.baseline_caches.RandomCache import RandomCache
+from simulation.baseline_caches.utils.CacheWrapper import CacheWrapper
+from simulation.metrics.calculator import calculate_cache_simulation_metrics
 from utils.simulation.classes.CacheMetricsLogger import (
     CacheMetricsLogger,
 )
-from simulation.caches.utils.CacheWrapper import CacheWrapper
-from simulation.visualization.plots.hit_miss_rates_plotter import (
+from simulation.visualization.plotting.hit_miss_rates_plotter import (
     plot_hit_miss_rate,
 )
-from simulation.visualization.report.simulation_reporter import (
+from simulation.visualization.reporting.simulation_reporter import (
     generate_simulation_report,
 )
 from simulation.running.simulation_runner import run_cache_simulation
 from utils.logs.levels.info_logger import info
 
 
-def run_simulations(config_settings):
-    """
-    Method to orchestrate simulation of cache strategies.
-    :param config_settings: The configuration settings.
-    :return:
-    """
-    # initial message
-    info("🔄 Cache simulations started...")
+def run_simulations(config: Config) -> None:
+    # Prepare configuration
+    data_distribution_mode = config.data.general.mode
 
-    try:
-        # setup cache strategies
-        strategies = {
-            "LRU": CacheWrapper(
-                LRUCache,
-                CacheMetricsLogger(),
-                config_settings,
-            ),
-            "LFU": CacheWrapper(
-                LFUCache,
-                CacheMetricsLogger(),
-                config_settings,
-            ),
-            "FIFO": CacheWrapper(
-                FIFOCache,
-                CacheMetricsLogger(),
-                config_settings,
-            ),
-            "RANDOM": RandomCache(
-                None,
-                CacheMetricsLogger(),
-                config_settings,
-            ),
-            "LSTM": LSTMCache(
-                None,
-                CacheMetricsLogger(),
-                config_settings,
-            ),
+    # Data setup and initialization
+    cache_eviction_policies = {
+        "LRU": CacheWrapper(
+            LRUCache,
+            CacheMetricsLogger(),
+            config,
+        ),
+        "LFU": CacheWrapper(
+            LFUCache,
+            CacheMetricsLogger(),
+            config,
+        ),
+        "FIFO": CacheWrapper(
+            FIFOCache,
+            CacheMetricsLogger(),
+            config,
+        ),
+        "RANDOM": RandomCache(
+            None,
+            CacheMetricsLogger(),
+            config,
+        ),
+        "LSTM": LSTMCache(
+            None,
+            CacheMetricsLogger(),
+            config,
+        ),
+    }
+    results = []
+
+    # For each cache eviction policy run a simulation
+    for policy, cache in cache_eviction_policies.items():
+        # Simulate a cache policy and
+        # get some numbers to calculate metrics
+        counters, timeline, cache_latencies = run_cache_simulation(
+            cache,
+            policy,
+            config,
+        )
+
+        # Calculate metrics at the end
+        # of cache simulation
+        (
+            hit_rate,
+            miss_rate,
+            eviction_mistake_rate,
+            avg_cache_latency,
+        ) = calculate_cache_simulation_metrics(
+            counters, cache_latencies, cache.metrics_logger, config
+        )
+
+        return {
+            "policy": policy,
+            "hit_rate": hit_rate,
+            "miss_rate": miss_rate,
+            "hits": counters["hits"],
+            "misses": counters["misses"],
+            "avg_prefetching_latency": avg_cache_latency,
+            "timeline": timeline,
+            "eviction_mistake_rate": eviction_mistake_rate,
         }
 
-        # run simulations
-        results = []
-        for policy, cache in strategies.items():
-            # simulate a cache policy and save results
-            result = run_cache_simulation(
-                cache,
-                policy,
-                cache.metrics_logger,
-                config_settings,
-            )
-            results.append(result)
-    except KeyError as e:
-        raise KeyError(f"KeyError: {e}.")
-    except TypeError as e:
-        raise TypeError(f"TypeError: {e}.")
-    except ValueError as e:
-        raise ValueError(f"ValueError: {e}.")
-    except AttributeError as e:
-        raise AttributeError(f"AttributeError: {e}.")
-    except Exception as e:
-        raise RuntimeError(f"RuntimeError: {e}.")
+        results.append(result)
 
-    # show results
+    # Generate a report for simulation results
     generate_simulation_report(results)
 
-    # show hit rate and miss rate plot
-    plot_hit_miss_rate(results)
+    # Plot hit and miss rates over time
+    plot_hit_miss_rate(results, data_distribution_mode)
 
     # print a successful message
     info("✅ Cache simulations completed.")

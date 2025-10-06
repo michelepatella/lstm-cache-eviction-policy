@@ -4,21 +4,22 @@ from const import HIT_COUNTER_NAME, MISS_COUNTER_NAME
 from utils.logs.levels.info_logger import info
 
 
-def search_key_in_cache(
-    cache: Any, key: int, current_time: float, counters: Dict
+def check_update_hit_miss(
+    cache: Any, key: int, current_time: float, counters: Dict[str, int]
 ) -> bool:
     """
-    Search for a key in the cache.
+    Check key presence in the cache
+    and update hit and miss counters.
 
     This function checks whether a given key exists in the cache
     and is still valid based on its expiration time. It updates
-    the hit/miss counters accordingly and logs the result.
+    the hit/miss counters accordingly.
 
     Parameters:
         cache (Any): Cache object implementing a contains method.
         key (int): Key to look up in the cache.
         current_time (float): Current timestamp for validation.
-        counters (Dict): Dictionary containing cache hit/miss counters.
+        counters (Dict[str, int]): Dictionary containing cache hit/miss counters.
 
     Returns:
         bool: True if the key is found in the cache, False otherwise.

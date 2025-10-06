@@ -10,13 +10,13 @@ from const import (
     TESTING_SPLIT_TYPE,
 )
 from config.classes.Config import Config
-from pipeline.testing.visualization.plots.confusion_matrix_plotter import (
+from pipeline.testing.visualization.plotting.confusion_matrix_plotter import (
     plot_confusion_matrix,
 )
-from pipeline.testing.visualization.plots.precision_recall_curve_plotter import (
+from pipeline.testing.visualization.plotting.precision_recall_curve_plotter import (
     plot_precision_recall_curve,
 )
-from pipeline.testing.visualization.report.model_evaluation_reporter import (
+from pipeline.testing.visualization.reporting.model_evaluation_reporter import (
     generate_model_evaluation_report,
 )
 from pipeline.utils.evaluation.evaluator import evaluate_model

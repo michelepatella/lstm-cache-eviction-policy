@@ -2,7 +2,7 @@ from typing import List
 
 import pandas as pd
 
-from pipeline.data_preprocessing.visualization.report.dataset_removal_reporter import (
+from pipeline.data_preprocessing.visualization.reporting.dataset_removal_reporter import (
     report_dataset_removal,
 )
 from utils.logs.levels.error_logger import error

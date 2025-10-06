@@ -15,7 +15,6 @@ def initialize_simulation(
 ) -> Tuple[
     Dict[str, int],
     List[float],
-    List[int],
     List[float],
     AccessLogsDataset,
     DataLoader,
@@ -25,19 +24,17 @@ def initialize_simulation(
 
     This function sets up all necessary structures and datasets for
     running a cache simulation. It initializes counters, timelines,
-    recent hits, cache latency records, and prepares the testing
-    dataset and data loader.
+    cache latency records, and prepares the testing dataset and data loader.
 
     Parameters:
         config (Config): Configuration object.
 
     Returns:
-        Tuple[dict, list, list, list, AccessLogsDataset, DataLoader]:
+        Tuple[Dict[str, int], List[float], List[float], AccessLogsDataset, DataLoader]:
             A tuple containing a dictionary with initialized cache hit
             and miss counters, a list to track cache events over time,
-            a list to track recently accessed keys, a list to store
-            latency of cache accesses, a dataset for testing, and
-            a data loader for iterating over the testing set.
+            a list to store latency of cache accesses, a dataset for
+            testing, and a data loader for iterating over the testing set.
     """
     # Prepare configuration
     testing_batch_size = config.testing.batch_size
@@ -49,7 +46,6 @@ def initialize_simulation(
         MISS_COUNTER_NAME: 0,
     }
     timeline = []
-    recent_hits = []
     cache_latencies = []
 
     # Get testing set
@@ -68,7 +64,6 @@ def initialize_simulation(
     return (
         counters,
         timeline,
-        recent_hits,
         cache_latencies,
         testing_set,
         testing_loader,

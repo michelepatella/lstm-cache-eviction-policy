@@ -1,5 +1,4 @@
 import logging
-from datetime import timedelta
 from pathlib import Path
 from typing import Literal
 
@@ -35,9 +34,10 @@ CURRENT_DAY_START = 0
 CURRENT_SECONDS_IN_DAY_START = 0.0
 MIN_HOUR = 0
 MAX_HOUR = 23
-PERIOD = timedelta(days=1).total_seconds()
-SECONDS_IN_HOUR = timedelta(hours=1).total_seconds()
-HOURS_IN_DAY = timedelta(days=1).total_seconds() / SECONDS_IN_HOUR
+PERIOD = 86400
+SECONDS_IN_HOUR = 3600
+HOURS_IN_DAY = 24
+MILLISECONDS_IN_SECONDS = 1000
 
 # Hardware
 DEVICES = ["cpu", "cuda", "mps"]
@@ -114,6 +114,13 @@ AVG_CACHE_LATENCY_NAME = "avg_cache_latency"
 TIMELINE_NAME = "timeline"
 TIMELINE_INDEX_NAME = "index"
 TIMELINE_INSTANT_HIT_RATE_NAME = "instant_hit_rate"
+
+# Caches
+LSTM_CACHE_NAME = "LSTM"
+FIFO_CACHE_NAME = "FIFO"
+LFU_CACHE_NAME = "LFU"
+LRU_CACHE_NAME = "LRU"
+RANDOM_CACHE_NAME = "RANDOM"
 
 # Reports
 PLOTS_SAVE_PATH = PROJECT_ROOT / "reports" / "plots"

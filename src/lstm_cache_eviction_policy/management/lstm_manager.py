@@ -6,7 +6,7 @@ from lstm_cache_eviction_policy.key_selection.key_candidates_finder import (
 from lstm_cache_eviction_policy.management.cold_start_manager import (
     manage_cold_start,
 )
-from utils.simulation.key_in_cache_searcher import search_key_in_cache
+from utils.simulation.hit_miss_checker_updater import check_update_hit_miss
 from lstm_cache_eviction_policy.seed_seq_extractor import extract_seed_seq
 from lstm_cache_eviction_policy.autoregression import autoregressive_rollout
 from lstm_cache_eviction_policy.confidence_interval_calculator import (
@@ -21,8 +21,6 @@ def manage_lstm_cache(
     current_time,
     current_idx,
     counters,
-    device,
-    model,
     testing_set,
     config_settings,
 ):
@@ -47,7 +45,7 @@ def manage_lstm_cache(
         num_insertion = 0
 
         # search the key into the cache
-        _ = search_key_in_cache(cache, key, current_time, counters)
+        _ = check_update_hit_miss(cache, key, current_time, counters)
 
         # if it's not time to prefetch (no enough data)
         if current_idx < config_settings.data.sequence.length:
