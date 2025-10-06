@@ -1,6 +1,7 @@
 import json
 from typing import Dict, List
 
+from const import JSON_INDENT
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
 from utils.logs.levels.error_logger import error
@@ -33,7 +34,7 @@ def save_json(data_dict: Dict | List[Dict], path: str) -> None:
         # Save data dictionary as JSON file
         # to the specified path
         with open(path, "w") as f:
-            json.dump(data_dict, f)
+            json.dump(data_dict, f, indent=JSON_INDENT)
     except (TypeError, OSError) as e:
         msg = "Failed to save JSON"
         error("%s: %s", msg, e)

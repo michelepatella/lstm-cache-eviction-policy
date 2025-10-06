@@ -12,8 +12,6 @@ from const import (
     PRECISION_RECALL_CURVE_TITLE,
     PRECISION_RECALL_CURVE_X_LABEL,
     PRECISION_RECALL_CURVE_Y_LABEL,
-    PLOTS_SAVE_PATH,
-    PRECISION_RECALL_CURVE_SAVE_PATH_NAME,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
@@ -23,7 +21,7 @@ def plot_precision_recall_curve(
     targets: List[int],
     outputs: np.ndarray,
     num_keys: int,
-    data_distribution_mode: str,
+    save_path: str,
 ) -> None:
     """
     Plot precision-recall curves.
@@ -36,7 +34,7 @@ def plot_precision_recall_curve(
         targets (List[int]): True class labels (1D array).
         outputs (np.ndarray): Model outputs/probabilities (2D array).
         num_keys (int): Number of keys (i.e., classes).
-        data_distribution_mode (str): Data distribution mode.
+        save_path (str): Path to save the figure.
 
     Returns:
         None
@@ -71,14 +69,7 @@ def plot_precision_recall_curve(
     plt.xlabel(PRECISION_RECALL_CURVE_X_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
     plt.ylabel(PRECISION_RECALL_CURVE_Y_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
     plt.tight_layout()
-
-    save_path = (
-        PLOTS_SAVE_PATH
-        / data_distribution_mode
-        / PRECISION_RECALL_CURVE_SAVE_PATH_NAME
-    )
     plt.savefig(save_path)
-
     plt.show()
     plt.close()
 

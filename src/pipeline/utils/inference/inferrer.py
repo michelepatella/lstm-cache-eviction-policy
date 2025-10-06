@@ -3,8 +3,8 @@ from typing import List, Tuple
 import torch
 from torch.utils.data import DataLoader
 
+from config.classes.Config import Config
 from const import MC_DROPOUT_SAMPLES_DEFAULT
-from config import Config
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info

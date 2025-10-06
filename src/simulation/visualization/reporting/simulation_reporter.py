@@ -51,10 +51,10 @@ def generate_simulation_report(
 
             # Show cache eviction policy metrics
             info(
-                f"{policy_name}: Hit Rate: {hit_rate:.4f}%, "
+                f"{policy_name}: Hit Rate: {hit_rate}%, "
                 f"Miss Rate: {miss_rate:.4f}%, "
-                f"Average Cache Latency: {avg_latency:.6f}s, "
-                f"Eviction Mistake Rate: {eviction_mistake_rate:.4f}%"
+                f"Average Cache Latency: {avg_latency}µs, "
+                f"Eviction Mistake Rate: {eviction_mistake_rate}%"
             )
     except (TypeError, ValueError) as e:
         msg = "Failed to generate simulation report"

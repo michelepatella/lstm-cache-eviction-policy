@@ -69,8 +69,8 @@ class RandomCache(BaseCache):
                 evict_key = random.choice(list(self.store.keys()))
 
                 # Evict selected key
-                self.store.pop(evict_key)
-                self.expiry.pop(evict_key)
+                self.store.pop(evict_key, None)
+                self.expiry.pop(evict_key, None)
 
                 debug(f"Random cache full, evicted key: {evict_key}")
 

@@ -1,4 +1,4 @@
-from const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE
+from const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE, PROJECT_ROOT
 from config.classes.Config import Config
 from pipeline.training.utils.model_saver import save_model
 from pipeline.utils.dataset.splitter import split_training_set
@@ -95,6 +95,7 @@ def train_model(config: Config) -> None:
     )
 
     # Save the best model trained
-    save_model(model, model_save_path)
+    abs_model_save_path = PROJECT_ROOT / model_save_path
+    save_model(model, abs_model_save_path)
 
     info("Model training completed")

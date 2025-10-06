@@ -16,8 +16,6 @@ from const import (
     KEY_USAGE_HEATMAP_Y_LABEL,
     MAX_HOUR,
     MIN_HOUR,
-    PLOTS_SAVE_PATH,
-    KEY_USAGE_SAVE_PATH_NAME,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
@@ -29,7 +27,7 @@ def plot_key_usage_heatmap(
     max_key: int,
     requests: List[int],
     timestamps_hours: np.ndarray,
-    data_distribution_mode: str,
+    save_path: str,
 ) -> None:
     """
     Plot key usage heatmap over hours of the day.
@@ -42,7 +40,7 @@ def plot_key_usage_heatmap(
         max_key (int): The greatest key.
         requests (List[int]): List of key accesses.
         timestamps_hours (np.ndarray): Array of request timestamps in hours.
-        data_distribution_mode (str): Data distribution mode.
+        save_path (str): Path to save the figure.
 
     Returns:
         None
@@ -130,12 +128,7 @@ def plot_key_usage_heatmap(
             fontsize=FIGURE_LABEL_FONT_SIZE,
         )
         plt.tight_layout()
-
-        save_path = (
-            PLOTS_SAVE_PATH / data_distribution_mode / KEY_USAGE_SAVE_PATH_NAME
-        )
         plt.savefig(save_path)
-
         plt.show()
         plt.close()
 

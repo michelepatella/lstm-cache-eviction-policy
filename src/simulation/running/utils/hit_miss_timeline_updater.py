@@ -3,7 +3,6 @@ from typing import List, Dict
 from const import (
     HIT_COUNTER_NAME,
     MISS_COUNTER_NAME,
-    MISS_RATE_NAME,
     TIMELINE_INDEX_NAME,
     TIMELINE_INSTANT_HIT_RATE_NAME,
 )
@@ -46,14 +45,14 @@ def update_hit_miss_timeline(
                 TIMELINE_INDEX_NAME: idx,
                 TIMELINE_INSTANT_HIT_RATE_NAME: instant_hit_rate,
                 HIT_COUNTER_NAME: counters[HIT_COUNTER_NAME],
-                MISS_COUNTER_NAME: counters[MISS_RATE_NAME],
+                MISS_COUNTER_NAME: counters[MISS_COUNTER_NAME],
             }
         )
 
         info(
             f"Timeline updated for request index {idx}:\n"
             f"hits: {counters[HIT_COUNTER_NAME]}\n"
-            f"misses: {counters[MISS_RATE_NAME]}\n"
+            f"misses: {counters[MISS_COUNTER_NAME]}\n"
             f"instant hit rate: {instant_hit_rate}"
         )
     except KeyError as e:

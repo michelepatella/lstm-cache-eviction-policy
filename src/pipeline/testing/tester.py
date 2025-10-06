@@ -7,7 +7,8 @@ from const import (
     MODEL_METRICS_COHEN_KAPPA_SCORE,
     MODEL_METRICS_CONFUSION_MATRIX,
     MODEL_METRICS_TOP_K_ACCURACY,
-    TESTING_SPLIT_TYPE,
+    TESTING_SPLIT_TYPE, PLOTS_SAVE_PATH, CONFUSION_MATRIX_SAVE_PATH_NAME, PRECISION_RECALL_CURVE_SAVE_PATH_NAME,
+    RESULTS_SAVE_PATH, LSTM_RESULTS_SAVE_PATH_NAME,
 )
 from config.classes.Config import Config
 from pipeline.testing.visualization.plotting.confusion_matrix_plotter import (
@@ -69,6 +70,13 @@ def test_model(config: Config) -> None:
     # Set model in evaluation phase
     model.eval()
 
+    # Prepare path where to save evaluation metrics
+    metrics_save_path = (
+            RESULTS_SAVE_PATH
+            / data_distribution_mode
+            / LSTM_RESULTS_SAVE_PATH_NAME
+    )
+
     # Evaluate model
     (
         avg_loss,
@@ -82,7 +90,7 @@ def test_model(config: Config) -> None:
         criterion,
         device,
         config,
-        data_distribution_mode,
+        metrics_save_path,
         compute_metrics=True,
     )
 
@@ -110,10 +118,22 @@ def test_model(config: Config) -> None:
     # into a numpy array
     stacked_outputs = torch.stack(all_outputs).numpy()
 
+    # Prepare save paths
+    precision_recall_save_path = (
+        PLOTS_SAVE_PATH
+        / data_distribution_mode
+        / PRECISION_RECALL_CURVE_SAVE_PATH_NAME
+    )
+    confusion_matrix_save_path = (
+        PLOTS_SAVE_PATH
+        / data_distribution_mode
+        / CONFUSION_MATRIX_SAVE_PATH_NAME
+    )
+
     # Show testing-related plots
     plot_precision_recall_curve(
-        all_targets, stacked_outputs, num_keys, data_distribution_mode
+        all_targets, stacked_outputs, num_keys, precision_recall_save_path
     )
-    plot_confusion_matrix(confusion_matrix, data_distribution_mode)
+    plot_confusion_matrix(confusion_matrix, confusion_matrix_save_path)
 
     info("Model testing completed")

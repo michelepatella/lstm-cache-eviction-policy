@@ -31,8 +31,8 @@ class CacheMetricsLogger:
         # Initialize data structures to
         # keep track of cache events
         self.put_events = {}
-        self.access_events = defaultdict()
-        self.evicted_keys = defaultdict()
+        self.access_events = defaultdict(list)
+        self.evicted_keys = defaultdict(list)
         self.prefetch_predictions = {}
 
         info("CacheMetricsLogger initialized")

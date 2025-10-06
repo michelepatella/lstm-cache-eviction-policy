@@ -11,15 +11,13 @@ from const import (
     FIGURE_LABEL_FONT_SIZE,
     FIGURE_SIZE,
     FIGURE_TITLE_FONT_SIZE,
-    PLOTS_SAVE_PATH,
-    CONFUSION_MATRIX_SAVE_PATH_NAME,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
 
 
 def plot_confusion_matrix(
-    confusion_matrix: dict, data_distribution_mode: str
+    confusion_matrix: dict, save_path: str
 ) -> None:
     """
     Plot a confusion matrix.
@@ -29,7 +27,7 @@ def plot_confusion_matrix(
 
     Parameters:
         confusion_matrix (dict): Confusion matrix to plot.
-        data_distribution_mode (str): Data distribution mode.
+        save_path (str): Path to save the figure.
 
     Returns:
         None
@@ -51,12 +49,6 @@ def plot_confusion_matrix(
     plt.xlabel(CONFUSION_MATRIX_PLOT_X_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
     plt.ylabel(CONFUSION_MATRIX_PLOT_Y_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
     plt.tight_layout()
-
-    save_path = (
-        PLOTS_SAVE_PATH
-        / data_distribution_mode
-        / CONFUSION_MATRIX_SAVE_PATH_NAME
-    )
     plt.savefig(save_path)
     plt.show()
     plt.close()

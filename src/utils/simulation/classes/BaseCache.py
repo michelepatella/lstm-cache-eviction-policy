@@ -120,7 +120,7 @@ class BaseCache(ABC):
         for k in expired_keys:
             # Remove key from cache/store
             if self.cache is not None:
-                self.cache.pop(k, None)
+                self.cache.pop(k)
             else:
                 self.store.pop(k, None)
 

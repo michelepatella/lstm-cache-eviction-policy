@@ -3,7 +3,8 @@ from const import (
     DATASET_RAW_TYPE,
     LOGS_DATA_GENERATION_PHASE,
     REQUEST_COLUMN,
-    TIMESTAMP_COLUMN,
+    TIMESTAMP_COLUMN, PLOTS_SAVE_PATH, KEY_USAGE_SAVE_PATH_NAME, DAILY_PROFILE_SAVE_PATH_NAME,
+    ZIPF_LOGLOG_SAVE_PATH_NAME,
 )
 from config.classes.Config import Config
 from pipeline.data_generation.generation.requests.dynamic_generator import (
@@ -81,11 +82,26 @@ def generate_data(config: Config) -> None:
     # as dataset
     save_dataset(df, DATASET_RAW_TYPE, config)
 
+    # Prepare save paths
+    zipf_log_log_save_path = (
+            PLOTS_SAVE_PATH
+            / data_distribution_mode
+            / ZIPF_LOGLOG_SAVE_PATH_NAME
+    )
+    daily_profile_save_path = (
+            PLOTS_SAVE_PATH
+            / data_distribution_mode
+            / DAILY_PROFILE_SAVE_PATH_NAME
+    )
+    key_usage_heatmap_save_path = (
+            PLOTS_SAVE_PATH / data_distribution_mode / KEY_USAGE_SAVE_PATH_NAME
+    )
+
     # Show data generation -related plots
-    plot_zipf_loglog(requests, data_distribution_mode)
-    plot_daily_profile(timestamps_hours, data_distribution_mode)
+    plot_zipf_loglog(requests, zipf_log_log_save_path)
+    plot_daily_profile(timestamps_hours, daily_profile_save_path)
     plot_key_usage_heatmap(
-        min_key, max_key, requests, timestamps_hours, data_distribution_mode
+        min_key, max_key, requests, timestamps_hours, key_usage_heatmap_save_path
     )
 
     info("Data generation completed")

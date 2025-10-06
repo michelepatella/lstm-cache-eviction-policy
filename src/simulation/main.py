@@ -79,11 +79,6 @@ def run_simulations(config: Config) -> None:
             CacheMetricsLogger(),
             config,
         ),
-        LSTM_CACHE_NAME: LSTMCache(
-            None,
-            CacheMetricsLogger(),
-            config,
-        ),
     }
     results = []
 

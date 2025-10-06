@@ -71,7 +71,7 @@ class LRUCache(Cache):
 
             # Remove and reinsert key item
             # to mark it as recently used
-            item = self._data.pop(key)
+            item = self._data.pop(key, None)
             self._data[key] = item
 
             debug(f"LRU cache item retrieved: {item}, for key: {key}")
@@ -102,7 +102,7 @@ class LRUCache(Cache):
         # move it to the end (recently used)
         if key in self._data:
             # Remove key item from the cache
-            self._data.pop(key)
+            self._data.pop(key, None)
 
             debug(f"LRU cache item updated: {item}, for key: {key}")
         else:

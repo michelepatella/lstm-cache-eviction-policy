@@ -7,8 +7,6 @@ from torch.utils.data import DataLoader
 from config.classes.Config import Config
 from const import (
     COMPUTE_METRICS_DEFAULT,
-    RESULTS_SAVE_PATH,
-    LSTM_RESULTS_SAVE_PATH_NAME,
 )
 from pipeline.utils.inference.inferrer import infer_batch
 from pipeline.utils.metrics.calculator import (
@@ -26,7 +24,7 @@ def evaluate_model(
     criterion: torch.nn.Module,
     device: torch.device,
     config: Config,
-    data_distribution_mode: str = None,
+    metrics_save_path: str = None,
     compute_metrics: bool = COMPUTE_METRICS_DEFAULT,
 ) -> Tuple[
     float, Dict[str, int | float] | None, List[Tensor], List[int], List[Tensor]
@@ -45,7 +43,7 @@ def evaluate_model(
         criterion (torch.nn.Module): Loss function used for evaluation.
         device (torch.device): Device on which to perform computations.
         config (Config): Configuration object.
-        data_distribution_mode (str): Data distribution mode.
+        metrics_save_path (str): Path to save metrics.
         compute_metrics (bool): Whether to compute evaluation metrics
                                 in addition to loss.
 
@@ -99,13 +97,8 @@ def evaluate_model(
             config,
         )
 
-        if data_distribution_mode is not None:
+        if metrics_save_path is not None:
             # Save results as JSON file
-            metrics_save_path = (
-                RESULTS_SAVE_PATH
-                / data_distribution_mode
-                / LSTM_RESULTS_SAVE_PATH_NAME
-            )
             save_json(metrics, metrics_save_path)
 
             debug("Metrics saved to JSON file")
