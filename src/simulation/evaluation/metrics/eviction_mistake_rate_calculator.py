@@ -63,7 +63,7 @@ def calculate_eviction_mistake_rate(
         eviction_mistake_rate = (
             tot_eviction_mistakes / tot_eviction_events
             if tot_eviction_events > 0
-            else 0
+            else 0.0
         )
 
         info(f"Eviction mistake rate calculated: {eviction_mistake_rate}")

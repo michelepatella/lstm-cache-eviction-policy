@@ -31,7 +31,7 @@ def generate_model_evaluation_report(
     class_report = Box(class_report)
 
     # General metrics
-    info("=== Model Evaluation Report ===")
+    info("=== LSTM Standalone Evaluation Report ===")
     info(f"Average Loss      : {avg_loss:.4f}")
     info(f"Top-{top_k} Accuracy: {top_k_accuracy:.4f}")
     info(f"Kappa Statistic   : {kappa_statistic:.4f}")

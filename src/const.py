@@ -106,6 +106,11 @@ MC_DROPOUT_DEFAULT = False
 # Simulation metrics
 HIT_COUNTER_NAME = "hit"
 MISS_COUNTER_NAME = "miss"
+POLICY_NAME = "policy"
+HIT_RATE_NAME = "hit_rate"
+MISS_RATE_NAME = "miss_rate"
+EVICTION_MISTAKE_RATE_NAME = "eviction_mistake_rate"
+AVG_CACHE_LATENCY_NAME = "avg_cache_latency"
 
 # Reports
 PLOTS_SAVE_PATH = PROJECT_ROOT / "reports" / "plots"

@@ -7,11 +7,11 @@ from simulation.utils.CacheMetricsLogger import (
     CacheMetricsLogger,
 )
 from simulation.caches.utils.CacheWrapper import CacheWrapper
-from simulation.evaluation.visualization.simulation_plotter import (
+from simulation.evaluation.visualization.plots.simulation_plotter import (
     plot_hit_miss_rate_over_time,
 )
-from simulation.evaluation.visualization.simulation_reporter import (
-    generate_caches_evaluation_report,
+from simulation.evaluation.visualization.report.simulation_reporter import (
+    generate_simulation_report,
 )
 from simulation.running.simulation_runner import run_cache_simulation
 from utils.logs.levels.info_logger import info
@@ -79,7 +79,7 @@ def run_simulations(config_settings):
         raise RuntimeError(f"RuntimeError: {e}.")
 
     # show results
-    generate_caches_evaluation_report(results)
+    generate_simulation_report(results)
 
     # show hit rate and miss rate plot
     plot_hit_miss_rate_over_time(results)
