@@ -82,7 +82,7 @@ def run_simulations(config: Config) -> None:
             None,
             CacheMetricsLogger(),
             config,
-        ),
+        )
     }
     results = []
 

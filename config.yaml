@@ -6,7 +6,7 @@ data:
     seed: 42
     mode: static
     requests:
-      count: 100000
+      count: 500000
     keys:
       min: 1
       max: 5000

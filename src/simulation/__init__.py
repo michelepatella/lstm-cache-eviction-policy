@@ -1,3 +1,3 @@
-from .main import run_simulations
+from .simulator import run_simulations
 
 __all__ = ["run_simulations"]
