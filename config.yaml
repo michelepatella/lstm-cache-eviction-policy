@@ -6,10 +6,10 @@ data:
     seed: 42
     mode: static
     requests:
-      count: 500000
+      count: 100000
     keys:
       min: 1
-      max: 5000
+      max: 1000
   pattern:
     access:
       zipf:
@@ -150,7 +150,7 @@ inference:
 
 simulation:
   general:
-    dimension: 1000
+    dimension: 200
     ttl: 180
   lstm:
     prediction:
@@ -158,4 +158,4 @@ simulation:
     threshold: 0.5
   evaluation:
     mistake_rate:
-      window: 3000
+      window: 5000
