@@ -1,5 +1,6 @@
 from typing import List
 
+from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
 
 
@@ -21,6 +22,8 @@ def calculate_avg_cache_latency(
                if no latency values are provided.
     """
     avg_cache_latency = None
+
+    debug(f"Number of cache latencies to average: {len(cache_latencies)}")
 
     if len(cache_latencies) != 0:
         # Calculate average cache latency

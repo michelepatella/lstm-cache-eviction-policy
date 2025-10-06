@@ -20,6 +20,7 @@ from const import (
     HIT_MISS_RATES_SUBPLOTS_TITLE_NAME,
     HIT_MISS_RATES_SUBPLOTS_Y_LABEL_NAME,
 )
+from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
 from utils.logs.levels.error_logger import error
 
@@ -50,6 +51,8 @@ def plot_hit_miss_rate(
             * If matplotlib receives invalid data for plotting.
     """
     try:
+        debug(f"Number of policies to plot hit/miss rates: {len(results)}")
+
         # Setup for the whole plot
         fig, axes = plt.subplots(
             nrows=HIT_MISS_RATES_PLOT_NUM_ROWS,
