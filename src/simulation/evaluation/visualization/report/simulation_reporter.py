@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Any
 
 from const import (
     HIT_RATE_NAME,
@@ -12,7 +12,7 @@ from utils.logs.levels.info_logger import info
 
 
 def generate_simulation_report(
-    results: List[Dict[str, float | str | None]],
+    results: List[Dict[str, Any]],
 ) -> None:
     """
     Generate a report for cache simulation evaluation results.
@@ -22,8 +22,8 @@ def generate_simulation_report(
     and eviction mistake rate, using informational logs.
 
     Parameters:
-        results (List[Dict[str, str | float | None]]): List of dictionaries containing
-                                                       cache policy metrics.
+        results (List[Dict[str, Any]]): List of dictionaries containing
+                                        cache policy metrics.
 
     Returns:
         None

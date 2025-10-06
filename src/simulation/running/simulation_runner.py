@@ -130,7 +130,6 @@ def run_cache_simulation(
         avg_prefetching_latency,
     ) = evaluate_cache(
         counters,
-        tot_prefetch,
         autoregressive_latencies,
         metrics_logger,
     )

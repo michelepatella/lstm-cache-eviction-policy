@@ -3,6 +3,7 @@ from typing import List
 
 import numpy as np
 from matplotlib import pyplot as plt
+from setuptools.sandbox import save_path
 
 from const import (
     FIGURE_LABEL_FONT_SIZE,
@@ -80,15 +81,18 @@ def plot_zipf_loglog(requests: List[int], data_distribution_mode: str) -> None:
             fontsize=FIGURE_LABEL_FONT_SIZE,
         )
         plt.tight_layout()
-        plt.savefig(
+
+        save_path = (
             PLOTS_SAVE_PATH
             / data_distribution_mode
             / ZIPF_LOGLOG_SAVE_PATH_NAME
         )
+        plt.savefig(save_path)
+
         plt.show()
         plt.close()
 
-        info("Zipf log-log plotted")
+        info(f"Zipf log-log plotted and saved to {save_path}")
     except (ValueError, TypeError) as e:
         msg = "Failed to plot Zipf log-log"
         error("%s: %s", msg, e)

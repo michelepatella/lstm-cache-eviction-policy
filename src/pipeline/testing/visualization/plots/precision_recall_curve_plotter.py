@@ -71,12 +71,15 @@ def plot_precision_recall_curve(
     plt.xlabel(PRECISION_RECALL_CURVE_X_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
     plt.ylabel(PRECISION_RECALL_CURVE_Y_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
     plt.tight_layout()
-    plt.savefig(
+
+    save_path = (
         PLOTS_SAVE_PATH
         / data_distribution_mode
         / PRECISION_RECALL_CURVE_SAVE_PATH_NAME
     )
+    plt.savefig(save_path)
+
     plt.show()
     plt.close()
 
-    info("Precision-recall curve plotted")
+    info(f"Precision-recall curve plotted and saved to {save_path}")

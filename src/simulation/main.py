@@ -7,8 +7,8 @@ from simulation.utils.CacheMetricsLogger import (
     CacheMetricsLogger,
 )
 from simulation.caches.utils.CacheWrapper import CacheWrapper
-from simulation.evaluation.visualization.plots.simulation_plotter import (
-    plot_hit_miss_rate_over_time,
+from simulation.evaluation.visualization.plots.hit_miss_rates_plotter import (
+    plot_hit_miss_rate,
 )
 from simulation.evaluation.visualization.report.simulation_reporter import (
     generate_simulation_report,
@@ -82,7 +82,7 @@ def run_simulations(config_settings):
     generate_simulation_report(results)
 
     # show hit rate and miss rate plot
-    plot_hit_miss_rate_over_time(results)
+    plot_hit_miss_rate(results)
 
     # print a successful message
     info("✅ Cache simulations completed.")

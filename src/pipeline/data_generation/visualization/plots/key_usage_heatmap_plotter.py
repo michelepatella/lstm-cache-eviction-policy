@@ -130,13 +130,16 @@ def plot_key_usage_heatmap(
             fontsize=FIGURE_LABEL_FONT_SIZE,
         )
         plt.tight_layout()
-        plt.savefig(
+
+        save_path = (
             PLOTS_SAVE_PATH / data_distribution_mode / KEY_USAGE_SAVE_PATH_NAME
         )
+        plt.savefig(save_path)
+
         plt.show()
         plt.close()
 
-        info("Key usage heatmap plotted")
+        info(f"Key usage heatmap plotted and saved to {save_path}")
     except (TypeError, ValueError) as e:
         msg = "Failed to plot key usage heatmap"
         error("%s: %s", msg, e)

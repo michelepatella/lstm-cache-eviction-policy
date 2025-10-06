@@ -99,15 +99,18 @@ def plot_daily_profile(
             fontsize=FIGURE_LABEL_FONT_SIZE,
         )
         plt.tight_layout()
-        plt.savefig(
+
+        save_path = (
             PLOTS_SAVE_PATH
             / data_distribution_mode
             / DAILY_PROFILE_SAVE_PATH_NAME
         )
+        plt.savefig(save_path)
+
         plt.show()
         plt.close()
 
-        info("Daily profile plotted")
+        info(f"Daily profile plotted and saved to {save_path}")
     except (
         ZeroDivisionError,
         ValueError,

@@ -51,12 +51,14 @@ def plot_confusion_matrix(
     plt.xlabel(CONFUSION_MATRIX_PLOT_X_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
     plt.ylabel(CONFUSION_MATRIX_PLOT_Y_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
     plt.tight_layout()
-    plt.savefig(
+
+    save_path = (
         PLOTS_SAVE_PATH
         / data_distribution_mode
         / CONFUSION_MATRIX_SAVE_PATH_NAME
     )
+    plt.savefig(save_path)
     plt.show()
     plt.close()
 
-    info("Confusion matrix plotted")
+    info(f"Confusion matrix plotted and saved to {save_path}")
