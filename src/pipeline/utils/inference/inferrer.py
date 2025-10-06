@@ -4,7 +4,7 @@ import torch
 from torch.utils.data import DataLoader
 
 from config.classes.Config import Config
-from const import MC_DROPOUT_SAMPLES_DEFAULT
+from const import MC_DROPOUT_NUM_SAMPLES_DEFAULT
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
@@ -93,7 +93,7 @@ def infer_batch(
                     (features, keys, targets),
                     device,
                     num_features,
-                    MC_DROPOUT_SAMPLES_DEFAULT,
+                    MC_DROPOUT_NUM_SAMPLES_DEFAULT,
                 )
 
                 debug(f"Outputs mean shape: {outputs_mean.shape}")

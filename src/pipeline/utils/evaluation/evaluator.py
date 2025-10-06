@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader
 
 from config.classes.Config import Config
 from const import (
-    COMPUTE_METRICS_DEFAULT,
+    MODEL_COMPUTE_METRICS_DEFAULT,
 )
 from pipeline.utils.inference.inferrer import infer_batch
 from pipeline.utils.metrics.calculator import (
@@ -25,7 +25,7 @@ def evaluate_model(
     device: torch.device,
     config: Config,
     metrics_save_path: str = None,
-    compute_metrics: bool = COMPUTE_METRICS_DEFAULT,
+    compute_metrics: bool = MODEL_COMPUTE_METRICS_DEFAULT,
 ) -> Tuple[
     float, Dict[str, int | float] | None, List[Tensor], List[int], List[Tensor]
 ]:

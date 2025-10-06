@@ -1,6 +1,6 @@
 from pydantic import BaseModel, model_validator
 
-from const import DEVICES
+from const import HW_DEVICES
 from config.classes.validation.choice_field_validator import (
     validate_choice_field,
 )
@@ -30,6 +30,6 @@ class HardwareConfig(BaseModel):
         return validate_choice_field(
             self,
             self.device,
-            DEVICES,
+            HW_DEVICES,
             "hardware.device",
         )

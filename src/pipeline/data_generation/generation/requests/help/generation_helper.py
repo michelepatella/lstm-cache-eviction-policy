@@ -2,7 +2,7 @@ from typing import List, Tuple
 
 import numpy as np
 
-from const import PERIOD, SECONDS_IN_HOUR
+from const import SECONDS_IN_DAY, SECONDS_IN_HOUR
 from config.classes.Config import Config
 from pipeline.data_generation.generation.patterns.generator import (
     generate_pattern_requests,
@@ -99,7 +99,7 @@ def generate_requests_helper(
 
     # Convert timestamps from seconds to hours
     timestamps_hours = (
-        np.array(timestamps_seconds) % PERIOD
+                               np.array(timestamps_seconds) % SECONDS_IN_DAY
     ) / SECONDS_IN_HOUR
 
     return requests, timestamps_hours

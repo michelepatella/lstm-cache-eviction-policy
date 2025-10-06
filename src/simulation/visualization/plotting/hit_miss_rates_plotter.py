@@ -2,13 +2,13 @@ from typing import List, Dict, Any
 import matplotlib.pyplot as plt
 
 from const import (
-    FIGURE_SIZE,
+    PLOT_SIZE,
     POLICY_NAME,
     TIMELINE_NAME,
     TIMELINE_INDEX_NAME,
     TIMELINE_INSTANT_HIT_RATE_NAME,
-    FIGURE_TITLE_FONT_SIZE,
-    FIGURE_LABEL_FONT_SIZE,
+    PLOT_TITLE_FONT_SIZE,
+    PLOT_LABEL_FONT_SIZE,
     HIT_MISS_RATE_SUBPLOT_X_LABEL,
     HIT_MISS_RATES_PLOT_NUM_ROWS,
     HIT_MISS_RATES_PLOT_NUM_COLS,
@@ -55,7 +55,7 @@ def plot_hit_miss_rate(
         fig, axes = plt.subplots(
             nrows=HIT_MISS_RATES_PLOT_NUM_ROWS,
             ncols=HIT_MISS_RATES_PLOT_NUM_COLS,
-            figsize=(FIGURE_SIZE, FIGURE_SIZE),
+            figsize=(PLOT_SIZE, PLOT_SIZE),
         )
         fig.tight_layout()
 
@@ -94,14 +94,14 @@ def plot_hit_miss_rate(
             # Set title and labels
             axes[i].set_title(
                 subplot[HIT_MISS_RATES_SUBPLOTS_TITLE_NAME],
-                fontsize=FIGURE_TITLE_FONT_SIZE,
+                fontsize=PLOT_TITLE_FONT_SIZE,
             )
             axes[i].set_xlabel(
-                HIT_MISS_RATE_SUBPLOT_X_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE
+                HIT_MISS_RATE_SUBPLOT_X_LABEL, fontsize=PLOT_LABEL_FONT_SIZE
             )
             axes[i].set_ylabel(
                 subplot[HIT_MISS_RATES_SUBPLOTS_Y_LABEL_NAME],
-                fontsize=FIGURE_LABEL_FONT_SIZE,
+                fontsize=PLOT_LABEL_FONT_SIZE,
             )
             axes[i].legend()
 

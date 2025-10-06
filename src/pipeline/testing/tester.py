@@ -4,11 +4,15 @@ from box.box import Box
 from const import (
     LOGS_TESTING_PHASE,
     MODEL_METRICS_CLASS_REPORT_NAME,
-    MODEL_METRICS_COHEN_KAPPA_SCORE,
-    MODEL_METRICS_CONFUSION_MATRIX,
-    MODEL_METRICS_TOP_K_ACCURACY,
-    TESTING_SPLIT_TYPE, PLOTS_SAVE_PATH, CONFUSION_MATRIX_SAVE_PATH_NAME, PRECISION_RECALL_CURVE_SAVE_PATH_NAME,
-    RESULTS_SAVE_PATH, LSTM_RESULTS_SAVE_PATH_NAME,
+    MODEL_METRICS_COHEN_KAPPA_SCORE_NAME,
+    MODEL_METRICS_CONFUSION_MATRIX_NAME,
+    MODEL_METRICS_TOP_K_ACCURACY_NAME,
+    TESTING_SPLIT_TYPE,
+    PLOTS_DIRECTORY_PATH,
+    CONFUSION_MATRIX_FILE_NAME,
+    PRECISION_RECALL_CURVE_FILE_NAME,
+    RESULTS_DIRECTORY_PATH,
+    MODEL_RESULTS_FILE_NAME,
 )
 from config.classes.Config import Config
 from pipeline.testing.visualization.plotting.confusion_matrix_plotter import (
@@ -72,9 +76,9 @@ def test_model(config: Config) -> None:
 
     # Prepare path where to save evaluation metrics
     metrics_save_path = (
-            RESULTS_SAVE_PATH
+            RESULTS_DIRECTORY_PATH
             / data_distribution_mode
-            / LSTM_RESULTS_SAVE_PATH_NAME
+            / MODEL_RESULTS_FILE_NAME
     )
 
     # Evaluate model
@@ -99,9 +103,9 @@ def test_model(config: Config) -> None:
 
     # Retrieve metrics
     class_report = getattr(metrics, MODEL_METRICS_CLASS_REPORT_NAME)
-    top_k_accuracy = getattr(metrics, MODEL_METRICS_TOP_K_ACCURACY)
-    kappa_score = getattr(metrics, MODEL_METRICS_COHEN_KAPPA_SCORE)
-    confusion_matrix = getattr(metrics, MODEL_METRICS_CONFUSION_MATRIX)
+    top_k_accuracy = getattr(metrics, MODEL_METRICS_TOP_K_ACCURACY_NAME)
+    kappa_score = getattr(metrics, MODEL_METRICS_COHEN_KAPPA_SCORE_NAME)
+    confusion_matrix = getattr(metrics, MODEL_METRICS_CONFUSION_MATRIX_NAME)
 
     # Show report to display testing results
     generate_model_evaluation_report(
@@ -120,14 +124,14 @@ def test_model(config: Config) -> None:
 
     # Prepare save paths
     precision_recall_save_path = (
-        PLOTS_SAVE_PATH
-        / data_distribution_mode
-        / PRECISION_RECALL_CURVE_SAVE_PATH_NAME
+            PLOTS_DIRECTORY_PATH
+            / data_distribution_mode
+            / PRECISION_RECALL_CURVE_FILE_NAME
     )
     confusion_matrix_save_path = (
-        PLOTS_SAVE_PATH
-        / data_distribution_mode
-        / CONFUSION_MATRIX_SAVE_PATH_NAME
+            PLOTS_DIRECTORY_PATH
+            / data_distribution_mode
+            / CONFUSION_MATRIX_FILE_NAME
     )
 
     # Show testing-related plots

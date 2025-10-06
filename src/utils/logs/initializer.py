@@ -3,11 +3,11 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 from const import (
-    LOGS_BACKUP_COUNT,
+    LOGS_FILE_BACKUP_COUNT,
     LOGS_DEFAULT_LEVEL,
     LOGS_FORMAT,
-    LOGS_MAX_BYTES,
-    LOGS_SAVE_PATH,
+    LOGS_FILE_MAX_BYTES,
+    LOGS_FILE_PATH,
     LOGS_PHASE_NAME,
     LOGS_PHASE_DEFAULT,
 )
@@ -37,9 +37,9 @@ def initialize_logs() -> None:
     # File handler for logging to
     # file with rotation
     file_handler = RotatingFileHandler(
-        LOGS_SAVE_PATH,
-        maxBytes=LOGS_MAX_BYTES,
-        backupCount=LOGS_BACKUP_COUNT,
+        LOGS_FILE_PATH,
+        maxBytes=LOGS_FILE_MAX_BYTES,
+        backupCount=LOGS_FILE_BACKUP_COUNT,
     )
     file_handler.setLevel(LOGS_DEFAULT_LEVEL)
     file_handler.setFormatter(formatter)

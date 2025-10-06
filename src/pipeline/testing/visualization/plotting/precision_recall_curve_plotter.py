@@ -6,8 +6,8 @@ from sklearn.metrics import precision_recall_curve
 from sklearn.preprocessing import label_binarize
 
 from const import (
-    FIGURE_LABEL_FONT_SIZE,
-    FIGURE_TITLE_FONT_SIZE,
+    PLOT_LABEL_FONT_SIZE,
+    PLOT_TITLE_FONT_SIZE,
     PRECISION_RECALL_CURVE_CLASS_LABEL,
     PRECISION_RECALL_CURVE_TITLE,
     PRECISION_RECALL_CURVE_X_LABEL,
@@ -65,9 +65,9 @@ def plot_precision_recall_curve(
             label=f"{PRECISION_RECALL_CURVE_CLASS_LABEL} {i}",
         )
 
-    plt.title(PRECISION_RECALL_CURVE_TITLE, fontsize=FIGURE_TITLE_FONT_SIZE)
-    plt.xlabel(PRECISION_RECALL_CURVE_X_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
-    plt.ylabel(PRECISION_RECALL_CURVE_Y_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
+    plt.title(PRECISION_RECALL_CURVE_TITLE, fontsize=PLOT_TITLE_FONT_SIZE)
+    plt.xlabel(PRECISION_RECALL_CURVE_X_LABEL, fontsize=PLOT_LABEL_FONT_SIZE)
+    plt.ylabel(PRECISION_RECALL_CURVE_Y_LABEL, fontsize=PLOT_LABEL_FONT_SIZE)
     plt.tight_layout()
     plt.savefig(save_path)
     plt.show()

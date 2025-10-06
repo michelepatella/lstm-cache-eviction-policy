@@ -4,7 +4,7 @@ from tqdm import tqdm
 import time
 
 from config.classes.Config import Config
-from const import LSTM_CACHE_NAME, MILLISECONDS_IN_SECONDS
+from const import LSTM_CACHE_NAME, MICROSECONDS_IN_SECOND
 from lstm_cache_eviction_policy.management.lstm_manager import (
     manage_lstm_cache,
 )
@@ -107,7 +107,7 @@ def run_cache_simulation(
             end_time = time.perf_counter()
 
             # Store cache latency
-            cache_latency = (end_time - start_time) * MILLISECONDS_IN_SECONDS
+            cache_latency = (end_time - start_time) * MICROSECONDS_IN_SECOND
             cache_latencies.append(cache_latency)
 
             # update number of hits and misses

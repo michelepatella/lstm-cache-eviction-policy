@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from const import LSTM_PARAMETERS, MC_DROPOUT_DEFAULT
+from const import LSTM_PARAM_NAMES, MC_DROPOUT_DEFAULT
 from config.classes.Config import Config
 from config.classes.ModelConfig import ModelParamsConfig
 from utils.logs.levels.debug_logger import debug
@@ -40,7 +40,7 @@ class LSTM(nn.Module):
             num_features = config.model.general.features.count
 
             # For each required parameter
-            for param in LSTM_PARAMETERS:
+            for param in LSTM_PARAM_NAMES:
                 # Check whether the required parameter
                 # has been directly passed to the model
                 if param in params and params[param] is not None:

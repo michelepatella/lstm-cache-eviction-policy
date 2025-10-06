@@ -19,7 +19,8 @@ def check_update_hit_miss(
         cache (Any): Cache object implementing a contains method.
         key (int): Key to look up in the cache.
         current_time (float): Current timestamp for validation.
-        counters (Dict[str, int]): Dictionary containing cache hit/miss counters.
+        counters (Dict[str, int]): Dictionary containing cache
+                                   hit/miss counters.
 
     Returns:
         bool: True if the key is found in the cache, False otherwise.

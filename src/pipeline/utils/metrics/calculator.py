@@ -5,9 +5,9 @@ import torch
 from config.classes.Config import Config
 from const import (
     MODEL_METRICS_CLASS_REPORT_NAME,
-    MODEL_METRICS_COHEN_KAPPA_SCORE,
-    MODEL_METRICS_CONFUSION_MATRIX,
-    MODEL_METRICS_TOP_K_ACCURACY,
+    MODEL_METRICS_COHEN_KAPPA_SCORE_NAME,
+    MODEL_METRICS_CONFUSION_MATRIX_NAME,
+    MODEL_METRICS_TOP_K_ACCURACY_NAME,
 )
 from pipeline.utils.metrics.components.class_report_generator import (
     generate_class_report,
@@ -86,9 +86,9 @@ def calculate_model_metrics(
     # Collect metrics in a dictionary
     metrics = {
         MODEL_METRICS_CLASS_REPORT_NAME: class_report,
-        MODEL_METRICS_TOP_K_ACCURACY: top_k_accuracy,
-        MODEL_METRICS_CONFUSION_MATRIX: conf_matrix.tolist(),
-        MODEL_METRICS_COHEN_KAPPA_SCORE: cohen_kappa_score,
+        MODEL_METRICS_TOP_K_ACCURACY_NAME: top_k_accuracy,
+        MODEL_METRICS_CONFUSION_MATRIX_NAME: conf_matrix.tolist(),
+        MODEL_METRICS_COHEN_KAPPA_SCORE_NAME: cohen_kappa_score,
     }
 
     info("Model metrics calculated")

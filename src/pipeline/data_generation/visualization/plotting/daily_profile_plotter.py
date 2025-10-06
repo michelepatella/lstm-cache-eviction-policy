@@ -9,20 +9,18 @@ from const import (
     DAILY_PROFILE_PLOT_TITLE,
     DAILY_PROFILE_PLOT_X_LABEL,
     DAILY_PROFILE_PLOT_Y_LABEL,
-    FIGURE_LABEL_FONT_SIZE,
-    FIGURE_SIZE,
-    FIGURE_TITLE_FONT_SIZE,
-    MAX_HOUR,
-    MIN_HOUR,
+    PLOT_LABEL_FONT_SIZE,
+    PLOT_SIZE,
+    PLOT_TITLE_FONT_SIZE,
+    DATA_GENERATION_FINAL_HOUR,
+    DATA_GENERATION_INITIAL_HOUR,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
 
-def plot_daily_profile(
-    timestamps_hours: np.ndarray, save_path: str
-) -> None:
+def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
     """
     Plot daily profile of requests.
 
@@ -47,13 +45,13 @@ def plot_daily_profile(
     try:
         # Define the number of bins to
         # be displayed
-        num_bins = int((MAX_HOUR - MIN_HOUR) / DAILY_PROFILE_PLOT_BIN_SIZE) + 1
+        num_bins = int((DATA_GENERATION_FINAL_HOUR - DATA_GENERATION_INITIAL_HOUR) / DAILY_PROFILE_PLOT_BIN_SIZE) + 1
 
         debug(f"Number of bins for daily profile plot: {num_bins}")
 
         # Define the bins ranging from predefined
         # min hour to max hour
-        bins = np.linspace(MIN_HOUR, MAX_HOUR, num_bins + 1)
+        bins = np.linspace(DATA_GENERATION_INITIAL_HOUR, DATA_GENERATION_FINAL_HOUR, num_bins + 1)
 
         debug(f"Bins for daily profile histogram: {bins}")
 
@@ -67,7 +65,7 @@ def plot_daily_profile(
         debug(f"Counts per daily profile histogram bin: {counts}")
 
         # Plot daily profile
-        plt.figure(figsize=(FIGURE_SIZE, FIGURE_SIZE))
+        plt.figure(figsize=(PLOT_SIZE, PLOT_SIZE))
         plt.bar(
             bins[:-1],
             counts,
@@ -77,23 +75,23 @@ def plot_daily_profile(
         )
         plt.title(
             DAILY_PROFILE_PLOT_TITLE,
-            fontsize=FIGURE_TITLE_FONT_SIZE,
+            fontsize=PLOT_TITLE_FONT_SIZE,
         )
         plt.xlabel(
             DAILY_PROFILE_PLOT_X_LABEL,
-            fontsize=FIGURE_LABEL_FONT_SIZE,
+            fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.ylabel(
             DAILY_PROFILE_PLOT_Y_LABEL,
-            fontsize=FIGURE_LABEL_FONT_SIZE,
+            fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.xticks(
             np.arange(
-                MIN_HOUR,
-                MAX_HOUR + 1,
+                DATA_GENERATION_INITIAL_HOUR,
+                DATA_GENERATION_FINAL_HOUR + 1,
                 step=DAILY_PROFILE_PLOT_STEP,
             ),
-            fontsize=FIGURE_LABEL_FONT_SIZE,
+            fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.tight_layout()
         plt.savefig(save_path)

@@ -2,8 +2,8 @@ from const import (
     DATASET_PREPROCESSED_TYPE,
     DATASET_RAW_TYPE,
     LOGS_DATA_PREPROCESSING_PHASE,
-    REQUEST_COLUMN,
-    TIMESTAMP_COLUMN,
+    REQUEST_COLUMN_NAME,
+    TIMESTAMP_COLUMN_NAME,
 )
 from config.classes.Config import Config
 from pipeline.data_preprocessing.features.builder import (
@@ -50,7 +50,7 @@ def preprocess_data(config: Config) -> None:
     df = remove_missing_values(df)
 
     # Remove duplicates
-    df = remove_duplicates(df, [TIMESTAMP_COLUMN])
+    df = remove_duplicates(df, [TIMESTAMP_COLUMN_NAME])
 
     # Remove invalid values
     df = remove_invalid_values(df, config)
@@ -58,8 +58,8 @@ def preprocess_data(config: Config) -> None:
     # Build new features
     df = build_features(
         df,
-        TIMESTAMP_COLUMN,
-        REQUEST_COLUMN,
+        TIMESTAMP_COLUMN_NAME,
+        REQUEST_COLUMN_NAME,
     )
 
     # Save preprocessed dataset

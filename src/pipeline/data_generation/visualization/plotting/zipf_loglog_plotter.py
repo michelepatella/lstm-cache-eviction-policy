@@ -5,13 +5,13 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 from const import (
-    FIGURE_LABEL_FONT_SIZE,
-    FIGURE_SIZE,
-    FIGURE_TITLE_FONT_SIZE,
-    ZIPF_LOGLOG_PLOT_MARKER,
-    ZIPF_LOGLOG_PLOT_TITLE,
-    ZIPF_LOGLOG_PLOT_X_LABEL,
-    ZIPF_LOGLOG_PLOT_Y_LABEL,
+    PLOT_LABEL_FONT_SIZE,
+    PLOT_SIZE,
+    PLOT_TITLE_FONT_SIZE,
+    ZIPF_LOG_LOG_PLOT_MARKER,
+    ZIPF_LOG_LOG_PLOT_TITLE,
+    ZIPF_LOG_LOG_PLOT_X_LABEL,
+    ZIPF_LOG_LOG_PLOT_Y_LABEL,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
@@ -59,23 +59,23 @@ def plot_zipf_loglog(requests: List[int], save_path: str) -> None:
 
         # Plot the Zipfian distribution
         # log-log
-        plt.figure(figsize=(FIGURE_SIZE, FIGURE_SIZE))
+        plt.figure(figsize=(PLOT_SIZE, PLOT_SIZE))
         plt.loglog(
             ranks,
             key_frequencies,
-            marker=ZIPF_LOGLOG_PLOT_MARKER,
+            marker=ZIPF_LOG_LOG_PLOT_MARKER,
         )
         plt.title(
-            ZIPF_LOGLOG_PLOT_TITLE,
-            fontsize=FIGURE_TITLE_FONT_SIZE,
+            ZIPF_LOG_LOG_PLOT_TITLE,
+            fontsize=PLOT_TITLE_FONT_SIZE,
         )
         plt.xlabel(
-            ZIPF_LOGLOG_PLOT_X_LABEL,
-            fontsize=FIGURE_LABEL_FONT_SIZE,
+            ZIPF_LOG_LOG_PLOT_X_LABEL,
+            fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.ylabel(
-            ZIPF_LOGLOG_PLOT_Y_LABEL,
-            fontsize=FIGURE_LABEL_FONT_SIZE,
+            ZIPF_LOG_LOG_PLOT_Y_LABEL,
+            fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.tight_layout()
         plt.savefig(save_path)

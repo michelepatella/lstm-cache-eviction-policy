@@ -30,7 +30,13 @@ def initialize_simulation(
         config (Config): Configuration object.
 
     Returns:
-        Tuple[Dict[str, int], List[float], List[float], AccessLogsDataset, DataLoader]:
+        Tuple[
+            Dict[str, int],
+            List[float],
+            List[float],
+            AccessLogsDataset,
+            DataLoader
+        ]:
             A tuple containing a dictionary with initialized cache hit
             and miss counters, a list to track cache events over time,
             a list to store latency of cache accesses, a dataset for

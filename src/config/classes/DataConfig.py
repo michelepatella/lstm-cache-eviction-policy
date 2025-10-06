@@ -1,6 +1,6 @@
 from pydantic import BaseModel, confloat, conint, model_validator
 
-from const import DATA_DISTRIBUTION_MODES, MAX_HOUR, MIN_HOUR
+from const import DATA_DISTRIBUTION_MODES, DATA_GENERATION_FINAL_HOUR, DATA_GENERATION_INITIAL_HOUR
 from config.classes.validation.choice_field_validator import (
     validate_choice_field,
 )
@@ -10,8 +10,8 @@ from config.classes.validation.min_max_validator import (
 
 
 class HoursConfig(BaseModel):
-    start: conint(ge=MIN_HOUR, le=MAX_HOUR)  # type: ignore[valid-type]
-    end: conint(ge=MIN_HOUR, le=MAX_HOUR)  # type: ignore[valid-type]
+    start: conint(ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR)  # type: ignore[valid-type]
+    end: conint(ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR)  # type: ignore[valid-type]
 
 
 # Data — Distribution
@@ -178,8 +178,8 @@ class AccessConfig(BaseModel):
 
 
 class BurstinessHoursConfig(BaseModel):
-    start: conint(ge=MIN_HOUR, le=MAX_HOUR)  # type: ignore[valid-type]
-    end: conint(ge=MIN_HOUR, le=MAX_HOUR)  # type: ignore[valid-type]
+    start: conint(ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR)  # type: ignore[valid-type]
+    end: conint(ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR)  # type: ignore[valid-type]
 
 
 class BurstinessConfig(BaseModel):

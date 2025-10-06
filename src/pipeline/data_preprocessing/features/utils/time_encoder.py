@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from const import COS_TIME_COLUMN, HOURS_IN_DAY, SIN_TIME_COLUMN
+from const import COS_TIME_COLUMN_NAME, HOURS_IN_DAY, SIN_TIME_COLUMN_NAME
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
@@ -60,8 +60,8 @@ def encode_time_trigonometrically(
 
         # Create new columns — sin and cosine
         # for the angles
-        df[SIN_TIME_COLUMN] = np.sin(angles)
-        df[COS_TIME_COLUMN] = np.cos(angles)
+        df[SIN_TIME_COLUMN_NAME] = np.sin(angles)
+        df[COS_TIME_COLUMN_NAME] = np.cos(angles)
 
         # Drop the original time column,
         # use only the new trigonometric columns

@@ -3,7 +3,7 @@ from typing import Tuple, Union
 import torch
 from torch import nn
 
-from const import MC_DROPOUT_SAMPLES_DEFAULT
+from const import MC_DROPOUT_NUM_SAMPLES_DEFAULT
 from utils.backpropagation.forward_runner import compute_forward
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
@@ -20,7 +20,7 @@ def mc_forward_passes(
     ],
     device: torch.device,
     num_features: int,
-    mc_dropout_samples: int = MC_DROPOUT_SAMPLES_DEFAULT,
+    mc_dropout_samples: int = MC_DROPOUT_NUM_SAMPLES_DEFAULT,
 ) -> Tuple[torch.Tensor, torch.Tensor | None, torch.Tensor]:
     """
     Perform forward passes with optional Monte Carlo (MC) Dropout.
@@ -56,7 +56,7 @@ def mc_forward_passes(
     """
     # Enable MC Dropout if more than one MC
     # dropout sample
-    if mc_dropout_samples > MC_DROPOUT_SAMPLES_DEFAULT:
+    if mc_dropout_samples > MC_DROPOUT_NUM_SAMPLES_DEFAULT:
         # Enable MC dropout during inference
         # (i.e., set the model to training mode)
         enable_mc_dropout(model)
@@ -99,7 +99,7 @@ def mc_forward_passes(
     # Calculate outputs variance provided that
     # the number of MC dropout sample is greater
     # than the default value
-    if mc_dropout_samples > MC_DROPOUT_SAMPLES_DEFAULT:
+    if mc_dropout_samples > MC_DROPOUT_NUM_SAMPLES_DEFAULT:
         outputs_var = outputs_mc_tensor.var(dim=0, unbiased=False)
     else:
         outputs_var = None

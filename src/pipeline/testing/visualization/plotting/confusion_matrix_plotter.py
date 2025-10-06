@@ -8,17 +8,15 @@ from const import (
     CONFUSION_MATRIX_PLOT_TITLE,
     CONFUSION_MATRIX_PLOT_X_LABEL,
     CONFUSION_MATRIX_PLOT_Y_LABEL,
-    FIGURE_LABEL_FONT_SIZE,
-    FIGURE_SIZE,
-    FIGURE_TITLE_FONT_SIZE,
+    PLOT_LABEL_FONT_SIZE,
+    PLOT_SIZE,
+    PLOT_TITLE_FONT_SIZE,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
 
 
-def plot_confusion_matrix(
-    confusion_matrix: dict, save_path: str
-) -> None:
+def plot_confusion_matrix(confusion_matrix: dict, save_path: str) -> None:
     """
     Plot a confusion matrix.
 
@@ -39,15 +37,15 @@ def plot_confusion_matrix(
     )
 
     # Plot confusion matrix
-    plt.figure(figsize=(FIGURE_SIZE, FIGURE_SIZE))
+    plt.figure(figsize=(PLOT_SIZE, PLOT_SIZE))
     sns.heatmap(
         confusion_matrix,
         annot=CONFUSION_MATRIX_PLOT_ANNOT,
         fmt=CONFUSION_MATRIX_PLOT_FMT,
     )
-    plt.title(CONFUSION_MATRIX_PLOT_TITLE, fontsize=FIGURE_TITLE_FONT_SIZE)
-    plt.xlabel(CONFUSION_MATRIX_PLOT_X_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
-    plt.ylabel(CONFUSION_MATRIX_PLOT_Y_LABEL, fontsize=FIGURE_LABEL_FONT_SIZE)
+    plt.title(CONFUSION_MATRIX_PLOT_TITLE, fontsize=PLOT_TITLE_FONT_SIZE)
+    plt.xlabel(CONFUSION_MATRIX_PLOT_X_LABEL, fontsize=PLOT_LABEL_FONT_SIZE)
+    plt.ylabel(CONFUSION_MATRIX_PLOT_Y_LABEL, fontsize=PLOT_LABEL_FONT_SIZE)
     plt.tight_layout()
     plt.savefig(save_path)
     plt.show()

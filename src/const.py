@@ -3,68 +3,110 @@ from pathlib import Path
 from typing import Literal
 
 
+# ----------------------------
 # Project
+# ----------------------------
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
+
+# ----------------------------
 # Configuration
+# ----------------------------
 CONFIG_FILE_NAME = "config.yaml"
+
 CONFIG_SECTIONS_WITH_PARAMS = {
     "model": "params",
     "training.optimizer": "params",
 }
 
+
+# ----------------------------
 # Logs
+# ----------------------------
 LOGS_PHASE_NAME = "phase"
 LOGS_PHASE_DEFAULT = "unknown"
-LOGS_FORMAT = "[%(phase)s] %(levelname)s: %(message)s"
-LOGS_SAVE_PATH = PROJECT_ROOT / "logs" / "log.log"
-LOGS_MAX_BYTES = 10_000_000
-LOGS_BACKUP_COUNT = 100
-LOGS_DEFAULT_LEVEL = logging.INFO
+
 LOGS_CONFIGURATION_PHASE = "configuration"
 LOGS_DATA_GENERATION_PHASE = "data generation"
 LOGS_DATA_PREPROCESSING_PHASE = "data preprocessing"
 LOGS_VALIDATION_PHASE = "validation"
 LOGS_TRAINING_PHASE = "training"
 LOGS_TESTING_PHASE = "testing"
+LOGS_SIMULATION_PHASE = "simulation"
 
+LOGS_FORMAT = "[%(phase)s] %(levelname)s: %(message)s"
+
+LOGS_DEFAULT_LEVEL = logging.INFO
+
+LOGS_DIRECTORY_PATH = PROJECT_ROOT / "logs"
+LOGS_FILE_PATH = LOGS_DIRECTORY_PATH / "log.log"
+LOGS_FILE_MAX_BYTES = 10_000_000
+LOGS_FILE_BACKUP_COUNT = 100
+
+
+# ----------------------------
 # Time
-TIMESTAMPS_START = [0.0]
-CURRENT_DAY_START = 0
-CURRENT_SECONDS_IN_DAY_START = 0.0
-MIN_HOUR = 0
-MAX_HOUR = 23
-PERIOD = 86_400
-SECONDS_IN_HOUR = 3_600
+# ----------------------------
 HOURS_IN_DAY = 24
-MILLISECONDS_IN_SECONDS = 1_000_000
+SECONDS_IN_DAY = 86_400
+SECONDS_IN_HOUR = 3_600
+MICROSECONDS_IN_SECOND = 1_000_000
 
-# Hardware
-DEVICES = ["cpu", "cuda", "mps"]
 
-# Data distribution
+# ----------------------------
+# Data Distributions
+# ----------------------------
 DATA_DISTRIBUTION_STATIC_MODE = "static"
 DATA_DISTRIBUTION_DYNAMIC_MODE = "dynamic"
+
 DATA_DISTRIBUTION_MODES = [
     DATA_DISTRIBUTION_STATIC_MODE,
     DATA_DISTRIBUTION_DYNAMIC_MODE,
 ]
 
+
+# ----------------------------
 # Dataset
+# ----------------------------
+TIMESTAMP_COLUMN_NAME = "timestamp"
+REQUEST_COLUMN_NAME = "request"
+SIN_TIME_COLUMN_NAME = "sin_time"
+COS_TIME_COLUMN_NAME = "cos_time"
+
 DATASET_RAW_TYPE = "raw"
 DATASET_PREPROCESSED_TYPE = "preprocessed"
-TIMESTAMP_COLUMN = "timestamp"
-REQUEST_COLUMN = "request"
-SIN_TIME_COLUMN = "sin_time"
-COS_TIME_COLUMN = "cos_time"
+
 TRAINING_SPLIT_TYPE = "training"
 TESTING_SPLIT_TYPE = "testing"
 
-# Data preprocessing
+
+# ----------------------------
+# Data Generation
+# ----------------------------
+DATA_GENERATION_INITIAL_HOUR = 0
+DATA_GENERATION_FINAL_HOUR = 23
+
+DATA_GENERATION_INITIAL_TIMESTAMP = [0.0]
+DATA_GENERATION_INITIAL_CURRENT_DAY = 0
+DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY = 0.0
+
+
+# ----------------------------
+# Data Preprocessing
+# ----------------------------
 MISSING_VALUES_REMOVAL_DROPNA_AXIS = 0
 MISSING_VALUES_REMOVAL_DROPNA_HOW: Literal["any", "all"] = "any"
 
-# Training
+
+# ----------------------------
+# Hardware Devices
+# ----------------------------
+HW_DEVICES = ["cpu", "cuda", "mps"]
+
+
+# ----------------------------
+# Optimizers
+# ----------------------------
 ADAM_OPTIMIZER = "adam"
 ADAMW_OPTIMIZER = "adamw"
 SGD_OPTIMIZER = "sgd"
@@ -75,24 +117,17 @@ TRAINING_OPTIMIZERS = [
     SGD_OPTIMIZER,
 ]
 
-# Validation
-VALIDATION_PARAMS_SUFFIX = "_range"
 
-# Inference
-MC_DROPOUT_SAMPLES_DEFAULT = 1
-
-# Model metrics
-COMPUTE_METRICS_DEFAULT = False
-MODEL_METRICS_CLASS_REPORT_NAME = "class_report"
-MODEL_METRICS_TOP_K_ACCURACY = "top_k_accuracy"
-MODEL_METRICS_CONFUSION_MATRIX = "confusion_matrix"
-MODEL_METRICS_COHEN_KAPPA_SCORE = "cohen_kappa_score"
-
-# Class weight
+# ----------------------------
+# Criterion
+# ----------------------------
 CLASS_WEIGHT_TYPE = "balanced"
 
-# Model
-LSTM_PARAMETERS = [
+
+# ----------------------------
+# Model (LSTM)
+# ----------------------------
+LSTM_PARAM_NAMES = [
     "hidden_size",
     "num_layers",
     "bias",
@@ -101,92 +136,124 @@ LSTM_PARAMETERS = [
     "bidirectional",
     "proj_size",
 ]
+
+
+# ----------------------------
+# Validation
+# ----------------------------
+VALIDATION_PARAMS_SUFFIX = "_range"
+
+
+# ----------------------------
+# Monte Carlo (MC) Dropout
+# ----------------------------
 MC_DROPOUT_DEFAULT = False
 
-# Simulation metrics
-HIT_COUNTER_NAME = "hit"
-MISS_COUNTER_NAME = "miss"
-POLICY_NAME = "policy"
-HIT_RATE_NAME = "hit_rate"
-MISS_RATE_NAME = "miss_rate"
-EVICTION_MISTAKE_RATE_NAME = "eviction_mistake_rate"
-AVG_CACHE_LATENCY_NAME = "avg_cache_latency"
-TIMELINE_NAME = "timeline"
-TIMELINE_INDEX_NAME = "index"
-TIMELINE_INSTANT_HIT_RATE_NAME = "instant_hit_rate"
+MC_DROPOUT_NUM_SAMPLES_DEFAULT = 1
 
-# Caches
+
+# ----------------------------
+# Cache eviction policies
+# ----------------------------
 LSTM_CACHE_NAME = "LSTM"
 FIFO_CACHE_NAME = "FIFO"
 LFU_CACHE_NAME = "LFU"
 LRU_CACHE_NAME = "LRU"
 RANDOM_CACHE_NAME = "RANDOM"
 
-# Reports
-PLOTS_SAVE_PATH = PROJECT_ROOT / "reports" / "plots"
-RESULTS_SAVE_PATH = PROJECT_ROOT / "reports" / "results"
-LSTM_RESULTS_SAVE_PATH_NAME = "lstm_results.json"
-SIMULATION_RESULTS_SAVE_PATH_NAME = "simulation_results.json"
+
+# ----------------------------
+# Model metrics
+# ----------------------------
+MODEL_COMPUTE_METRICS_DEFAULT = False
+MODEL_METRICS_CLASS_REPORT_NAME = "class_report"
+MODEL_METRICS_TOP_K_ACCURACY_NAME = "top_k_accuracy"
+MODEL_METRICS_CONFUSION_MATRIX_NAME = "confusion_matrix"
+MODEL_METRICS_COHEN_KAPPA_SCORE_NAME = "cohen_kappa_score"
+
+
+# ----------------------------
+# Cache simulation metrics
+# ----------------------------
+HIT_COUNTER_NAME = "hit_count"
+MISS_COUNTER_NAME = "miss_count"
+
+POLICY_NAME = "policy"
+HIT_RATE_NAME = "hit_rate"
+MISS_RATE_NAME = "miss_rate"
+EVICTION_MISTAKE_RATE_NAME = "eviction_mistake_rate"
+AVG_CACHE_LATENCY_NAME = "avg_cache_latency"
+
+TIMELINE_NAME = "timeline"
+TIMELINE_INDEX_NAME = "index"
+TIMELINE_INSTANT_HIT_RATE_NAME = "instant_hit_rate"
+
+
+# ----------------------------
+# Results
+# ----------------------------
+RESULTS_DIRECTORY_PATH = PROJECT_ROOT / "reports" / "results"
+MODEL_RESULTS_FILE_NAME = "model_results.json"
+SIMULATION_RESULTS_FILE_NAME = "simulation_results.json"
+
 JSON_INDENT = 4
 
-# Figures
-FIGURE_SIZE = 12
-FIGURE_TITLE_FONT_SIZE = 18
-FIGURE_LABEL_FONT_SIZE = 16
 
-# Zipf log-log plot
-ZIPF_LOGLOG_SAVE_PATH_NAME = "zipf_log_log.png"
-ZIPF_LOGLOG_PLOT_MARKER = "o"
-ZIPF_LOGLOG_PLOT_TITLE = "Zipf Distribution (Log-Log)"
-ZIPF_LOGLOG_PLOT_X_LABEL = "Key"
-ZIPF_LOGLOG_PLOT_Y_LABEL = "Frequency"
+# ----------------------------
+# Plots
+# ----------------------------
+PLOTS_DIRECTORY_PATH = PROJECT_ROOT / "reports" / "plots"
+PLOT_SIZE = 12
+PLOT_TITLE_FONT_SIZE = 18
+PLOT_LABEL_FONT_SIZE = 16
 
-# Daily profile plot
-DAILY_PROFILE_SAVE_PATH_NAME = "daily_profile.png"
+ZIPF_LOG_LOG_PLOT_FILE_NAME = "zipf_log_log.png"
+ZIPF_LOG_LOG_PLOT_MARKER = "o"
+ZIPF_LOG_LOG_PLOT_TITLE = "Zipf Distribution (Log-Log)"
+ZIPF_LOG_LOG_PLOT_X_LABEL = "Key"
+ZIPF_LOG_LOG_PLOT_Y_LABEL = "Frequency"
+
+DAILY_PROFILE_PLOT_FILE_NAME = "daily_profile.png"
+DAILY_PROFILE_PLOT_STEP = 1
 DAILY_PROFILE_PLOT_BIN_SIZE = 0.5
 DAILY_PROFILE_PLOT_ALIGN: Literal["center", "edge"] = "center"
 DAILY_PROFILE_PLOT_EDGE_COLOR = "black"
 DAILY_PROFILE_PLOT_TITLE = "Distribution of Requests Over Day"
 DAILY_PROFILE_PLOT_X_LABEL = "Hour of Day"
 DAILY_PROFILE_PLOT_Y_LABEL = "Number of Requests"
-DAILY_PROFILE_PLOT_STEP = 1
 
-# Key usage heatmap
-KEY_USAGE_SAVE_PATH_NAME = "key_usage.png"
+KEY_USAGE_HEATMAP_FILE_NAME = "key_usage.png"
+KEY_USAGE_HEATMAP_ROTATION = 45
 KEY_USAGE_HEATMAP_ASPECT: Literal["equal", "auto"] = "auto"
 KEY_USAGE_HEATMAP_CMAP = "turbo"
 KEY_USAGE_HEATMAP_TITLE = "Heatmap of Key Access Frequency by Hour of Day"
-KEY_USAGE_HEATMAP_COLORBAR_LABEL = "Access Count"
 KEY_USAGE_HEATMAP_X_LABEL = "Key"
 KEY_USAGE_HEATMAP_Y_LABEL = "Hour of Day"
-KEY_USAGE_HEATMAP_ROTATION = 45
+KEY_USAGE_HEATMAP_COLORBAR_LABEL = "Access Count"
 
-# Precision-recall curve
-PRECISION_RECALL_CURVE_SAVE_PATH_NAME = "precision_recall_curve.png"
+PRECISION_RECALL_CURVE_FILE_NAME = "precision_recall_curve.png"
 PRECISION_RECALL_CURVE_TITLE = "Precision-Recall Curve"
-PRECISION_RECALL_CURVE_CLASS_LABEL = "Class"
 PRECISION_RECALL_CURVE_X_LABEL = "Recall"
 PRECISION_RECALL_CURVE_Y_LABEL = "Precision"
+PRECISION_RECALL_CURVE_CLASS_LABEL = "Class"
 
-# Confusion matrix plot
-CONFUSION_MATRIX_SAVE_PATH_NAME = "confusion_matrix.png"
+CONFUSION_MATRIX_FILE_NAME = "confusion_matrix.png"
+CONFUSION_MATRIX_PLOT_ANNOT = True
+CONFUSION_MATRIX_PLOT_FMT = "d"
 CONFUSION_MATRIX_PLOT_TITLE = "Confusion Matrix"
 CONFUSION_MATRIX_PLOT_X_LABEL = "Predicted Key"
 CONFUSION_MATRIX_PLOT_Y_LABEL = "True Key"
-CONFUSION_MATRIX_PLOT_ANNOT = True
-CONFUSION_MATRIX_PLOT_FMT = "d"
 
-# Hit/miss rates plot
-HIT_MISS_RATES_PLOT_SAVE_PATH_NAME = "hit_miss_rates.png"
+HIT_MISS_RATES_PLOT_FILE_NAME = "hit_miss_rates.png"
 HIT_MISS_RATES_PLOT_NUM_ROWS = 2
 HIT_MISS_RATES_PLOT_NUM_COLS = 1
 HIT_RATE_SUBPLOT_LINE_STYLE = "--"
 MISS_RATE_SUBPLOT_LINE_STYLE = "-"
 HIT_RATE_SUBPLOT_TITLE = "Hit Rate Over Time"
 MISS_RATE_SUBPLOT_TITLE = "Miss Rate Over Time"
+HIT_MISS_RATE_SUBPLOT_X_LABEL = "Request"
 HIT_RATE_SUBPLOT_Y_LABEL = "Hit Rate (%)"
 MISS_RATE_SUBPLOT_Y_LABEL = "Miss Rate (%)"
-HIT_MISS_RATE_SUBPLOT_X_LABEL = "Request"
 HIT_MISS_RATES_SUBPLOTS_TITLE_NAME = "title"
 HIT_MISS_RATES_SUBPLOTS_Y_LABEL_NAME = "ylabel"
 HIT_MISS_RATES_SUBPLOTS_LINE_STYLE_NAME = "line_style"

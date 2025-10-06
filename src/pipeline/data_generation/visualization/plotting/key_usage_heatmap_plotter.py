@@ -4,9 +4,9 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 from const import (
-    FIGURE_LABEL_FONT_SIZE,
-    FIGURE_SIZE,
-    FIGURE_TITLE_FONT_SIZE,
+    PLOT_LABEL_FONT_SIZE,
+    PLOT_SIZE,
+    PLOT_TITLE_FONT_SIZE,
     KEY_USAGE_HEATMAP_ASPECT,
     KEY_USAGE_HEATMAP_CMAP,
     KEY_USAGE_HEATMAP_COLORBAR_LABEL,
@@ -14,8 +14,8 @@ from const import (
     KEY_USAGE_HEATMAP_TITLE,
     KEY_USAGE_HEATMAP_X_LABEL,
     KEY_USAGE_HEATMAP_Y_LABEL,
-    MAX_HOUR,
-    MIN_HOUR,
+    DATA_GENERATION_FINAL_HOUR,
+    DATA_GENERATION_INITIAL_HOUR,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
@@ -55,7 +55,7 @@ def plot_key_usage_heatmap(
     """
     try:
         # Initialize heatmap
-        num_hours = MAX_HOUR - MIN_HOUR + 1
+        num_hours = DATA_GENERATION_FINAL_HOUR - DATA_GENERATION_INITIAL_HOUR + 1
         num_keys = max_key - min_key + 1
         heatmap = np.zeros(
             (num_hours, num_keys),
@@ -87,17 +87,17 @@ def plot_key_usage_heatmap(
             # corresponding requested key is also
             # within the predefined range
             if (
-                MIN_HOUR <= current_timestamp_hour_int < MIN_HOUR + num_hours
+                    DATA_GENERATION_INITIAL_HOUR <= current_timestamp_hour_int < DATA_GENERATION_INITIAL_HOUR + num_hours
             ) and (0 <= requested_key_idx < num_keys):
                 # Increment the current heatmap
                 # position by one
                 heatmap[
-                    current_timestamp_hour_int - MIN_HOUR,
+                    current_timestamp_hour_int - DATA_GENERATION_INITIAL_HOUR,
                     requested_key_idx,
                 ] += 1
 
         # Plot key usage heatmap
-        plt.figure(figsize=(FIGURE_SIZE, FIGURE_SIZE))
+        plt.figure(figsize=(PLOT_SIZE, PLOT_SIZE))
         plt.imshow(
             heatmap,
             aspect=KEY_USAGE_HEATMAP_ASPECT,
@@ -105,27 +105,27 @@ def plot_key_usage_heatmap(
         )
         plt.title(
             KEY_USAGE_HEATMAP_TITLE,
-            fontsize=FIGURE_TITLE_FONT_SIZE,
+            fontsize=PLOT_TITLE_FONT_SIZE,
         )
         plt.colorbar(label=KEY_USAGE_HEATMAP_COLORBAR_LABEL)
         plt.xlabel(
             KEY_USAGE_HEATMAP_X_LABEL,
-            fontsize=FIGURE_LABEL_FONT_SIZE,
+            fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.ylabel(
             KEY_USAGE_HEATMAP_Y_LABEL,
-            fontsize=FIGURE_LABEL_FONT_SIZE,
+            fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.yticks(
             ticks=np.arange(num_hours),
-            labels=[f"{h}:00" for h in range(MIN_HOUR, MAX_HOUR + 1)],
-            fontsize=FIGURE_LABEL_FONT_SIZE,
+            labels=[f"{h}:00" for h in range(DATA_GENERATION_INITIAL_HOUR, DATA_GENERATION_FINAL_HOUR + 1)],
+            fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.xticks(
             ticks=np.arange(num_keys),
             labels=np.arange(min_key, max_key + 1),
             rotation=KEY_USAGE_HEATMAP_ROTATION,
-            fontsize=FIGURE_LABEL_FONT_SIZE,
+            fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.tight_layout()
         plt.savefig(save_path)

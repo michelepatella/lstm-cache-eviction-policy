@@ -4,10 +4,10 @@ import numpy as np
 
 from config.classes.Config import Config
 from const import (
-    PERIOD,
-    TIMESTAMPS_START,
-    CURRENT_DAY_START,
-    CURRENT_SECONDS_IN_DAY_START,
+    SECONDS_IN_DAY,
+    DATA_GENERATION_INITIAL_TIMESTAMP,
+    DATA_GENERATION_INITIAL_CURRENT_DAY,
+    DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY,
 )
 from pipeline.data_generation.generation.patterns.access.generator import (
     generate_access_pattern,
@@ -51,10 +51,10 @@ def generate_pattern_requests(
     """
     # Initialize data
     requests = []
-    timestamps_seconds = TIMESTAMPS_START  # Get start from timestamp zero
-    current_day = CURRENT_DAY_START  # Get start from day zero
+    timestamps_seconds = DATA_GENERATION_INITIAL_TIMESTAMP  # Get start from timestamp zero
+    current_day = DATA_GENERATION_INITIAL_CURRENT_DAY  # Get start from day zero
     current_seconds_in_day = (
-        CURRENT_SECONDS_IN_DAY_START  # Get start from midnight (second zero)
+        DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY  # Get start from midnight (second zero)
     )
 
     general_data_config = config.data.general
@@ -69,7 +69,7 @@ def generate_pattern_requests(
 
     debug(f"Number of requests to be generated: {num_requests}")
 
-    debug(f"Period of requests generation: {PERIOD}")
+    debug(f"Period of requests generation: {SECONDS_IN_DAY}")
 
     # Define a seed to make the
     # generation process deterministic
@@ -94,13 +94,13 @@ def generate_pattern_requests(
         current_seconds_in_day, current_day = update_time(
             current_seconds_in_day,
             current_day,
-            PERIOD,
+            SECONDS_IN_DAY,
             delta_t,
         )
 
         # Get current absolute seconds of the
         # request to be generated
-        current_abs_seconds = current_day * PERIOD + current_seconds_in_day
+        current_abs_seconds = current_day * SECONDS_IN_DAY + current_seconds_in_day
 
         # Generate a request (i.e., accessed key)
         request = generate_access_pattern(

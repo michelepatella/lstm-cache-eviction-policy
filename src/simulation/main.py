@@ -8,15 +8,15 @@ from const import (
     AVG_CACHE_LATENCY_NAME,
     TIMELINE_NAME,
     EVICTION_MISTAKE_RATE_NAME,
-    RESULTS_SAVE_PATH,
-    SIMULATION_RESULTS_SAVE_PATH_NAME,
+    RESULTS_DIRECTORY_PATH,
+    SIMULATION_RESULTS_FILE_NAME,
     LRU_CACHE_NAME,
     LFU_CACHE_NAME,
     FIFO_CACHE_NAME,
     RANDOM_CACHE_NAME,
     LSTM_CACHE_NAME,
-    PLOTS_SAVE_PATH,
-    HIT_MISS_RATES_PLOT_SAVE_PATH_NAME,
+    PLOTS_DIRECTORY_PATH,
+    HIT_MISS_RATES_PLOT_FILE_NAME, LOGS_SIMULATION_PHASE,
 )
 from lstm_cache_eviction_policy.LSTMCache import LSTMCache
 from simulation.baseline_caches.FIFOCache import FIFOCache
@@ -26,6 +26,7 @@ from simulation.baseline_caches.RandomCache import RandomCache
 from simulation.baseline_caches.utils.CacheWrapper import CacheWrapper
 from simulation.metrics.calculator import calculate_cache_simulation_metrics
 from utils.json.saver import save_json
+from utils.logs.initializer import logs_phase
 from utils.simulation.classes.CacheMetricsLogger import (
     CacheMetricsLogger,
 )
@@ -54,6 +55,9 @@ def run_simulations(config: Config) -> None:
     Returns:
         None
     """
+    # Set new state
+    logs_phase.set(LOGS_SIMULATION_PHASE)
+
     # Prepare configuration
     data_distribution_mode = config.data.general.mode
 
@@ -124,17 +128,17 @@ def run_simulations(config: Config) -> None:
 
     # Save simulation results as JSON
     results_save_path = (
-        RESULTS_SAVE_PATH
-        / data_distribution_mode
-        / SIMULATION_RESULTS_SAVE_PATH_NAME
+            RESULTS_DIRECTORY_PATH
+            / data_distribution_mode
+            / SIMULATION_RESULTS_FILE_NAME
     )
     save_json(results, results_save_path)
 
     # Plot hit and miss rates over time
     hit_miss_rate_plot_save_path = (
-        PLOTS_SAVE_PATH
-        / data_distribution_mode
-        / HIT_MISS_RATES_PLOT_SAVE_PATH_NAME
+            PLOTS_DIRECTORY_PATH
+            / data_distribution_mode
+            / HIT_MISS_RATES_PLOT_FILE_NAME
     )
     plot_hit_miss_rate(results, hit_miss_rate_plot_save_path)
 

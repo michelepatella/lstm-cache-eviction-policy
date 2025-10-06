@@ -1,6 +1,6 @@
 import pandas as pd
 
-from const import REQUEST_COLUMN, TIMESTAMP_COLUMN
+from const import REQUEST_COLUMN_NAME, TIMESTAMP_COLUMN_NAME
 from config.classes.Config import Config
 from pipeline.data_preprocessing.visualization.reporting.dataset_removal_reporter import (
     report_dataset_removal,
@@ -39,14 +39,14 @@ def remove_invalid_values(df: pd.DataFrame, config: Config) -> pd.DataFrame:
 
         # Filter out rows having valid
         # request values only
-        valid_request_rows = df[REQUEST_COLUMN].apply(
+        valid_request_rows = df[REQUEST_COLUMN_NAME].apply(
             lambda x: isinstance(x, int) and min_key <= x <= max_key
         )
         new_df = df[valid_request_rows]
 
         # Filter out rows having valid
         # timestamp values only
-        valid_timestamp_rows = pd.to_numeric(new_df[TIMESTAMP_COLUMN]).notna()
+        valid_timestamp_rows = pd.to_numeric(new_df[TIMESTAMP_COLUMN_NAME]).notna()
         new_df = new_df[valid_timestamp_rows]
 
         # Report for invalid values removal

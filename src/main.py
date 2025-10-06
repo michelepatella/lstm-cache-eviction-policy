@@ -15,10 +15,10 @@ def main():
     config = prepare_config()
 
     # 2. GENERATE SYNTHETIC DATA
-    #generate_data(config)
+    generate_data(config)
 
     # 3. PREPROCESS GENERATED DATA
-    #preprocess_data(config)
+    preprocess_data(config)
 
     # 4. FIND THE BEST HYPERPARAMETERS
     # config = validate_model(config)
@@ -29,7 +29,7 @@ def main():
     # 6. TEST THE STANDALONE MODEL
     test_model(config)
 
-    #run_simulations(config)
+    # run_simulations(config)
 
 
 if __name__ == "__main__":
