@@ -27,6 +27,7 @@ from simulation.baseline_caches.utils.CacheWrapper import CacheWrapper
 from simulation.metrics.calculator import calculate_cache_simulation_metrics
 from utils.json.saver import save_json
 from utils.logs.initializer import logs_phase
+from utils.logs.levels.debug_logger import debug
 from utils.simulation.classes.CacheMetricsLogger import (
     CacheMetricsLogger,
 )
@@ -133,6 +134,8 @@ def run_simulations(config: Config) -> None:
             / SIMULATION_RESULTS_FILE_NAME
     )
     save_json(results, results_save_path)
+
+    debug("Simulation results saved to JSON file")
 
     # Plot hit and miss rates over time
     hit_miss_rate_plot_save_path = (
