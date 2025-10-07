@@ -14,7 +14,7 @@ from utils.logs.levels.info_logger import info
 from utils.model.initialization.model_components_initializer import (
     initialize_model_components,
 )
-from utils.model.locator import get_model_path
+from utils.model.locator import get_model_abs_path
 
 
 def train_model(config: Config) -> None:
@@ -46,7 +46,7 @@ def train_model(config: Config) -> None:
     training_num_epochs = config.training.general.epochs
 
     # Get the model path
-    model_path = get_model_path(data_distribution_mode)
+    model_path = get_model_abs_path(data_distribution_mode)
 
     # Load the training set and the
     # training loader

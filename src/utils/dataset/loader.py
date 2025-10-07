@@ -1,7 +1,7 @@
 import pandas as pd
 
 from config.classes.Config import Config
-from utils.dataset.locator import get_dataset_path
+from utils.dataset.locator import get_dataset_abs_path
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
@@ -33,7 +33,7 @@ def load_dataset(dataset_type: str, config: Config) -> pd.DataFrame:
     data_distribution_mode = config.data.generation.mode
 
     # Retrieve path to load dataset from
-    dataset_path = get_dataset_path(dataset_type, data_distribution_mode)
+    dataset_path = get_dataset_abs_path(dataset_type, data_distribution_mode)
 
     debug(f"Path to load dataset from: {dataset_path}")
 

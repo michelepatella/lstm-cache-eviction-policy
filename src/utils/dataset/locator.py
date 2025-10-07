@@ -15,11 +15,11 @@ from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
 
-def get_dataset_path(dataset_type: str, data_distribution_mode: str) -> str:
+def get_dataset_abs_path(dataset_type: str, data_distribution_mode: str) -> str:
     """
-    Retrieve the dataset path.
+    Retrieve the dataset absolute path.
 
-    This function retrieves the dataset path
+    This function retrieves the dataset absolute path
     dynamically, based on data distribution mode.
 
     Parameters:
@@ -27,7 +27,7 @@ def get_dataset_path(dataset_type: str, data_distribution_mode: str) -> str:
         data_distribution_mode (str): Data distribution mode selected.
 
     Returns:
-        str: Dataset path.
+        str: Dataset absolute path.
 
     Raises:
         RuntimeError: If configuration object has
@@ -45,12 +45,12 @@ def get_dataset_path(dataset_type: str, data_distribution_mode: str) -> str:
             # For static data distribution mode
             if dataset_type == DATASET_RAW_TYPE:
                 # For raw dataset
-                dataset_path = (
+                dataset_abs_path = (
                     STATIC_RAW_DATASET_DIRECTORY / STATIC_RAW_DATASET_FILE_NAME
                 )
             else:
                 # For preprocessed dataset
-                dataset_path = (
+                dataset_abs_path = (
                     STATIC_PROCESSED_DATASET_DIRECTORY
                     / STATIC_PROCESSED_DATASET_FILE_NAME
                 )
@@ -58,21 +58,21 @@ def get_dataset_path(dataset_type: str, data_distribution_mode: str) -> str:
             # For dynamic data distribution mode
             if dataset_type == DATASET_RAW_TYPE:
                 # For raw dataset
-                dataset_path = (
+                dataset_abs_path = (
                     DYNAMIC_RAW_DATASET_DIRECTORY
                     / DYNAMIC_RAW_DATASET_FILE_NAME
                 )
             else:
                 # For preprocessed dataset
-                dataset_path = (
+                dataset_abs_path = (
                     DYNAMIC_PROCESSED_DATASET_DIRECTORY
                     / DYNAMIC_PROCESSED_DATASET_FILE_NAME
                 )
 
-        info(f"Dataset path retrieved: {dataset_path}")
+        info(f"Dataset absolute path retrieved: {dataset_abs_path}")
 
-        return dataset_path
+        return dataset_abs_path
     except AttributeError as e:
-        msg = "Failed to retrieve dataset path"
+        msg = "Failed to retrieve dataset absolute path"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e

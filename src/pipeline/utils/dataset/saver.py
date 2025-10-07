@@ -1,7 +1,7 @@
 import pandas as pd
 
 from config.classes.Config import Config
-from utils.dataset.locator import get_dataset_path
+from utils.dataset.locator import get_dataset_abs_path
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
@@ -32,7 +32,7 @@ def save_dataset(df: pd.DataFrame, dataset_type: str, config: Config) -> None:
 
     # Retrieve path where
     # to save dataset
-    dataset_path = get_dataset_path(dataset_type, data_distribution_mode)
+    dataset_path = get_dataset_abs_path(dataset_type, data_distribution_mode)
 
     debug(f"Path where to save dataset: {dataset_path}")
 

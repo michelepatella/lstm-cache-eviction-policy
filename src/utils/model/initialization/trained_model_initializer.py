@@ -5,7 +5,6 @@ from torch import nn
 from torch.utils.data import DataLoader
 
 from config.classes.Config import Config
-from const import PROJECT_ROOT
 from utils.data_loader.targets_extractor import (
     extract_targets_from_data_loader,
 )
@@ -14,7 +13,7 @@ from utils.model.initialization.model_components_initializer import (
     initialize_model_components,
 )
 from utils.model.initialization.utils.loader import load_model
-from utils.model.locator import get_model_path
+from utils.model.locator import get_model_abs_path
 
 
 def initialize_trained_model(
@@ -45,7 +44,7 @@ def initialize_trained_model(
     data_distribution_mode = config.data.generation.mode
 
     # Get the model path
-    model_path = get_model_path(data_distribution_mode)
+    model_path = get_model_abs_path(data_distribution_mode)
 
     # Extract targets from
     # provided data loader
@@ -57,8 +56,7 @@ def initialize_trained_model(
     )
 
     # Load the trained model
-    abs_model_path = PROJECT_ROOT / model_path
-    model = load_model(model, device, abs_model_path)
+    model = load_model(model, device, model_path)
 
     info("Trained model initialization completed")
 
