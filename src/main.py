@@ -12,17 +12,17 @@ def main():
 
     config = prepare_config()
 
-    #generate_data(config)
+    # generate_data(config)
 
-    #preprocess_data(config)
+    # preprocess_data(config)
 
-    #config = validate_model(config)
+    # config = validate_model(config)
 
-    #train_model(config)
+    # train_model(config)
 
-    #test_model(config)
+    # test_model(config)
 
-    #run_simulations(config)
+    # run_simulations(config)
 
 
 if __name__ == "__main__":

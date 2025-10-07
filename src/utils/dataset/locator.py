@@ -15,7 +15,9 @@ from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
 
-def get_dataset_abs_path(dataset_type: str, data_distribution_mode: str) -> str:
+def get_dataset_abs_path(
+    dataset_type: str, data_distribution_mode: str
+) -> str:
     """
     Retrieve the dataset absolute path.
 

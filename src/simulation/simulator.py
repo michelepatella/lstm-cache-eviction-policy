@@ -19,12 +19,12 @@ from const import (
     SIMULATION_RESULTS_FILE_NAME,
     TIMELINE_NAME,
 )
-from lstm_cache_eviction_policy.LSTMCache import LSTMCache
-from simulation.baseline_caches.FIFOCache import FIFOCache
-from simulation.baseline_caches.LFUCache import LFUCache
-from simulation.baseline_caches.LRUCache import LRUCache
-from simulation.baseline_caches.RandomCache import RandomCache
-from simulation.baseline_caches.utils.CacheWrapper import CacheWrapper
+from simulation.caches.LSTMCache import LSTMCache
+from simulation.caches.FIFOCache import FIFOCache
+from simulation.caches.LFUCache import LFUCache
+from simulation.caches.LRUCache import LRUCache
+from simulation.caches.RandomCache import RandomCache
+from simulation.caches.utils.CacheWrapper import CacheWrapper
 from simulation.metrics.calculator import calculate_cache_simulation_metrics
 from simulation.running.simulation_runner import run_cache_simulation
 from simulation.visualization.plotting.hit_miss_rates_plotter import (
@@ -81,6 +81,11 @@ def run_simulations(config: Config) -> None:
             config,
         ),
         RANDOM_CACHE_NAME: RandomCache(
+            None,
+            CacheMetricsLogger(),
+            config,
+        ),
+        LSTM_CACHE_NAME: LSTMCache(
             None,
             CacheMetricsLogger(),
             config,
