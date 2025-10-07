@@ -1,5 +1,6 @@
 from collections import defaultdict
 
+from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
 
 
@@ -32,7 +33,6 @@ class CacheMetricsLogger:
         self.put_events = {}
         self.access_events = defaultdict(list)
         self.evicted_keys = defaultdict(list)
-        self.prefetch_predictions = {}
 
         info("CacheMetricsLogger initialized")
 
@@ -58,7 +58,7 @@ class CacheMetricsLogger:
         # Track put event
         self.put_events.setdefault(key, []).append((time, ttl))
 
-        info(f"Key insertion traced for key: {key}")
+        debug(f"Key insertion traced for key: {key}")
 
     def log_get(self: "CacheMetricsLogger", key: int, time: float) -> None:
         """
@@ -79,7 +79,7 @@ class CacheMetricsLogger:
         # Track get event
         self.access_events[key].append(time)
 
-        info(f"Key access traced for key: {key}")
+        debug(f"Key access traced for key: {key}")
 
     def log_eviction(
         self: "CacheMetricsLogger", key: int, time: float
@@ -102,4 +102,4 @@ class CacheMetricsLogger:
         # Track eviction event
         self.evicted_keys[key].append(time)
 
-        info(f"Key eviction traced for key: {key}")
+        debug(f"Key eviction traced for key: {key}")

@@ -1,4 +1,5 @@
 import random
+from typing import Any
 
 from torch.utils.data import DataLoader
 
@@ -23,7 +24,7 @@ class LSTMCache(BaseCache):
 
     def __init__(
         self: "LSTMCache",
-        cache_class: "LSTMCache",
+        cache_class: Any,
         metrics_logger: CacheMetricsLogger,
         config: Config,
     ) -> None:
@@ -35,8 +36,8 @@ class LSTMCache(BaseCache):
 
         Parameters:
             self ("LSTMCache"): Current class instance.
-            cache_class ("LSTMCache"): Underlying cache class
-                                       to store items.
+            cache_class (Any): Underlying cache class
+                               to store items.
             metrics_logger (CacheMetricsLogger): Logger for cache events.
             config (Config): Configuration object.
 
