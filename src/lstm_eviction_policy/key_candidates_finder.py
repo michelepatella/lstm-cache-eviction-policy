@@ -1,7 +1,7 @@
 import numpy as np
 from torch.nn.functional import softmax
 
-from lstm_cache_eviction_policy.key_score_calculator import (
+from lstm_eviction_policy.key_score_calculator import (
     calculate_key_scores,
 )
 from utils.logs.levels.info_logger import info

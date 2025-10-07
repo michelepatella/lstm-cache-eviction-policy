@@ -19,7 +19,6 @@ class MCDropoutConfig(BaseModel):
 # Simulation — Cache — LSTM — Main Config
 class LSTMCacheConfig(BaseModel):
     prediction_interval: conint(gt=0)
-    threshold: confloat(ge=0, le=1)
     confidence_intervals: ConfidenceIntervalsConfig
     mc_dropout: MCDropoutConfig
 

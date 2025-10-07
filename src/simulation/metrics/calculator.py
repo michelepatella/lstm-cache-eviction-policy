@@ -11,7 +11,9 @@ from simulation.metrics.components.hit_miss_rate_calculator import (
     calculate_hit_miss_rate,
 )
 from utils.logs.levels.info_logger import info
-from utils.simulation.classes.CacheMetricsLogger import CacheMetricsLogger
+from simulation.caches.utils.classes.CacheMetricsLogger import (
+    CacheMetricsLogger,
+)
 
 
 def calculate_cache_simulation_metrics(

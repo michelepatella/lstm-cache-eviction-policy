@@ -70,7 +70,7 @@ def test_model(config: Config) -> None:
     )
 
     # Trained model setup for testing
-    device, criterion, model = initialize_trained_model(testing_loader, config)
+    device, criterion, model = initialize_trained_model(config, testing_loader)
 
     # Set model in evaluation phase
     model.eval()

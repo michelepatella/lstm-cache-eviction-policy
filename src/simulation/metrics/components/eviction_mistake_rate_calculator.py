@@ -1,7 +1,9 @@
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
-from utils.simulation.classes.CacheMetricsLogger import CacheMetricsLogger
+from simulation.caches.utils.classes.CacheMetricsLogger import (
+    CacheMetricsLogger,
+)
 
 
 def calculate_eviction_mistake_rate(

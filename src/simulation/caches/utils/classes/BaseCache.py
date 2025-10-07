@@ -4,7 +4,7 @@ from typing import Any
 from config.classes.Config import Config
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
-from utils.simulation.classes.CacheMetricsLogger import (
+from simulation.caches.utils.classes.CacheMetricsLogger import (
     CacheMetricsLogger,
 )
 

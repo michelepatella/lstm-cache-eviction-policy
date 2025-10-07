@@ -24,7 +24,7 @@ from simulation.caches.FIFOCache import FIFOCache
 from simulation.caches.LFUCache import LFUCache
 from simulation.caches.LRUCache import LRUCache
 from simulation.caches.RandomCache import RandomCache
-from simulation.caches.utils.CacheWrapper import CacheWrapper
+from simulation.caches.utils.classes.CacheWrapper import CacheWrapper
 from simulation.metrics.calculator import calculate_cache_simulation_metrics
 from simulation.running.simulation_runner import run_cache_simulation
 from simulation.visualization.plotting.hit_miss_rates_plotter import (
@@ -37,7 +37,7 @@ from utils.json.saver import save_json
 from utils.logs.initializer import logs_phase
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
-from utils.simulation.classes.CacheMetricsLogger import (
+from simulation.caches.utils.classes.CacheMetricsLogger import (
     CacheMetricsLogger,
 )
 

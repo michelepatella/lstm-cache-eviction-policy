@@ -17,7 +17,8 @@ from utils.model.locator import get_model_abs_path
 
 
 def initialize_trained_model(
-    data_loader: DataLoader, config: Config
+    config: Config,
+    data_loader: DataLoader = None,
 ) -> Tuple[torch.device, nn.Module, nn.Module]:
     """
     Prepare a trained model for further usage.
@@ -28,8 +29,9 @@ def initialize_trained_model(
     loss function, and loads pre-trained weights.
 
     Parameters:
-        data_loader (DataLoader): DataLoader containing the dataset to be used.
         config (Config): Configuration object.
+        data_loader (DataLoader | None): DataLoader containing the
+                                         dataset to be used.
 
     Returns:
         Tuple[
@@ -46,13 +48,15 @@ def initialize_trained_model(
     # Get the model path
     model_path = get_model_abs_path(data_distribution_mode)
 
-    # Extract targets from
-    # provided data loader
-    targets = extract_targets_from_data_loader(data_loader)
+    targets = None
+    if data_loader is not None:
+        # Extract targets from
+        # provided data loader
+        targets = extract_targets_from_data_loader(data_loader)
 
     # Setup for model components
     device, criterion, model, _ = initialize_model_components(
-        model_params, learning_rate, targets, config
+        model_params, learning_rate, config, targets
     )
 
     # Load the trained model

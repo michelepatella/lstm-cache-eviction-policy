@@ -1,62 +1,163 @@
+import random
+
+from torch.utils.data import DataLoader
+
+from config.classes.Config import Config
+from lstm_eviction_policy.manager import manage_lstm_eviction_policy
 from simulation.caches.utils.last_accesses_extractor import get_last_accesses
+from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
-from utils.simulation.classes.BaseCache import BaseCache
+from simulation.caches.utils.classes.BaseCache import BaseCache
+from simulation.caches.utils.classes.CacheMetricsLogger import (
+    CacheMetricsLogger,
+)
 
 
 class LSTMCache(BaseCache):
+    """
+    LSTM cache implementation.
+
+    This cache is based on an LSTM eviction policy
+    decide which key to evict when the cache is full.
+    """
+
     def __init__(
-        self,
-        cache_class,
-        metrics_logger,
-        config_settings,
-    ):
-        super().__init__(
-            cache_class,
-            metrics_logger,
-            config_settings,
-        )
+        self: "LSTMCache",
+        cache_class: "LSTMCache",
+        metrics_logger: CacheMetricsLogger,
+        config: Config,
+    ) -> None:
+        """
+        Initialize the LSTM cache.
 
-        self.threshold_score = config_settings.simulation.lstm.threshold
+        This function initializes the LSTM cache by
+        calling the BaseCache constructor.
 
-        info("LSTM cache initialized.")
+        Parameters:
+            self ("LSTMCache"): Current class instance.
+            cache_class ("LSTMCache"): Underlying cache class
+                                       to store items.
+            metrics_logger (CacheMetricsLogger): Logger for cache events.
+            config (Config): Configuration object.
 
-    def evict_key(self, key):
+        Returns:
+            None
+        """
+        # Cache class initialization
+        super().__init__(cache_class, metrics_logger, config)
+
+        info("LSTM cache initialized")
+
+    def evict_key(self: "LSTMCache", key: int) -> None:
+        """
+        Evict a key from the cache.
+
+        This function evicts a provided key
+        from the LSTM cache, along with its
+        expiration time.
+
+        Parameters:
+            self ("LSTMCache"): Current class instance.
+            key (int): Key to remove from the cache.
+
+        Returns:
+            None
+        """
+        # Remove key from store and its
+        # expiration time
         self.store.pop(key, None)
         self.expiry.pop(key, None)
-        self.scores.pop(key, None)
 
-    def _put_key(
-        self,
-        key,
-        score,
-        current_time,
-    ):
+        debug(f"LSTM cache evicted key: {key}")
+
+    def _put_key(self: "LSTMCache", key: int, current_time: float) -> None:
+        """
+        Put a key in the cache.
+
+        This function puts a key into the LSTM cache
+        along with its expiration time.
+
+        Parameters:
+            self ("LSTMCache"): Current class instance.
+            key (int): Key to insert in the cache.
+            current_time (float): Current time.
+
+        Returns:
+            None
+        """
+        # Insert key in the store along
+        # with its expiration time
         self.store[key] = key
-        self.scores[key] = score
         self.expiry[key] = current_time + self.ttl
+
+        # Track put event
         self.metrics_logger.log_put(key, current_time, self.ttl)
 
+        debug(f"LSTM cache inserted key: {key}, at time {current_time}")
+
     def put(
-        self,
-        key,
-        score,
-        current_time
-    ):
+        self: "LSTMCache",
+        key: int,
+        current_time: float,
+        current_idx: int,
+        testing_set: DataLoader,
+        config: Config,
+    ) -> None:
+        """
+        Insert a key in the LSTM cache.
+
+        This function puts a key into the LSTM cache
+        along with its expiration time. If the cache is full,
+        extracts the last sequence of accesses and uses the
+        LSTM policy to decide which key to evict.
+
+        Parameters:
+            self ("LSTMCache"): Current class instance.
+            key (int): Key to insert.
+            current_time (float): Current time.
+            current_idx (int): Index of the current request.
+            testing_set (DataLoader): Testing dataset for sequence extraction.
+            config (Config): Configuration object.
+
+        Returns:
+            None
+        """
+        # Remove all expired keys
+        # before insertion
         self._remove_expired_keys(current_time)
 
+        # Check whether the cache is full
         if key not in self.store and len(self.store) >= self.maxsize:
-            # Get the sequence length to be extracted
+            # Get the sequence length
+            # of the LSTM model
             seq_len = config.model.sequence.length
 
-            # Extract seed sequence
-            seed_seq = get_last_accesses(
+            # Extract last accesses of
+            # sequence length
+            last_accesses = get_last_accesses(
                 current_idx,
-                seq_len
+                seq_len,
                 testing_set,
-                config_settings,
+                config,
             )
 
-        self._put_key(key, score, current_time)
+            # Check whether last accesses
+            # are not available
+            if last_accesses is None:
+                # Eviction fallback policy: Random
+                key_to_evict = random.choice(list(self.store.keys()))
+            else:
+                # Run LSTM eviction policy to get
+                # the key to be evicted from the cache
+                key_to_evict = manage_lstm_eviction_policy(
+                    self.store, last_accesses, config
+                )
 
-        # print a successful message
-        info("🟢 Key inserted.")
+            # Evict key
+            self.evict_key(key_to_evict)
+
+            # Track eviction event
+            self.metrics_logger.log_eviction(key_to_evict, current_time)
+
+        # Insert the key
+        self._put_key(key, current_time)

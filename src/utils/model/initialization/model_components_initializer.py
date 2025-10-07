@@ -17,8 +17,8 @@ from utils.model.LSTM import LSTM
 def initialize_model_components(
     model_params: ModelParamsConfig,
     learning_rate: float,
-    targets: torch.Tensor,
     config: Config,
+    targets: torch.Tensor = None,
 ) -> tuple[torch.device, nn.Module, nn.Module, Optimizer]:
     """
     Set up the model components for
@@ -35,9 +35,9 @@ def initialize_model_components(
         model_params (ModelParamsConfig): Dictionary containing model
                                                  hyperparameters.
         learning_rate (float): Learning rate for the optimizer.
+        config (Config): Configuration object.
         targets (torch.Tensor): Tensor of target labels for
                                 computing class weights.
-        config (Config): Configuration object.
 
     Returns:
         tuple[
@@ -74,21 +74,27 @@ def initialize_model_components(
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 
-    # Compute class weights
-    class_weights = calculate_class_weight(targets, num_keys)
+    criterion = None
+    if targets is not None:
+        # Compute class weights
+        class_weights = calculate_class_weight(targets, num_keys)
 
-    debug(f"Class weights computed: {class_weights}, for {num_keys} keys")
+        debug(f"Class weights computed: {class_weights}, for {num_keys} keys")
 
-    try:
-        # Define loss function
-        weight = torch.tensor(class_weights, dtype=torch.float32).to(device)
-        criterion = nn.CrossEntropyLoss(weight=weight)
+        try:
+            # Define loss function
+            weight = torch.tensor(class_weights, dtype=torch.float32).to(
+                device
+            )
+            criterion = nn.CrossEntropyLoss(weight=weight)
 
-        debug(f"{criterion} initialized as loss function with class weights")
-    except (RuntimeError, TypeError) as e:
-        msg = "Failed to define loss function"
-        error("%s: %s", msg, e)
-        raise RuntimeError(msg) from e
+            debug(
+                f"{criterion} initialized as loss function with class weights"
+            )
+        except (RuntimeError, TypeError) as e:
+            msg = "Failed to define loss function"
+            error("%s: %s", msg, e)
+            raise RuntimeError(msg) from e
 
     # Instantiate LSTM model
     model = LSTM(model_params, config)

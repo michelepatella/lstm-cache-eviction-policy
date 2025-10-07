@@ -5,9 +5,6 @@ from tqdm import tqdm
 
 from config.classes.Config import Config
 from const import LSTM_CACHE_NAME, MICROSECONDS_IN_SECOND
-from lstm_cache_eviction_policy.manager import (
-    manage_lstm_cache,
-)
 from simulation.running.initialization.initializer import initialize_simulation
 from simulation.running.utils.hit_miss_timeline_updater import (
     update_hit_miss_timeline,
@@ -16,7 +13,9 @@ from simulation.running.utils.time_key_from_row_extractor import (
     extract_time_key_from_row,
 )
 from utils.logs.levels.error_logger import error
-from utils.simulation.hit_miss_checker_updater import check_update_hit_miss
+from simulation.running.utils.hit_miss_checker_updater import (
+    check_update_hit_miss,
+)
 
 
 def run_cache_simulation(
@@ -82,9 +81,14 @@ def run_cache_simulation(
             # If the requested key is not
             # into the cache
             if not is_hit:
-                # Put the requested key
-                # into the cache
-                cache.put(key, current_time)
+                if policy == LSTM_CACHE_NAME:
+                    # Put the requested key
+                    # into the LSTM cache
+                    cache.put(key, current_time, idx, testing_set, config)
+                else:
+                    # Put the requested key
+                    # into the baseline cache
+                    cache.put(key, current_time)
 
             # Stop timer to keep track of
             # cache latency
