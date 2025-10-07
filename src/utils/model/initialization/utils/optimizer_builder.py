@@ -2,8 +2,8 @@ import torch
 from torch import nn
 from torch.optim import Optimizer
 
-from const import ADAM_OPTIMIZER, ADAMW_OPTIMIZER
 from config.classes.Config import Config
+from const import ADAM_OPTIMIZER, ADAMW_OPTIMIZER
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info

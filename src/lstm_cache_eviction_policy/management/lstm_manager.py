@@ -1,18 +1,18 @@
 import time
 
+from lstm_cache_eviction_policy.autoregression import autoregressive_rollout
+from lstm_cache_eviction_policy.confidence_interval_calculator import (
+    calculate_confidence_interval,
+)
 from lstm_cache_eviction_policy.key_selection.key_candidates_finder import (
     find_key_candidates,
 )
 from lstm_cache_eviction_policy.management.cold_start_manager import (
     manage_cold_start,
 )
-from utils.simulation.hit_miss_checker_updater import check_update_hit_miss
 from lstm_cache_eviction_policy.seed_seq_extractor import extract_seed_seq
-from lstm_cache_eviction_policy.autoregression import autoregressive_rollout
-from lstm_cache_eviction_policy.confidence_interval_calculator import (
-    calculate_confidence_interval,
-)
 from utils.logs.levels.info_logger import info
+from utils.simulation.hit_miss_checker_updater import check_update_hit_miss
 
 
 def manage_lstm_cache(
@@ -48,7 +48,7 @@ def manage_lstm_cache(
         _ = check_update_hit_miss(cache, key, current_time, counters)
 
         # if it's not time to prefetch (no enough data)
-        if current_idx < config_settings.data.sequence.length:
+        if current_idx < config_settings.model.sequence.length:
             # handle cold start
             manage_cold_start(
                 cache,
@@ -57,7 +57,7 @@ def manage_lstm_cache(
             )
 
         elif (
-            current_idx >= config_settings.data.sequence.length
+            current_idx >= config_settings.model.sequence.length
             and current_idx
             % config_settings.simulation.lstm.prediction.interval
             == 0
@@ -65,7 +65,7 @@ def manage_lstm_cache(
             # if it's the first time we do prefetch
             # save the number of hits of random policy
             # during cold start
-            if current_idx == config_settings.data.sequence.length:
+            if current_idx == config_settings.model.sequence.length:
                 # count the no. of hits during cold start
                 counters["hits_cold_start"] = counters["hits"]
 

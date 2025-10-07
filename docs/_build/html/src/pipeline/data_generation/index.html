@@ -33,7 +33,7 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>src.pipeline.data_generation</code></h1>
+<h1 class="title">Namespace <code>src.pipeline.data_generation</code></h1>
 </header>
 <section id="section-intro">
 </section>
@@ -61,93 +61,6 @@ el.replaceWith(d);
 <section>
 </section>
 <section>
-<h2 class="section-title" id="header-functions">Functions</h2>
-<dl>
-<dt id="src.pipeline.data_generation.generate_data"><code class="name flex">
-<span>def <span class="ident">generate_data</span></span>(<span>config: pipeline.config.classes.Config.Config) ‑> None</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def generate_data(config: Config) -&gt; None:
-    &#34;&#34;&#34;
-    Generate data according
-    to a specified data distribution mode.
-
-    This function generates data according
-    to a specified data distribution mode, by
-    orchestrating the generation of both access
-    and temporal data patterns of requests. These
-    patterns aim to reflect real-world data access
-    patterns. Data generated — including a requested
-    key and the corresponding timestamp in hours —
-    is used to create a dataframe saved as CSV dataset next.
-    Finally, data generated is validated by proper plots.
-
-    Parameters:
-        config (Config): Configuration object.
-
-    Returns:
-        None
-    &#34;&#34;&#34;
-    # Set the new pipeline state
-    logs_phase.set(LOGS_DATA_GENERATION_PHASE)
-
-    # Prepare configuration
-    data_distribution_mode = config.data.general.mode
-    min_key = config.data.general.keys.min
-    max_key = config.data.general.keys.max
-
-    debug(f&#34;Data distribution mode: {data_distribution_mode}&#34;)
-
-    # Generate requests with corresponding timestamps,
-    # based on the data distribution mode
-    if data_distribution_mode == DATA_DISTRIBUTION_STATIC_MODE:
-        # Static requests generation
-        requests, timestamps_hours = generate_static_requests(config)
-    else:
-        # Dynamic requests generation
-        requests, timestamps_hours = generate_dynamic_requests(config)
-
-    # Create a dataframe where each row is composed of
-    # a timestamp and the corresponding request
-    df = create_dataframe(
-        {
-            TIMESTAMP_COLUMN: timestamps_hours[: len(requests)],
-            REQUEST_COLUMN: requests,
-        }
-    )
-
-    # Save just created dataframe
-    # as dataset
-    save_dataset(df, DATASET_RAW_TYPE, config)
-
-    # Show data generation -related plots
-    plot_zipf_loglog(requests)
-    plot_daily_profile(timestamps_hours)
-    plot_key_usage_heatmap(min_key, max_key, requests, timestamps_hours)
-
-    info(&#34;Data generation completed&#34;)</code></pre>
-</details>
-<div class="desc"><p>Generate data according
-to a specified data distribution mode.</p>
-<p>This function generates data according
-to a specified data distribution mode, by
-orchestrating the generation of both access
-and temporal data patterns of requests. These
-patterns aim to reflect real-world data access
-patterns. Data generated — including a requested
-key and the corresponding timestamp in hours —
-is used to create a dataframe saved as CSV dataset next.
-Finally, data generated is validated by proper plots.</p>
-<h2 id="parameters">Parameters</h2>
-<p>config (Config): Configuration object.</p>
-<h2 id="returns">Returns</h2>
-<p>None</p></div>
-</dd>
-</dl>
 </section>
 <section>
 </section>
@@ -168,11 +81,6 @@ Finally, data generated is validated by proper plots.</p>
 <li><code><a title="src.pipeline.data_generation.generation" href="generation/index.html">src.pipeline.data_generation.generation</a></code></li>
 <li><code><a title="src.pipeline.data_generation.utils" href="utils/index.html">src.pipeline.data_generation.utils</a></code></li>
 <li><code><a title="src.pipeline.data_generation.visualization" href="visualization/index.html">src.pipeline.data_generation.visualization</a></code></li>
-</ul>
-</li>
-<li><h3><a href="#header-functions">Functions</a></h3>
-<ul class="">
-<li><code><a title="src.pipeline.data_generation.generate_data" href="#src.pipeline.data_generation.generate_data">generate_data</a></code></li>
 </ul>
 </li>
 </ul>

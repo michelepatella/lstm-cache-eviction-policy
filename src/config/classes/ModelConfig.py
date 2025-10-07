@@ -2,13 +2,8 @@ from pydantic import BaseModel, confloat, conint
 
 
 # Model — General
-class FeaturesConfig(BaseModel):
-    count: conint(gt=0)  # type: ignore[valid-type]
-
-
 class GeneralModelConfig(BaseModel):
-    features: FeaturesConfig
-    path: str
+    features: conint(gt=0)  # type: ignore[valid-type]
 
 
 # Model — Params
@@ -22,6 +17,16 @@ class ModelParamsConfig(BaseModel):
     proj_size: conint(ge=0)  # type: ignore[valid-type]
 
 
+# Model — Sequence
+class EmbeddingConfig(BaseModel):
+    dimension: conint(gt=0)  # type: ignore[valid-type]
+
+
+class SequenceConfig(BaseModel):
+    length: conint(gt=0)  # type: ignore[valid-type]
+    embedding: EmbeddingConfig
+
+
 class ModelConfig(BaseModel):
     """
     Class representing the model configuration
@@ -30,3 +35,4 @@ class ModelConfig(BaseModel):
 
     general: GeneralModelConfig
     params: ModelParamsConfig
+    sequence: SequenceConfig

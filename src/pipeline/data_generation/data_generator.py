@@ -1,15 +1,15 @@
+from config.classes.Config import Config
 from const import (
+    DAILY_PROFILE_PLOT_FILE_NAME,
     DATA_DISTRIBUTION_STATIC_MODE,
     DATASET_RAW_TYPE,
+    KEY_USAGE_HEATMAP_FILE_NAME,
     LOGS_DATA_GENERATION_PHASE,
+    PLOTS_DIRECTORY_PATH,
     REQUEST_COLUMN_NAME,
     TIMESTAMP_COLUMN_NAME,
-    PLOTS_DIRECTORY_PATH,
-    KEY_USAGE_HEATMAP_FILE_NAME,
-    DAILY_PROFILE_PLOT_FILE_NAME,
     ZIPF_LOG_LOG_PLOT_FILE_NAME,
 )
-from config.classes.Config import Config
 from pipeline.data_generation.generation.requests.dynamic_generator import (
     generate_dynamic_requests,
 )
@@ -57,9 +57,9 @@ def generate_data(config: Config) -> None:
     logs_phase.set(LOGS_DATA_GENERATION_PHASE)
 
     # Prepare configuration
-    data_distribution_mode = config.data.general.mode
-    min_key = config.data.general.keys.min
-    max_key = config.data.general.keys.max
+    data_distribution_mode = config.data.generation.mode
+    min_key = config.data.generation.keys.min
+    max_key = config.data.generation.keys.max
 
     debug(f"Data distribution mode: {data_distribution_mode}")
 
@@ -87,13 +87,19 @@ def generate_data(config: Config) -> None:
 
     # Prepare save paths
     zipf_log_log_save_path = (
-            PLOTS_DIRECTORY_PATH / data_distribution_mode / ZIPF_LOG_LOG_PLOT_FILE_NAME
+        PLOTS_DIRECTORY_PATH
+        / data_distribution_mode
+        / ZIPF_LOG_LOG_PLOT_FILE_NAME
     )
     daily_profile_save_path = (
-            PLOTS_DIRECTORY_PATH / data_distribution_mode / DAILY_PROFILE_PLOT_FILE_NAME
+        PLOTS_DIRECTORY_PATH
+        / data_distribution_mode
+        / DAILY_PROFILE_PLOT_FILE_NAME
     )
     key_usage_heatmap_save_path = (
-            PLOTS_DIRECTORY_PATH / data_distribution_mode / KEY_USAGE_HEATMAP_FILE_NAME
+        PLOTS_DIRECTORY_PATH
+        / data_distribution_mode
+        / KEY_USAGE_HEATMAP_FILE_NAME
     )
 
     # Show data generation -related plots

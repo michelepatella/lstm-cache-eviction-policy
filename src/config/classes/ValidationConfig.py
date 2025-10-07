@@ -9,18 +9,10 @@ class GeneralValidationConfig(BaseModel):
     shuffle: bool
 
 
-# Validation — Cross validation — Folds & Epochs
-class FoldsConfig(BaseModel):
-    count: conint(gt=1)  # type: ignore[valid-type]
-
-
-class EpochsConfig(BaseModel):
-    count: conint(gt=0)  # type: ignore[valid-type]
-
-
+# Validation — Cross validation
 class CrossValidationConfig(BaseModel):
-    folds: FoldsConfig
-    epochs: EpochsConfig
+    folds: conint(gt=1)  # type: ignore[valid-type]
+    epochs: conint(gt=0)  # type: ignore[valid-type]
 
 
 # Validation — Early stopping

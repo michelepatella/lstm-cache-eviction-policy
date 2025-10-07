@@ -45,7 +45,7 @@ el.replaceWith(d);
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="src.pipeline.data_generation.generation.requests.help.generation_helper.generate_requests_helper"><code class="name flex">
-<span>def <span class="ident">generate_requests_helper</span></span>(<span>config: pipeline.config.classes.Config.Config,<br>alpha_range: List[float] = None) ‑> Tuple[List[int], numpy.ndarray]</span>
+<span>def <span class="ident">generate_requests_helper</span></span>(<span>config: config.classes.Config.Config, alpha_range: List[float] = None) ‑> Tuple[List[int], numpy.ndarray]</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -76,7 +76,7 @@ el.replaceWith(d);
                                       timestamps in hours.
     &#34;&#34;&#34;
     # Retrieve keys range from configuration
-    keys_config = config.data.general.keys
+    keys_config = config.data.generation.keys
     min_key = keys_config.min
     max_key = keys_config.max
     keys_range = np.arange(min_key, max_key + 1)
@@ -90,13 +90,13 @@ el.replaceWith(d);
     if alpha_range is None:
         # Use static fixed alpha and
         # don&#39;t consider any time step duration
-        alpha_fixed = config.data.pattern.access.zipf.alpha.fixed
+        alpha_fixed = config.data.generation.pattern.access.zipf.alpha.fixed
         alpha_range = [alpha_fixed]
         time_step_duration = None
     else:
         # Otherwise, split requests
         # into several time steps
-        num_requests = config.data.general.requests.count
+        num_requests = config.data.generation.requests
         time_step_duration = num_requests // len(alpha_range)
 
         debug(
@@ -137,7 +137,7 @@ el.replaceWith(d);
 
     # Convert timestamps from seconds to hours
     timestamps_hours = (
-        np.array(timestamps_seconds) % PERIOD
+        np.array(timestamps_seconds) % SECONDS_IN_DAY
     ) / SECONDS_IN_HOUR
 
     return requests, timestamps_hours</code></pre>

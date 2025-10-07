@@ -45,7 +45,7 @@ el.replaceWith(d);
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="src.pipeline.data_generation.generation.patterns.access.generator.generate_access_pattern"><code class="name flex">
-<span>def <span class="ident">generate_access_pattern</span></span>(<span>zipf_probs: numpy.ndarray,<br>keys_range: numpy.ndarray,<br>current_abs_seconds: float,<br>requests: List[int],<br>config: pipeline.config.classes.Config.Config) ‑> int</span>
+<span>def <span class="ident">generate_access_pattern</span></span>(<span>zipf_probs: numpy.ndarray,<br>keys_range: numpy.ndarray,<br>current_abs_seconds: float,<br>requests: List[int],<br>config: config.classes.Config.Config) ‑> int</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -81,7 +81,9 @@ el.replaceWith(d);
         int: Index of the next key to be accessed.
     &#34;&#34;&#34;
     # Get the current hour in day
-    current_hour_in_day = (current_abs_seconds % PERIOD) / SECONDS_IN_HOUR
+    current_hour_in_day = (
+        current_abs_seconds % SECONDS_IN_DAY
+    ) / SECONDS_IN_HOUR
 
     debug(
         f&#34;Current hour in day for access &#34;
@@ -100,7 +102,7 @@ el.replaceWith(d);
         f&#34; to {first_key+keys_range_size}&#34;
     )
 
-    behavior_config = config.data.pattern.access.behavior
+    behavior_config = config.data.generation.pattern.access.behavior
 
     # Prepare repetition pattern configuration
     repetition_interval = behavior_config.repetition.interval
@@ -130,10 +132,10 @@ el.replaceWith(d);
     distortion_correction = behavior_config.distortion.offsets.correction
     distortion_start = behavior_config.distortion.hours.start
     distortion_end = behavior_config.distortion.hours.end
+    distortion_noise_min = behavior_config.distortion.noise.min
+    distortion_noise_max = behavior_config.distortion.noise.max
 
     # Prepare memory pattern configuration
-    noise_min = behavior_config.noise.min
-    noise_max = behavior_config.noise.max
     memory_interval = behavior_config.memory.interval
     memory_offset = behavior_config.memory.offset
 
@@ -197,8 +199,8 @@ el.replaceWith(d);
             requests_count,
             keys_range_size,
             first_key,
-            noise_min,
-            noise_max,
+            distortion_noise_min,
+            distortion_noise_max,
         )
 
     # Memory/fallback pattern

@@ -12,7 +12,6 @@ from const import (
 from pipeline.utils.metrics.components.class_report_generator import (
     generate_class_report,
 )
-
 from pipeline.utils.metrics.components.cohen_kappa_score_calculator import (
     calculate_cohen_kappa_score,
 )
@@ -64,7 +63,7 @@ def calculate_model_metrics(
               to mismatched lengths or invalid inputs.
     """
     # Prepare configuration
-    top_k = config.evaluation.top_k
+    top_k = config.testing.metrics.top_k
 
     debug(f"Targets length: {len(targets)}")
     debug(f"Predictions length: {len(predictions)}")

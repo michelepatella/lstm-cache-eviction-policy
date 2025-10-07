@@ -6,7 +6,8 @@ from torch.utils.data import DataLoader
 
 from config.classes.Config import Config
 from const import (
-    MODEL_COMPUTE_METRICS_DEFAULT, MODEL_METRICS_CONFUSION_MATRIX_NAME,
+    MODEL_COMPUTE_METRICS_DEFAULT,
+    MODEL_METRICS_CONFUSION_MATRIX_NAME,
 )
 from pipeline.utils.inference.inferrer import infer_batch
 from pipeline.utils.metrics.calculator import (
@@ -101,7 +102,9 @@ def evaluate_model(
             # Filter out all metrics except
             # confusion matrix
             metrics_to_save = {
-                k: v for k, v in metrics.items() if k != MODEL_METRICS_CONFUSION_MATRIX_NAME
+                k: v
+                for k, v in metrics.items()
+                if k != MODEL_METRICS_CONFUSION_MATRIX_NAME
             }
 
             # Save metrics as JSON file

@@ -27,9 +27,12 @@ def save_dataset(df: pd.DataFrame, dataset_type: str, config: Config) -> None:
         RuntimeError: Generic operating system error while
                       saving the dataset at specified path.
     """
+    # Prepare configuration
+    data_distribution_mode = config.data.generation.mode
+
     # Retrieve path where
     # to save dataset
-    dataset_path = get_dataset_path(dataset_type, config)
+    dataset_path = get_dataset_path(dataset_type, data_distribution_mode)
 
     debug(f"Path where to save dataset: {dataset_path}")
 

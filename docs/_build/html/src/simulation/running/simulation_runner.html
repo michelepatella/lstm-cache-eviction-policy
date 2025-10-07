@@ -45,7 +45,7 @@ el.replaceWith(d);
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="src.simulation.running.simulation_runner.run_cache_simulation"><code class="name flex">
-<span>def <span class="ident">run_cache_simulation</span></span>(<span>cache, policy_name, metrics_logger, config_settings)</span>
+<span>def <span class="ident">run_cache_simulation</span></span>(<span>cache: Any, policy: str, config: config.classes.Config.Config) ‑> Tuple[Dict[str, int], List[Dict[str, float]], List[float]]</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -53,149 +53,129 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def run_cache_simulation(
-    cache,
-    policy_name,
-    metrics_logger,
-    config_settings,
-):
+    cache: Any,
+    policy: str,
+    config: Config,
+) -&gt; Tuple[Dict[str, int], List[Dict[str, float]], List[float]]:
     &#34;&#34;&#34;
-    Method to simulate a cache policy.
-    :param cache: The cache object to simulate.
-    :param policy_name: The cache policy name to use.
-    :param metrics_logger: The metrics logger.
-    :param config_settings: The configuration settings.
-    :return: The hit rate and miss rate in terms of %.
+    Run a full cache simulation for a given cache
+    eviction policy.
+
+    This function runs a cache simulation over the
+    testing dataset, managing requests one by one
+    according to the provided eviction policy (either
+    LSTM-based or baseline). It collects key metrics
+    such as hit/miss counters, timeline evolution,
+    and cache access latencies.
+
+    Parameters:
+        cache (Any): Cache object implementing the eviction policy.
+        policy (str): Cache eviction policy name.
+        config (Config): Configuration object.
+
+    Returns:
+        Tuple[Dict[str, int], List[Dict[str, float]], List[float]]:
+            A tuple containing counters for hits and misses, a timeline
+            of hits and misses evolution, and a list of caches latencies.
+
+    Raises:
+        RuntimeError: If an error occurs during the cache simulation, e.g.:
+            * The cache object does not implement required methods.
+            * The input dataset row structure is invalid.
+            * Required dictionary keys are missing.
     &#34;&#34;&#34;
-    # initial message
-    info(f&#34;🔄 {policy_name} policy simulation started...&#34;)
-
-    # debugging
-    debug(f&#34;⚙️ Policy: {policy_name}.&#34;)
-
-    # setup for simulation
-    (
-        counters,
-        timeline,
-        recent_hits,
-        autoregressive_latencies,
-        window,
-        testing_set,
-        testing_loader,
-        device,
-        criterion,
-        model,
-    ) = simulation_setup(policy_name, config_settings)
-
-    tot_prefetch = 0
-    # for each request
-    for idx in tqdm(
-        range(len(testing_set)),
-        desc=f&#34;Simulating {policy_name}&#34;,
-    ):
-        try:
-            # extract the row from the dataset
-            row = testing_set[idx]
-
-            # keep track of the no. of hits so far
-            prev_hits = counters[&#34;hits&#34;]
-        except NameError as e:
-            raise NameError(f&#34;NameError: {e}.&#34;)
-        except IndexError as e:
-            raise IndexError(f&#34;IndexError: {e}.&#34;)
-        except TypeError as e:
-            raise TypeError(f&#34;TypeError: {e}.&#34;)
-        except KeyError as e:
-            raise KeyError(f&#34;KeyError: {e}.&#34;)
-        except AttributeError as e:
-            raise AttributeError(f&#34;AttributeError: {e}.&#34;)
-        except ValueError as e:
-            raise ValueError(f&#34;ValueError: {e}.&#34;)
-        except Exception as e:
-            raise RuntimeError(f&#34;RuntimeError: {e}.&#34;)
-
-        # extrapolate timestamp and key from the row
-        (current_time, key) = preprocess_row(row)
-
-        # debugging
-        debug(f&#34;⚙️ Current time: {current_time} - Key: {key}.&#34;)
-
-        # if the LSTM cache is being used
-        if policy_name == &#34;LSTM&#34;:
-            (
-                autoregressive_latency,
-                num_prefetch,
-            ) = manage_lstm_cache(
-                cache,
-                key,
-                current_time,
-                idx,
-                counters,
-                device,
-                model,
-                testing_set,
-                config_settings,
-            )
-
-            # update no. of prefetch
-            tot_prefetch += num_prefetch
-
-            # store cache latency
-            autoregressive_latencies.append(autoregressive_latency)
-
-        # if the traditional cache (LRU, LFU, FIFO, or RANDOM) is being used
-        else:
-            # search the key into the cache
-            is_hit = find_key(cache, key, current_time, counters)
-
-            if not is_hit:
-                # put a key in cache
-                cache.put(key, current_time)
-
-        # update number of hits and misses
-        (recent_hits, timeline) = trace_hits_misses(
-            counters,
-            prev_hits,
-            recent_hits,
-            window,
-            idx,
-            timeline,
-        )
-
-    # compute cache metrics
-    (
-        hit_rate,
-        miss_rate,
-        prefetch_hit_rate,
-        eviction_mistake_rate,
-        avg_prefetching_latency,
-    ) = evaluate_cache(
-        counters,
-        tot_prefetch,
-        autoregressive_latencies,
-        metrics_logger,
+    # Setup for simulation
+    (counters, timeline, cache_latencies, testing_set, testing_loader) = (
+        initialize_simulation(config)
     )
 
-    # print a successful message
-    info(f&#34;🟢 {policy_name} policy simulation completed.&#34;)
+    try:
+        # Iterate over testing set, assuming each
+        # row represents a request to be satisfied
+        for idx in tqdm(
+            range(len(testing_set)),
+            desc=f&#34;Simulating {policy}&#34;,
+        ):
+            # Extract the current row
+            # from the dataset
+            row = testing_set[idx]
 
-    return {
-        &#34;policy&#34;: policy_name,
-        &#34;hit_rate&#34;: hit_rate,
-        &#34;miss_rate&#34;: miss_rate,
-        &#34;hits&#34;: counters[&#34;hits&#34;],
-        &#34;misses&#34;: counters[&#34;misses&#34;],
-        &#34;avg_prefetching_latency&#34;: avg_prefetching_latency,
-        &#34;timeline&#34;: timeline,
-        &#34;prefetch_hit_rate&#34;: prefetch_hit_rate,
-        &#34;eviction_mistake_rate&#34;: eviction_mistake_rate,
-    }</code></pre>
+            # Extrapolate current time and requested
+            # key from the current row
+            current_time, key = extract_time_key_from_row(row)
+
+            # Start timer to keep track of
+            # cache latency
+            start_time = time.perf_counter()
+
+            # Manage LSTM cache and baseline
+            # caches separately
+            if policy == LSTM_CACHE_NAME:
+                # Manage LSTM cache
+                manage_lstm_cache(
+                    cache,
+                    key,
+                    current_time,
+                    idx,
+                    counters,
+                    testing_set,
+                    config,
+                )
+            else:
+                # Check whether the requested key
+                # is into the baseline cache
+                is_hit = check_update_hit_miss(
+                    cache, key, current_time, counters
+                )
+
+                # If the requested key is not
+                # into the cache
+                if not is_hit:
+                    # Put the requested key
+                    # into the cache
+                    cache.put(key, current_time)
+
+            # Stop timer to keep track of
+            # cache latency
+            end_time = time.perf_counter()
+
+            # Store cache latency
+            cache_latency = (end_time - start_time) * MICROSECONDS_IN_SECOND
+            cache_latencies.append(cache_latency)
+
+            # update number of hits and misses
+            timeline = update_hit_miss_timeline(idx, counters, timeline)
+    except (TypeError, KeyError, AttributeError) as e:
+        msg = &#34;Cache simulation failed&#34;
+        error(&#34;%s: %s&#34;, msg, e)
+        raise RuntimeError(msg) from e
+
+    return counters, timeline, cache_latencies</code></pre>
 </details>
-<div class="desc"><p>Method to simulate a cache policy.
-:param cache: The cache object to simulate.
-:param policy_name: The cache policy name to use.
-:param metrics_logger: The metrics logger.
-:param config_settings: The configuration settings.
-:return: The hit rate and miss rate in terms of %.</p></div>
+<div class="desc"><p>Run a full cache simulation for a given cache
+eviction policy.</p>
+<p>This function runs a cache simulation over the
+testing dataset, managing requests one by one
+according to the provided eviction policy (either
+LSTM-based or baseline). It collects key metrics
+such as hit/miss counters, timeline evolution,
+and cache access latencies.</p>
+<h2 id="parameters">Parameters</h2>
+<p>cache (Any): Cache object implementing the eviction policy.
+policy (str): Cache eviction policy name.
+config (Config): Configuration object.</p>
+<h2 id="returns">Returns</h2>
+<p>Tuple[Dict[str, int], List[Dict[str, float]], List[float]]:
+A tuple containing counters for hits and misses, a timeline
+of hits and misses evolution, and a list of caches latencies.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RuntimeError</code></dt>
+<dd>If an error occurs during the cache simulation, e.g.:
+* The cache object does not implement required methods.
+* The input dataset row structure is invalid.
+* Required dictionary keys are missing.</dd>
+</dl></div>
 </dd>
 </dl>
 </section>

@@ -1,5 +1,5 @@
-from const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE, PROJECT_ROOT
 from config.classes.Config import Config
+from const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE
 from pipeline.training.utils.model_saver import save_model
 from pipeline.utils.dataset.splitter import split_training_set
 from pipeline.utils.training.n_epochs_trainer import train_n_epochs
@@ -14,6 +14,7 @@ from utils.logs.levels.info_logger import info
 from utils.model.initialization.model_components_initializer import (
     initialize_model_components,
 )
+from utils.model.locator import get_model_path
 
 
 def train_model(config: Config) -> None:
@@ -35,14 +36,17 @@ def train_model(config: Config) -> None:
     logs_phase.set(LOGS_TRAINING_PHASE)
 
     # Prepare configuration
+    data_distribution_mode = config.data.generation.mode
     training_batch_size = config.training.general.batch_size
     training_shuffle = config.training.general.shuffle
     validation_batch_size = config.validation.general.batch_size
     validation_shuffle = config.validation.general.shuffle
     model_params = config.model.params
     learning_rate = config.training.optimizer.params.learning_rate
-    training_num_epochs = config.training.general.epochs.count
-    model_save_path = config.model.general.path
+    training_num_epochs = config.training.general.epochs
+
+    # Get the model path
+    model_path = get_model_path(data_distribution_mode)
 
     # Load the training set and the
     # training loader
@@ -95,7 +99,6 @@ def train_model(config: Config) -> None:
     )
 
     # Save the best model trained
-    abs_model_save_path = PROJECT_ROOT / model_save_path
-    save_model(model, abs_model_save_path)
+    save_model(model, model_path)
 
     info("Model training completed")

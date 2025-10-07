@@ -1,22 +1,23 @@
 from config.classes.Config import Config
 from const import (
-    POLICY_NAME,
-    HIT_RATE_NAME,
-    MISS_RATE_NAME,
-    HIT_COUNTER_NAME,
-    MISS_COUNTER_NAME,
     AVG_CACHE_LATENCY_NAME,
-    TIMELINE_NAME,
     EVICTION_MISTAKE_RATE_NAME,
+    FIFO_CACHE_NAME,
+    HIT_COUNTER_NAME,
+    HIT_MISS_RATES_PLOT_FILE_NAME,
+    HIT_RATE_NAME,
+    LFU_CACHE_NAME,
+    LOGS_SIMULATION_PHASE,
+    LRU_CACHE_NAME,
+    LSTM_CACHE_NAME,
+    MISS_COUNTER_NAME,
+    MISS_RATE_NAME,
+    PLOTS_DIRECTORY_PATH,
+    POLICY_NAME,
+    RANDOM_CACHE_NAME,
     RESULTS_DIRECTORY_PATH,
     SIMULATION_RESULTS_FILE_NAME,
-    LRU_CACHE_NAME,
-    LFU_CACHE_NAME,
-    FIFO_CACHE_NAME,
-    RANDOM_CACHE_NAME,
-    LSTM_CACHE_NAME,
-    PLOTS_DIRECTORY_PATH,
-    HIT_MISS_RATES_PLOT_FILE_NAME, LOGS_SIMULATION_PHASE,
+    TIMELINE_NAME,
 )
 from lstm_cache_eviction_policy.LSTMCache import LSTMCache
 from simulation.baseline_caches.FIFOCache import FIFOCache
@@ -25,20 +26,20 @@ from simulation.baseline_caches.LRUCache import LRUCache
 from simulation.baseline_caches.RandomCache import RandomCache
 from simulation.baseline_caches.utils.CacheWrapper import CacheWrapper
 from simulation.metrics.calculator import calculate_cache_simulation_metrics
-from utils.json.saver import save_json
-from utils.logs.initializer import logs_phase
-from utils.logs.levels.debug_logger import debug
-from utils.simulation.classes.CacheMetricsLogger import (
-    CacheMetricsLogger,
-)
+from simulation.running.simulation_runner import run_cache_simulation
 from simulation.visualization.plotting.hit_miss_rates_plotter import (
     plot_hit_miss_rate,
 )
 from simulation.visualization.reporting.simulation_reporter import (
     generate_simulation_report,
 )
-from simulation.running.simulation_runner import run_cache_simulation
+from utils.json.saver import save_json
+from utils.logs.initializer import logs_phase
+from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
+from utils.simulation.classes.CacheMetricsLogger import (
+    CacheMetricsLogger,
+)
 
 
 def run_simulations(config: Config) -> None:
@@ -60,7 +61,7 @@ def run_simulations(config: Config) -> None:
     logs_phase.set(LOGS_SIMULATION_PHASE)
 
     # Prepare configuration
-    data_distribution_mode = config.data.general.mode
+    data_distribution_mode = config.data.generation.mode
 
     # Data setup and initialization
     cache_eviction_policies = {
@@ -83,7 +84,7 @@ def run_simulations(config: Config) -> None:
             None,
             CacheMetricsLogger(),
             config,
-        )
+        ),
     }
     results = []
 
@@ -129,9 +130,9 @@ def run_simulations(config: Config) -> None:
 
     # Save simulation results as JSON
     results_save_path = (
-            RESULTS_DIRECTORY_PATH
-            / data_distribution_mode
-            / SIMULATION_RESULTS_FILE_NAME
+        RESULTS_DIRECTORY_PATH
+        / data_distribution_mode
+        / SIMULATION_RESULTS_FILE_NAME
     )
     save_json(results, results_save_path)
 
@@ -139,9 +140,9 @@ def run_simulations(config: Config) -> None:
 
     # Plot hit and miss rates over time
     hit_miss_rate_plot_save_path = (
-            PLOTS_DIRECTORY_PATH
-            / data_distribution_mode
-            / HIT_MISS_RATES_PLOT_FILE_NAME
+        PLOTS_DIRECTORY_PATH
+        / data_distribution_mode
+        / HIT_MISS_RATES_PLOT_FILE_NAME
     )
     plot_hit_miss_rate(results, hit_miss_rate_plot_save_path)
 

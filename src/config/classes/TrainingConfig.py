@@ -1,18 +1,14 @@
 from pydantic import BaseModel, confloat, conint, model_validator
 
-from const import TRAINING_OPTIMIZERS
 from config.classes.validation.choice_field_validator import (
     validate_choice_field,
 )
+from const import TRAINING_OPTIMIZERS
 
 
 # Training — General
-class TrainingGeneralEpochsConfig(BaseModel):
-    count: conint(gt=0)  # type: ignore[valid-type]
-
-
 class TrainingGeneralConfig(BaseModel):
-    epochs: TrainingGeneralEpochsConfig
+    epochs: conint(gt=0)  # type: ignore[valid-type]
     batch_size: conint(gt=0)  # type: ignore[valid-type]
     shuffle: bool
 

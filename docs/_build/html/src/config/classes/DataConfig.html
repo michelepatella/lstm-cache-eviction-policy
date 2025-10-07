@@ -1,0 +1,2423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>src.config.classes.DataConfig API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>src.config.classes.DataConfig</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="src.config.classes.DataConfig.AccessConfig"><code class="flex name class">
+<span>class <span class="ident">AccessConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AccessConfig(BaseModel):
+    zipf: ZipfConfig
+    behavior: BehaviorConfig</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.AccessConfig.behavior"><code class="name">var <span class="ident">behavior</span> : <a title="src.config.classes.DataConfig.BehaviorConfig" href="#src.config.classes.DataConfig.BehaviorConfig">BehaviorConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.AccessConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.AccessConfig.zipf"><code class="name">var <span class="ident">zipf</span> : <a title="src.config.classes.DataConfig.ZipfConfig" href="#src.config.classes.DataConfig.ZipfConfig">ZipfConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.BehaviorConfig"><code class="flex name class">
+<span>class <span class="ident">BehaviorConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BehaviorConfig(BaseModel):
+    repetition: RepetitionConfig
+    toggle: ToggleConfig
+    cycle: CycleConfig
+    distortion: DistortionConfig
+    memory: MemoryConfig</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.BehaviorConfig.cycle"><code class="name">var <span class="ident">cycle</span> : <a title="src.config.classes.DataConfig.CycleConfig" href="#src.config.classes.DataConfig.CycleConfig">CycleConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.BehaviorConfig.distortion"><code class="name">var <span class="ident">distortion</span> : <a title="src.config.classes.DataConfig.DistortionConfig" href="#src.config.classes.DataConfig.DistortionConfig">DistortionConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.BehaviorConfig.memory"><code class="name">var <span class="ident">memory</span> : <a title="src.config.classes.DataConfig.MemoryConfig" href="#src.config.classes.DataConfig.MemoryConfig">MemoryConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.BehaviorConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.BehaviorConfig.repetition"><code class="name">var <span class="ident">repetition</span> : <a title="src.config.classes.DataConfig.RepetitionConfig" href="#src.config.classes.DataConfig.RepetitionConfig">RepetitionConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.BehaviorConfig.toggle"><code class="name">var <span class="ident">toggle</span> : <a title="src.config.classes.DataConfig.ToggleConfig" href="#src.config.classes.DataConfig.ToggleConfig">ToggleConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.BurstinessConfig"><code class="flex name class">
+<span>class <span class="ident">BurstinessConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BurstinessConfig(BaseModel):
+    high: confloat(gt=0)  # type: ignore[valid-type]
+    low: confloat(gt=0)  # type: ignore[valid-type]
+    hours: BurstinessHoursConfig
+
+    @model_validator(mode=&#34;after&#34;)
+    def check_high_low_bursts(
+        self: &#34;BurstinessConfig&#34;,
+    ) -&gt; &#34;BurstinessConfig&#34;:
+        &#34;&#34;&#34;
+        Check whether the highest burst value is
+        greater than or equal to the lowest one or not.
+
+        Parameters:
+            self (BurstinessConfig): Current model instance.
+
+        Returns:
+            BurstinessConfig: Validated model instance.
+        &#34;&#34;&#34;
+        # Check min/max validity
+        are_min_max_valid(
+            self.high,
+            self.low,
+            context=&#34;data.pattern.temporal.burstiness&#34;,
+        )
+
+        return self</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.BurstinessConfig.high"><code class="name">var <span class="ident">high</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.BurstinessConfig.hours"><code class="name">var <span class="ident">hours</span> : <a title="src.config.classes.DataConfig.BurstinessHoursConfig" href="#src.config.classes.DataConfig.BurstinessHoursConfig">BurstinessHoursConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.BurstinessConfig.low"><code class="name">var <span class="ident">low</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.BurstinessConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.BurstinessConfig.check_high_low_bursts"><code class="name flex">
+<span>def <span class="ident">check_high_low_bursts</span></span>(<span>self: <a title="src.config.classes.DataConfig.BurstinessConfig" href="#src.config.classes.DataConfig.BurstinessConfig">BurstinessConfig</a>) ‑> <a title="src.config.classes.DataConfig.BurstinessConfig" href="#src.config.classes.DataConfig.BurstinessConfig">BurstinessConfig</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@model_validator(mode=&#34;after&#34;)
+def check_high_low_bursts(
+    self: &#34;BurstinessConfig&#34;,
+) -&gt; &#34;BurstinessConfig&#34;:
+    &#34;&#34;&#34;
+    Check whether the highest burst value is
+    greater than or equal to the lowest one or not.
+
+    Parameters:
+        self (BurstinessConfig): Current model instance.
+
+    Returns:
+        BurstinessConfig: Validated model instance.
+    &#34;&#34;&#34;
+    # Check min/max validity
+    are_min_max_valid(
+        self.high,
+        self.low,
+        context=&#34;data.pattern.temporal.burstiness&#34;,
+    )
+
+    return self</code></pre>
+</details>
+<div class="desc"><p>Check whether the highest burst value is
+greater than or equal to the lowest one or not.</p>
+<h2 id="parameters">Parameters</h2>
+<p>self (BurstinessConfig): Current model instance.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="src.config.classes.DataConfig.BurstinessConfig" href="#src.config.classes.DataConfig.BurstinessConfig">BurstinessConfig</a></code></dt>
+<dd>Validated model instance.</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.BurstinessHoursConfig"><code class="flex name class">
+<span>class <span class="ident">BurstinessHoursConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BurstinessHoursConfig(BaseModel):
+    start: conint(
+        ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR
+    )  # type: ignore[valid-type]
+    end: conint(
+        ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR
+    )  # type: ignore[valid-type]</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.BurstinessHoursConfig.end"><code class="name">var <span class="ident">end</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.BurstinessHoursConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.BurstinessHoursConfig.start"><code class="name">var <span class="ident">start</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.CycleConfig"><code class="flex name class">
+<span>class <span class="ident">CycleConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CycleConfig(BaseModel):
+    base: conint(gt=0)  # type: ignore[valid-type]
+    mod: conint(gt=0)  # type: ignore[valid-type]
+    divisor: conint(gt=0)  # type: ignore[valid-type]
+    hours: HoursConfig</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.CycleConfig.base"><code class="name">var <span class="ident">base</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.CycleConfig.divisor"><code class="name">var <span class="ident">divisor</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.CycleConfig.hours"><code class="name">var <span class="ident">hours</span> : <a title="src.config.classes.DataConfig.HoursConfig" href="#src.config.classes.DataConfig.HoursConfig">HoursConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.CycleConfig.mod"><code class="name">var <span class="ident">mod</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.CycleConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.DataConfig"><code class="flex name class">
+<span>class <span class="ident">DataConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataConfig(BaseModel):
+    &#34;&#34;&#34;
+    Class representing the data configuration
+    settings including generation settings.
+    &#34;&#34;&#34;
+
+    generation: GenerationConfig</code></pre>
+</details>
+<div class="desc"><p>Class representing the data configuration
+settings including generation settings.</p>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.DataConfig.generation"><code class="name">var <span class="ident">generation</span> : <a title="src.config.classes.DataConfig.GenerationConfig" href="#src.config.classes.DataConfig.GenerationConfig">GenerationConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.DataConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.DistortionConfig"><code class="flex name class">
+<span>class <span class="ident">DistortionConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DistortionConfig(BaseModel):
+    interval: conint(gt=0)  # type: ignore[valid-type]
+    hours: HoursConfig
+    offsets: DistortionOffsetsConfig
+    noise: NoiseConfig</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.DistortionConfig.hours"><code class="name">var <span class="ident">hours</span> : <a title="src.config.classes.DataConfig.HoursConfig" href="#src.config.classes.DataConfig.HoursConfig">HoursConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.DistortionConfig.interval"><code class="name">var <span class="ident">interval</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.DistortionConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.DistortionConfig.noise"><code class="name">var <span class="ident">noise</span> : <a title="src.config.classes.DataConfig.NoiseConfig" href="#src.config.classes.DataConfig.NoiseConfig">NoiseConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.DistortionConfig.offsets"><code class="name">var <span class="ident">offsets</span> : <a title="src.config.classes.DataConfig.DistortionOffsetsConfig" href="#src.config.classes.DataConfig.DistortionOffsetsConfig">DistortionOffsetsConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.DistortionOffsetsConfig"><code class="flex name class">
+<span>class <span class="ident">DistortionOffsetsConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DistortionOffsetsConfig(BaseModel):
+    history: int
+    correction: int</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.DistortionOffsetsConfig.correction"><code class="name">var <span class="ident">correction</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.DistortionOffsetsConfig.history"><code class="name">var <span class="ident">history</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.DistortionOffsetsConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.GenerationConfig"><code class="flex name class">
+<span>class <span class="ident">GenerationConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GenerationConfig(BaseModel):
+    seed: conint(ge=0)  # type: ignore[valid-type]
+    mode: str
+    requests: conint(gt=0)  # type: ignore[valid-type]
+    keys: KeysConfig
+    pattern: PatternConfig
+
+    @model_validator(mode=&#34;after&#34;)
+    def check_data_distribution_mode(
+        self: &#34;GenerationConfig&#34;,
+    ) -&gt; &#34;GenerationConfig&#34;:
+        &#34;&#34;&#34;
+        Check whether data distribution
+        mode is valid or not.
+
+        This function validates the data
+        distribution mode.
+
+        Parameters:
+            self (GenerationConfig): Current model instance.
+
+        Returns:
+            GenerationConfig: Validated model instance.
+        &#34;&#34;&#34;
+        return validate_choice_field(
+            self,
+            self.mode,
+            DATA_DISTRIBUTION_MODES,
+            &#34;data.general.mode&#34;,
+        )</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.GenerationConfig.keys"><code class="name">var <span class="ident">keys</span> : <a title="src.config.classes.DataConfig.KeysConfig" href="#src.config.classes.DataConfig.KeysConfig">KeysConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.GenerationConfig.mode"><code class="name">var <span class="ident">mode</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.GenerationConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.GenerationConfig.pattern"><code class="name">var <span class="ident">pattern</span> : <a title="src.config.classes.DataConfig.PatternConfig" href="#src.config.classes.DataConfig.PatternConfig">PatternConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.GenerationConfig.requests"><code class="name">var <span class="ident">requests</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.GenerationConfig.seed"><code class="name">var <span class="ident">seed</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.GenerationConfig.check_data_distribution_mode"><code class="name flex">
+<span>def <span class="ident">check_data_distribution_mode</span></span>(<span>self: <a title="src.config.classes.DataConfig.GenerationConfig" href="#src.config.classes.DataConfig.GenerationConfig">GenerationConfig</a>) ‑> <a title="src.config.classes.DataConfig.GenerationConfig" href="#src.config.classes.DataConfig.GenerationConfig">GenerationConfig</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@model_validator(mode=&#34;after&#34;)
+def check_data_distribution_mode(
+    self: &#34;GenerationConfig&#34;,
+) -&gt; &#34;GenerationConfig&#34;:
+    &#34;&#34;&#34;
+    Check whether data distribution
+    mode is valid or not.
+
+    This function validates the data
+    distribution mode.
+
+    Parameters:
+        self (GenerationConfig): Current model instance.
+
+    Returns:
+        GenerationConfig: Validated model instance.
+    &#34;&#34;&#34;
+    return validate_choice_field(
+        self,
+        self.mode,
+        DATA_DISTRIBUTION_MODES,
+        &#34;data.general.mode&#34;,
+    )</code></pre>
+</details>
+<div class="desc"><p>Check whether data distribution
+mode is valid or not.</p>
+<p>This function validates the data
+distribution mode.</p>
+<h2 id="parameters">Parameters</h2>
+<p>self (GenerationConfig): Current model instance.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="src.config.classes.DataConfig.GenerationConfig" href="#src.config.classes.DataConfig.GenerationConfig">GenerationConfig</a></code></dt>
+<dd>Validated model instance.</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.HoursConfig"><code class="flex name class">
+<span>class <span class="ident">HoursConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class HoursConfig(BaseModel):
+    start: conint(
+        ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR
+    )  # type: ignore[valid-type]
+    end: conint(
+        ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR
+    )  # type: ignore[valid-type]</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.HoursConfig.end"><code class="name">var <span class="ident">end</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.HoursConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.HoursConfig.start"><code class="name">var <span class="ident">start</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.KeysConfig"><code class="flex name class">
+<span>class <span class="ident">KeysConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class KeysConfig(BaseModel):
+    min: conint(gt=0)  # type: ignore[valid-type]
+    max: conint(gt=0)  # type: ignore[valid-type]
+
+    @model_validator(mode=&#34;after&#34;)
+    def check_min_max_keys(
+        self: &#34;KeysConfig&#34;,
+    ) -&gt; &#34;KeysConfig&#34;:
+        &#34;&#34;&#34;
+        Check whether the least key is greater than
+        or equal to the greatest key or not.
+
+        Parameters:
+            self (KeysConfig): Current model instance.
+
+        Returns:
+            KeysConfig: Validated model instance.
+        &#34;&#34;&#34;
+        # Check min/max validity
+        are_min_max_valid(
+            self.min,
+            self.max,
+            context=&#34;data.general.keys&#34;,
+        )
+
+        return self</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.KeysConfig.max"><code class="name">var <span class="ident">max</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.KeysConfig.min"><code class="name">var <span class="ident">min</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.KeysConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.KeysConfig.check_min_max_keys"><code class="name flex">
+<span>def <span class="ident">check_min_max_keys</span></span>(<span>self: <a title="src.config.classes.DataConfig.KeysConfig" href="#src.config.classes.DataConfig.KeysConfig">KeysConfig</a>) ‑> <a title="src.config.classes.DataConfig.KeysConfig" href="#src.config.classes.DataConfig.KeysConfig">KeysConfig</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@model_validator(mode=&#34;after&#34;)
+def check_min_max_keys(
+    self: &#34;KeysConfig&#34;,
+) -&gt; &#34;KeysConfig&#34;:
+    &#34;&#34;&#34;
+    Check whether the least key is greater than
+    or equal to the greatest key or not.
+
+    Parameters:
+        self (KeysConfig): Current model instance.
+
+    Returns:
+        KeysConfig: Validated model instance.
+    &#34;&#34;&#34;
+    # Check min/max validity
+    are_min_max_valid(
+        self.min,
+        self.max,
+        context=&#34;data.general.keys&#34;,
+    )
+
+    return self</code></pre>
+</details>
+<div class="desc"><p>Check whether the least key is greater than
+or equal to the greatest key or not.</p>
+<h2 id="parameters">Parameters</h2>
+<p>self (KeysConfig): Current model instance.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="src.config.classes.DataConfig.KeysConfig" href="#src.config.classes.DataConfig.KeysConfig">KeysConfig</a></code></dt>
+<dd>Validated model instance.</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.MemoryConfig"><code class="flex name class">
+<span>class <span class="ident">MemoryConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MemoryConfig(BaseModel):
+    interval: conint(gt=0)  # type: ignore[valid-type]
+    offset: conint(gt=0)  # type: ignore[valid-type]</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.MemoryConfig.interval"><code class="name">var <span class="ident">interval</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.MemoryConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.MemoryConfig.offset"><code class="name">var <span class="ident">offset</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.NoiseConfig"><code class="flex name class">
+<span>class <span class="ident">NoiseConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class NoiseConfig(BaseModel):
+    min: int
+    max: int
+
+    @model_validator(mode=&#34;after&#34;)
+    def check_min_max_noises(
+        self: &#34;NoiseConfig&#34;,
+    ) -&gt; &#34;NoiseConfig&#34;:
+        &#34;&#34;&#34;
+        Check whether the least noise value is
+        greater than or equal to the greatest one or not.
+
+        Parameters:
+            self (NoiseConfig): Current model instance.
+
+        Returns:
+            NoiseConfig: Validated model instance.
+        &#34;&#34;&#34;
+        are_min_max_valid(
+            self.min,
+            self.max,
+            context=&#34;data.pattern.access.behavior.distortion.noise&#34;,
+        )
+
+        return self</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.NoiseConfig.max"><code class="name">var <span class="ident">max</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.NoiseConfig.min"><code class="name">var <span class="ident">min</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.NoiseConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.NoiseConfig.check_min_max_noises"><code class="name flex">
+<span>def <span class="ident">check_min_max_noises</span></span>(<span>self: <a title="src.config.classes.DataConfig.NoiseConfig" href="#src.config.classes.DataConfig.NoiseConfig">NoiseConfig</a>) ‑> <a title="src.config.classes.DataConfig.NoiseConfig" href="#src.config.classes.DataConfig.NoiseConfig">NoiseConfig</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@model_validator(mode=&#34;after&#34;)
+def check_min_max_noises(
+    self: &#34;NoiseConfig&#34;,
+) -&gt; &#34;NoiseConfig&#34;:
+    &#34;&#34;&#34;
+    Check whether the least noise value is
+    greater than or equal to the greatest one or not.
+
+    Parameters:
+        self (NoiseConfig): Current model instance.
+
+    Returns:
+        NoiseConfig: Validated model instance.
+    &#34;&#34;&#34;
+    are_min_max_valid(
+        self.min,
+        self.max,
+        context=&#34;data.pattern.access.behavior.distortion.noise&#34;,
+    )
+
+    return self</code></pre>
+</details>
+<div class="desc"><p>Check whether the least noise value is
+greater than or equal to the greatest one or not.</p>
+<h2 id="parameters">Parameters</h2>
+<p>self (NoiseConfig): Current model instance.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="src.config.classes.DataConfig.NoiseConfig" href="#src.config.classes.DataConfig.NoiseConfig">NoiseConfig</a></code></dt>
+<dd>Validated model instance.</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.PatternConfig"><code class="flex name class">
+<span>class <span class="ident">PatternConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class PatternConfig(BaseModel):
+    access: AccessConfig
+    temporal: TemporalConfig</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.PatternConfig.access"><code class="name">var <span class="ident">access</span> : <a title="src.config.classes.DataConfig.AccessConfig" href="#src.config.classes.DataConfig.AccessConfig">AccessConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.PatternConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.PatternConfig.temporal"><code class="name">var <span class="ident">temporal</span> : <a title="src.config.classes.DataConfig.TemporalConfig" href="#src.config.classes.DataConfig.TemporalConfig">TemporalConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.PeriodicConfig"><code class="flex name class">
+<span>class <span class="ident">PeriodicConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class PeriodicConfig(BaseModel):
+    scale: conint(gt=0)  # type: ignore[valid-type]
+    amplitude: conint(ge=0)  # type: ignore[valid-type]</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.PeriodicConfig.amplitude"><code class="name">var <span class="ident">amplitude</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.PeriodicConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.PeriodicConfig.scale"><code class="name">var <span class="ident">scale</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.RepetitionConfig"><code class="flex name class">
+<span>class <span class="ident">RepetitionConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RepetitionConfig(BaseModel):
+    interval: conint(gt=0)  # type: ignore[valid-type]
+    offset: conint(gt=0)  # type: ignore[valid-type]
+    hours: HoursConfig</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.RepetitionConfig.hours"><code class="name">var <span class="ident">hours</span> : <a title="src.config.classes.DataConfig.HoursConfig" href="#src.config.classes.DataConfig.HoursConfig">HoursConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.RepetitionConfig.interval"><code class="name">var <span class="ident">interval</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.RepetitionConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.RepetitionConfig.offset"><code class="name">var <span class="ident">offset</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.TemporalConfig"><code class="flex name class">
+<span>class <span class="ident">TemporalConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TemporalConfig(BaseModel):
+    burstiness: BurstinessConfig
+    periodic: PeriodicConfig</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.TemporalConfig.burstiness"><code class="name">var <span class="ident">burstiness</span> : <a title="src.config.classes.DataConfig.BurstinessConfig" href="#src.config.classes.DataConfig.BurstinessConfig">BurstinessConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.TemporalConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.TemporalConfig.periodic"><code class="name">var <span class="ident">periodic</span> : <a title="src.config.classes.DataConfig.PeriodicConfig" href="#src.config.classes.DataConfig.PeriodicConfig">PeriodicConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.ToggleBaseRequestsConfig"><code class="flex name class">
+<span>class <span class="ident">ToggleBaseRequestsConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ToggleBaseRequestsConfig(BaseModel):
+    first: conint(gt=0)  # type: ignore[valid-type]
+    second: conint(gt=0)  # type: ignore[valid-type]</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.ToggleBaseRequestsConfig.first"><code class="name">var <span class="ident">first</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.ToggleBaseRequestsConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.ToggleBaseRequestsConfig.second"><code class="name">var <span class="ident">second</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.ToggleConfig"><code class="flex name class">
+<span>class <span class="ident">ToggleConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ToggleConfig(BaseModel):
+    interval: conint(gt=0)  # type: ignore[valid-type]
+    hours: HoursConfig
+    base_requests: ToggleBaseRequestsConfig
+    offsets: ToggleOffsetsConfig</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.ToggleConfig.base_requests"><code class="name">var <span class="ident">base_requests</span> : <a title="src.config.classes.DataConfig.ToggleBaseRequestsConfig" href="#src.config.classes.DataConfig.ToggleBaseRequestsConfig">ToggleBaseRequestsConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.ToggleConfig.hours"><code class="name">var <span class="ident">hours</span> : <a title="src.config.classes.DataConfig.HoursConfig" href="#src.config.classes.DataConfig.HoursConfig">HoursConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.ToggleConfig.interval"><code class="name">var <span class="ident">interval</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.ToggleConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.ToggleConfig.offsets"><code class="name">var <span class="ident">offsets</span> : <a title="src.config.classes.DataConfig.ToggleOffsetsConfig" href="#src.config.classes.DataConfig.ToggleOffsetsConfig">ToggleOffsetsConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.ToggleOffsetsConfig"><code class="flex name class">
+<span>class <span class="ident">ToggleOffsetsConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ToggleOffsetsConfig(BaseModel):
+    forward: int
+    backward: int</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.ToggleOffsetsConfig.backward"><code class="name">var <span class="ident">backward</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.ToggleOffsetsConfig.forward"><code class="name">var <span class="ident">forward</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.ToggleOffsetsConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.ZipfAlphaConfig"><code class="flex name class">
+<span>class <span class="ident">ZipfAlphaConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ZipfAlphaConfig(BaseModel):
+    fixed: confloat(gt=0)  # type: ignore[valid-type]
+    min: confloat(gt=0)  # type: ignore[valid-type]
+    max: confloat(gt=0)  # type: ignore[valid-type]</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.ZipfAlphaConfig.fixed"><code class="name">var <span class="ident">fixed</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.ZipfAlphaConfig.max"><code class="name">var <span class="ident">max</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.ZipfAlphaConfig.min"><code class="name">var <span class="ident">min</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.ZipfAlphaConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.config.classes.DataConfig.ZipfConfig"><code class="flex name class">
+<span>class <span class="ident">ZipfConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ZipfConfig(BaseModel):
+    alpha: ZipfAlphaConfig
+    steps: conint(gt=0)  # type: ignore[valid-type]</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.config.classes.DataConfig.ZipfConfig.alpha"><code class="name">var <span class="ident">alpha</span> : <a title="src.config.classes.DataConfig.ZipfAlphaConfig" href="#src.config.classes.DataConfig.ZipfAlphaConfig">ZipfAlphaConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.ZipfConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.config.classes.DataConfig.ZipfConfig.steps"><code class="name">var <span class="ident">steps</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="src.config.classes" href="index.html">src.config.classes</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.AccessConfig" href="#src.config.classes.DataConfig.AccessConfig">AccessConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.AccessConfig.behavior" href="#src.config.classes.DataConfig.AccessConfig.behavior">behavior</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.AccessConfig.model_config" href="#src.config.classes.DataConfig.AccessConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.AccessConfig.zipf" href="#src.config.classes.DataConfig.AccessConfig.zipf">zipf</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.BehaviorConfig" href="#src.config.classes.DataConfig.BehaviorConfig">BehaviorConfig</a></code></h4>
+<ul class="two-column">
+<li><code><a title="src.config.classes.DataConfig.BehaviorConfig.cycle" href="#src.config.classes.DataConfig.BehaviorConfig.cycle">cycle</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.BehaviorConfig.distortion" href="#src.config.classes.DataConfig.BehaviorConfig.distortion">distortion</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.BehaviorConfig.memory" href="#src.config.classes.DataConfig.BehaviorConfig.memory">memory</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.BehaviorConfig.model_config" href="#src.config.classes.DataConfig.BehaviorConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.BehaviorConfig.repetition" href="#src.config.classes.DataConfig.BehaviorConfig.repetition">repetition</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.BehaviorConfig.toggle" href="#src.config.classes.DataConfig.BehaviorConfig.toggle">toggle</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.BurstinessConfig" href="#src.config.classes.DataConfig.BurstinessConfig">BurstinessConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.BurstinessConfig.check_high_low_bursts" href="#src.config.classes.DataConfig.BurstinessConfig.check_high_low_bursts">check_high_low_bursts</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.BurstinessConfig.high" href="#src.config.classes.DataConfig.BurstinessConfig.high">high</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.BurstinessConfig.hours" href="#src.config.classes.DataConfig.BurstinessConfig.hours">hours</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.BurstinessConfig.low" href="#src.config.classes.DataConfig.BurstinessConfig.low">low</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.BurstinessConfig.model_config" href="#src.config.classes.DataConfig.BurstinessConfig.model_config">model_config</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.BurstinessHoursConfig" href="#src.config.classes.DataConfig.BurstinessHoursConfig">BurstinessHoursConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.BurstinessHoursConfig.end" href="#src.config.classes.DataConfig.BurstinessHoursConfig.end">end</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.BurstinessHoursConfig.model_config" href="#src.config.classes.DataConfig.BurstinessHoursConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.BurstinessHoursConfig.start" href="#src.config.classes.DataConfig.BurstinessHoursConfig.start">start</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.CycleConfig" href="#src.config.classes.DataConfig.CycleConfig">CycleConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.CycleConfig.base" href="#src.config.classes.DataConfig.CycleConfig.base">base</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.CycleConfig.divisor" href="#src.config.classes.DataConfig.CycleConfig.divisor">divisor</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.CycleConfig.hours" href="#src.config.classes.DataConfig.CycleConfig.hours">hours</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.CycleConfig.mod" href="#src.config.classes.DataConfig.CycleConfig.mod">mod</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.CycleConfig.model_config" href="#src.config.classes.DataConfig.CycleConfig.model_config">model_config</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.DataConfig" href="#src.config.classes.DataConfig.DataConfig">DataConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.DataConfig.generation" href="#src.config.classes.DataConfig.DataConfig.generation">generation</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.DataConfig.model_config" href="#src.config.classes.DataConfig.DataConfig.model_config">model_config</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.DistortionConfig" href="#src.config.classes.DataConfig.DistortionConfig">DistortionConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.DistortionConfig.hours" href="#src.config.classes.DataConfig.DistortionConfig.hours">hours</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.DistortionConfig.interval" href="#src.config.classes.DataConfig.DistortionConfig.interval">interval</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.DistortionConfig.model_config" href="#src.config.classes.DataConfig.DistortionConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.DistortionConfig.noise" href="#src.config.classes.DataConfig.DistortionConfig.noise">noise</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.DistortionConfig.offsets" href="#src.config.classes.DataConfig.DistortionConfig.offsets">offsets</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.DistortionOffsetsConfig" href="#src.config.classes.DataConfig.DistortionOffsetsConfig">DistortionOffsetsConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.DistortionOffsetsConfig.correction" href="#src.config.classes.DataConfig.DistortionOffsetsConfig.correction">correction</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.DistortionOffsetsConfig.history" href="#src.config.classes.DataConfig.DistortionOffsetsConfig.history">history</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.DistortionOffsetsConfig.model_config" href="#src.config.classes.DataConfig.DistortionOffsetsConfig.model_config">model_config</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.GenerationConfig" href="#src.config.classes.DataConfig.GenerationConfig">GenerationConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.GenerationConfig.check_data_distribution_mode" href="#src.config.classes.DataConfig.GenerationConfig.check_data_distribution_mode">check_data_distribution_mode</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.GenerationConfig.keys" href="#src.config.classes.DataConfig.GenerationConfig.keys">keys</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.GenerationConfig.mode" href="#src.config.classes.DataConfig.GenerationConfig.mode">mode</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.GenerationConfig.model_config" href="#src.config.classes.DataConfig.GenerationConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.GenerationConfig.pattern" href="#src.config.classes.DataConfig.GenerationConfig.pattern">pattern</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.GenerationConfig.requests" href="#src.config.classes.DataConfig.GenerationConfig.requests">requests</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.GenerationConfig.seed" href="#src.config.classes.DataConfig.GenerationConfig.seed">seed</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.HoursConfig" href="#src.config.classes.DataConfig.HoursConfig">HoursConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.HoursConfig.end" href="#src.config.classes.DataConfig.HoursConfig.end">end</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.HoursConfig.model_config" href="#src.config.classes.DataConfig.HoursConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.HoursConfig.start" href="#src.config.classes.DataConfig.HoursConfig.start">start</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.KeysConfig" href="#src.config.classes.DataConfig.KeysConfig">KeysConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.KeysConfig.check_min_max_keys" href="#src.config.classes.DataConfig.KeysConfig.check_min_max_keys">check_min_max_keys</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.KeysConfig.max" href="#src.config.classes.DataConfig.KeysConfig.max">max</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.KeysConfig.min" href="#src.config.classes.DataConfig.KeysConfig.min">min</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.KeysConfig.model_config" href="#src.config.classes.DataConfig.KeysConfig.model_config">model_config</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.MemoryConfig" href="#src.config.classes.DataConfig.MemoryConfig">MemoryConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.MemoryConfig.interval" href="#src.config.classes.DataConfig.MemoryConfig.interval">interval</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.MemoryConfig.model_config" href="#src.config.classes.DataConfig.MemoryConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.MemoryConfig.offset" href="#src.config.classes.DataConfig.MemoryConfig.offset">offset</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.NoiseConfig" href="#src.config.classes.DataConfig.NoiseConfig">NoiseConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.NoiseConfig.check_min_max_noises" href="#src.config.classes.DataConfig.NoiseConfig.check_min_max_noises">check_min_max_noises</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.NoiseConfig.max" href="#src.config.classes.DataConfig.NoiseConfig.max">max</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.NoiseConfig.min" href="#src.config.classes.DataConfig.NoiseConfig.min">min</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.NoiseConfig.model_config" href="#src.config.classes.DataConfig.NoiseConfig.model_config">model_config</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.PatternConfig" href="#src.config.classes.DataConfig.PatternConfig">PatternConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.PatternConfig.access" href="#src.config.classes.DataConfig.PatternConfig.access">access</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.PatternConfig.model_config" href="#src.config.classes.DataConfig.PatternConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.PatternConfig.temporal" href="#src.config.classes.DataConfig.PatternConfig.temporal">temporal</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.PeriodicConfig" href="#src.config.classes.DataConfig.PeriodicConfig">PeriodicConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.PeriodicConfig.amplitude" href="#src.config.classes.DataConfig.PeriodicConfig.amplitude">amplitude</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.PeriodicConfig.model_config" href="#src.config.classes.DataConfig.PeriodicConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.PeriodicConfig.scale" href="#src.config.classes.DataConfig.PeriodicConfig.scale">scale</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.RepetitionConfig" href="#src.config.classes.DataConfig.RepetitionConfig">RepetitionConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.RepetitionConfig.hours" href="#src.config.classes.DataConfig.RepetitionConfig.hours">hours</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.RepetitionConfig.interval" href="#src.config.classes.DataConfig.RepetitionConfig.interval">interval</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.RepetitionConfig.model_config" href="#src.config.classes.DataConfig.RepetitionConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.RepetitionConfig.offset" href="#src.config.classes.DataConfig.RepetitionConfig.offset">offset</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.TemporalConfig" href="#src.config.classes.DataConfig.TemporalConfig">TemporalConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.TemporalConfig.burstiness" href="#src.config.classes.DataConfig.TemporalConfig.burstiness">burstiness</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.TemporalConfig.model_config" href="#src.config.classes.DataConfig.TemporalConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.TemporalConfig.periodic" href="#src.config.classes.DataConfig.TemporalConfig.periodic">periodic</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.ToggleBaseRequestsConfig" href="#src.config.classes.DataConfig.ToggleBaseRequestsConfig">ToggleBaseRequestsConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.ToggleBaseRequestsConfig.first" href="#src.config.classes.DataConfig.ToggleBaseRequestsConfig.first">first</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.ToggleBaseRequestsConfig.model_config" href="#src.config.classes.DataConfig.ToggleBaseRequestsConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.ToggleBaseRequestsConfig.second" href="#src.config.classes.DataConfig.ToggleBaseRequestsConfig.second">second</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.ToggleConfig" href="#src.config.classes.DataConfig.ToggleConfig">ToggleConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.ToggleConfig.base_requests" href="#src.config.classes.DataConfig.ToggleConfig.base_requests">base_requests</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.ToggleConfig.hours" href="#src.config.classes.DataConfig.ToggleConfig.hours">hours</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.ToggleConfig.interval" href="#src.config.classes.DataConfig.ToggleConfig.interval">interval</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.ToggleConfig.model_config" href="#src.config.classes.DataConfig.ToggleConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.ToggleConfig.offsets" href="#src.config.classes.DataConfig.ToggleConfig.offsets">offsets</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.ToggleOffsetsConfig" href="#src.config.classes.DataConfig.ToggleOffsetsConfig">ToggleOffsetsConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.ToggleOffsetsConfig.backward" href="#src.config.classes.DataConfig.ToggleOffsetsConfig.backward">backward</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.ToggleOffsetsConfig.forward" href="#src.config.classes.DataConfig.ToggleOffsetsConfig.forward">forward</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.ToggleOffsetsConfig.model_config" href="#src.config.classes.DataConfig.ToggleOffsetsConfig.model_config">model_config</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.ZipfAlphaConfig" href="#src.config.classes.DataConfig.ZipfAlphaConfig">ZipfAlphaConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.ZipfAlphaConfig.fixed" href="#src.config.classes.DataConfig.ZipfAlphaConfig.fixed">fixed</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.ZipfAlphaConfig.max" href="#src.config.classes.DataConfig.ZipfAlphaConfig.max">max</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.ZipfAlphaConfig.min" href="#src.config.classes.DataConfig.ZipfAlphaConfig.min">min</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.ZipfAlphaConfig.model_config" href="#src.config.classes.DataConfig.ZipfAlphaConfig.model_config">model_config</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.config.classes.DataConfig.ZipfConfig" href="#src.config.classes.DataConfig.ZipfConfig">ZipfConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.config.classes.DataConfig.ZipfConfig.alpha" href="#src.config.classes.DataConfig.ZipfConfig.alpha">alpha</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.ZipfConfig.model_config" href="#src.config.classes.DataConfig.ZipfConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.config.classes.DataConfig.ZipfConfig.steps" href="#src.config.classes.DataConfig.ZipfConfig.steps">steps</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

@@ -4,8 +4,8 @@ import pandas as pd
 import torch
 from torch.utils.data import Dataset
 
-from const import DATASET_PREPROCESSED_TYPE, TRAINING_SPLIT_TYPE
 from config.classes.Config import Config
+from const import DATASET_PREPROCESSED_TYPE, TRAINING_SPLIT_TYPE
 from utils.dataset.loader import load_dataset
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
@@ -122,7 +122,7 @@ class AccessLogsDataset(Dataset):
             self.target = self.columns[-1]  # Only the last one
 
             # Retrieve sequence length
-            self.seq_len = config.data.sequence.length
+            self.seq_len = config.model.sequence.length
 
             debug(f"Feature dataset columns: {self.features}")
             debug(f"Target dataset column: {self.target}")

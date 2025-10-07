@@ -48,7 +48,7 @@ el.replaceWith(d);
 <dl>
 <dt id="src.utils.dataset.AccessLogsDataset.AccessLogsDataset"><code class="flex name class">
 <span>class <span class="ident">AccessLogsDataset</span></span>
-<span>(</span><span>dataset_type: str, config: pipeline.config.classes.Config.Config)</span>
+<span>(</span><span>dataset_type: str, config: config.classes.Config.Config)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -165,7 +165,7 @@ el.replaceWith(d);
             self.target = self.columns[-1]  # Only the last one
 
             # Retrieve sequence length
-            self.seq_len = config.data.sequence.length
+            self.seq_len = config.model.sequence.length
 
             debug(f&#34;Feature dataset columns: {self.features}&#34;)
             debug(f&#34;Target dataset column: {self.target}&#34;)
@@ -314,7 +314,7 @@ el.replaceWith(d);
 
         try:
             # Extract feature sequence
-            seq_data = self.data.iloc[idx: idx + self.seq_len]
+            seq_data = self.data.iloc[idx : idx + self.seq_len]
 
             # Convert features to float tensor
             x_features = torch.tensor(
@@ -434,7 +434,7 @@ or missing columns attribute</dd>
 <h3>Static methods</h3>
 <dl>
 <dt id="src.utils.dataset.AccessLogsDataset.AccessLogsDataset.from_dataframe"><code class="name flex">
-<span>def <span class="ident">from_dataframe</span></span>(<span>df: pd.DataFrame, config: pipeline.config.classes.Config.Config) ‑> <a title="src.utils.dataset.AccessLogsDataset.AccessLogsDataset" href="#src.utils.dataset.AccessLogsDataset.AccessLogsDataset">AccessLogsDataset</a></span>
+<span>def <span class="ident">from_dataframe</span></span>(<span>df: pd.DataFrame, config: config.classes.Config.Config) ‑> <a title="src.utils.dataset.AccessLogsDataset.AccessLogsDataset" href="#src.utils.dataset.AccessLogsDataset.AccessLogsDataset">AccessLogsDataset</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Instantiate AccessLogsDataset from an existing dataframe.</p>

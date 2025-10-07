@@ -1,5 +1,5 @@
-from const import LOGS_VALIDATION_PHASE, TRAINING_SPLIT_TYPE
 from config.classes.Config import Config
+from const import LOGS_VALIDATION_PHASE, TRAINING_SPLIT_TYPE
 from pipeline.validation.best_params.saver import save_best_params
 from pipeline.validation.tuning.grid_search_runner import (
     compute_grid_search,

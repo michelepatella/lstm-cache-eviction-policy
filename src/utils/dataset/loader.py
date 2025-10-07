@@ -29,8 +29,11 @@ def load_dataset(dataset_type: str, config: Config) -> pd.DataFrame:
             * The dataset file is empty.
             * An error occurred while parsing the dataset file.
     """
+    # Prepare configuration
+    data_distribution_mode = config.data.generation.mode
+
     # Retrieve path to load dataset from
-    dataset_path = get_dataset_path(dataset_type, config)
+    dataset_path = get_dataset_path(dataset_type, data_distribution_mode)
 
     debug(f"Path to load dataset from: {dataset_path}")
 

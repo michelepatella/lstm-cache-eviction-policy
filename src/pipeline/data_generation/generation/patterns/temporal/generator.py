@@ -1,7 +1,7 @@
 import numpy as np
 
-from const import SECONDS_IN_HOUR
 from config.classes.Config import Config
+from const import SECONDS_IN_HOUR
 from pipeline.data_generation.generation.patterns.temporal.components.burst_setter import (
     set_bursty_scale,
 )
@@ -47,7 +47,7 @@ def generate_temporal_pattern(
         f"for temporal pattern generation"
     )
 
-    periodic_pattern_config = config.data.pattern.temporal.periodic
+    periodic_pattern_config = config.data.generation.pattern.temporal.periodic
     # Get scale and amplitude for
     # periodic component generation
     periodic_scale = periodic_pattern_config.scale
@@ -61,7 +61,9 @@ def generate_temporal_pattern(
         current_hour_in_day,
     )
 
-    burstiness_pattern_config = config.data.pattern.temporal.burstiness
+    burstiness_pattern_config = (
+        config.data.generation.pattern.temporal.burstiness
+    )
     # Get burst high and low for burstiness,
     # as well as burst start and end hours
     burst_high = burstiness_pattern_config.high

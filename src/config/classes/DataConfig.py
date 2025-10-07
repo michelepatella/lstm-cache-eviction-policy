@@ -1,22 +1,25 @@
 from pydantic import BaseModel, confloat, conint, model_validator
 
-from const import DATA_DISTRIBUTION_MODES, DATA_GENERATION_FINAL_HOUR, DATA_GENERATION_INITIAL_HOUR
 from config.classes.validation.choice_field_validator import (
     validate_choice_field,
 )
 from config.classes.validation.min_max_validator import (
     are_min_max_valid,
 )
+from const import (
+    DATA_DISTRIBUTION_MODES,
+    DATA_GENERATION_FINAL_HOUR,
+    DATA_GENERATION_INITIAL_HOUR,
+)
 
 
 class HoursConfig(BaseModel):
-    start: conint(ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR)  # type: ignore[valid-type]
-    end: conint(ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR)  # type: ignore[valid-type]
-
-
-# Data — Distribution
-class RequestsConfig(BaseModel):
-    count: conint(gt=0)  # type: ignore[valid-type]
+    start: conint(
+        ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR
+    )  # type: ignore[valid-type]
+    end: conint(
+        ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR
+    )  # type: ignore[valid-type]
 
 
 class KeysConfig(BaseModel):
@@ -45,37 +48,6 @@ class KeysConfig(BaseModel):
         )
 
         return self
-
-
-class GeneralDataConfig(BaseModel):
-    seed: conint(ge=0)  # type: ignore[valid-type]
-    mode: str
-    requests: RequestsConfig
-    keys: KeysConfig
-
-    @model_validator(mode="after")
-    def check_data_distribution_mode(
-        self: "GeneralDataConfig",
-    ) -> "GeneralDataConfig":
-        """
-        Check whether data distribution
-        mode is valid or not.
-
-        This function validates the data
-        distribution mode.
-
-        Parameters:
-            self (GeneralDataConfig): Current model instance.
-
-        Returns:
-            GeneralDataConfig: Validated model instance.
-        """
-        return validate_choice_field(
-            self,
-            self.mode,
-            DATA_DISTRIBUTION_MODES,
-            "data.general.mode",
-        )
 
 
 # Data — Pattern
@@ -113,17 +85,6 @@ class ToggleConfig(BaseModel):
     offsets: ToggleOffsetsConfig
 
 
-class DistortionOffsetsConfig(BaseModel):
-    history: int
-    correction: int
-
-
-class DistortionConfig(BaseModel):
-    interval: conint(gt=0)  # type: ignore[valid-type]
-    hours: HoursConfig
-    offsets: DistortionOffsetsConfig
-
-
 class NoiseConfig(BaseModel):
     min: int
     max: int
@@ -145,10 +106,22 @@ class NoiseConfig(BaseModel):
         are_min_max_valid(
             self.min,
             self.max,
-            context="data.pattern.access.behavior.noise",
+            context="data.pattern.access.behavior.distortion.noise",
         )
 
         return self
+
+
+class DistortionOffsetsConfig(BaseModel):
+    history: int
+    correction: int
+
+
+class DistortionConfig(BaseModel):
+    interval: conint(gt=0)  # type: ignore[valid-type]
+    hours: HoursConfig
+    offsets: DistortionOffsetsConfig
+    noise: NoiseConfig
 
 
 class MemoryConfig(BaseModel):
@@ -168,7 +141,6 @@ class BehaviorConfig(BaseModel):
     toggle: ToggleConfig
     cycle: CycleConfig
     distortion: DistortionConfig
-    noise: NoiseConfig
     memory: MemoryConfig
 
 
@@ -178,8 +150,12 @@ class AccessConfig(BaseModel):
 
 
 class BurstinessHoursConfig(BaseModel):
-    start: conint(ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR)  # type: ignore[valid-type]
-    end: conint(ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR)  # type: ignore[valid-type]
+    start: conint(
+        ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR
+    )  # type: ignore[valid-type]
+    end: conint(
+        ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR
+    )  # type: ignore[valid-type]
 
 
 class BurstinessConfig(BaseModel):
@@ -226,50 +202,42 @@ class PatternConfig(BaseModel):
     temporal: TemporalConfig
 
 
-# Data — Sequence
-class EmbeddingConfig(BaseModel):
-    dimension: conint(gt=0)  # type: ignore[valid-type]
+class GenerationConfig(BaseModel):
+    seed: conint(ge=0)  # type: ignore[valid-type]
+    mode: str
+    requests: conint(gt=0)  # type: ignore[valid-type]
+    keys: KeysConfig
+    pattern: PatternConfig
 
+    @model_validator(mode="after")
+    def check_data_distribution_mode(
+        self: "GenerationConfig",
+    ) -> "GenerationConfig":
+        """
+        Check whether data distribution
+        mode is valid or not.
 
-class SequenceConfig(BaseModel):
-    length: conint(gt=0)  # type: ignore[valid-type]
-    embedding: EmbeddingConfig
+        This function validates the data
+        distribution mode.
 
+        Parameters:
+            self (GenerationConfig): Current model instance.
 
-# Data — Dataset
-class SplitConfig(BaseModel):
-    training: confloat(ge=0, le=1)  # type: ignore[valid-type]
-    validation: confloat(ge=0, le=1)  # type: ignore[valid-type]
-
-
-class DatasetRawPathsConfig(BaseModel):
-    static: str
-    dynamic: str
-
-
-class DatasetProcessedPathsConfig(BaseModel):
-    static: str
-    dynamic: str
-
-
-class DatasetPathsConfig(BaseModel):
-    raw: DatasetRawPathsConfig
-    processed: DatasetProcessedPathsConfig
-
-
-class DatasetConfig(BaseModel):
-    split: SplitConfig
-    paths: DatasetPathsConfig
+        Returns:
+            GenerationConfig: Validated model instance.
+        """
+        return validate_choice_field(
+            self,
+            self.mode,
+            DATA_DISTRIBUTION_MODES,
+            "data.general.mode",
+        )
 
 
 class DataConfig(BaseModel):
     """
     Class representing the data configuration
-    settings including general, pattern,
-    sequence, and dataset settings.
+    settings including generation settings.
     """
 
-    general: GeneralDataConfig
-    pattern: PatternConfig
-    sequence: SequenceConfig
-    dataset: DatasetConfig
+    generation: GenerationConfig

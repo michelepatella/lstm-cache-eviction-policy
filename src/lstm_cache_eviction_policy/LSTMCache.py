@@ -1,8 +1,8 @@
 import random
 
-from utils.simulation.classes.BaseCache import BaseCache
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
+from utils.simulation.classes.BaseCache import BaseCache
 
 
 class LSTMCache(BaseCache):

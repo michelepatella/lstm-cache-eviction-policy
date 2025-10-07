@@ -5,8 +5,8 @@ from torch import Tensor
 
 from const import HOURS_IN_DAY, SECONDS_IN_HOUR
 from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
 from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
 
 
 def extract_time_key_from_row(

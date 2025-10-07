@@ -13,7 +13,8 @@ from utils.logs.levels.info_logger import info
 from utils.model.initialization.model_components_initializer import (
     initialize_model_components,
 )
-from utils.model.initialization.utils.model_loader import load_model
+from utils.model.initialization.utils.loader import load_model
+from utils.model.locator import get_model_path
 
 
 def initialize_trained_model(
@@ -41,7 +42,10 @@ def initialize_trained_model(
     # Prepare configuration
     model_params = config.model.params
     learning_rate = config.training.optimizer.params.learning_rate
-    model_path = config.model.general.path
+    data_distribution_mode = config.data.generation.mode
+
+    # Get the model path
+    model_path = get_model_path(data_distribution_mode)
 
     # Extract targets from
     # provided data loader

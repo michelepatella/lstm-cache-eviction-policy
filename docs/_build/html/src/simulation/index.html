@@ -40,19 +40,11 @@ el.replaceWith(d);
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="src.simulation.caches" href="caches/index.html">src.simulation.caches</a></code></dt>
+<dt><code class="name"><a title="src.simulation.baseline_caches" href="baseline_caches/index.html">src.simulation.baseline_caches</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt><code class="name"><a title="src.simulation.evaluation" href="evaluation/index.html">src.simulation.evaluation</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.simulation.main" href="main.html">src.simulation.main</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.simulation.prefetching" href="prefetching/index.html">src.simulation.prefetching</a></code></dt>
+<dt><code class="name"><a title="src.simulation.metrics" href="metrics/index.html">src.simulation.metrics</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -60,7 +52,11 @@ el.replaceWith(d);
 <dd>
 <div class="desc"></div>
 </dd>
-<dt><code class="name"><a title="src.simulation.utils" href="utils/index.html">src.simulation.utils</a></code></dt>
+<dt><code class="name"><a title="src.simulation.simulator" href="simulator.html">src.simulation.simulator</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="src.simulation.visualization" href="visualization/index.html">src.simulation.visualization</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -72,86 +68,128 @@ el.replaceWith(d);
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="src.simulation.run_simulations"><code class="name flex">
-<span>def <span class="ident">run_simulations</span></span>(<span>config_settings)</span>
+<span>def <span class="ident">run_simulations</span></span>(<span>config: config.classes.Config.Config) ‑> None</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def run_simulations(config_settings):
+<pre><code class="python">def run_simulations(config: Config) -&gt; None:
     &#34;&#34;&#34;
-    Method to orchestrate simulation of cache strategies.
-    :param config_settings: The configuration settings.
-    :return:
-    &#34;&#34;&#34;
-    # initial message
-    info(&#34;🔄 Cache simulations started...&#34;)
+    Run cache simulations for multiple cache eviction policies.
 
-    try:
-        # setup cache strategies
-        strategies = {
-            &#34;LRU&#34;: CacheWrapper(
-                LRUCache,
-                CacheMetricsLogger(),
-                config_settings,
-            ),
-            &#34;LFU&#34;: CacheWrapper(
-                LFUCache,
-                CacheMetricsLogger(),
-                config_settings,
-            ),
-            &#34;FIFO&#34;: CacheWrapper(
-                FIFOCache,
-                CacheMetricsLogger(),
-                config_settings,
-            ),
-            &#34;RANDOM&#34;: RandomCache(
-                None,
-                CacheMetricsLogger(),
-                config_settings,
-            ),
-            &#34;LSTM&#34;: LSTMCache(
-                None,
-                CacheMetricsLogger(),
-                config_settings,
-            ),
+    This function executes a complete cache simulation workflow
+    across different cache eviction strategies. For each policy,
+    it initializes the cache, runs the cache simulation, calculates
+    key performance metrics, saves the results, and plots performance data.
+
+    Parameters:
+        config (Config): Configuration object.
+
+    Returns:
+        None
+    &#34;&#34;&#34;
+    # Set new state
+    logs_phase.set(LOGS_SIMULATION_PHASE)
+
+    # Prepare configuration
+    data_distribution_mode = config.data.generation.mode
+
+    # Data setup and initialization
+    cache_eviction_policies = {
+        LRU_CACHE_NAME: CacheWrapper(
+            LRUCache,
+            CacheMetricsLogger(),
+            config,
+        ),
+        LFU_CACHE_NAME: CacheWrapper(
+            LFUCache,
+            CacheMetricsLogger(),
+            config,
+        ),
+        FIFO_CACHE_NAME: CacheWrapper(
+            FIFOCache,
+            CacheMetricsLogger(),
+            config,
+        ),
+        RANDOM_CACHE_NAME: RandomCache(
+            None,
+            CacheMetricsLogger(),
+            config,
+        ),
+    }
+    results = []
+
+    # For each cache eviction policy run a simulation
+    for policy, cache in cache_eviction_policies.items():
+        # Simulate a cache policy and
+        # get simulation insights
+        counters, timeline, cache_latencies = run_cache_simulation(
+            cache,
+            policy,
+            config,
+        )
+
+        # Calculate metrics at the end
+        # of cache simulation
+        (
+            hit_rate,
+            miss_rate,
+            eviction_mistake_rate,
+            avg_cache_latency,
+        ) = calculate_cache_simulation_metrics(
+            counters, cache_latencies, cache.metrics_logger, config
+        )
+
+        # Collect metrics together for the
+        # current cache eviction policy
+        metrics = {
+            POLICY_NAME: policy,
+            HIT_RATE_NAME: hit_rate,
+            MISS_RATE_NAME: miss_rate,
+            HIT_COUNTER_NAME: counters[HIT_COUNTER_NAME],
+            MISS_COUNTER_NAME: counters[MISS_COUNTER_NAME],
+            TIMELINE_NAME: timeline,
+            EVICTION_MISTAKE_RATE_NAME: eviction_mistake_rate,
+            AVG_CACHE_LATENCY_NAME: avg_cache_latency,
         }
 
-        # run simulations
-        results = []
-        for policy, cache in strategies.items():
-            # simulate a cache policy and save results
-            result = run_cache_simulation(
-                cache,
-                policy,
-                cache.metrics_logger,
-                config_settings,
-            )
-            results.append(result)
-    except KeyError as e:
-        raise KeyError(f&#34;KeyError: {e}.&#34;)
-    except TypeError as e:
-        raise TypeError(f&#34;TypeError: {e}.&#34;)
-    except ValueError as e:
-        raise ValueError(f&#34;ValueError: {e}.&#34;)
-    except AttributeError as e:
-        raise AttributeError(f&#34;AttributeError: {e}.&#34;)
-    except Exception as e:
-        raise RuntimeError(f&#34;RuntimeError: {e}.&#34;)
+        # Save metrics
+        results.append(metrics)
 
-    # show results
-    generate_caches_evaluation_report(results)
+    # Generate a report for simulation results
+    generate_simulation_report(results)
 
-    # show hit rate and miss rate plot
-    plot_hit_miss_rate_over_time(results)
+    # Save simulation results as JSON
+    results_save_path = (
+        RESULTS_DIRECTORY_PATH
+        / data_distribution_mode
+        / SIMULATION_RESULTS_FILE_NAME
+    )
+    save_json(results, results_save_path)
 
-    # print a successful message
-    info(&#34;✅ Cache simulations completed.&#34;)</code></pre>
+    debug(&#34;Simulation results saved to JSON file&#34;)
+
+    # Plot hit and miss rates over time
+    hit_miss_rate_plot_save_path = (
+        PLOTS_DIRECTORY_PATH
+        / data_distribution_mode
+        / HIT_MISS_RATES_PLOT_FILE_NAME
+    )
+    plot_hit_miss_rate(results, hit_miss_rate_plot_save_path)
+
+    info(&#34;Cache simulations completed&#34;)</code></pre>
 </details>
-<div class="desc"><p>Method to orchestrate simulation of cache strategies.
-:param config_settings: The configuration settings.
-:return:</p></div>
+<div class="desc"><p>Run cache simulations for multiple cache eviction policies.</p>
+<p>This function executes a complete cache simulation workflow
+across different cache eviction strategies. For each policy,
+it initializes the cache, runs the cache simulation, calculates
+key performance metrics, saves the results, and plots performance data.</p>
+<h2 id="parameters">Parameters</h2>
+<p>config (Config): Configuration object.</p>
+<h2 id="returns">Returns</h2>
+<p>None</p></div>
 </dd>
 </dl>
 </section>
@@ -170,12 +208,11 @@ el.replaceWith(d);
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="src.simulation.caches" href="caches/index.html">src.simulation.caches</a></code></li>
-<li><code><a title="src.simulation.evaluation" href="evaluation/index.html">src.simulation.evaluation</a></code></li>
-<li><code><a title="src.simulation.main" href="main.html">src.simulation.main</a></code></li>
-<li><code><a title="src.simulation.prefetching" href="prefetching/index.html">src.simulation.prefetching</a></code></li>
+<li><code><a title="src.simulation.baseline_caches" href="baseline_caches/index.html">src.simulation.baseline_caches</a></code></li>
+<li><code><a title="src.simulation.metrics" href="metrics/index.html">src.simulation.metrics</a></code></li>
 <li><code><a title="src.simulation.running" href="running/index.html">src.simulation.running</a></code></li>
-<li><code><a title="src.simulation.utils" href="utils/index.html">src.simulation.utils</a></code></li>
+<li><code><a title="src.simulation.simulator" href="simulator.html">src.simulation.simulator</a></code></li>
+<li><code><a title="src.simulation.visualization" href="visualization/index.html">src.simulation.visualization</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>

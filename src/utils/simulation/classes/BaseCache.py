@@ -2,11 +2,11 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from config.classes.Config import Config
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 from utils.simulation.classes.CacheMetricsLogger import (
     CacheMetricsLogger,
 )
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
 
 
 class BaseCache(ABC):
@@ -42,8 +42,8 @@ class BaseCache(ABC):
             None
         """
         # Prepare configuration
-        dimension = config.simulation.general.dimension
-        ttl = config.simulation.general.ttl
+        dimension = config.simulation.cache.general.dimension
+        ttl = config.simulation.cache.general.ttl
 
         debug(f"BaseCache dimension: {dimension}")
         debug(f"BaseCache TTL: {ttl}")

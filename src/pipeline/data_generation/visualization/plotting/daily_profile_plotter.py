@@ -9,11 +9,11 @@ from const import (
     DAILY_PROFILE_PLOT_TITLE,
     DAILY_PROFILE_PLOT_X_LABEL,
     DAILY_PROFILE_PLOT_Y_LABEL,
+    DATA_GENERATION_FINAL_HOUR,
+    DATA_GENERATION_INITIAL_HOUR,
     PLOT_LABEL_FONT_SIZE,
     PLOT_SIZE,
     PLOT_TITLE_FONT_SIZE,
-    DATA_GENERATION_FINAL_HOUR,
-    DATA_GENERATION_INITIAL_HOUR,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
@@ -45,13 +45,23 @@ def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
     try:
         # Define the number of bins to
         # be displayed
-        num_bins = int((DATA_GENERATION_FINAL_HOUR - DATA_GENERATION_INITIAL_HOUR) / DAILY_PROFILE_PLOT_BIN_SIZE) + 1
+        num_bins = (
+            int(
+                (DATA_GENERATION_FINAL_HOUR - DATA_GENERATION_INITIAL_HOUR)
+                / DAILY_PROFILE_PLOT_BIN_SIZE
+            )
+            + 1
+        )
 
         debug(f"Number of bins for daily profile plot: {num_bins}")
 
         # Define the bins ranging from predefined
         # min hour to max hour
-        bins = np.linspace(DATA_GENERATION_INITIAL_HOUR, DATA_GENERATION_FINAL_HOUR, num_bins + 1)
+        bins = np.linspace(
+            DATA_GENERATION_INITIAL_HOUR,
+            DATA_GENERATION_FINAL_HOUR,
+            num_bins + 1,
+        )
 
         debug(f"Bins for daily profile histogram: {bins}")
 

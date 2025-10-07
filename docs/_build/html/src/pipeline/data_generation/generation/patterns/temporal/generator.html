@@ -45,7 +45,7 @@ el.replaceWith(d);
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="src.pipeline.data_generation.generation.patterns.temporal.generator.generate_temporal_pattern"><code class="name flex">
-<span>def <span class="ident">generate_temporal_pattern</span></span>(<span>current_seconds_in_day: float, config: pipeline.config.classes.Config.Config) ‑> float</span>
+<span>def <span class="ident">generate_temporal_pattern</span></span>(<span>current_seconds_in_day: float, config: config.classes.Config.Config) ‑> float</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -87,7 +87,7 @@ el.replaceWith(d);
         f&#34;for temporal pattern generation&#34;
     )
 
-    periodic_pattern_config = config.data.pattern.temporal.periodic
+    periodic_pattern_config = config.data.generation.pattern.temporal.periodic
     # Get scale and amplitude for
     # periodic component generation
     periodic_scale = periodic_pattern_config.scale
@@ -101,7 +101,9 @@ el.replaceWith(d);
         current_hour_in_day,
     )
 
-    burstiness_pattern_config = config.data.pattern.temporal.burstiness
+    burstiness_pattern_config = (
+        config.data.generation.pattern.temporal.burstiness
+    )
     # Get burst high and low for burstiness,
     # as well as burst start and end hours
     burst_high = burstiness_pattern_config.high

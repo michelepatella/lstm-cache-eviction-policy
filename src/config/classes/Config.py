@@ -3,9 +3,7 @@ from typing import Dict, List, TypeAlias, Union
 from pydantic import BaseModel
 
 from config.classes.DataConfig import DataConfig
-from config.classes.EvaluationConfig import EvaluationConfig
 from config.classes.HardwareConfig import HardwareConfig
-from config.classes.InferenceConfig import InferenceConfig
 from config.classes.ModelConfig import ModelConfig
 from config.classes.SimulationConfig import SimulationConfig
 from config.classes.TestingConfig import TestingConfig
@@ -37,6 +35,4 @@ class Config(BaseModel):
     validation: ValidationConfig
     training: TrainingConfig
     testing: TestingConfig
-    evaluation: EvaluationConfig
-    inference: InferenceConfig
     simulation: SimulationConfig

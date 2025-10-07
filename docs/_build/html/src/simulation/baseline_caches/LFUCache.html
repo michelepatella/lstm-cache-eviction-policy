@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>src.simulation.baseline_caches.LFUCache API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>src.simulation.baseline_caches.LFUCache</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="src.simulation.baseline_caches.LFUCache.LFUCache"><code class="flex name class">
+<span>class <span class="ident">LFUCache</span></span>
+<span>(</span><span>maxsize: int, callback: Callable = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LFUCache(Cache):
+    &#34;&#34;&#34;
+    LFU (Least Frequently Used) cache implementation.
+
+    This cache evicts the least frequently used item when the
+    maximum size is reached. Optionally, a callback can be
+    provided to handle evicted keys.
+    &#34;&#34;&#34;
+
+    def __init__(
+        self: &#34;LFUCache&#34;, maxsize: int, callback: Callable = None
+    ) -&gt; None:
+        &#34;&#34;&#34;
+        Initialize the LFU cache.
+
+        This function initializes the LFU cache by setting up
+        the data structures to collect data during simulation,
+        and the optional callback provided.
+
+        Parameters:
+            self (&#34;LFUCache&#34;): Current class instance.
+            maxsize (int): Maximum size of the cache.
+            callback (Callable): Callback function invoked
+                                 with the evicted key.
+
+        Returns:
+            None
+        &#34;&#34;&#34;
+        # Class instantiation
+        super().__init__(maxsize)
+
+        debug(f&#34;LFU cache max size: {self.maxsize}&#34;)
+
+        # Fields initialization
+        self._data = {}
+        self._freq = defaultdict()
+        self.callback = callback
+
+        info(&#34;LFU cache initialized&#34;)
+
+    def __getitem__(self: &#34;LFUCache&#34;, key: int) -&gt; Any:
+        &#34;&#34;&#34;
+        Retrieve a key item from the LFU cache.
+
+        This function, given a key, retrieves its
+        item from the LFU cache and increments its
+        access frequency.
+
+        Parameters:
+            self (&#34;LFUCache&#34;): Current class instance.
+            key (int): Key to look up in the cache.
+
+        Returns:
+            Any: Retrieved key item.
+
+        Raises:
+            RuntimeError: If the key does not exist in the LFU cache.
+        &#34;&#34;&#34;
+        try:
+            debug(f&#34;Key to retrieve item from LFU cache for: {key}&#34;)
+
+            # Retrieve key item
+            item = self._data[key]
+
+            # Increment key item access
+            # frequency by one
+            self._freq[key] += 1
+
+            debug(
+                f&#34;LFU cache item retrieved: {item}, &#34;
+                f&#34;for key: {key}, frequency updated &#34;
+                f&#34;to: {self._freq[key]}&#34;
+            )
+
+            return item
+        except KeyError as e:
+            msg = &#34;Failed to retrieve item from LFU cache&#34;
+            error(&#34;%s: %s&#34;, msg, e)
+            raise RuntimeError(msg) from e
+
+    def __setitem__(self: &#34;LFUCache&#34;, key: int, item: Any) -&gt; None:
+        &#34;&#34;&#34;
+        Insert or update a key item in the LFU cache.
+
+        This function, given a key and its item, updates
+        or inserts the provided item for the key in the
+        LFU cache (depending on whether the key is already cached).
+
+        Parameters:
+            self (&#34;LFUCache&#34;): Current class instance.
+            key (int): Key to store in the cache.
+            item (Any): Value associated with the key.
+
+        Returns:
+            None
+        &#34;&#34;&#34;
+        # Check whether the key is
+        # already cached
+        if key in self._data:
+            # Update key item and increment
+            # its access frequency
+            self._data[key] = item
+            self._freq[key] += 1
+
+            debug(
+                f&#34;LFU cache item updated: {item},&#34;
+                f&#34; for key: {key}, frequency &#34;
+                f&#34;incremented to {self._freq[key]}&#34;
+            )
+        else:
+            # Check whether there is no space
+            # enough into the cache to store the key item
+            if len(self._data) &gt;= self.maxsize:
+                # Identify the least frequency
+                min_freq = min(self._freq.values())
+
+                # Identify key item(s) having the
+                # least access frequency
+                evicted_candidates = [
+                    k for k, f in self._freq.items() if f == min_freq
+                ]
+
+                debug(
+                    f&#34;Candidate keys to be evicted from&#34;
+                    f&#34; LFU cache: {evicted_candidates}, &#34;
+                    f&#34;with frequency: {min_freq}&#34;
+                )
+
+                # Evict the oldest among the least used keys
+                key_to_evict = evicted_candidates[0]
+
+                # Get the item corresponding to the
+                # key to be evicted
+                evicted_item = self._data[key_to_evict]
+
+                # Remove key item from the LFU cache
+                del self._data[key_to_evict]
+
+                # Remove frequency of key evicted
+                del self._freq[key_to_evict]
+
+                debug(
+                    f&#34;LFU cache item evicted: {evicted_item},&#34;
+                    f&#34; for key: {key_to_evict}, &#34;
+                    f&#34;with frequency {min_freq}&#34;
+                )
+
+                # Callback (if provided)
+                if self.callback:
+                    self.callback(key_to_evict)
+
+            # Insert new key item into
+            # the cache
+            self._data[key] = item
+
+            # Initialize its access
+            # frequency to 1
+            self._freq[key] = 1
+
+            debug(f&#34;LFU cache item inserted: {item}, for key: {key}&#34;)
+
+    def __delitem__(self: &#34;LFUCache&#34;, key: int) -&gt; None:
+        &#34;&#34;&#34;
+        Delete a key and its item from the LFU cache.
+
+        This function, given a key, deletes it
+        from the LFU cache along with its access frequency.
+
+        Parameters:
+            self (&#34;LFUCache&#34;): Current class instance.
+            key (int): Key to delete.
+
+        Returns:
+            None
+
+        Raises:
+            RuntimeError: If the key does not exist in the LFU cache.
+        &#34;&#34;&#34;
+        try:
+            debug(f&#34;Key to delete from LFU cache: {key}&#34;)
+
+            # Remove both key and its
+            # access frequency
+            del self._data[key]
+            del self._freq[key]
+        except KeyError as e:
+            msg = &#34;Failed to delete key from LFU cache&#34;
+            error(&#34;%s: %s&#34;, msg, e)
+            raise RuntimeError(msg) from e
+
+        debug(f&#34;LFU cache key deleted: {key}&#34;)
+
+    def __contains__(self: &#34;LFUCache&#34;, key: int) -&gt; bool:
+        &#34;&#34;&#34;
+        Check if a key exists in the LFU cache.
+
+        This function, given a key, returns True if
+        it exists in the LFU cache, False otherwise.
+
+        Parameters:
+            self (&#34;LFUCache&#34;): Current class instance.
+            key (int): Key to check.
+
+        Returns:
+            bool: True if key exists in the LFU cache,
+                  False otherwise.
+        &#34;&#34;&#34;
+        debug(f&#34;Key existence check in LFU cache: {key}&#34;)
+        return key in self._data
+
+    def pop(self: &#34;LFUCache&#34;, key: int) -&gt; Any | None:
+        &#34;&#34;&#34;
+        Remove a key from the LFU cache and return its item.
+
+        This function, given a key, removes it
+        from the LFU cache and returns its item.
+        If the key is not found, it returns None instead.
+
+        Parameters:
+            self (&#34;LFUCache&#34;): Current class instance.
+            key (int): Key to remove.
+
+        Returns:
+            Any | None: Item associated with the key removed
+                        (None if its key is not found in the LFU cache).
+        &#34;&#34;&#34;
+        # Pop the key from the cache and
+        # get its item
+        item = self._data.pop(key, None)
+
+        # If the key popped was in the
+        # cache
+        if item is not None:
+            # Remove its access frequency too
+            self._freq.pop(key, None)
+
+            debug(f&#34;LFU cache item popped: {item}, for key: {key}&#34;)
+        else:
+            debug(f&#34;LFU cache pop attempted for non-existent key: {key}&#34;)
+
+        return item
+
+    def __len__(self: &#34;LFUCache&#34;) -&gt; int:
+        &#34;&#34;&#34;
+        Get the number of items currently
+        in the LFU cache.
+
+        This function returns the number of items
+        currently stored in the LFU cache.
+
+        Parameters:
+            self (&#34;LFUCache&#34;): Current class instance.
+
+        Returns:
+            int: Number of cached items.
+        &#34;&#34;&#34;
+        return len(self._data)
+
+    def clear(self: &#34;LFUCache&#34;) -&gt; None:
+        &#34;&#34;&#34;
+        Clear all items from the LFU cache.
+
+        This function clears the LFU cache by
+        removing all stored items and their frequencies.
+
+        Parameters:
+            self (&#34;LFUCache&#34;): Current class instance.
+
+        Returns:
+            None
+        &#34;&#34;&#34;
+        # Clear cache removing both
+        # data and access frequencies
+        self._data.clear()
+        self._freq.clear()
+
+        debug(&#34;LFU cache cleared&#34;)</code></pre>
+</details>
+<div class="desc"><p>LFU (Least Frequently Used) cache implementation.</p>
+<p>This cache evicts the least frequently used item when the
+maximum size is reached. Optionally, a callback can be
+provided to handle evicted keys.</p>
+<p>Initialize the LFU cache.</p>
+<p>This function initializes the LFU cache by setting up
+the data structures to collect data during simulation,
+and the optional callback provided.</p>
+<h2 id="parameters">Parameters</h2>
+<p>self ("LFUCache"): Current class instance.
+maxsize (int): Maximum size of the cache.
+callback (Callable): Callback function invoked
+with the evicted key.</p>
+<h2 id="returns">Returns</h2>
+<p>None</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>cachetools.Cache</li>
+<li>collections.abc.MutableMapping</li>
+<li>collections.abc.Mapping</li>
+<li>collections.abc.Collection</li>
+<li>collections.abc.Sized</li>
+<li>collections.abc.Iterable</li>
+<li>collections.abc.Container</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="src.simulation.baseline_caches.LFUCache.LFUCache.clear"><code class="name flex">
+<span>def <span class="ident">clear</span></span>(<span>self: <a title="src.simulation.baseline_caches.LFUCache.LFUCache" href="#src.simulation.baseline_caches.LFUCache.LFUCache">LFUCache</a>) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def clear(self: &#34;LFUCache&#34;) -&gt; None:
+    &#34;&#34;&#34;
+    Clear all items from the LFU cache.
+
+    This function clears the LFU cache by
+    removing all stored items and their frequencies.
+
+    Parameters:
+        self (&#34;LFUCache&#34;): Current class instance.
+
+    Returns:
+        None
+    &#34;&#34;&#34;
+    # Clear cache removing both
+    # data and access frequencies
+    self._data.clear()
+    self._freq.clear()
+
+    debug(&#34;LFU cache cleared&#34;)</code></pre>
+</details>
+<div class="desc"><p>Clear all items from the LFU cache.</p>
+<p>This function clears the LFU cache by
+removing all stored items and their frequencies.</p>
+<h2 id="parameters">Parameters</h2>
+<p>self ("LFUCache"): Current class instance.</p>
+<h2 id="returns">Returns</h2>
+<p>None</p></div>
+</dd>
+<dt id="src.simulation.baseline_caches.LFUCache.LFUCache.pop"><code class="name flex">
+<span>def <span class="ident">pop</span></span>(<span>self: <a title="src.simulation.baseline_caches.LFUCache.LFUCache" href="#src.simulation.baseline_caches.LFUCache.LFUCache">LFUCache</a>,<br>key: int) ‑> typing.Any | None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pop(self: &#34;LFUCache&#34;, key: int) -&gt; Any | None:
+    &#34;&#34;&#34;
+    Remove a key from the LFU cache and return its item.
+
+    This function, given a key, removes it
+    from the LFU cache and returns its item.
+    If the key is not found, it returns None instead.
+
+    Parameters:
+        self (&#34;LFUCache&#34;): Current class instance.
+        key (int): Key to remove.
+
+    Returns:
+        Any | None: Item associated with the key removed
+                    (None if its key is not found in the LFU cache).
+    &#34;&#34;&#34;
+    # Pop the key from the cache and
+    # get its item
+    item = self._data.pop(key, None)
+
+    # If the key popped was in the
+    # cache
+    if item is not None:
+        # Remove its access frequency too
+        self._freq.pop(key, None)
+
+        debug(f&#34;LFU cache item popped: {item}, for key: {key}&#34;)
+    else:
+        debug(f&#34;LFU cache pop attempted for non-existent key: {key}&#34;)
+
+    return item</code></pre>
+</details>
+<div class="desc"><p>Remove a key from the LFU cache and return its item.</p>
+<p>This function, given a key, removes it
+from the LFU cache and returns its item.
+If the key is not found, it returns None instead.</p>
+<h2 id="parameters">Parameters</h2>
+<p>self ("LFUCache"): Current class instance.
+key (int): Key to remove.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Any | None</code></dt>
+<dd>Item associated with the key removed
+(None if its key is not found in the LFU cache).</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="src.simulation.baseline_caches" href="index.html">src.simulation.baseline_caches</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="src.simulation.baseline_caches.LFUCache.LFUCache" href="#src.simulation.baseline_caches.LFUCache.LFUCache">LFUCache</a></code></h4>
+<ul class="">
+<li><code><a title="src.simulation.baseline_caches.LFUCache.LFUCache.clear" href="#src.simulation.baseline_caches.LFUCache.LFUCache.clear">clear</a></code></li>
+<li><code><a title="src.simulation.baseline_caches.LFUCache.LFUCache.pop" href="#src.simulation.baseline_caches.LFUCache.LFUCache.pop">pop</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

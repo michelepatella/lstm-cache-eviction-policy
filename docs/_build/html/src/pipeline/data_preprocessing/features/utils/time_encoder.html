@@ -105,8 +105,8 @@ el.replaceWith(d);
 
         # Create new columns — sin and cosine
         # for the angles
-        df[SIN_TIME_COLUMN] = np.sin(angles)
-        df[COS_TIME_COLUMN] = np.cos(angles)
+        df[SIN_TIME_COLUMN_NAME] = np.sin(angles)
+        df[COS_TIME_COLUMN_NAME] = np.cos(angles)
 
         # Drop the original time column,
         # use only the new trigonometric columns

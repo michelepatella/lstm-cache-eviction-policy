@@ -45,7 +45,7 @@ el.replaceWith(d);
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="src.pipeline.data_preprocessing.removal.invalid_values_remover.remove_invalid_values"><code class="name flex">
-<span>def <span class="ident">remove_invalid_values</span></span>(<span>df: pandas.core.frame.DataFrame,<br>config: pipeline.config.classes.Config.Config) ‑> pandas.core.frame.DataFrame</span>
+<span>def <span class="ident">remove_invalid_values</span></span>(<span>df: pandas.core.frame.DataFrame, config: config.classes.Config.Config) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -77,19 +77,21 @@ el.replaceWith(d);
     &#34;&#34;&#34;
     try:
         # Retrieve min and max keys
-        min_key = config.data.general.keys.min
-        max_key = config.data.general.keys.max
+        min_key = config.data.generation.keys.min
+        max_key = config.data.generation.keys.max
 
         # Filter out rows having valid
         # request values only
-        valid_request_rows = df[REQUEST_COLUMN].apply(
+        valid_request_rows = df[REQUEST_COLUMN_NAME].apply(
             lambda x: isinstance(x, int) and min_key &lt;= x &lt;= max_key
         )
         new_df = df[valid_request_rows]
 
         # Filter out rows having valid
         # timestamp values only
-        valid_timestamp_rows = pd.to_numeric(new_df[TIMESTAMP_COLUMN]).notna()
+        valid_timestamp_rows = pd.to_numeric(
+            new_df[TIMESTAMP_COLUMN_NAME]
+        ).notna()
         new_df = new_df[valid_timestamp_rows]
 
         # Report for invalid values removal

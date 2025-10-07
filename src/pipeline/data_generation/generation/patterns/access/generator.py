@@ -52,7 +52,9 @@ def generate_access_pattern(
         int: Index of the next key to be accessed.
     """
     # Get the current hour in day
-    current_hour_in_day = (current_abs_seconds % SECONDS_IN_DAY) / SECONDS_IN_HOUR
+    current_hour_in_day = (
+        current_abs_seconds % SECONDS_IN_DAY
+    ) / SECONDS_IN_HOUR
 
     debug(
         f"Current hour in day for access "
@@ -71,7 +73,7 @@ def generate_access_pattern(
         f" to {first_key+keys_range_size}"
     )
 
-    behavior_config = config.data.pattern.access.behavior
+    behavior_config = config.data.generation.pattern.access.behavior
 
     # Prepare repetition pattern configuration
     repetition_interval = behavior_config.repetition.interval
@@ -101,10 +103,10 @@ def generate_access_pattern(
     distortion_correction = behavior_config.distortion.offsets.correction
     distortion_start = behavior_config.distortion.hours.start
     distortion_end = behavior_config.distortion.hours.end
+    distortion_noise_min = behavior_config.distortion.noise.min
+    distortion_noise_max = behavior_config.distortion.noise.max
 
     # Prepare memory pattern configuration
-    noise_min = behavior_config.noise.min
-    noise_max = behavior_config.noise.max
     memory_interval = behavior_config.memory.interval
     memory_offset = behavior_config.memory.offset
 
@@ -168,8 +170,8 @@ def generate_access_pattern(
             requests_count,
             keys_range_size,
             first_key,
-            noise_min,
-            noise_max,
+            distortion_noise_min,
+            distortion_noise_max,
         )
 
     # Memory/fallback pattern

@@ -45,7 +45,7 @@ el.replaceWith(d);
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="src.pipeline.data_generation.generation.patterns.generator.generate_pattern_requests"><code class="name flex">
-<span>def <span class="ident">generate_pattern_requests</span></span>(<span>keys_range: numpy.ndarray,<br>zipf_probs: numpy.ndarray,<br>config: pipeline.config.classes.Config.Config,<br>time_step_duration: int = None) ‑> Tuple[List[int], List[float]]</span>
+<span>def <span class="ident">generate_pattern_requests</span></span>(<span>keys_range: numpy.ndarray,<br>zipf_probs: numpy.ndarray,<br>config: config.classes.Config.Config,<br>time_step_duration: int = None) ‑> Tuple[List[int], List[float]]</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -81,23 +81,27 @@ el.replaceWith(d);
     &#34;&#34;&#34;
     # Initialize data
     requests = []
-    timestamps_seconds = [0.0]  # Get start from timestamp zero
-    current_day = 0  # Get start from day zero
-    current_seconds_in_day = 0.0  # Get start from midnight (second zero)
+    timestamps_seconds = (
+        DATA_GENERATION_INITIAL_TIMESTAMP  # Get start from timestamp zero
+    )
+    current_day = (
+        DATA_GENERATION_INITIAL_CURRENT_DAY  # Get start from day zero
+    )
+    current_seconds_in_day = DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY  # Get start from midnight (second zero)
 
-    general_data_config = config.data.general
+    general_data_config = config.data.generation
 
     # Get the number of requests
     # to be generated
     num_requests = (
         time_step_duration
         if time_step_duration is not None
-        else general_data_config.requests.count
+        else general_data_config.requests
     )
 
     debug(f&#34;Number of requests to be generated: {num_requests}&#34;)
 
-    debug(f&#34;Period of requests generation: {PERIOD}&#34;)
+    debug(f&#34;Period of requests generation: {SECONDS_IN_DAY}&#34;)
 
     # Define a seed to make the
     # generation process deterministic
@@ -122,13 +126,15 @@ el.replaceWith(d);
         current_seconds_in_day, current_day = update_time(
             current_seconds_in_day,
             current_day,
-            PERIOD,
+            SECONDS_IN_DAY,
             delta_t,
         )
 
         # Get current absolute seconds of the
         # request to be generated
-        current_abs_seconds = current_day * PERIOD + current_seconds_in_day
+        current_abs_seconds = (
+            current_day * SECONDS_IN_DAY + current_seconds_in_day
+        )
 
         # Generate a request (i.e., accessed key)
         request = generate_access_pattern(

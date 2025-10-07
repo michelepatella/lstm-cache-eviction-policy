@@ -44,22 +44,22 @@ el.replaceWith(d);
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="src.pipeline.utils.metrics.calculator.compute_model_metrics"><code class="name flex">
-<span>def <span class="ident">compute_model_metrics</span></span>(<span>targets: List[int],<br>predictions: List[int],<br>outputs: List[torch.Tensor],<br>config: pipeline.config.classes.Config.Config) ‑> Dict[str, int | float]</span>
+<dt id="src.pipeline.utils.metrics.calculator.calculate_model_metrics"><code class="name flex">
+<span>def <span class="ident">calculate_model_metrics</span></span>(<span>targets: List[int],<br>predictions: List[int],<br>outputs: List[torch.Tensor],<br>config: config.classes.Config.Config) ‑> Dict[str, int | float]</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def compute_model_metrics(
+<pre><code class="python">def calculate_model_metrics(
     targets: List[int],
     predictions: List[int],
     outputs: List[torch.Tensor],
     config: Config,
 ) -&gt; Dict[str, int | float]:
     &#34;&#34;&#34;
-    Compute evaluation metrics for a model.
+    Calculate evaluation metrics for a model.
 
     This function calculates multiple evaluation metrics for
     a model, including:
@@ -90,38 +90,21 @@ el.replaceWith(d);
               to mismatched lengths or invalid inputs.
     &#34;&#34;&#34;
     # Prepare configuration
-    top_k = config.evaluation.top_k
+    top_k = config.testing.metrics.top_k
 
     debug(f&#34;Targets length: {len(targets)}&#34;)
     debug(f&#34;Predictions length: {len(predictions)}&#34;)
     debug(f&#34;Outputs length: {len(outputs)}&#34;)
     debug(f&#34;Configured top-k: {top_k}&#34;)
 
-    try:
-        # Compute class report
-        class_report = classification_report(
-            targets,
-            predictions,
-            output_dict=True,
-            zero_division=0,
-        )
-    except (ValueError, TypeError) as e:
-        msg = &#34;Failed to compute class report&#34;
-        error(&#34;%s: %s&#34;, msg, e)
-        raise RuntimeError(msg) from e
+    # Generate a class report
+    class_report = generate_class_report(targets, predictions)
 
     # Calculate top-k accuracy
     top_k_accuracy = calculate_top_k_accuracy(targets, outputs, top_k)
 
-    try:
-        # Get confusion matrix
-        conf_matrix = confusion_matrix(targets, predictions)
-
-        debug(f&#34;Confusion matrix shape: {conf_matrix.shape}&#34;)
-    except (ValueError, TypeError) as e:
-        msg = &#34;Failed to get confusion matrix&#34;
-        error(&#34;%s: %s&#34;, msg, e)
-        raise RuntimeError(msg) from e
+    # Generate confusion matrix
+    conf_matrix = generate_confusion_matrix(targets, predictions)
 
     # Calculate Cohen&#39;s kappa score
     cohen_kappa_score = calculate_cohen_kappa_score(targets, predictions)
@@ -129,16 +112,16 @@ el.replaceWith(d);
     # Collect metrics in a dictionary
     metrics = {
         MODEL_METRICS_CLASS_REPORT_NAME: class_report,
-        MODEL_METRICS_TOP_K_ACCURACY: top_k_accuracy,
-        MODEL_METRICS_CONFUSION_MATRIX: conf_matrix.tolist(),
-        MODEL_METRICS_COHEN_KAPPA_SCORE: cohen_kappa_score,
+        MODEL_METRICS_TOP_K_ACCURACY_NAME: top_k_accuracy,
+        MODEL_METRICS_CONFUSION_MATRIX_NAME: conf_matrix.tolist(),
+        MODEL_METRICS_COHEN_KAPPA_SCORE_NAME: cohen_kappa_score,
     }
 
-    info(&#34;Model metrics computed&#34;)
+    info(&#34;Model metrics calculated&#34;)
 
     return metrics</code></pre>
 </details>
-<div class="desc"><p>Compute evaluation metrics for a model.</p>
+<div class="desc"><p>Calculate evaluation metrics for a model.</p>
 <p>This function calculates multiple evaluation metrics for
 a model, including:
 - Class-wise precision, recall, f1-score (class report).
@@ -187,7 +170,7 @@ to mismatched lengths or invalid inputs.</dd>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="src.pipeline.utils.metrics.calculator.compute_model_metrics" href="#src.pipeline.utils.metrics.calculator.compute_model_metrics">compute_model_metrics</a></code></li>
+<li><code><a title="src.pipeline.utils.metrics.calculator.calculate_model_metrics" href="#src.pipeline.utils.metrics.calculator.calculate_model_metrics">calculate_model_metrics</a></code></li>
 </ul>
 </li>
 </ul>

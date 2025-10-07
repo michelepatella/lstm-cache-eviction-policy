@@ -45,7 +45,7 @@ el.replaceWith(d);
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="src.pipeline.utils.inference.inferrer.infer_batch"><code class="name flex">
-<span>def <span class="ident">infer_batch</span></span>(<span>model: torch.nn.modules.module.Module,<br>data_loader: torch.utils.data.dataloader.DataLoader,<br>criterion: torch.nn.modules.module.Module,<br>device: torch.device,<br>config: pipeline.config.classes.Config.Config) ‑> Tuple[float, List[int], List[int], List[torch.Tensor], List[torch.Tensor]]</span>
+<span>def <span class="ident">infer_batch</span></span>(<span>model: torch.nn.modules.module.Module,<br>data_loader: torch.utils.data.dataloader.DataLoader,<br>criterion: torch.nn.modules.module.Module,<br>device: torch.device,<br>config: config.classes.Config.Config) ‑> Tuple[float, List[int], List[int], List[torch.Tensor], List[torch.Tensor]]</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -132,7 +132,7 @@ el.replaceWith(d);
                     (features, keys, targets),
                     device,
                     num_features,
-                    MC_DROPOUT_SAMPLES_DEFAULT,
+                    MC_DROPOUT_NUM_SAMPLES_DEFAULT,
                 )
 
                 debug(f&#34;Outputs mean shape: {outputs_mean.shape}&#34;)

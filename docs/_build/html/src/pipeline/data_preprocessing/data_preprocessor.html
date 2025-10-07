@@ -45,7 +45,7 @@ el.replaceWith(d);
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="src.pipeline.data_preprocessing.data_preprocessor.preprocess_data"><code class="name flex">
-<span>def <span class="ident">preprocess_data</span></span>(<span>config: pipeline.config.classes.Config.Config) ‑> None</span>
+<span>def <span class="ident">preprocess_data</span></span>(<span>config: config.classes.Config.Config) ‑> None</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -68,7 +68,7 @@ el.replaceWith(d);
     Returns:
         None
     &#34;&#34;&#34;
-    # Set the new pipeline state
+    # Set the new state
     logs_phase.set(LOGS_DATA_PREPROCESSING_PHASE)
 
     # Load the dataset
@@ -78,7 +78,7 @@ el.replaceWith(d);
     df = remove_missing_values(df)
 
     # Remove duplicates
-    df = remove_duplicates(df, [TIMESTAMP_COLUMN])
+    df = remove_duplicates(df, [TIMESTAMP_COLUMN_NAME])
 
     # Remove invalid values
     df = remove_invalid_values(df, config)
@@ -86,8 +86,8 @@ el.replaceWith(d);
     # Build new features
     df = build_features(
         df,
-        TIMESTAMP_COLUMN,
-        REQUEST_COLUMN,
+        TIMESTAMP_COLUMN_NAME,
+        REQUEST_COLUMN_NAME,
     )
 
     # Save preprocessed dataset

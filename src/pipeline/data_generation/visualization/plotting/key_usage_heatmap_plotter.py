@@ -4,9 +4,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 from const import (
-    PLOT_LABEL_FONT_SIZE,
-    PLOT_SIZE,
-    PLOT_TITLE_FONT_SIZE,
+    DATA_GENERATION_FINAL_HOUR,
+    DATA_GENERATION_INITIAL_HOUR,
     KEY_USAGE_HEATMAP_ASPECT,
     KEY_USAGE_HEATMAP_CMAP,
     KEY_USAGE_HEATMAP_COLORBAR_LABEL,
@@ -14,8 +13,9 @@ from const import (
     KEY_USAGE_HEATMAP_TITLE,
     KEY_USAGE_HEATMAP_X_LABEL,
     KEY_USAGE_HEATMAP_Y_LABEL,
-    DATA_GENERATION_FINAL_HOUR,
-    DATA_GENERATION_INITIAL_HOUR,
+    PLOT_LABEL_FONT_SIZE,
+    PLOT_SIZE,
+    PLOT_TITLE_FONT_SIZE,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
@@ -55,7 +55,9 @@ def plot_key_usage_heatmap(
     """
     try:
         # Initialize heatmap
-        num_hours = DATA_GENERATION_FINAL_HOUR - DATA_GENERATION_INITIAL_HOUR + 1
+        num_hours = (
+            DATA_GENERATION_FINAL_HOUR - DATA_GENERATION_INITIAL_HOUR + 1
+        )
         num_keys = max_key - min_key + 1
         heatmap = np.zeros(
             (num_hours, num_keys),
@@ -87,7 +89,9 @@ def plot_key_usage_heatmap(
             # corresponding requested key is also
             # within the predefined range
             if (
-                    DATA_GENERATION_INITIAL_HOUR <= current_timestamp_hour_int < DATA_GENERATION_INITIAL_HOUR + num_hours
+                DATA_GENERATION_INITIAL_HOUR
+                <= current_timestamp_hour_int
+                < DATA_GENERATION_INITIAL_HOUR + num_hours
             ) and (0 <= requested_key_idx < num_keys):
                 # Increment the current heatmap
                 # position by one
@@ -118,7 +122,13 @@ def plot_key_usage_heatmap(
         )
         plt.yticks(
             ticks=np.arange(num_hours),
-            labels=[f"{h}:00" for h in range(DATA_GENERATION_INITIAL_HOUR, DATA_GENERATION_FINAL_HOUR + 1)],
+            labels=[
+                f"{h}:00"
+                for h in range(
+                    DATA_GENERATION_INITIAL_HOUR,
+                    DATA_GENERATION_FINAL_HOUR + 1,
+                )
+            ],
             fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.xticks(

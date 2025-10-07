@@ -2,7 +2,6 @@ import logging
 from pathlib import Path
 from typing import Literal
 
-
 # ----------------------------
 # Project
 # ----------------------------
@@ -89,6 +88,20 @@ DATASET_PREPROCESSED_TYPE = "preprocessed"
 TRAINING_SPLIT_TYPE = "training"
 TESTING_SPLIT_TYPE = "testing"
 
+STATIC_RAW_DATASET_DIRECTORY = PROJECT_ROOT / "data" / "raw" / "static"
+DYNAMIC_RAW_DATASET_DIRECTORY = PROJECT_ROOT / "data" / "raw" / "dynamic"
+STATIC_PROCESSED_DATASET_DIRECTORY = (
+    PROJECT_ROOT / "data" / "processed" / "static"
+)
+DYNAMIC_PROCESSED_DATASET_DIRECTORY = (
+    PROJECT_ROOT / "data" / "processed" / "dynamic"
+)
+
+STATIC_RAW_DATASET_FILE_NAME = "static_raw_dataset.csv"
+DYNAMIC_RAW_DATASET_FILE_NAME = "dynamic_raw_dataset.csv"
+STATIC_PROCESSED_DATASET_FILE_NAME = "static_processed_dataset.csv"
+DYNAMIC_PROCESSED_DATASET_FILE_NAME = "dynamic_processed_dataset.csv"
+
 
 # ----------------------------
 # Data Generation
@@ -146,6 +159,12 @@ LSTM_PARAM_NAMES = [
     "bidirectional",
     "proj_size",
 ]
+
+TRAINED_MODEL_STATIC_DIRECTORY = PROJECT_ROOT / "models" / "static"
+TRAINED_MODEL_DYNAMIC_DIRECTORY = PROJECT_ROOT / "models" / "dynamic"
+
+TRAINED_MODEL_STATIC_FILE_NAME = "trained_static_model.pt"
+TRAINED_MODEL_DYNAMIC_FILE_NAME = "trained_dynamic_model.pt"
 
 
 # ----------------------------

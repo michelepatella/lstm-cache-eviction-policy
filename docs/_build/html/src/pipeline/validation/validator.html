@@ -45,7 +45,7 @@ el.replaceWith(d);
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="src.pipeline.validation.validator.validate_model"><code class="name flex">
-<span>def <span class="ident">validate_model</span></span>(<span>config: pipeline.config.classes.Config.Config) ‑> pipeline.config.classes.Config.Config</span>
+<span>def <span class="ident">validate_model</span></span>(<span>config: config.classes.Config.Config) ‑> config.classes.Config.Config</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -67,7 +67,7 @@ el.replaceWith(d);
     Returns:
         Config: Updated configuration object (with the best hyperparameters).
     &#34;&#34;&#34;
-    # Set the new pipeline state
+    # Set the new state
     logs_phase.set(LOGS_VALIDATION_PHASE)
 
     # Prepare configuration

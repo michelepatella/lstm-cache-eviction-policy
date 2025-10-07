@@ -1,3 +1,4 @@
+from config.classes.Config import Config
 from const import (
     DATASET_PREPROCESSED_TYPE,
     DATASET_RAW_TYPE,
@@ -5,7 +6,6 @@ from const import (
     REQUEST_COLUMN_NAME,
     TIMESTAMP_COLUMN_NAME,
 )
-from config.classes.Config import Config
 from pipeline.data_preprocessing.features.builder import (
     build_features,
 )

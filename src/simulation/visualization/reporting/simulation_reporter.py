@@ -1,10 +1,10 @@
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 from const import (
+    AVG_CACHE_LATENCY_NAME,
+    EVICTION_MISTAKE_RATE_NAME,
     HIT_RATE_NAME,
     MISS_RATE_NAME,
-    EVICTION_MISTAKE_RATE_NAME,
-    AVG_CACHE_LATENCY_NAME,
     POLICY_NAME,
 )
 from utils.logs.levels.error_logger import error

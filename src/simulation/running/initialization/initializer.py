@@ -1,4 +1,4 @@
-from typing import Dict, Tuple, List
+from typing import Dict, List, Tuple
 
 from torch.utils.data import DataLoader
 
@@ -43,8 +43,8 @@ def initialize_simulation(
             testing, and a data loader for iterating over the testing set.
     """
     # Prepare configuration
-    testing_batch_size = config.testing.batch_size
-    testing_shuffle = config.testing.shuffle
+    testing_batch_size = config.testing.general.batch_size
+    testing_shuffle = config.testing.general.shuffle
 
     # Initialize data
     counters = {

@@ -1,7 +1,7 @@
 import pandas as pd
 
-from const import REQUEST_COLUMN_NAME, TIMESTAMP_COLUMN_NAME
 from config.classes.Config import Config
+from const import REQUEST_COLUMN_NAME, TIMESTAMP_COLUMN_NAME
 from pipeline.data_preprocessing.visualization.reporting.dataset_removal_reporter import (
     report_dataset_removal,
 )
@@ -34,8 +34,8 @@ def remove_invalid_values(df: pd.DataFrame, config: Config) -> pd.DataFrame:
     """
     try:
         # Retrieve min and max keys
-        min_key = config.data.general.keys.min
-        max_key = config.data.general.keys.max
+        min_key = config.data.generation.keys.min
+        max_key = config.data.generation.keys.max
 
         # Filter out rows having valid
         # request values only
@@ -46,7 +46,9 @@ def remove_invalid_values(df: pd.DataFrame, config: Config) -> pd.DataFrame:
 
         # Filter out rows having valid
         # timestamp values only
-        valid_timestamp_rows = pd.to_numeric(new_df[TIMESTAMP_COLUMN_NAME]).notna()
+        valid_timestamp_rows = pd.to_numeric(
+            new_df[TIMESTAMP_COLUMN_NAME]
+        ).notna()
         new_df = new_df[valid_timestamp_rows]
 
         # Report for invalid values removal

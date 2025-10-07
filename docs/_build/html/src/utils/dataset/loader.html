@@ -45,7 +45,7 @@ el.replaceWith(d);
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="src.utils.dataset.loader.load_dataset"><code class="name flex">
-<span>def <span class="ident">load_dataset</span></span>(<span>dataset_type: str, config: pipeline.config.classes.Config.Config) ‑> pandas.core.frame.DataFrame</span>
+<span>def <span class="ident">load_dataset</span></span>(<span>dataset_type: str, config: config.classes.Config.Config) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -74,8 +74,11 @@ el.replaceWith(d);
             * The dataset file is empty.
             * An error occurred while parsing the dataset file.
     &#34;&#34;&#34;
+    # Prepare configuration
+    data_distribution_mode = config.data.generation.mode
+
     # Retrieve path to load dataset from
-    dataset_path = get_dataset_path(dataset_type, config)
+    dataset_path = get_dataset_path(dataset_type, data_distribution_mode)
 
     debug(f&#34;Path to load dataset from: {dataset_path}&#34;)
 

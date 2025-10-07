@@ -1,13 +1,14 @@
-from typing import Any, Tuple, Dict, List
+import time
+from typing import Any, Dict, List, Tuple
 
 from tqdm import tqdm
-import time
 
 from config.classes.Config import Config
 from const import LSTM_CACHE_NAME, MICROSECONDS_IN_SECOND
 from lstm_cache_eviction_policy.management.lstm_manager import (
     manage_lstm_cache,
 )
+from simulation.running.initialization.initializer import initialize_simulation
 from simulation.running.utils.hit_miss_timeline_updater import (
     update_hit_miss_timeline,
 )
@@ -16,7 +17,6 @@ from simulation.running.utils.time_key_from_row_extractor import (
 )
 from utils.logs.levels.error_logger import error
 from utils.simulation.hit_miss_checker_updater import check_update_hit_miss
-from simulation.running.initialization.initializer import initialize_simulation
 
 
 def run_cache_simulation(

@@ -33,7 +33,7 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>src.pipeline.training</code></h1>
+<h1 class="title">Namespace <code>src.pipeline.training</code></h1>
 </header>
 <section id="section-intro">
 </section>
@@ -53,110 +53,6 @@ el.replaceWith(d);
 <section>
 </section>
 <section>
-<h2 class="section-title" id="header-functions">Functions</h2>
-<dl>
-<dt id="src.pipeline.training.train_model"><code class="name flex">
-<span>def <span class="ident">train_model</span></span>(<span>config: pipeline.config.classes.Config.Config) ‑> None</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def train_model(config: Config) -&gt; None:
-    &#34;&#34;&#34;
-    Train LSTM model.
-
-    This function trains the LSTM model, by orchestrating
-    model and training setup, as well as training itself.
-    The best model found during training process is saved
-    for further usage.
-
-    Parameters:
-        config (Config): Configuration object.
-
-    Returns:
-        None
-    &#34;&#34;&#34;
-    # Set the new pipeline state
-    logs_phase.set(LOGS_TRAINING_PHASE)
-
-    # Prepare configuration
-    training_batch_size = config.training.general.batch_size
-    training_shuffle = config.training.general.shuffle
-    validation_batch_size = config.validation.general.batch_size
-    validation_shuffle = config.validation.general.shuffle
-    model_params = config.model.params
-    learning_rate = config.training.optimizer.params.learning_rate
-    training_num_epochs = config.training.general.epochs.count
-    model_save_path = config.model.general.path
-
-    # Load the training set and the
-    # training loader
-    training_set, training_loader = initialize_data_loader(
-        TRAINING_SPLIT_TYPE,
-        training_batch_size,
-        validation_shuffle,
-        config,
-        AccessLogsDataset,
-    )
-
-    # Split training set into training
-    # and validation sets
-    training_set, validation_set = split_training_set(training_set, config)
-
-    # Create a loader both for
-    # training and validation sets
-    training_loader = create_data_loader(
-        training_set,
-        training_batch_size,
-        training_shuffle,
-    )
-    validation_loader = create_data_loader(
-        validation_set,
-        validation_batch_size,
-        validation_shuffle,
-    )
-
-    # Extract targets from training loader
-    targets = extract_targets_from_data_loader(training_loader)
-
-    # Model setup for training
-    device, criterion, model, optimizer = initialize_model_components(
-        model_params,
-        learning_rate,
-        targets,
-        config,
-    )
-
-    # Train the model
-    _, model = train_n_epochs(
-        training_num_epochs,
-        model,
-        training_loader,
-        validation_loader,
-        optimizer,
-        criterion,
-        device,
-        config,
-    )
-
-    # Save the best model trained
-    save_model(model, model_save_path)
-
-    info(&#34;Model training completed&#34;)</code></pre>
-</details>
-<div class="desc"><p>Train LSTM model.</p>
-<p>This function trains the LSTM model, by orchestrating
-model and training setup, as well as training itself.
-The best model found during training process is saved
-for further usage.</p>
-<h2 id="parameters">Parameters</h2>
-<p>config (Config): Configuration object.</p>
-<h2 id="returns">Returns</h2>
-<p>None</p></div>
-</dd>
-</dl>
 </section>
 <section>
 </section>
@@ -175,11 +71,6 @@ for further usage.</p>
 <ul>
 <li><code><a title="src.pipeline.training.trainer" href="trainer.html">src.pipeline.training.trainer</a></code></li>
 <li><code><a title="src.pipeline.training.utils" href="utils/index.html">src.pipeline.training.utils</a></code></li>
-</ul>
-</li>
-<li><h3><a href="#header-functions">Functions</a></h3>
-<ul class="">
-<li><code><a title="src.pipeline.training.train_model" href="#src.pipeline.training.train_model">train_model</a></code></li>
 </ul>
 </li>
 </ul>

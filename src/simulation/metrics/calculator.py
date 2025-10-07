@@ -1,17 +1,17 @@
 from typing import Dict, List, Tuple
 
 from config.classes.Config import Config
+from simulation.metrics.components.avg_cache_latency_calculator import (
+    calculate_avg_cache_latency,
+)
 from simulation.metrics.components.eviction_mistake_rate_calculator import (
     calculate_eviction_mistake_rate,
 )
 from simulation.metrics.components.hit_miss_rate_calculator import (
     calculate_hit_miss_rate,
 )
-from simulation.metrics.components.avg_cache_latency_calculator import (
-    calculate_avg_cache_latency,
-)
-from utils.simulation.classes.CacheMetricsLogger import CacheMetricsLogger
 from utils.logs.levels.info_logger import info
+from utils.simulation.classes.CacheMetricsLogger import CacheMetricsLogger
 
 
 def calculate_cache_simulation_metrics(
@@ -44,7 +44,7 @@ def calculate_cache_simulation_metrics(
                                            average latency.
     """
     # Prepare configuration
-    mistake_window = config.simulation.evaluation.mistake_rate.window
+    mistake_window = config.simulation.metrics.mistake_rate.window
 
     # Calculate hit and miss rates
     hit_rate, miss_rate = calculate_hit_miss_rate(counters)

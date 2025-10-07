@@ -45,7 +45,7 @@ el.replaceWith(d);
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="src.pipeline.utils.dataset.saver.save_dataset"><code class="name flex">
-<span>def <span class="ident">save_dataset</span></span>(<span>df: pandas.core.frame.DataFrame,<br>dataset_type: str,<br>config: pipeline.config.classes.Config.Config) ‑> None</span>
+<span>def <span class="ident">save_dataset</span></span>(<span>df: pandas.core.frame.DataFrame,<br>dataset_type: str,<br>config: config.classes.Config.Config) ‑> None</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -72,9 +72,12 @@ el.replaceWith(d);
         RuntimeError: Generic operating system error while
                       saving the dataset at specified path.
     &#34;&#34;&#34;
+    # Prepare configuration
+    data_distribution_mode = config.data.generation.mode
+
     # Retrieve path where
     # to save dataset
-    dataset_path = get_dataset_path(dataset_type, config)
+    dataset_path = get_dataset_path(dataset_type, data_distribution_mode)
 
     debug(f&#34;Path where to save dataset: {dataset_path}&#34;)
 

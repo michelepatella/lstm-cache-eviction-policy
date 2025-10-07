@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import Dict, List
 
 from const import (
     HIT_COUNTER_NAME,

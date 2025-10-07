@@ -1,20 +1,20 @@
 import torch
 from box.box import Box
 
+from config.classes.Config import Config
 from const import (
+    CONFUSION_MATRIX_FILE_NAME,
     LOGS_TESTING_PHASE,
     MODEL_METRICS_CLASS_REPORT_NAME,
     MODEL_METRICS_COHEN_KAPPA_SCORE_NAME,
     MODEL_METRICS_CONFUSION_MATRIX_NAME,
     MODEL_METRICS_TOP_K_ACCURACY_NAME,
-    TESTING_SPLIT_TYPE,
+    MODEL_RESULTS_FILE_NAME,
     PLOTS_DIRECTORY_PATH,
-    CONFUSION_MATRIX_FILE_NAME,
     PRECISION_RECALL_CURVE_FILE_NAME,
     RESULTS_DIRECTORY_PATH,
-    MODEL_RESULTS_FILE_NAME,
+    TESTING_SPLIT_TYPE,
 )
-from config.classes.Config import Config
 from pipeline.testing.visualization.plotting.confusion_matrix_plotter import (
     plot_confusion_matrix,
 )
@@ -27,7 +27,6 @@ from pipeline.testing.visualization.reporting.model_evaluation_reporter import (
 from pipeline.utils.evaluation.evaluator import evaluate_model
 from utils.data_loader.initializer import initialize_data_loader
 from utils.dataset.AccessLogsDataset import AccessLogsDataset
-
 from utils.logs.initializer import logs_phase
 from utils.logs.levels.info_logger import info
 from utils.model.initialization.trained_model_initializer import (
@@ -53,11 +52,13 @@ def test_model(config: Config) -> None:
     logs_phase.set(LOGS_TESTING_PHASE)
 
     # Prepare configuration
-    data_distribution_mode = config.data.general.mode
-    testing_batch_size = config.testing.batch_size
-    testing_shuffle = config.testing.shuffle
-    num_keys = config.data.general.keys.max - config.data.general.keys.min + 1
-    top_k = config.evaluation.top_k
+    data_distribution_mode = config.data.generation.mode
+    testing_batch_size = config.testing.general.batch_size
+    testing_shuffle = config.testing.general.shuffle
+    num_keys = (
+        config.data.generation.keys.max - config.data.generation.keys.min + 1
+    )
+    top_k = config.testing.metrics.top_k
 
     # Setup testing data loader
     _, testing_loader = initialize_data_loader(
@@ -76,9 +77,9 @@ def test_model(config: Config) -> None:
 
     # Prepare path where to save evaluation metrics
     metrics_save_path = (
-            RESULTS_DIRECTORY_PATH
-            / data_distribution_mode
-            / MODEL_RESULTS_FILE_NAME
+        RESULTS_DIRECTORY_PATH
+        / data_distribution_mode
+        / MODEL_RESULTS_FILE_NAME
     )
 
     # Evaluate model
@@ -124,14 +125,14 @@ def test_model(config: Config) -> None:
 
     # Prepare save paths
     precision_recall_save_path = (
-            PLOTS_DIRECTORY_PATH
-            / data_distribution_mode
-            / PRECISION_RECALL_CURVE_FILE_NAME
+        PLOTS_DIRECTORY_PATH
+        / data_distribution_mode
+        / PRECISION_RECALL_CURVE_FILE_NAME
     )
     confusion_matrix_save_path = (
-            PLOTS_DIRECTORY_PATH
-            / data_distribution_mode
-            / CONFUSION_MATRIX_FILE_NAME
+        PLOTS_DIRECTORY_PATH
+        / data_distribution_mode
+        / CONFUSION_MATRIX_FILE_NAME
     )
 
     # Show testing-related plots

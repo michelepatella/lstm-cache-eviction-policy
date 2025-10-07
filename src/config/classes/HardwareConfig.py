@@ -1,9 +1,9 @@
 from pydantic import BaseModel, model_validator
 
-from const import HW_DEVICES
 from config.classes.validation.choice_field_validator import (
     validate_choice_field,
 )
+from const import HW_DEVICES
 
 
 class HardwareConfig(BaseModel):

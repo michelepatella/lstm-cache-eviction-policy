@@ -1,26 +1,27 @@
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
 import matplotlib.pyplot as plt
 
 from const import (
-    PLOT_SIZE,
-    POLICY_NAME,
-    TIMELINE_NAME,
-    TIMELINE_INDEX_NAME,
-    TIMELINE_INSTANT_HIT_RATE_NAME,
-    PLOT_TITLE_FONT_SIZE,
-    PLOT_LABEL_FONT_SIZE,
     HIT_MISS_RATE_SUBPLOT_X_LABEL,
-    HIT_MISS_RATES_PLOT_NUM_ROWS,
     HIT_MISS_RATES_PLOT_NUM_COLS,
+    HIT_MISS_RATES_PLOT_NUM_ROWS,
     HIT_MISS_RATES_SUBPLOTS,
-    HIT_MISS_RATES_SUBPLOTS_TRANSFORM_NAME,
     HIT_MISS_RATES_SUBPLOTS_LINE_STYLE_NAME,
     HIT_MISS_RATES_SUBPLOTS_TITLE_NAME,
+    HIT_MISS_RATES_SUBPLOTS_TRANSFORM_NAME,
     HIT_MISS_RATES_SUBPLOTS_Y_LABEL_NAME,
+    PLOT_LABEL_FONT_SIZE,
+    PLOT_SIZE,
+    PLOT_TITLE_FONT_SIZE,
+    POLICY_NAME,
+    TIMELINE_INDEX_NAME,
+    TIMELINE_INSTANT_HIT_RATE_NAME,
+    TIMELINE_NAME,
 )
 from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
 from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
 
 
 def plot_hit_miss_rate(
@@ -43,10 +44,11 @@ def plot_hit_miss_rate(
         None
 
     Raises:
-        RuntimeError: If an error occurs while plotting hit and miss rates, e.g.:
-            * If one of the timeline fields is not numeric.
-            * If expected keys are missing.
-            * If matplotlib receives invalid data for plotting.
+        RuntimeError: If an error occurs while plotting hit
+                      and miss rates, e.g.:
+                        * If one of the timeline fields is not numeric.
+                        * If expected keys are missing.
+                        * If matplotlib receives invalid data for plotting.
     """
     try:
         debug(f"Number of policies to plot hit/miss rates: {len(results)}")

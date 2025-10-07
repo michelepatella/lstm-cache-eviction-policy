@@ -1,9 +1,9 @@
 import torch
 import torch.nn as nn
 
-from const import LSTM_PARAM_NAMES, MC_DROPOUT_DEFAULT
 from config.classes.Config import Config
 from config.classes.ModelConfig import ModelParamsConfig
+from const import LSTM_PARAM_NAMES, MC_DROPOUT_DEFAULT
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
@@ -34,9 +34,9 @@ class LSTM(nn.Module):
         try:
             # Prepare configuration
             model_params = config.model.params
-            max_key = config.data.general.keys.max
-            min_key = config.data.general.keys.min
-            embedding_dim = config.data.sequence.embedding.dimension
+            max_key = config.data.generation.keys.max
+            min_key = config.data.generation.keys.min
+            embedding_dim = config.model.sequence.embedding.dimension
             num_features = config.model.general.features.count
 
             # For each required parameter

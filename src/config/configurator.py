@@ -1,6 +1,6 @@
-from const import LOGS_CONFIGURATION_PHASE
 from config.classes.Config import Config
 from config.io.loader import load_config
+from const import LOGS_CONFIGURATION_PHASE
 from utils.logs.initializer import logs_phase
 from utils.logs.levels.info_logger import info
 

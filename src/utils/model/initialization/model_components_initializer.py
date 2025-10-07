@@ -60,7 +60,9 @@ def initialize_model_components(
     # Prepare configuration
     device_type = config.hardware.device
     optimizer_type = config.training.optimizer.type
-    num_keys = config.data.general.keys.max - config.data.general.keys.min + 1
+    num_keys = (
+        config.data.generation.keys.max - config.data.generation.keys.min + 1
+    )
 
     try:
         # Define the device

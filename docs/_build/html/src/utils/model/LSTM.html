@@ -48,7 +48,7 @@ el.replaceWith(d);
 <dl>
 <dt id="src.utils.model.LSTM.LSTM"><code class="flex name class">
 <span>class <span class="ident">LSTM</span></span>
-<span>(</span><span>params: pipeline.config.classes.ModelConfig.ModelParamsConfig,<br>config: pipeline.config.classes.Config.Config)</span>
+<span>(</span><span>params: config.classes.ModelConfig.ModelParamsConfig,<br>config: config.classes.Config.Config)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -80,13 +80,13 @@ el.replaceWith(d);
         try:
             # Prepare configuration
             model_params = config.model.params
-            max_key = config.data.general.keys.max
-            min_key = config.data.general.keys.min
-            embedding_dim = config.data.sequence.embedding.dimension
+            max_key = config.data.generation.keys.max
+            min_key = config.data.generation.keys.min
+            embedding_dim = config.model.sequence.embedding.dimension
             num_features = config.model.general.features.count
 
             # For each required parameter
-            for param in LSTM_PARAMETERS:
+            for param in LSTM_PARAM_NAMES:
                 # Check whether the required parameter
                 # has been directly passed to the model
                 if param in params and params[param] is not None:
@@ -158,7 +158,7 @@ el.replaceWith(d);
         &#34;&#34;&#34;
         super(LSTM, self).__init__()
 
-        # Set MC dropout flag
+        # Set MC dropout default flag
         self.mc_dropout = MC_DROPOUT_DEFAULT
 
         debug(f&#34;MC dropout set to default: {self.mc_dropout}&#34;)

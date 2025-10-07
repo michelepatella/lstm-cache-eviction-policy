@@ -45,7 +45,7 @@ el.replaceWith(d);
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="src.pipeline.data_generation.data_generator.generate_data"><code class="name flex">
-<span>def <span class="ident">generate_data</span></span>(<span>config: pipeline.config.classes.Config.Config) ‑> None</span>
+<span>def <span class="ident">generate_data</span></span>(<span>config: config.classes.Config.Config) ‑> None</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -73,13 +73,13 @@ el.replaceWith(d);
     Returns:
         None
     &#34;&#34;&#34;
-    # Set the new pipeline state
+    # Set the new state
     logs_phase.set(LOGS_DATA_GENERATION_PHASE)
 
     # Prepare configuration
-    data_distribution_mode = config.data.general.mode
-    min_key = config.data.general.keys.min
-    max_key = config.data.general.keys.max
+    data_distribution_mode = config.data.generation.mode
+    min_key = config.data.generation.keys.min
+    max_key = config.data.generation.keys.max
 
     debug(f&#34;Data distribution mode: {data_distribution_mode}&#34;)
 
@@ -96,8 +96,8 @@ el.replaceWith(d);
     # a timestamp and the corresponding request
     df = create_dataframe(
         {
-            TIMESTAMP_COLUMN: timestamps_hours[: len(requests)],
-            REQUEST_COLUMN: requests,
+            TIMESTAMP_COLUMN_NAME: timestamps_hours[: len(requests)],
+            REQUEST_COLUMN_NAME: requests,
         }
     )
 
@@ -105,10 +105,33 @@ el.replaceWith(d);
     # as dataset
     save_dataset(df, DATASET_RAW_TYPE, config)
 
+    # Prepare save paths
+    zipf_log_log_save_path = (
+        PLOTS_DIRECTORY_PATH
+        / data_distribution_mode
+        / ZIPF_LOG_LOG_PLOT_FILE_NAME
+    )
+    daily_profile_save_path = (
+        PLOTS_DIRECTORY_PATH
+        / data_distribution_mode
+        / DAILY_PROFILE_PLOT_FILE_NAME
+    )
+    key_usage_heatmap_save_path = (
+        PLOTS_DIRECTORY_PATH
+        / data_distribution_mode
+        / KEY_USAGE_HEATMAP_FILE_NAME
+    )
+
     # Show data generation -related plots
-    plot_zipf_loglog(requests)
-    plot_daily_profile(timestamps_hours)
-    plot_key_usage_heatmap(min_key, max_key, requests, timestamps_hours)
+    plot_zipf_loglog(requests, zipf_log_log_save_path)
+    plot_daily_profile(timestamps_hours, daily_profile_save_path)
+    plot_key_usage_heatmap(
+        min_key,
+        max_key,
+        requests,
+        timestamps_hours,
+        key_usage_heatmap_save_path,
+    )
 
     info(&#34;Data generation completed&#34;)</code></pre>
 </details>

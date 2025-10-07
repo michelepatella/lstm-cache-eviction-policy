@@ -61,6 +61,7 @@ def compute_time_series_cv(
 
     # Prepare configuration
     cv_num_folds = config.validation.cross_validation.folds
+    cv_num_epochs = config.validation.cross_validation.epochs
     training_shuffle = config.training.general.shuffle
     validation_shuffle = config.validation.general.shuffle
 
@@ -126,7 +127,7 @@ def compute_time_series_cv(
 
             # Train model
             avg_loss, _ = train_n_epochs(
-                config.validation_num_epochs,
+                cv_num_epochs,
                 model,
                 training_loader,
                 validation_loader,

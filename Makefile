@@ -46,8 +46,8 @@ docs:
 
 # Clean logs
 clean-logs:
-	rm -rf logs/*.log
-	rm -rf logs/*.log.*
+	rm -rf logs/*/*.log
+	rm -rf logs/*/*.log.*
 
 # Clean pycache
 clean-pyc:

@@ -34,11 +34,11 @@ def extract_seed_seq(
     try:
         debug(
             f"Seed sequence extraction at index: {current_idx}, "
-            f"sequence length: {config.data.sequence.length}"
+            f"sequence length: {config.model.sequence.length}"
         )
 
         # Compute sliding window boundaries
-        start_idx = current_idx - config.data.sequence.length + 1
+        start_idx = current_idx - config.model.sequence.length + 1
         end_idx = current_idx + 1
 
         # Select window from testing dataset
@@ -49,7 +49,7 @@ def extract_seed_seq(
         )
 
         # Ensure enough data for sequence extraction
-        if len(testing_window_df) < config.data.sequence.length:
+        if len(testing_window_df) < config.model.sequence.length:
             info("Not enough data to extract seed sequence — skipping.")
             return None
 

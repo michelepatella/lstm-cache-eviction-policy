@@ -4,10 +4,10 @@ import numpy as np
 
 from config.classes.Config import Config
 from const import (
-    SECONDS_IN_DAY,
-    DATA_GENERATION_INITIAL_TIMESTAMP,
     DATA_GENERATION_INITIAL_CURRENT_DAY,
     DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY,
+    DATA_GENERATION_INITIAL_TIMESTAMP,
+    SECONDS_IN_DAY,
 )
 from pipeline.data_generation.generation.patterns.access.generator import (
     generate_access_pattern,
@@ -51,20 +51,22 @@ def generate_pattern_requests(
     """
     # Initialize data
     requests = []
-    timestamps_seconds = DATA_GENERATION_INITIAL_TIMESTAMP  # Get start from timestamp zero
-    current_day = DATA_GENERATION_INITIAL_CURRENT_DAY  # Get start from day zero
-    current_seconds_in_day = (
-        DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY  # Get start from midnight (second zero)
+    timestamps_seconds = (
+        DATA_GENERATION_INITIAL_TIMESTAMP  # Get start from timestamp zero
     )
+    current_day = (
+        DATA_GENERATION_INITIAL_CURRENT_DAY  # Get start from day zero
+    )
+    current_seconds_in_day = DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY  # Get start from midnight (second zero)
 
-    general_data_config = config.data.general
+    general_data_config = config.data.generation
 
     # Get the number of requests
     # to be generated
     num_requests = (
         time_step_duration
         if time_step_duration is not None
-        else general_data_config.requests.count
+        else general_data_config.requests
     )
 
     debug(f"Number of requests to be generated: {num_requests}")
@@ -100,7 +102,9 @@ def generate_pattern_requests(
 
         # Get current absolute seconds of the
         # request to be generated
-        current_abs_seconds = current_day * SECONDS_IN_DAY + current_seconds_in_day
+        current_abs_seconds = (
+            current_day * SECONDS_IN_DAY + current_seconds_in_day
+        )
 
         # Generate a request (i.e., accessed key)
         request = generate_access_pattern(

@@ -45,7 +45,7 @@ el.replaceWith(d);
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="src.pipeline.training.trainer.train_model"><code class="name flex">
-<span>def <span class="ident">train_model</span></span>(<span>config: pipeline.config.classes.Config.Config) ‑> None</span>
+<span>def <span class="ident">train_model</span></span>(<span>config: config.classes.Config.Config) ‑> None</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -67,18 +67,21 @@ el.replaceWith(d);
     Returns:
         None
     &#34;&#34;&#34;
-    # Set the new pipeline state
+    # Set the new state
     logs_phase.set(LOGS_TRAINING_PHASE)
 
     # Prepare configuration
+    data_distribution_mode = config.data.generation.mode
     training_batch_size = config.training.general.batch_size
     training_shuffle = config.training.general.shuffle
     validation_batch_size = config.validation.general.batch_size
     validation_shuffle = config.validation.general.shuffle
     model_params = config.model.params
     learning_rate = config.training.optimizer.params.learning_rate
-    training_num_epochs = config.training.general.epochs.count
-    model_save_path = config.model.general.path
+    training_num_epochs = config.training.general.epochs
+
+    # Get the model path
+    model_path = get_model_path(data_distribution_mode)
 
     # Load the training set and the
     # training loader
@@ -131,7 +134,7 @@ el.replaceWith(d);
     )
 
     # Save the best model trained
-    save_model(model, model_save_path)
+    save_model(model, model_path)
 
     info(&#34;Model training completed&#34;)</code></pre>
 </details>

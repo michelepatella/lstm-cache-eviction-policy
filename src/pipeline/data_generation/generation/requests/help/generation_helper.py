@@ -2,8 +2,8 @@ from typing import List, Tuple
 
 import numpy as np
 
-from const import SECONDS_IN_DAY, SECONDS_IN_HOUR
 from config.classes.Config import Config
+from const import SECONDS_IN_DAY, SECONDS_IN_HOUR
 from pipeline.data_generation.generation.patterns.generator import (
     generate_pattern_requests,
 )
@@ -38,7 +38,7 @@ def generate_requests_helper(
                                       timestamps in hours.
     """
     # Retrieve keys range from configuration
-    keys_config = config.data.general.keys
+    keys_config = config.data.generation.keys
     min_key = keys_config.min
     max_key = keys_config.max
     keys_range = np.arange(min_key, max_key + 1)
@@ -52,13 +52,13 @@ def generate_requests_helper(
     if alpha_range is None:
         # Use static fixed alpha and
         # don't consider any time step duration
-        alpha_fixed = config.data.pattern.access.zipf.alpha.fixed
+        alpha_fixed = config.data.generation.pattern.access.zipf.alpha.fixed
         alpha_range = [alpha_fixed]
         time_step_duration = None
     else:
         # Otherwise, split requests
         # into several time steps
-        num_requests = config.data.general.requests.count
+        num_requests = config.data.generation.requests
         time_step_duration = num_requests // len(alpha_range)
 
         debug(
@@ -99,7 +99,7 @@ def generate_requests_helper(
 
     # Convert timestamps from seconds to hours
     timestamps_hours = (
-                               np.array(timestamps_seconds) % SECONDS_IN_DAY
+        np.array(timestamps_seconds) % SECONDS_IN_DAY
     ) / SECONDS_IN_HOUR
 
     return requests, timestamps_hours

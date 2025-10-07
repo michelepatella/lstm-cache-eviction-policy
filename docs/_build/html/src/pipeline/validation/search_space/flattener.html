@@ -100,7 +100,6 @@ el.replaceWith(d);
                 items.append((new_key, v))
 
                 debug(f&#34;Added flattened key: {new_key} -&gt; values: {v}&#34;)
-
     except (TypeError, RecursionError, AttributeError) as e:
         msg = &#34;Failed to flatten search space&#34;
         error(&#34;%s: %s&#34;, msg, e)
