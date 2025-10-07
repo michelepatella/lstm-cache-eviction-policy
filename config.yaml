@@ -132,8 +132,8 @@ testing:
 simulation:
   cache:
     general:
-      dimension: 200
-      ttl: 180
+      dimension: 100
+      ttl: 1800
     lstm:
       prediction_interval: 5
       threshold: 0.5
@@ -143,4 +143,4 @@ simulation:
         samples: 50
   metrics:
     mistake_rate:
-      window: 5000
+      window: 100

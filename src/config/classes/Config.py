@@ -3,6 +3,7 @@ from typing import Dict, List, TypeAlias, Union
 from pydantic import BaseModel
 
 from config.classes.DataConfig import DataConfig
+from config.classes.DatasetConfig import DatasetConfig
 from config.classes.HardwareConfig import HardwareConfig
 from config.classes.ModelConfig import ModelConfig
 from config.classes.SimulationConfig import SimulationConfig
@@ -31,6 +32,7 @@ class Config(BaseModel):
 
     hardware: HardwareConfig
     data: DataConfig
+    dataset: DatasetConfig
     model: ModelConfig
     validation: ValidationConfig
     training: TrainingConfig

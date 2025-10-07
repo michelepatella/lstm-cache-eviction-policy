@@ -134,7 +134,15 @@ def run_simulations(config: Config) -> None:
         / data_distribution_mode
         / SIMULATION_RESULTS_FILE_NAME
     )
-    save_json(results, results_save_path)
+
+    # Filter out all results except
+    # timeline
+    results_to_save = [
+        {k: v for k, v in result.items() if k != TIMELINE_NAME}
+        for result in results
+    ]
+
+    save_json(results_to_save, results_save_path)
 
     debug("Simulation results saved to JSON file")
 

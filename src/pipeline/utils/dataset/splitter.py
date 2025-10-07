@@ -38,7 +38,7 @@ def split_training_set(
     """
     try:
         # Prepare configuration
-        validation_perc = config.data.dataset.split.validation
+        validation_perc = config.dataset.split.validation
 
         # If both or one of the two index is not
         # provided, calculate them

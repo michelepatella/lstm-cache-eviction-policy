@@ -51,7 +51,7 @@ class AccessLogsDataset(Dataset):
 
         try:
             # Calculate split index based on the train %
-            train_perc = config.data.dataset.split.training
+            train_perc = config.dataset.split.training
             dataset_split_idx = int(len(self.data) * train_perc)
 
             debug(f"Dataset split index calculated: {dataset_split_idx}")

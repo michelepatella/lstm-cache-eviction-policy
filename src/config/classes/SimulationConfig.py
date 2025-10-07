@@ -7,30 +7,18 @@ class CacheGeneralConfig(BaseModel):
     ttl: conint(gt=0)
 
 
-# Simulation — Cache — LSTM — Prediction
-class LSTMCachePredictionConfig(BaseModel):
-    interval: conint(gt=0)  # previously called prediction_interval
-
-
 # Simulation — Cache — LSTM — Confidence Intervals
 class ConfidenceIntervalsConfig(BaseModel):
     level: confloat(ge=0, le=1)
-    enabled: bool = True  # optional: default enabled
-
-
-# Simulation — Cache — LSTM — MC Dropout
-class MCDropoutSamplesConfig(BaseModel):
-    count: conint(gt=0)
 
 
 class MCDropoutConfig(BaseModel):
-    samples: MCDropoutSamplesConfig
-    enabled: bool = True  # optional: default enabled
+    samples: conint(gt=0)
 
 
 # Simulation — Cache — LSTM — Main Config
 class LSTMCacheConfig(BaseModel):
-    prediction: LSTMCachePredictionConfig
+    prediction_interval: conint(gt=0)
     threshold: confloat(ge=0, le=1)
     confidence_intervals: ConfidenceIntervalsConfig
     mc_dropout: MCDropoutConfig
