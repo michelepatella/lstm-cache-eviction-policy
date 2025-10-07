@@ -195,6 +195,7 @@ RANDOM_CACHE_NAME = "RANDOM"
 # Model metrics
 # ----------------------------
 MODEL_COMPUTE_METRICS_DEFAULT = False
+MODEL_METRICS_AVG_LOSS = "avg_loss"
 MODEL_METRICS_CLASS_REPORT_NAME = "class_report"
 MODEL_METRICS_TOP_K_ACCURACY_NAME = "top_k_accuracy"
 MODEL_METRICS_CONFUSION_MATRIX_NAME = "confusion_matrix"

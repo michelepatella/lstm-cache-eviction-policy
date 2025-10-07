@@ -22,7 +22,7 @@ def main():
 
     #test_model(config)
 
-    run_simulations(config)
+    #run_simulations(config)
 
 
 if __name__ == "__main__":

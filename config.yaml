@@ -5,15 +5,15 @@ data:
   generation:
     seed: 42
     mode: static
-    requests: 100000
+    requests: 500000
     keys:
       min: 1
-      max: 1000
+      max: 500
     pattern:
       access:
         zipf:
           alpha:
-            fixed: 1.0
+            fixed: 1.5
             min: 0.5
             max: 2.0
           steps: 5
@@ -22,13 +22,13 @@ data:
             interval: 7
             offset: 3
             hours:
-              start: 5
+              start: 4
               end: 9
           toggle:
             interval: 10
             hours:
               start: 9
-              end: 12
+              end: 14
             base_requests:
               first: 1
               second: 2
@@ -40,12 +40,12 @@ data:
             mod: 3
             divisor: 50
             hours:
-              start: 12
-              end: 18
+              start: 14
+              end: 19
           distortion:
             interval: 4
             hours:
-              start: 18
+              start: 19
               end: 23
             offsets:
               history: 4
@@ -70,7 +70,7 @@ data:
 dataset:
   split:
     training: 0.7
-    validation: 0.25
+    validation: 0.2
 
 model:
   general:
@@ -90,11 +90,11 @@ model:
 
 validation:
   general:
-    batch_size: 64
+    batch_size: 128
     shuffle: false
   cross_validation:
     folds: 10
-    epochs: 15
+    epochs: 10
   early_stopping:
     patience: 5
     delta: 0.0005
@@ -105,26 +105,26 @@ validation:
       dropout_range: [0.1, 0.3]
     training:
       optimizer:
-        learning_rate_range: [0.001, 0.005]
+        learning_rate_range: [0.001, 0.0005]
 
 training:
   general:
-    batch_size: 64
+    batch_size: 128
     shuffle: true
     epochs: 500
   optimizer:
     type: adamw
     params:
-      learning_rate: 0.001
+      learning_rate: 0.0005
       weight_decay: 0.05
       momentum: 0.9
   early_stopping:
-    patience: 20
+    patience: 10
     delta: 0.0001
 
 testing:
   general:
-    batch_size: 64
+    batch_size: 128
     shuffle: false
   metrics:
     top_k: 3

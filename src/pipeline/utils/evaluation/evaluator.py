@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 from config.classes.Config import Config
 from const import (
     MODEL_COMPUTE_METRICS_DEFAULT,
-    MODEL_METRICS_CONFUSION_MATRIX_NAME,
+    MODEL_METRICS_CONFUSION_MATRIX_NAME, MODEL_METRICS_AVG_LOSS,
 )
 from pipeline.utils.inference.inferrer import infer_batch
 from pipeline.utils.metrics.calculator import (
@@ -106,6 +106,9 @@ def evaluate_model(
                 for k, v in metrics.items()
                 if k != MODEL_METRICS_CONFUSION_MATRIX_NAME
             }
+
+            # Add average loss to metrics to be saved
+            metrics_to_save[MODEL_METRICS_AVG_LOSS] = avg_loss
 
             # Save metrics as JSON file
             save_json(metrics_to_save, metrics_save_path)

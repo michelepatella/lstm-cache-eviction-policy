@@ -56,7 +56,7 @@ def infer_batch(
             * Argmax or conversion to NumPy fails.
     """
     # Prepare configuration
-    num_features = config.model.general.features.count
+    num_features = config.model.general.features
 
     # Initialization
     total_loss = 0.0

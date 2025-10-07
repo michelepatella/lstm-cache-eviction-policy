@@ -37,7 +37,7 @@ class LSTM(nn.Module):
             max_key = config.data.generation.keys.max
             min_key = config.data.generation.keys.min
             embedding_dim = config.model.sequence.embedding.dimension
-            num_features = config.model.general.features.count
+            num_features = config.model.general.features
 
             # For each required parameter
             for param in LSTM_PARAM_NAMES:
