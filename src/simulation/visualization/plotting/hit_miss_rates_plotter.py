@@ -18,6 +18,7 @@ from const import (
     TIMELINE_INDEX_NAME,
     TIMELINE_INSTANT_HIT_RATE_NAME,
     TIMELINE_NAME,
+    HIT_MISS_RATES_PLOT_PAD,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
@@ -59,7 +60,7 @@ def plot_hit_miss_rate(
             ncols=HIT_MISS_RATES_PLOT_NUM_COLS,
             figsize=(PLOT_SIZE, PLOT_SIZE),
         )
-        fig.tight_layout()
+        fig.tight_layout(pad=HIT_MISS_RATES_PLOT_PAD)
 
         # Ensure axes is always a list
         # (even of a single value)

@@ -16,6 +16,7 @@ from const import (
     PLOT_LABEL_FONT_SIZE,
     PLOT_SIZE,
     PLOT_TITLE_FONT_SIZE,
+    KEY_USAGE_HEATMAP_STEP,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
@@ -132,8 +133,8 @@ def plot_key_usage_heatmap(
             fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.xticks(
-            ticks=np.arange(num_keys),
-            labels=np.arange(min_key, max_key + 1),
+            ticks=np.arange(0, num_keys, KEY_USAGE_HEATMAP_STEP),
+            labels=np.arange(min_key, max_key + 1, KEY_USAGE_HEATMAP_STEP),
             rotation=KEY_USAGE_HEATMAP_ROTATION,
             fontsize=PLOT_LABEL_FONT_SIZE,
         )

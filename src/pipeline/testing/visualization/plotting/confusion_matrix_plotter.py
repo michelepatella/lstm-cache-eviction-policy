@@ -11,6 +11,7 @@ from const import (
     PLOT_LABEL_FONT_SIZE,
     PLOT_SIZE,
     PLOT_TITLE_FONT_SIZE,
+    CONFUSION_MATRIX_PLOT_CMAP,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
@@ -36,12 +37,25 @@ def plot_confusion_matrix(confusion_matrix: dict, save_path: str) -> None:
         f" max: {np.max(confusion_matrix)}"
     )
 
+    # Convert confusion matrix
+    # to 2D numpy array
+    labels = sorted(confusion_matrix.keys())
+    confusion_matrix_array = np.array(
+        [[confusion_matrix[i].get(j, 0) for j in labels] for i in labels]
+    )
+
+    # Normalize confusion matrix
+    confusion_matrix_norm = (
+        confusion_matrix_array / confusion_matrix_array.max()
+    )
+
     # Plot confusion matrix
     plt.figure(figsize=(PLOT_SIZE, PLOT_SIZE))
     sns.heatmap(
-        confusion_matrix,
+        confusion_matrix_norm,
         annot=CONFUSION_MATRIX_PLOT_ANNOT,
         fmt=CONFUSION_MATRIX_PLOT_FMT,
+        cmap=CONFUSION_MATRIX_PLOT_CMAP,
     )
     plt.title(CONFUSION_MATRIX_PLOT_TITLE, fontsize=PLOT_TITLE_FONT_SIZE)
     plt.xlabel(CONFUSION_MATRIX_PLOT_X_LABEL, fontsize=PLOT_LABEL_FONT_SIZE)

@@ -18,9 +18,6 @@ from const import (
 from pipeline.testing.visualization.plotting.confusion_matrix_plotter import (
     plot_confusion_matrix,
 )
-from pipeline.testing.visualization.plotting.precision_recall_curve_plotter import (
-    plot_precision_recall_curve,
-)
 from pipeline.testing.visualization.reporting.model_evaluation_reporter import (
     generate_model_evaluation_report,
 )
@@ -135,10 +132,7 @@ def test_model(config: Config) -> None:
         / CONFUSION_MATRIX_FILE_NAME
     )
 
-    # Show testing-related plots
-    plot_precision_recall_curve(
-        all_targets, stacked_outputs, num_keys, precision_recall_save_path
-    )
+    # Show testing-related plot
     plot_confusion_matrix(confusion_matrix, confusion_matrix_save_path)
 
     info("Model testing completed")
