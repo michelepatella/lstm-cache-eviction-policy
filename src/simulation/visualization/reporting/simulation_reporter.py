@@ -21,7 +21,7 @@ def generate_simulation_report(
     cache eviction policy, including hit/miss rates, average latency,
     and eviction mistake rate, using informational logs.
 
-    Parameters:
+    Args:
         results (List[Dict[str, Any]]): List of dictionaries containing
                                         cache policy metrics.
 

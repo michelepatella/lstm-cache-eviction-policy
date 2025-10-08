@@ -33,7 +33,7 @@ def compute_time_series_cv(
     This function splits the training set using time series cross-validation,
     trains a model for each fold, and calculates the average loss across folds.
 
-    Parameters:
+    Args:
         training_set (AccessLogsDataset): Dataset to perform CV on.
         params (Dict[str, Any]): Hyperparameter configuration
                                  for model and training.

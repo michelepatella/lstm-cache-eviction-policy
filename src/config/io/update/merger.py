@@ -17,7 +17,7 @@ def merge_config(
     key exists in both objects, the merge is applied recursively.
     Otherwise, the update value replaces the original one.
 
-    Parameters:
+    Args:
         original_config (dict | None): Original configuration
                                        object. If none, an empty
                                        dictionary is used.

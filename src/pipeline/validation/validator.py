@@ -19,7 +19,7 @@ def validate_model(config: Config) -> Config:
     grid search), and saving the best hyperparameters found
     in a new configuration.
 
-    Parameters:
+    Args:
         config (Config): Current configuration object.
 
     Returns:

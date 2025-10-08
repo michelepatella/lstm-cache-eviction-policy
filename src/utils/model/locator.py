@@ -16,7 +16,7 @@ def get_model_abs_path(data_distribution_mode: str) -> str:
     This function retrieves the model absolute path
     dynamically, based on data distribution mode.
 
-    Parameters:
+    Args:
         data_distribution_mode (str): Data distribution mode selected.
 
     Returns:

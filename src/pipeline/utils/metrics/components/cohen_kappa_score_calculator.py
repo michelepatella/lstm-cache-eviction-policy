@@ -17,7 +17,7 @@ def calculate_cohen_kappa_score(
     provided true labels and predicted ones, which measures
     the agreement between two raters while correcting for chance.
 
-    Parameters:
+    Args:
         targets (List[int]): Ground truth labels.
         predictions (List[int]): Predicted labels.
 

@@ -27,7 +27,7 @@ class LRUCache(Cache):
         the data structure to collect data during simulation,
         and the optional callback provided.
 
-        Parameters:
+        Args:
             self ("LRUCache"): Current class instance.
             maxsize (int): Maximum size of the cache.
             callback (Callable): Callback function invoked
@@ -56,7 +56,7 @@ class LRUCache(Cache):
         end of the internal ordered dictionary to
         mark it as recently used.
 
-        Parameters:
+        Args:
             self ("LRUCache"): Current class instance.
             key (int): Key to look up in the cache.
 
@@ -90,7 +90,7 @@ class LRUCache(Cache):
         or inserts the provided item for the key in the
         LRU cache (depending on whether the key is already cached).
 
-        Parameters:
+        Args:
             self ("LRUCache"): Current class instance.
             key (int): Key to store in the cache.
             item (Any): Value associated with the key.
@@ -135,7 +135,7 @@ class LRUCache(Cache):
         This function, given a key, deletes it
         from the LRU cache.
 
-        Parameters:
+        Args:
             self ("LRUCache"): Current class instance.
             key (int): Key to delete.
 
@@ -163,7 +163,7 @@ class LRUCache(Cache):
         This function, given a key, returns True if
         it exists in the LRU cache, False otherwise.
 
-        Parameters:
+        Args:
             self ("LRUCache"): Current class instance.
             key (int): Key to check.
 
@@ -183,7 +183,7 @@ class LRUCache(Cache):
         from the LRU cache and returns its item.
         If the key is not found, it returns None instead.
 
-        Parameters:
+        Args:
             self ("LRUCache"): Current class instance.
             key (int): Key to remove.
 
@@ -209,7 +209,7 @@ class LRUCache(Cache):
         This function returns the number of items
         currently stored in the LRU cache.
 
-        Parameters:
+        Args:
             self ("LRUCache"): Current class instance.
 
         Returns:
@@ -224,7 +224,7 @@ class LRUCache(Cache):
         This function clears the LRU cache by
         removing all the items stored.
 
-        Parameters:
+        Args:
             self ("LRUCache"): Current class instance.
 
         Returns:

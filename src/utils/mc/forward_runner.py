@@ -31,7 +31,7 @@ def mc_forward_passes(
     stochastic passes are performed to
     estimate predictive uncertainty.
 
-    Parameters:
+    Args:
         model (nn.Module): The PyTorch model to evaluate.
         inputs (Union[
             Tuple[torch.Tensor, torch.Tensor, torch.Tensor],

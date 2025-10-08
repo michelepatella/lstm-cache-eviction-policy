@@ -34,7 +34,7 @@ def preprocess_data(config: Config) -> None:
     new features construction, saving the final
     preprocessed dataset for further usage.
 
-    Parameters:
+    Args:
         config (Config): Configuration object.
 
     Returns:

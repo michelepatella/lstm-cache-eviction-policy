@@ -24,7 +24,7 @@ def generate_temporal_pattern(
     This temporal pattern is determined as a combination of
     periodic and burst components, reflecting real-world data requests.
 
-    Parameters:
+    Args:
         current_seconds_in_day (float): Current seconds in day for which
                                         temporal pattern (i.e., delta time)
                                         is to be generated.

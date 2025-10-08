@@ -19,7 +19,7 @@ def update_time(
     generated, which represents the gap between the current
     request and the next one.
 
-    Parameters:
+    Args:
         current_seconds_in_day (float): Current seconds in day to be updated.
         current_day (int): Current day to be updated (if needed).
         period (float): Time period used for data generation.

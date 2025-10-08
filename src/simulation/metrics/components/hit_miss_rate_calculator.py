@@ -14,7 +14,7 @@ def calculate_hit_miss_rate(counters: Dict[str, int]) -> Tuple[float, float]:
     based on the provided counters. The rates are expressed
     as percentages of the total number of cache requests.
 
-    Parameters:
+    Args:
         counters (Dict[str, int]): Dictionary containing hit and
                                    miss counters.
 

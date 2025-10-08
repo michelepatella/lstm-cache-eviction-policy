@@ -22,7 +22,7 @@ def build_features(
     cyclical time. It then reorders the columns so that the
     target column appears last, keeping feature columns first.
 
-    Parameters:
+    Args:
         df (pd.DataFrame): Dataset containing the time and target columns.
         time_column (str): Name of the time column to encode trigonometrically.
         target_column (str): Name of the target column to place at the end.

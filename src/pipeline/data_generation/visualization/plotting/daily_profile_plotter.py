@@ -28,7 +28,7 @@ def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
     profile of requests, given timestamps
     in hours when they occurred.
 
-    Parameters:
+    Args:
         timestamps_hours (np.ndarray): Timestamp in hours of requests.
         save_path (str): Path to save the figure.
 

@@ -22,7 +22,7 @@ class CacheMetricsLogger:
         This function sets up the data structures to store
         cache events and logs initialization start and success.
 
-        Parameters:
+        Args:
             self ("CacheMetricsLogger"): Current class instance.
 
         Returns:
@@ -46,7 +46,7 @@ class CacheMetricsLogger:
         into the cache, by storing the key and its
         expiration time.
 
-        Parameters:
+        Args:
             self ("CacheMetricsLogger"): Current class instance.
             key (int): Key inserted into the cache.
             time (float): Timestamp of insertion.
@@ -68,7 +68,7 @@ class CacheMetricsLogger:
         from the cache, by storing the key and the
         current time.
 
-        Parameters:
+        Args:
             self ("CacheMetricsLogger"): Current class instance.
             key (int): Key accessed from the cache.
             time (float): Timestamp of access.
@@ -91,7 +91,7 @@ class CacheMetricsLogger:
         from the cache, by storing the key and the
         current time.
 
-        Parameters:
+        Args:
             self ("CacheMetricsLogger"): Current class instance.
             key (int): Key evicted from the cache.
             time (float): Timestamp of eviction.

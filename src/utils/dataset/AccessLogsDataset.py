@@ -32,7 +32,7 @@ class AccessLogsDataset(Dataset):
         or testing portions according to the train percentage
         defined in the configuration.
 
-        Parameters:
+        Args:
             self (AccessLogsDataset): Instance of AccessLogsDataset.
             dataset_type (str): The dataset type to split (e.g., "training").
             config (Config): Configuration object.
@@ -89,7 +89,7 @@ class AccessLogsDataset(Dataset):
         and target column (assuming target is the last column), and retrieves
         the sequence length from the configuration.
 
-        Parameters:
+        Args:
             self (AccessLogsDataset): Instance of AccessLogsDataset.
             data (pd.DataFrame): Dataset from which fields are extracted.
             config (Config): Configuration object.
@@ -144,7 +144,7 @@ class AccessLogsDataset(Dataset):
         for a given dataset type, by loading dataset, preparing
         and setting data, and splitting the dataset.
 
-        Parameters:
+        Args:
             self (AccessLogsDataset): AccessLogsDataset class.
             dataset_type (str): The dataset type requested to
                                 be created (e.g. "training").
@@ -197,7 +197,7 @@ class AccessLogsDataset(Dataset):
         This method calculates the number of sequences
         available in the dataset based on the sequence length.
 
-        Parameters:
+        Args:
             self (AccessLogsDataset): AccessLogsDataset class.
 
         Returns:
@@ -244,7 +244,7 @@ class AccessLogsDataset(Dataset):
         equal to those of sequence and the corresponding
         next key in the dataset.
 
-        Parameters:
+        Args:
             self (AccessLogsDataset): AccessLogsDataset class.
             idx (int): Index of the starting row
                        for the sequence.
@@ -316,7 +316,7 @@ class AccessLogsDataset(Dataset):
         preloaded dataframe, copying its content and setting the
         necessary fields (features, target, sequence length).
 
-        Parameters:
+        Args:
             cls (AccessLogsDataset): AccessLogsDataset class.
             df (pd.DataFrame): Preloaded dataframe containing dataset.
             config (Config): Configuration object.

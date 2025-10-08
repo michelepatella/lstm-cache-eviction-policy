@@ -15,7 +15,7 @@ def create_data_loader(
     This function creates a data loader for a given dataset,
     applying specified settings including batch size and shuffling.
 
-    Parameters:
+    Args:
         dataset (AccessLogsDataset | Subset): The dataset instance
                                               to create the
                                               data loader for.

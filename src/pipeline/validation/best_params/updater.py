@@ -20,7 +20,7 @@ def check_and_update_best_params(
     improves upon the previous best, both the best loss and
     corresponding parameters are updated.
 
-    Parameters:
+    Args:
         avg_loss (float): Average loss of the current iteration.
         best_avg_loss (float | None): Best average loss found so far,
                                       or None if not set yet.

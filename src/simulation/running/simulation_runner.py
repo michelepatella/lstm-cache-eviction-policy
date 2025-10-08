@@ -34,7 +34,7 @@ def run_cache_simulation(
     such as hit/miss counters, timeline evolution,
     and cache access latencies.
 
-    Parameters:
+    Args:
         cache (Any): Cache object implementing the eviction policy.
         policy (str): Cache eviction policy name.
         config (Config): Configuration object.

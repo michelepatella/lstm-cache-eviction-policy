@@ -29,7 +29,7 @@ def compute_grid_search(
     each combination using time-series cross-validation, and
     selects the one with the lowest average loss.
 
-    Parameters:
+    Args:
         training_set (AccessLogsDataset): Training dataset to be used
                                           in CV evaluation.
         config (Config): Configuration object.

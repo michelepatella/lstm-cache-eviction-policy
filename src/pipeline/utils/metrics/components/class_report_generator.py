@@ -15,7 +15,7 @@ def generate_class_report(
     This function computes the classification report given
     the true targets and predicted labels.
 
-    Parameters:
+    Args:
         targets (List[int]): True class labels.
         predictions (List[int]): Predicted class labels.
 

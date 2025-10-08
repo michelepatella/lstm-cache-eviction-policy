@@ -16,7 +16,7 @@ def load_model(
     specified path into the given model and maps the
     weights to the provided device.
 
-    Parameters:
+    Args:
         model (nn.Module): The PyTorch model instance.
         device (torch.device): Device on which to map the model weights.
         model_path (str): Path to the file containing

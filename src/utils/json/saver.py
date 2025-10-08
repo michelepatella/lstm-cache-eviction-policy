@@ -14,7 +14,7 @@ def save_json(data_dict: Dict | List[Dict], path: str) -> None:
     This function saves a data dictionary as a
     JSON file to the provided path.
 
-    Parameters:
+    Args:
         data_dict (Dict | List[Dict]): Data to save.
         path (str): File path where the JSON will be saved.
 

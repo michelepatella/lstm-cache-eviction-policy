@@ -28,7 +28,7 @@ def generate_requests_helper(
     - dynamic: alpha range is provided, splits total
                requests in time steps
 
-    Parameters:
+    Args:
         config (Config): Configuration object.
         alpha_range (List[float]): Optional list of alpha parameters
                                    for dynamic requests.

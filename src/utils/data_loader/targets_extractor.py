@@ -15,7 +15,7 @@ def extract_targets_from_data_loader(data_loader: DataLoader) -> torch.Tensor:
     all target tensors. The collected targets are then concatenated
     into a single tensor.
 
-    Parameters:
+    Args:
         data_loader (DataLoader): DataLoader instance from which
                                   to extract targets.
 

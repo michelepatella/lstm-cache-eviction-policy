@@ -17,7 +17,7 @@ def generate_model_evaluation_report(
     This function reports model evaluation results via
     informational logs.
 
-    Parameters:
+    Args:
         class_report (dict): Classification metrics per class.
         top_k_accuracy (float): Top-K accuracy of the model.
         kappa_statistic (float): Cohen's kappa statistic of the model.

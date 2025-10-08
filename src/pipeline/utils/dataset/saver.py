@@ -14,7 +14,7 @@ def save_dataset(df: pd.DataFrame, dataset_type: str, config: Config) -> None:
     This function saves Pandas dataframe
     to CSV dataset at specified path.
 
-    Parameters:
+    Args:
         df (pd.DataFrame): Pandas dataframe to be saved as
                            CSV dataset.
         dataset_type (str): Dataset type to be saved.

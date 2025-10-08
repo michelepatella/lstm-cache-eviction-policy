@@ -26,7 +26,7 @@ def initialize_simulation(
     running a cache simulation. It initializes counters, timelines,
     cache latency records, and prepares the testing dataset and data loader.
 
-    Parameters:
+    Args:
         config (Config): Configuration object.
 
     Returns:

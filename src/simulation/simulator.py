@@ -51,7 +51,7 @@ def run_simulations(config: Config) -> None:
     it initializes the cache, runs the cache simulation, calculates
     key performance metrics, saves the results, and plots performance data.
 
-    Parameters:
+    Args:
         config (Config): Configuration object.
 
     Returns:

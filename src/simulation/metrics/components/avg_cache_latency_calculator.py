@@ -14,7 +14,7 @@ def calculate_avg_cache_latency(
     given a list of recorded latency values. If the list
     is empty, the result is set to None.
 
-    Parameters:
+    Args:
         cache_latencies (List[float]): List of cache latencies.
 
     Returns:

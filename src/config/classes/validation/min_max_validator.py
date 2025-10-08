@@ -16,7 +16,7 @@ def are_min_max_valid(
     values, checks whether the first is less than or equal to the
     second one, with respect to a given context.
 
-    Parameters:
+    Args:
         min_val (int | float): The least value.
         max_val (int | float): The greatest value.
         context (str): Context for error messages.

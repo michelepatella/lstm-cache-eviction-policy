@@ -10,7 +10,7 @@ def debug(msg: str, *args: Any, **kwargs: Any) -> None:
     """
     Log a debug-level message with contextual phase.
 
-    Parameters:
+    Args:
         msg (str): The message to log.
         args (Any): Positional arguments for the message.
         kwargs (Any): Keyword arguments for the logging function.

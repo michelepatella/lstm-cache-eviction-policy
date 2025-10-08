@@ -27,7 +27,7 @@ class FIFOCache(Cache):
         the data structure to collect data during simulation, and
         the optional callback provided.
 
-        Parameters:
+        Args:
             self ("FIFOCache"): Current class instance.
             maxsize (int): Maximum size of the cache.
             callback (Callable): Callback function invoked
@@ -54,7 +54,7 @@ class FIFOCache(Cache):
         This function, given a key, retrieves its
         item from the FIFO cache.
 
-        Parameters:
+        Args:
             self ("FIFOCache"): Current class instance.
             key (int): Key to look up in the cache.
 
@@ -88,7 +88,7 @@ class FIFOCache(Cache):
         or inserts the provided item for the key in the
         FIFO cache (depending on whether the key is cached or not).
 
-        Parameters:
+        Args:
             self ("FIFOCache"): Current class instance.
             key (int): Key to store in the cache.
             item (Any): Value associated with the key.
@@ -135,7 +135,7 @@ class FIFOCache(Cache):
         This function, given a key, deletes it
         from the FIFO cache along with its item.
 
-        Parameters:
+        Args:
             self ("FIFOCache"): Current class instance.
             key (int): Key to delete.
 
@@ -166,7 +166,7 @@ class FIFOCache(Cache):
         This function, given a key, returns True if
         it exists in the FIFO cache, False otherwise.
 
-        Parameters:
+        Args:
             self ("FIFOCache"): Current class instance.
             key (Any): Key to check.
 
@@ -188,7 +188,7 @@ class FIFOCache(Cache):
         If the key is not in the cache, the function
         returns None instead of its item.
 
-        Parameters:
+        Args:
             self ("FIFOCache"): Current class instance.
             key (int): Key to remove.
 
@@ -217,7 +217,7 @@ class FIFOCache(Cache):
         This function returns the number of items
         currently stored in the FIFO cache.
 
-        Parameters:
+        Args:
             self ("FIFOCache"): Current class instance.
 
         Returns:
@@ -232,7 +232,7 @@ class FIFOCache(Cache):
         This function clears the FIFO cache by
         removing all the items stored.
 
-        Parameters:
+        Args:
             self ("FIFOCache"): Current class instance.
 
         Returns:

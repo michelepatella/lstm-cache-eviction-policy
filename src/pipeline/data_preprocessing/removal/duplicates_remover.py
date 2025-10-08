@@ -17,7 +17,7 @@ def remove_duplicates(df: pd.DataFrame, subset: List[str]) -> pd.DataFrame:
     from a given subset of dataset column(s),
     returning a new clean dataset.
 
-    Parameters:
+    Args:
         df (pd.DataFrame): Dataset to remove duplicates from.
         subset (List[str]): Column(s) of dataset to remove
                             duplicates from.

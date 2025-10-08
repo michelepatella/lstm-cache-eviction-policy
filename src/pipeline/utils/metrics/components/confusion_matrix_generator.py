@@ -17,7 +17,7 @@ def generate_confusion_matrix(
     This function generates the confusion matrix,
     given a set of targets and predictions.
 
-    Parameters:
+    Args:
         targets (List[int]): True class labels.
         predictions (List[int]): Predicted class labels.
 

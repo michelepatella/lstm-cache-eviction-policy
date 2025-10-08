@@ -18,7 +18,7 @@ def calculate_periodic_component(
     current hour in day, given scale and amplitude, by adding
     the base scale to the cosine-modulated amplitude.
 
-    Parameters:
+    Args:
         scale (int): Scale of periodic component to be calculated.
         amplitude (int): Amplitude of periodic component to be calculated.
         current_hour_in_day (float): Current hour in day for which periodic

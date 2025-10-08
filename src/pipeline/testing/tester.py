@@ -11,7 +11,6 @@ from const import (
     MODEL_METRICS_TOP_K_ACCURACY_NAME,
     MODEL_RESULTS_FILE_NAME,
     PLOTS_DIRECTORY_PATH,
-    PRECISION_RECALL_CURVE_FILE_NAME,
     RESULTS_DIRECTORY_PATH,
     TESTING_SPLIT_TYPE,
 )
@@ -39,7 +38,7 @@ def test_model(config: Config) -> None:
     testing set. Results are shown via report and
     plots providing model performance insights.
 
-    Parameters:
+    Args:
         config (Config): Configuration object.
 
     Returns:

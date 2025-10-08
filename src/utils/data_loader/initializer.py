@@ -23,7 +23,7 @@ def initialize_data_loader(
     instantiating the dataset class and creating
     a dataloader from the instance.
 
-    Parameters:
+    Args:
         data_loader_type (str): Type of data loader to create.
         batch_size (int): Batch size for the data loader to create.
         shuffle (bool): Whether to apply shuffle to the data loader.

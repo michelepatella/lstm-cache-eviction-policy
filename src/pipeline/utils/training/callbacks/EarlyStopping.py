@@ -23,7 +23,7 @@ class EarlyStopping:
         patience and delta, as well as initializing the best
         average loss, counter, and early stropping triggering flag.
 
-        Parameters:
+        Args:
             self ("EarlyStopping"): Current class instance.
             config (Config): Configuration object.
 
@@ -80,7 +80,7 @@ class EarlyStopping:
         updates the internal counter and sets the early stopping trigger
         flag if patience is exceeded.
 
-        Parameters:
+        Args:
             self ("EarlyStopping"): Current class instance.
             avg_loss (float): Current average loss for the epoch.
 

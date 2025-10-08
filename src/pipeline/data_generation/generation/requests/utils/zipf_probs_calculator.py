@@ -15,7 +15,7 @@ def calculate_zipf_probs(keys: np.ndarray, alpha: float) -> np.ndarray:
     will be greater than those of later ones, according to the Zipfian
     distribution governed by alpha parameter.
 
-    Parameters:
+    Args:
         keys (np.ndarray): Keys to calculate Zipfian probabilities for.
         alpha (float): The Zipfian parameter which governs its distribution.
 

@@ -27,7 +27,7 @@ def generate_toggle_pattern(
     The result is an oscillating sequence of key
     requests.
 
-    Parameters:
+    Args:
         toggle_interval (int): Number of requests between state switches.
         toggle_forward (int): Offset to apply in the forward toggle state.
         toggle_backward (int): Offset to apply in the backward toggle state.

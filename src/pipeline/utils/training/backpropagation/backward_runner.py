@@ -12,7 +12,7 @@ def compute_backward(loss: nn.Module, optimizer: Optimizer) -> None:
     from the provided loss and updates the model parameters
     using the given optimizer.
 
-    Parameters:
+    Args:
         loss (nn.Module): Loss tensor from which to compute gradients.
         optimizer (Optimizer): Optimizer used to update model parameters.
 

@@ -41,7 +41,7 @@ def calculate_model_metrics(
         - Confusion matrix.
         - Cohen’s kappa score.
 
-    Parameters:
+    Args:
         targets (List[int]): Ground truth class labels.
         predictions (List[int]): Predicted class labels.
         outputs (List[torch.Tensor]): Model outputs.

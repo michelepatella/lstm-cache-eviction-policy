@@ -21,7 +21,7 @@ def generate_static_requests(
     Static requests use a fixed Zipfian parameter, meaning
     the access distribution over keys does not change over time.
 
-    Parameters:
+    Args:
         config (Config): Configuration object.
 
     Returns:

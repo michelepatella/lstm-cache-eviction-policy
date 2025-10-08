@@ -22,7 +22,7 @@ def get_parameters_combination(
     dictionary structure for each combination, and returns the list of
     fully nested parameter configurations.
 
-    Parameters:
+    Args:
         config (Config): Configuration object.
 
     Returns:

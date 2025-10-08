@@ -40,7 +40,7 @@ def generate_access_pattern(
     toggle, cycle, distortion, memory, and
     fallback) based on day band.
 
-    Parameters:
+    Args:
         zipf_probs (np.ndarray): List of Zipfian probabilities
                                  for keys.
         keys_range (np.ndarray): List of all available keys.

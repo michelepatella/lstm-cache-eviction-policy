@@ -36,7 +36,7 @@ def plot_key_usage_heatmap(
     This function generates a heatmap showing the frequency
     of accesses for each key across the hours of the day.
 
-    Parameters:
+    Args:
         min_key (int): The lowest key.
         max_key (int): The greatest key.
         requests (List[int]): List of key accesses.

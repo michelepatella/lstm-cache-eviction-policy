@@ -24,7 +24,7 @@ def get_dataset_abs_path(
     This function retrieves the dataset absolute path
     dynamically, based on data distribution mode.
 
-    Parameters:
+    Args:
         dataset_type (str): Type of dataset requested (raw or preprocessed).
         data_distribution_mode (str): Data distribution mode selected.
 

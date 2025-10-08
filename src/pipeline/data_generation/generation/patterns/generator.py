@@ -38,7 +38,7 @@ def generate_pattern_requests(
     to specific access and temporal patterns involving
     given keys, strongly affected by Zipfian distribution.
 
-    Parameters:
+    Args:
         keys_range (np.ndarray): List of keys to generate requests for.
         zipf_probs (np.ndarray): List of Zipfian probabilities
                                  of the given keys.

@@ -47,7 +47,7 @@ def generate_data(config: Config) -> None:
     is used to create a dataframe saved as CSV dataset next.
     Finally, data generated is validated by proper plots.
 
-    Parameters:
+    Args:
         config (Config): Configuration object.
 
     Returns:

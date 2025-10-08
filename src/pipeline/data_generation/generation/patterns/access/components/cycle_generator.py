@@ -21,7 +21,7 @@ def generate_cycle_pattern(
     to a subset of keys dynamically built, depending
     on the number of requests already generated.
 
-    Parameters:
+    Args:
         cycle_base (int): Minimum number of keys in the cycle.
         cycle_divisor (int): Divisor controlling how quickly the
                              cycle length increases.

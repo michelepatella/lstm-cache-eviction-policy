@@ -24,7 +24,7 @@ def update_hit_miss_timeline(
     so far, then appends a new entry to the timeline with
     the current statistics.
 
-    Parameters:
+    Args:
         counters (Dict[str, int]): Dictionary containing current
                                    hit and miss counters.
         idx (int): Current request index.

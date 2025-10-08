@@ -21,7 +21,7 @@ class HardwareConfig(BaseModel):
 
         This function validates the device specified.
 
-        Parameters:
+        Args:
             self (HardwareConfig): Current model instance.
 
         Returns:

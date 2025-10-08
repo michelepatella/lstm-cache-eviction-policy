@@ -24,7 +24,7 @@ def plot_confusion_matrix(confusion_matrix: dict, save_path: str) -> None:
     This function visualizes the provided confusion matrix
     as a heatmap.
 
-    Parameters:
+    Args:
         confusion_matrix (dict): Confusion matrix to plot.
         save_path (str): Path to save the figure.
 

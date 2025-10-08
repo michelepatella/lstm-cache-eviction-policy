@@ -23,7 +23,7 @@ def update_config(
     it into the original one. Then, runs validation on the entire new
     configuration object before using it as new settings.
 
-    Parameters:
+    Args:
         updated_config (dict): Updated configuration object.
         prepare_config (Callable): Method to run validation on
             the new configuration object and set it as new settings.

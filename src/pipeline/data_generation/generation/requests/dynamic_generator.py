@@ -24,7 +24,7 @@ def generate_dynamic_requests(
     Each time step uses a different alpha, creating
     temporal variability in the access distribution.
 
-    Parameters:
+    Args:
         config (Config): Configuration object.
 
     Returns:

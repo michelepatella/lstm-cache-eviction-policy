@@ -28,7 +28,7 @@ def initialize_trained_model(
     the model with the correct device,
     loss function, and loads pre-trained weights.
 
-    Parameters:
+    Args:
         config (Config): Configuration object.
         data_loader (DataLoader | None): DataLoader containing the
                                          dataset to be used.

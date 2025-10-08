@@ -14,7 +14,7 @@ def get_all_sections_combinations(
     Combine parameter combinations from all
     sections into full configurations.
 
-    Parameters:
+    Args:
         section_combinations (List[Tuple[str, Any]]):
             Section name and its combinations.
 

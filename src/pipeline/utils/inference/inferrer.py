@@ -30,7 +30,7 @@ def infer_batch(
     loss per batch, and accumulates predictions, targets, outputs, and
     variances.
 
-    Parameters:
+    Args:
         model (torch.nn.Module): The model to perform inference with.
         data_loader (DataLoader): DataLoader providing batches of data.
         criterion (torch.nn.Module): Loss function for computing batch loss.

@@ -12,7 +12,7 @@ def enable_mc_dropout(model: torch.nn.Module) -> None:
     to training mode, allowing stochastic dropout to be applied
     during inference.
 
-    Parameters:
+    Args:
         model (torch.nn.Module): The PyTorch model in which to
                                  enable MC Dropout.
 

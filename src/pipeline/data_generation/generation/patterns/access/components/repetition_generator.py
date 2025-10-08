@@ -24,7 +24,7 @@ def generate_repetition_pattern(
     accessed regularly, while other accesses involve
     keys randomly selected from a subset of initial keys.
 
-    Parameters:
+    Args:
         repetition_interval (int): Integer indicating how many times
                                    there will be a regular key access.
         repetition_offset (int): Integer determining how many steps back

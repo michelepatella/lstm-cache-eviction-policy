@@ -31,7 +31,7 @@ def initialize_model_components(
         - Instantiates the LSTM model and moves it to the device
         - Builds the optimizer for the model parameters
 
-    Parameters:
+    Args:
         model_params (ModelParamsConfig): Dictionary containing model
                                                  hyperparameters.
         learning_rate (float): Learning rate for the optimizer.

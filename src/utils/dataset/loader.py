@@ -16,7 +16,7 @@ def load_dataset(dataset_type: str, config: Config) -> pd.DataFrame:
     data distribution mode — and returns it as a
     pandas DataFrame.
 
-    Parameters:
+    Args:
         dataset_type (str): Dataset type to be loaded.
         config (Config): Configuration object.
 

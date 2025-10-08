@@ -22,7 +22,7 @@ def split_training_set(
     the validation percentage in the configuration, and returns PyTorch
     Subsets for training and validation.
 
-    Parameters:
+    Args:
         training_set (AccessLogsDataset): The dataset to split.
         config (Config): Configuration object.
         training_idx (List[int] | None): Optional training set index.

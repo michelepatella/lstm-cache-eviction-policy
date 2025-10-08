@@ -37,7 +37,7 @@ def plot_hit_miss_rate(
     and one for miss rate — showing the evolution of each
     metric over time across different cache policies.
 
-    Parameters:
+    Args:
         results (List[Dict[str, Any]]): List of simulation results.
         save_path (str): Path where to save the figure.
 

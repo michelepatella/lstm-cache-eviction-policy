@@ -16,7 +16,7 @@ def flatten_search_space(
     into a flat list of tuples, where each tuple contains a key path and
     the corresponding list of possible values.
 
-    Parameters:
+    Args:
         nested_dict (Dict[str, Any]): The search space dictionary to flatten.
         parent_key (Tuple[str, ...]): Accumulated key path from
                                       previous recursion levels.

@@ -27,7 +27,7 @@ def plot_zipf_loglog(requests: List[int], save_path: str) -> None:
     plot should highlight much more key accesses to
     the first keys than those to later ones.
 
-    Parameters:
+    Args:
         requests (List[int]): List of key accesses.
         save_path (str): Path to save the figure.
 

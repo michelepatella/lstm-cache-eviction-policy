@@ -35,7 +35,7 @@ class OptimizerConfig(BaseModel):
         This function validates the training
         optimizer specified.
 
-        Parameters:
+        Args:
             self (OptimizerConfig): Current model instance.
 
         Returns:

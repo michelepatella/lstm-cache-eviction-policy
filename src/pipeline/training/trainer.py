@@ -26,7 +26,7 @@ def train_model(config: Config) -> None:
     The best model found during training process is saved
     for further usage.
 
-    Parameters:
+    Args:
         config (Config): Configuration object.
 
     Returns:

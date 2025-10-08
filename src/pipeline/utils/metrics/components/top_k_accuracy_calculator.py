@@ -18,7 +18,7 @@ def calculate_top_k_accuracy(
     This function calculates the proportion of samples for which
     the true label is among the top-K predicted labels.
 
-    Parameters:
+    Args:
         targets (List[int]): Ground truth class labels.
         outputs (List[torch.Tensor]): Model outputs.
         top_k (int): Number of top predictions to consider for accuracy.

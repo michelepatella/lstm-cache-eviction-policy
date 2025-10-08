@@ -23,7 +23,7 @@ class RandomCache(BaseCache):
         its expiration time if already cached, and evicts
         a random key if the cache is full.
 
-        Parameters:
+        Args:
             self ("RandomCache"): Current class instance.
             key (int): Key to insert or update.
             current_time (float): Current timestamp for

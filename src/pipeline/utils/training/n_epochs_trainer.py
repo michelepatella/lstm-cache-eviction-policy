@@ -37,7 +37,7 @@ def train_n_epochs(
     criterion received as arguments. All the operations are performed
     on a specified device.
 
-    Parameters:
+    Args:
         num_epochs (int): Number of epochs to train.
         model (torch.nn.Module): The model to train.
         training_loader (DataLoader): DataLoader for training data.

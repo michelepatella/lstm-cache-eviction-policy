@@ -18,7 +18,7 @@ def calculate_class_weight(
     This function ensures that classes which appear less frequently
     are assigned higher weights, useful for imbalanced classification.
 
-    Parameters:
+    Args:
         targets (Tensor): Target labels.
         num_keys (int): Number of classes (i.e., keys).
 

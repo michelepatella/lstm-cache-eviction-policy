@@ -20,7 +20,7 @@ def extract_time_key_from_row(
     calculates and returns the current time in seconds — based on the
     sinusoidal encoding — and the requested key.
 
-    Parameters:
+    Args:
         row (Tuple[Tensor, Tensor, Tensor]): A single dataset row.
 
     Returns:

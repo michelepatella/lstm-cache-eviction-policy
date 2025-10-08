@@ -1,4 +1,4 @@
-from typing import Any, Tuple, Dict
+from typing import Any, Tuple, List
 
 from torch import Tensor
 
@@ -17,13 +17,10 @@ from utils.model.initialization.trained_model_initializer import (
 
 
 def manage_lstm_eviction_policy(
-    store: Dict[Any, Any],
+    store: List[Any],
     last_accesses: Tuple[Tensor, Tensor, Tensor],
     config: Config,
 ):
-    # Trained model setup for testing
-    device, _, model = initialize_trained_model(config)
-
     # compute rollout
     all_outputs, all_vars = autoregressive_rollout(
         model,

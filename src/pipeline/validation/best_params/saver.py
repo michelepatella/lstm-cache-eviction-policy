@@ -15,7 +15,7 @@ def save_best_params(best_params: Dict[str, Any], config: Config) -> Config:
     This function updates the provided configuration
     object with the best parameters found during optimization.
 
-    Parameters:
+    Args:
         best_params (Dict[str, Any]): Best parameters found.
         config (Config): Current configuration object.
 
@@ -32,7 +32,7 @@ def save_best_params(best_params: Dict[str, Any], config: Config) -> Config:
             """
             Recursively apply updates to a Pydantic model or dictionary.
 
-            Parameters:
+            Args:
                 obj (Any): The current Pydantic model or dictionary to update.
                 updates (Dict[str, Any]): Dictionary of updates to apply.
                 path (str): Dot-separated path for logging purposes.

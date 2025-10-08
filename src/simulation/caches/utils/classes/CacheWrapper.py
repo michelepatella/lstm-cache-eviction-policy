@@ -19,7 +19,7 @@ class CacheWrapper(BaseCache):
         expired entries, updates the expiration time, and logs
         the operation in the metrics logger.
 
-        Parameters:
+        Args:
             self ("CacheWrapper"): Current class instance.
             key (int): Key to insert.
             current_time (float): Current timestamp.

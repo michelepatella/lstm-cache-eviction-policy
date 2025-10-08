@@ -22,7 +22,7 @@ def get_last_accesses(
     last sequence of accesses from the testing set. If there is
     not enough data to form a full sequence, returns None.
 
-    Parameters:
+    Args:
         current_idx (int): Current request index.
         seq_len (int): Sequence length to be extracted.
         testing_set (DataLoader): Testing dataset.

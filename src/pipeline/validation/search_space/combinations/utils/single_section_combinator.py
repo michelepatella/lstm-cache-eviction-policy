@@ -22,7 +22,7 @@ def get_single_section_combinations(
     """
     Generate all possible parameter combinations for a single section.
 
-    Parameters:
+    Args:
         section (str): Section name in the search space.
         params_dict (Dict[str, Any]): Section parameters.
 

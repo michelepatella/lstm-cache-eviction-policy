@@ -18,7 +18,7 @@ def calculate_eviction_mistake_rate(
     occurs when a key that was evicted from the cache
     is accessed again within the specified temporal window.
 
-    Parameters:
+    Args:
         metrics_logger (CacheMetricsLogger): Object tracking cache events
                                              (evictions and accesses).
         mistake_window (int): Temporal window to consider future

@@ -19,7 +19,7 @@ def encode_time_trigonometrically(
     The original time column is dropped and replaced by the
     two new columns.
 
-    Parameters:
+    Args:
         df (pd.DataFrame): Dataset containing the time column to encode.
         time_column (str): Name of the time column to be transformed.
 

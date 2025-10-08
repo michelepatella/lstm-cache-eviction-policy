@@ -16,7 +16,7 @@ def remove_invalid_values(df: pd.DataFrame, config: Config) -> pd.DataFrame:
     This function removes rows with invalid column values
     from dataset, returning a new valid dataset.
 
-    Parameters:
+    Args:
         df (pd.DataFrame): Dataset to remove invalid
                            values from.
         config (Config): Configuration object.

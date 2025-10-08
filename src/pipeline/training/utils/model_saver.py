@@ -10,7 +10,7 @@ def save_model(model: Module, model_save_path: str) -> None:
     """
     Save a PyTorch model to the specified path.
 
-    Parameters:
+    Args:
         model (Module): The PyTorch model to save.
         model_save_path (str): File path to save the model.
 

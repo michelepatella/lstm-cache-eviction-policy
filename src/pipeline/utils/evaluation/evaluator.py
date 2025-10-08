@@ -39,7 +39,7 @@ def evaluate_model(
     evaluation metrics including classification report, top-k accuracy,
     confusion matrix, and Cohen’s kappa score.
 
-    Parameters:
+    Args:
         model (torch.nn.Module): Model to evaluate.
         data_loader (DataLoader): DataLoader containing the evaluation dataset.
         criterion (torch.nn.Module): Loss function used for evaluation.

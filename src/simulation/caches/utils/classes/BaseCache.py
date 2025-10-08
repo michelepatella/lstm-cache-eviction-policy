@@ -31,7 +31,7 @@ class BaseCache(ABC):
         This function sets up the cache, metrics logger,
         TTL, maximum size, and auxiliary data structures.
 
-        Parameters:
+        Args:
             self (BaseCache): Current class instance.
             cache_class (Any): Class implementing a cache.
             metrics_logger (CacheMetricsLogger): Object to log cache
@@ -76,7 +76,7 @@ class BaseCache(ABC):
         TTL. The function returns True if the key
         has expired, False otherwise.
 
-        Parameters:
+        Args:
             self (BaseCache): Current class instance.
             key (int): Key to check expiration for.
             current_time (float): Current timestamp.
@@ -102,7 +102,7 @@ class BaseCache(ABC):
         This function, given the current time, removes
         all the expired keys from the cache, based on TTL.
 
-        Parameters:
+        Args:
             self (BaseCache): Current class instance.
             current_time (float): Current timestamp.
 
@@ -147,7 +147,7 @@ class BaseCache(ABC):
         expired, returning True if both condition are verified,
         False otherwise.
 
-        Parameters:
+        Args:
             self (BaseCache): Current class instance.
             key (int): Key to check.
             current_time (float): Current timestamp.
@@ -183,7 +183,7 @@ class BaseCache(ABC):
         callback removes expiration time for the evicted
         key as well as logs the eviction event.
 
-        Parameters:
+        Args:
             self (BaseCache): Current class instance.
             key (int): Key that was evicted.
 
@@ -209,7 +209,7 @@ class BaseCache(ABC):
         Each cache eviction strategy must implement
         its own put method.
 
-        Parameters:
+        Args:
             self ("BaseCache"): Current class instance.
             *args (Any): Positional arguments required
                          by the specific cache strategy.

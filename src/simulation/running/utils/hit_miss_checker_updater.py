@@ -15,7 +15,7 @@ def check_update_hit_miss(
     and is still valid based on its expiration time. It updates
     the hit/miss counters accordingly.
 
-    Parameters:
+    Args:
         cache (Any): Cache object implementing a contains method.
         key (int): Key to look up in the cache.
         current_time (float): Current timestamp for validation.

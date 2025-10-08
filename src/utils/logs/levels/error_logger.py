@@ -9,7 +9,7 @@ def error(msg: str, *args: Any, **kwargs: Any) -> None:
     """
     Log an error-level message with the current phase context.
 
-    Parameters:
+    Args:
         msg (str): The message to log.
         args (Any): Positional arguments for message formatting.
         kwargs (Any): Keyword arguments for the logging function.

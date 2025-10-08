@@ -2,7 +2,6 @@ import math
 
 import torch
 
-from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
 from utils.mc.forward_runner import (
     mc_forward_passes,
@@ -32,7 +31,7 @@ def autoregressive_rollout(model, seed_sequence, device, config_settings):
             model,
             (x_features_seq, x_keys_seq),
             device,
-            config_settings,
+            config_settings.model.general.features,
             config_settings.inference.mc_dropout.samples.count,
         )
 

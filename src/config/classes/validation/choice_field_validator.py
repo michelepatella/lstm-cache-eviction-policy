@@ -19,7 +19,7 @@ def validate_choice_field(
     ensuring its value it's a valid one, according
     to a list of allowed values.
 
-    Parameters:
+    Args:
         instance (Any): Model instance being validated.
         field_value (Any): Value of the choice field.
         allowed_field_values (List[Any]): List of allowed values.

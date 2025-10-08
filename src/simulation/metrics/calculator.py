@@ -31,7 +31,7 @@ def calculate_cache_simulation_metrics(
     cache latency records, as well as a metrics logger for eviction
     tracking.
 
-    Parameters:
+    Args:
         counters (Dict[str, int]): Dictionary containing counts of cache
                                    hits and misses.
         cache_latencies (List[float]): List of cache access latencies

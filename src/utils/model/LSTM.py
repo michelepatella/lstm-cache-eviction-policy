@@ -19,7 +19,7 @@ class LSTM(nn.Module):
         This function sets LSTM model fields using
         provided parameters or configuration.
 
-        Parameters:
+        Args:
             self ("LSTM"): Current class instance.
             params (ModelParamsConfig): Parameters specified for the model.
             config (Config): Configuration object.
@@ -102,7 +102,7 @@ class LSTM(nn.Module):
         the LSTM class, as well as a dropout and a fully-connected (linear)
         layer.
 
-        Parameters:
+        Args:
             self ("LSTM"): Current class instance.
             params (ModelParamsConfig: Model parameters.
             config (Config): Configuration object.
@@ -169,7 +169,7 @@ class LSTM(nn.Module):
         This function builds and returns the LSTM input
         by concatenating features with embedded keys.
 
-        Parameters:
+        Args:
             x_features (torch.Tensor): Feature tensor for the current batch.
             x_keys (torch.Tensor): Keys tensor for the current batch.
 
@@ -220,7 +220,7 @@ class LSTM(nn.Module):
         with embedded keys, passes it through the LSTM, optionally
         applies MC dropout, and finally computes logits using a linear layer.
 
-        Parameters:
+        Args:
             x_features (torch.Tensor): Input features tensor
                                        for the current batch.
             x_keys (torch.Tensor): Input keys tensor

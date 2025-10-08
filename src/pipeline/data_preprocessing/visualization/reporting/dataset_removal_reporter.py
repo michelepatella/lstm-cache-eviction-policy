@@ -17,7 +17,7 @@ def report_dataset_removal(
     of rows removed from dataset after applying
     a specific cleaning operation.
 
-    Parameters:
+    Args:
         original_df (pd.DataFrame): Original dataframe (i.e., before
                                     applying the cleaning operation).
         new_df (pd.DataFrame): New dataframe (i.e., after applying

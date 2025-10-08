@@ -20,7 +20,7 @@ def remove_missing_values(
     This function removes rows with missing values
     from dataset, returning a new clean dataset.
 
-    Parameters:
+    Args:
         df (pd.DataFrame): Dataset to remove missing
                            values from.
 

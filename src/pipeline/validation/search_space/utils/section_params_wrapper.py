@@ -16,7 +16,7 @@ def wrap_section_params(
     matches the Pydantic BaseModel, handling both top-level
     and nested sections.
 
-    Parameters:
+    Args:
         combo (Dict[str, Any]): Parameter combination
                                 dictionary for the section.
         section (str): Section name (top-level or nested).

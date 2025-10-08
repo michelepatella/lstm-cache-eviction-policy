@@ -27,7 +27,7 @@ def generate_memory_fallback_pattern(
     Otherwise, it selects a key randomly according
     to the provided Zipfian probabilities.
 
-    Parameters:
+    Args:
         memory_interval (int): Number of requests between
                                memory-based accesses.
         memory_offset (int): Steps back in request history to

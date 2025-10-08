@@ -30,7 +30,7 @@ def train_one_epoch(
     as a backward pass — to calculate the gradients of loss and update
     the weights through optimizer consequently.
 
-    Parameters:
+    Args:
         model (torch.nn.Module): The model to train.
         training_loader (DataLoader): DataLoader providing training batches.
         optimizer (Optimizer): Optimizer used to update model parameters.

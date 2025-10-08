@@ -29,7 +29,7 @@ def compute_forward(
         - If a criterion is provided, computes the
           loss using the model outputs and target.
 
-    Parameters:
+    Args:
         inputs (Union[
             Tuple[torch.Tensor, torch.Tensor, torch.Tensor],
             Tuple[torch.Tensor, torch.Tensor],

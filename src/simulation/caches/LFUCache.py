@@ -27,7 +27,7 @@ class LFUCache(Cache):
         the data structures to collect data during simulation,
         and the optional callback provided.
 
-        Parameters:
+        Args:
             self ("LFUCache"): Current class instance.
             maxsize (int): Maximum size of the cache.
             callback (Callable): Callback function invoked
@@ -56,7 +56,7 @@ class LFUCache(Cache):
         item from the LFU cache and increments its
         access frequency.
 
-        Parameters:
+        Args:
             self ("LFUCache"): Current class instance.
             key (int): Key to look up in the cache.
 
@@ -96,7 +96,7 @@ class LFUCache(Cache):
         or inserts the provided item for the key in the
         LFU cache (depending on whether the key is already cached).
 
-        Parameters:
+        Args:
             self ("LFUCache"): Current class instance.
             key (int): Key to store in the cache.
             item (Any): Value associated with the key.
@@ -176,7 +176,7 @@ class LFUCache(Cache):
         This function, given a key, deletes it
         from the LFU cache along with its access frequency.
 
-        Parameters:
+        Args:
             self ("LFUCache"): Current class instance.
             key (int): Key to delete.
 
@@ -207,7 +207,7 @@ class LFUCache(Cache):
         This function, given a key, returns True if
         it exists in the LFU cache, False otherwise.
 
-        Parameters:
+        Args:
             self ("LFUCache"): Current class instance.
             key (int): Key to check.
 
@@ -226,7 +226,7 @@ class LFUCache(Cache):
         from the LFU cache and returns its item.
         If the key is not found, it returns None instead.
 
-        Parameters:
+        Args:
             self ("LFUCache"): Current class instance.
             key (int): Key to remove.
 
@@ -258,7 +258,7 @@ class LFUCache(Cache):
         This function returns the number of items
         currently stored in the LFU cache.
 
-        Parameters:
+        Args:
             self ("LFUCache"): Current class instance.
 
         Returns:
@@ -273,7 +273,7 @@ class LFUCache(Cache):
         This function clears the LFU cache by
         removing all stored items and their frequencies.
 
-        Parameters:
+        Args:
             self ("LFUCache"): Current class instance.
 
         Returns:

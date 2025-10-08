@@ -34,7 +34,7 @@ class KeysConfig(BaseModel):
         Check whether the least key is greater than
         or equal to the greatest key or not.
 
-        Parameters:
+        Args:
             self (KeysConfig): Current model instance.
 
         Returns:
@@ -97,7 +97,7 @@ class NoiseConfig(BaseModel):
         Check whether the least noise value is
         greater than or equal to the greatest one or not.
 
-        Parameters:
+        Args:
             self (NoiseConfig): Current model instance.
 
         Returns:
@@ -171,7 +171,7 @@ class BurstinessConfig(BaseModel):
         Check whether the highest burst value is
         greater than or equal to the lowest one or not.
 
-        Parameters:
+        Args:
             self (BurstinessConfig): Current model instance.
 
         Returns:
@@ -220,7 +220,7 @@ class GenerationConfig(BaseModel):
         This function validates the data
         distribution mode.
 
-        Parameters:
+        Args:
             self (GenerationConfig): Current model instance.
 
         Returns:

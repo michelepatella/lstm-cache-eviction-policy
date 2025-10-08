@@ -17,7 +17,7 @@ def set_bursty_scale(
     burst high/low, depending on the current hour in day
     with respect to the burst band of the day.
 
-    Parameters:
+    Args:
         burst_high (float): Burst high value.
         burst_low (float): Burst low value.
         burst_start_hour (int): Hour in day when the burst starts.

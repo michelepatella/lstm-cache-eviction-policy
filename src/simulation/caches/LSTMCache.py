@@ -34,7 +34,7 @@ class LSTMCache(BaseCache):
         This function initializes the LSTM cache by
         calling the BaseCache constructor.
 
-        Parameters:
+        Args:
             self ("LSTMCache"): Current class instance.
             cache_class (Any): Underlying cache class
                                to store items.
@@ -57,7 +57,7 @@ class LSTMCache(BaseCache):
         from the LSTM cache, along with its
         expiration time.
 
-        Parameters:
+        Args:
             self ("LSTMCache"): Current class instance.
             key (int): Key to remove from the cache.
 
@@ -78,7 +78,7 @@ class LSTMCache(BaseCache):
         This function puts a key into the LSTM cache
         along with its expiration time.
 
-        Parameters:
+        Args:
             self ("LSTMCache"): Current class instance.
             key (int): Key to insert in the cache.
             current_time (float): Current time.
@@ -112,7 +112,7 @@ class LSTMCache(BaseCache):
         extracts the last sequence of accesses and uses the
         LSTM policy to decide which key to evict.
 
-        Parameters:
+        Args:
             self ("LSTMCache"): Current class instance.
             key (int): Key to insert.
             current_time (float): Current time.
@@ -151,7 +151,7 @@ class LSTMCache(BaseCache):
                 # Run LSTM eviction policy to get
                 # the key to be evicted from the cache
                 key_to_evict = manage_lstm_eviction_policy(
-                    self.store, last_accesses, config
+                    list(self.store.keys()), last_accesses, config
                 )
 
             # Evict key

@@ -17,7 +17,7 @@ def set_nested_dict(
     to the provided sequence of keys, creating intermediate
     dictionaries if needed, and sets the value at the last key.
 
-    Parameters:
+    Args:
         nested_dict (Dict[str, Any]): Dictionary to update.
         keys (Sequence[str]): Sequence of nested keys leading to the value.
         value (int | float): Value to set at the nested location.

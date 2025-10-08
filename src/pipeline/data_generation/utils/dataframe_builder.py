@@ -17,7 +17,7 @@ def create_dataframe(
     This function creates a Pandas dataframe
     from the given columns.
 
-    Parameters:
+    Args:
         columns (Dict[str, Union[Sequence, np.ndarray]]): Columns to create
                                                           dataframe for.
 
