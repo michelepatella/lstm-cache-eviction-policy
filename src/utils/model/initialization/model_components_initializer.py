@@ -60,9 +60,11 @@ def initialize_model_components(
     # Prepare configuration
     device_type = config.hardware.device
     optimizer_type = config.training.optimizer.type
-    num_keys = (
-        config.data.generation.keys.max - config.data.generation.keys.min + 1
-    )
+    min_key = config.data.generation.keys.min
+    max_key = config.data.generation.keys.max
+    num_keys = max_key - min_key + 1
+    embedding_dim = config.model.sequence.embedding.dimension
+    num_features = config.model.general.features
 
     try:
         # Define the device
@@ -97,7 +99,9 @@ def initialize_model_components(
             raise RuntimeError(msg) from e
 
     # Instantiate LSTM model
-    model = LSTM(model_params, config)
+    model = LSTM(
+        model_params, min_key, max_key, embedding_dim, num_features, config
+    )
 
     try:
         # Move model to device

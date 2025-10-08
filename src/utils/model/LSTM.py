@@ -1,3 +1,5 @@
+from typing import Dict
+
 import torch
 import torch.nn as nn
 
@@ -11,7 +13,13 @@ from utils.logs.levels.info_logger import info
 
 class LSTM(nn.Module):
     def _set_fields(
-        self: "LSTM", params: ModelParamsConfig, config: Config
+        self: "LSTM",
+        params: ModelParamsConfig | Dict[str, int | float | bool],
+        min_key: int,
+        max_key: int,
+        embedding_dim: int,
+        num_features: int,
+        config: Config,
     ) -> None:
         """
         Set LSTM model fields.
@@ -21,7 +29,11 @@ class LSTM(nn.Module):
 
         Args:
             self ("LSTM"): Current class instance.
-            params (ModelParamsConfig): Parameters specified for the model.
+            params (ModelParamsConfig | Dict[str, int | float | bool]): Parameters specified for the model.
+            min_key (int): Maximum key.
+            max_key (int): Minimum key.
+            embedding_dim (int): Embedding dimension for embedding the keys.
+            num_features (int): Number of features for the LSTM model.
             config (Config): Configuration object.
 
         Returns:
@@ -32,12 +44,11 @@ class LSTM(nn.Module):
                 * Invalid values for embedding dimension or number of keys.
         """
         try:
-            # Prepare configuration
-            model_params = config.model.params
-            max_key = config.data.generation.keys.max
-            min_key = config.data.generation.keys.min
-            embedding_dim = config.model.sequence.embedding.dimension
-            num_features = config.model.general.features
+            # Prepare configuration model params
+            # if a configuration object is passed
+            model_params = None
+            if config is not None:
+                model_params = config.model.params
 
             # For each required parameter
             for param in LSTM_PARAM_NAMES:
@@ -92,7 +103,13 @@ class LSTM(nn.Module):
             raise RuntimeError(msg) from e
 
     def __init__(
-        self: "LSTM", params: ModelParamsConfig, config: Config
+        self: "LSTM",
+        params: ModelParamsConfig | Dict[str, int | float | bool],
+        min_key: int,
+        max_key: int,
+        embedding_dim: int,
+        num_features: int,
+        config: Config = None,
     ) -> None:
         """
         Initialize the LSTM model.
@@ -104,7 +121,12 @@ class LSTM(nn.Module):
 
         Args:
             self ("LSTM"): Current class instance.
-            params (ModelParamsConfig: Model parameters.
+            params (ModelParamsConfig | Dict[str, int | float | bool]):
+                Model parameters.
+            min_key (int): Maximum key.
+            max_key (int): Minimum key.
+            embedding_dim (int): Embedding dimension for embedding the keys.
+            num_features (int): Number of features for the LSTM model.
             config (Config): Configuration object.
 
         Returns:
@@ -118,7 +140,9 @@ class LSTM(nn.Module):
         debug(f"MC dropout set to default: {self.mc_dropout}")
 
         # Set model fields
-        self._set_fields(params, config)
+        self._set_fields(
+            params, min_key, max_key, embedding_dim, num_features, config
+        )
 
         # Instantiate the LSTM layer
         self.lstm = nn.LSTM(
