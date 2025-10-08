@@ -17,9 +17,11 @@ from utils.model.initialization.trained_model_initializer import (
 
 
 def manage_lstm_eviction_policy(
-    store: List[Any],
+    keys_in_cache: List[Any],
     last_accesses: Tuple[Tensor, Tensor, Tensor],
-    config: Config,
+    prediction_window: int,
+    num_mc_samples: int,
+    confidence_level: float,
 ):
     # compute rollout
     all_outputs, all_vars = autoregressive_rollout(

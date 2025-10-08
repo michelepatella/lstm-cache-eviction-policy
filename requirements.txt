@@ -1,5 +1,6 @@
 cachetools==6.2.0
 black==25.9.0
+fastapi==0.118.1
 flake8==7.3.0
 isort==6.1.0
 matplotlib==3.10.6
