@@ -4,7 +4,7 @@ from typing import Any
 from torch.utils.data import DataLoader
 
 from config.classes.Config import Config
-from lstm_eviction_policy.manager import manage_lstm_eviction_policy
+from eviction_policy_api.manager import manage_lstm_eviction_policy
 from simulation.caches.utils.last_accesses_extractor import get_last_accesses
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info

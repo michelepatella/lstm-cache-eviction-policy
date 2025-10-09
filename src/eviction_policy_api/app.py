@@ -2,7 +2,7 @@ from typing import List, Any
 
 from fastapi import FastAPI
 
-from lstm_eviction_policy.initialization.initializer import initialize_api
+from eviction_policy_api.initialization.initializer import initialize_api
 
 app = FastAPI()
 

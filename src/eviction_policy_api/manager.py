@@ -3,11 +3,11 @@ from typing import Any, Tuple, List
 from torch import Tensor
 
 from config.classes.Config import Config
-from lstm_eviction_policy.autoregression import autoregressive_rollout
-from lstm_eviction_policy.confidence_interval_calculator import (
+from eviction_policy_api.autoregression import autoregressive_rollout
+from eviction_policy_api.confidence_interval_calculator import (
     calculate_confidence_interval,
 )
-from lstm_eviction_policy.key_candidates_finder import (
+from eviction_policy_api.key_candidates_finder import (
     find_key_candidates,
 )
 from utils.logs.levels.info_logger import info
