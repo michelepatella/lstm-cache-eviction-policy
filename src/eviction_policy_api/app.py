@@ -6,9 +6,9 @@ from eviction_policy_api.initialization.initializer import initialize_api
 
 app = FastAPI()
 
-# Setup for API: Load model and device, using
-# configuration settings
-model, device = initialize_api()
+# Setup for API: Load model, device and
+# API configuration
+model, device, api_config = initialize_api()
 
 
 @app.post("/evict")
