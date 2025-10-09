@@ -131,15 +131,8 @@ testing:
 
 simulation:
   cache:
-    general:
-      dimension: 100
-      ttl: 1800
-    lstm:
-      prediction_interval: 5
-      confidence_intervals:
-        level: 0.95
-      mc_dropout:
-        samples: 50
+    dimension: 100
+    ttl: 1800
   metrics:
     mistake_rate:
       window: 100
