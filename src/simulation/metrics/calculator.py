@@ -1,6 +1,9 @@
 from typing import Dict, List, Tuple
 
 from config.classes.Config import Config
+from simulation.caches.utils.classes.CacheMetricsLogger import (
+    CacheMetricsLogger,
+)
 from simulation.metrics.components.avg_cache_latency_calculator import (
     calculate_avg_cache_latency,
 )
@@ -11,9 +14,6 @@ from simulation.metrics.components.hit_miss_rate_calculator import (
     calculate_hit_miss_rate,
 )
 from utils.logs.levels.info_logger import info
-from simulation.caches.utils.classes.CacheMetricsLogger import (
-    CacheMetricsLogger,
-)
 
 
 def calculate_cache_simulation_metrics(

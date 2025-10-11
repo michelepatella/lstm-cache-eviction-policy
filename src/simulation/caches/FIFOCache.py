@@ -12,9 +12,11 @@ class FIFOCache(Cache):
     """
     FIFO (First-In-First-Out) cache implementation.
 
-    This cache evicts the oldest inserted item when the
-    maximum size is reached. Optionally, a callback can be
-    provided to handle evicted keys.
+    Evicts the oldest inserted item when the maximum size is reached.
+
+    Attributes:
+        _data (OrderedDict): Internal data storage for cache items.
+        callback (Callable | None): Optional callback for evicted keys.
     """
 
     def __init__(

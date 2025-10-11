@@ -8,8 +8,10 @@ from const import HW_DEVICES
 
 class HardwareConfig(BaseModel):
     """
-    Class representing the hardware configuration
-    settings.
+    Hardware configuration.
+
+    Attributes:
+        device (str): Hardware device type to be used.
     """
 
     device: str

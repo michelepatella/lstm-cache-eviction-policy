@@ -12,9 +12,12 @@ class LFUCache(Cache):
     """
     LFU (Least Frequently Used) cache implementation.
 
-    This cache evicts the least frequently used item when the
-    maximum size is reached. Optionally, a callback can be
-    provided to handle evicted keys.
+    Evicts the least frequently used item when the maximum size is reached.
+
+    Attributes:
+        _data (dict): Internal data storage for cache items.
+        _freq (defaultdict): Stores access frequency for each key.
+        callback (Callable | None): Optional callback for evicted keys.
     """
 
     def __init__(

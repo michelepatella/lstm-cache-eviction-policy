@@ -10,13 +10,13 @@ from const import (
     KEY_USAGE_HEATMAP_CMAP,
     KEY_USAGE_HEATMAP_COLORBAR_LABEL,
     KEY_USAGE_HEATMAP_ROTATION,
+    KEY_USAGE_HEATMAP_STEP,
     KEY_USAGE_HEATMAP_TITLE,
     KEY_USAGE_HEATMAP_X_LABEL,
     KEY_USAGE_HEATMAP_Y_LABEL,
     PLOT_LABEL_FONT_SIZE,
     PLOT_SIZE,
     PLOT_TITLE_FONT_SIZE,
-    KEY_USAGE_HEATMAP_STEP,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error

@@ -1,6 +1,8 @@
-from utils.model.LSTM import LSTM
-from fastapi import HTTPException, status
 from typing import Dict
+
+from fastapi import HTTPException, status
+
+from utils.model.LSTM import LSTM
 
 
 def build_model(

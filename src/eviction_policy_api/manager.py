@@ -1,4 +1,4 @@
-from typing import Any, Tuple, List
+from typing import Any, List, Tuple
 
 from torch import Tensor
 

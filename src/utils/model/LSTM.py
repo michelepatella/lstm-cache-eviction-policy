@@ -12,6 +12,31 @@ from utils.logs.levels.info_logger import info
 
 
 class LSTM(nn.Module):
+    """
+    LSTM model for cache eviction prediction.
+
+    This class implements an LSTM-based model that predicts which key
+    to evict from the cache.
+
+    Attributes:
+        mc_dropout (bool): Flag indicating if MC dropout is enabled.
+        hidden_size (int): Hidden size of the LSTM layers.
+        num_layers (int): Number of LSTM layers.
+        bias (bool): Whether to use bias in LSTM layers.
+        batch_first (bool): If True, batch dimension comes first.
+        dropout (float): Dropout probability between LSTM layers.
+        bidirectional (bool): If True, use bidirectional LSTM.
+        proj_size (int): Optional projection layer size.
+        num_keys (int): Number of unique keys to embed.
+        input_size (int): Size of LSTM input (features + embedding dim).
+        num_features (int): Number of features in input data.
+        embedding_dim (int): Dimensionality of key embeddings.
+        embedding (nn.Embedding): Embedding layer for keys.
+        lstm (nn.LSTM): PyTorch LSTM module.
+        mc_dropout_layer (nn.Dropout): Dropout layer for MC dropout.
+        fc (nn.Linear): Fully connected layer producing logits.
+    """
+
     def _set_fields(
         self: "LSTM",
         params: ModelParamsConfig | Dict[str, int | float | bool],

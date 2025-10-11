@@ -1,18 +1,15 @@
 import random
 
+from simulation.caches.utils.classes.BaseCache import BaseCache
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
-from simulation.caches.utils.classes.BaseCache import BaseCache
 
 
 class RandomCache(BaseCache):
     """
     Random cache implementation.
 
-    This cache evicts a random item when the
-    maximum size is reached. Each cached key
-    also has an expiration time based on the
-    configured TTL (Time-To-Live).
+    Evicts a random item when the maximum size is reached.
     """
 
     def put(self: "RandomCache", key: int, current_time: float) -> None:

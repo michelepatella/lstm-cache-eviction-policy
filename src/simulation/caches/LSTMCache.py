@@ -5,21 +5,21 @@ from torch.utils.data import DataLoader
 
 from config.classes.Config import Config
 from eviction_policy_api.manager import manage_lstm_eviction_policy
-from simulation.caches.utils.last_accesses_extractor import get_last_accesses
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
 from simulation.caches.utils.classes.BaseCache import BaseCache
 from simulation.caches.utils.classes.CacheMetricsLogger import (
     CacheMetricsLogger,
 )
+from simulation.caches.utils.last_accesses_extractor import get_last_accesses
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 
 
 class LSTMCache(BaseCache):
     """
-    LSTM cache implementation.
+    LSTM-based cache implementation.
 
-    This cache is based on an LSTM eviction policy
-    decide which key to evict when the cache is full.
+    Evicts keys from the cache based on an LSTM
+    eviction policy when the cache is full.
     """
 
     def __init__(

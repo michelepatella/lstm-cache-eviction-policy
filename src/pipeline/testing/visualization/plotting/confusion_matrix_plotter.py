@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 
 from const import (
     CONFUSION_MATRIX_PLOT_ANNOT,
+    CONFUSION_MATRIX_PLOT_CMAP,
     CONFUSION_MATRIX_PLOT_FMT,
     CONFUSION_MATRIX_PLOT_TITLE,
     CONFUSION_MATRIX_PLOT_X_LABEL,
@@ -11,7 +12,6 @@ from const import (
     PLOT_LABEL_FONT_SIZE,
     PLOT_SIZE,
     PLOT_TITLE_FONT_SIZE,
-    CONFUSION_MATRIX_PLOT_CMAP,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info

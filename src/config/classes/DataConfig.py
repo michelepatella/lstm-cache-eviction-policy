@@ -14,6 +14,16 @@ from const import (
 
 
 class HoursConfig(BaseModel):
+    """
+    Configuration for a range of hours within the day.
+
+    Attributes:
+        start (int): Start hour (between DATA_GENERATION_INITIAL_HOUR
+                     and DATA_GENERATION_FINAL_HOUR).
+        end (int): End hour (between DATA_GENERATION_INITIAL_HOUR
+                   and DATA_GENERATION_FINAL_HOUR).
+    """
+
     start: conint(
         ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR
     )  # type: ignore[valid-type]
@@ -23,6 +33,14 @@ class HoursConfig(BaseModel):
 
 
 class KeysConfig(BaseModel):
+    """
+    Configuration for key ranges.
+
+    Attributes:
+        min (int): Minimum key (> 0).
+        max (int): Maximum key (> 0).
+    """
+
     min: conint(gt=0)  # type: ignore[valid-type]
     max: conint(gt=0)  # type: ignore[valid-type]
 
@@ -50,35 +68,87 @@ class KeysConfig(BaseModel):
         return self
 
 
-# Data — Pattern
 class ZipfAlphaConfig(BaseModel):
+    """
+    Configuration for alpha parameters of
+    Zipf distribution.
+
+    Attributes:
+        fixed (float): Fixed alpha value (> 0).
+        min (float): Minimum alpha (> 0).
+        max (float): Maximum alpha (> 0).
+    """
+
     fixed: confloat(gt=0)  # type: ignore[valid-type]
     min: confloat(gt=0)  # type: ignore[valid-type]
     max: confloat(gt=0)  # type: ignore[valid-type]
 
 
 class ZipfConfig(BaseModel):
+    """
+    Configuration for Zipf distribution.
+
+    Attributes:
+        alpha (ZipfAlphaConfig): Alpha configuration.
+        steps (int): Number of steps (> 0).
+    """
+
     alpha: ZipfAlphaConfig
     steps: conint(gt=0)  # type: ignore[valid-type]
 
 
 class RepetitionConfig(BaseModel):
+    """
+    Configuration for repetition behavior in access patterns.
+
+    Attributes:
+        interval (int): Interval between repetitions (> 0).
+        offset (int): Offset applied to repetitions (> 0).
+        hours (HoursConfig): Hours during which repetitions occur.
+    """
+
     interval: conint(gt=0)  # type: ignore[valid-type]
     offset: conint(gt=0)  # type: ignore[valid-type]
     hours: HoursConfig
 
 
 class ToggleOffsetsConfig(BaseModel):
+    """
+    Offset configuration for toggle behavior.
+
+    Attributes:
+        forward (int): Forward offset.
+        backward (int): Backward offset.
+    """
+
     forward: int
     backward: int
 
 
 class ToggleBaseRequestsConfig(BaseModel):
+    """
+    Base requests configuration for toggle behavior.
+
+    Attributes:
+        first (int): First base request (> 0).
+        second (int): Second base request (> 0).
+    """
+
     first: conint(gt=0)  # type: ignore[valid-type]
     second: conint(gt=0)  # type: ignore[valid-type]
 
 
 class ToggleConfig(BaseModel):
+    """
+    Configuration for toggle behavior.
+
+    Attributes:
+        interval (int): Toggle interval (> 0).
+        hours (HoursConfig): Hours during which toggle behavior occurs.
+        base_requests (ToggleBaseRequestsConfig): Base request indices.
+        offsets (ToggleOffsetsConfig): Offsets for toggle behavior.
+    """
+
     interval: conint(gt=0)  # type: ignore[valid-type]
     hours: HoursConfig
     base_requests: ToggleBaseRequestsConfig
@@ -86,6 +156,14 @@ class ToggleConfig(BaseModel):
 
 
 class NoiseConfig(BaseModel):
+    """
+    Noise distortion configuration for access behavior.
+
+    Attributes:
+        min (int): Minimum noise value.
+        max (int): Maximum noise value.
+    """
+
     min: int
     max: int
 
@@ -113,11 +191,29 @@ class NoiseConfig(BaseModel):
 
 
 class DistortionOffsetsConfig(BaseModel):
+    """
+    Offsets configuration for distortion behavior.
+
+    Attributes:
+        history (int): Past history.
+        correction (int): Offset for distortion correction.
+    """
+
     history: int
     correction: int
 
 
 class DistortionConfig(BaseModel):
+    """
+    Distortion configuration for access behavior.
+
+    Attributes:
+        interval (int): Interval at which distortion is applied (> 0).
+        hours (HoursConfig): Hours during which distortion occurs.
+        offsets (DistortionOffsetsConfig): Distortion offsets.
+        noise (NoiseConfig): Noise parameters for distortion.
+    """
+
     interval: conint(gt=0)  # type: ignore[valid-type]
     hours: HoursConfig
     offsets: DistortionOffsetsConfig
@@ -125,11 +221,29 @@ class DistortionConfig(BaseModel):
 
 
 class MemoryConfig(BaseModel):
+    """
+    Memory behavior configuration.
+
+    Attributes:
+        interval (int): Interval at which memory is applied (> 0).
+        offset (int): Offset applied to memory (> 0).
+    """
+
     interval: conint(gt=0)  # type: ignore[valid-type]
     offset: conint(gt=0)  # type: ignore[valid-type]
 
 
 class CycleConfig(BaseModel):
+    """
+    Cyclical behavior configuration.
+
+    Attributes:
+        base (int): Base value for cycle (> 0).
+        mod (int): Modulus for cycle (> 0).
+        divisor (int): Divisor for cycle (> 0).
+        hours (HoursConfig): Hours during which cyclical behavior occurs.
+    """
+
     base: conint(gt=0)  # type: ignore[valid-type]
     mod: conint(gt=0)  # type: ignore[valid-type]
     divisor: conint(gt=0)  # type: ignore[valid-type]
@@ -137,6 +251,17 @@ class CycleConfig(BaseModel):
 
 
 class BehaviorConfig(BaseModel):
+    """
+    Aggregated access behavior configuration.
+
+    Attributes:
+        repetition (RepetitionConfig): Repetition configuration.
+        toggle (ToggleConfig): Toggle configuration.
+        cycle (CycleConfig): Cycle configuration.
+        distortion (DistortionConfig): Distortion configuration.
+        memory (MemoryConfig): Memory configuration.
+    """
+
     repetition: RepetitionConfig
     toggle: ToggleConfig
     cycle: CycleConfig
@@ -145,11 +270,29 @@ class BehaviorConfig(BaseModel):
 
 
 class AccessConfig(BaseModel):
+    """
+    Configuration for access patterns.
+
+    Attributes:
+        zipf (ZipfConfig): Zipf distribution configuration.
+        behavior (BehaviorConfig): Behavioral access configuration.
+    """
+
     zipf: ZipfConfig
     behavior: BehaviorConfig
 
 
 class BurstinessHoursConfig(BaseModel):
+    """
+    Hour range configuration for burstiness.
+
+    Attributes:
+        start (int): Start hour of burstiness range (between
+            DATA_GENERATION_INITIAL_HOUR and DATA_GENERATION_FINAL_HOUR).
+        end (int): End hour of burstiness range (between DATA_GENERATION_INITIAL_HOUR
+            and DATA_GENERATION_FINAL_HOUR).
+    """
+
     start: conint(
         ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR
     )  # type: ignore[valid-type]
@@ -159,6 +302,15 @@ class BurstinessHoursConfig(BaseModel):
 
 
 class BurstinessConfig(BaseModel):
+    """
+    Burstiness configuration for temporal patterns.
+
+    Attributes:
+        high (float): High burstiness value (> 0).
+        low (float): Low burstiness value (> 0).
+        hours (BurstinessHoursConfig): Hours during which burstiness occurs.
+    """
+
     high: confloat(gt=0)  # type: ignore[valid-type]
     low: confloat(gt=0)  # type: ignore[valid-type]
     hours: BurstinessHoursConfig
@@ -188,21 +340,56 @@ class BurstinessConfig(BaseModel):
 
 
 class PeriodicConfig(BaseModel):
+    """
+    Periodic access pattern configuration.
+
+    Attributes:
+        scale (int): Period scale (> 0).
+        amplitude (int): Period amplitude (>= 0).
+    """
+
     scale: conint(gt=0)  # type: ignore[valid-type]
     amplitude: conint(ge=0)  # type: ignore[valid-type]
 
 
 class TemporalConfig(BaseModel):
+    """
+    Temporal behavior configuration.
+
+    Attributes:
+        burstiness (BurstinessConfig): Burstiness configuration.
+        periodic (PeriodicConfig): Periodic pattern configuration.
+    """
+
     burstiness: BurstinessConfig
     periodic: PeriodicConfig
 
 
 class PatternConfig(BaseModel):
+    """
+    Pattern configuration.
+
+    Attributes:
+        access (AccessConfig): Access pattern configuration.
+        temporal (TemporalConfig): Temporal pattern configuration.
+    """
+
     access: AccessConfig
     temporal: TemporalConfig
 
 
 class GenerationConfig(BaseModel):
+    """
+    Data generation configuration.
+
+    Attributes:
+        seed (int): Random seed for generation (>= 0).
+        mode (str): Data distribution mode.
+        requests (int): Number of requests (> 0).
+        keys (KeysConfig): Key range configuration.
+        pattern (PatternConfig): Pattern configuration.
+    """
+
     seed: conint(ge=0)  # type: ignore[valid-type]
     mode: str
     requests: conint(gt=0)  # type: ignore[valid-type]
@@ -236,8 +423,10 @@ class GenerationConfig(BaseModel):
 
 class DataConfig(BaseModel):
     """
-    Class representing the data configuration
-    settings including generation settings.
+    Data configuration.
+
+    Attributes:
+        generation (GenerationConfig): Data generation configuration.
     """
 
     generation: GenerationConfig

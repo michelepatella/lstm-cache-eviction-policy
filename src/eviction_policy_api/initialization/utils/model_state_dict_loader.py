@@ -1,5 +1,6 @@
-import torch
 import pickle
+
+import torch
 from fastapi import HTTPException, status
 
 

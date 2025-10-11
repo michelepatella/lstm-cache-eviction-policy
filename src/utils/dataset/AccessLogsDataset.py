@@ -16,10 +16,16 @@ class AccessLogsDataset(Dataset):
     """
     Dataset class for access logs, compatible with PyTorch.
 
-    This class manages sequential access logs for LSTM model. It handles
-    loading, preprocessing, and splitting of the dataset into training
-    and testing sets. Each dataset instance provides feature sequences
-    and target keys for sequence modeling.
+    This class manages sequential access logs for a PyTorch models.
+    It handles loading, preprocessing, splitting, and provides sequences
+    of features and target keys for model training and evaluation.
+
+    Attributes:
+        data (pd.DataFrame): Full dataset stored internally.
+        columns (List[str]): List of column names in the dataset.
+        features (List[str]): List of feature column names.
+        target (str): Target column name (usually the last column).
+        seq_len (int): Sequence length used for LSTM sequences.
     """
 
     def _split_dataset(

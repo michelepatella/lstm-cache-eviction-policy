@@ -6,6 +6,9 @@ from tqdm import tqdm
 from config.classes.Config import Config
 from const import LSTM_CACHE_NAME, MICROSECONDS_IN_SECOND
 from simulation.running.initialization.initializer import initialize_simulation
+from simulation.running.utils.hit_miss_checker_updater import (
+    check_update_hit_miss,
+)
 from simulation.running.utils.hit_miss_timeline_updater import (
     update_hit_miss_timeline,
 )
@@ -13,9 +16,6 @@ from simulation.running.utils.time_key_from_row_extractor import (
     extract_time_key_from_row,
 )
 from utils.logs.levels.error_logger import error
-from simulation.running.utils.hit_miss_checker_updater import (
-    check_update_hit_miss,
-)
 
 
 def run_cache_simulation(

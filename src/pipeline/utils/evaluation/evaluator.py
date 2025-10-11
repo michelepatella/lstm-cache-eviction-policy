@@ -7,8 +7,8 @@ from torch.utils.data import DataLoader
 from config.classes.Config import Config
 from const import (
     MODEL_COMPUTE_METRICS_DEFAULT,
-    MODEL_METRICS_CONFUSION_MATRIX_NAME,
     MODEL_METRICS_AVG_LOSS,
+    MODEL_METRICS_CONFUSION_MATRIX_NAME,
 )
 from pipeline.utils.inference.inferrer import infer_batch
 from pipeline.utils.metrics.calculator import (

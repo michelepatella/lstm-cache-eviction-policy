@@ -26,8 +26,22 @@ ConfigDict: TypeAlias = Dict[str, ConfigValue]
 
 class Config(BaseModel):
     """
-    Class representing the whole
-    configuration settings.
+    Represents the full configuration of the system.
+
+    This class aggregates all configuration sections used
+    across the system, providing structured access
+    to hardware, data, dataset, model, simulation, training,
+    testing, and validation configurations.
+
+    Attributes:
+        hardware (HardwareConfig): Hardware configuration.
+        data (DataConfig): Data configuration.
+        dataset (DatasetConfig): Dataset configuration.
+        model (ModelConfig): Model configuration.
+        validation (ValidationConfig): Validation configuration.
+        training (TrainingConfig): Training configuration.
+        testing (TestingConfig): Testing configuration.
+        simulation (SimulationConfig): Simulation configuration.
     """
 
     hardware: HardwareConfig

@@ -2,21 +2,31 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from config.classes.Config import Config
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
 from simulation.caches.utils.classes.CacheMetricsLogger import (
     CacheMetricsLogger,
 )
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 
 
 class BaseCache(ABC):
     """
     Abstract base class for all cache implementations.
 
-    This class provides common functionalities such as:
+    Provides common functionalities such as:
     - TTL (Time-To-Live) management
     - Expired key removal
-    - Metrics logging
+    - Metrics logging for get, put, and eviction events
+
+    Attributes:
+        cache (Any): Optional underlying cache instance.
+        maxsize (int): Maximum number of keys allowed in the cache.
+        ttl (float): Time-to-Live for each key.
+        metrics_logger (CacheMetricsLogger): Logger for cache events.
+        store (dict): Dictionary storing cache keys and values.
+        expiry (dict): Dictionary storing expiration time per key.
+        scores (dict): Optional dictionary storing scores for keys.
+        _last_put_time (float | None): Timestamp of the last put operation.
     """
 
     def __init__(

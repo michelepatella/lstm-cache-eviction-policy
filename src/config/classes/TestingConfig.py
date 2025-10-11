@@ -1,21 +1,38 @@
 from pydantic import BaseModel, conint
 
 
-# Testing — General
 class GeneralTestingConfig(BaseModel):
+    """
+    General configuration for testing.
+
+    Attributes:
+        batch_size (int): Number of samples per batch (> 0).
+        shuffle (bool): Whether to shuffle the dataset during testing.
+    """
+
     batch_size: conint(gt=0)  # type: ignore[valid-type]
     shuffle: bool
 
 
-# Testing — Metrics
 class MetricsConfig(BaseModel):
+    """
+    Metrics configuration for testing.
+
+    Attributes:
+        top_k (int): Number of top predictions to
+                     consider for evaluation (> 0).
+    """
+
     top_k: conint(gt=0)  # type: ignore[valid-type]
 
 
 class TestingConfig(BaseModel):
     """
-    Class representing the testing configuration
-    settings including general and metrics settings.
+    Testing configuration.
+
+    Attributes:
+        general (GeneralTestingConfig): General testing configuration.
+        metrics (MetricsConfig): Testing metrics configuration.
     """
 
     general: GeneralTestingConfig

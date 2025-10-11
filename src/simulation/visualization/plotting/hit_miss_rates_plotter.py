@@ -6,6 +6,7 @@ from const import (
     HIT_MISS_RATE_SUBPLOT_X_LABEL,
     HIT_MISS_RATES_PLOT_NUM_COLS,
     HIT_MISS_RATES_PLOT_NUM_ROWS,
+    HIT_MISS_RATES_PLOT_PAD,
     HIT_MISS_RATES_SUBPLOTS,
     HIT_MISS_RATES_SUBPLOTS_LINE_STYLE_NAME,
     HIT_MISS_RATES_SUBPLOTS_TITLE_NAME,
@@ -18,7 +19,6 @@ from const import (
     TIMELINE_INDEX_NAME,
     TIMELINE_INSTANT_HIT_RATE_NAME,
     TIMELINE_NAME,
-    HIT_MISS_RATES_PLOT_PAD,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error

@@ -8,11 +8,16 @@ class CacheMetricsLogger:
     """
     Logger class for tracing cache metrics.
 
-    This class tracks:
+    This class tracks cache events, including:
         - Keys inserted into the cache (put events)
         - Keys accessed from the cache (get events)
         - Keys evicted from the cache
-        - Keys predicted for prefetching
+
+    Attributes:
+        put_events (dict[int, list[tuple[float, float]]]): Records key insertions
+            with timestamp and TTL.
+        access_events (defaultdict[list[float]]): Records access timestamps for each key.
+        evicted_keys (defaultdict[list[float]]): Records eviction timestamps for each key.
     """
 
     def __init__(self: "CacheMetricsLogger") -> None:

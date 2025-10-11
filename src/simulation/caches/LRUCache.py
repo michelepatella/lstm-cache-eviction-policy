@@ -12,9 +12,11 @@ class LRUCache(Cache):
     """
     LRU (Least Recently Used) cache implementation.
 
-    This cache evicts the least recently used item when the
-    maximum size is reached. Optionally, a callback can be
-    provided to handle evicted keys.
+    Evicts the least recently used item when the maximum size is reached.
+
+    Attributes:
+        _data (OrderedDict): Internal data storage for cache items in order of use.
+        callback (Callable | None): Optional callback for evicted keys.
     """
 
     def __init__(

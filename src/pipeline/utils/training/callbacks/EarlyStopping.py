@@ -9,10 +9,22 @@ from utils.logs.levels.info_logger import info
 
 class EarlyStopping:
     """
-    Early stopping handler for model training.
+    Early stopping handler for model training and validation.
 
-    Monitors the average loss and stops training if no improvement
-    is observed for a specified number of epochs.
+    Monitors the average loss during training or validation.
+    If no significant improvement is observed for a number of epochs
+    equal to the patience value, training is stopped early to prevent
+    overfitting or wasted computation.
+
+    Attributes:
+        patience (int): Number of epochs to wait without improvement
+                        before stopping.
+        delta (float): Minimum change in average loss to qualify as
+                       an improvement.
+        best_avg_loss (float): Best observed average loss so far.
+        counter (int): Number of consecutive epochs without improvement.
+        early_stop (bool): Flag indicating whether early stopping
+                           has been triggered.
     """
 
     def __init__(self: "EarlyStopping", config: Config) -> None:
