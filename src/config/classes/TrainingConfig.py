@@ -1,9 +1,9 @@
 from pydantic import BaseModel, confloat, conint, model_validator
 
-from config.classes.validation.choice_field_validator import (
+from const import TRAINING_OPTIMIZERS
+from utils.assertions.choice_field_validator import (
     validate_choice_field,
 )
-from const import TRAINING_OPTIMIZERS
 
 
 class TrainingGeneralConfig(BaseModel):

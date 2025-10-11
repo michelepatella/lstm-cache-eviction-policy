@@ -1,15 +1,15 @@
 from pydantic import BaseModel, confloat, conint, model_validator
 
-from config.classes.validation.choice_field_validator import (
-    validate_choice_field,
-)
-from config.classes.validation.min_max_validator import (
-    are_min_max_valid,
-)
 from const import (
     DATA_DISTRIBUTION_MODES,
     DATA_GENERATION_FINAL_HOUR,
     DATA_GENERATION_INITIAL_HOUR,
+)
+from utils.assertions.choice_field_validator import (
+    validate_choice_field,
+)
+from utils.assertions.min_max_validator import (
+    are_min_max_valid,
 )
 
 

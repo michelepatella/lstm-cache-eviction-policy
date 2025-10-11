@@ -1,6 +1,14 @@
 from typing import Any, List
 
-from pydantic import BaseModel, confloat, conint
+from pydantic import BaseModel, confloat, conint, model_validator
+
+from eviction_policy_api.const import (
+    MAX_MC_DROPOUT_SAMPLES,
+    MAX_ROLLOUT_HORIZON,
+    MAX_TIME_STEP_INCREMENT,
+    TIEBREAK_STRATEGIES,
+)
+from utils.assertions.choice_field_validator import validate_choice_field
 
 
 class APIKwargs(BaseModel):
@@ -12,34 +20,57 @@ class APIKwargs(BaseModel):
 
     Attributes:
         rollout_horizon (int): Number of future steps to predict in the
-                               autoregressive rollout (> 0).
+                               autoregressive rollout (> 0 and <= MAX_ROLLOUT_HORIZON).
         mc_dropout_samples (int): Number of Monte Carlo dropout samples
-                                  for uncertainty estimation (> 0).
-        confidence_level (float): Confidence level for prediction intervals.
-                                  (in (0.0, 1.0])
+                                  for uncertainty estimation (> 0 and
+                                  <= MAX_MC_DROPOUT_SAMPLES).
+        confidence_level (float): Confidence level for prediction intervals
+                                  (in (0.0, 1.0]).
         time_step_increment (float): Time step increment in hours for feature
-                                     progression (> 0).
+                                     progression (> 0 and <= MAX_TIME_STEP_INCREMENT).
         num_evictions (int): Number of keys to evict in the current step (> 0).
         exclude_keys (List[Any]): List of keys that should not be evicted.
-        prob_weight (float): Weight applied to probability in key scoring.
-                             (in [0.0, 1.0]).
-        conf_weight (float): Weight applied to confidence in key scoring.
-                             (in [0.0, 1.0]).
+        prob_weight (float): Weight applied to probability in key scoring (in (0.0, 1.0]).
+        conf_weight (float): Weight applied to confidence in key scoring (in (0.0, 1.0]).
         tiebreak_strategy (str): Strategy to resolve ties when multiple
                                  keys have equal scores.
         return_all_scores (bool): If True, API returns the score for every key.
-        return_prob_conf (bool): If True, API returns the probability and confidence matrices
-                                 used to calculate scores.
+        return_prob_conf (bool): If True, API returns the probability and confidence
+                                 matrices used to calculate scores.
     """
 
-    rollout_horizon: conint(gt=0)
-    mc_dropout_samples: conint(gt=0)
+    rollout_horizon: conint(gt=0, le=MAX_ROLLOUT_HORIZON)
+    mc_dropout_samples: conint(gt=0, le=MAX_MC_DROPOUT_SAMPLES)
     confidence_level: confloat(gt=0.0, le=1.0)
-    time_step_increment: confloat(gt=0)
+    time_step_increment: confloat(gt=0, le=MAX_TIME_STEP_INCREMENT)
     num_evictions: conint(gt=0)
     exclude_keys: List[Any]
-    prob_weight: confloat(ge=0.0, le=1.0)
-    conf_weight: confloat(ge=0.0, le=1.0)
+    prob_weight: confloat(gt=0.0, le=1.0)
+    conf_weight: confloat(gt=0.0, le=1.0)
     tiebreak_strategy: str
     return_all_scores: bool
     return_prob_conf: bool
+
+    @model_validator(mode="after")
+    def check_tiebreak_strategy(
+        self: "APIKwargs",
+    ) -> "APIKwargs":
+        """
+        Check whether tiebreak strategy is valid.
+
+        This function validates the tiebreak strategy
+        field of the API kwargs, ensuring its value
+        is among the allowed strategies.
+
+        Args:
+            self ("APIKwargs"): Current model instance.
+
+        Returns:
+            "APIKwargs": Validated model instance.
+        """
+        return validate_choice_field(
+            self,
+            self.tiebreak_strategy,
+            TIEBREAK_STRATEGIES,
+            "APIKwargs.tiebreak_strategy",
+        )
