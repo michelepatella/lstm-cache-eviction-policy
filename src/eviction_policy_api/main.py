@@ -19,8 +19,8 @@ model, device, api_config = initialize_api()
 
 @app.post("/evict")
 def evict_key(
-    keys_in_cache: List[int],
-    last_accesses: List[float, int],
+    keys_in_cache: List[Any],
+    last_accesses: List[float, Any],
     user_kwargs: Dict[str, int | float | List[Any] | str | bool],
 ):
     # Retrieve default kwargs from

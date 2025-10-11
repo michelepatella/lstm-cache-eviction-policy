@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, List
 
 from pydantic import BaseModel, confloat, conint
 
@@ -20,7 +20,7 @@ class APIKwargs(BaseModel):
         time_step_increment (float): Time step increment in hours for feature
                                      progression (> 0).
         num_evictions (int): Number of keys to evict in the current step (> 0).
-        exclude_keys (List[int]): List of keys that should not be evicted.
+        exclude_keys (List[Any]): List of keys that should not be evicted.
         prob_weight (float): Weight applied to probability in key scoring.
                              (in [0.0, 1.0]).
         conf_weight (float): Weight applied to confidence in key scoring.
@@ -37,7 +37,7 @@ class APIKwargs(BaseModel):
     confidence_level: confloat(gt=0.0, le=1.0)
     time_step_increment: confloat(gt=0)
     num_evictions: conint(gt=0)
-    exclude_keys: List[int]
+    exclude_keys: List[Any]
     prob_weight: confloat(ge=0.0, le=1.0)
     conf_weight: confloat(ge=0.0, le=1.0)
     tiebreak_strategy: str
