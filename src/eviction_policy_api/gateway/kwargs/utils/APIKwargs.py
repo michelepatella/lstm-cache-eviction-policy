@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import List
 
 from pydantic import BaseModel, confloat, conint, model_validator
 

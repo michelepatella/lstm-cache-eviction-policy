@@ -4,9 +4,14 @@ import requests
 from box import Box
 from fastapi import FastAPI
 
-from eviction_policy_api.const import AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT, AUTOREGRESSIVE_ROLLOUT_SERVICE_PARAMS, \
-    META_DATA_CONFIG_FILE_PATH
-from eviction_policy_api.gateway.kwargs.utils.default_kwargs_getter import get_default_kwargs
+from eviction_policy_api.const import (
+    AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT,
+    AUTOREGRESSIVE_ROLLOUT_SERVICE_PARAMS,
+    API_CONFIG_FILE_PATH, API_GATEWAY_ENDPOINT,
+)
+from eviction_policy_api.gateway.kwargs.utils.default_kwargs_getter import (
+    get_default_kwargs,
+)
 from utils.json.loader import load_json
 from eviction_policy_api.gateway.kwargs.builder import (
     build_api_kwargs,
@@ -16,10 +21,10 @@ app = FastAPI()
 
 # Setup for API Gateway: Load API configuration
 # meta data from JSON file
-api_config = load_json(META_DATA_CONFIG_FILE_PATH)
+api_config = load_json(API_CONFIG_FILE_PATH)
 
 
-@app.post("/evict")
+@app.post(API_GATEWAY_ENDPOINT)
 def evict_key(
     keys_in_cache: List[int],
     last_accesses: List[Tuple[float, int]],
@@ -41,10 +46,16 @@ def evict_key(
     autoregressive_rollout_params.min_key = api_config.model.keys.min
     autoregressive_rollout_params.max_key = api_config.model.keys.max
     autoregressive_rollout_params.num_features = api_config.model.num_features
-    autoregressive_rollout_params.embedding_dim = api_config.model.embedding_dim
+    autoregressive_rollout_params.embedding_dim = (
+        api_config.model.embedding_dim
+    )
     autoregressive_rollout_params.rollout_horizon = api_kwargs.rollout_horizon
-    autoregressive_rollout_params.mc_dropout_samples = api_kwargs.mc_dropout_samples
-    autoregressive_rollout_params.time_step_increment = api_kwargs.time_step_increment
+    autoregressive_rollout_params.mc_dropout_samples = (
+        api_kwargs.mc_dropout_samples
+    )
+    autoregressive_rollout_params.time_step_increment = (
+        api_kwargs.time_step_increment
+    )
 
     # Call autoregressive rollout service
     autoregressive_rollout_response = requests.post(

@@ -1,17 +1,16 @@
 import torch
-from torch.nn import Module
 
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
 
-def save_model(model: Module, model_save_path: str) -> None:
+def save_model(model: torch.nn.Module, model_save_path: str) -> None:
     """
     Save a PyTorch model to the specified path.
 
     Args:
-        model (Module): The PyTorch model to save.
+        model (torch.nn.Module): The PyTorch model to save.
         model_save_path (str): File path to save the model.
 
     Returns:

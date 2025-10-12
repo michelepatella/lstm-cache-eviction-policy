@@ -5,6 +5,8 @@ from torch import nn
 from torch.utils.data import DataLoader
 
 from config.classes.Config import Config
+from utils.model.initialization.utils.model_state_dict_loader import \
+    load_model_state_dict
 from utils.data_loader.targets_extractor import (
     extract_targets_from_data_loader,
 )
@@ -12,7 +14,6 @@ from utils.logs.levels.info_logger import info
 from utils.model.initialization.model_components_initializer import (
     initialize_model_components,
 )
-from utils.model.initialization.utils.loader import load_model
 from utils.model.locator import get_model_abs_path
 
 
@@ -35,7 +36,7 @@ def initialize_trained_model(
 
     Returns:
         Tuple[
-        torch.device, nn.Module, nn.Module
+        torch.device, torch.nn.Module, torch.nn.Module
         ]: Tuple containing the device on which
            the model is loaded, loss function initialized
            with class weights, and pre-trained model.
@@ -60,7 +61,7 @@ def initialize_trained_model(
     )
 
     # Load the trained model
-    model = load_model(model, device, model_path)
+    model = load_model_state_dict(model_path, model, device)
 
     info("Trained model initialization completed")
 

@@ -1,7 +1,6 @@
 from typing import Tuple, Union
 
 import torch
-from torch import nn
 
 from const import MC_DROPOUT_NUM_SAMPLES_DEFAULT
 from utils.backpropagation.forward_runner import compute_forward
@@ -13,7 +12,7 @@ from utils.mc.dropout_activator import (
 
 
 def mc_forward_passes(
-    model: nn.Module,
+    model: torch.nn.Module,
     inputs: Union[
         Tuple[torch.Tensor, torch.Tensor, torch.Tensor],
         Tuple[torch.Tensor, torch.Tensor],
@@ -32,7 +31,7 @@ def mc_forward_passes(
     estimate predictive uncertainty.
 
     Args:
-        model (nn.Module): The PyTorch model to evaluate.
+        model (torch.nn.Module): The PyTorch model to evaluate.
         inputs (Union[
             Tuple[torch.Tensor, torch.Tensor, torch.Tensor],
             Tuple[torch.Tensor, torch.Tensor],

@@ -2,7 +2,6 @@ import copy
 from typing import Tuple
 
 import torch
-from torch import nn
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from tqdm import tqdm
@@ -22,7 +21,7 @@ def train_n_epochs(
     training_loader: DataLoader,
     validation_loader: DataLoader,
     optimizer: Optimizer,
-    criterion: nn.Module,
+    criterion: torch.nn.Module,
     device: torch.device,
     config: Config,
 ) -> Tuple[float, torch.nn.Module]:
@@ -43,7 +42,7 @@ def train_n_epochs(
         training_loader (DataLoader): DataLoader for training data.
         validation_loader (DataLoader): DataLoader for validation data.
         optimizer (Optimizer): Optimizer to use.
-        criterion (nn.Module): Loss function to use.
+        criterion (torch.nn.Module): Loss function to use.
         device (torch.device): Device to run training on.
         config (Config): Configuration object.
 

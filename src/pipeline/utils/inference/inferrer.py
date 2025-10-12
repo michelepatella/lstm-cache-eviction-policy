@@ -11,6 +11,7 @@ from utils.logs.levels.info_logger import info
 from utils.mc.forward_runner import (
     mc_forward_passes,
 )
+from utils.model.initialization.utils.device_mover import move_to_device
 
 
 def infer_batch(
@@ -82,9 +83,9 @@ def infer_batch(
 
                 # Move tensors to device
                 features, keys, targets = (
-                    features.to(device),
-                    keys.to(device),
-                    targets.to(device),
+                    move_to_device(features, device),
+                    move_to_device(keys, device),
+                    move_to_device(targets, device),
                 )
 
                 # Perform MC Dropout forward passes

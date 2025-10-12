@@ -1,10 +1,10 @@
-from torch import nn
+import torch
 from torch.optim import Optimizer
 
 from utils.logs.levels.info_logger import info
 
 
-def compute_backward(loss: nn.Module, optimizer: Optimizer) -> None:
+def compute_backward(loss: torch.nn.Module, optimizer: Optimizer) -> None:
     """
     Perform a backward pass and update model parameters.
 
@@ -13,7 +13,7 @@ def compute_backward(loss: nn.Module, optimizer: Optimizer) -> None:
     using the given optimizer.
 
     Args:
-        loss (nn.Module): Loss tensor from which to compute gradients.
+        loss (torch.nn.Module): Loss tensor from which to compute gradients.
         optimizer (Optimizer): Optimizer used to update model parameters.
 
     Returns:

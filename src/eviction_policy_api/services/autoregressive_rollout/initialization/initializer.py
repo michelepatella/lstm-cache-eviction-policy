@@ -1,57 +1,61 @@
-from typing import Tuple
+from typing import Tuple, Dict
 
 import torch
-from box import Box
-from torch.nn import Module
 
-from eviction_policy_api.services.autoregressive_rollout.initialization.utils.device_selector import (
-    select_device,
-)
-from eviction_policy_api.services.autoregressive_rollout.initialization.utils.model_builder import (
-    build_model,
-)
-from eviction_policy_api.services.autoregressive_rollout.initialization.utils.model_state_dict_loader import (
-    load_model_state_dict,
-)
-from eviction_policy_api.services.autoregressive_rollout.initialization.utils.model_to_device_mover import (
-    move_model_to_device,
-)
+from utils.model.initialization.utils.device_selector import select_device
+from utils.model.initialization.utils.model_builder import build_model
+from utils.model.initialization.utils.model_state_dict_loader import load_model_state_dict
+from utils.model.initialization.utils.device_mover import move_to_device
 
 
-def initialize_autoregressive_rollout(api_config: Box) -> tuple[Module, torch.device, Box]:
+def initialize_autoregressive_rollout(
+    model_path: str,
+    model_params: Dict[str, int | float | bool],
+    device_type: str,
+    min_key: int,
+    max_key: int,
+    num_features: int,
+    embedding_dim: int,
+) -> Tuple[torch.nn.Module, torch.device]:
     """
     Initialize the autoregressive rollout service.
 
-    This function performs all steps required to
-    prepare the autoregressive rollout service:
-        - Selects the computation device.
-        - Builds the LSTM model instance.
-        - Moves the model to the selected device.
-        - Loads pre-trained model weights.
+    This function performs all steps required to prepare
+    for autoregressive rollout:
+        1. Selects the computation device.
+        2. Builds the model instance.
+        3. Moves the model to the selected device.
+        4. Loads pre-trained model weights.
 
     Args:
-        api_config (Box): API configuration object.
+        model_path (str): Path to the saved model weights.
+        model_params (Dict[str, int | float | bool]): Model hyperparameters.
+        device_type (str): Device type to use.
+        min_key (int): Minimum key.
+        max_key (int): Maximum key.
+        num_features (int): Number of input features for the model.
+        embedding_dim (int): Dimension of embedding layer.
 
     Returns:
-        Tuple[Module, torch.device, Box]: Tuple containing the instantiated
-                                          LSTM model, the device where the model
-                                          resides, and the Box object containing
-                                          the API configuration.
+        Tuple[torch.nn.Module, torch.device]: The initialized model and
+                                              the device it resides on.
     """
-    # Select device according to device type
+    # Select computation device
     device = select_device(device_type)
 
-    # Build model to be used for inference
+    # Build the model
     model = build_model(
-        model_params, min_key, max_key, embedding_dim, num_features
+        model_params,
+        min_key,
+        max_key,
+        embedding_dim,
+        num_features,
     )
 
-    # Move model built to
-    # selected device
-    model = move_model_to_device(model, device)
+    # Move model to device
+    model = move_to_device(model, device)
 
-    # Load state dictionary and
-    # apply it to the model
+    # Load pre-trained weights
     load_model_state_dict(model_path, model, device)
 
-    return model, device, api_config
+    return model, device

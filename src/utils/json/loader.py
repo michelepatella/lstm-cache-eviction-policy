@@ -9,7 +9,9 @@ from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
 
-def load_json(path: str, wrap: bool = JSON_WRAP_BOX_DEFAULT) -> Dict[Any, Any] | Box:
+def load_json(
+    path: str, wrap: bool = JSON_WRAP_BOX_DEFAULT
+) -> Dict[Any, Any] | Box:
     """
     Load a JSON file.
 

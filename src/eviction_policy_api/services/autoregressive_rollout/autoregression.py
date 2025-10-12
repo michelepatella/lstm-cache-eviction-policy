@@ -4,13 +4,17 @@ from typing import List, Tuple, Dict
 import torch
 from fastapi import FastAPI
 
+from eviction_policy_api.const import AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT
+from eviction_policy_api.services.autoregressive_rollout.initialization.initializer import (
+    initialize_autoregressive_rollout,
+)
 from utils.logs.levels.info_logger import info
 from utils.mc.forward_runner import mc_forward_passes
+from utils.model.initialization.utils.device_mover import move_to_device
 
 app = FastAPI()
 
-
-@app.post("/rollout")
+@app.post(AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT)
 def autoregressive_rollout_service(
     last_accesses: List[Tuple[float, int]],
     model_path: str,
@@ -25,6 +29,18 @@ def autoregressive_rollout_service(
     time_step_increment: float,
 ):
     try:
+        # Setup for autoregressive rollout service:
+        # Prepare model and device for inference
+        model, device = initialize_autoregressive_rollout(
+            model_path,
+            model_params,
+            device_type,
+            min_key,
+            max_key,
+            num_features,
+            embedding_dim,
+        )
+
         # Prepare initial sequence from last accesses
         x_features_seq = []
         x_keys_seq = []
@@ -37,11 +53,13 @@ def autoregressive_rollout_service(
         x_features_seq = (
             torch.tensor(x_features_seq, dtype=torch.float)
             .unsqueeze(0)
-            .to(device)
         )
+        move_to_device(x_features_seq, device)
+
         x_keys_seq = (
-            torch.tensor(x_keys_seq, dtype=torch.long).unsqueeze(0).to(device)
+            torch.tensor(x_keys_seq, dtype=torch.long).unsqueeze(0)
         )
+        move_to_device(x_keys_seq, device)
 
         all_outputs = []
         all_vars = []

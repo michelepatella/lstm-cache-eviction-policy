@@ -1,5 +1,4 @@
 import torch
-from torch import nn
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from tqdm import tqdm
@@ -17,7 +16,7 @@ def train_one_epoch(
     model: torch.nn.Module,
     training_loader: DataLoader,
     optimizer: Optimizer,
-    criterion: nn.Module,
+    criterion: torch.nn.Module,
     device: torch.device,
     epoch: int,
 ) -> None:
@@ -34,7 +33,7 @@ def train_one_epoch(
         model (torch.nn.Module): The model to train.
         training_loader (DataLoader): DataLoader providing training batches.
         optimizer (Optimizer): Optimizer used to update model parameters.
-        criterion (nn.Module): Loss function used to compute the loss.
+        criterion (torch.nn.Module): Loss function used to compute the loss.
         device (torch.device): Device on which training is performed.
         epoch (int): Current epoch number for logging and progress display.
 

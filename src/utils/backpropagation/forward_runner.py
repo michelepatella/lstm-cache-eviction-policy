@@ -1,11 +1,11 @@
 from typing import Tuple, Union
 
 import torch
-from torch import nn
 
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
+from utils.model.initialization.utils.device_mover import move_to_device
 
 
 def compute_forward(
@@ -13,8 +13,8 @@ def compute_forward(
         Tuple[torch.Tensor, torch.Tensor, torch.Tensor],
         Tuple[torch.Tensor, torch.Tensor],
     ],
-    model: nn.Module,
-    criterion: nn.Module | None,
+    model: torch.nn.Module,
+    criterion: torch.nn.Module | None,
     device: torch.device,
 ) -> Tuple[torch.Tensor | None, torch.Tensor]:
     """
@@ -35,9 +35,10 @@ def compute_forward(
             Tuple[torch.Tensor, torch.Tensor],
         ]): Model inputs, either a tuple including the
             target or inputs ready for model.
-        model (nn.Module): The PyTorch model to compute forward pass for.
-        criterion (nn.Module | None): Loss function.
-                                      If None, loss is not computed.
+        model (torch.nn.Module): The PyTorch model to compute
+                                 forward pass for.
+        criterion (torch.nn.Module | None): Loss function.
+                                            If None, loss is not computed.
         device (torch.device): Device on which to perform
                                computations.
 
@@ -58,9 +59,9 @@ def compute_forward(
     debug(f"Target batch shape: {y_key.shape}")
 
     # Move to device
-    x_features = x_features.to(device)
-    x_keys = x_keys.to(device)
-    y_key = y_key.to(device)
+    move_to_device(x_features, device)
+    move_to_device(x_keys, device)
+    move_to_device(y_key, device)
 
     debug(f"Inputs moved to device: {device}")
 

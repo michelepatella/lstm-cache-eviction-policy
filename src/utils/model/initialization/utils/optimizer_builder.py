@@ -1,5 +1,4 @@
 import torch
-from torch import nn
 from torch.optim import Optimizer
 
 from config.classes.Config import Config
@@ -10,7 +9,7 @@ from utils.logs.levels.info_logger import info
 
 
 def build_optimizer(
-    model: nn.Module, learning_rate: float, optimizer_type: str, config: Config
+    model: torch.nn.Module, learning_rate: float, optimizer_type: str, config: Config
 ) -> Optimizer:
     """
     Build an optimizer for the given model.
@@ -19,7 +18,7 @@ def build_optimizer(
     Supports 'adam', 'adamw', and 'sgd' optimizers.
 
     Args:
-        model (nn.Module): The model for which to create the optimizer.
+        model (torch.nn.Module): The model for which to create the optimizer.
         learning_rate (float): Learning rate for the optimizer.
         optimizer_type (str): Optimizer type to be instantiated.
         config (Config): Configuration object.

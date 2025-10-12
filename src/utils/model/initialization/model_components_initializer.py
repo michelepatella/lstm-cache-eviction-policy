@@ -4,14 +4,17 @@ from torch.optim import Optimizer
 
 from config.classes.Config import Config
 from config.classes.ModelConfig import ModelParamsConfig
+from utils.model.initialization.utils.device_mover import \
+    move_to_device
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 from utils.model.initialization.utils.class_weights_calculator import (
     calculate_class_weight,
 )
+from utils.model.initialization.utils.device_selector import select_device
+from utils.model.initialization.utils.model_builder import build_model
 from utils.model.initialization.utils.optimizer_builder import build_optimizer
-from utils.model.LSTM import LSTM
 
 
 def initialize_model_components(
@@ -19,7 +22,7 @@ def initialize_model_components(
     learning_rate: float,
     config: Config,
     targets: torch.Tensor = None,
-) -> tuple[torch.device, nn.Module, nn.Module, Optimizer]:
+) -> tuple[torch.device, torch.nn.Module, torch.nn.Module, Optimizer]:
     """
     Set up the model components for
     further usage.
@@ -41,7 +44,7 @@ def initialize_model_components(
 
     Returns:
         tuple[
-        torch.device, nn.Module, nn.Module, Optimizer
+        torch.device, torch.nn.Module, torch.nn.Module, Optimizer
         ]: Tuple containing the device
            used for computations, loss
            function with class weights
@@ -52,7 +55,6 @@ def initialize_model_components(
     Raises:
         RuntimeError: If an error occurs while
                       setting up the model components, e.g.:
-            * Failed to select device due to unsupported device type.
             * Failed to define the loss function due to incompatible
               class weights or device issues.
             * Failed to move the model to the device.
@@ -66,15 +68,8 @@ def initialize_model_components(
     embedding_dim = config.model.sequence.embedding.dimension
     num_features = config.model.general.features
 
-    try:
-        # Define the device
-        device = torch.device(device_type)
-
-        debug(f"Device selected: {device}")
-    except (RuntimeError, ValueError) as e:
-        msg = "Failed to select device"
-        error("%s: %s", msg, e)
-        raise RuntimeError(msg) from e
+    # Define the device
+    device = select_device(device_type)
 
     criterion = None
     if targets is not None:
@@ -85,9 +80,9 @@ def initialize_model_components(
 
         try:
             # Define loss function
-            weight = torch.tensor(class_weights, dtype=torch.float32).to(
-                device
-            )
+            weight = torch.tensor(class_weights, dtype=torch.float32)
+            weight = move_to_device(weight, device)
+
             criterion = nn.CrossEntropyLoss(weight=weight)
 
             debug(
@@ -99,17 +94,12 @@ def initialize_model_components(
             raise RuntimeError(msg) from e
 
     # Instantiate LSTM model
-    model = LSTM(
-        model_params, min_key, max_key, embedding_dim, num_features, config
+    model = build_model(
+        model_params, min_key, max_key, embedding_dim, num_features
     )
 
-    try:
-        # Move model to device
-        model.to(device)
-    except RuntimeError as e:
-        msg = "Failed to move model to device"
-        error("%s: %s", msg, e)
-        raise RuntimeError(msg) from e
+    # Move model to device
+    model = move_to_device(model, device)
 
     # Build optimizer
     optimizer = build_optimizer(model, learning_rate, optimizer_type, config)
