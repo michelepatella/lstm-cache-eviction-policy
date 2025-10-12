@@ -20,6 +20,13 @@ CONFIG_SECTIONS_WITH_PARAMS = {
 
 
 # ----------------------------
+# JSON
+# ----------------------------
+JSON_WRAP_BOX_DEFAULT = True
+JSON_INDENT = 4
+
+
+# ----------------------------
 # Logs
 # ----------------------------
 LOGS_PHASE_NAME = "phase"
@@ -234,8 +241,6 @@ TIMELINE_INSTANT_HIT_RATE_NAME = "instant_hit_rate"
 RESULTS_DIRECTORY_PATH = PROJECT_ROOT / "reports" / "results"
 MODEL_RESULTS_FILE_NAME = "model_results.json"
 SIMULATION_RESULTS_FILE_NAME = "simulation_results.json"
-
-JSON_INDENT = 4
 
 
 # ----------------------------

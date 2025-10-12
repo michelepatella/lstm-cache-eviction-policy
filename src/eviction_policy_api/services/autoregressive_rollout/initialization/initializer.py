@@ -4,18 +4,16 @@ import torch
 from box import Box
 from torch.nn import Module
 
-from eviction_policy_api.const import META_DATA_CONFIG_FILE_PATH
-from eviction_policy_api.gateway.initialization.utils.device_selector import (
+from eviction_policy_api.services.autoregressive_rollout.initialization.utils.device_selector import (
     select_device,
 )
-from eviction_policy_api.gateway.initialization.utils.meta_data_loader import (
-    load_meta_data,
+from eviction_policy_api.services.autoregressive_rollout.initialization.utils.model_builder import (
+    build_model,
 )
-from eviction_policy_api.gateway.initialization.utils.model_builder import build_model
-from eviction_policy_api.gateway.initialization.utils.model_state_dict_loader import (
+from eviction_policy_api.services.autoregressive_rollout.initialization.utils.model_state_dict_loader import (
     load_model_state_dict,
 )
-from eviction_policy_api.gateway.initialization.utils.model_to_device_mover import (
+from eviction_policy_api.services.autoregressive_rollout.initialization.utils.model_to_device_mover import (
     move_model_to_device,
 )
 
@@ -38,10 +36,6 @@ def initialize_api() -> tuple[Module, torch.device, Box]:
                                           resides, and the Box object containing
                                           the API configuration.
     """
-    # Load API configuration encoded
-    # as meta data from JSON file
-    api_config = load_meta_data(META_DATA_CONFIG_FILE_PATH)
-
     # Extract API configurations needed
     # for next steps
     device_type = api_config.hardware.device_type

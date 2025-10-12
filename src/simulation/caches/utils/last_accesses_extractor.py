@@ -5,9 +5,9 @@ from torch.utils.data import DataLoader
 
 from const import (
     COS_TIME_COLUMN_NAME,
-    SIN_TIME_COLUMN_NAME,
     REQUEST_COLUMN_NAME,
     SECONDS_IN_HOUR,
+    SIN_TIME_COLUMN_NAME,
 )
 from simulation.utils.time_key_from_row_extractor import (
     extract_time_key_from_row,

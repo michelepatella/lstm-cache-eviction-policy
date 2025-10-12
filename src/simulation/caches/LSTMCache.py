@@ -5,8 +5,12 @@ import requests
 from torch.utils.data import DataLoader
 
 from config.classes.Config import Config
-from const import EVICTION_POLICY_API_KEYS_IN_CACHE_PARAM_NAME, EVICTION_POLICY_API_LAST_ACCESSES_PARAM_NAME, \
-    EVICTION_POLICY_API_USER_KWARGS_PARAM_NAME, EVICTION_POLICY_API_ENDPOINT
+from const import (
+    EVICTION_POLICY_API_ENDPOINT,
+    EVICTION_POLICY_API_KEYS_IN_CACHE_PARAM_NAME,
+    EVICTION_POLICY_API_LAST_ACCESSES_PARAM_NAME,
+    EVICTION_POLICY_API_USER_KWARGS_PARAM_NAME,
+)
 from simulation.caches.utils.classes.BaseCache import BaseCache
 from simulation.caches.utils.classes.CacheMetricsLogger import (
     CacheMetricsLogger,
@@ -152,9 +156,11 @@ class LSTMCache(BaseCache):
                 response = requests.post(
                     EVICTION_POLICY_API_ENDPOINT,
                     json={
-                        EVICTION_POLICY_API_KEYS_IN_CACHE_PARAM_NAME: list(self.store.keys()),
+                        EVICTION_POLICY_API_KEYS_IN_CACHE_PARAM_NAME: list(
+                            self.store.keys()
+                        ),
                         EVICTION_POLICY_API_LAST_ACCESSES_PARAM_NAME: last_accesses,
-                        EVICTION_POLICY_API_USER_KWARGS_PARAM_NAME: {}
+                        EVICTION_POLICY_API_USER_KWARGS_PARAM_NAME: {},
                     },
                 )
                 response.raise_for_status()

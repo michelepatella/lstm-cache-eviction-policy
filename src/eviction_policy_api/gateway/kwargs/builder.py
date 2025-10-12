@@ -1,14 +1,12 @@
 from typing import Any, Dict, List
 
-from box import Box
 from fastapi import HTTPException, status
 
 from eviction_policy_api.gateway.kwargs.utils.APIKwargs import APIKwargs
-from eviction_policy_api.gateway.kwargs.utils.default_kwargs_getter import get_default_kwargs
 
 
 def build_api_kwargs(
-    api_config: Box,
+    default_kwargs: Dict[str, int | float | List[Any] | str | bool],
     user_kwargs: Dict[str, int | float | List[Any] | str | bool] | None,
 ) -> APIKwargs:
     """
@@ -20,7 +18,8 @@ def build_api_kwargs(
     Resulting kwarg values are validated before being returned.
 
     Args:
-        api_config (Box): API configuration object.
+        default_kwargs (Dict[str, int | float | List[Any] | str | bool]):
+            Default API kwargs.
         user_kwargs (Dict[str, int | float | List[Any] | str | bool] | None):
             User-provided kwargs (None if any has been provided).
 
@@ -36,10 +35,6 @@ def build_api_kwargs(
               or structure issues.
     """
     try:
-        # Retrieve default kwargs from
-        # API configuration
-        default_kwargs = get_default_kwargs(api_config)
-
         # If the user provided kwargs, merge
         # them with default ones, checking their
         # validity before

@@ -1,7 +1,7 @@
 from pathlib import Path
 
 # ----------------------------
-# Project & API
+# Project
 # ----------------------------
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 EVICTION_POLICY_API_DIRECTORY = PROJECT_ROOT / "eviction_policy_api"
@@ -33,13 +33,13 @@ MAX_ROLLOUT_HORIZON = 50
 MAX_MC_DROPOUT_SAMPLES = 1000
 MAX_TIME_STEP_INCREMENT = 5.0
 
-TIEBREAK_RANDOM = "random"
-TIEBREAK_FIFO = "fifo"
-TIEBREAK_LIFO = "lifo"
+TIEBREAK_RANDOM_STRATEGY = "random"
+TIEBREAK_FIFO_STRATEGY = "fifo"
+TIEBREAK_LIFO_STRATEGY = "lifo"
 TIEBREAK_STRATEGIES = [
-    TIEBREAK_RANDOM,
-    TIEBREAK_FIFO,
-    TIEBREAK_LIFO,
+    TIEBREAK_RANDOM_STRATEGY,
+    TIEBREAK_FIFO_STRATEGY,
+    TIEBREAK_LIFO_STRATEGY,
 ]
 
 KWARGS = {
@@ -54,4 +54,19 @@ KWARGS = {
     TIEBREAK_STRATEGY_KWARG_NAME,
     RETURN_ALL_SCORES_KWARG_NAME,
     RETURN_PROB_CONF_KWARG_NAME,
+}
+
+
+# ----------------------------
+# Autoregressive Rollout
+# ----------------------------
+AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT = "http://localhost:8001/autoregressive_rollout"
+
+AUTOREGRESSIVE_ROLLOUT_SERVICE_PARAMS = {
+    "model_path": None,
+    "device_type": None,
+    "last_accesses": None,
+    "rollout_horizon": None,
+    "mc_dropout_samples": None,
+    "time_step_increment": None,
 }
