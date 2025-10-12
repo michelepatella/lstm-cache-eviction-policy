@@ -1,10 +1,12 @@
 import random
 from typing import Any
 
+import requests
 from torch.utils.data import DataLoader
 
 from config.classes.Config import Config
-from eviction_policy_api.manager import manage_lstm_eviction_policy
+from const import EVICTION_POLICY_API_KEYS_IN_CACHE_PARAM_NAME, EVICTION_POLICY_API_LAST_ACCESSES_PARAM_NAME, \
+    EVICTION_POLICY_API_USER_KWARGS_PARAM_NAME, EVICTION_POLICY_API_ENDPOINT
 from simulation.caches.utils.classes.BaseCache import BaseCache
 from simulation.caches.utils.classes.CacheMetricsLogger import (
     CacheMetricsLogger,
@@ -136,10 +138,7 @@ class LSTMCache(BaseCache):
             # Extract last accesses of
             # sequence length
             last_accesses = get_last_accesses(
-                current_idx,
-                seq_len,
-                testing_set,
-                config,
+                current_idx, seq_len, testing_set
             )
 
             # Check whether last accesses
@@ -148,11 +147,20 @@ class LSTMCache(BaseCache):
                 # Eviction fallback policy: Random
                 key_to_evict = random.choice(list(self.store.keys()))
             else:
-                # Run LSTM eviction policy to get
+                # Call LSTM eviction policy API to get
                 # the key to be evicted from the cache
-                key_to_evict = manage_lstm_eviction_policy(
-                    list(self.store.keys()), last_accesses, config
+                response = requests.post(
+                    EVICTION_POLICY_API_ENDPOINT,
+                    json={
+                        EVICTION_POLICY_API_KEYS_IN_CACHE_PARAM_NAME: list(self.store.keys()),
+                        EVICTION_POLICY_API_LAST_ACCESSES_PARAM_NAME: last_accesses,
+                        EVICTION_POLICY_API_USER_KWARGS_PARAM_NAME: {}
+                    },
                 )
+                response.raise_for_status()
+
+                # Extract the key from API response
+                key_to_evict = ...
 
             # Evict key
             self.evict_key(key_to_evict)

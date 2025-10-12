@@ -182,6 +182,15 @@ MC_DROPOUT_NUM_SAMPLES_DEFAULT = 1
 
 
 # ----------------------------
+# Cache simulation
+# ----------------------------
+EVICTION_POLICY_API_ENDPOINT = "http://localhost:8000/evict"
+EVICTION_POLICY_API_KEYS_IN_CACHE_PARAM_NAME = "keys_in_cache"
+EVICTION_POLICY_API_LAST_ACCESSES_PARAM_NAME = "last_accesses"
+EVICTION_POLICY_API_USER_KWARGS_PARAM_NAME = "user_kwargs"
+
+
+# ----------------------------
 # Cache eviction policies
 # ----------------------------
 LSTM_CACHE_NAME = "LSTM"

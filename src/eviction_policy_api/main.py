@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 from fastapi import FastAPI
 
@@ -20,12 +20,13 @@ model, device, api_config = initialize_api()
 @app.post("/evict")
 def evict_key(
     keys_in_cache: List[Any],
-    last_accesses: List[float, Any],
+    last_accesses: List[Tuple[float, Any]],
     user_kwargs: Dict[str, int | float | List[Any] | str | bool],
 ):
     # Retrieve default kwargs from
     # API configuration
     default_kwargs = get_default_kwargs(api_config)
 
-    # Build API kwargs
+    # Build API kwargs by merging default
+    # and user-provided values
     api_kwargs = build_api_kwargs(default_kwargs, user_kwargs)

@@ -12,7 +12,7 @@ from simulation.running.utils.hit_miss_checker_updater import (
 from simulation.running.utils.hit_miss_timeline_updater import (
     update_hit_miss_timeline,
 )
-from simulation.running.utils.time_key_from_row_extractor import (
+from simulation.utils.time_key_from_row_extractor import (
     extract_time_key_from_row,
 )
 from utils.logs.levels.error_logger import error

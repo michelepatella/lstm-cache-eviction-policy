@@ -1,39 +1,41 @@
-from typing import Tuple
+from typing import List, Tuple
 
-from torch import Tensor
+import torch
 from torch.utils.data import DataLoader
 
-from config.classes.Config import Config
-from utils.dataset.AccessLogsDataset import AccessLogsDataset
+from const import (
+    COS_TIME_COLUMN_NAME,
+    SIN_TIME_COLUMN_NAME,
+    REQUEST_COLUMN_NAME,
+    SECONDS_IN_HOUR,
+)
+from simulation.utils.time_key_from_row_extractor import (
+    extract_time_key_from_row,
+)
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
 
 def get_last_accesses(
-    current_idx: int, seq_len: int, testing_set: DataLoader, config: Config
-) -> Tuple[Tensor, Tensor, Tensor] | None:
+    current_idx: int, seq_len: int, testing_set: DataLoader
+) -> List[Tuple[float, int]] | None:
     """
-    Extract the last sequence of accesses from the
-    testing set.
+    Extract the last sequence of accesses.
 
-    The function uses a sliding window of configured length
-    ending at the current request index to extract the resulting
-    last sequence of accesses from the testing set. If there is
-    not enough data to form a full sequence, returns None.
+    This function extracts the last sequence of
+    key accesses from the testing set, computing the access
+    hour column from trigonometrically encoded time
+    columns (cos time and sin time).
 
     Args:
         current_idx (int): Current request index.
-        seq_len (int): Sequence length to be extracted.
+        seq_len (int): Sequence length to extract.
         testing_set (DataLoader): Testing dataset.
-        config (Config): Configuration object.
 
     Returns:
-        Tuple[Tensor, Tensor, Tensor] | None: A tuple containing the last
-                                              sequence of accesses extracted,
-                                              None if not enough data is available
-                                              to extract last accesses of specified
-                                              length.
+        List[Tuple[float, int]]: Each tuple is (hour, key), None if no
+                                 enough data is available.
 
     Raises:
         RuntimeError: If an error occurs during the extraction of
@@ -53,7 +55,7 @@ def get_last_accesses(
         end_idx = current_idx + 1
 
         # Select data from testing set contained
-        # into the sliding window defined
+        # into the sliding window
         testing_window_df = testing_set.data.iloc[start_idx:end_idx]
 
         debug(
@@ -69,19 +71,34 @@ def get_last_accesses(
 
             return None
 
-        # Convert selected testing
-        # window to dataset
-        window_dataset = AccessLogsDataset.from_dataframe(
-            testing_window_df, config
-        )
+        # Extract last accesses (hour and key) from
+        # testing window
+        last_accesses = []
+        for _, row in testing_window_df.iterrows():
+            # Extract tensors from the current row
+            x_features = torch.tensor(
+                row[[SIN_TIME_COLUMN_NAME, COS_TIME_COLUMN_NAME]].values,
+                dtype=torch.float,
+            )
+            x_keys = torch.empty(0)
+            y_key = torch.tensor(
+                int(row[REQUEST_COLUMN_NAME]), dtype=torch.long
+            )
 
-        # Get last accesses from
-        # the testing window
-        last_accesses = window_dataset[-1]
+            # Build the row tuple made up
+            # of the extracted tensors
+            row_tuple = (x_features, x_keys, y_key)
 
-        debug(f"Last accesses extracted: {last_accesses}")
+            # Extract time (in seconds) and key
+            # from the current row
+            current_time, key = extract_time_key_from_row(row_tuple)
 
-        info("Last accesses extracted")
+            # Store the current access couple
+            # (time in hours, key)
+            last_accesses.append((current_time / SECONDS_IN_HOUR, key))
+
+        debug(f"Extracted last accesses: {last_accesses}")
+        info("Last accesses extracted successfully")
 
         return last_accesses
     except (AttributeError, IndexError, KeyError, ValueError) as e:
