@@ -5,13 +5,31 @@
 # Dependencies
 REQUIREMENTS_PATH := requirements.txt
 
-# DVC (Data Versioning Control)
+# VC / DVC
 STATIC_RAW_DATASET_PATH := data/raw/static/static_raw_dataset.csv
 DYNAMIC_RAW_DATASET_PATH := data/raw/dynamic/dynamic_raw_dataset.csv
 STATIC_PROCESSED_DATASET_PATH := data/processed/static/static_processed_dataset.csv
 DYNAMIC_PROCESSED_DATASET_PATH := data/processed/dynamic/dynamic_processed_dataset.csv
-DATASETS_DIRECTORY_PATTERN := data/**/*.dvc
-DATA_COMMIT_MESSAGE := "data: Update dataset(s)"
+
+STATIC_MODEL_PATH := models/static/trained_static_model.pt
+DYNAMIC_MODEL_PATH := models/dynamic/trained_dynamic_model.pt
+
+STATIC_MODEL_RESULTS_PATH := reports/results/static/model_results.json
+DYNAMIC_MODEL_RESULTS_PATH := reports/results/dynamic/model_results.json
+STATIC_SIMULATION_RESULTS_PATH := reports/results/static/simulation_results.json
+DYNAMIC_SIMULATION_RESULTS_PATH := reports/results/dynamic/simulation_results.json
+
+DVC_TARGET_PATHS := $(STATIC_RAW_DATASET_PATH) $(DYNAMIC_RAW_DATASET_PATH) \
+                $(STATIC_PROCESSED_DATASET_PATH) $(DYNAMIC_PROCESSED_DATASET_PATH) \
+                $(STATIC_MODEL_PATH) $(DYNAMIC_MODEL_PATH) $(STATIC_MODEL_RESULTS_PATH) \
+                $(DYNAMIC_MODEL_RESULTS_PATH) $(STATIC_SIMULATION_RESULTS_PATH) \
+                $(DYNAMIC_SIMULATION_RESULTS_PATH)
+
+DATASETS_DVC_DIRECTORY_PATTERN := data/**/*.dvc
+MODELS_DVC_DIRECTORY_PATTERN := models/**/*.dvc
+
+VC_COMMIT_DVC_TARGET_DIRECTORY_PATTERNS := $(DATASETS_DVC_DIRECTORY_PATTERN) $(MODELS_DVC_DIRECTORY_PATTERN)
+VC_COMMIT_MESSAGE := "dvc: Update tracked files"
 
 # Quality Assurance & Documentation
 SRC_DIRECTORY := src
@@ -21,6 +39,7 @@ DOCS_OUTPUT_DIRECTORY := docs/_build/html
 LOGS_DIRECTORY_PATTERN := logs/*/*.log
 LOGS_DIRECTORY_PATTERN_ROTATED := logs/*/*.log.*
 PYCACHE_NAME := "__pycache__"
+
 
 # -------------------------------
 # Dependencies
@@ -36,37 +55,86 @@ deps_update:
 
 
 # -------------------------------
-# DVC (Data Versioning Control)
+# DVC / VC
 # -------------------------------
 
-# Check data status on DVC and Git
-data_check_status:
+# Pipeline for tracked files:
+# (1) Check DVC / VC status
+dvc_vc_check_status:
 	dvc status
 	git status
 
-# Add data to DVC
-data_add:
-	dvc add $(STATIC_RAW_DATASET_PATH)
-	dvc add $(DYNAMIC_RAW_DATASET_PATH)
-	dvc add $(STATIC_PROCESSED_DATASET_PATH)
-	dvc add $(DYNAMIC_PROCESSED_DATASET_PATH)
+# (2) Add to DVC
+dvc_add:
+	dvc add $(DVC_TARGET_PATHS)
 
-# Commit data on Git
-data_commit:
-	git add $(DATASETS_DIRECTORY_PATTERN) .gitignore
-	git commit -m $(DATA_COMMIT_MESSAGE)
+# (3) Commit to VC
+vc_commit:
+	git add $(VC_COMMIT_DVC_TARGET_DIRECTORY_PATTERNS) .gitignore
+	git commit -m $(VC_COMMIT_MESSAGE)
 
-# Push data to DVC and Git
-data_push:
+# (4) Push to DVC / VC
+dvc_vc_push:
 	dvc push
 	git push
 
-# Update and push data
-data_update_and_push: data_add data_commit data_push
+# (1)-(5) Pipeline for DVC tracked files
+dvc_vc_update_and_push: dvc_vc_check_status dvc_add vc_commit dvc_vc_push
 
-# Pull data from DVC
-data_pull:
+# (DVC) Others:
+# (+) List DVC-tracked files
+dvc_list:
+	dvc list .
+
+# (+) Remove tracked files from DVC
+dvc_remove:
+	dvc remove $(PATH)
+
+# (+) Pull latest files from DVC
+dvc_pull:
 	dvc pull
+
+# (+) Pull and checkout specific version
+dvc_pull_version:
+	dvc checkout $(VERSION)
+	dvc pull
+
+# (+) Restore DVC-tracked files
+dvc_checkout:
+	dvc checkout
+
+# (+) Restore specific DVC-tracked file
+dvc_checkout_file:
+	dvc checkout $(PATH)
+
+# (+) Show DAG (DVC pipeline)
+dvc_pipeline_show:
+	dvc dag
+
+# (VC) Others:
+# (+) Checkout VC files
+vc_tag_checkout:
+	git checkout $(TAG_NAME)
+
+# (+) Checkout specific VC file
+vc_tag_checkout_file:
+	git checkout $(TAG_NAME) $(PATH)
+
+# (+) Add a version tag in VC
+vc_tag_create:
+	git tag -a $(TAG_NAME) -m "$(TAG_MESSAGE)"
+
+# (+) Push a version tag to VC
+vc_tag_push:
+	git push origin $(TAG_NAME)
+
+# (+) Delete a local tag from VC
+vc_tag_delete_local:
+	git tag -d $(TAG_NAME)
+
+# (+) Delete a remote tag from VC
+vc_tag_delete_remote:
+	git push --delete origin $(TAG_NAME)
 
 
 # -------------------------------
@@ -116,7 +184,7 @@ logs_clean:
 
 # Clean pycache
 pycache_clean:
-	find . -name $(PYCACHE_NAME) -exec rm -rf {} +
+	find . -type d -name $(PYCACHE_NAME) -exec rm -rf {} +
 
 # Clean DVC cache
 dvc_cache_clean:
@@ -127,6 +195,6 @@ dvc_cache_clean:
 # PHONY
 # -------------------------------
 .PHONY: deps_install deps_update \
-	data_check_status data_add data_commit data_push data_update_and_push data_pull \
+	dvc_vc_check_status dvc_vc_push dvc_pull dvc_add vc_commit dvc_vc_update_and_push \
 	code_format code_sort_imports code_fix_style code_check_lint code_check_type code_check_quality \
 	docs_generate logs_clean pycache_clean dvc_cache_clean
