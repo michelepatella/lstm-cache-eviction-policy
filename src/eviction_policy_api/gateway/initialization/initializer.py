@@ -5,17 +5,17 @@ from box import Box
 from torch.nn import Module
 
 from eviction_policy_api.const import META_DATA_CONFIG_FILE_PATH
-from eviction_policy_api.initialization.utils.device_selector import (
+from eviction_policy_api.gateway.initialization.utils.device_selector import (
     select_device,
 )
-from eviction_policy_api.initialization.utils.meta_data_loader import (
+from eviction_policy_api.gateway.initialization.utils.meta_data_loader import (
     load_meta_data,
 )
-from eviction_policy_api.initialization.utils.model_builder import build_model
-from eviction_policy_api.initialization.utils.model_state_dict_loader import (
+from eviction_policy_api.gateway.initialization.utils.model_builder import build_model
+from eviction_policy_api.gateway.initialization.utils.model_state_dict_loader import (
     load_model_state_dict,
 )
-from eviction_policy_api.initialization.utils.model_to_device_mover import (
+from eviction_policy_api.gateway.initialization.utils.model_to_device_mover import (
     move_model_to_device,
 )
 

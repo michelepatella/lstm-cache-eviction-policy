@@ -2,8 +2,7 @@ from typing import Any, List, Tuple
 
 from torch import Tensor
 
-from config.classes.Config import Config
-from eviction_policy_api.autoregression import autoregressive_rollout
+from eviction_policy_api.services.autoregressive_rollout.autoregression import autoregressive_rollout
 from eviction_policy_api.confidence_interval_calculator import (
     calculate_confidence_interval,
 )
@@ -11,9 +10,6 @@ from eviction_policy_api.key_candidates_finder import (
     find_key_candidates,
 )
 from utils.logs.levels.info_logger import info
-from utils.model.initialization.trained_model_initializer import (
-    initialize_trained_model,
-)
 
 
 def manage_lstm_eviction_policy(
