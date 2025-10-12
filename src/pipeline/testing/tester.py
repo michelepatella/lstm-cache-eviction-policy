@@ -120,11 +120,6 @@ def test_model(config: Config) -> None:
     stacked_outputs = torch.stack(all_outputs).numpy()
 
     # Prepare save paths
-    precision_recall_save_path = (
-        PLOTS_DIRECTORY_PATH
-        / data_distribution_mode
-        / PRECISION_RECALL_CURVE_FILE_NAME
-    )
     confusion_matrix_save_path = (
         PLOTS_DIRECTORY_PATH
         / data_distribution_mode

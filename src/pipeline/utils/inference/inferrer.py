@@ -11,7 +11,7 @@ from utils.logs.levels.info_logger import info
 from utils.mc.forward_runner import (
     mc_forward_passes,
 )
-from utils.model.initialization.utils.device_mover import move_to_device
+from utils.model.initialization.components.device_mover import move_to_device
 
 
 def infer_batch(

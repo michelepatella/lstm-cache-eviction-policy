@@ -82,8 +82,8 @@ def train_model(config: Config) -> None:
     device, criterion, model, optimizer = initialize_model_components(
         model_params,
         learning_rate,
-        targets,
         config,
+        targets
     )
 
     # Train the model

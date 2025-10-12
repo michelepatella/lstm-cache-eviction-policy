@@ -10,7 +10,7 @@ from eviction_policy_api.services.autoregressive_rollout.initialization.initiali
 )
 from utils.logs.levels.info_logger import info
 from utils.mc.forward_runner import mc_forward_passes
-from utils.model.initialization.utils.device_mover import move_to_device
+from utils.model.initialization.components.device_mover import move_to_device
 
 app = FastAPI()
 

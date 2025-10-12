@@ -121,8 +121,8 @@ def compute_time_series_cv(
             device, criterion, model, optimizer = initialize_model_components(
                 params_box.model,
                 params_box.training.optimizer.learning_rate,
-                targets,
                 config,
+                targets
             )
 
             # Train model

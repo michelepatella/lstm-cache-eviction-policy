@@ -4,17 +4,14 @@ from torch.optim import Optimizer
 
 from config.classes.Config import Config
 from config.classes.ModelConfig import ModelParamsConfig
-from utils.model.initialization.utils.device_mover import \
-    move_to_device
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
-from utils.model.initialization.utils.class_weights_calculator import (
-    calculate_class_weight,
-)
-from utils.model.initialization.utils.device_selector import select_device
-from utils.model.initialization.utils.model_builder import build_model
-from utils.model.initialization.utils.optimizer_builder import build_optimizer
+from utils.model.initialization.components.class_weights_calculator import calculate_class_weight
+from utils.model.initialization.components.device_mover import move_to_device
+from utils.model.initialization.components.device_selector import select_device
+from utils.model.initialization.components.model_builder import build_model
+from utils.model.initialization.components.optimizer_builder import build_optimizer
 
 
 def initialize_model_components(

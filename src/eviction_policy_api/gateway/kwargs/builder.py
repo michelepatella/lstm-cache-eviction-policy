@@ -2,7 +2,7 @@ from typing import Dict, List
 
 from fastapi import HTTPException, status
 
-from eviction_policy_api.gateway.kwargs.utils.APIKwargs import APIKwargs
+from eviction_policy_api.gateway.kwargs.classes.APIKwargs import APIKwargs
 
 
 def build_api_kwargs(

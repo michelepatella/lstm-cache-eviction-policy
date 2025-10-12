@@ -5,7 +5,7 @@ from utils.model.LSTM import LSTM
 
 
 def build_model(
-    model_params: ModelParamsConfig,
+    model_params: ModelParamsConfig | Dict[str, int | float | bool],
     min_key: int,
     max_key: int,
     embedding_dim: int,
@@ -18,7 +18,8 @@ def build_model(
     the given parameters and input configuration, returning it.
 
     Args:
-        model_params (ModelParamsConfig): Dictionary containing model parameters.
+        model_params (ModelParamsConfig | Dict[str, int | float | bool]):
+            Dictionary containing model parameters.
         min_key (int): Minimum key index used in the model.
         max_key (int): Maximum key index used in the model.
         embedding_dim (int): Dimension of the key embedding.

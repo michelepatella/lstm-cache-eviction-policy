@@ -9,7 +9,7 @@ from eviction_policy_api.const import (
     AUTOREGRESSIVE_ROLLOUT_SERVICE_PARAMS,
     API_CONFIG_FILE_PATH, API_GATEWAY_ENDPOINT,
 )
-from eviction_policy_api.gateway.kwargs.utils.default_kwargs_getter import (
+from eviction_policy_api.gateway.kwargs.default_getter import (
     get_default_kwargs,
 )
 from utils.json.loader import load_json
