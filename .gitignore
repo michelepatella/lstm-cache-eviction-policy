@@ -59,5 +59,3 @@ coverage.xml
 *.bak
 *.swp
 .DS_Store
-
-data
