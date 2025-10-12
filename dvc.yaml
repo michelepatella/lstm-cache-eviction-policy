@@ -1,0 +1,52 @@
+stages:
+  generate_data:
+    cmd: python src/pipeline/data_generation/data_generator.py
+    deps: []
+    outs:
+      - data/raw/static/static_raw_dataset.csv
+      - data/raw/dynamic/dynamic_raw_dataset.csv
+      - plots/static/zipf_loglog.png
+      - plots/static/daily_profile.png
+      - plots/static/key_usage_heatmap.png
+      - plots/dynamic/zipf_loglog.png
+      - plots/dynamic/daily_profile.png
+      - plots/dynamic/key_usage_heatmap.png
+
+  preprocess_data:
+    cmd: python src/pipeline/data_preprocessing/data_processor.py
+    deps:
+      - data/raw/static/static_raw_dataset.csv
+      - data/raw/dynamic/dynamic_raw_dataset.csv
+    outs:
+      - data/processed/static/static_processed_dataset.csv
+      - data/processed/dynamic/dynamic_processed_dataset.csv
+
+  validate_model:
+    cmd: python src/pipeline/validation/validator.py
+    deps:
+      - data/processed/static/static_processed_dataset.csv
+      - data/processed/dynamic/dynamic_processed_dataset.csv
+    outs:
+      - config.yaml
+
+  train_model:
+    cmd: python src/pipeline/training/trainer.py
+    deps:
+      - data/processed/static/static_processed_dataset.csv
+      - data/processed/dynamic/dynamic_processed_dataset.csv
+    outs:
+      - models/static/trained_static_model.pt
+      - models/dynamic/trained_dynamic_model.pt
+
+  test_model:
+    cmd: python src/pipeline/testing/tester.py
+    deps:
+      - data/processed/static/static_processed_dataset.csv
+      - data/processed/dynamic/dynamic_processed_dataset.csv
+      - models/static/trained_static_model.pt
+      - models/dynamic/trained_dynamic_model.pt
+    outs:
+      - reports/results/static/model_results.json
+      - reports/results/dynamic/model_results.json
+      - reports/plots/static/confusion_matrix.png
+      - reports/plots/dynamic/confusion_matrix.png

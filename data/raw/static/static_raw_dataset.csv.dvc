@@ -1,5 +1,0 @@
-outs:
-- md5: 4709f69ae10bd8f0d7282075c150e72f
-  size: 10805190
-  hash: md5
-  path: static_raw_dataset.csv

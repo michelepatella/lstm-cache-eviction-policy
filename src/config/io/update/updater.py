@@ -2,7 +2,7 @@ from typing import Callable
 
 import yaml
 
-from config.classes.Config import ConfigDict
+from config.classes.Config import ConfigDict, Config
 from config.io.loader import load_config
 from config.io.update.merger import merge_config
 from config.io.utils.locator import get_config_abs_path
@@ -14,7 +14,7 @@ from utils.logs.levels.info_logger import info
 def update_config(
     updated_config: ConfigDict,
     prepare_config: Callable,
-) -> ConfigDict:
+) -> Config:
     """
     Update the YAML configuration file by merging the
     updated configuration object into the original one.
@@ -29,7 +29,7 @@ def update_config(
             the new configuration object and set it as new settings.
 
     Returns:
-        dict: Updated, validated configuration object.
+        Config: Updated, validated configuration object.
 
     Raises:
         RuntimeError: If the YAML configuration file cannot be updated

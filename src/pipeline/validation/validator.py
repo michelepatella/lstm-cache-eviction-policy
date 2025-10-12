@@ -1,4 +1,6 @@
+from config import prepare_config
 from config.classes.Config import Config
+from config.io.update.updater import update_config
 from const import LOGS_VALIDATION_PHASE, TRAINING_SPLIT_TYPE
 from pipeline.validation.best_params.saver import save_best_params
 from pipeline.validation.tuning.grid_search_runner import (
@@ -47,6 +49,10 @@ def validate_model(config: Config) -> Config:
     # Save the best parameters and
     # get new configuration
     new_config = save_best_params(best_params, config)
+
+    # Update configuration file and
+    # get the updated object
+    new_config = update_config(new_config.model_dump(), prepare_config)
 
     info("Model validation completed")
 

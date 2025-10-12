@@ -1,4 +1,3 @@
-import torch
 from box.box import Box
 
 from config.classes.Config import Config
@@ -51,9 +50,6 @@ def test_model(config: Config) -> None:
     data_distribution_mode = config.data.generation.mode
     testing_batch_size = config.testing.general.batch_size
     testing_shuffle = config.testing.general.shuffle
-    num_keys = (
-        config.data.generation.keys.max - config.data.generation.keys.min + 1
-    )
     top_k = config.testing.metrics.top_k
 
     # Setup testing data loader
@@ -112,12 +108,6 @@ def test_model(config: Config) -> None:
         avg_loss,
         top_k,
     )
-
-    # Given all the outputs, transform them
-    # into an unic tensor with an additional
-    # dimension, converting the resulting tensor
-    # into a numpy array
-    stacked_outputs = torch.stack(all_outputs).numpy()
 
     # Prepare save paths
     confusion_matrix_save_path = (
