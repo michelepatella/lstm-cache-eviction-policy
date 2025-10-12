@@ -18,17 +18,19 @@ from eviction_policy_api.services.autoregressive_rollout.initialization.utils.mo
 )
 
 
-def initialize_api() -> tuple[Module, torch.device, Box]:
+def initialize_autoregressive_rollout(api_config: Box) -> tuple[Module, torch.device, Box]:
     """
-    Initialize the eviction policy API.
+    Initialize the autoregressive rollout service.
 
     This function performs all steps required to
-    prepare the eviction policy API:
-        - Loads API configuration from JSON file.
+    prepare the autoregressive rollout service:
         - Selects the computation device.
         - Builds the LSTM model instance.
         - Moves the model to the selected device.
         - Loads pre-trained model weights.
+
+    Args:
+        api_config (Box): API configuration object.
 
     Returns:
         Tuple[Module, torch.device, Box]: Tuple containing the instantiated
@@ -36,16 +38,6 @@ def initialize_api() -> tuple[Module, torch.device, Box]:
                                           resides, and the Box object containing
                                           the API configuration.
     """
-    # Extract API configurations needed
-    # for next steps
-    device_type = api_config.hardware.device_type
-    model_params = api_config.model.params
-    model_path = api_config.model.path
-    min_key = api_config.model.keys.min
-    max_key = api_config.model.keys.max
-    num_features = api_config.model.num_features
-    embedding_dim = api_config.model.embedding_dim
-
     # Select device according to device type
     device = select_device(device_type)
 

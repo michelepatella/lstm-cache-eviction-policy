@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Dict, List
 
 from fastapi import HTTPException, status
 
@@ -6,8 +6,8 @@ from eviction_policy_api.gateway.kwargs.utils.APIKwargs import APIKwargs
 
 
 def build_api_kwargs(
-    default_kwargs: Dict[str, int | float | List[Any] | str | bool],
-    user_kwargs: Dict[str, int | float | List[Any] | str | bool] | None,
+    default_kwargs: Dict[str, int | float | List[int] | str | bool],
+    user_kwargs: Dict[str, int | float | List[int] | str | bool] | None,
 ) -> APIKwargs:
     """
     Build API kwargs starting from default and user-provided ones.
@@ -18,9 +18,9 @@ def build_api_kwargs(
     Resulting kwarg values are validated before being returned.
 
     Args:
-        default_kwargs (Dict[str, int | float | List[Any] | str | bool]):
+        default_kwargs (Dict[str, int | float | List[int] | str | bool]):
             Default API kwargs.
-        user_kwargs (Dict[str, int | float | List[Any] | str | bool] | None):
+        user_kwargs (Dict[str, int | float | List[int] | str | bool] | None):
             User-provided kwargs (None if any has been provided).
 
     Returns:

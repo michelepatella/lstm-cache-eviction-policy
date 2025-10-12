@@ -15,7 +15,7 @@ from utils.logs.levels.info_logger import info
 
 
 def manage_lstm_eviction_policy(
-    keys_in_cache: List[Any],
+    keys_in_cache: List[int],
     last_accesses: Tuple[Tensor, Tensor, Tensor],
     prediction_window: int,
     num_mc_samples: int,

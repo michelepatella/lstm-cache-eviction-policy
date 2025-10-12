@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Tuple
+from typing import Dict, List, Tuple
 
 import requests
 from box import Box
@@ -21,9 +21,9 @@ api_config = load_json(META_DATA_CONFIG_FILE_PATH)
 
 @app.post("/evict")
 def evict_key(
-    keys_in_cache: List[Any],
-    last_accesses: List[Tuple[float, Any]],
-    user_kwargs: Dict[str, int | float | List[Any] | str | bool],
+    keys_in_cache: List[int],
+    last_accesses: List[Tuple[float, int]],
+    user_kwargs: Dict[str, int | float | List[int] | str | bool],
 ):
     # Retrieve default kwargs from
     # API configuration
@@ -34,9 +34,14 @@ def evict_key(
 
     # Prepare params for autoregressive rollout service
     autoregressive_rollout_params = Box(AUTOREGRESSIVE_ROLLOUT_SERVICE_PARAMS)
-    autoregressive_rollout_params.model_path = api_config.model.path
-    autoregressive_rollout_params.device_type = api_config.hardware.device_type
     autoregressive_rollout_params.last_accesses = last_accesses
+    autoregressive_rollout_params.model_path = api_config.model.path
+    autoregressive_rollout_params.model_params = api_config.model.params
+    autoregressive_rollout_params.device_type = api_config.hardware.device_type
+    autoregressive_rollout_params.min_key = api_config.model.keys.min
+    autoregressive_rollout_params.max_key = api_config.model.keys.max
+    autoregressive_rollout_params.num_features = api_config.model.num_features
+    autoregressive_rollout_params.embedding_dim = api_config.model.embedding_dim
     autoregressive_rollout_params.rollout_horizon = api_kwargs.rollout_horizon
     autoregressive_rollout_params.mc_dropout_samples = api_kwargs.mc_dropout_samples
     autoregressive_rollout_params.time_step_increment = api_kwargs.time_step_increment

@@ -20,16 +20,15 @@ class APIKwargs(BaseModel):
 
     Attributes:
         rollout_horizon (int): Number of future steps to predict in the
-                               autoregressive rollout (> 0 and <= MAX_ROLLOUT_HORIZON).
+                               autoregressive rollout (in (0, MAX_ROLLOUT_HORIZON]).
         mc_dropout_samples (int): Number of Monte Carlo dropout samples
-                                  for uncertainty estimation (> 0 and
-                                  <= MAX_MC_DROPOUT_SAMPLES).
+                                  for uncertainty estimation (in (0, MAX_MC_DROPOUT_SAMPLES]).
         confidence_level (float): Confidence level for prediction intervals
                                   (in (0.0, 1.0]).
         time_step_increment (float): Time step increment in hours for feature
-                                     progression (> 0 and <= MAX_TIME_STEP_INCREMENT).
+                                     progression (in (0, MAX_TIME_STEP_INCREMENT]).
         num_evictions (int): Number of keys to evict in the current step (> 0).
-        exclude_keys (List[Any]): List of keys that should not be evicted.
+        exclude_keys (List[int]): List of keys that should not be evicted.
         prob_weight (float): Weight applied to probability in key scoring (in (0.0, 1.0]).
         conf_weight (float): Weight applied to confidence in key scoring (in (0.0, 1.0]).
         tiebreak_strategy (str): Strategy to resolve ties when multiple
@@ -44,7 +43,7 @@ class APIKwargs(BaseModel):
     confidence_level: confloat(gt=0.0, le=1.0)
     time_step_increment: confloat(gt=0, le=MAX_TIME_STEP_INCREMENT)
     num_evictions: conint(gt=0)
-    exclude_keys: List[Any]
+    exclude_keys: List[int]
     prob_weight: confloat(gt=0.0, le=1.0)
     conf_weight: confloat(gt=0.0, le=1.0)
     tiebreak_strategy: str

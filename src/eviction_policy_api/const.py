@@ -63,10 +63,15 @@ KWARGS = {
 AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT = "http://localhost:8001/autoregressive_rollout"
 
 AUTOREGRESSIVE_ROLLOUT_SERVICE_PARAMS = {
-    "model_path": None,
-    "device_type": None,
     "last_accesses": None,
+    "model_path": None,
+    "model_params": None,
+    "device_type": None,
+    "min_key": None,
+    "max_key": None,
+    "num_features": None,
+    "embedding_dim": None,
     "rollout_horizon": None,
     "mc_dropout_samples": None,
-    "time_step_increment": None,
+    "time_step_increment": None
 }
