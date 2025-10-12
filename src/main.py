@@ -23,7 +23,7 @@ def main():
 
     # (2) Data preprocessing
     preprocess_data(config)
-
+    return
     # (3) Model validation
     config = validate_model(config)
 

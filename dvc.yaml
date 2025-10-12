@@ -1,6 +1,6 @@
 stages:
   generate_data:
-    cmd: python src/pipeline/data_generation/data_generator.py
+    cmd: python -m src.pipeline.data_generation.data_generator
     deps: []
     outs:
       - data/raw/static/static_raw_dataset.csv
