@@ -105,12 +105,12 @@ def compute_time_series_cv(
             # training and validation sets
             training_loader = create_data_loader(
                 training_dataset,
-                config.training_batch_size,
+                config.training.general.batch_size,
                 shuffle=training_shuffle,
             )
             validation_loader = create_data_loader(
                 validation_dataset,
-                config.training_batch_size,
+                config.validation.general.batch_size,
                 shuffle=validation_shuffle,
             )
 
