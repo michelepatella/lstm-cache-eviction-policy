@@ -1,4 +1,4 @@
-from config.classes.Config import Config
+from config import prepare_config
 from const import (
     DATASET_PREPROCESSED_TYPE,
     DATASET_RAW_TYPE,
@@ -24,7 +24,7 @@ from utils.logs.initializer import logs_phase
 from utils.logs.levels.info_logger import info
 
 
-def preprocess_data(config: Config) -> None:
+def preprocess_data() -> None:
     """
     Preprocess generated data.
 
@@ -34,14 +34,14 @@ def preprocess_data(config: Config) -> None:
     new features construction, saving the final
     preprocessed dataset for further usage.
 
-    Args:
-        config (Config): Configuration object.
-
     Returns:
         None
     """
     # Set the new state
     logs_phase.set(LOGS_DATA_PREPROCESSING_PHASE)
+
+    # Read configuration
+    config = prepare_config()
 
     # Load the dataset
     df = load_dataset(DATASET_RAW_TYPE, config)

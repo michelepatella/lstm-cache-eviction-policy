@@ -1,4 +1,4 @@
-from config.classes.Config import Config
+from config import prepare_config
 from const import (
     AVG_CACHE_LATENCY_NAME,
     EVICTION_MISTAKE_RATE_NAME,
@@ -42,7 +42,7 @@ from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
 
 
-def run_simulations(config: Config) -> None:
+def run_simulations() -> None:
     """
     Run cache simulations for multiple cache eviction policies.
 
@@ -51,14 +51,14 @@ def run_simulations(config: Config) -> None:
     it initializes the cache, runs the cache simulation, calculates
     key performance metrics, saves the results, and plots performance data.
 
-    Args:
-        config (Config): Configuration object.
-
     Returns:
         None
     """
     # Set new state
     logs_phase.set(LOGS_SIMULATION_PHASE)
+
+    # Read configuration
+    config = prepare_config()
 
     # Prepare configuration
     data_distribution_mode = config.data.generation.mode

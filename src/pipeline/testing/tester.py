@@ -1,6 +1,6 @@
 from box.box import Box
 
-from config.classes.Config import Config
+from config import prepare_config
 from const import (
     CONFUSION_MATRIX_FILE_NAME,
     LOGS_TESTING_PHASE,
@@ -29,7 +29,7 @@ from utils.model.initialization.trained_model_initializer import (
 )
 
 
-def test_model(config: Config) -> None:
+def test_model() -> None:
     """
     Test the trained model.
 
@@ -37,14 +37,14 @@ def test_model(config: Config) -> None:
     testing set. Results are shown via report and
     plots providing model performance insights.
 
-    Args:
-        config (Config): Configuration object.
-
     Returns:
         None
     """
     # Set the new state
     logs_phase.set(LOGS_TESTING_PHASE)
+
+    # Read configuration
+    config = prepare_config()
 
     # Prepare configuration
     data_distribution_mode = config.data.generation.mode

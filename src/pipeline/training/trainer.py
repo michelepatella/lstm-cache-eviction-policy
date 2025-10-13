@@ -1,4 +1,4 @@
-from config.classes.Config import Config
+from config import prepare_config
 from const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE
 from pipeline.training.utils.model_saver import save_model
 from pipeline.utils.dataset.splitter import split_training_set
@@ -17,7 +17,7 @@ from utils.model.initialization.model_components_initializer import (
 from utils.model.locator import get_model_abs_path
 
 
-def train_model(config: Config) -> None:
+def train_model() -> None:
     """
     Train LSTM model.
 
@@ -26,14 +26,14 @@ def train_model(config: Config) -> None:
     The best model found during training process is saved
     for further usage.
 
-    Args:
-        config (Config): Configuration object.
-
     Returns:
         None
     """
     # Set the new state
     logs_phase.set(LOGS_TRAINING_PHASE)
+
+    # Read configuration
+    config = prepare_config()
 
     # Prepare configuration
     data_distribution_mode = config.data.generation.mode

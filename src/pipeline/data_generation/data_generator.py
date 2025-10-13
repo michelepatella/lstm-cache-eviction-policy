@@ -1,4 +1,4 @@
-from config.classes.Config import Config
+from config import prepare_config
 from const import (
     DAILY_PROFILE_PLOT_FILE_NAME,
     DATA_DISTRIBUTION_STATIC_MODE,
@@ -32,7 +32,7 @@ from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
 
 
-def generate_data(config: Config) -> None:
+def generate_data() -> None:
     """
     Generate data according
     to a specified data distribution mode.
@@ -47,14 +47,14 @@ def generate_data(config: Config) -> None:
     is used to create a dataframe saved as CSV dataset next.
     Finally, data generated is validated by proper plots.
 
-    Args:
-        config (Config): Configuration object.
-
     Returns:
         None
     """
     # Set the new state
     logs_phase.set(LOGS_DATA_GENERATION_PHASE)
+
+    # Read configuration
+    config = prepare_config()
 
     # Prepare configuration
     data_distribution_mode = config.data.generation.mode
@@ -114,3 +114,7 @@ def generate_data(config: Config) -> None:
     )
 
     info("Data generation completed")
+
+
+if __name__ == "__main__":
+    generate_data()

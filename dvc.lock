@@ -1,0 +1,4 @@
+schema: '2.0'
+stages:
+  setup:
+    cmd: PYTHONPATH=src python -m utils.logs.initializer

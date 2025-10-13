@@ -1,6 +1,11 @@
 stages:
+  setup:
+    cmd: PYTHONPATH=src python -m utils.logs.initializer
+    deps: []
+    outs: []
+
   generate_data:
-    cmd: python -m src.pipeline.data_generation.data_generator
+    cmd: PYTHONPATH=src python -m pipeline.data_generation.data_generator
     deps: []
     outs:
       - data/raw/static/static_raw_dataset.csv
@@ -13,7 +18,7 @@ stages:
       - plots/dynamic/key_usage_heatmap.png
 
   preprocess_data:
-    cmd: python src/pipeline/data_preprocessing/data_processor.py
+    cmd: PYTHONPATH=src python -m pipeline.data_preprocessing.data_processor.py
     deps:
       - data/raw/static/static_raw_dataset.csv
       - data/raw/dynamic/dynamic_raw_dataset.csv
@@ -22,7 +27,7 @@ stages:
       - data/processed/dynamic/dynamic_processed_dataset.csv
 
   validate_model:
-    cmd: python src/pipeline/validation/validator.py
+    cmd: PYTHONPATH=src python -m pipeline.validation.validator.py
     deps:
       - data/processed/static/static_processed_dataset.csv
       - data/processed/dynamic/dynamic_processed_dataset.csv
@@ -30,7 +35,7 @@ stages:
       - config.yaml
 
   train_model:
-    cmd: python src/pipeline/training/trainer.py
+    cmd: PYTHONPATH=src python -m pipeline.training.trainer.py
     deps:
       - data/processed/static/static_processed_dataset.csv
       - data/processed/dynamic/dynamic_processed_dataset.csv
@@ -39,7 +44,7 @@ stages:
       - models/dynamic/trained_dynamic_model.pt
 
   test_model:
-    cmd: python src/pipeline/testing/tester.py
+    cmd: PYTHONPATH=src python -m pipeline.testing.tester.py
     deps:
       - data/processed/static/static_processed_dataset.csv
       - data/processed/dynamic/dynamic_processed_dataset.csv

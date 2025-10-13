@@ -1,5 +1,4 @@
 from config import prepare_config
-from config.classes.Config import Config
 from config.io.update.updater import update_config
 from const import LOGS_VALIDATION_PHASE, TRAINING_SPLIT_TYPE
 from pipeline.validation.best_params.saver import save_best_params
@@ -12,7 +11,7 @@ from utils.logs.initializer import logs_phase
 from utils.logs.levels.info_logger import info
 
 
-def validate_model(config: Config) -> Config:
+def validate_model() -> None:
     """
     Validate model to find the best hyperparameters.
 
@@ -21,14 +20,14 @@ def validate_model(config: Config) -> Config:
     grid search), and saving the best hyperparameters found
     in a new configuration.
 
-    Args:
-        config (Config): Current configuration object.
-
     Returns:
-        Config: Updated configuration object (with the best hyperparameters).
+        None
     """
     # Set the new state
     logs_phase.set(LOGS_VALIDATION_PHASE)
+
+    # Read configuration
+    config = prepare_config()
 
     # Prepare configuration
     validation_batch_size = config.validation.general.batch_size
@@ -55,5 +54,3 @@ def validate_model(config: Config) -> Config:
     new_config = update_config(new_config.model_dump(), prepare_config)
 
     info("Model validation completed")
-
-    return new_config
