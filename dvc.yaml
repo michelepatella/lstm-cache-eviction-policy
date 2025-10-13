@@ -41,6 +41,9 @@ stages:
       # - data/processed/dynamic/dynamic_processed_dataset.csv
     outs: []
 
+    run_simulations:
+      cmd: PYTHONPATH=src python -m pipeline.simulation.simulator
+
 artifacts:
   static-model:
     path: models/static/trained_static_model.pt

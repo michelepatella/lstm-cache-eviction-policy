@@ -1,10 +1,10 @@
 import numpy as np
 
-from config.classes.Config import Config
+from pipeline.config import Config
 from const import LOGS_VALIDATION_PHASE
-from utils.logs.initializer import logs_phase
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
+from pipeline.utils.logs.initializer import logs_phase
+from pipeline.utils.logs.levels.debug_logger import debug
+from pipeline.utils.logs.levels.info_logger import info
 
 
 class EarlyStopping:

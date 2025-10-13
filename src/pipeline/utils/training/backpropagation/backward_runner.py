@@ -1,7 +1,7 @@
 import torch
 from torch.optim import Optimizer
 
-from utils.logs.levels.info_logger import info
+from pipeline.utils.logs.levels.info_logger import info
 
 
 def compute_backward(loss: torch.nn.Module, optimizer: Optimizer) -> None:

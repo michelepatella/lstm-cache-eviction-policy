@@ -6,13 +6,13 @@ from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from config.classes.Config import Config
+from pipeline.config import Config
 from pipeline.utils.evaluation.evaluator import evaluate_model
 from pipeline.utils.training.callbacks.EarlyStopping import EarlyStopping
 from pipeline.utils.training.one_epoch_trainer import train_one_epoch
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
+from pipeline.utils.logs.levels.debug_logger import debug
+from pipeline.utils.logs.levels.error_logger import error
+from pipeline.utils.logs.levels.info_logger import info
 
 
 def train_n_epochs(

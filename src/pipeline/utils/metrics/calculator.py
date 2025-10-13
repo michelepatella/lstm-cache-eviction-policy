@@ -2,7 +2,7 @@ from typing import Dict, List
 
 import torch
 
-from config.classes.Config import Config
+from pipeline.config import Config
 from const import (
     MODEL_METRICS_CLASS_REPORT_NAME,
     MODEL_METRICS_COHEN_KAPPA_SCORE_NAME,
@@ -17,8 +17,8 @@ from pipeline.utils.metrics.components.cohen_kappa_score_calculator import (
 from pipeline.utils.metrics.components.top_k_accuracy_calculator import (
     calculate_top_k_accuracy,
 )
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
+from pipeline.utils.logs.levels.debug_logger import debug
+from pipeline.utils.logs.levels.info_logger import info
 
 
 def calculate_model_metrics(

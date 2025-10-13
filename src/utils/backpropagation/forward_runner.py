@@ -2,10 +2,12 @@ from typing import Tuple, Union
 
 import torch
 
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
-from utils.model.initialization.components.device_mover import move_to_device
+from pipeline.utils.logs.levels.debug_logger import debug
+from pipeline.utils.logs.levels.error_logger import error
+from pipeline.utils.logs.levels.info_logger import info
+from pipeline.utils.model.initialization.components.device_mover import (
+    move_to_device,
+)
 
 
 def compute_forward(

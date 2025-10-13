@@ -2,12 +2,18 @@ from typing import Tuple, Dict
 
 import torch
 
-from utils.model.initialization.components.device_selector import select_device
-from utils.model.initialization.components.model_builder import build_model
-from utils.model.initialization.components.model_state_dict_loader import (
+from pipeline.utils.model.initialization.components.device_selector import (
+    select_device,
+)
+from pipeline.utils.model.initialization.components.model_builder import (
+    build_model,
+)
+from pipeline.utils.model.initialization.components.model_state_dict_loader import (
     load_model_state_dict,
 )
-from utils.model.initialization.components.device_mover import move_to_device
+from pipeline.utils.model.initialization.components.device_mover import (
+    move_to_device,
+)
 
 
 def initialize_autoregressive_rollout(

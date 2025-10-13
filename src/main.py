@@ -1,10 +1,10 @@
-from pipeline.data_generation.data_generator import generate_data
-from pipeline.data_preprocessing.data_preprocessor import preprocess_data
-from pipeline.testing.tester import test_model
-from pipeline.training.trainer import train_model
-from pipeline.validation.validator import validate_model
-from simulation import run_simulations
-from utils.logs.initializer import initialize_logs
+from pipeline.steps.data_generation.data_generator import generate_data
+from pipeline.steps.data_preprocessing.data_preprocessor import preprocess_data
+from pipeline.steps.testing.tester import test_model
+from pipeline.steps.training.trainer import train_model
+from pipeline.steps.validation.validator import validate_model
+from pipeline.simulation import run_simulations
+from pipeline.utils.logs.initializer import initialize_logs
 
 
 def main():

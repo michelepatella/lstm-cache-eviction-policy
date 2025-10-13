@@ -1,10 +1,10 @@
 import pandas as pd
 
-from config.classes.Config import Config
-from utils.dataset.locator import get_dataset_abs_path
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
+from pipeline.config import Config
+from pipeline.utils.dataset.locator import get_dataset_abs_path
+from pipeline.utils.logs.levels.debug_logger import debug
+from pipeline.utils.logs.levels.error_logger import error
+from pipeline.utils.logs.levels.info_logger import info
 
 
 def save_dataset(df: pd.DataFrame, dataset_type: str, config: Config) -> None:

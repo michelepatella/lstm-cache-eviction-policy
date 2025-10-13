@@ -2,11 +2,11 @@ from typing import List, Tuple
 
 from torch.utils.data import Subset
 
-from config.classes.Config import Config
-from utils.dataset.AccessLogsDataset import AccessLogsDataset
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
+from pipeline.config import Config
+from pipeline.utils.dataset.AccessLogsDataset import AccessLogsDataset
+from pipeline.utils.logs.levels.debug_logger import debug
+from pipeline.utils.logs.levels.error_logger import error
+from pipeline.utils.logs.levels.info_logger import info
 
 
 def split_training_set(

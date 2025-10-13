@@ -3,15 +3,17 @@ from typing import List, Tuple
 import torch
 from torch.utils.data import DataLoader
 
-from config.classes.Config import Config
+from pipeline.config import Config
 from const import MC_DROPOUT_NUM_SAMPLES_DEFAULT
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
+from pipeline.utils.logs.levels.debug_logger import debug
+from pipeline.utils.logs.levels.error_logger import error
+from pipeline.utils.logs.levels.info_logger import info
 from utils.mc.forward_runner import (
     mc_forward_passes,
 )
-from utils.model.initialization.components.device_mover import move_to_device
+from pipeline.utils.model.initialization.components.device_mover import (
+    move_to_device,
+)
 
 
 def infer_batch(

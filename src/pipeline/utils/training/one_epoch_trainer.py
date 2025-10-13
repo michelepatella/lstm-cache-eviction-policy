@@ -7,9 +7,9 @@ from pipeline.utils.training.backpropagation.backward_runner import (
     compute_backward,
 )
 from utils.backpropagation.forward_runner import compute_forward
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
+from pipeline.utils.logs.levels.debug_logger import debug
+from pipeline.utils.logs.levels.error_logger import error
+from pipeline.utils.logs.levels.info_logger import info
 
 
 def train_one_epoch(

@@ -4,7 +4,7 @@ import torch
 from torch import Tensor
 from torch.utils.data import DataLoader
 
-from config.classes.Config import Config
+from pipeline.config import Config
 from const import (
     MODEL_COMPUTE_METRICS_DEFAULT,
     MODEL_METRICS_AVG_LOSS,
@@ -17,10 +17,10 @@ from pipeline.utils.inference.inferrer import infer_batch
 from pipeline.utils.metrics.calculator import (
     calculate_model_metrics,
 )
-from utils.json.saver import save_json
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
+from pipeline.utils.json.saver import save_json
+from pipeline.utils.logs.levels.debug_logger import debug
+from pipeline.utils.logs.levels.error_logger import error
+from pipeline.utils.logs.levels.info_logger import info
 
 
 def evaluate_model(
@@ -114,7 +114,8 @@ def evaluate_model(
                         filtered_report = {
                             rk: rv
                             for rk, rv in v.items()
-                            if rk in [
+                            if rk
+                            in [
                                 MODEL_METRICS_ACCURACY_NAME,
                                 MODEL_METRICS_MACRO_AVG_NAME,
                                 MODEL_METRICS_WEIGHTED_AVG_NAME,
