@@ -4,6 +4,7 @@ fastapi==0.118.1
 flake8==7.3.0
 isort==6.1.0
 matplotlib==3.10.6
+mlflow==3.4.0
 numpy==2.3.3
 pandas==2.3.3
 pydantic==2.11.9

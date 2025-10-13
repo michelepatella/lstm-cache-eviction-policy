@@ -5,7 +5,7 @@ data:
   generation:
     seed: 42
     mode: static
-    requests: 200000
+    requests: 500000
     keys:
       min: 1
       max: 500
@@ -93,8 +93,8 @@ validation:
     batch_size: 128
     shuffle: false
   cross_validation:
-    folds: 10
-    epochs: 10
+    folds: 5
+    epochs: 5
   early_stopping:
     patience: 5
     delta: 0.0005

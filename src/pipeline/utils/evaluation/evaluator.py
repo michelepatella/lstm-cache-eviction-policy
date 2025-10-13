@@ -125,6 +125,9 @@ def evaluate_model(
                     else:
                         # Fallback if is not a dictionary
                         metrics_to_save[k] = v
+                else:
+                    # Keep all the other metrics
+                    metrics_to_save[k] = v
 
             # Add average loss to metrics to be saved
             metrics_to_save[MODEL_METRICS_AVG_LOSS] = avg_loss
