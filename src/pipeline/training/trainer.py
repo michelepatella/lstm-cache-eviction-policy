@@ -80,10 +80,7 @@ def train_model() -> None:
 
     # Model setup for training
     device, criterion, model, optimizer = initialize_model_components(
-        model_params,
-        learning_rate,
-        config,
-        targets
+        model_params, learning_rate, config, targets
     )
 
     # Train the model
@@ -102,3 +99,7 @@ def train_model() -> None:
     save_model(model, model_path)
 
     info("Model training completed")
+
+
+if __name__ == "__main__":
+    train_model()

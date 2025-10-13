@@ -2,19 +2,15 @@ from box.box import Box
 
 from config import prepare_config
 from const import (
-    CONFUSION_MATRIX_FILE_NAME,
     LOGS_TESTING_PHASE,
     MODEL_METRICS_CLASS_REPORT_NAME,
     MODEL_METRICS_COHEN_KAPPA_SCORE_NAME,
-    MODEL_METRICS_CONFUSION_MATRIX_NAME,
     MODEL_METRICS_TOP_K_ACCURACY_NAME,
-    MODEL_RESULTS_FILE_NAME,
-    PLOTS_DIRECTORY_PATH,
+    STATIC_MODEL_RESULTS_FILE_NAME,
     RESULTS_DIRECTORY_PATH,
     TESTING_SPLIT_TYPE,
-)
-from pipeline.testing.visualization.plotting.confusion_matrix_plotter import (
-    plot_confusion_matrix,
+    DATA_DISTRIBUTION_STATIC_MODE,
+    DYNAMIC_MODEL_RESULTS_FILE_NAME,
 )
 from pipeline.testing.visualization.reporting.model_evaluation_reporter import (
     generate_model_evaluation_report,
@@ -67,11 +63,17 @@ def test_model() -> None:
     # Set model in evaluation phase
     model.eval()
 
-    # Prepare path where to save evaluation metrics
-    metrics_save_path = (
+    # Prepare file name where to save model results
+    if data_distribution_mode == DATA_DISTRIBUTION_STATIC_MODE:
+        model_results_file_name = STATIC_MODEL_RESULTS_FILE_NAME
+    else:
+        model_results_file_name = DYNAMIC_MODEL_RESULTS_FILE_NAME
+
+    # Build path to save model metrics
+    model_results_save_path = (
         RESULTS_DIRECTORY_PATH
         / data_distribution_mode
-        / MODEL_RESULTS_FILE_NAME
+        / model_results_file_name
     )
 
     # Evaluate model
@@ -87,7 +89,7 @@ def test_model() -> None:
         criterion,
         device,
         config,
-        metrics_save_path,
+        model_results_save_path,
         compute_metrics=True,
     )
 
@@ -98,7 +100,6 @@ def test_model() -> None:
     class_report = getattr(metrics, MODEL_METRICS_CLASS_REPORT_NAME)
     top_k_accuracy = getattr(metrics, MODEL_METRICS_TOP_K_ACCURACY_NAME)
     kappa_score = getattr(metrics, MODEL_METRICS_COHEN_KAPPA_SCORE_NAME)
-    confusion_matrix = getattr(metrics, MODEL_METRICS_CONFUSION_MATRIX_NAME)
 
     # Show report to display testing results
     generate_model_evaluation_report(
@@ -109,14 +110,8 @@ def test_model() -> None:
         top_k,
     )
 
-    # Prepare save paths
-    confusion_matrix_save_path = (
-        PLOTS_DIRECTORY_PATH
-        / data_distribution_mode
-        / CONFUSION_MATRIX_FILE_NAME
-    )
-
-    # Show testing-related plot
-    plot_confusion_matrix(confusion_matrix, confusion_matrix_save_path)
-
     info("Model testing completed")
+
+
+if __name__ == "__main__":
+    test_model()

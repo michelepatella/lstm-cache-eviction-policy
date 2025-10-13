@@ -66,3 +66,7 @@ def preprocess_data() -> None:
     save_dataset(df, DATASET_PREPROCESSED_TYPE, config)
 
     info("Data preprocessing completed")
+
+
+if __name__ == "__main__":
+    preprocess_data()

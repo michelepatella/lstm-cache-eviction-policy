@@ -8,7 +8,10 @@ from config.classes.Config import Config
 from const import (
     MODEL_COMPUTE_METRICS_DEFAULT,
     MODEL_METRICS_AVG_LOSS,
-    MODEL_METRICS_CONFUSION_MATRIX_NAME,
+    MODEL_METRICS_CLASS_REPORT_NAME,
+    MODEL_METRICS_ACCURACY_NAME,
+    MODEL_METRICS_MACRO_AVG_NAME,
+    MODEL_METRICS_WEIGHTED_AVG_NAME,
 )
 from pipeline.utils.inference.inferrer import infer_batch
 from pipeline.utils.metrics.calculator import (
@@ -26,7 +29,7 @@ def evaluate_model(
     criterion: torch.nn.Module,
     device: torch.device,
     config: Config,
-    metrics_save_path: str = None,
+    model_results_save_path: str = None,
     compute_metrics: bool = MODEL_COMPUTE_METRICS_DEFAULT,
 ) -> Tuple[
     float, Dict[str, int | float] | None, List[Tensor], List[int], List[Tensor]
@@ -37,7 +40,7 @@ def evaluate_model(
     This function performs inference over the provided data loader using
     the given model, computes the average loss, and optionally calculates
     evaluation metrics including classification report, top-k accuracy,
-    confusion matrix, and Cohen’s kappa score.
+    and Cohen’s kappa score.
 
     Args:
         model (torch.nn.Module): Model to evaluate.
@@ -45,7 +48,7 @@ def evaluate_model(
         criterion (torch.nn.Module): Loss function used for evaluation.
         device (torch.device): Device on which to perform computations.
         config (Config): Configuration object.
-        metrics_save_path (str): Path to save metrics.
+        model_results_save_path (str): Path to save metrics.
         compute_metrics (bool): Whether to compute evaluation metrics
                                 in addition to loss.
 
@@ -99,20 +102,35 @@ def evaluate_model(
             config,
         )
 
-        if metrics_save_path is not None:
-            # Filter out all metrics except
-            # confusion matrix
-            metrics_to_save = {
-                k: v
-                for k, v in metrics.items()
-                if k != MODEL_METRICS_CONFUSION_MATRIX_NAME
-            }
+        if model_results_save_path is not None:
+            metrics_to_save = {}
+
+            # Filter metrics
+            for k, v in metrics.items():
+                if k == MODEL_METRICS_CLASS_REPORT_NAME:
+                    # Keep only accuracy and both macro
+                    # and weighted average from class report
+                    if isinstance(v, dict):
+                        filtered_report = {
+                            rk: rv
+                            for rk, rv in v.items()
+                            if rk in [
+                                MODEL_METRICS_ACCURACY_NAME,
+                                MODEL_METRICS_MACRO_AVG_NAME,
+                                MODEL_METRICS_WEIGHTED_AVG_NAME,
+                            ]
+                        }
+
+                        metrics_to_save[k] = filtered_report
+                    else:
+                        # Fallback if is not a dictionary
+                        metrics_to_save[k] = v
 
             # Add average loss to metrics to be saved
             metrics_to_save[MODEL_METRICS_AVG_LOSS] = avg_loss
 
             # Save metrics as JSON file
-            save_json(metrics_to_save, metrics_save_path)
+            save_json(metrics_to_save, model_results_save_path)
 
             debug("Model results saved to JSON file")
 

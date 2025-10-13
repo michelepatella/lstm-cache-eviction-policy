@@ -122,7 +122,7 @@ def compute_time_series_cv(
                 params_box.model,
                 params_box.training.optimizer.learning_rate,
                 config,
-                targets
+                targets,
             )
 
             # Train model

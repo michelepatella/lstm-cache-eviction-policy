@@ -214,9 +214,10 @@ MODEL_COMPUTE_METRICS_DEFAULT = False
 MODEL_METRICS_AVG_LOSS = "avg_loss"
 MODEL_METRICS_CLASS_REPORT_NAME = "class_report"
 MODEL_METRICS_TOP_K_ACCURACY_NAME = "top_k_accuracy"
-MODEL_METRICS_CONFUSION_MATRIX_NAME = "confusion_matrix"
 MODEL_METRICS_COHEN_KAPPA_SCORE_NAME = "cohen_kappa_score"
-
+MODEL_METRICS_ACCURACY_NAME = "accuracy"
+MODEL_METRICS_MACRO_AVG_NAME = "macro avg"
+MODEL_METRICS_WEIGHTED_AVG_NAME = "weighted avg"
 
 # ----------------------------
 # Cache simulation metrics
@@ -239,8 +240,12 @@ TIMELINE_INSTANT_HIT_RATE_NAME = "instant_hit_rate"
 # Results
 # ----------------------------
 RESULTS_DIRECTORY_PATH = PROJECT_ROOT / "reports" / "results"
-MODEL_RESULTS_FILE_NAME = "model_results.json"
-SIMULATION_RESULTS_FILE_NAME = "simulation_results.json"
+
+STATIC_MODEL_RESULTS_FILE_NAME = "static_model_results.json"
+DYNAMIC_MODEL_RESULTS_FILE_NAME = "dynamic_model_results.json"
+
+STATIC_SIMULATION_RESULTS_FILE_NAME = "static_simulation_results.json"
+DYNAMIC_SIMULATION_RESULTS_FILE_NAME = "dynamic_simulation_results.json"
 
 
 # ----------------------------
@@ -275,14 +280,6 @@ KEY_USAGE_HEATMAP_TITLE = "Heatmap of Key Access Frequency by Hour of Day"
 KEY_USAGE_HEATMAP_X_LABEL = "Key"
 KEY_USAGE_HEATMAP_Y_LABEL = "Hour of Day"
 KEY_USAGE_HEATMAP_COLORBAR_LABEL = "Access Count"
-
-CONFUSION_MATRIX_FILE_NAME = "confusion_matrix.png"
-CONFUSION_MATRIX_PLOT_ANNOT = True
-CONFUSION_MATRIX_PLOT_FMT = "d"
-CONFUSION_MATRIX_PLOT_CMAP = "turbo"
-CONFUSION_MATRIX_PLOT_TITLE = "Confusion Matrix"
-CONFUSION_MATRIX_PLOT_X_LABEL = "Predicted Key"
-CONFUSION_MATRIX_PLOT_Y_LABEL = "True Key"
 
 HIT_MISS_RATES_PLOT_FILE_NAME = "hit_miss_rates.png"
 HIT_MISS_RATES_PLOT_PAD = 3.0

@@ -7,7 +7,8 @@ from fastapi import FastAPI
 from eviction_policy_api.const import (
     AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT,
     AUTOREGRESSIVE_ROLLOUT_SERVICE_PARAMS,
-    API_CONFIG_FILE_PATH, API_GATEWAY_ENDPOINT,
+    API_CONFIG_FILE_PATH,
+    API_GATEWAY_ENDPOINT,
 )
 from eviction_policy_api.gateway.kwargs.default_getter import (
     get_default_kwargs,

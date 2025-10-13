@@ -9,7 +9,10 @@ from utils.logs.levels.info_logger import info
 
 
 def build_optimizer(
-    model: torch.nn.Module, learning_rate: float, optimizer_type: str, config: Config
+    model: torch.nn.Module,
+    learning_rate: float,
+    optimizer_type: str,
+    config: Config,
 ) -> Optimizer:
     """
     Build an optimizer for the given model.

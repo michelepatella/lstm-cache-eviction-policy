@@ -1,5 +1,6 @@
 from typing import Dict
 
+from config.classes.Config import Config
 from config.classes.ModelConfig import ModelParamsConfig
 from utils.model.LSTM import LSTM
 
@@ -10,6 +11,7 @@ def build_model(
     max_key: int,
     embedding_dim: int,
     num_features: int,
+    config: Config = None,
 ) -> LSTM:
     """
     Instantiate and return a PyTorch model.
@@ -24,13 +26,14 @@ def build_model(
         max_key (int): Maximum key index used in the model.
         embedding_dim (int): Dimension of the key embedding.
         num_features (int): Number of input features for the model.
+        config (Config): Configuration object.
 
     Returns:
         LSTM: Instantiated PyTorch model.
     """
     # Instantiate the model
     model = LSTM(
-        model_params, min_key, max_key, embedding_dim, num_features
+        model_params, min_key, max_key, embedding_dim, num_features, config
     )
 
     return model

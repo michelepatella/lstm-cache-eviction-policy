@@ -14,6 +14,7 @@ from utils.model.initialization.components.device_mover import move_to_device
 
 app = FastAPI()
 
+
 @app.post(AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT)
 def autoregressive_rollout_service(
     last_accesses: List[Tuple[float, int]],
@@ -50,15 +51,12 @@ def autoregressive_rollout_service(
             x_features_seq.append([math.sin(angle), math.cos(angle)])
             x_keys_seq.append(key)
 
-        x_features_seq = (
-            torch.tensor(x_features_seq, dtype=torch.float)
-            .unsqueeze(0)
-        )
+        x_features_seq = torch.tensor(
+            x_features_seq, dtype=torch.float
+        ).unsqueeze(0)
         move_to_device(x_features_seq, device)
 
-        x_keys_seq = (
-            torch.tensor(x_keys_seq, dtype=torch.long).unsqueeze(0)
-        )
+        x_keys_seq = torch.tensor(x_keys_seq, dtype=torch.long).unsqueeze(0)
         move_to_device(x_keys_seq, device)
 
         all_outputs = []

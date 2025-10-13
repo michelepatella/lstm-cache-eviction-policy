@@ -66,9 +66,7 @@ API_GATEWAY_ENDPOINT = "/evict"
 # ----------------------------
 # Autoregressive Rollout
 # ----------------------------
-AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT = (
-    "/autoregressive_rollout"
-)
+AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT = "/autoregressive_rollout"
 
 AUTOREGRESSIVE_ROLLOUT_SERVICE_PARAMS = {
     "last_accesses": None,

@@ -234,7 +234,12 @@ class LSTM(torch.nn.Module):
                 f"keys shape: {x_keys.shape}"
             )
 
-            # Pass keys through the embedding layer
+            # Ensure keys are on the same device as the embedding layer
+            device = self.embedding.weight.device
+            x_features = x_features.to(device)
+            x_keys = x_keys.to(device)
+
+            # Perform embedding
             embedded_keys = self.embedding(x_keys)
 
             debug(f"Embedded keys shape: {embedded_keys.shape}")

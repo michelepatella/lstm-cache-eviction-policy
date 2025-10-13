@@ -54,3 +54,7 @@ def validate_model() -> None:
     new_config = update_config(new_config.model_dump(), prepare_config)
 
     info("Model validation completed")
+
+
+if __name__ == "__main__":
+    validate_model()

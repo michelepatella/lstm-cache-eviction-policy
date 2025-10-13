@@ -2,3 +2,34 @@ schema: '2.0'
 stages:
   setup:
     cmd: PYTHONPATH=src python -m utils.logs.initializer
+  generate_data:
+    cmd: PYTHONPATH=src python -m pipeline.data_generation.data_generator
+    outs:
+    - path: data/raw/static/static_raw_dataset.csv
+      hash: md5
+      md5: 724e9ecf4acf65dff12236581343c958
+      size: 4321813
+  preprocess_data:
+    cmd: PYTHONPATH=src python -m pipeline.data_preprocessing.data_preprocessor
+    deps:
+    - path: data/raw/static/static_raw_dataset.csv
+      hash: md5
+      md5: 724e9ecf4acf65dff12236581343c958
+      size: 4321813
+    outs:
+    - path: data/processed/static/static_processed_dataset.csv
+      hash: md5
+      md5: 5db0f29b1b9a92b59dd413120afe90a2
+      size: 8523314
+  train_model:
+    cmd: PYTHONPATH=src python -m pipeline.training.trainer
+    deps:
+    - path: data/processed/static/static_processed_dataset.csv
+      hash: md5
+      md5: 5db0f29b1b9a92b59dd413120afe90a2
+      size: 8523314
+    outs:
+    - path: models/static/trained_static_model.pt
+      hash: md5
+      md5: 338319fc2cba647078af860af39c671b
+      size: 1181562

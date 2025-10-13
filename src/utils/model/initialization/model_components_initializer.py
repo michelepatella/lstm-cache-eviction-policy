@@ -7,11 +7,15 @@ from config.classes.ModelConfig import ModelParamsConfig
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
-from utils.model.initialization.components.class_weights_calculator import calculate_class_weight
+from utils.model.initialization.components.class_weights_calculator import (
+    calculate_class_weight,
+)
 from utils.model.initialization.components.device_mover import move_to_device
 from utils.model.initialization.components.device_selector import select_device
 from utils.model.initialization.components.model_builder import build_model
-from utils.model.initialization.components.optimizer_builder import build_optimizer
+from utils.model.initialization.components.optimizer_builder import (
+    build_optimizer,
+)
 
 
 def initialize_model_components(
@@ -92,7 +96,7 @@ def initialize_model_components(
 
     # Instantiate LSTM model
     model = build_model(
-        model_params, min_key, max_key, embedding_dim, num_features
+        model_params, min_key, max_key, embedding_dim, num_features, config
     )
 
     # Move model to device

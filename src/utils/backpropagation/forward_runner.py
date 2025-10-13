@@ -59,9 +59,9 @@ def compute_forward(
     debug(f"Target batch shape: {y_key.shape}")
 
     # Move to device
-    move_to_device(x_features, device)
-    move_to_device(x_keys, device)
-    move_to_device(y_key, device)
+    x_features = move_to_device(x_features, device)
+    x_keys = move_to_device(x_keys, device)
+    y_key = move_to_device(y_key, device)
 
     debug(f"Inputs moved to device: {device}")
 

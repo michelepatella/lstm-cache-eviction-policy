@@ -82,57 +82,85 @@ dvc_vc_push:
 dvc_vc_update_and_push: dvc_vc_check_status dvc_add vc_commit dvc_vc_push
 
 # (DVC) Others:
-# (+) List DVC-tracked files
+# List DVC-tracked files
 dvc_list:
 	dvc list .
 
-# (+) Remove tracked files from DVC
+# Remove tracked files from DVC
 dvc_remove:
 	dvc remove $(PATH)
 
-# (+) Pull latest files from DVC
+# Pull latest files from DVC
 dvc_pull:
 	dvc pull
 
-# (+) Pull and checkout specific version
+# Pull and checkout specific version
 dvc_pull_version:
 	dvc checkout $(VERSION)
 	dvc pull
 
-# (+) Restore DVC-tracked files
+# Restore DVC-tracked files
 dvc_checkout:
 	dvc checkout
 
-# (+) Restore specific DVC-tracked file
+# Restore specific DVC-tracked file
 dvc_checkout_file:
 	dvc checkout $(PATH)
 
-# (+) Show DAG (DVC pipeline)
+# Show DVC pipeline
 dvc_pipeline_show:
 	dvc dag
 
+# Run the whole DVC pipeline
+dvc_pipeline_run:
+	dvc repro
+
+# Run a specific pipeline stage
+dvc_pipeline_stage_run:
+	dvc repro $(STAGE_NAME)
+
+# Run the whole DVC pipeline (Force)
+dvc_pipeline_run_force:
+	dvc repro --force
+
+# Run a specific pipeline stage (Force)
+dvc_pipeline_stage_run_force:
+	dvc repro $(STAGE_NAME) --force
+
+# Show metrics
+dvc_metrics_show:
+	dvc metrics show --json | jq
+
+# Show metric differences
+dvc_metrics_diff:
+	dvc metrics diff --json | jq
+
+# Show plots
+dvc_plots_show:
+	dvc plots show
+
 # (VC) Others:
-# (+) Checkout VC files
+# Checkout VC files via version tag
 vc_tag_checkout:
 	git checkout $(TAG_NAME)
 
-# (+) Checkout specific VC file
+# Checkout specific VC file via version tag
 vc_tag_checkout_file:
 	git checkout $(TAG_NAME) $(PATH)
 
-# (+) Add a version tag in VC
+# Add a version tag in VC
 vc_tag_create:
 	git tag -a $(TAG_NAME) -m "$(TAG_MESSAGE)"
 
-# (+) Push a version tag to VC
+# Push a version tag to VC
 vc_tag_push:
 	git push origin $(TAG_NAME)
 
-# (+) Delete a local tag from VC
+# Delete a local version tag from VC
 vc_tag_delete_local:
 	git tag -d $(TAG_NAME)
 
-# (+) Delete a remote tag from VC
+# Delete a remote version tag from VC
 vc_tag_delete_remote:
 	git push --delete origin $(TAG_NAME)
 
@@ -196,5 +224,9 @@ dvc_cache_clean:
 # -------------------------------
 .PHONY: deps_install deps_update \
 	dvc_vc_check_status dvc_vc_push dvc_pull dvc_add vc_commit dvc_vc_update_and_push \
+	dvc_list dvc_remove dvc_pull_version dvc_checkout dvc_checkout_file \
+	dvc_pipeline_show dvc_pipeline_run dvc_pipeline_stage_run \
+	vc_tag_checkout vc_tag_checkout_file vc_tag_create vc_tag_push vc_tag_delete_local vc_tag_delete_remote \
 	code_format code_sort_imports code_fix_style code_check_lint code_check_type code_check_quality \
-	docs_generate logs_clean pycache_clean dvc_cache_clean
+	docs_generate \
+	logs_clean pycache_clean dvc_cache_clean

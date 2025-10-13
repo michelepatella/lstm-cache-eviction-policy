@@ -9,49 +9,67 @@ stages:
     deps: []
     outs:
       - data/raw/static/static_raw_dataset.csv
-      - data/raw/dynamic/dynamic_raw_dataset.csv
-      - plots/static/zipf_loglog.png
-      - plots/static/daily_profile.png
-      - plots/static/key_usage_heatmap.png
-      - plots/dynamic/zipf_loglog.png
-      - plots/dynamic/daily_profile.png
-      - plots/dynamic/key_usage_heatmap.png
+      # - data/raw/dynamic/dynamic_raw_dataset.csv
 
   preprocess_data:
-    cmd: PYTHONPATH=src python -m pipeline.data_preprocessing.data_processor.py
+    cmd: PYTHONPATH=src python -m pipeline.data_preprocessing.data_preprocessor
     deps:
       - data/raw/static/static_raw_dataset.csv
-      - data/raw/dynamic/dynamic_raw_dataset.csv
+      # - data/raw/dynamic/dynamic_raw_dataset.csv
     outs:
       - data/processed/static/static_processed_dataset.csv
-      - data/processed/dynamic/dynamic_processed_dataset.csv
+      # - data/processed/dynamic/dynamic_processed_dataset.csv
 
   validate_model:
-    cmd: PYTHONPATH=src python -m pipeline.validation.validator.py
+    cmd: PYTHONPATH=src python -m pipeline.validation.validator
     deps:
       - data/processed/static/static_processed_dataset.csv
-      - data/processed/dynamic/dynamic_processed_dataset.csv
-    outs:
-      - config.yaml
+      # - data/processed/dynamic/dynamic_processed_dataset.csv
+    outs: []
 
   train_model:
-    cmd: PYTHONPATH=src python -m pipeline.training.trainer.py
+    cmd: PYTHONPATH=src python -m pipeline.training.trainer
     deps:
       - data/processed/static/static_processed_dataset.csv
-      - data/processed/dynamic/dynamic_processed_dataset.csv
-    outs:
-      - models/static/trained_static_model.pt
-      - models/dynamic/trained_dynamic_model.pt
+      # - data/processed/dynamic/dynamic_processed_dataset.csv
+    outs: []
 
   test_model:
-    cmd: PYTHONPATH=src python -m pipeline.testing.tester.py
+    cmd: PYTHONPATH=src python -m pipeline.testing.tester
     deps:
       - data/processed/static/static_processed_dataset.csv
-      - data/processed/dynamic/dynamic_processed_dataset.csv
-      - models/static/trained_static_model.pt
-      - models/dynamic/trained_dynamic_model.pt
-    outs:
-      - reports/results/static/model_results.json
-      - reports/results/dynamic/model_results.json
-      - reports/plots/static/confusion_matrix.png
-      - reports/plots/dynamic/confusion_matrix.png
+      # - data/processed/dynamic/dynamic_processed_dataset.csv
+    outs: []
+
+artifacts:
+  static-model:
+    path: models/static/trained_static_model.pt
+    type: model
+    desc: "LSTM model trained on static data logs"
+    labels:
+      - LSTM
+      - static data
+    meta:
+      framework: pytorch
+
+  dynamic-model:
+    path: models/dynamic/trained_dynamic_model.pt
+    type: model
+    desc: "LSTM model trained on dynamic data logs"
+    labels:
+      - LSTM
+      - dynamic data
+    meta:
+      framework: pytorch
+
+metrics:
+  - reports/results/static/static_model_results.json
+  # - reports/results/dynamic/dynamic_model_results.json
+
+plots:
+  - reports/plots/static/daily_profile.png
+  - reports/plots/static/key_usage.png
+  - reports/plots/static/zipf_log_log.png
+  # - reports/plots/dynamic/daily_profile.png
+  # - reports/plots/dynamic/key_usage.png
+  # - reports/plots/dynamic/zipf_log_log.png

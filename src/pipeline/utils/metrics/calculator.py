@@ -6,7 +6,6 @@ from config.classes.Config import Config
 from const import (
     MODEL_METRICS_CLASS_REPORT_NAME,
     MODEL_METRICS_COHEN_KAPPA_SCORE_NAME,
-    MODEL_METRICS_CONFUSION_MATRIX_NAME,
     MODEL_METRICS_TOP_K_ACCURACY_NAME,
 )
 from pipeline.utils.metrics.components.class_report_generator import (
@@ -14,9 +13,6 @@ from pipeline.utils.metrics.components.class_report_generator import (
 )
 from pipeline.utils.metrics.components.cohen_kappa_score_calculator import (
     calculate_cohen_kappa_score,
-)
-from pipeline.utils.metrics.components.confusion_matrix_generator import (
-    generate_confusion_matrix,
 )
 from pipeline.utils.metrics.components.top_k_accuracy_calculator import (
     calculate_top_k_accuracy,
@@ -38,7 +34,6 @@ def calculate_model_metrics(
     a model, including:
         - Class-wise precision, recall, f1-score (class report).
         - Top-k accuracy.
-        - Confusion matrix.
         - Cohen’s kappa score.
 
     Args:
@@ -51,16 +46,13 @@ def calculate_model_metrics(
         Dict[str, int | float]: Dictionary containing class
                                 report with precision,
                                 recall, f1-score, top-k accuracy,
-                                confusion matrix, and
-                                Cohen's kappa score.
+                                and Cohen's kappa score.
 
     Raises:
         RuntimeError: If an error occurs while
                       computing model metrics, e.g.:
             * Failed to compute class report due to
               mismatched lengths or invalid inputs.
-            * Failed to compute confusion matrix due
-              to mismatched lengths or invalid inputs.
     """
     # Prepare configuration
     top_k = config.testing.metrics.top_k
@@ -76,9 +68,6 @@ def calculate_model_metrics(
     # Calculate top-k accuracy
     top_k_accuracy = calculate_top_k_accuracy(targets, outputs, top_k)
 
-    # Generate confusion matrix
-    conf_matrix = generate_confusion_matrix(targets, predictions)
-
     # Calculate Cohen's kappa score
     cohen_kappa_score = calculate_cohen_kappa_score(targets, predictions)
 
@@ -86,7 +75,6 @@ def calculate_model_metrics(
     metrics = {
         MODEL_METRICS_CLASS_REPORT_NAME: class_report,
         MODEL_METRICS_TOP_K_ACCURACY_NAME: top_k_accuracy,
-        MODEL_METRICS_CONFUSION_MATRIX_NAME: conf_matrix.tolist(),
         MODEL_METRICS_COHEN_KAPPA_SCORE_NAME: cohen_kappa_score,
     }
 
