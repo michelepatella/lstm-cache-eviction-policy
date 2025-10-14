@@ -15,7 +15,8 @@ class LRUCache(Cache):
     Evicts the least recently used item when the maximum size is reached.
 
     Attributes:
-        _data (OrderedDict): Internal data storage for cache items in order of use.
+        _data (OrderedDict): Internal data storage for cache items
+                             in order of use.
         callback (Callable | None): Optional callback for evicted keys.
     """
 
@@ -49,6 +50,31 @@ class LRUCache(Cache):
 
         info("LRU cache initialized")
 
+    def _evict_oldest_item(self: "LRUCache") -> None:
+        """
+        Evict the oldest item from the LRU cache.
+
+        This function removes the least recently used key from the cache
+        along with its item. If a callback is provided, it is invoked
+        with the evicted key.
+
+        Args:
+            self ("LRUCache"): Current class instance.
+
+        Returns:
+            None
+        """
+        # Remove oldest key and item
+        oldest_key, oldest_item = self._data.popitem(last=False)
+
+        debug(
+            f"LRU cache item evicted: {oldest_item}, " f"for key: {oldest_key}"
+        )
+
+        # Callback if present
+        if self.callback:
+            self.callback(oldest_key)
+
     def __getitem__(self: "LRUCache", key: int) -> Any:
         """
         Retrieve a key item from the LRU cache.
@@ -71,9 +97,9 @@ class LRUCache(Cache):
         try:
             debug(f"Key to retrieve item from LRU cache for: {key}")
 
-            # Remove and reinsert key item
-            # to mark it as recently used
-            item = self._data.pop(key, None)
+            # Remove and reinsert key item to
+            # mark it as recently used
+            item = self._data.pop(key)
             self._data[key] = item
 
             debug(f"LRU cache item retrieved: {item}, for key: {key}")
@@ -100,35 +126,20 @@ class LRUCache(Cache):
         Returns:
             None
         """
-        # If the key already exists,
-        # move it to the end (recently used)
+        # Evict the oldest item if cache is
+        # full and key is new
+        if len(self._data) >= self.maxsize and key not in self._data:
+            self._evict_oldest_item()
+
+        # Update key item and move to
+        # end as most recently used
         if key in self._data:
-            # Remove key item from the cache
-            self._data.pop(key, None)
-
+            self._data.pop(key)
             debug(f"LRU cache item updated: {item}, for key: {key}")
-        else:
-            # Check whether there is no space
-            # enough into the cache to store the key item
-            if len(self._data) >= self.maxsize:
-                # Remove the oldest item along with
-                # its key from the cache, as the last
-                # recently used
-                oldest_key, oldest_item = self._data.popitem(last=False)
 
-                debug(
-                    f"LRU cache item evicted: {oldest_item}, "
-                    f"for key: {oldest_key}"
-                )
-
-                # Callback (if provided)
-                if self.callback:
-                    self.callback(oldest_key)
-
-            debug(f"LRU cache item inserted: {item}, for key: {key}")
-
-        # Insert key as most recently used
         self._data[key] = item
+
+        debug(f"LRU cache item inserted: {item}, for key: {key}")
 
     def __delitem__(self: "LRUCache", key: int) -> None:
         """
@@ -174,7 +185,6 @@ class LRUCache(Cache):
                   False otherwise.
         """
         debug(f"Key existence check in LRU cache: {key}")
-
         return key in self._data
 
     def pop(self: "LRUCache", key: int) -> Any | None:
@@ -193,7 +203,6 @@ class LRUCache(Cache):
             Any | None: Item associated with the key removed
                         (None if its key is not found in the LRU cache).
         """
-        # Pop key from cache
         item = self._data.pop(key, None)
 
         if item is not None:
@@ -232,7 +241,6 @@ class LRUCache(Cache):
         Returns:
             None
         """
-        # Remove all data from cache
         self._data.clear()
 
         debug("LRU cache cleared")

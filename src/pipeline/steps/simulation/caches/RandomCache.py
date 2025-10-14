@@ -12,6 +12,32 @@ class RandomCache(BaseCache):
     Evicts a random item when the maximum size is reached.
     """
 
+    def _evict_random(self: "RandomCache", current_time: float) -> None:
+        """
+        Evict a random key from the cache.
+
+        This function randomly selects a key stored in the cache,
+        removes it along with its expiration, and logs the eviction.
+
+        Args:
+            self ("RandomCache"): Current class instance.
+            current_time (float): Current timestamp for TTL management.
+
+        Returns:
+            None
+        """
+        # Select a random key to evict
+        evict_key = random.choice(list(self.store.keys()))
+
+        # Remove the selected key from cache
+        self.store.pop(evict_key, None)
+        self.expiry.pop(evict_key, None)
+
+        debug(f"Random cache full, evicted key: {evict_key}")
+
+        # Trace event
+        self.metrics_logger.log_eviction(evict_key, current_time)
+
     def put(self: "RandomCache", key: int, current_time: float) -> None:
         """
         Insert or update a key in the Random cache.
@@ -43,44 +69,19 @@ class RandomCache(BaseCache):
             # Remove expired keys before insertion
             self._remove_expired_keys(current_time)
 
-            # Check if key already exists in cache
-            if self.contains(key, current_time):
-                # Update TTL
-                self.expiry[key] = current_time + self.ttl
+            # Check whether the cache is full and
+            # the key is new
+            if len(self.store) >= self.maxsize and key not in self.store:
+                # Evict a random key
+                self._evict_random(current_time)
 
-                debug(
-                    f"Random cache key already cached updated: {key}, "
-                    f"new expiration time: {self.expiry[key]}"
-                )
-
-                # Trace event
-                self.metrics_logger.log_put(key, current_time, self.ttl)
-
-                # Exit
-                return
-
-            # Check whether the cache is full
-            if len(self.store) >= self.maxsize:
-                # Evict a random key among those
-                # stored in the cache
-                evict_key = random.choice(list(self.store.keys()))
-
-                # Evict selected key
-                self.store.pop(evict_key, None)
-                self.expiry.pop(evict_key, None)
-
-                debug(f"Random cache full, evicted key: {evict_key}")
-
-                # Trace event
-                self.metrics_logger.log_eviction(evict_key, current_time)
-
-            # Insert new key along with
+            # (Re)Insert new key along with
             # its expiration time
             self.store[key] = key
             self.expiry[key] = current_time + self.ttl
 
             debug(
-                f"Random cache key inserted: {key}, "
+                f"Random cache key inserted/updated: {key}, "
                 f"expiration time: {self.expiry[key]}"
             )
 

@@ -121,7 +121,7 @@ class BaseCache(ABC):
         """
         # Identify expired keys
         expired_keys = [
-            k for k, exp in self.expiry.items() if exp < current_time
+            k for k in self.expiry if self._is_expired(k, current_time)
         ]
 
         debug(f"Expired keys to be removed from BaseCache: {expired_keys}")
@@ -134,8 +134,10 @@ class BaseCache(ABC):
             else:
                 self.store.pop(k, None)
 
-            # Remove TTL and scores (if any)
+            # Remove TTL
             self.expiry.pop(k, None)
+
+            # Remove score (if any)
             if self.scores is not None:
                 self.scores.pop(k, None)
 

@@ -82,6 +82,29 @@ class FIFOCache(Cache):
             error("%s: %s", msg, e)
             raise RuntimeError(msg) from e
 
+    def _evict_oldest_item(self: "FIFOCache") -> None:
+        """
+        Evict the oldest inserted item from the FIFO cache.
+
+        This function removes the oldest key from the cache
+        and triggers the callback if provided.
+
+        Args:
+            self ("FIFOCache"): Current class instance.
+
+        Returns:
+            None
+        """
+        # Remove the oldest key and its item
+        # from the cache
+        oldest_key, oldest_item = self._data.popitem(last=False)
+
+        debug(f"FIFO cache item evicted: {oldest_item}, for key: {oldest_key}")
+
+        # Callback (if provided)
+        if self.callback:
+            self.callback(oldest_key)
+
     def __setitem__(self: "FIFOCache", key: int, item: Any) -> None:
         """
         Insert or update a key item in the FIFO cache.
@@ -98,36 +121,20 @@ class FIFOCache(Cache):
         Returns:
             None
         """
-        # Check whether the key is cached
-        if key in self._data:
-            # Update key item in the cache
-            self._data[key] = item
+        # If the key is not cached but
+        # there is no space enough to
+        # cache it
+        if len(self._data) >= self.maxsize and key not in self._data:
+            # Remove the oldest inserted
+            # key from the cache, along with
+            # its item
+            self._evict_oldest_item()
 
-            debug(f"FIFO cache item updated: {item}, for key: {key}")
-        else:
-            # If the key is not cached but
-            # there is no space enough to
-            # cache it
-            if len(self._data) >= self.maxsize:
-                # Remove the oldest inserted
-                # key from the cache, along with
-                # its item
-                oldest_key, oldest_item = self._data.popitem(last=False)
+        # Put the requested key in the cache,
+        # along with its item
+        self._data[key] = item
 
-                debug(
-                    f"FIFO cache item evicted: {oldest_item},"
-                    f" for key: {oldest_key}"
-                )
-
-                # Callback (if provided)
-                if self.callback:
-                    self.callback(oldest_key)
-
-            # Put the requested key in the cache,
-            # along with its item
-            self._data[key] = item
-
-            debug(f"FIFO cache item inserted: {item}, for key: {key}")
+        debug(f"FIFO cache item inserted: {item}, for key: {key}")
 
     def __delitem__(self: "FIFOCache", key: int) -> None:
         """

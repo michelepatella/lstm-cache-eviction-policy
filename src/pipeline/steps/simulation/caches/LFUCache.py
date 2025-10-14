@@ -51,6 +51,27 @@ class LFUCache(Cache):
 
         info("LFU cache initialized")
 
+    def _increment_frequency(self: "LFUCache", key: int) -> None:
+        """
+        Increment key access frequency.
+
+        This function increments the frequency of a
+        given key stored in the cache.
+
+        Args:
+            self ("LFUCache"): Current class instance.
+            key (int): Key to increment frequency.
+
+        Returns:
+            None
+        """
+        # Increment key access by one
+        self._freq[key] += 1
+
+        debug(
+            f"LFU cache frequency incremented for key: {key}, now: {self._freq[key]}"
+        )
+
     def __getitem__(self: "LFUCache", key: int) -> Any:
         """
         Retrieve a key item from the LFU cache.
@@ -77,7 +98,7 @@ class LFUCache(Cache):
 
             # Increment key item access
             # frequency by one
-            self._freq[key] += 1
+            self._increment_frequency(key)
 
             debug(
                 f"LFU cache item retrieved: {item}, "
@@ -90,6 +111,44 @@ class LFUCache(Cache):
             msg = "Failed to retrieve item from LFU cache"
             error("%s: %s", msg, e)
             raise RuntimeError(msg) from e
+
+    def _evict_least_frequent(self: "LFUCache") -> None:
+        """
+        Evict the least frequently used key.
+
+        This function identifies the least frequently used
+        key into the cache to be evicted. The tiebreak
+        strategy implemented by the function consist of
+        evicting the oldest key among candidate ones.
+
+        Args:
+            self ("LFUCache"): Current class instance.
+
+        Returns:
+            None
+        """
+        # Identify least frequency
+        min_freq = min(self._freq.values())
+
+        # Identify candidate keys with minimum frequency
+        evicted_candidates = [
+            k for k, f in self._freq.items() if f == min_freq
+        ]
+
+        # Tiebreak strategy: select the oldest
+        # key among them
+        key_to_evict = evicted_candidates[0]
+
+        # Remove selected key from cache
+        # and frequency dictionary
+        del self._data[key_to_evict]
+        del self._freq[key_to_evict]
+
+        debug(f"LFU cache key evicted: {key_to_evict}, frequency: {min_freq}")
+
+        # Callback if present
+        if self.callback:
+            self.callback(key_to_evict)
 
     def __setitem__(self: "LFUCache", key: int, item: Any) -> None:
         """
@@ -107,70 +166,20 @@ class LFUCache(Cache):
         Returns:
             None
         """
-        # Check whether the key is
-        # already cached
-        if key in self._data:
-            # Update key item and increment
-            # its access frequency
-            self._data[key] = item
-            self._freq[key] += 1
+        # Check whether there is no space
+        # enough into the cache to store the key item which
+        # is not into the cache
+        if len(self._data) >= self.maxsize and key not in self._data:
+            # Evict the least frequently used
+            # key from the cache
+            self._evict_least_frequent()
 
-            debug(
-                f"LFU cache item updated: {item},"
-                f" for key: {key}, frequency "
-                f"incremented to {self._freq[key]}"
-            )
-        else:
-            # Check whether there is no space
-            # enough into the cache to store the key item
-            if len(self._data) >= self.maxsize:
-                # Identify the least frequency
-                min_freq = min(self._freq.values())
+        # Update key item and increment
+        # its access frequency
+        self._data[key] = item
+        self._increment_frequency(key)
 
-                # Identify key item(s) having the
-                # least access frequency
-                evicted_candidates = [
-                    k for k, f in self._freq.items() if f == min_freq
-                ]
-
-                debug(
-                    f"Candidate keys to be evicted from"
-                    f" LFU cache: {evicted_candidates}, "
-                    f"with frequency: {min_freq}"
-                )
-
-                # Evict the oldest among the least used keys
-                key_to_evict = evicted_candidates[0]
-
-                # Get the item corresponding to the
-                # key to be evicted
-                evicted_item = self._data[key_to_evict]
-
-                # Remove key item from the LFU cache
-                del self._data[key_to_evict]
-
-                # Remove frequency of key evicted
-                del self._freq[key_to_evict]
-
-                debug(
-                    f"LFU cache item evicted: {evicted_item},"
-                    f" for key: {key_to_evict}, "
-                    f"with frequency {min_freq}"
-                )
-
-                # Callback (if provided)
-                if self.callback:
-                    self.callback(key_to_evict)
-
-            # Insert new key item into
-            # the cache
-            self._data[key] = item
-
-            # Initialize its access
-            # frequency to 1
-            self._freq[key] = 1
-
-            debug(f"LFU cache item inserted: {item}, for key: {key}")
+        debug(f"LFU cache item inserted: {item}, for key: {key}")
 
     def __delitem__(self: "LFUCache", key: int) -> None:
         """
