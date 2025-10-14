@@ -13,7 +13,7 @@ def infer_batches(
     data_loader: DataLoader,
     criterion: torch.nn.Module,
     device: torch.device,
-    num_features: int
+    num_features: int,
 ) -> Tuple[
     float, List[int], List[int], List[torch.Tensor], List[torch.Tensor]
 ]:

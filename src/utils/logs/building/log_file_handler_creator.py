@@ -9,11 +9,11 @@ from pipeline.const import (
 
 
 def create_logs_file_handler(
-    logs_path: str,
-    logs_level: int,
+    path: str,
+    level: int,
     max_bytes: int = LOGS_FILE_MAX_BYTES,
     backup_count: int = LOGS_FILE_BACKUP_COUNT,
-    logs_format: str = LOGS_FORMAT,
+    file_format: str = LOGS_FORMAT,
 ) -> RotatingFileHandler:
     """
     Set up a RotatingFileHandler for logging to a file.
@@ -24,26 +24,26 @@ def create_logs_file_handler(
     keeping backups.
 
     Args:
-        logs_path (str): Path to the logs file.
-        logs_level (int): Logging level.
+        path (str): Path to the logs file.
+        level (int): Logging level.
         max_bytes (int): Maximum file size in bytes before rotation.
         backup_count (int): Number of backup files to keep.
-        logs_format (str): Format string for logs messages.
+        file_format (str): Format string for logs messages.
 
     Returns:
         RotatingFileHandler: Rotating file handler configured.
     """
     # Create a rotating file handler
     file_handler = RotatingFileHandler(
-        logs_path,
+        path,
         maxBytes=max_bytes,
         backupCount=backup_count,
     )
 
     # Set logs level
-    file_handler.setLevel(logs_level)
+    file_handler.setLevel(level)
 
     # Apply formatter
-    file_handler.setFormatter(logging.Formatter(logs_format))
+    file_handler.setFormatter(logging.Formatter(file_format))
 
     return file_handler

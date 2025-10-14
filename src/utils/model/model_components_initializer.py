@@ -7,19 +7,19 @@ from pipeline.config.classes.ModelConfig import ModelParamsConfig
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
-from utils.model.initialization.components.class_weights_calculator import (
+from utils.model.class_weights_calculator import (
     calculate_class_weight,
 )
-from utils.model.initialization.components.device_mover import (
+from utils.device.mover import (
     move_to_device,
 )
-from utils.model.initialization.components.device_selector import (
+from utils.device.selector import (
     select_device,
 )
-from utils.model.initialization.components.model_builder import (
+from utils.model.model_builder import (
     build_model,
 )
-from utils.model.initialization.components.optimizer_builder import (
+from utils.model.optimizer_builder import (
     build_optimizer,
 )
 

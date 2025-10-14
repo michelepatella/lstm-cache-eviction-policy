@@ -1,7 +1,9 @@
 from pipeline.const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE
 from pipeline.config.configurator import prepare_config
-from utils.model.saver import save_model
-from utils.dataset.building.splitter import split_training_set
+from utils.model.io.saver import save_model
+from utils.dataset.building.training_validation_splitter import (
+    split_training_validation,
+)
 from utils.training.epochs_trainer import train_epochs
 from utils.data_loader.building.creator import create_data_loader
 from utils.data_loader.building.initializer import initialize_data_loader
@@ -11,10 +13,10 @@ from utils.data_loader.targets.extractor import (
 from utils.dataset.AccessLogsDataset import AccessLogsDataset
 from utils.logs.initializer import logs_phase
 from utils.logs.levels.info_logger import info
-from utils.model.initialization.model_components_initializer import (
+from utils.model.model_components_initializer import (
     initialize_model_components,
 )
-from utils.model.locator import get_model_abs_path
+from utils.model.io.locator import get_model_abs_path
 
 
 def train_model() -> None:
@@ -41,6 +43,7 @@ def train_model() -> None:
     training_shuffle = config.training.general.shuffle
     validation_batch_size = config.validation.general.batch_size
     validation_shuffle = config.validation.general.shuffle
+    validation_split = config.dataset.split.validation
     model_params = config.model.params
     learning_rate = config.training.optimizer.params.learning_rate
     training_num_epochs = config.training.general.epochs
@@ -60,7 +63,9 @@ def train_model() -> None:
 
     # Split training set into training
     # and validation sets
-    training_set, validation_set = split_training_set(training_set, config)
+    training_set, validation_set = split_training_validation(
+        training_set, validation_split
+    )
 
     # Create a loader both for
     # training and validation sets

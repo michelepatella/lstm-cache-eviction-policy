@@ -27,7 +27,7 @@ from utils.logs.levels.info_logger import info
 
 def plot_hit_miss_rate(
     results: List[Dict[str, Any]],
-    save_path: str,
+    path: str,
 ) -> None:
     """
     Plot the evolution of hit and miss rates over time
@@ -39,7 +39,7 @@ def plot_hit_miss_rate(
 
     Args:
         results (List[Dict[str, Any]]): List of simulation results.
-        save_path (str): Path where to save the figure.
+        path (str): Path where to save the figure.
 
     Returns:
         None
@@ -108,12 +108,12 @@ def plot_hit_miss_rate(
             )
             axes[i].legend()
 
-        plt.savefig(save_path)
+        plt.savefig(path)
 
         plt.show()
         plt.close(fig)
 
-        info(f"Hit and miss rates plotted and saved to {save_path}")
+        info(f"Hit and miss rates plotted and saved to {path}")
     except (TypeError, KeyError, ValueError) as e:
         msg = "Failed to plot hit/miss rates"
         error("%s: %s", msg, e)

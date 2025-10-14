@@ -5,7 +5,7 @@ import torch
 from utils.loss_calculator import calculate_loss
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
-from utils.model.initialization.components.device_mover import (
+from utils.device.mover import (
     move_to_device,
 )
 

@@ -7,10 +7,10 @@ from tqdm import tqdm
 
 from pipeline.config.classes.Config import Config
 from utils.evaluation.evaluator import evaluate_model
-from utils.model.initialization.components.best_model_updater import (
+from utils.model.best_model_updater import (
     update_best_model,
 )
-from utils.model.initialization.components.model_state_dict_copier import (
+from utils.model.state_dict.copier import (
     copy_model_state_dict,
 )
 from utils.training.callbacks.EarlyStopping import EarlyStopping

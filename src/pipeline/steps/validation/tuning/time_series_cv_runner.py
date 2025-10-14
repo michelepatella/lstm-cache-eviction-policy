@@ -5,7 +5,9 @@ from box import Box
 from sklearn.model_selection import TimeSeriesSplit
 
 from pipeline.config.classes.Config import Config
-from utils.dataset.building.splitter import split_training_set
+from utils.dataset.building.training_validation_splitter import (
+    split_training_validation,
+)
 from utils.training.epochs_trainer import train_epochs
 from utils.data_loader.building.creator import (
     create_data_loader,
@@ -17,7 +19,7 @@ from utils.dataset.AccessLogsDataset import AccessLogsDataset
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
-from utils.model.initialization.model_components_initializer import (
+from utils.model.model_components_initializer import (
     initialize_model_components,
 )
 
@@ -89,9 +91,8 @@ def compute_time_series_cv(
 
             # Split the whole training set into training
             # and validation sets
-            training_dataset, validation_dataset = split_training_set(
+            training_dataset, validation_dataset = split_training_validation(
                 training_set,
-                config,
                 training_idx=train_idx,
                 validation_idx=val_idx,
             )

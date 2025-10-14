@@ -3,7 +3,7 @@ from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
 
-def calculate_percentage(counter: int, total: int) -> float:
+def calculate_percentage(counter: int | float, total: int | float) -> float:
     """
     Calculate the percentage of a counter.
 
@@ -11,8 +11,8 @@ def calculate_percentage(counter: int, total: int) -> float:
     a provided counter.
 
     Args:
-        counter (int): Counter for which to calculate the percentage.
-        total (int): The total used for calculating the percentage.
+        counter (int | float): Counter for which to calculate the percentage.
+        total (int | float): The total used for calculating the percentage.
 
     Returns:
         float: Percentage of the counter.

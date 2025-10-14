@@ -7,9 +7,7 @@ from utils.logs.levels.info_logger import info
 
 
 def set_model_mode(
-    model: torch.nn.Module,
-    mode: str,
-    mc_dropout_flag: str = None
+    model: torch.nn.Module, mode: str, mc_dropout_flag: str = None
 ) -> None:
     """
     Set the mode of a PyTorch model.

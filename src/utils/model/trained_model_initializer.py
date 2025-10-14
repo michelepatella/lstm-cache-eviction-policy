@@ -9,13 +9,13 @@ from utils.data_loader.targets.extractor import (
     extract_targets_from_data_loader,
 )
 from utils.logs.levels.info_logger import info
-from utils.model.initialization.components.model_state_dict_loader import (
+from utils.model.state_dict.loader import (
     load_model_state_dict,
 )
-from utils.model.initialization.model_components_initializer import (
+from utils.model.model_components_initializer import (
     initialize_model_components,
 )
-from utils.model.locator import get_model_abs_path
+from utils.model.io.locator import get_model_abs_path
 
 
 def initialize_trained_model(

@@ -6,8 +6,10 @@ from utils.loss_calculator import calculate_loss
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
-from utils.backpropagation.mc_dropout.runner import compute_mc_dropout_forward_passes
-from utils.model.initialization.components.device_mover import move_to_device
+from utils.backpropagation.mc_dropout.runner import (
+    compute_mc_dropout_forward_passes,
+)
+from utils.device.mover import move_to_device
 
 
 def infer_single_batch(
@@ -16,7 +18,7 @@ def infer_single_batch(
     model: torch.nn.Module,
     criterion: torch.nn.Module,
     device: torch.device,
-    num_features: int
+    num_features: int,
 ) -> Tuple[
     float, List[int], List[int], List[torch.Tensor], List[torch.Tensor]
 ]:
@@ -68,10 +70,7 @@ def infer_single_batch(
 
         # Perform MC Dropout forward passes
         outputs_mean, outputs_var, _ = compute_mc_dropout_forward_passes(
-            model,
-            (features, keys, targets),
-            device,
-            num_features
+            model, (features, keys, targets), device, num_features
         )
 
         debug(f"Outputs mean shape: {outputs_mean.shape}")
@@ -83,7 +82,9 @@ def infer_single_batch(
         predictions = torch.argmax(outputs_mean, dim=1).cpu().numpy().tolist()
         targets_list = targets.cpu().numpy().tolist()
         outputs_list = [t.cpu() for t in outputs_mean]
-        variances = [t.cpu() for t in outputs_var] if outputs_var is not None else []
+        variances = (
+            [t.cpu() for t in outputs_var] if outputs_var is not None else []
+        )
 
         info("Single batch inference completed")
 

@@ -2,7 +2,7 @@ from typing import Tuple, Dict
 import torch
 
 from utils.logs.levels.info_logger import info
-from utils.model.initialization.components.model_state_dict_copier import (
+from utils.model.state_dict.copier import (
     copy_model_state_dict,
 )
 

@@ -28,7 +28,7 @@ def plot_key_usage_heatmap(
     max_key: int,
     requests: List[int],
     timestamps_hours: np.ndarray,
-    save_path: str,
+    path: str,
 ) -> None:
     """
     Plot key usage heatmap over hours of the day.
@@ -41,7 +41,7 @@ def plot_key_usage_heatmap(
         max_key (int): The greatest key.
         requests (List[int]): List of key accesses.
         timestamps_hours (np.ndarray): Array of request timestamps in hours.
-        save_path (str): Path to save the figure.
+        path (str): Path to save the figure.
 
     Returns:
         None
@@ -139,11 +139,11 @@ def plot_key_usage_heatmap(
             fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.tight_layout()
-        plt.savefig(save_path)
+        plt.savefig(path)
         plt.show()
         plt.close()
 
-        info(f"Key usage heatmap plotted and saved to {save_path}")
+        info(f"Key usage heatmap plotted and saved to {path}")
     except (TypeError, ValueError) as e:
         msg = "Failed to plot key usage heatmap"
         error("%s: %s", msg, e)

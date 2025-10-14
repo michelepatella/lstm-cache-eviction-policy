@@ -2,7 +2,12 @@ from typing import Tuple, Union
 
 import torch
 
-from pipeline.const import MC_DROPOUT_NUM_SAMPLES_DEFAULT, MC_DROPOUT_FLAG, MC_DROPOUT_MODEL_MODE, EVALUATION_MODEL_MODE
+from pipeline.const import (
+    MC_DROPOUT_NUM_SAMPLES_DEFAULT,
+    MC_DROPOUT_FLAG,
+    MC_DROPOUT_MODEL_MODE,
+    EVALUATION_MODEL_MODE,
+)
 from utils.backpropagation.forward_runner import compute_forward
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info

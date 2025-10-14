@@ -1,6 +1,7 @@
 import torch
 
 from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
 
 
 def load_model_state_dict(
@@ -36,6 +37,8 @@ def load_model_state_dict(
         # Apply state dictionary loaded
         # to provided model
         model.load_state_dict(model_state_dict)
+
+        info("Model state dictionary loaded")
 
         return model
     except (OSError, RuntimeError, TypeError) as e:

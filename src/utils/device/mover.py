@@ -1,6 +1,7 @@
 import torch
 
 from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
 
 
 def move_to_device(
@@ -29,8 +30,10 @@ def move_to_device(
         # Move object to device
         obj = obj.to(device)
 
+        info(f"{obj} moved to {device}")
+
         return obj
     except (TypeError, RuntimeError) as e:
-        msg = "Failed to move the object to the specified device"
+        msg = "Failed to move object to specified device"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e

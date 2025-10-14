@@ -1,6 +1,8 @@
 import torch
 
+from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
 
 
 def select_device(device_type: str) -> torch.device:
@@ -23,9 +25,13 @@ def select_device(device_type: str) -> torch.device:
             * If the device cannot be used due to runtime constraints.
     """
     try:
+        debug(f"Device type to be instantiated: {device_type}")
+
         # Instantiate device based on
         # device type passed
         device = torch.device(device_type)
+
+        info(f"Device selected")
 
         return device
     except (TypeError, RuntimeError) as e:
