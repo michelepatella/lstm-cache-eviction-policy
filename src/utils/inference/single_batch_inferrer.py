@@ -6,7 +6,7 @@ from utils.loss_calculator import calculate_loss
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
-from utils.mc_dropout.runner import compute_mc_forward_passes
+from utils.backpropagation.mc_dropout.runner import compute_mc_dropout_forward_passes
 from utils.model.initialization.components.device_mover import move_to_device
 
 
@@ -67,7 +67,7 @@ def infer_single_batch(
         )
 
         # Perform MC Dropout forward passes
-        outputs_mean, outputs_var, _ = compute_mc_forward_passes(
+        outputs_mean, outputs_var, _ = compute_mc_dropout_forward_passes(
             model,
             (features, keys, targets),
             device,
