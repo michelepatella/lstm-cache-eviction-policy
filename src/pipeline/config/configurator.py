@@ -1,8 +1,8 @@
 from pipeline.config.classes.Config import Config
-from pipeline.config.io.loader import load_config
-from const import LOGS_CONFIGURATION_PHASE
-from pipeline.utils.logs.initializer import logs_phase
-from pipeline.utils.logs.levels.info_logger import info
+from utils.yaml.loader import load_yaml
+from pipeline.const import LOGS_CONFIGURATION_PHASE, CONFIG_FILE_NAME, CONFIG_DIRECTORY_PATH
+from utils.logs.initializer import logs_phase
+from utils.logs.levels.info_logger import info
 
 
 def prepare_config() -> Config:
@@ -22,8 +22,12 @@ def prepare_config() -> Config:
     # Set the new state
     logs_phase.set(LOGS_CONFIGURATION_PHASE)
 
+    # Get the absolute path of the YAML
+    # configuration file
+    abs_config_path = CONFIG_DIRECTORY_PATH / CONFIG_FILE_NAME
+
     # Load the YAML configuration file
-    config_file = load_config()
+    config_file = load_yaml(abs_config_path)
 
     # Validate and parse YAML configuration file
     config = Config(**config_file)

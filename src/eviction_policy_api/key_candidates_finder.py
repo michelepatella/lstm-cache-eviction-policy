@@ -4,7 +4,7 @@ from torch.nn.functional import softmax
 from eviction_policy_api.key_score_calculator import (
     calculate_key_scores,
 )
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.info_logger import info
 
 
 def find_key_candidates(all_outputs, upper_ci, lower_ci):

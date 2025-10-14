@@ -1,5 +1,5 @@
-from pipeline.config import prepare_config
-from const import (
+
+from pipeline.const import (
     AVG_CACHE_LATENCY_NAME,
     EVICTION_MISTAKE_RATE_NAME,
     FIFO_CACHE_NAME,
@@ -16,9 +16,11 @@ from const import (
     POLICY_NAME,
     RANDOM_CACHE_NAME,
     RESULTS_DIRECTORY_PATH,
-    SIMULATION_RESULTS_FILE_NAME,
-    TIMELINE_NAME,
+
+    TIMELINE_NAME, DATA_DISTRIBUTION_STATIC_MODE, STATIC_SIMULATION_RESULTS_FILE_NAME,
+    DYNAMIC_SIMULATION_RESULTS_FILE_NAME,
 )
+from pipeline.config.configurator import prepare_config
 from pipeline.steps.simulation.caches.FIFOCache import FIFOCache
 from pipeline.steps.simulation.caches.LFUCache import LFUCache
 from pipeline.steps.simulation.caches.LRUCache import LRUCache
@@ -42,10 +44,10 @@ from pipeline.steps.simulation.visualization.plotting.hit_miss_rates_plotter imp
 from pipeline.steps.simulation.visualization.reporting.simulation_reporter import (
     generate_simulation_report,
 )
-from pipeline.utils.json.saver import save_json
-from pipeline.utils.logs.initializer import logs_phase
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.info_logger import info
+from utils.json.saver import save_json
+from utils.logs.initializer import logs_phase
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 
 
 def run_simulations() -> None:
@@ -68,6 +70,7 @@ def run_simulations() -> None:
 
     # Prepare configuration
     data_distribution_mode = config.data.generation.mode
+    mistake_window = config.simulation.metrics.mistake_rate.window
 
     # Data setup and initialization
     cache_eviction_policies = {
@@ -117,7 +120,7 @@ def run_simulations() -> None:
             eviction_mistake_rate,
             avg_cache_latency,
         ) = calculate_cache_simulation_metrics(
-            counters, cache_latencies, cache.metrics_logger, config
+            counters, cache_latencies, mistake_window, cache.metrics_logger
         )
 
         # Collect metrics together for the
@@ -139,11 +142,18 @@ def run_simulations() -> None:
     # Generate a report for simulation results
     generate_simulation_report(results)
 
-    # Save simulation results as JSON
+    # Determine results file name according
+    # to data distribution mode
+    if data_distribution_mode == DATA_DISTRIBUTION_STATIC_MODE:
+        results_file_name = STATIC_SIMULATION_RESULTS_FILE_NAME
+    else:
+        results_file_name = DYNAMIC_SIMULATION_RESULTS_FILE_NAME
+
+    # Build results save path
     results_save_path = (
-        RESULTS_DIRECTORY_PATH
-        / data_distribution_mode
-        / SIMULATION_RESULTS_FILE_NAME
+            RESULTS_DIRECTORY_PATH
+            / data_distribution_mode
+            / results_file_name
     )
 
     # Filter out all results except

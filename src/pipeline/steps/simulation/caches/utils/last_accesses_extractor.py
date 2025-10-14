@@ -3,7 +3,7 @@ from typing import List, Tuple
 import torch
 from torch.utils.data import DataLoader
 
-from const import (
+from pipeline.const import (
     COS_TIME_COLUMN_NAME,
     REQUEST_COLUMN_NAME,
     SECONDS_IN_HOUR,
@@ -12,9 +12,9 @@ from const import (
 from pipeline.steps.simulation.utils.time_key_from_row_extractor import (
     extract_time_key_from_row,
 )
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.error_logger import error
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
 
 
 def get_last_accesses(

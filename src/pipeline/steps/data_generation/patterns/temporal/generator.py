@@ -1,15 +1,15 @@
 import numpy as np
 
 from pipeline.config.classes.Config import Config
-from const import SECONDS_IN_HOUR
+from pipeline.const import SECONDS_IN_HOUR
 from pipeline.steps.data_generation.patterns.temporal.components.burst_setter import (
     set_bursty_scale,
 )
 from pipeline.steps.data_generation.patterns.temporal.components.periodic_calculator import (
     calculate_periodic_component,
 )
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 
 
 def generate_temporal_pattern(

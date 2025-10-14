@@ -1,6 +1,6 @@
 from pydantic import BaseModel, model_validator
 
-from const import HW_DEVICES
+from pipeline.const import HW_DEVICES
 from utils.assertions.choice_field_validator import (
     validate_choice_field,
 )
@@ -17,7 +17,7 @@ class HardwareConfig(BaseModel):
     device: str
 
     @model_validator(mode="after")
-    def check_device(self: "HardwareConfig") -> "HardwareConfig":
+    def check_device(self: "HardwareConfig") -> None:
         """
         Check whether device is valid or not.
 
@@ -27,10 +27,9 @@ class HardwareConfig(BaseModel):
             self (HardwareConfig): Current model instance.
 
         Returns:
-            HardwareConfig: Validated model instance.
+            None.
         """
-        return validate_choice_field(
-            self,
+        validate_choice_field(
             self.device,
             HW_DEVICES,
             "hardware.device",

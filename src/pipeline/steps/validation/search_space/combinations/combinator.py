@@ -7,8 +7,8 @@ from pipeline.steps.validation.search_space.combinations.utils.all_sections_comb
 from pipeline.steps.validation.search_space.combinations.utils.single_section_combinator import (
     get_single_section_combinations,
 )
-from pipeline.utils.logs.levels.error_logger import error
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
 
 
 def get_parameters_combination(

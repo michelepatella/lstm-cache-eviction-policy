@@ -1,6 +1,6 @@
 from pipeline.steps.simulation.caches.utils.classes.BaseCache import BaseCache
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.error_logger import error
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.error_logger import error
 
 
 class CacheWrapper(BaseCache):

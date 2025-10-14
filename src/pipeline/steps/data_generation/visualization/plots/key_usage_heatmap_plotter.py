@@ -3,7 +3,7 @@ from typing import List
 import numpy as np
 from matplotlib import pyplot as plt
 
-from const import (
+from pipeline.const import (
     DATA_GENERATION_FINAL_HOUR,
     DATA_GENERATION_INITIAL_HOUR,
     KEY_USAGE_HEATMAP_ASPECT,
@@ -18,9 +18,9 @@ from const import (
     PLOT_SIZE,
     PLOT_TITLE_FONT_SIZE,
 )
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.error_logger import error
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
 
 
 def plot_key_usage_heatmap(

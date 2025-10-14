@@ -1,4 +1,4 @@
-from const import (
+from pipeline.const import (
     DATASET_PREPROCESSED_TYPE,
     DATASET_RAW_TYPE,
     LOGS_DATA_PREPROCESSING_PHASE,
@@ -8,16 +8,17 @@ from pipeline.config.configurator import prepare_config
 from pipeline.steps.data_preprocessing.features.builder import (
     build_time_features,
 )
-from pipeline.utils.dataset.cleaning.duplicates_remover import (
+from utils.dataset.cleaning.duplicates_remover import (
     remove_dataset_duplicates,
 )
-from pipeline.utils.dataset.cleaning.missing_values_remover import (
+from utils.dataset.cleaning.missing_values_remover import (
     remove_dataset_missing_values,
 )
-from pipeline.utils.dataset.saver import save_dataset
-from pipeline.utils.dataset.loader import load_dataset
-from pipeline.utils.logs.initializer import logs_phase
-from pipeline.utils.logs.levels.info_logger import info
+from utils.dataset.locator import get_dataset_abs_path
+from utils.dataset.saver import save_dataset
+from utils.dataset.loader import load_dataset
+from utils.logs.initializer import logs_phase
+from utils.logs.levels.info_logger import info
 
 
 def preprocess_data() -> None:
@@ -39,8 +40,14 @@ def preprocess_data() -> None:
     # Read configuration
     config = prepare_config()
 
+    # Prepare configuration
+    data_distribution_mode = config.data.generation.mode
+
+    # Retrieve path to load dataset from
+    dataset_path = get_dataset_abs_path(DATASET_RAW_TYPE, data_distribution_mode)
+
     # Load the dataset
-    df = load_dataset(DATASET_RAW_TYPE, config)
+    df = load_dataset(dataset_path)
 
     # Remove missing values
     df = remove_dataset_missing_values(df)
@@ -52,7 +59,7 @@ def preprocess_data() -> None:
     df = build_time_features(df)
 
     # Save preprocessed dataset
-    save_dataset(df, DATASET_PREPROCESSED_TYPE, config)
+    save_dataset(df, dataset_path)
 
     info("Data preprocessing completed")
 

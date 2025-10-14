@@ -2,9 +2,8 @@ from typing import List
 
 import numpy as np
 
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.error_logger import error
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 
 
 def generate_memory_fallback_pattern(
@@ -40,24 +39,8 @@ def generate_memory_fallback_pattern(
 
     Returns:
         int: Index of the next accessed key.
-
-    Raises:
-        ValueError: If Zipfian probabilities are not valid.
     """
     debug(f"Memory interval for memory/fallback pattern: {memory_interval}")
-
-    # Check whether the total number of
-    # Zipfian probabilities is not equal to
-    # those of keys, or probabilities do not sum to 1
-    if len(zipf_probs) != len(keys_range) or not np.isclose(
-        zipf_probs.sum(), 1.0
-    ):
-        msg = (
-            "Invalid Zipfian probabilities, "
-            "cannot generate memory/fallback pattern"
-        )
-        error("%s", msg)
-        raise ValueError(msg)
 
     # Based on the memory interval
     if (requests_count % memory_interval == 0) and (

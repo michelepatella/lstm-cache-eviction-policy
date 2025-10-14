@@ -1,6 +1,6 @@
 from pydantic import BaseModel, confloat, conint, model_validator
 
-from const import (
+from pipeline.const import (
     DATA_DISTRIBUTION_MODES,
     DATA_GENERATION_FINAL_HOUR,
     DATA_GENERATION_INITIAL_HOUR,
@@ -8,7 +8,7 @@ from const import (
 from utils.assertions.choice_field_validator import (
     validate_choice_field,
 )
-from pipeline.utils.assertions.min_max_validator import (
+from utils.assertions.min_max_validator import (
     are_min_max_valid,
 )
 
@@ -399,7 +399,7 @@ class GenerationConfig(BaseModel):
     @model_validator(mode="after")
     def check_data_distribution_mode(
         self: "GenerationConfig",
-    ) -> "GenerationConfig":
+    ) -> None:
         """
         Check whether data distribution
         mode is valid or not.
@@ -411,10 +411,9 @@ class GenerationConfig(BaseModel):
             self (GenerationConfig): Current model instance.
 
         Returns:
-            GenerationConfig: Validated model instance.
+            None
         """
-        return validate_choice_field(
-            self,
+        validate_choice_field(
             self.mode,
             DATA_DISTRIBUTION_MODES,
             "data.general.mode",

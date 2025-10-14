@@ -1,6 +1,6 @@
 from pydantic import BaseModel, confloat, conint, model_validator
 
-from const import TRAINING_OPTIMIZERS
+from pipeline.const import TRAINING_OPTIMIZERS
 from utils.assertions.choice_field_validator import (
     validate_choice_field,
 )
@@ -51,7 +51,7 @@ class OptimizerConfig(BaseModel):
     @model_validator(mode="after")
     def check_data_distribution_mode(
         self: "OptimizerConfig",
-    ) -> "OptimizerConfig":
+    ) -> None:
         """
         Check whether optimizer is valid or not.
 
@@ -62,10 +62,9 @@ class OptimizerConfig(BaseModel):
             self (OptimizerConfig): Current model instance.
 
         Returns:
-            OptimizerConfig: Validated model instance.
+            None.
         """
-        return validate_choice_field(
-            self,
+        validate_choice_field(
             self.type,
             TRAINING_OPTIMIZERS,
             "training.optimizer.type",

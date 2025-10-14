@@ -4,10 +4,9 @@ from typing import Any, Dict, List, Tuple
 from tqdm import tqdm
 
 from pipeline.config.classes.Config import Config
-from const import LSTM_CACHE_NAME, MICROSECONDS_IN_SECOND
-from pipeline.steps.simulation.running.initialization.initializer import (
-    initialize_simulation,
-)
+from pipeline.const import LSTM_CACHE_NAME, MICROSECONDS_IN_SECOND
+from pipeline.const import HIT_COUNTER_NAME, MISS_COUNTER_NAME, TESTING_SPLIT_TYPE
+from utils.data_loader.initializer import initialize_data_loader
 from pipeline.steps.simulation.running.utils.hit_miss_checker_updater import (
     check_update_hit_miss,
 )
@@ -17,7 +16,8 @@ from pipeline.steps.simulation.running.utils.hit_miss_timeline_updater import (
 from pipeline.steps.simulation.utils.time_key_from_row_extractor import (
     extract_time_key_from_row,
 )
-from pipeline.utils.logs.levels.error_logger import error
+from utils.dataset.AccessLogsDataset import AccessLogsDataset
+from utils.logs.levels.error_logger import error
 
 
 def run_cache_simulation(
@@ -52,9 +52,25 @@ def run_cache_simulation(
             * The input dataset row structure is invalid.
             * Required dictionary keys are missing.
     """
-    # Setup for simulation
-    (counters, timeline, cache_latencies, testing_set, testing_loader) = (
-        initialize_simulation(config)
+    # Prepare configuration
+    testing_batch_size = config.testing.general.batch_size
+    testing_shuffle = config.testing.general.shuffle
+
+    # Initialize data
+    counters = {
+        HIT_COUNTER_NAME: 0,
+        MISS_COUNTER_NAME: 0,
+    }
+    timeline = []
+    cache_latencies = []
+
+    # Get testing set
+    testing_set, testing_loader = initialize_data_loader(
+        TESTING_SPLIT_TYPE,
+        testing_batch_size,
+        testing_shuffle,
+        AccessLogsDataset,
+        config,
     )
 
     try:
@@ -100,7 +116,7 @@ def run_cache_simulation(
             cache_latency = (end_time - start_time) * MICROSECONDS_IN_SECOND
             cache_latencies.append(cache_latency)
 
-            # update number of hits and misses
+            # Update number of hits and misses
             timeline = update_hit_miss_timeline(idx, counters, timeline)
     except (TypeError, KeyError, AttributeError) as e:
         msg = "Cache simulation failed"

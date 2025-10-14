@@ -4,7 +4,7 @@ from typing import List
 import numpy as np
 from matplotlib import pyplot as plt
 
-from const import (
+from pipeline.const import (
     PLOT_LABEL_FONT_SIZE,
     PLOT_SIZE,
     PLOT_TITLE_FONT_SIZE,
@@ -13,9 +13,9 @@ from const import (
     ZIPF_LOG_LOG_PLOT_X_LABEL,
     ZIPF_LOG_LOG_PLOT_Y_LABEL,
 )
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.error_logger import error
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
 
 
 def plot_zipf_loglog(requests: List[int], save_path: str) -> None:

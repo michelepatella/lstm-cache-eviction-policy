@@ -2,10 +2,10 @@ from typing import Tuple, Union
 
 import torch
 
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.error_logger import error
-from pipeline.utils.logs.levels.info_logger import info
-from pipeline.utils.model.initialization.components.device_mover import (
+from utils.backpropagation.loss_calculator import calculate_loss
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
+from utils.model.initialization.components.device_mover import (
     move_to_device,
 )
 
@@ -72,19 +72,8 @@ def compute_forward(
 
     debug(f"Model output shape: {outputs.shape}")
 
-    try:
-        # Compute loss if criterion and target provided
-        loss = None
-        if criterion is not None and y_key is not None:
-            # Calculate loss
-            loss = criterion(outputs, y_key)
-
-            debug(f"Loss computed: {loss.item()}")
-            debug(f"Criterion used: {criterion}")
-    except TypeError as e:
-        msg = "Failed to compute loss at the end of forward pass"
-        error("%s: %s", msg, e)
-        raise RuntimeError(msg) from e
+    # Calculate loss
+    loss = calculate_loss(outputs, y_key, criterion)
 
     info("Forward pass completed")
 

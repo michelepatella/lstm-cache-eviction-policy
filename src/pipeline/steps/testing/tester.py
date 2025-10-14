@@ -1,7 +1,6 @@
 from box.box import Box
 
-from pipeline.config import prepare_config
-from const import (
+from pipeline.const import (
     LOGS_TESTING_PHASE,
     MODEL_METRICS_CLASS_REPORT_NAME,
     MODEL_METRICS_COHEN_KAPPA_SCORE_NAME,
@@ -12,15 +11,16 @@ from const import (
     DATA_DISTRIBUTION_STATIC_MODE,
     DYNAMIC_MODEL_RESULTS_FILE_NAME,
 )
+from pipeline.config.configurator import prepare_config
 from pipeline.steps.testing.visualization.reporting.model_evaluation_reporter import (
     generate_model_evaluation_report,
 )
-from pipeline.utils.evaluation.evaluator import evaluate_model
-from pipeline.utils.data_loader.initializer import initialize_data_loader
-from pipeline.utils.dataset.AccessLogsDataset import AccessLogsDataset
-from pipeline.utils.logs.initializer import logs_phase
-from pipeline.utils.logs.levels.info_logger import info
-from pipeline.utils.model.initialization.trained_model_initializer import (
+from utils.evaluation.evaluator import evaluate_model
+from utils.data_loader.initializer import initialize_data_loader
+from utils.dataset.AccessLogsDataset import AccessLogsDataset
+from utils.logs.initializer import logs_phase
+from utils.logs.levels.info_logger import info
+from utils.model.initialization.trained_model_initializer import (
     initialize_trained_model,
 )
 
@@ -53,8 +53,8 @@ def test_model() -> None:
         TESTING_SPLIT_TYPE,
         testing_batch_size,
         testing_shuffle,
-        config,
         AccessLogsDataset,
+        config,
     )
 
     # Trained model setup for testing

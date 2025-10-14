@@ -1,4 +1,4 @@
-from const import (
+from pipeline.const import (
     DAILY_PROFILE_PLOT_FILE_NAME,
     DATA_DISTRIBUTION_STATIC_MODE,
     DATASET_RAW_TYPE,
@@ -16,7 +16,7 @@ from pipeline.steps.data_generation.requests.dynamic_generator import (
 from pipeline.steps.data_generation.requests.static_generator import (
     generate_static_requests,
 )
-from pipeline.utils.dataset.builder import create_dataset
+from utils.dataset.builder import create_dataset
 from pipeline.steps.data_generation.visualization.plots.daily_profile_plotter import (
     plot_daily_profile,
 )
@@ -26,10 +26,11 @@ from pipeline.steps.data_generation.visualization.plots.key_usage_heatmap_plotte
 from pipeline.steps.data_generation.visualization.plots.zipf_loglog_plotter import (
     plot_zipf_loglog,
 )
-from pipeline.utils.dataset.saver import save_dataset
-from pipeline.utils.logs.initializer import logs_phase
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.info_logger import info
+from utils.dataset.locator import get_dataset_abs_path
+from utils.dataset.saver import save_dataset
+from utils.logs.initializer import logs_phase
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 
 
 def generate_data() -> None:
@@ -81,8 +82,12 @@ def generate_data() -> None:
         }
     )
 
+    # Retrieve path where
+    # to save dataset
+    dataset_path = get_dataset_abs_path(DATASET_RAW_TYPE, data_distribution_mode)
+
     # Save just created dataset
-    save_dataset(df, DATASET_RAW_TYPE, config)
+    save_dataset(df, dataset_path)
 
     # Prepare save paths
     zipf_log_log_save_path = (

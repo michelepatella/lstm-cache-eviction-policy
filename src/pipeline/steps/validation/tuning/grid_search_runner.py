@@ -2,7 +2,7 @@ from typing import Any, Dict
 
 from tqdm import tqdm
 
-from pipeline.config import Config
+from pipeline.config.classes.Config import Config
 from pipeline.steps.validation.best_params.updater import (
     check_and_update_best_params,
 )
@@ -12,9 +12,9 @@ from pipeline.steps.validation.search_space.combinations.combinator import (
 from pipeline.steps.validation.tuning.time_series_cv_runner import (
     compute_time_series_cv,
 )
-from pipeline.utils.dataset.AccessLogsDataset import AccessLogsDataset
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.info_logger import info
+from utils.dataset.AccessLogsDataset import AccessLogsDataset
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 
 
 def compute_grid_search(

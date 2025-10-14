@@ -1,20 +1,20 @@
-from pipeline.config import prepare_config
-from const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE
-from pipeline.utils.model.saver import save_model
-from pipeline.utils.dataset.splitter import split_training_set
-from pipeline.utils.training.n_epochs_trainer import train_n_epochs
-from pipeline.utils.data_loader.builder import create_data_loader
-from pipeline.utils.data_loader.initializer import initialize_data_loader
-from pipeline.utils.data_loader.targets_extractor import (
+from pipeline.const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE
+from pipeline.config.configurator import prepare_config
+from utils.model.saver import save_model
+from utils.dataset.splitter import split_training_set
+from utils.training.n_epochs_trainer import train_n_epochs
+from utils.data_loader.builder import create_data_loader
+from utils.data_loader.initializer import initialize_data_loader
+from utils.data_loader.targets_extractor import (
     extract_targets_from_data_loader,
 )
-from pipeline.utils.dataset.AccessLogsDataset import AccessLogsDataset
-from pipeline.utils.logs.initializer import logs_phase
-from pipeline.utils.logs.levels.info_logger import info
-from pipeline.utils.model.initialization.model_components_initializer import (
+from utils.dataset.AccessLogsDataset import AccessLogsDataset
+from utils.logs.initializer import logs_phase
+from utils.logs.levels.info_logger import info
+from utils.model.initialization.model_components_initializer import (
     initialize_model_components,
 )
-from pipeline.utils.model.locator import get_model_abs_path
+from utils.model.locator import get_model_abs_path
 
 
 def train_model() -> None:
@@ -54,8 +54,8 @@ def train_model() -> None:
         TRAINING_SPLIT_TYPE,
         training_batch_size,
         validation_shuffle,
-        config,
         AccessLogsDataset,
+        config,
     )
 
     # Split training set into training

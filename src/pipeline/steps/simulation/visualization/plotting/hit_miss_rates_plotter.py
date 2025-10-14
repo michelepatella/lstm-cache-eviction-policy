@@ -2,7 +2,7 @@ from typing import Any, Dict, List
 
 import matplotlib.pyplot as plt
 
-from const import (
+from pipeline.const import (
     HIT_MISS_RATE_SUBPLOT_X_LABEL,
     HIT_MISS_RATES_PLOT_NUM_COLS,
     HIT_MISS_RATES_PLOT_NUM_ROWS,
@@ -20,9 +20,9 @@ from const import (
     TIMELINE_INSTANT_HIT_RATE_NAME,
     TIMELINE_NAME,
 )
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.error_logger import error
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
 
 
 def plot_hit_miss_rate(

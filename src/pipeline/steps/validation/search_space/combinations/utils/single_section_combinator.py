@@ -1,19 +1,19 @@
 import itertools
 from typing import Any, Dict, List
 
-from const import CONFIG_SECTIONS_WITH_PARAMS
+from pipeline.const import CONFIG_SECTIONS_WITH_PARAMS
 from pipeline.steps.validation.search_space.flattener import (
     flatten_search_space,
 )
-from pipeline.steps.validation.search_space.setter import (
-    set_nested_dict,
+from utils.dict.value_setter import (
+    set_dict_value,
 )
 from pipeline.steps.validation.search_space.utils.section_params_wrapper import (
     wrap_section_params,
 )
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.error_logger import error
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
 
 
 def get_single_section_combinations(
@@ -56,7 +56,7 @@ def get_single_section_combinations(
             for key_path, value in zip(keys, values):
                 # Set nested key-value pairs to reconstruct
                 # original structure
-                set_nested_dict(combo, key_path, value)
+                set_dict_value(combo, key_path, value)
 
             # Wrap section parameters ensuring
             # consistent representation with respect to

@@ -1,9 +1,9 @@
 from typing import Any, Dict, List, Tuple
 
-from const import VALIDATION_PARAMS_SUFFIX
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.error_logger import error
-from pipeline.utils.logs.levels.info_logger import info
+from pipeline.const import VALIDATION_PARAMS_SUFFIX
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
 
 
 def flatten_search_space(

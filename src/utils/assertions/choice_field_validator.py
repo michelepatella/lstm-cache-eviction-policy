@@ -1,16 +1,15 @@
 from typing import Any, List
 
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.error_logger import error
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
 
 
 def validate_choice_field(
-    instance: Any,
     field_value: Any,
     allowed_field_values: List[Any],
     context: str,
-) -> Any:
+) -> None:
     """
     Check whether a choice field
     is valid or not.
@@ -20,13 +19,12 @@ def validate_choice_field(
     to a list of allowed values.
 
     Args:
-        instance (Any): Model instance being validated.
         field_value (Any): Value of the choice field.
         allowed_field_values (List[Any]): List of allowed values.
         context (str): Context for error messages.
 
     Returns:
-        Any: Validated model instance.
+        None
 
     Raises:
         ValueError: If the choice field is not valid (i.e.,
@@ -55,5 +53,3 @@ def validate_choice_field(
         raise ValueError(msg)
 
     info(f"{context}: {field_value}, validated")
-
-    return instance

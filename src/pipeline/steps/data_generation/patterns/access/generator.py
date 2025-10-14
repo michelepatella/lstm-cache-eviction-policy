@@ -3,7 +3,7 @@ from typing import List
 import numpy as np
 
 from pipeline.config.classes.Config import Config
-from const import SECONDS_IN_DAY, SECONDS_IN_HOUR
+from pipeline.const import SECONDS_IN_DAY, SECONDS_IN_HOUR
 from pipeline.steps.data_generation.patterns.access.components.cycle_generator import (
     generate_cycle_pattern,
 )
@@ -19,8 +19,8 @@ from pipeline.steps.data_generation.patterns.access.components.repetition_genera
 from pipeline.steps.data_generation.patterns.access.components.toggle_generator import (
     generate_toggle_pattern,
 )
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 
 
 def generate_access_pattern(

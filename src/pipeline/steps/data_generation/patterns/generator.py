@@ -2,7 +2,7 @@ from typing import List, Tuple
 
 import numpy as np
 
-from const import (
+from pipeline.const import (
     DATA_GENERATION_INITIAL_CURRENT_DAY,
     DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY,
     DATA_GENERATION_INITIAL_TIMESTAMP,
@@ -11,8 +11,8 @@ from pipeline.config.classes.Config import Config
 from pipeline.steps.data_generation.patterns.utils.single_pattern_request_generator import (
     generate_single_pattern_request,
 )
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 
 
 def generate_pattern_requests(

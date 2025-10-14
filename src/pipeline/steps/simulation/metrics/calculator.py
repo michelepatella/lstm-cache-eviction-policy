@@ -1,26 +1,22 @@
 from typing import Dict, List, Tuple
 
-from pipeline.config.classes.Config import Config
+from pipeline.const import HIT_COUNTER_NAME, MISS_COUNTER_NAME
 from pipeline.steps.simulation.caches.utils.classes.CacheMetricsLogger import (
     CacheMetricsLogger,
-)
-from pipeline.steps.simulation.metrics.components.avg_cache_latency_calculator import (
-    calculate_avg_cache_latency,
 )
 from pipeline.steps.simulation.metrics.components.eviction_mistake_rate_calculator import (
     calculate_eviction_mistake_rate,
 )
-from pipeline.steps.simulation.metrics.components.hit_miss_rate_calculator import (
-    calculate_hit_miss_rate,
-)
-from pipeline.utils.logs.levels.info_logger import info
+from utils.math.percentage_calculator import (calculate_percentage)
+from utils.logs.levels.info_logger import info
+from utils.math.avg_calculator import calculate_average
 
 
 def calculate_cache_simulation_metrics(
     counters: Dict[str, int],
     cache_latencies: List[float],
+    mistake_window: int,
     metrics_logger: CacheMetricsLogger,
-    config: Config,
 ) -> Tuple[float, float, float, float]:
     """
     Calculate cache simulation metrics.
@@ -36,28 +32,33 @@ def calculate_cache_simulation_metrics(
                                    hits and misses.
         cache_latencies (List[float]): List of cache access latencies
                                        recorded during simulation.
+        mistake_window (int): Mistake window for mistake rate calculation.
         metrics_logger (CacheMetricsLogger): Object logging cache
                                              events.
-        config (Config): Configuration object.
 
     Returns:
         Tuple[float, float, float, float]: A tuple containing cache hit rate,
                                            miss rate, eviction mistake, and
                                            average latency.
     """
-    # Prepare configuration
-    mistake_window = config.simulation.metrics.mistake_rate.window
+    # Get total cache accesses
+    total_cache_accesses = counters[HIT_COUNTER_NAME] + counters[MISS_COUNTER_NAME]
 
     # Calculate hit and miss rates
-    hit_rate, miss_rate = calculate_hit_miss_rate(counters)
+    hit_rate = calculate_percentage(counters[HIT_COUNTER_NAME], total_cache_accesses)
+    miss_rate = calculate_percentage(counters[MISS_COUNTER_NAME], total_cache_accesses)
+
+    # Extract eviction and access data
+    evicted_items = metrics_logger.evicted_keys
+    access_events_dict = metrics_logger.access_events
 
     # Calculate eviction mistake rate
     eviction_mistake_rate = calculate_eviction_mistake_rate(
-        metrics_logger, mistake_window
+        evicted_items, access_events_dict, mistake_window
     )
 
     # Calculate average cache latency
-    avg_cache_latency = calculate_avg_cache_latency(cache_latencies)
+    avg_cache_latency = calculate_average(cache_latencies)
 
     info("Cache simulation metrics calculated")
 

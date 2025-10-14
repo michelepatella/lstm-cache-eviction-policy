@@ -1,7 +1,7 @@
 from typing import Any, Dict
 
-from const import HIT_COUNTER_NAME, MISS_COUNTER_NAME
-from pipeline.utils.logs.levels.info_logger import info
+from pipeline.const import HIT_COUNTER_NAME, MISS_COUNTER_NAME
+from utils.logs.levels.info_logger import info
 
 
 def check_update_hit_miss(

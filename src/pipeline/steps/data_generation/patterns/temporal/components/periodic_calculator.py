@@ -1,8 +1,8 @@
 import numpy as np
 
-from const import HOURS_IN_DAY
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.info_logger import info
+from pipeline.const import HOURS_IN_DAY
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 
 
 def calculate_periodic_component(

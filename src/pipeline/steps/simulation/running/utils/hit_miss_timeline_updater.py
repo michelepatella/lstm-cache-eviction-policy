@@ -1,13 +1,14 @@
 from typing import Dict, List
 
-from const import (
+from pipeline.const import (
     HIT_COUNTER_NAME,
     MISS_COUNTER_NAME,
     TIMELINE_INDEX_NAME,
     TIMELINE_INSTANT_HIT_RATE_NAME,
 )
-from pipeline.utils.logs.levels.error_logger import error
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
+from utils.math.percentage_calculator import calculate_percentage
 
 
 def update_hit_miss_timeline(
@@ -37,7 +38,7 @@ def update_hit_miss_timeline(
     """
     try:
         # Calculate instant hit rate
-        instant_hit_rate = counters[HIT_COUNTER_NAME] / (idx + 1)
+        instant_hit_rate = calculate_percentage(counters[HIT_COUNTER_NAME], idx + 1)
 
         # Append current metrics to the timeline
         timeline.append(

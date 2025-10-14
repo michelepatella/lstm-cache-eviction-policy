@@ -6,8 +6,8 @@ from pipeline.config.classes.Config import Config
 from pipeline.steps.data_generation.requests.utils.alpha_requests_generator import (
     generate_requests_for_alpha,
 )
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.time.seconds_to_hours_converter import (
+from utils.logs.levels.debug_logger import debug
+from utils.time.seconds_to_hours_converter import (
     convert_seconds_to_hours,
 )
 

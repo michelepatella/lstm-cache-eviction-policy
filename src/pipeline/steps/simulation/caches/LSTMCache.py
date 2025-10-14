@@ -5,7 +5,7 @@ import requests
 from torch.utils.data import DataLoader
 
 from pipeline.config.classes.Config import Config
-from const import (
+from pipeline.const import (
     EVICTION_POLICY_API_ENDPOINT,
     EVICTION_POLICY_API_KEYS_IN_CACHE_PARAM_NAME,
     EVICTION_POLICY_API_LAST_ACCESSES_PARAM_NAME,
@@ -18,8 +18,8 @@ from pipeline.steps.simulation.caches.utils.classes.CacheMetricsLogger import (
 from pipeline.steps.simulation.caches.utils.last_accesses_extractor import (
     get_last_accesses,
 )
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 
 
 class LSTMCache(BaseCache):

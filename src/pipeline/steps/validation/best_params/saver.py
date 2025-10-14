@@ -2,10 +2,10 @@ from typing import Any, Dict
 
 from box.box import Box
 
-from pipeline.config import Config
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.error_logger import error
-from pipeline.utils.logs.levels.info_logger import info
+from pipeline.config.classes.Config import Config
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
 
 
 def save_best_params(best_params: Dict[str, Any], config: Config) -> Config:
@@ -27,7 +27,7 @@ def save_best_params(best_params: Dict[str, Any], config: Config) -> Config:
     try:
 
         def _apply_updates(
-            obj: Any, updates: Dict[str, Any], path: str = ""
+            obj: Any, updates: Dict[str, Any], path: str = None
         ) -> None:
             """
             Recursively apply updates to a Pydantic model or dictionary.

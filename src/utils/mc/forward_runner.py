@@ -2,10 +2,10 @@ from typing import Tuple, Union
 
 import torch
 
-from const import MC_DROPOUT_NUM_SAMPLES_DEFAULT
+from pipeline.const import MC_DROPOUT_NUM_SAMPLES_DEFAULT
 from utils.backpropagation.forward_runner import compute_forward
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 from utils.mc.dropout_activator import (
     enable_mc_dropout,
 )

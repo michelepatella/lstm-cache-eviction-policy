@@ -1,7 +1,7 @@
 import torch
 from scipy.stats import norm
 
-from pipeline.utils.logs.levels.info_logger import info
+from utils.logs.levels.info_logger import info
 
 
 def calculate_confidence_interval(all_outputs, all_vars, config_settings):

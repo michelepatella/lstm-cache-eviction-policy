@@ -1,0 +1,145 @@
+from typing import Dict, List, Tuple
+
+import torch
+from torch import Tensor
+from torch.utils.data import DataLoader
+
+from pipeline.config import Config
+from pipeline.const import (
+    MODEL_COMPUTE_METRICS_DEFAULT,
+    MODEL_METRICS_AVG_LOSS,
+    MODEL_METRICS_CLASS_REPORT_NAME,
+    MODEL_METRICS_ACCURACY_NAME,
+    MODEL_METRICS_MACRO_AVG_NAME,
+    MODEL_METRICS_WEIGHTED_AVG_NAME,
+)
+from utils.inference.inferrer import infer_batch
+from utils.metrics.calculator import (
+    calculate_model_metrics,
+)
+from utils.json.saver import save_json
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
+
+
+def evaluate_model(
+    model: torch.nn.Module,
+    data_loader: DataLoader,
+    criterion: torch.nn.Module,
+    device: torch.device,
+    config: Config,
+    model_results_save_path: str = None,
+    compute_metrics: bool = MODEL_COMPUTE_METRICS_DEFAULT,
+) -> Tuple[
+    float, Dict[str, int | float] | None, List[Tensor], List[int], List[Tensor]
+]:
+    """
+    Evaluate a model on a given data loader.
+
+    This function performs inference over the provided data loader using
+    the given model, computes the average loss, and optionally calculates
+    evaluation metrics including classification report, top-k accuracy,
+    and Cohen’s kappa score.
+
+    Args:
+        model (torch.nn.Module): Model to evaluate.
+        data_loader (DataLoader): DataLoader containing the evaluation dataset.
+        criterion (torch.nn.Module): Loss function used for evaluation.
+        device (torch.device): Device on which to perform computations.
+        config (Config): Configuration object.
+        model_results_save_path (str): Path to save metrics.
+        compute_metrics (bool): Whether to compute evaluation metrics
+                                in addition to loss.
+
+    Returns:
+        Tuple[
+        float, Dict[str, int | float] | None,
+        torch.Tensor, List[int], List[float]
+        ]:
+            Tuple containing the average loss,
+            (optionally) a dictionary of
+            evaluation metrics, model outputs,
+            ground truth labels, and
+            variances from MC dropout (if applicable).
+
+    Raises:
+        RuntimeError: If an error occurs during the
+                      calculation of average loss, e.g.:
+            * Division by zero if the data loader is empty.
+            * Invalid type or attribute error when
+              accessing the data loader length.
+    """
+    # Perform inference
+    (
+        total_loss,
+        all_predictions,
+        all_targets,
+        all_outputs,
+        all_vars,
+    ) = infer_batch(model, data_loader, criterion, device, config)
+
+    try:
+        debug(f"Total loss accumulated: {total_loss:.4f}")
+        debug(f"Number of batches: {len(data_loader)}")
+
+        # Calculate average loss
+        avg_loss = total_loss / len(data_loader)
+
+        debug(f"Average loss: {avg_loss:.4f}")
+    except (ZeroDivisionError, TypeError, AttributeError) as e:
+        msg = "Failed to compute average loss during model evaluation"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
+
+    # Compute metrics if requested
+    metrics = None
+    if compute_metrics:
+        metrics = calculate_model_metrics(
+            all_targets,
+            all_predictions,
+            all_outputs,
+            config,
+        )
+
+        if model_results_save_path is not None:
+            metrics_to_save = {}
+
+            # Filter metrics
+            for k, v in metrics.items():
+                if k == MODEL_METRICS_CLASS_REPORT_NAME:
+                    # Keep only accuracy and both macro
+                    # and weighted average from class report
+                    if isinstance(v, dict):
+                        filtered_report = {
+                            rk: rv
+                            for rk, rv in v.items()
+                            if rk
+                            in [
+                                MODEL_METRICS_ACCURACY_NAME,
+                                MODEL_METRICS_MACRO_AVG_NAME,
+                                MODEL_METRICS_WEIGHTED_AVG_NAME,
+                            ]
+                        }
+
+                        metrics_to_save[k] = filtered_report
+                    else:
+                        # Fallback if is not a dictionary
+                        metrics_to_save[k] = v
+                else:
+                    # Keep all the other metrics
+                    metrics_to_save[k] = v
+
+            # Add average loss to metrics to be saved
+            metrics_to_save[MODEL_METRICS_AVG_LOSS] = avg_loss
+
+            # Save metrics as JSON file
+            save_json(metrics_to_save, model_results_save_path)
+
+            debug("Model results saved to JSON file")
+
+        debug("Evaluation metrics computed")
+
+    info("Model evaluation completed")
+
+    return avg_loss, metrics, all_outputs, all_targets, all_vars

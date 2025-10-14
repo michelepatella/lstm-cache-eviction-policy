@@ -1,58 +1,61 @@
-from pipeline.steps.simulation.caches.utils.classes.CacheMetricsLogger import (
-    CacheMetricsLogger,
-)
-from pipeline.utils.logs.levels.debug_logger import debug
-from pipeline.utils.logs.levels.error_logger import error
-from pipeline.utils.logs.levels.info_logger import info
+from typing import Dict, List
+
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
+from utils.math.percentage_calculator import calculate_percentage
 
 
 def calculate_eviction_mistake_rate(
-    metrics_logger: CacheMetricsLogger, mistake_window: int
+    evicted_items: Dict[int, List[float]],
+    access_events_dict: Dict[int, List[float]],
+    mistake_window: int
 ) -> float:
     """
-    Calculate the eviction mistake rate within a
-    given temporal window.
+    Calculate the eviction mistake rate.
 
-    This function calculates the eviction mistake rate,
-    within a provided temporal window. An eviction mistake
-    occurs when a key that was evicted from the cache
-    is accessed again within the specified temporal window.
+    This function calculates the eviction mistake rate based on provided
+    evicted keys and their access events. An eviction mistake occurs
+    when a key that was evicted is accessed again within the specified
+    temporal window.
 
     Args:
-        metrics_logger (CacheMetricsLogger): Object tracking cache events
-                                             (evictions and accesses).
-        mistake_window (int): Temporal window to consider future
-                              accesses as mistakes.
+        evicted_items (Dict[int, List[float]]): Dictionary mapping keys
+                                                to their eviction times.
+        access_events_dict (Dict[int, List[float]]): Dictionary mapping keys to their
+                                                     access timestamps.
+        mistake_window (int): Temporal window to consider accesses as mistakes.
 
     Returns:
-        float: Eviction mistake rate.
+        float: Eviction mistake rate in percentage.
     """
-    debug(f"Eviction mistake rate with window: {mistake_window}")
+    debug(f"Eviction mistake rate window: {mistake_window}")
 
     try:
-        # Initialize counters
+        # Initialize counter
         tot_eviction_mistakes = 0
         tot_eviction_events = 0
 
-        # Iterate over all evicted keys and their eviction times
-        for key, eviction_times in metrics_logger.evicted_keys.items():
+        # For each eviction
+        for key, eviction_times in evicted_items.items():
+            # Get its access times
+            access_times = access_events_dict.get(key, [])
+
             for eviction_time in eviction_times:
-                # Increase eviction events by one
+                # Increase the eviction events by one
                 tot_eviction_events += 1
 
-                # Find future accesses within
-                # the mistake window
+                # Check whether an access time lies
+                # within the mistake window
                 future_accesses = [
-                    t
-                    for t in metrics_logger.access_events.get(key, [])
+                    t for t in access_times
                     if eviction_time < t <= eviction_time + mistake_window
                 ]
 
-                # If there is at least one
-                # future access within the
-                # mistake window
+                # If there is at least one future
+                # access lying within the mistake window
                 if future_accesses:
-                    # Increase eviction mistake by one
+                    # Increase the eviction mistakes by one
                     tot_eviction_mistakes += 1
 
                     debug(
@@ -61,12 +64,8 @@ def calculate_eviction_mistake_rate(
                         f"future access(es): {future_accesses}"
                     )
 
-        # Compute eviction mistake rate
-        eviction_mistake_rate = (
-            tot_eviction_mistakes / tot_eviction_events
-            if tot_eviction_events > 0
-            else 0.0
-        )
+        # Calculate eviction mistake rate
+        eviction_mistake_rate = calculate_percentage(tot_eviction_mistakes, tot_eviction_events)
 
         info(f"Eviction mistake rate calculated: {eviction_mistake_rate}")
 
