@@ -16,7 +16,7 @@ class FIFOCache(Cache):
 
     Attributes:
         _data (OrderedDict): Internal data storage for cache items.
-        callback (Callable | None): Optional callback for evicted keys.
+        callback (Callable | None): Callback for evicted keys.
     """
 
     def __init__(

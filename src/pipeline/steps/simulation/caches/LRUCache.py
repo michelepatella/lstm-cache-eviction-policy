@@ -17,7 +17,7 @@ class LRUCache(Cache):
     Attributes:
         _data (OrderedDict): Internal data storage for cache items
                              in order of use.
-        callback (Callable | None): Optional callback for evicted keys.
+        callback (Callable | None): Callback for evicted keys.
     """
 
     def __init__(

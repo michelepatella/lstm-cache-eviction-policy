@@ -25,8 +25,8 @@ def split_training_set(
     Args:
         training_set (AccessLogsDataset): The dataset to split.
         config (Config): Configuration object.
-        training_idx (List[int] | None): Optional training set index.
-        validation_idx (List[int] | None): Optional validation set index.
+        training_idx (List[int] | None): Training set index.
+        validation_idx (List[int] | None): Validation set index.
 
     Returns:
         Tuple[Subset, Subset]: Training and validation subsets.

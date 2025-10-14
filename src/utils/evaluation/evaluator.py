@@ -95,11 +95,14 @@ def evaluate_model(
     # Compute metrics if requested
     metrics = None
     if compute_metrics:
+        # Prepare configuration
+        top_k = config.testing.metrics.top_k
+
         metrics = calculate_model_metrics(
             all_targets,
             all_predictions,
             all_outputs,
-            config,
+            top_k,
         )
 
         if model_results_save_path is not None:

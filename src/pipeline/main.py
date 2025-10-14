@@ -31,9 +31,7 @@ def main():
     # (5) Model testing
     test_model()
 
-    # -----------------------
-    # Simulation
-    # -----------------------
+    # (6) Simulation
     run_simulations()
 
 

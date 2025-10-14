@@ -2,6 +2,7 @@ from typing import Dict, List
 
 from sklearn.metrics import classification_report
 
+from pipeline.const import MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT, MODEL_METRICS_CLASS_REPORT_ZERO_DIVISION
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
@@ -30,8 +31,8 @@ def generate_class_report(
         class_report = classification_report(
             targets,
             predictions,
-            output_dict=True,
-            zero_division=0,
+            output_dict=MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT,
+            zero_division=MODEL_METRICS_CLASS_REPORT_ZERO_DIVISION,
         )
     except (ValueError, TypeError) as e:
         msg = "Failed to compute classification report"

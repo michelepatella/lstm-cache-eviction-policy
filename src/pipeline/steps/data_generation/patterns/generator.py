@@ -36,7 +36,7 @@ def generate_pattern_requests(
         zipf_probs (np.ndarray): List of Zipfian probabilities
                                  of the given keys.
         config (Config): Configuration object.
-        time_step_duration (int): Optional time step to generate requests for.
+        time_step_duration (int): Time step to generate requests for.
 
     Returns:
         Tuple[List[int], List[float]]: List of requests along with their

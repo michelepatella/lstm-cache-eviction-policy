@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader
 
 from pipeline.config import Config
 from pipeline.const import MC_DROPOUT_NUM_SAMPLES_DEFAULT
-from utils.backpropagation.loss_calculator import calculate_loss
+from utils.backpropagation.utils.loss_calculator import calculate_loss
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info

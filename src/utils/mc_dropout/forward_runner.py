@@ -2,13 +2,11 @@ from typing import Tuple, Union
 
 import torch
 
-from pipeline.const import MC_DROPOUT_NUM_SAMPLES_DEFAULT
+from pipeline.const import MC_DROPOUT_NUM_SAMPLES_DEFAULT, MC_DROPOUT_FLAG
 from utils.backpropagation.forward_runner import compute_forward
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
-from utils.mc.dropout_activator import (
-    enable_mc_dropout,
-)
+from utils.mc_dropout.enabler import enable_mc_dropout
 
 
 def mc_forward_passes(
@@ -58,7 +56,7 @@ def mc_forward_passes(
     if mc_dropout_samples > MC_DROPOUT_NUM_SAMPLES_DEFAULT:
         # Enable MC dropout during inference
         # (i.e., set the model to training mode)
-        enable_mc_dropout(model)
+        enable_mc_dropout(model, MC_DROPOUT_FLAG)
 
         debug(f"MC Dropout enabled for {mc_dropout_samples} forward passes")
     else:

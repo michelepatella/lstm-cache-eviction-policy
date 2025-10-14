@@ -2,7 +2,6 @@ from typing import Dict, List
 
 import torch
 
-from pipeline.config import Config
 from pipeline.const import (
     MODEL_METRICS_CLASS_REPORT_NAME,
     MODEL_METRICS_COHEN_KAPPA_SCORE_NAME,
@@ -25,7 +24,7 @@ def calculate_model_metrics(
     targets: List[int],
     predictions: List[int],
     outputs: List[torch.Tensor],
-    config: Config,
+    top_k: int
 ) -> Dict[str, int | float]:
     """
     Calculate evaluation metrics for a model.
@@ -40,7 +39,7 @@ def calculate_model_metrics(
         targets (List[int]): Ground truth class labels.
         predictions (List[int]): Predicted class labels.
         outputs (List[torch.Tensor]): Model outputs.
-        config (Config): Configuration object.
+        top_k (int): Top-k to be considered for accuracy calculation.
 
     Returns:
         Dict[str, int | float]: Dictionary containing class
@@ -54,13 +53,10 @@ def calculate_model_metrics(
             * Failed to compute class report due to
               mismatched lengths or invalid inputs.
     """
-    # Prepare configuration
-    top_k = config.testing.metrics.top_k
-
     debug(f"Targets length: {len(targets)}")
     debug(f"Predictions length: {len(predictions)}")
     debug(f"Outputs length: {len(outputs)}")
-    debug(f"Configured top-k: {top_k}")
+    debug(f"Top-k: {top_k}")
 
     # Generate a class report
     class_report = generate_class_report(targets, predictions)

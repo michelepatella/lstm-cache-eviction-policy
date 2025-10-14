@@ -19,13 +19,13 @@ class BaseCache(ABC):
     - Metrics logging for get, put, and eviction events
 
     Attributes:
-        cache (Any): Optional underlying cache instance.
+        cache (Any): Underlying cache instance.
         maxsize (int): Maximum number of keys allowed in the cache.
         ttl (float): Time-to-Live for each key.
         metrics_logger (CacheMetricsLogger): Logger for cache events.
         store (dict): Dictionary storing cache keys and values.
         expiry (dict): Dictionary storing expiration time per key.
-        scores (dict): Optional dictionary storing scores for keys.
+        scores (dict): Dictionary storing scores for keys.
         _last_put_time (float | None): Timestamp of the last put operation.
     """
 

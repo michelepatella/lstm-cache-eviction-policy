@@ -187,6 +187,8 @@ MC_DROPOUT_DEFAULT = False
 
 MC_DROPOUT_NUM_SAMPLES_DEFAULT = 1
 
+MC_DROPOUT_FLAG = "mc_dropout"
+
 
 # ----------------------------
 # Cache simulation
@@ -218,6 +220,8 @@ MODEL_METRICS_COHEN_KAPPA_SCORE_NAME = "cohen_kappa_score"
 MODEL_METRICS_ACCURACY_NAME = "accuracy"
 MODEL_METRICS_MACRO_AVG_NAME = "macro avg"
 MODEL_METRICS_WEIGHTED_AVG_NAME = "weighted avg"
+MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT = True
+MODEL_METRICS_CLASS_REPORT_ZERO_DIVISION = 0
 
 # ----------------------------
 # Cache simulation metrics

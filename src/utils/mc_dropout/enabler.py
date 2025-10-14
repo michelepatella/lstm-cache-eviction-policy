@@ -1,10 +1,11 @@
 import torch
 
+from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
 
-def enable_mc_dropout(model: torch.nn.Module) -> None:
+def enable_mc_dropout(model: torch.nn.Module, mc_dropout_flag: str = None) -> None:
     """
     Enable Monte Carlo (MC) Dropout for inference.
 
@@ -15,6 +16,8 @@ def enable_mc_dropout(model: torch.nn.Module) -> None:
     Args:
         model (torch.nn.Module): The PyTorch model in which to
                                  enable MC Dropout.
+        mc_dropout_flag (str): Name of the attribute
+                               to set as flag on the model.
 
     Returns:
         None
@@ -34,7 +37,10 @@ def enable_mc_dropout(model: torch.nn.Module) -> None:
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 
-    # Set a flag indicating MC Dropout is active
-    model.mc_dropout = True
+    # Set a flag indicating MC Dropout is active,
+    # provided it has been passed and exists
+    if mc_dropout_flag is not None and hasattr(model, mc_dropout_flag):
+        setattr(model, mc_dropout_flag, True)
+        debug("MC Dropout flag set")
 
     info("MC Dropout enabled for model")

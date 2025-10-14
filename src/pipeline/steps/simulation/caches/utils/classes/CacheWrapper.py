@@ -17,7 +17,7 @@ class CacheWrapper(BaseCache):
         maxsize (int): Maximum number of items the cache can hold.
         ttl (float): Time-to-Live for cache entries.
         store (dict[int, Any]): Storage for cache items if cache object is None.
-        scores (dict[int, float] | None): Optional dictionary to store scores
+        scores (dict[int, float] | None): Dictionary to store scores
                                           associated with keys.
         _last_put_time (float | None): Timestamp of the last insertion operation.
     """

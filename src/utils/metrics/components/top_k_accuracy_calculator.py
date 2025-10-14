@@ -5,6 +5,7 @@ import torch
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
+from utils.math.percentage_calculator import calculate_percentage
 
 
 def calculate_top_k_accuracy(
@@ -49,20 +50,12 @@ def calculate_top_k_accuracy(
         debug(f"Top-{top_k} predictions shape: {top_k_predictions.shape}")
 
         # Count correct predictions
-        correct_predictions = 0
-        for i, target in enumerate(targets):
-            # Whether the current target is in the
-            # top-k predicted keys
-            if target in top_k_predictions[i][:top_k]:
-                correct_predictions += 1
-            debug(
-                f"Sample {i}: target={target}, "
-                f"top-k={top_k_predictions[i][:top_k]}, "
-                f"correct={target in top_k_predictions[i][:top_k]}"
-            )
+        correct_predictions = sum(
+            1 for i, target in enumerate(targets) if target in top_k_predictions[i][:top_k]
+        )
 
-        # Compute accuracy
-        top_k_accuracy = correct_predictions / len(targets)
+        # Compute top-k accuracy
+        top_k_accuracy = calculate_percentage(correct_predictions, len(targets))
 
         info(f"Top-{top_k} accuracy calculated")
     except (RuntimeError, IndexError, TypeError, ZeroDivisionError) as e:

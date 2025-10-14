@@ -28,7 +28,7 @@ def generate_requests_helper(
 
     Args:
         config (Config): Configuration object.
-        alpha_range (List[float]): Optional list of alpha parameters
+        alpha_range (List[float]): List of alpha parameters
                                    for dynamic requests.
 
     Returns:

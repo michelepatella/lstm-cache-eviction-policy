@@ -17,7 +17,7 @@ class LFUCache(Cache):
     Attributes:
         _data (dict): Internal data storage for cache items.
         _freq (defaultdict): Stores access frequency for each key.
-        callback (Callable | None): Optional callback for evicted keys.
+        callback (Callable | None): Callback for evicted keys.
     """
 
     def __init__(

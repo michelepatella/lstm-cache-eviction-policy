@@ -28,7 +28,7 @@ def save_json(data_dict: Dict | List[Dict], path: str) -> None:
             * If an operating system error occurs while
               JSON file.
     """
-    debug(f"Path where to save JSON: {path}")
+    debug(f"Path to save JSON to: {path}")
 
     try:
         # Save data dictionary as JSON file
