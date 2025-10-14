@@ -80,13 +80,13 @@ def evaluate_model(
     ) = infer_batch(model, data_loader, criterion, device, config)
 
     try:
-        debug(f"Total loss accumulated: {total_loss:.4f}")
+        debug(f"Total loss accumulated: {total_loss}")
         debug(f"Number of batches: {len(data_loader)}")
 
         # Calculate average loss
         avg_loss = total_loss / len(data_loader)
 
-        debug(f"Average loss: {avg_loss:.4f}")
+        debug(f"Average loss: {avg_loss}")
     except (ZeroDivisionError, TypeError, AttributeError) as e:
         msg = "Failed to compute average loss during model evaluation"
         error("%s: %s", msg, e)

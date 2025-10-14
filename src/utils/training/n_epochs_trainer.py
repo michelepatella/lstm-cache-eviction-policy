@@ -1,4 +1,3 @@
-import copy
 from typing import Tuple
 
 import torch
@@ -6,12 +5,13 @@ from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from pipeline.config import Config
+from pipeline.config.classes.Config import Config
 from utils.evaluation.evaluator import evaluate_model
+from utils.model.initialization.components.best_model_updater import update_best_model
+from utils.model.initialization.components.model_state_dict_copier import copy_model_state_dict
 from utils.training.callbacks.EarlyStopping import EarlyStopping
 from utils.training.one_epoch_trainer import train_one_epoch
 from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
 
@@ -51,9 +51,6 @@ def train_n_epochs(
                                        average loss achieved
                                        during training and the
                                        best trained model.
-
-    Raises:
-        RuntimeError: If an error occurs while deep copying the model weights.
     """
     debug(
         f"General training configuration:\n"
@@ -65,18 +62,9 @@ def train_n_epochs(
         f"- Device: {device}"
     )
 
-    try:
-        # Initialize model weights
-        best_model_weights = copy.deepcopy(model.state_dict())
-    except TypeError as e:
-        msg = "Failed to deepcopy model weights"
-        error("%s: %s", msg, e)
-        raise RuntimeError(msg) from e
-
-    # Initialize bookkeeping
+    # Initialization
+    best_model_weights = copy_model_state_dict(model)
     best_avg_loss = float("inf")
-    num_epochs_run = 0
-    tot_loss = 0.0
 
     # Instantiate early stopping
     es = EarlyStopping(config)
@@ -90,39 +78,20 @@ def train_n_epochs(
             model, training_loader, optimizer, criterion, device, epoch
         )
 
-        # Increase the number of epochs run
-        num_epochs_run += 1
-
         # Evaluate the model to get the
         # average loss after the current epoch
         avg_loss, *_ = evaluate_model(
             model, validation_loader, criterion, device, config
         )
 
-        debug(f"Validation average loss: {avg_loss:.6f}")
+        debug(f"Validation average loss: {avg_loss}")
 
-        # Add the current average loss
-        # to the total one
-        tot_loss += avg_loss
+        # Check for an update in average loss
+        best_avg_loss, new_model_weights = update_best_model(avg_loss, best_avg_loss, model)
 
-        # Save the best model weights if
-        # an improvement is found
-        if avg_loss < best_avg_loss:
-            debug(
-                f"New best average loss found ({avg_loss} < {best_avg_loss})"
-            )
-
-            # Both best average loss and best
-            # model update are going to be updated
-            # consequently
-            best_avg_loss = avg_loss
-
-            try:
-                best_model_weights = copy.deepcopy(model.state_dict())
-            except TypeError as e:
-                msg = "Failed to deepcopy the current best model weights"
-                error("%s: %s", msg, e)
-                raise RuntimeError(msg) from e
+        # Update best model weights (if any)
+        if new_model_weights:
+            best_model_weights = new_model_weights
 
         # Early stopping check
         # (check whether to stop training process
@@ -135,14 +104,8 @@ def train_n_epochs(
 
     # Apply the best weights
     # before returning the trained model
-    try:
-        model.load_state_dict(best_model_weights)
-    except TypeError as e:
-        msg = "Failed to deepcopy the final best model weights"
-        error("%s: %s", msg, e)
-        raise RuntimeError(msg) from e
+    model.load_state_dict(best_model_weights)
 
-    info(f"Total number of epochs run: {num_epochs_run}")
     info(f"Best average loss achieved: {best_avg_loss}")
     info("Training process completed")
 

@@ -1,6 +1,6 @@
 import numpy as np
 
-from pipeline.config import Config
+from pipeline.config.classes.Config import Config
 from pipeline.const import LOGS_VALIDATION_PHASE
 from utils.logs.initializer import logs_phase
 from utils.logs.levels.debug_logger import debug

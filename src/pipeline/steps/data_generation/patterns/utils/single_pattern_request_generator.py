@@ -10,7 +10,7 @@ from pipeline.steps.data_generation.patterns.access.generator import (
 from pipeline.steps.data_generation.patterns.temporal.generator import (
     generate_temporal_pattern,
 )
-from utils.time.cyclic_updater import (
+from utils.time.cyclic.updater import (
     update_cyclic_time,
 )
 from utils.logs.levels.debug_logger import debug

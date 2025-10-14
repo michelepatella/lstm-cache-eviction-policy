@@ -3,7 +3,7 @@ from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from utils.training.backpropagation.backward_runner import (
+from utils.backpropagation.backward_runner import (
     compute_backward,
 )
 from utils.backpropagation.forward_runner import compute_forward

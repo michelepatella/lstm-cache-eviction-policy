@@ -11,7 +11,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 # ----------------------------
 # Configuration
 # ----------------------------
-CONFIG_DIRECTORY_PATH = PROJECT_ROOT / "config"
+CONFIG_DIRECTORY_PATH = PROJECT_ROOT / "pipeline"
 CONFIG_FILE_NAME = "pipeline_config.yaml"
 
 CONFIG_SECTIONS_WITH_PARAMS = {

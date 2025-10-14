@@ -64,7 +64,7 @@ def extract_time_key_from_row(
         key = y_key.item()
 
         debug(
-            f"Current time: {current_time:.2f}, and key: {key},"
+            f"Current time: {current_time}, and key: {key},"
             f" extracted from row"
         )
 

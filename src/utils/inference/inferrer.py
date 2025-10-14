@@ -111,7 +111,7 @@ def infer_batch(
                 loss = calculate_loss(outputs_mean, targets, criterion)
                 total_loss += loss.item()
 
-                debug(f"Batch {batch_idx} loss: {loss.item():.4f}")
+                debug(f"Batch {batch_idx} loss: {loss.item()}")
 
                 # Store predictions, targets, and outputs
                 predictions = torch.argmax(outputs_mean, dim=1)

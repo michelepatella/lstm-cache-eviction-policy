@@ -14,6 +14,9 @@ def load_yaml(path: str) -> Dict[str, Any]:
 
     This function reads a YAML file from the specified path.
 
+    Args:
+        path (str): Path to load YAML file from.
+
     Returns:
         Dict[str, Any]: YAML file loaded.
 

@@ -32,9 +32,9 @@ def generate_model_evaluation_report(
 
     # General metrics
     info("=== LSTM Standalone Evaluation Report ===")
-    info(f"Average Loss      : {avg_loss:.4f}")
-    info(f"Top-{top_k} Accuracy: {top_k_accuracy:.4f}")
-    info(f"Kappa Statistic   : {kappa_statistic:.4f}")
+    info(f"Average Loss      : {avg_loss}")
+    info(f"Top-{top_k} Accuracy: {top_k_accuracy}")
+    info(f"Kappa Statistic   : {kappa_statistic}")
 
     # Per-class metrics
     for cls in sorted(
@@ -42,8 +42,8 @@ def generate_model_evaluation_report(
     ):
         metrics = class_report[cls]
         info(
-            f"Class {cls}: Precision={metrics.precision:.4f}, "
-            f"Recall={metrics.recall:.4f}, F1={metrics.f1_score:.4f}, "
+            f"Class {cls}: Precision={metrics.precision}, "
+            f"Recall={metrics.recall}, F1={metrics.f1_score}, "
             f"Support={int(metrics.support)}"
         )
 
@@ -51,12 +51,12 @@ def generate_model_evaluation_report(
     macro = class_report.macro_avg
     weighted = class_report.weighted_avg
     info(
-        f"Macro Avg: Precision={macro.precision:.4f}, "
-        f"Recall={macro.recall:.4f}, F1={macro.f1_score:.4f}"
+        f"Macro Avg: Precision={macro.precision}, "
+        f"Recall={macro.recall}, F1={macro.f1_score}"
     )
     info(
-        f"Weighted Avg: Precision={weighted.precision:.4f}, "
-        f"Recall={weighted.recall:.4f}, F1={weighted.f1_score:.4f}"
+        f"Weighted Avg: Precision={weighted.precision}, "
+        f"Recall={weighted.recall}, F1={weighted.f1_score}"
     )
-    info(f"Accuracy: {class_report.accuracy:.4f}")
+    info(f"Accuracy: {class_report.accuracy}")
     info("=== End of Report ===")

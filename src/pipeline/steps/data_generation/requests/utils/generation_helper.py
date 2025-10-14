@@ -7,8 +7,8 @@ from pipeline.steps.data_generation.requests.utils.alpha_requests_generator impo
     generate_requests_for_alpha,
 )
 from utils.logs.levels.debug_logger import debug
-from utils.time.seconds_to_hours_converter import (
-    convert_seconds_to_hours,
+from utils.time.cyclic.seconds_to_hours_converter import (
+    convert_seconds_to_hours_cyclic,
 )
 
 
@@ -82,6 +82,6 @@ def generate_requests_helper(
         timestamps_seconds.extend(current_timestamps_seconds)
 
     # Convert timestamps from seconds to hours
-    timestamps_hours = convert_seconds_to_hours(timestamps_seconds)
+    timestamps_hours = convert_seconds_to_hours_cyclic(timestamps_seconds)
 
     return requests, timestamps_hours

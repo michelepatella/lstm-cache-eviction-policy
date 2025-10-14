@@ -10,16 +10,17 @@ from utils.logs.levels.info_logger import info
 
 def encode_time_trigonometrically(
     time_column: np.ndarray,
+    cycle_length: float = HOURS_IN_DAY,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Encode a time list trigonometrically.
 
-    This function converts a time list into
-    two new features using sine and cosine transformations,
-    allowing cyclical representation of time.
+    This function converts a time list into sine and cosine
+    features, representing cyclical time.
 
     Args:
         time_column (np.ndarray): Time list to be transformed.
+        cycle_length (float): Length of the repeating cycle (default 24).
 
     Returns:
         Tuple[np.ndarray, np.ndarray]: Cosine and sine time produced.
@@ -36,9 +37,8 @@ def encode_time_trigonometrically(
             f"Max: {max(time_column)}"
         )
 
-        # Normalize time to [0, 2pi] so that
-        # to have time in cycle
-        time_in_cycle = (time_column % HOURS_IN_DAY) / HOURS_IN_DAY
+        # Normalize time so that to have time in cycle
+        time_in_cycle = (time_column % cycle_length) / cycle_length
 
         debug(
             f"(Time after normalization) Min:"
