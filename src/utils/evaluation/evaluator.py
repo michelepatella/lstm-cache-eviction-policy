@@ -13,7 +13,7 @@ from pipeline.const import (
     MODEL_METRICS_MACRO_AVG_NAME,
     MODEL_METRICS_WEIGHTED_AVG_NAME,
 )
-from utils.inference.inferrer import infer_batch
+from utils.inference.batches_inferrer import infer_batches
 from utils.metrics.calculator import (
     calculate_model_metrics,
 )
@@ -70,14 +70,17 @@ def evaluate_model(
             * Invalid type or attribute error when
               accessing the data loader length.
     """
+    # Retrieve number of features
+    num_features = config.model.general.features
+
     # Perform inference
     (
         total_loss,
         all_predictions,
         all_targets,
         all_outputs,
-        all_vars,
-    ) = infer_batch(model, data_loader, criterion, device, config)
+        all_variances,
+    ) = infer_batches(model, data_loader, criterion, device, num_features)
 
     try:
         debug(f"Total loss accumulated: {total_loss}")
@@ -145,4 +148,4 @@ def evaluate_model(
 
     info("Model evaluation completed")
 
-    return avg_loss, metrics, all_outputs, all_targets, all_vars
+    return avg_loss, metrics, all_outputs, all_targets, all_variances

@@ -4,7 +4,7 @@ from scipy.stats import norm
 from utils.logs.levels.info_logger import info
 
 
-def calculate_confidence_interval(all_outputs, all_vars, config_settings):
+def calculate_confidence_interval(all_outputs, all_variances, config_settings):
     # calculate the z-score
     z_score = norm.ppf(
         1 - (1 - config_settings.inference.confidence_intervals.level) / 2
@@ -12,7 +12,7 @@ def calculate_confidence_interval(all_outputs, all_vars, config_settings):
 
     # calculate the standard deviation
     outputs_tensor = torch.stack(all_outputs)
-    outputs_std = torch.sqrt(torch.stack(all_vars))
+    outputs_std = torch.sqrt(torch.stack(all_variances))
 
     # calculate lower and upper CIs boundaries
     lower_ci = outputs_tensor - z_score * outputs_std

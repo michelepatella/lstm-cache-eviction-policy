@@ -62,7 +62,7 @@ def autoregressive_rollout_service(
         move_to_device(x_keys_seq, device)
 
         all_outputs = []
-        all_vars = []
+        all_variances = []
 
         last_sin = x_features_seq[0, -1, 0].item()
         last_cos = x_features_seq[0, -1, 1].item()
@@ -80,9 +80,9 @@ def autoregressive_rollout_service(
 
             all_outputs.append(outputs_mean.squeeze(0))
             if outputs_var is not None:
-                all_vars.append(outputs_var.squeeze(0))
+                all_variances.append(outputs_var.squeeze(0))
             else:
-                all_vars.append(torch.zeros_like(outputs_mean.squeeze(0)))
+                all_variances.append(torch.zeros_like(outputs_mean.squeeze(0)))
 
             pred_key = outputs_mean.argmax(dim=-1).unsqueeze(1)
             x_keys_seq = torch.cat([x_keys_seq[:, 1:], pred_key], dim=1)
@@ -99,7 +99,7 @@ def autoregressive_rollout_service(
 
         return {
             "outputs": [o.tolist() for o in all_outputs],
-            "variances": [v.tolist() for v in all_vars],
+            "variances": [v.tolist() for v in all_variances],
         }
 
     except Exception as e:
