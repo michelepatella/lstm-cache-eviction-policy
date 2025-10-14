@@ -1,4 +1,3 @@
-
 from pipeline.const import (
     AVG_CACHE_LATENCY_NAME,
     EVICTION_MISTAKE_RATE_NAME,
@@ -16,8 +15,9 @@ from pipeline.const import (
     POLICY_NAME,
     RANDOM_CACHE_NAME,
     RESULTS_DIRECTORY_PATH,
-
-    TIMELINE_NAME, DATA_DISTRIBUTION_STATIC_MODE, STATIC_SIMULATION_RESULTS_FILE_NAME,
+    TIMELINE_NAME,
+    DATA_DISTRIBUTION_STATIC_MODE,
+    STATIC_SIMULATION_RESULTS_FILE_NAME,
     DYNAMIC_SIMULATION_RESULTS_FILE_NAME,
 )
 from pipeline.config.configurator import prepare_config
@@ -151,9 +151,7 @@ def run_simulations() -> None:
 
     # Build results save path
     results_save_path = (
-            RESULTS_DIRECTORY_PATH
-            / data_distribution_mode
-            / results_file_name
+        RESULTS_DIRECTORY_PATH / data_distribution_mode / results_file_name
     )
 
     # Filter out all results except

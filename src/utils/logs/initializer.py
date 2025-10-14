@@ -1,19 +1,19 @@
 import contextvars
 import logging
-from logging.handlers import RotatingFileHandler
+
 
 from pipeline.const import (
-    LOGS_CONSOLE_LEVEL,
     LOGS_DEBUG_FILE_PATH,
     LOGS_ERROR_FILE_PATH,
-    LOGS_FILE_BACKUP_COUNT,
     LOGS_FILE_BASE_LEVEL,
-    LOGS_FILE_MAX_BYTES,
-    LOGS_FORMAT,
     LOGS_INFO_FILE_PATH,
     LOGS_PHASE_DEFAULT,
     LOGS_PHASE_NAME,
+    LOGS_FILE_MAX_BYTES,
+    LOGS_FILE_BACKUP_COUNT,
+    LOGS_FORMAT,
 )
+from utils.logs.utils.log_file_handler_creator import create_logs_file_handler
 
 # Contextual variable indicating
 # the current phase
@@ -22,56 +22,64 @@ logs_phase = contextvars.ContextVar(
 )
 
 
-def initialize_logs() -> None:
+def initialize_logs(
+    debug_path: str = LOGS_DEBUG_FILE_PATH,
+    info_path: str = LOGS_INFO_FILE_PATH,
+    error_path: str = LOGS_ERROR_FILE_PATH,
+    base_level: int = LOGS_FILE_BASE_LEVEL,
+    max_bytes: int = LOGS_FILE_MAX_BYTES,
+    backup_count: int = LOGS_FILE_BACKUP_COUNT,
+    logs_format: str = LOGS_FORMAT,
+) -> None:
     """
-    Setup global logging configuration.
+    Set up global logging configuration with rotating file handlers.
 
     This function configures logging to:
-        - Write all INFO-level messages to a rotating file.
-        - Show INFO-level messages on the terminal.
-        - Use a consistent log format.
+        - Write debug, info, and error messages to separate rotating files.
+        - Use a consistent log format for all messages.
+        - Apply file size limits and backup counts.
+
+    Args:
+        debug_path (str): Path for debug log file.
+        info_path (str): Path for info log file.
+        error_path (str): Path for error log file.
+        base_level (int): Base logging level for the root logger.
+        max_bytes (int): Maximum file size in bytes before rotation.
+        backup_count (int): Number of backup files to keep.
+        logs_format (str): Log message format.
 
     Returns:
         None
     """
-    # Create formatter for log messages
-    formatter = logging.Formatter(LOGS_FORMAT)
-
-    # File handlers for logging to file
-    debug_file_handler = RotatingFileHandler(
-        LOGS_DEBUG_FILE_PATH,
-        maxBytes=LOGS_FILE_MAX_BYTES,
-        backupCount=LOGS_FILE_BACKUP_COUNT,
+    # Create file handlers for debug,
+    # info, and error logs
+    debug_file_handler = create_logs_file_handler(
+        debug_path,
+        logging.DEBUG,
+        max_bytes=max_bytes,
+        backup_count=backup_count,
+        logs_format=logs_format,
     )
-    debug_file_handler.setLevel(logging.DEBUG)
-    debug_file_handler.setFormatter(formatter)
-
-    info_file_handler = RotatingFileHandler(
-        LOGS_INFO_FILE_PATH,
-        maxBytes=LOGS_FILE_MAX_BYTES,
-        backupCount=LOGS_FILE_BACKUP_COUNT,
+    info_file_handler = create_logs_file_handler(
+        info_path,
+        logging.INFO,
+        max_bytes=max_bytes,
+        backup_count=backup_count,
+        logs_format=logs_format,
     )
-    info_file_handler.setLevel(logging.INFO)
-    info_file_handler.setFormatter(formatter)
-
-    error_file_handler = RotatingFileHandler(
-        LOGS_ERROR_FILE_PATH,
-        maxBytes=LOGS_FILE_MAX_BYTES,
-        backupCount=LOGS_FILE_BACKUP_COUNT,
+    error_file_handler = create_logs_file_handler(
+        error_path,
+        logging.ERROR,
+        max_bytes=max_bytes,
+        backup_count=backup_count,
+        logs_format=logs_format,
     )
-    error_file_handler.setLevel(logging.ERROR)
-    error_file_handler.setFormatter(formatter)
-
-    # Stream handler for terminal output
-    console_handler = logging.StreamHandler()
-    console_handler.setLevel(LOGS_CONSOLE_LEVEL)
-    console_handler.setFormatter(formatter)
 
     # Configure the root logger
+    # with all handlers
     logging.basicConfig(
-        level=LOGS_FILE_BASE_LEVEL,
+        level=base_level,
         handlers=[
-            console_handler,
             debug_file_handler,
             info_file_handler,
             error_file_handler,

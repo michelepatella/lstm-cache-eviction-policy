@@ -5,7 +5,9 @@ from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
 
-def enable_mc_dropout(model: torch.nn.Module, mc_dropout_flag: str = None) -> None:
+def enable_mc_dropout(
+    model: torch.nn.Module, mc_dropout_flag: str = None
+) -> None:
     """
     Enable Monte Carlo (MC) Dropout for inference.
 

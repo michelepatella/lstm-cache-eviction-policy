@@ -84,7 +84,9 @@ def generate_data() -> None:
 
     # Retrieve path where
     # to save dataset
-    dataset_path = get_dataset_abs_path(DATASET_RAW_TYPE, data_distribution_mode)
+    dataset_path = get_dataset_abs_path(
+        DATASET_RAW_TYPE, data_distribution_mode
+    )
 
     # Save just created dataset
     save_dataset(df, dataset_path)

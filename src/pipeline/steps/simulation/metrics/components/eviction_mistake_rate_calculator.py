@@ -9,7 +9,7 @@ from utils.math.percentage_calculator import calculate_percentage
 def calculate_eviction_mistake_rate(
     evicted_items: Dict[int, List[float]],
     access_events_dict: Dict[int, List[float]],
-    mistake_window: int
+    mistake_window: int,
 ) -> float:
     """
     Calculate the eviction mistake rate.
@@ -48,7 +48,8 @@ def calculate_eviction_mistake_rate(
                 # Check whether an access time lies
                 # within the mistake window
                 future_accesses = [
-                    t for t in access_times
+                    t
+                    for t in access_times
                     if eviction_time < t <= eviction_time + mistake_window
                 ]
 
@@ -65,7 +66,9 @@ def calculate_eviction_mistake_rate(
                     )
 
         # Calculate eviction mistake rate
-        eviction_mistake_rate = calculate_percentage(tot_eviction_mistakes, tot_eviction_events)
+        eviction_mistake_rate = calculate_percentage(
+            tot_eviction_mistakes, tot_eviction_events
+        )
 
         info(f"Eviction mistake rate calculated: {eviction_mistake_rate}")
 

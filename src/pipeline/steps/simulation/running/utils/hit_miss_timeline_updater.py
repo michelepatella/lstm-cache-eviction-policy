@@ -38,7 +38,9 @@ def update_hit_miss_timeline(
     """
     try:
         # Calculate instant hit rate
-        instant_hit_rate = calculate_percentage(counters[HIT_COUNTER_NAME], idx + 1)
+        instant_hit_rate = calculate_percentage(
+            counters[HIT_COUNTER_NAME], idx + 1
+        )
 
         # Append current metrics to the timeline
         timeline.append(

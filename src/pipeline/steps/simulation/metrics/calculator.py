@@ -7,7 +7,7 @@ from pipeline.steps.simulation.caches.utils.classes.CacheMetricsLogger import (
 from pipeline.steps.simulation.metrics.components.eviction_mistake_rate_calculator import (
     calculate_eviction_mistake_rate,
 )
-from utils.math.percentage_calculator import (calculate_percentage)
+from utils.math.percentage_calculator import calculate_percentage
 from utils.logs.levels.info_logger import info
 from utils.math.avg_calculator import calculate_average
 
@@ -42,11 +42,17 @@ def calculate_cache_simulation_metrics(
                                            average latency.
     """
     # Get total cache accesses
-    total_cache_accesses = counters[HIT_COUNTER_NAME] + counters[MISS_COUNTER_NAME]
+    total_cache_accesses = (
+        counters[HIT_COUNTER_NAME] + counters[MISS_COUNTER_NAME]
+    )
 
     # Calculate hit and miss rates
-    hit_rate = calculate_percentage(counters[HIT_COUNTER_NAME], total_cache_accesses)
-    miss_rate = calculate_percentage(counters[MISS_COUNTER_NAME], total_cache_accesses)
+    hit_rate = calculate_percentage(
+        counters[HIT_COUNTER_NAME], total_cache_accesses
+    )
+    miss_rate = calculate_percentage(
+        counters[MISS_COUNTER_NAME], total_cache_accesses
+    )
 
     # Extract eviction and access data
     evicted_items = metrics_logger.evicted_keys

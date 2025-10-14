@@ -2,7 +2,10 @@ from typing import Dict, List
 
 from sklearn.metrics import classification_report
 
-from pipeline.const import MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT, MODEL_METRICS_CLASS_REPORT_ZERO_DIVISION
+from pipeline.const import (
+    MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT,
+    MODEL_METRICS_CLASS_REPORT_ZERO_DIVISION,
+)
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 

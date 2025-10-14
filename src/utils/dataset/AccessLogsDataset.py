@@ -181,7 +181,9 @@ class AccessLogsDataset(Dataset):
         data_distribution_mode = config.data.generation.mode
 
         # Retrieve path to load dataset from
-        dataset_path = get_dataset_abs_path(dataset_type, data_distribution_mode)
+        dataset_path = get_dataset_abs_path(
+            dataset_type, data_distribution_mode
+        )
 
         # Load the dataset
         df = load_dataset(dataset_path)

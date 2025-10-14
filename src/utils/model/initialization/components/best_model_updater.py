@@ -2,13 +2,13 @@ from typing import Tuple, Dict
 import torch
 
 from utils.logs.levels.info_logger import info
-from utils.model.initialization.components.model_state_dict_copier import copy_model_state_dict
+from utils.model.initialization.components.model_state_dict_copier import (
+    copy_model_state_dict,
+)
 
 
 def update_best_model(
-    avg_loss: float,
-    best_avg_loss: float,
-    model: torch.nn.Module
+    avg_loss: float, best_avg_loss: float, model: torch.nn.Module
 ) -> Tuple[float, Dict[str, torch.Tensor] | None]:
     """
     Update the best model weights if the current average loss improves.

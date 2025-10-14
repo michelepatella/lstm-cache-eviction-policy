@@ -6,7 +6,9 @@ from pipeline.const import SECONDS_IN_DAY, SECONDS_IN_HOUR
 from utils.logs.levels.info_logger import info
 
 
-def convert_seconds_to_hours_cyclic(timestamps_seconds: List[float]) -> np.ndarray:
+def convert_seconds_to_hours_cyclic(
+    timestamps_seconds: List[float],
+) -> np.ndarray:
     """
     Convert timestamps from seconds to hours (cyclic over a day).
 

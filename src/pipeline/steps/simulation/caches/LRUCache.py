@@ -67,9 +67,7 @@ class LRUCache(Cache):
         # Remove oldest key and item
         oldest_key, oldest_item = self._data.popitem(last=False)
 
-        debug(
-            f"LRU cache item evicted: {oldest_item}, for key: {oldest_key}"
-        )
+        debug(f"LRU cache item evicted: {oldest_item}, for key: {oldest_key}")
 
         # Callback if present
         if self.callback:

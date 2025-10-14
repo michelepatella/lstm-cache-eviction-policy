@@ -1,6 +1,10 @@
 from pipeline.config.classes.Config import Config
 from utils.yaml.loader import load_yaml
-from pipeline.const import LOGS_CONFIGURATION_PHASE, CONFIG_FILE_NAME, CONFIG_DIRECTORY_PATH
+from pipeline.const import (
+    LOGS_CONFIGURATION_PHASE,
+    CONFIG_FILE_NAME,
+    CONFIG_DIRECTORY_PATH,
+)
 from utils.logs.initializer import logs_phase
 from utils.logs.levels.info_logger import info
 

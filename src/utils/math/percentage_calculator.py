@@ -24,11 +24,15 @@ def calculate_percentage(counter: int, total: int) -> float:
 
     # Check inputs validity
     if counter < 0 or total < 0:
-        msg = "Counter and total must be non-negative numbers for % calculation"
+        msg = (
+            "Counter and total must be non-negative numbers for % calculation"
+        )
         error("%s", msg)
         raise RuntimeError(msg)
 
-    if not isinstance(counter, int | float) or  not isinstance(total, int | float):
+    if not isinstance(counter, int | float) or not isinstance(
+        total, int | float
+    ):
         msg = "Counter and total must be integers or floats for % calculation"
         error("%s", msg)
         raise RuntimeError(msg)
@@ -48,4 +52,3 @@ def calculate_percentage(counter: int, total: int) -> float:
     info(f"Percentage calculated: {percentage}%")
 
     return percentage
-

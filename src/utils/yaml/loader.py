@@ -24,9 +24,7 @@ def load_yaml(path: str) -> Dict[str, Any]:
         RuntimeError: If the YAML file cannot be loaded
                       due to file errors or YAML parsing issues.
     """
-    debug(
-        f"YAML file path to be loaded: {path}"
-    )
+    debug(f"YAML file path to be loaded: {path}")
 
     try:
         # Load the YAML file from its path

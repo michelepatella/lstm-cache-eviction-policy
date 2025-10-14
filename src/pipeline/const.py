@@ -43,7 +43,6 @@ LOGS_SIMULATION_PHASE = "simulation"
 
 LOGS_FORMAT = "[%(phase)s] %(levelname)s: %(message)s"
 
-LOGS_CONSOLE_LEVEL = logging.ERROR
 LOGS_FILE_BASE_LEVEL = logging.DEBUG
 
 LOGS_DIRECTORY_PATH = PROJECT_ROOT / "logs"

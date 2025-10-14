@@ -24,7 +24,7 @@ def calculate_model_metrics(
     targets: List[int],
     predictions: List[int],
     outputs: List[torch.Tensor],
-    top_k: int
+    top_k: int,
 ) -> Dict[str, int | float]:
     """
     Calculate evaluation metrics for a model.

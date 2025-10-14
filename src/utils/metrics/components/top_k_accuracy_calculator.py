@@ -51,11 +51,15 @@ def calculate_top_k_accuracy(
 
         # Count correct predictions
         correct_predictions = sum(
-            1 for i, target in enumerate(targets) if target in top_k_predictions[i][:top_k]
+            1
+            for i, target in enumerate(targets)
+            if target in top_k_predictions[i][:top_k]
         )
 
         # Compute top-k accuracy
-        top_k_accuracy = calculate_percentage(correct_predictions, len(targets))
+        top_k_accuracy = calculate_percentage(
+            correct_predictions, len(targets)
+        )
 
         info(f"Top-{top_k} accuracy calculated")
     except (RuntimeError, IndexError, TypeError, ZeroDivisionError) as e:

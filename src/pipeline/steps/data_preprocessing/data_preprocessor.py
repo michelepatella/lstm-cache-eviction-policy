@@ -44,7 +44,9 @@ def preprocess_data() -> None:
     data_distribution_mode = config.data.generation.mode
 
     # Retrieve path to load dataset from
-    dataset_path = get_dataset_abs_path(DATASET_RAW_TYPE, data_distribution_mode)
+    dataset_path = get_dataset_abs_path(
+        DATASET_RAW_TYPE, data_distribution_mode
+    )
 
     # Load the dataset
     df = load_dataset(dataset_path)

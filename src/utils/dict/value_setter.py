@@ -11,7 +11,7 @@ def set_dict_value(
     value: int | float,
 ) -> None:
     """
-    Set a value in a (nested) dictionary given a sequence 
+    Set a value in a (nested) dictionary given a sequence
     of one or more keys.
 
     This function traverses a (nested) dictionary according

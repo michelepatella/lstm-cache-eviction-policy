@@ -7,8 +7,12 @@ from tqdm import tqdm
 
 from pipeline.config.classes.Config import Config
 from utils.evaluation.evaluator import evaluate_model
-from utils.model.initialization.components.best_model_updater import update_best_model
-from utils.model.initialization.components.model_state_dict_copier import copy_model_state_dict
+from utils.model.initialization.components.best_model_updater import (
+    update_best_model,
+)
+from utils.model.initialization.components.model_state_dict_copier import (
+    copy_model_state_dict,
+)
 from utils.training.callbacks.EarlyStopping import EarlyStopping
 from utils.training.one_epoch_trainer import train_one_epoch
 from utils.logs.levels.debug_logger import debug
@@ -87,7 +91,9 @@ def train_n_epochs(
         debug(f"Validation average loss: {avg_loss}")
 
         # Check for an update in average loss
-        best_avg_loss, new_model_weights = update_best_model(avg_loss, best_avg_loss, model)
+        best_avg_loss, new_model_weights = update_best_model(
+            avg_loss, best_avg_loss, model
+        )
 
         # Update best model weights (if any)
         if new_model_weights:
