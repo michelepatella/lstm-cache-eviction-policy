@@ -12,7 +12,7 @@ from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
 
-def train_one_epoch(
+def train_single_epoch(
     model: torch.nn.Module,
     training_loader: DataLoader,
     optimizer: Optimizer,

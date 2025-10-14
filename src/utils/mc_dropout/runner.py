@@ -9,7 +9,7 @@ from utils.logs.levels.info_logger import info
 from utils.mc_dropout.enabler import enable_mc_dropout
 
 
-def mc_forward_passes(
+def compute_mc_forward_passes(
     model: torch.nn.Module,
     inputs: Union[
         Tuple[torch.Tensor, torch.Tensor, torch.Tensor],

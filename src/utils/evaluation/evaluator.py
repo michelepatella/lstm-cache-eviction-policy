@@ -4,22 +4,14 @@ import torch
 from torch import Tensor
 from torch.utils.data import DataLoader
 
-from pipeline.config import Config
-from pipeline.const import (
-    MODEL_COMPUTE_METRICS_DEFAULT,
-    MODEL_METRICS_AVG_LOSS,
-    MODEL_METRICS_CLASS_REPORT_NAME,
-    MODEL_METRICS_ACCURACY_NAME,
-    MODEL_METRICS_MACRO_AVG_NAME,
-    MODEL_METRICS_WEIGHTED_AVG_NAME,
-)
+from pipeline.const import MODEL_COMPUTE_METRICS_DEFAULT
+from utils.evaluation.metrics.utils.saver import save_model_metrics
 from utils.inference.batches_inferrer import infer_batches
-from utils.metrics.calculator import (
+from utils.math.avg_calculator import calculate_average
+from utils.evaluation.metrics.calculator import (
     calculate_model_metrics,
 )
-from utils.json.saver import save_json
 from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
 
@@ -28,7 +20,8 @@ def evaluate_model(
     data_loader: DataLoader,
     criterion: torch.nn.Module,
     device: torch.device,
-    config: Config,
+    num_features: int,
+    top_k: int = None,
     model_results_save_path: str = None,
     compute_metrics: bool = MODEL_COMPUTE_METRICS_DEFAULT,
 ) -> Tuple[
@@ -47,7 +40,8 @@ def evaluate_model(
         data_loader (DataLoader): DataLoader containing the evaluation dataset.
         criterion (torch.nn.Module): Loss function used for evaluation.
         device (torch.device): Device on which to perform computations.
-        config (Config): Configuration object.
+        num_features (int): Number of features for the model.
+        top_k (int): Top-k for accuracy computation.
         model_results_save_path (str): Path to save metrics.
         compute_metrics (bool): Whether to compute evaluation metrics
                                 in addition to loss.
@@ -70,9 +64,6 @@ def evaluate_model(
             * Invalid type or attribute error when
               accessing the data loader length.
     """
-    # Retrieve number of features
-    num_features = config.model.general.features
-
     # Perform inference
     (
         total_loss,
@@ -82,25 +73,14 @@ def evaluate_model(
         all_variances,
     ) = infer_batches(model, data_loader, criterion, device, num_features)
 
-    try:
-        debug(f"Total loss accumulated: {total_loss}")
-        debug(f"Number of batches: {len(data_loader)}")
+    # Calculate average loss
+    avg_loss = calculate_average([total_loss / len(data_loader)])
 
-        # Calculate average loss
-        avg_loss = total_loss / len(data_loader)
-
-        debug(f"Average loss: {avg_loss}")
-    except (ZeroDivisionError, TypeError, AttributeError) as e:
-        msg = "Failed to compute average loss during model evaluation"
-        error("%s: %s", msg, e)
-        raise RuntimeError(msg) from e
+    debug(f"Average loss: {avg_loss}")
 
     # Compute metrics if requested
     metrics = None
     if compute_metrics:
-        # Prepare configuration
-        top_k = config.testing.metrics.top_k
-
         metrics = calculate_model_metrics(
             all_targets,
             all_predictions,
@@ -108,43 +88,10 @@ def evaluate_model(
             top_k,
         )
 
+        # Save metrics if requested (i.e., if the
+        # model results save path is specified)
         if model_results_save_path is not None:
-            metrics_to_save = {}
-
-            # Filter metrics
-            for k, v in metrics.items():
-                if k == MODEL_METRICS_CLASS_REPORT_NAME:
-                    # Keep only accuracy and both macro
-                    # and weighted average from class report
-                    if isinstance(v, dict):
-                        filtered_report = {
-                            rk: rv
-                            for rk, rv in v.items()
-                            if rk
-                            in [
-                                MODEL_METRICS_ACCURACY_NAME,
-                                MODEL_METRICS_MACRO_AVG_NAME,
-                                MODEL_METRICS_WEIGHTED_AVG_NAME,
-                            ]
-                        }
-
-                        metrics_to_save[k] = filtered_report
-                    else:
-                        # Fallback if is not a dictionary
-                        metrics_to_save[k] = v
-                else:
-                    # Keep all the other metrics
-                    metrics_to_save[k] = v
-
-            # Add average loss to metrics to be saved
-            metrics_to_save[MODEL_METRICS_AVG_LOSS] = avg_loss
-
-            # Save metrics as JSON file
-            save_json(metrics_to_save, model_results_save_path)
-
-            debug("Model results saved to JSON file")
-
-        debug("Evaluation metrics computed")
+            save_model_metrics(metrics, avg_loss, model_results_save_path)
 
     info("Model evaluation completed")
 

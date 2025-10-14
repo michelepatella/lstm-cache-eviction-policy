@@ -9,7 +9,7 @@ from pipeline.steps.validation.best_params.saver import save_best_params
 from pipeline.steps.validation.tuning.grid_search_runner import (
     compute_grid_search,
 )
-from utils.data_loader.initializer import initialize_data_loader
+from utils.data_loader.building.initializer import initialize_data_loader
 from utils.dataset.AccessLogsDataset import AccessLogsDataset
 from utils.dict.merger import merge_dicts
 from utils.logs.initializer import logs_phase

@@ -1,11 +1,11 @@
 from pipeline.const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE
 from pipeline.config.configurator import prepare_config
 from utils.model.saver import save_model
-from utils.dataset.splitter import split_training_set
-from utils.training.n_epochs_trainer import train_n_epochs
-from utils.data_loader.builder import create_data_loader
-from utils.data_loader.initializer import initialize_data_loader
-from utils.data_loader.targets_extractor import (
+from utils.dataset.building.splitter import split_training_set
+from utils.training.epochs_trainer import train_epochs
+from utils.data_loader.building.creator import create_data_loader
+from utils.data_loader.building.initializer import initialize_data_loader
+from utils.data_loader.targets.extractor import (
     extract_targets_from_data_loader,
 )
 from utils.dataset.AccessLogsDataset import AccessLogsDataset
@@ -84,7 +84,7 @@ def train_model() -> None:
     )
 
     # Train the model
-    _, model = train_n_epochs(
+    _, model = train_epochs(
         training_num_epochs,
         model,
         training_loader,

@@ -10,7 +10,7 @@ from pipeline.const import (
     MISS_COUNTER_NAME,
     TESTING_SPLIT_TYPE,
 )
-from utils.data_loader.initializer import initialize_data_loader
+from utils.data_loader.building.initializer import initialize_data_loader
 from pipeline.steps.simulation.running.utils.hit_miss_checker_updater import (
     check_update_hit_miss,
 )

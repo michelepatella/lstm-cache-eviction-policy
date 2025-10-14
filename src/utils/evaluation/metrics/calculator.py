@@ -7,13 +7,13 @@ from pipeline.const import (
     MODEL_METRICS_COHEN_KAPPA_SCORE_NAME,
     MODEL_METRICS_TOP_K_ACCURACY_NAME,
 )
-from utils.metrics.components.class_report_generator import (
+from utils.evaluation.metrics.components.class_report_generator import (
     generate_class_report,
 )
-from utils.metrics.components.cohen_kappa_score_calculator import (
+from utils.evaluation.metrics.components.cohen_kappa_score_calculator import (
     calculate_cohen_kappa_score,
 )
-from utils.metrics.components.top_k_accuracy_calculator import (
+from utils.evaluation.metrics.components.top_k_accuracy_calculator import (
     calculate_top_k_accuracy,
 )
 from utils.logs.levels.debug_logger import debug

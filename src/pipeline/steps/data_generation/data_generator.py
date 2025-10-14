@@ -16,7 +16,7 @@ from pipeline.steps.data_generation.requests.dynamic_generator import (
 from pipeline.steps.data_generation.requests.static_generator import (
     generate_static_requests,
 )
-from utils.dataset.builder import create_dataset
+from utils.dataset.building.creator import create_dataset
 from pipeline.steps.data_generation.visualization.plots.daily_profile_plotter import (
     plot_daily_profile,
 )
@@ -26,8 +26,8 @@ from pipeline.steps.data_generation.visualization.plots.key_usage_heatmap_plotte
 from pipeline.steps.data_generation.visualization.plots.zipf_loglog_plotter import (
     plot_zipf_loglog,
 )
-from utils.dataset.locator import get_dataset_abs_path
-from utils.dataset.saver import save_dataset
+from utils.dataset.io.locator import get_dataset_abs_path
+from utils.dataset.io.saver import save_dataset
 from utils.logs.initializer import logs_phase
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info

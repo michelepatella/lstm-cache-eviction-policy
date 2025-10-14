@@ -16,7 +16,7 @@ from pipeline.steps.testing.visualization.reporting.model_evaluation_reporter im
     generate_model_evaluation_report,
 )
 from utils.evaluation.evaluator import evaluate_model
-from utils.data_loader.initializer import initialize_data_loader
+from utils.data_loader.building.initializer import initialize_data_loader
 from utils.dataset.AccessLogsDataset import AccessLogsDataset
 from utils.logs.initializer import logs_phase
 from utils.logs.levels.info_logger import info
@@ -46,6 +46,7 @@ def test_model() -> None:
     data_distribution_mode = config.data.generation.mode
     testing_batch_size = config.testing.general.batch_size
     testing_shuffle = config.testing.general.shuffle
+    num_features = config.model.general.features
     top_k = config.testing.metrics.top_k
 
     # Setup testing data loader
@@ -88,7 +89,8 @@ def test_model() -> None:
         testing_loader,
         criterion,
         device,
-        config,
+        num_features,
+        top_k,
         model_results_save_path,
         compute_metrics=True,
     )

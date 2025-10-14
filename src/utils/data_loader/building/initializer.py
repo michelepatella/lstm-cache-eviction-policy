@@ -3,7 +3,7 @@ from typing import Tuple
 from torch.utils.data import DataLoader
 
 from pipeline.config.classes.Config import Config
-from utils.data_loader.builder import create_data_loader
+from utils.data_loader.building.creator import create_data_loader
 from utils.dataset.AccessLogsDataset import AccessLogsDataset
 from utils.logs.levels.info_logger import info
 

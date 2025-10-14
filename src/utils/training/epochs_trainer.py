@@ -14,12 +14,12 @@ from utils.model.initialization.components.model_state_dict_copier import (
     copy_model_state_dict,
 )
 from utils.training.callbacks.EarlyStopping import EarlyStopping
-from utils.training.one_epoch_trainer import train_one_epoch
+from utils.training.single_epoch_trainer import train_single_epoch
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
 
 
-def train_n_epochs(
+def train_epochs(
     num_epochs: int,
     model: torch.nn.Module,
     training_loader: DataLoader,
@@ -70,6 +70,9 @@ def train_n_epochs(
     best_model_weights = copy_model_state_dict(model)
     best_avg_loss = float("inf")
 
+    # Prepare configuration
+    num_features = config.model.general.features
+
     # Instantiate early stopping
     es = EarlyStopping(config)
 
@@ -78,14 +81,14 @@ def train_n_epochs(
         debug(f"Epoch started: {epoch}")
 
         # Train one epoch
-        train_one_epoch(
+        train_single_epoch(
             model, training_loader, optimizer, criterion, device, epoch
         )
 
         # Evaluate the model to get the
         # average loss after the current epoch
         avg_loss, *_ = evaluate_model(
-            model, validation_loader, criterion, device, config
+            model, validation_loader, criterion, device, num_features
         )
 
         debug(f"Validation average loss: {avg_loss}")

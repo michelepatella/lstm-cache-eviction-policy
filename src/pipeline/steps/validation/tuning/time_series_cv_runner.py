@@ -5,12 +5,12 @@ from box import Box
 from sklearn.model_selection import TimeSeriesSplit
 
 from pipeline.config.classes.Config import Config
-from utils.dataset.splitter import split_training_set
-from utils.training.n_epochs_trainer import train_n_epochs
-from utils.data_loader.builder import (
+from utils.dataset.building.splitter import split_training_set
+from utils.training.epochs_trainer import train_epochs
+from utils.data_loader.building.creator import (
     create_data_loader,
 )
-from utils.data_loader.targets_extractor import (
+from utils.data_loader.targets.extractor import (
     extract_targets_from_data_loader,
 )
 from utils.dataset.AccessLogsDataset import AccessLogsDataset
@@ -126,7 +126,7 @@ def compute_time_series_cv(
             )
 
             # Train model
-            avg_loss, _ = train_n_epochs(
+            avg_loss, _ = train_epochs(
                 cv_num_epochs,
                 model,
                 training_loader,

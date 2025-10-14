@@ -1,5 +1,4 @@
 from pipeline.const import (
-    DATASET_PREPROCESSED_TYPE,
     DATASET_RAW_TYPE,
     LOGS_DATA_PREPROCESSING_PHASE,
     TIMESTAMP_COLUMN_NAME,
@@ -14,9 +13,9 @@ from utils.dataset.cleaning.duplicates_remover import (
 from utils.dataset.cleaning.missing_values_remover import (
     remove_dataset_missing_values,
 )
-from utils.dataset.locator import get_dataset_abs_path
-from utils.dataset.saver import save_dataset
-from utils.dataset.loader import load_dataset
+from utils.dataset.io.locator import get_dataset_abs_path
+from utils.dataset.io.saver import save_dataset
+from utils.dataset.io.loader import load_dataset
 from utils.logs.initializer import logs_phase
 from utils.logs.levels.info_logger import info
 
