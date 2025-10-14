@@ -172,6 +172,9 @@ TRAINED_MODEL_DYNAMIC_DIRECTORY = PROJECT_ROOT / "models" / "dynamic"
 TRAINED_MODEL_STATIC_FILE_NAME = "trained_static_model.pt"
 TRAINED_MODEL_DYNAMIC_FILE_NAME = "trained_dynamic_model.pt"
 
+TRAINING_MODEL_MODE = "train"
+EVALUATION_MODEL_MODE = "eval"
+MC_DROPOUT_MODEL_MODE = "mc_dropout"
 
 # ----------------------------
 # Validation

@@ -2,11 +2,11 @@ from typing import Tuple, Union
 
 import torch
 
-from pipeline.const import MC_DROPOUT_NUM_SAMPLES_DEFAULT, MC_DROPOUT_FLAG
+from pipeline.const import MC_DROPOUT_NUM_SAMPLES_DEFAULT, MC_DROPOUT_FLAG, MC_DROPOUT_MODEL_MODE, EVALUATION_MODEL_MODE
 from utils.backpropagation.forward_runner import compute_forward
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
-from utils.mc_dropout.enabler import enable_mc_dropout
+from utils.model.mode_setter import set_model_mode
 
 
 def compute_mc_forward_passes(
@@ -51,20 +51,14 @@ def compute_mc_forward_passes(
            tensor of all MC outputs concatenated
            along a new dimension.
     """
-    # Enable MC Dropout if more than one MC
-    # dropout sample
+    # Set model mode depending on the
+    # number of samples passed
     if mc_dropout_samples > MC_DROPOUT_NUM_SAMPLES_DEFAULT:
-        # Enable MC dropout during inference
-        # (i.e., set the model to training mode)
-        enable_mc_dropout(model, MC_DROPOUT_FLAG)
-
-        debug(f"MC Dropout enabled for {mc_dropout_samples} forward passes")
+        # MC Dropout mode
+        set_model_mode(model, MC_DROPOUT_MODEL_MODE, MC_DROPOUT_FLAG)
     else:
-        # Set the model to evaluation mode
-        # during inference
-        model.eval()
-
-        debug("Model set to evaluation mode (no MC Dropout)")
+        # Evaluation mode
+        set_model_mode(model, EVALUATION_MODEL_MODE)
 
     # Initialization of MC outputs
     outputs_mc = []
@@ -89,21 +83,18 @@ def compute_mc_forward_passes(
 
     # Aggregate outputs
     outputs_mc_tensor = torch.cat(outputs_mc, dim=0)
+    debug(f"Outputs tensor shape: {outputs_mc_tensor.shape}")
 
     # Calculate outputs mean
     outputs_mean = outputs_mc_tensor.mean(dim=0)
+    debug(f"Outputs mean shape: {outputs_mean.shape}")
 
     # Calculate outputs variance provided that
     # the number of MC dropout sample is greater
     # than the default value
+    outputs_var = None
     if mc_dropout_samples > MC_DROPOUT_NUM_SAMPLES_DEFAULT:
         outputs_var = outputs_mc_tensor.var(dim=0, unbiased=False)
-    else:
-        outputs_var = None
-
-    debug(f"Outputs tensor shape: {outputs_mc_tensor.shape}")
-    debug(f"Outputs mean shape: {outputs_mean.shape}")
-    if outputs_var is not None:
         debug(f"Outputs variance shape: {outputs_var.shape}")
 
     info("MC forward pass(es) completed")
