@@ -8,7 +8,7 @@ from pipeline.const import (
     DATA_GENERATION_INITIAL_TIMESTAMP,
 )
 from pipeline.config.classes.Config import Config
-from pipeline.steps.data_generation.patterns.utils.single_pattern_request_generator import (
+from pipeline.steps.data_generation.patterns.single_generator import (
     generate_single_pattern_request,
 )
 from utils.logs.levels.debug_logger import debug

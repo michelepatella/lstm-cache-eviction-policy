@@ -11,7 +11,7 @@ from pipeline.const import (
 )
 
 
-def save_model_metrics(
+def save_model_results(
     metrics: Dict[str, int | float], avg_loss: float, path: str
 ) -> None:
     """

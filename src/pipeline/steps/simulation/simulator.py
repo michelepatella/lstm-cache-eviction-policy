@@ -35,6 +35,7 @@ from pipeline.steps.simulation.caches.utils.classes.CacheWrapper import (
 from pipeline.steps.simulation.metrics.calculator import (
     calculate_cache_simulation_metrics,
 )
+from pipeline.steps.simulation.metrics.io.saver import save_simulation_results
 from pipeline.steps.simulation.running.simulation_runner import (
     run_cache_simulation,
 )
@@ -154,16 +155,8 @@ def run_simulations() -> None:
         RESULTS_DIRECTORY_PATH / data_distribution_mode / results_file_name
     )
 
-    # Filter out all results except
-    # timeline
-    results_to_save = [
-        {k: v for k, v in result.items() if k != TIMELINE_NAME}
-        for result in results
-    ]
-
-    save_json(results_to_save, results_save_path)
-
-    debug("Simulation results saved to JSON file")
+    # Save simulation results
+    save_simulation_results(results, results_save_path)
 
     # Plot hit and miss rates over time
     hit_miss_rate_plot_save_path = (

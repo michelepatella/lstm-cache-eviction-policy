@@ -10,13 +10,13 @@ from pipeline.const import (
     MISS_COUNTER_NAME,
     TESTING_SPLIT_TYPE,
 )
-from utils.data_loader.building.initializer import initialize_data_loader
-from pipeline.steps.simulation.running.utils.hit_miss_checker_updater import (
+from pipeline.steps.simulation.running.hit_miss.checker_updater import (
     check_update_hit_miss,
 )
-from pipeline.steps.simulation.running.utils.hit_miss_timeline_updater import (
+from pipeline.steps.simulation.running.hit_miss.timeline_updater import (
     update_hit_miss_timeline,
 )
+from utils.data_loader.building.initializer import initialize_data_loader
 from pipeline.steps.simulation.utils.time_key_from_row_extractor import (
     extract_time_key_from_row,
 )
@@ -84,36 +84,30 @@ def run_cache_simulation(
             range(len(testing_set)),
             desc=f"Simulating {policy}",
         ):
-            # Extract the current row
-            # from the dataset
+            # Extract the current row from the dataset
             row = testing_set[idx]
 
             # Extrapolate current time and requested
             # key from the current row
             current_time, key = extract_time_key_from_row(row)
 
-            # Start timer to keep track of
-            # cache latency
+            # Start timer to keep track of cache latency
             start_time = time.perf_counter()
 
             # Check whether the requested key
             # is into the baseline cache
             is_hit = check_update_hit_miss(cache, key, current_time, counters)
 
-            # If the requested key is not
-            # into the cache
+            # If the requested key is not into the cache
             if not is_hit:
                 if policy == LSTM_CACHE_NAME:
-                    # Put the requested key
-                    # into the LSTM cache
+                    # Put the requested key into the LSTM cache
                     cache.put(key, current_time, idx, testing_set, config)
                 else:
-                    # Put the requested key
-                    # into the baseline cache
+                    # Put the requested key into the baseline cache
                     cache.put(key, current_time)
 
-            # Stop timer to keep track of
-            # cache latency
+            # Stop timer to keep track of cache latency
             end_time = time.perf_counter()
 
             # Store cache latency

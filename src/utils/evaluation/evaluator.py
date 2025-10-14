@@ -5,7 +5,7 @@ from torch import Tensor
 from torch.utils.data import DataLoader
 
 from pipeline.const import MODEL_COMPUTE_METRICS_DEFAULT
-from utils.evaluation.metrics.utils.saver import save_model_metrics
+from utils.evaluation.metrics.io.saver import save_model_results
 from utils.inference.batches_inferrer import infer_batches
 from utils.math.avg_calculator import calculate_average
 from utils.evaluation.metrics.calculator import (
@@ -91,7 +91,7 @@ def evaluate_model(
         # Save metrics if requested (i.e., if the
         # model results save path is specified)
         if model_results_save_path is not None:
-            save_model_metrics(metrics, avg_loss, model_results_save_path)
+            save_model_results(metrics, avg_loss, model_results_save_path)
 
     info("Model evaluation completed")
 
