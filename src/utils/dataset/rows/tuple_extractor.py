@@ -35,9 +35,9 @@ def extract_tuple_from_dataset_row(
         target_dtype (torch.dtype): Type for the target tensor.
 
     Returns:
-        Tuple[torch.Tensor, torch.Tensor]: A tuple consisting of a tensor containing
-                                           the extracted feature value(s) and a tensor
-                                           containing the extracted target value.
+        Tuple[torch.Tensor, torch.Tensor]:
+            - features: Tensor containing the extracted feature value(s) from the dataset row.
+            - target: Tensor containing the extracted target value from the dataset row.
 
     Raises:
         RuntimeError: If an error occurs while extracting a tuple from

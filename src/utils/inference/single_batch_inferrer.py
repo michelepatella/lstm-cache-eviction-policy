@@ -38,10 +38,15 @@ def infer_single_batch(
         device (torch.device): Device to run computations on.
         num_features (int): Number of features for the model.
 
-    Returns:
-        Tuple[
-            float, List[int], List[int], List[torch.Tensor], List[torch.Tensor]
-        ]: Tuple containing loss, predictions, targets, outputs, and optionally variances.
+        Returns:
+            Tuple[
+                float, List[int], List[int], List[torch.Tensor], List[torch.Tensor]
+            ]:
+                - loss: Float representing the computed loss for the batch.
+                - predictions: List of predicted class indices for each sample in the batch.
+                - targets_list: List of ground truth labels corresponding to each sample in the batch.
+                - outputs_list: List of tensors containing model outputs for each sample in the batch.
+                - variances: List of tensors containing MC Dropout variances for each sample (empty if not computed).
 
     Raises:
         RuntimeError: If an error occurs during batch processing, e.g.:

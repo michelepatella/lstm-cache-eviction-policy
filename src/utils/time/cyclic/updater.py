@@ -23,8 +23,9 @@ def update_cyclic_time(
         delta_t (float): Time increment to apply.
 
     Returns:
-        Tuple[float, int]: Updated time within the cycle and updated
-                           cycle count.
+        Tuple[float, int]:
+            - current_time_in_cycle: Updated time within the current cycle after applying delta_t.
+            - cycle_count: Updated cycle count after overflow beyond the period.
     """
     debug(
         f"Current time in cycle: {current_time_in_cycle}, "

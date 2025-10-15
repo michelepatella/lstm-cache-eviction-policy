@@ -39,8 +39,9 @@ def generate_pattern_requests(
         time_step_duration (int): Time step to generate requests for.
 
     Returns:
-        Tuple[List[int], List[float]]: List of requests along with their
-                                       corresponding timestamps.
+        Tuple[List[int], List[float]]:
+            - requests: List of generated requests (key indices).
+            - timestamps_seconds: Corresponding timestamps of the requests in seconds.
     """
     # Initialize data
     requests = []

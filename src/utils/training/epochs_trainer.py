@@ -51,10 +51,9 @@ def train_epochs(
         config (Config): Configuration object.
 
     Returns:
-        Tuple[float, torch.nn.Module]: Tuple containing the best
-                                       average loss achieved
-                                       during training and the
-                                       best trained model.
+        Tuple[float, torch.nn.Module]:
+            - best_avg_loss: The best average loss achieved during training.
+            - model: The trained model with the best weights applied.
     """
     debug(
         f"General training configuration:\n"

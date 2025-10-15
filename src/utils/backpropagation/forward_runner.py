@@ -45,10 +45,9 @@ def compute_forward(
                                computations.
 
     Returns:
-        Tuple[torch.Tensor | None,
-        torch.Tensor]: Tuple containing computed loss
-                       (None if criterion is None) and
-                       model outputs.
+        Tuple[torch.Tensor | None, torch.Tensor]:
+            - loss: Computed loss using the criterion (None if criterion is not provided).
+            - outputs: Model outputs from the forward pass.
 
     Raises:
         RuntimeError: If an error occurs while calculating the loss.

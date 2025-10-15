@@ -23,7 +23,9 @@ def encode_time_trigonometrically(
         cycle_length (float): Length of the repeating cycle (default 24).
 
     Returns:
-        Tuple[np.ndarray, np.ndarray]: Cosine and sine time produced.
+        Tuple[np.ndarray, np.ndarray]:
+            - cos_time: Numpy array of cosine values representing cyclical time.
+            - sin_time: Numpy array of sine values representing cyclical time.
 
     Raises:
         RuntimeError: If an error occurs while

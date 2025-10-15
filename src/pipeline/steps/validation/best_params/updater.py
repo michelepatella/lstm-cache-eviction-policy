@@ -28,8 +28,9 @@ def check_and_update_best_params(
         best_params (Dict[str, Any]): Best parameter set found so far.
 
     Returns:
-        Tuple[float, Dict[str, Any]]: Updated best average loss and
-                                      best parameter set.
+        Tuple[float, Dict[str, Any]]:
+            - best_avg_loss: The updated best average loss after comparison.
+            - best_params: The parameter set corresponding to the best average loss.
 
     Raises:
         RuntimeError: If average loss or the best one

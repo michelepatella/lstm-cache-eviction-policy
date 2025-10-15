@@ -33,8 +33,9 @@ def initialize_data_loader(
                                                  data loader.
 
     Returns:
-        Tuple[AccessLogsDataset, DataLoader]: Tuple of dataset instance
-                                              and data loader created.
+        Tuple[AccessLogsDataset, DataLoader]:
+            - dataset: Instantiated dataset object of the specified class.
+            - data_loader: DataLoader created from the dataset instance.
     """
     # Get a dataset instance
     dataset = dataset_class(data_loader_type, config)

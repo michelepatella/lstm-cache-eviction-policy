@@ -29,7 +29,9 @@ def split_training_validation(
         validation_idx (List[int] | None): Validation set index.
 
     Returns:
-        Tuple[Subset, Subset]: Training and validation subsets.
+        Tuple[Subset, Subset]:
+            - final_training_set: PyTorch Subset containing the training portion of the dataset.
+            - final_validation_set: PyTorch Subset containing the validation portion of the dataset.
 
     Raises:
         RuntimeError: If any error occurs during training set splitting, e.g.:

@@ -44,17 +44,10 @@ def compute_mc_dropout_forward_passes(
         mc_dropout_samples (int): Number of MC Dropout samples to perform.
 
     Returns:
-        Tuple[
-        torch.Tensor, torch.Tensor | None, torch.Tensor
-        ]: Tuple containing a tensor for mean
-           of outputs across one or more MC
-           samples, a tensor for variance of
-           outputs across one or more MC
-           (computed if and only if the provided
-           number of Monte Carlo dropout samples
-           is greater than default value), and a
-           tensor of all MC outputs concatenated
-           along a new dimension.
+        Tuple[torch.Tensor, torch.Tensor | None, torch.Tensor]:
+            - outputs_mean: Mean of outputs across one or more MC dropout samples.
+            - outputs_var: Variance of outputs across MC dropout samples (None if only default single pass).
+            - outputs_mc_tensor: All MC outputs concatenated along a new dimension.
     """
     # Set model mode depending on the
     # number of samples passed

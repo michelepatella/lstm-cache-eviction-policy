@@ -41,10 +41,11 @@ def generate_single_pattern_request(
         config (Config): Configuration object.
 
     Returns:
-        Tuple[int, float, float, int]: Tuple containing the generated key
-                                       request, absolute timestamp in seconds,
-                                       updated seconds in current day, and
-                                       updated day count.
+        Tuple[int, float, float, int]:
+            - request: The generated key request.
+            - absolute_seconds: Absolute timestamp of the request in seconds.
+            - current_seconds_in_day: Updated seconds elapsed in the current day.
+            - current_day: Updated day count in the simulation.
     """
     debug(
         f"Generating single request for day {current_day}, "

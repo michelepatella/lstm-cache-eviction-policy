@@ -32,7 +32,9 @@ def generate_requests_for_alpha(
         time_step_duration (int): Time step duration for generation.
 
     Returns:
-        Tuple[List[int], List[float]]: Generated requests and timestamps in seconds.
+        Tuple[List[int], List[float]]:
+            - requests: List of generated requests (key indices).
+            - timestamps_seconds: Corresponding timestamps of the requests in seconds.
     """
     debug(f"Alpha to generate requests for: {alpha}")
 

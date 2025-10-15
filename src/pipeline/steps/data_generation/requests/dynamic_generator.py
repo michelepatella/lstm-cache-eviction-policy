@@ -28,8 +28,9 @@ def generate_dynamic_requests(
         config (Config): Configuration object.
 
     Returns:
-        Tuple[List[int], np.ndarray]: Keys requested and corresponding
-                                      timestamps in hours.
+        Tuple[List[int], np.ndarray]:
+            - requests: List of generated keys requested.
+            - timestamps_hours: Corresponding timestamps of requests in hours.
     """
     # Retrieve Zipfian config
     zipf_config = config.data.generation.pattern.access.zipf

@@ -37,9 +37,11 @@ def calculate_cache_simulation_metrics(
                                              events.
 
     Returns:
-        Tuple[float, float, float, float]: A tuple containing cache hit rate,
-                                           miss rate, eviction mistake, and
-                                           average latency.
+        Tuple[float, float, float, float]:
+            - hit_rate: Cache hit rate as a percentage.
+            - miss_rate: Cache miss rate as a percentage.
+            - eviction_mistake_rate: Rate of eviction mistakes over the given window.
+            - avg_cache_latency: Average latency of cache accesses.
     """
     # Get total cache accesses
     total_cache_accesses = (

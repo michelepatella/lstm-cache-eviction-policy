@@ -45,8 +45,9 @@ def initialize_autoregressive_rollout(
         embedding_dim (int): Dimension of embedding layer.
 
     Returns:
-        Tuple[torch.nn.Module, torch.device]: The initialized model and
-                                              the device it resides on.
+        Tuple[torch.nn.Module, torch.device]:
+            - model: The initialized model ready for autoregressive rollout.
+            - device: The computation device on which the model resides.
     """
     # Select computation device
     device = select_device(device_type)

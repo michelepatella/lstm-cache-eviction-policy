@@ -48,14 +48,13 @@ def evaluate_model(
 
     Returns:
         Tuple[
-        float, Dict[str, int | float] | None,
-        torch.Tensor, List[int], List[float]
+        float, Dict[str, int | float] | None, List[Tensor], List[int], List[Tensor]
         ]:
-            Tuple containing the average loss,
-            (optionally) a dictionary of
-            evaluation metrics, model outputs,
-            ground truth labels, and
-            variances from MC dropout (if applicable).
+            - avg_loss: Float representing the average loss over the data loader.
+            - metrics: Optional dictionary of evaluation metrics (classification report, top-k accuracy, Cohen’s kappa), or None if not computed.
+            - all_outputs: List of tensors containing the model outputs per batch.
+            - all_targets: List of ground truth labels corresponding to the inputs.
+            - all_variances: List of tensors containing variances from MC dropout (if applicable), otherwise empty.
 
     Raises:
         RuntimeError: If an error occurs during the

@@ -25,8 +25,9 @@ def generate_static_requests(
         config (Config): Configuration object.
 
     Returns:
-        Tuple[List[int], np.ndarray]: Keys requested and corresponding
-                                      timestamps in hours.
+        Tuple[List[int], np.ndarray]:
+            - requests: List of generated keys requested.
+            - timestamps_hours: Corresponding timestamps of requests in hours.
     """
     # Use common helper to generate
     # requests based on a fixed alpha value

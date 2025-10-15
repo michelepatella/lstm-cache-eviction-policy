@@ -39,10 +39,10 @@ def initialize_model_components(
                                 computing class weights.
 
     Returns:
-        Tuple[torch.device, torch.nn.Module, torch.nn.Module]: Tuple containing the device
-                                                               used for computations, criterion,
-                                                               and instantiated model
-                                                               on the selected device.
+        Tuple[torch.device, torch.nn.Module, torch.nn.Module]:
+            - device: The device used for computations.
+            - criterion: Loss function initialized with class weights.
+            - model: Pre-trained model ready for inference or testing.
     """
     # Prepare configuration
     device_type = config.hardware.device

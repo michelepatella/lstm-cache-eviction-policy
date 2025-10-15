@@ -33,14 +33,13 @@ def infer_batches(
 
     Returns:
         Tuple[
-        float, List[int], List[int],
-        List[torch.Tensor], List[torch.Tensor
-        ]]:
-            Tuple containing sum of batch losses,
-            predicted class indices per sample,
-            ground truth labels per sample, model
-            outputs per batch, and variances
-            from MC dropout.
+        float, List[int], List[int], List[torch.Tensor], List[torch.Tensor]
+        ]:
+            - total_loss: Float representing the sum of batch losses across the data loader.
+            - all_predictions: List of predicted class indices for each sample.
+            - all_targets: List of ground truth labels corresponding to each sample.
+            - all_outputs: List of tensors containing model outputs per batch.
+            - all_variances: List of tensors containing variances from MC dropout per batch (if applicable).
     """
     # Initialization
     total_loss = 0.0

@@ -48,8 +48,9 @@ def run_cache_simulation(
 
     Returns:
         Tuple[Dict[str, int], List[Dict[str, float]], List[float]]:
-            A tuple containing counters for hits and misses, a timeline
-            of hits and misses evolution, and a list of caches latencies.
+            - counters: Dictionary containing hit and miss counts.
+            - timeline: List of dictionaries showing the evolution of hits and misses over time.
+            - cache_latencies: List of cache access latencies in microseconds.
 
     Raises:
         RuntimeError: If an error occurs during the cache simulation, e.g.:

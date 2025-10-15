@@ -32,8 +32,9 @@ def generate_requests_helper(
                                    for dynamic requests.
 
     Returns:
-        Tuple[List[int], np.ndarray]: Generated requests and
-                                      timestamps in hours.
+        Tuple[List[int], np.ndarray]:
+            - requests: List of generated keys requested.
+            - timestamps_hours: Corresponding timestamps of the requests in hours.
     """
     # Retrieve keys range from configuration
     keys_config = config.data.generation.keys
