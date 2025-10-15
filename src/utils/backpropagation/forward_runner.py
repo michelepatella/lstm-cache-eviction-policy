@@ -7,7 +7,7 @@ from utils.device.mover import (
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
-from utils.loss_calculator import calculate_loss
+from utils.criterion.calculator import calculate_loss
 
 
 def compute_forward(

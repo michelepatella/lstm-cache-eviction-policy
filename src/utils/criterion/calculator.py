@@ -19,7 +19,7 @@ def calculate_loss(
     Args:
         outputs (torch.Tensor): Model predictions.
         targets (torch.Tensor): Ground truth target tensor.
-        criterion (torch.nn.Module): Loss function.
+        criterion (torch.nn.Module): Criterion to use for loss calculation.
 
     Returns:
         torch.Tensor | None: Calculated loss (None if something went wrong).
