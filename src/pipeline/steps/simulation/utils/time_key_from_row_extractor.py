@@ -7,6 +7,9 @@ from pipeline.const import HOURS_IN_DAY, SECONDS_IN_HOUR
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
+from utils.time.encoding_decoding.trig_decoder import (
+    decode_time_trigonometrically,
+)
 
 
 def extract_time_key_from_row(
@@ -46,19 +49,8 @@ def extract_time_key_from_row(
             f" extracted from row"
         )
 
-        # Compute angle in radians
-        angle = math.atan2(sin_time, cos_time)
-
-        debug(f"Raw angle extracted from row: {angle} (radians)")
-
-        # Normalize angle to be always
-        # positive
-        if angle < 0:
-            angle += 2 * math.pi
-            debug(f"Normalized angle after row extraction: {angle} (radians)")
-
-        # Convert to time seconds
-        current_time = angle / (2 * math.pi) * HOURS_IN_DAY * SECONDS_IN_HOUR
+        # Decode trigonometric time back to seconds
+        current_time = decode_time_trigonometrically(sin_time, cos_time)
 
         # Extract the requested key
         key = y_key.item()
