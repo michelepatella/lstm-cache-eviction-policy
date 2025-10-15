@@ -15,8 +15,8 @@ from pipeline.steps.simulation.caches.utils.classes.BaseCache import BaseCache
 from pipeline.steps.simulation.caches.utils.classes.CacheMetricsLogger import (
     CacheMetricsLogger,
 )
-from pipeline.steps.simulation.caches.utils.last_accesses_extractor import (
-    get_last_accesses,
+from utils.dataset.rows.lasts_extractor import (
+    extract_last_rows_from_dataset,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
@@ -143,7 +143,7 @@ class LSTMCache(BaseCache):
 
             # Extract last accesses of
             # sequence length
-            last_accesses = get_last_accesses(
+            last_accesses = extract_last_rows_from_dataset(
                 current_idx, seq_len, testing_set
             )
 
