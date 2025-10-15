@@ -11,7 +11,7 @@ from pipeline.const import (
 from utils.backpropagation.forward_runner import compute_forward
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
-from utils.model.mode_setter import set_model_mode
+from utils.model.mode.setter import set_model_mode
 
 
 def compute_mc_dropout_forward_passes(

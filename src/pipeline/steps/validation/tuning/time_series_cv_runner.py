@@ -18,9 +18,8 @@ from utils.dataset.building.training_validation_splitter import (
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
-from utils.model.building.initialization.components import (
-    initialize_model_components,
-)
+from utils.model.components.initializer import initialize_model_components
+from utils.optimizer.builder import build_optimizer
 from utils.training.epochs_trainer import train_epochs
 
 
@@ -66,6 +65,9 @@ def compute_time_series_cv(
     cv_num_epochs = config.validation.cross_validation.epochs
     training_shuffle = config.training.general.shuffle
     validation_shuffle = config.validation.general.shuffle
+    optimizer_type = config.training.optimizer.type
+    learning_rate = config.training.optimizer.params.learning_rate
+    weight_decay = config.training.optimizer.params.weight_decay
 
     debug(f"Number of folds for time series cross-validation: {cv_num_folds}")
 
@@ -119,10 +121,18 @@ def compute_time_series_cv(
             targets = extract_targets_from_data_loader(training_loader)
 
             # Setup model
-            device, criterion, model, optimizer = initialize_model_components(
+            device, criterion, model = initialize_model_components(
                 params_box.model,
                 config,
                 targets,
+            )
+
+            # Build optimizer
+            optimizer = build_optimizer(
+                model,
+                optimizer_type,
+                lr=learning_rate,
+                weight_decay=weight_decay,
             )
 
             # Train model

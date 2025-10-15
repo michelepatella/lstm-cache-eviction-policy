@@ -9,7 +9,7 @@ from pipeline.config.classes.Config import Config
 from utils.evaluation.evaluator import evaluate_model
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.info_logger import info
-from utils.model.best_model_updater import (
+from utils.model.best.updater import (
     update_best_model,
 )
 from utils.model.state_dict.copier import (

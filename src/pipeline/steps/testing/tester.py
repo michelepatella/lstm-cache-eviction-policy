@@ -21,10 +21,10 @@ from utils.dataset.AccessLogsDataset import AccessLogsDataset
 from utils.evaluation.evaluator import evaluate_model
 from utils.logs.initializer import logs_phase
 from utils.logs.levels.info_logger import info
-from utils.model.building.initialization.trained_model import (
+from utils.model.mode.setter import set_model_mode
+from utils.model.trained.initializer import (
     initialize_trained_model,
 )
-from utils.model.mode_setter import set_model_mode
 
 
 def test_model() -> None:
@@ -50,6 +50,7 @@ def test_model() -> None:
     testing_shuffle = config.testing.general.shuffle
     num_features = config.model.general.features
     top_k = config.testing.metrics.top_k
+    model_params = config.model.params
 
     # Setup testing data loader
     _, testing_loader = initialize_data_loader(
@@ -61,7 +62,9 @@ def test_model() -> None:
     )
 
     # Trained model setup for testing
-    device, criterion, model = initialize_trained_model(config, testing_loader)
+    device, criterion, model = initialize_trained_model(
+        model_params, data_distribution_mode, config, testing_loader
+    )
 
     # Set model in evaluation phase
     set_model_mode(model, EVALUATION_MODEL_MODE)

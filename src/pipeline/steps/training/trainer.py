@@ -11,11 +11,10 @@ from utils.dataset.building.training_validation_splitter import (
 )
 from utils.logs.initializer import logs_phase
 from utils.logs.levels.info_logger import info
-from utils.model.building.initialization.components import (
-    initialize_model_components,
-)
+from utils.model.components.initializer import initialize_model_components
 from utils.model.io.locator import get_model_abs_path
 from utils.model.io.saver import save_model
+from utils.optimizer.builder import build_optimizer
 from utils.training.epochs_trainer import train_epochs
 
 
@@ -46,6 +45,9 @@ def train_model() -> None:
     validation_split = config.dataset.split.validation
     model_params = config.model.params
     training_num_epochs = config.training.general.epochs
+    optimizer_type = config.training.optimizer.type
+    learning_rate = config.training.optimizer.params.learning_rate
+    weight_decay = config.training.optimizer.params.weight_decay
 
     # Get the model path
     model_path = get_model_abs_path(data_distribution_mode)
@@ -83,8 +85,13 @@ def train_model() -> None:
     targets = extract_targets_from_data_loader(training_loader)
 
     # Model setup for training
-    device, criterion, model, optimizer = initialize_model_components(
+    device, criterion, model = initialize_model_components(
         model_params, config, targets
+    )
+
+    # Build optimizer
+    optimizer = build_optimizer(
+        model, optimizer_type, lr=learning_rate, weight_decay=weight_decay
     )
 
     # Train the model

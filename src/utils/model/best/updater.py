@@ -35,7 +35,7 @@ def update_best_model(
         best_avg_loss = avg_loss
         best_model_weights = copy_model_state_dict(model)
 
-        info(f"Model update completed (New best avg loss: {best_avg_loss})")
+        info(f"Model updated (New best avg loss: {best_avg_loss})")
 
         return best_avg_loss, best_model_weights
 

@@ -5,13 +5,12 @@ from torch import nn
 from torch.utils.data import DataLoader
 
 from pipeline.config.classes.Config import Config
+from pipeline.config.classes.ModelConfig import ModelParamsConfig
 from utils.data_loader.targets.extractor import (
     extract_targets_from_data_loader,
 )
 from utils.logs.levels.info_logger import info
-from utils.model.building.initialization.components import (
-    initialize_model_components,
-)
+from utils.model.components.initializer import initialize_model_components
 from utils.model.io.locator import get_model_abs_path
 from utils.model.state_dict.loader import (
     load_model_state_dict,
@@ -19,44 +18,39 @@ from utils.model.state_dict.loader import (
 
 
 def initialize_trained_model(
+    model_params: ModelParamsConfig,
+    data_distribution_mode: str,
     config: Config,
     data_loader: DataLoader = None,
 ) -> Tuple[torch.device, nn.Module, nn.Module]:
     """
     Prepare a trained model for further usage.
 
-    This function sets up the model components, extracts the target labels
-    from the provided data loader, initializes
-    the model with the correct device,
-    loss function, and loads pre-trained weights.
+    This function extracts the target labels, sets up the model components,
+    and loads pre-trained weights.
 
     Args:
+        model_params (ModelParamsConfig): Model hyperparameters.
+        data_distribution_mode (str): Mode to determine the path of the trained model.
         config (Config): Configuration object.
         data_loader (DataLoader | None): DataLoader containing the
                                          dataset to be used.
 
     Returns:
-        Tuple[
-        torch.device, torch.nn.Module, torch.nn.Module
-        ]: Tuple containing the device on which
-           the model is loaded, loss function initialized
-           with class weights, and pre-trained model.
+        Tuple[torch.device, nn.Module, nn.Module]:
+            - device: The device on which the model is loaded.
+            - criterion: Loss function initialized with class weights.
+            - model: Pre-trained model ready for inference or testing.
     """
-    # Prepare configuration
-    model_params = config.model.params
-    data_distribution_mode = config.data.generation.mode
-
     # Get the model path
     model_path = get_model_abs_path(data_distribution_mode)
 
-    targets = None
-    if data_loader is not None:
-        # Extract targets from
-        # provided data loader
-        targets = extract_targets_from_data_loader(data_loader)
+    # Extract targets from
+    # provided data loader
+    targets = extract_targets_from_data_loader(data_loader)
 
     # Setup for model components
-    device, criterion, model, _ = initialize_model_components(
+    device, criterion, model = initialize_model_components(
         model_params, config, targets
     )
 

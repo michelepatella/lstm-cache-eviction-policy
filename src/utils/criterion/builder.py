@@ -1,10 +1,11 @@
-from torch import nn
 import torch
+from torch import nn
+
+from utils.criterion.class_weights.calculator import calculate_class_weight
 from utils.device.mover import move_to_device
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
-from utils.criterion.class_weights.calculator import calculate_class_weight
 
 
 def build_criterion(
