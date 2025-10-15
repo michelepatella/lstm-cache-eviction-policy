@@ -1,4 +1,5 @@
-from typing import Tuple, Dict
+from typing import Dict, Tuple
+
 import torch
 
 from utils.logs.levels.info_logger import info

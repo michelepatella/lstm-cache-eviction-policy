@@ -2,12 +2,12 @@ from typing import List, Tuple
 
 import numpy as np
 
+from pipeline.config.classes.Config import Config
 from pipeline.const import (
     DATA_GENERATION_INITIAL_CURRENT_DAY,
     DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY,
     DATA_GENERATION_INITIAL_TIMESTAMP,
 )
-from pipeline.config.classes.Config import Config
 from pipeline.steps.data_generation.patterns.single_generator import (
     generate_single_pattern_request,
 )

@@ -2,12 +2,12 @@ from typing import Tuple, Union
 
 import torch
 
-from utils.loss_calculator import calculate_loss
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
 from utils.device.mover import (
     move_to_device,
 )
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
+from utils.loss_calculator import calculate_loss
 
 
 def compute_forward(

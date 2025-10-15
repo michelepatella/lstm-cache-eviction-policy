@@ -7,6 +7,8 @@ from tqdm import tqdm
 
 from pipeline.config.classes.Config import Config
 from utils.evaluation.evaluator import evaluate_model
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 from utils.model.best_model_updater import (
     update_best_model,
 )
@@ -15,8 +17,6 @@ from utils.model.state_dict.copier import (
 )
 from utils.training.callbacks.EarlyStopping import EarlyStopping
 from utils.training.single_epoch_trainer import train_single_epoch
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
 
 
 def train_epochs(

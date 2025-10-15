@@ -1,30 +1,30 @@
 from box.box import Box
 
+from pipeline.config.configurator import prepare_config
 from pipeline.const import (
+    DATA_DISTRIBUTION_STATIC_MODE,
+    DYNAMIC_MODEL_RESULTS_FILE_NAME,
+    EVALUATION_MODEL_MODE,
     LOGS_TESTING_PHASE,
     MODEL_METRICS_CLASS_REPORT_NAME,
     MODEL_METRICS_COHEN_KAPPA_SCORE_NAME,
     MODEL_METRICS_TOP_K_ACCURACY_NAME,
-    STATIC_MODEL_RESULTS_FILE_NAME,
     RESULTS_DIRECTORY_PATH,
+    STATIC_MODEL_RESULTS_FILE_NAME,
     TESTING_SPLIT_TYPE,
-    DATA_DISTRIBUTION_STATIC_MODE,
-    DYNAMIC_MODEL_RESULTS_FILE_NAME,
-    EVALUATION_MODEL_MODE,
 )
-from pipeline.config.configurator import prepare_config
 from pipeline.steps.testing.visualization.reporting.model_evaluation_reporter import (
     generate_model_evaluation_report,
 )
-from utils.evaluation.evaluator import evaluate_model
 from utils.data_loader.building.initializer import initialize_data_loader
 from utils.dataset.AccessLogsDataset import AccessLogsDataset
+from utils.evaluation.evaluator import evaluate_model
 from utils.logs.initializer import logs_phase
 from utils.logs.levels.info_logger import info
-from utils.model.mode_setter import set_model_mode
-from utils.model.trained_model_initializer import (
+from utils.model.building.initialization.trained_model import (
     initialize_trained_model,
 )
+from utils.model.mode_setter import set_model_mode
 
 
 def test_model() -> None:

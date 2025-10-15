@@ -1,19 +1,19 @@
 import pandas as pd
 
 from pipeline.const import (
-    SIN_TIME_COLUMN_NAME,
     COS_TIME_COLUMN_NAME,
-    TIMESTAMP_COLUMN_NAME,
     REQUEST_COLUMN_NAME,
+    SIN_TIME_COLUMN_NAME,
+    TIMESTAMP_COLUMN_NAME,
 )
-from utils.dataset.columns.setter import set_dataset_column
 from utils.dataset.columns.dropper import drop_dataset_column
 from utils.dataset.columns.reorderer import reorder_dataset_columns
+from utils.dataset.columns.setter import set_dataset_column
+from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
 from utils.time.encoding_decoding.trig_encoder import (
     encode_time_trigonometrically,
 )
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
 
 
 def build_time_features(df: pd.DataFrame) -> pd.DataFrame:

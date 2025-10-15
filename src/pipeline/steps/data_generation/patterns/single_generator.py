@@ -2,19 +2,19 @@ from typing import List, Tuple
 
 import numpy as np
 
-from pipeline.const import SECONDS_IN_DAY
 from pipeline.config.classes.Config import Config
+from pipeline.const import SECONDS_IN_DAY
 from pipeline.steps.data_generation.patterns.access.generator import (
     generate_access_pattern,
 )
 from pipeline.steps.data_generation.patterns.temporal.generator import (
     generate_temporal_pattern,
 )
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 from utils.time.cyclic.updater import (
     update_cyclic_time,
 )
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
 
 
 def generate_single_pattern_request(

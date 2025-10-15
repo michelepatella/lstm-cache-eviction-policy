@@ -1,7 +1,8 @@
-from typing import List, Dict
+from typing import Dict, List
+
+from pipeline.const import TIMELINE_NAME
 from utils.json.saver import save_json
 from utils.logs.levels.debug_logger import debug
-from pipeline.const import TIMELINE_NAME
 
 
 def save_simulation_results(results: List[Dict], path: str) -> None:

@@ -1,4 +1,5 @@
 import math
+
 from pipeline.const import HOURS_IN_DAY, SECONDS_IN_HOUR
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info

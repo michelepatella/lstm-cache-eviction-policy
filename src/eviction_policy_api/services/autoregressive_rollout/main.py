@@ -1,5 +1,5 @@
 import math
-from typing import List, Tuple, Dict
+from typing import Dict, List, Tuple
 
 import torch
 from fastapi import FastAPI
@@ -8,11 +8,11 @@ from eviction_policy_api.const import AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT
 from eviction_policy_api.services.autoregressive_rollout.initialization.initializer import (
     initialize_autoregressive_rollout,
 )
-from utils.logs.levels.info_logger import info
-from utils.mc.forward_runner import mc_forward_passes
 from utils.device.mover import (
     move_to_device,
 )
+from utils.logs.levels.info_logger import info
+from utils.mc.forward_runner import mc_forward_passes
 
 app = FastAPI()
 

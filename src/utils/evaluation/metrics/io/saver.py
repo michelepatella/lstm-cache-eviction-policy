@@ -1,14 +1,14 @@
 from typing import Dict
-from utils.json.saver import save_json
-from utils.logs.levels.debug_logger import debug
 
 from pipeline.const import (
+    MODEL_METRICS_ACCURACY_NAME,
     MODEL_METRICS_AVG_LOSS,
     MODEL_METRICS_CLASS_REPORT_NAME,
-    MODEL_METRICS_ACCURACY_NAME,
     MODEL_METRICS_MACRO_AVG_NAME,
     MODEL_METRICS_WEIGHTED_AVG_NAME,
 )
+from utils.json.saver import save_json
+from utils.logs.levels.debug_logger import debug
 
 
 def save_model_results(

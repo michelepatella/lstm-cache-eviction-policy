@@ -5,10 +5,6 @@ from box import Box
 from sklearn.model_selection import TimeSeriesSplit
 
 from pipeline.config.classes.Config import Config
-from utils.dataset.building.training_validation_splitter import (
-    split_training_validation,
-)
-from utils.training.epochs_trainer import train_epochs
 from utils.data_loader.building.creator import (
     create_data_loader,
 )
@@ -16,12 +12,16 @@ from utils.data_loader.targets.extractor import (
     extract_targets_from_data_loader,
 )
 from utils.dataset.AccessLogsDataset import AccessLogsDataset
+from utils.dataset.building.training_validation_splitter import (
+    split_training_validation,
+)
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
-from utils.model.model_components_initializer import (
+from utils.model.building.initialization.components import (
     initialize_model_components,
 )
+from utils.training.epochs_trainer import train_epochs
 
 
 def compute_time_series_cv(

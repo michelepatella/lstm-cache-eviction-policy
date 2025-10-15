@@ -1,4 +1,4 @@
-from typing import Tuple, List
+from typing import List, Tuple
 
 import numpy as np
 
@@ -6,11 +6,11 @@ from pipeline.config.classes.Config import Config
 from pipeline.steps.data_generation.patterns.generator import (
     generate_pattern_requests,
 )
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.info_logger import info
 from utils.math.zipf_probs_calculator import (
     calculate_zipf_probs,
 )
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
 
 
 def generate_requests_for_alpha(

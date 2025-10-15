@@ -4,9 +4,10 @@ from typing import Any, Dict, List, Tuple
 from tqdm import tqdm
 
 from pipeline.config.classes.Config import Config
-from pipeline.const import LSTM_CACHE_NAME, MICROSECONDS_IN_SECOND
 from pipeline.const import (
     HIT_COUNTER_NAME,
+    LSTM_CACHE_NAME,
+    MICROSECONDS_IN_SECOND,
     MISS_COUNTER_NAME,
     TESTING_SPLIT_TYPE,
 )
@@ -16,10 +17,10 @@ from pipeline.steps.simulation.running.hit_miss.checker_updater import (
 from pipeline.steps.simulation.running.hit_miss.timeline_updater import (
     update_hit_miss_timeline,
 )
-from utils.data_loader.building.initializer import initialize_data_loader
 from pipeline.steps.simulation.utils.time_key_from_row_extractor import (
     extract_time_key_from_row,
 )
+from utils.data_loader.building.initializer import initialize_data_loader
 from utils.dataset.AccessLogsDataset import AccessLogsDataset
 from utils.logs.levels.error_logger import error
 

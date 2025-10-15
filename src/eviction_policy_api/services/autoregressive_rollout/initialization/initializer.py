@@ -1,18 +1,18 @@
-from typing import Tuple, Dict
+from typing import Dict, Tuple
 
 import torch
 
+from utils.device.mover import (
+    move_to_device,
+)
 from utils.device.selector import (
     select_device,
 )
-from utils.model.model_builder import (
+from utils.model.building.builder import (
     build_model,
 )
 from utils.model.state_dict.loader import (
     load_model_state_dict,
-)
-from utils.device.mover import (
-    move_to_device,
 )
 
 

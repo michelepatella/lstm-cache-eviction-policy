@@ -7,9 +7,9 @@ from pipeline.steps.simulation.caches.utils.classes.CacheMetricsLogger import (
 from pipeline.steps.simulation.metrics.components.eviction_mistake_rate_calculator import (
     calculate_eviction_mistake_rate,
 )
-from utils.math.percentage_calculator import calculate_percentage
 from utils.logs.levels.info_logger import info
 from utils.math.avg_calculator import calculate_average
+from utils.math.percentage_calculator import calculate_percentage
 
 
 def calculate_cache_simulation_metrics(

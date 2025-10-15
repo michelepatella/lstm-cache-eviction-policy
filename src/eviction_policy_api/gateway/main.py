@@ -5,18 +5,18 @@ from box import Box
 from fastapi import FastAPI
 
 from eviction_policy_api.const import (
-    AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT,
-    AUTOREGRESSIVE_ROLLOUT_SERVICE_PARAMS,
     API_CONFIG_FILE_PATH,
     API_GATEWAY_ENDPOINT,
+    AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT,
+    AUTOREGRESSIVE_ROLLOUT_SERVICE_PARAMS,
+)
+from eviction_policy_api.gateway.kwargs.builder import (
+    build_api_kwargs,
 )
 from eviction_policy_api.gateway.kwargs.default_getter import (
     get_default_kwargs,
 )
 from utils.json.loader import load_json
-from eviction_policy_api.gateway.kwargs.builder import (
-    build_api_kwargs,
-)
 
 app = FastAPI()
 

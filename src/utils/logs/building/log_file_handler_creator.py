@@ -2,8 +2,8 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 from pipeline.const import (
-    LOGS_FILE_MAX_BYTES,
     LOGS_FILE_BACKUP_COUNT,
+    LOGS_FILE_MAX_BYTES,
     LOGS_FORMAT,
 )
 

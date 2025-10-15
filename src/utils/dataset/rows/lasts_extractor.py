@@ -59,7 +59,9 @@ def extract_last_rows_from_dataset(
 
         # Check whether the extracted window is None
         if not window_df:
-            debug("Not enough data to extract last rows requested from dataset")
+            debug(
+                "Not enough data to extract last rows requested from dataset"
+            )
             return None
 
         # Extract last rows (hour and key) from window

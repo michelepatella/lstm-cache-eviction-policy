@@ -1,11 +1,12 @@
-import torch
-import pandas as pd
 from typing import Tuple
+
+import pandas as pd
+import torch
 
 from pipeline.const import (
     COS_TIME_COLUMN_NAME,
-    SIN_TIME_COLUMN_NAME,
     REQUEST_COLUMN_NAME,
+    SIN_TIME_COLUMN_NAME,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error

@@ -4,22 +4,22 @@ from torch.optim import Optimizer
 
 from pipeline.config.classes.Config import Config
 from pipeline.config.classes.ModelConfig import ModelParamsConfig
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
-from utils.model.class_weights_calculator import (
-    calculate_class_weight,
-)
 from utils.device.mover import (
     move_to_device,
 )
 from utils.device.selector import (
     select_device,
 )
-from utils.model.model_builder import (
+from utils.logs.levels.debug_logger import debug
+from utils.logs.levels.error_logger import error
+from utils.logs.levels.info_logger import info
+from utils.model.building.builder import (
     build_model,
 )
-from utils.model.optimizer_builder import (
+from utils.model.class_weights_calculator import (
+    calculate_class_weight,
+)
+from utils.optimizer.builder import (
     build_optimizer,
 )
 
@@ -69,6 +69,8 @@ def initialize_model_components(
     # Prepare configuration
     device_type = config.hardware.device
     optimizer_type = config.training.optimizer.type
+    learning_rate = config.training.optimizer.params.learning_rate
+    weight_decay = config.training.optimizer.params.weight_decay
     min_key = config.data.generation.keys.min
     max_key = config.data.generation.keys.max
     num_keys = max_key - min_key + 1
@@ -109,7 +111,9 @@ def initialize_model_components(
     model = move_to_device(model, device)
 
     # Build optimizer
-    optimizer = build_optimizer(model, learning_rate, optimizer_type, config)
+    optimizer = build_optimizer(
+        model, optimizer_type, lr=learning_rate, weight_decay=weight_decay
+    )
 
     debug(f"Optimizer created: {optimizer}")
 

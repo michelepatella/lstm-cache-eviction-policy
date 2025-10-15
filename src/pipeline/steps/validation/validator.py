@@ -1,9 +1,9 @@
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
+    CONFIG_DIRECTORY_PATH,
+    CONFIG_FILE_NAME,
     LOGS_VALIDATION_PHASE,
     TRAINING_SPLIT_TYPE,
-    CONFIG_FILE_NAME,
-    CONFIG_DIRECTORY_PATH,
 )
 from pipeline.steps.validation.best_params.saver import save_best_params
 from pipeline.steps.validation.tuning.grid_search_runner import (

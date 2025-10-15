@@ -1,3 +1,4 @@
+from pipeline.config.configurator import prepare_config
 from pipeline.const import (
     DAILY_PROFILE_PLOT_FILE_NAME,
     DATA_DISTRIBUTION_STATIC_MODE,
@@ -9,14 +10,12 @@ from pipeline.const import (
     TIMESTAMP_COLUMN_NAME,
     ZIPF_LOG_LOG_PLOT_FILE_NAME,
 )
-from pipeline.config.configurator import prepare_config
 from pipeline.steps.data_generation.requests.dynamic_generator import (
     generate_dynamic_requests,
 )
 from pipeline.steps.data_generation.requests.static_generator import (
     generate_static_requests,
 )
-from utils.dataset.building.creator import create_dataset
 from pipeline.steps.data_generation.visualization.plots.daily_profile_plotter import (
     plot_daily_profile,
 )
@@ -26,6 +25,7 @@ from pipeline.steps.data_generation.visualization.plots.key_usage_heatmap_plotte
 from pipeline.steps.data_generation.visualization.plots.zipf_loglog_plotter import (
     plot_zipf_loglog,
 )
+from utils.dataset.building.creator import create_dataset
 from utils.dataset.io.locator import get_dataset_abs_path
 from utils.dataset.io.saver import save_dataset
 from utils.logs.initializer import logs_phase

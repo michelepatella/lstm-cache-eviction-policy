@@ -5,11 +5,11 @@ from pipeline.const import CONFIG_SECTIONS_WITH_PARAMS
 from pipeline.steps.validation.search_space.flattener import (
     flatten_search_space,
 )
-from utils.dict.value_setter import (
-    set_dict_value,
-)
 from pipeline.steps.validation.search_space.utils.section_params_wrapper import (
     wrap_section_params,
+)
+from utils.dict.value_setter import (
+    set_dict_value,
 )
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error

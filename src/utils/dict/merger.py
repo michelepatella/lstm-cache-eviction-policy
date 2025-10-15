@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Any, Dict
 
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info

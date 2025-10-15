@@ -1,5 +1,8 @@
+from pipeline.config.configurator import prepare_config
 from pipeline.const import (
     AVG_CACHE_LATENCY_NAME,
+    DATA_DISTRIBUTION_STATIC_MODE,
+    DYNAMIC_SIMULATION_RESULTS_FILE_NAME,
     EVICTION_MISTAKE_RATE_NAME,
     FIFO_CACHE_NAME,
     HIT_COUNTER_NAME,
@@ -15,12 +18,9 @@ from pipeline.const import (
     POLICY_NAME,
     RANDOM_CACHE_NAME,
     RESULTS_DIRECTORY_PATH,
-    TIMELINE_NAME,
-    DATA_DISTRIBUTION_STATIC_MODE,
     STATIC_SIMULATION_RESULTS_FILE_NAME,
-    DYNAMIC_SIMULATION_RESULTS_FILE_NAME,
+    TIMELINE_NAME,
 )
-from pipeline.config.configurator import prepare_config
 from pipeline.steps.simulation.caches.FIFOCache import FIFOCache
 from pipeline.steps.simulation.caches.LFUCache import LFUCache
 from pipeline.steps.simulation.caches.LRUCache import LRUCache
