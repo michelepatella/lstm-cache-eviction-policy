@@ -1,8 +1,8 @@
-from typing import List, Tuple
+from typing import Tuple
 
+import numpy as np
 from torch.utils.data import Subset
 
-from pipeline.config.classes.Config import Config
 from utils.dataset.AccessLogsDataset import AccessLogsDataset
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
@@ -12,8 +12,8 @@ from utils.logs.levels.info_logger import info
 def split_training_validation(
     training_set: AccessLogsDataset,
     validation_split: float = None,
-    training_idx: List[int] | None = None,
-    validation_idx: List[int] | None = None,
+    training_idx: np.ndarray = None,
+    validation_idx: np.ndarray = None,
 ) -> Tuple[Subset, Subset]:
     """
     Split the dataset into training and validation sets.
@@ -25,8 +25,8 @@ def split_training_validation(
     Args:
         training_set (AccessLogsDataset): The dataset to split.
         validation_split (float): Validation percentage to split dataset.
-        training_idx (List[int] | None): Training set index.
-        validation_idx (List[int] | None): Validation set index.
+        training_idx (np.ndarray): Training set index.
+        validation_idx (np.ndarray): Validation set index.
 
     Returns:
         Tuple[Subset, Subset]:

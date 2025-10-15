@@ -9,8 +9,8 @@ from pipeline.steps.validation.best_params.updater import (
 from pipeline.steps.validation.search_space.combinations.combinator import (
     get_parameters_combination,
 )
-from pipeline.steps.validation.time_series_cv.runner import (
-    compute_time_series_cv,
+from pipeline.steps.validation.time_series_cv.folds_runner import (
+    compute_time_series_cv_folds,
 )
 from utils.dataset.AccessLogsDataset import AccessLogsDataset
 from utils.logs.levels.debug_logger import debug
@@ -39,6 +39,9 @@ def compute_grid_search(
     """
     debug(f"Training set size for grid search: {len(training_set)}")
 
+    # Prepare configuration
+    cv_num_folds = config.validation.cross_validation.folds
+
     # Initialize best tracking variables
     best_params: Dict[str, Any] = {}
     best_avg_loss: float = float("inf")
@@ -55,7 +58,9 @@ def compute_grid_search(
             debug(f"Evaluating parameter combination: {params}")
 
             # Perform time series CV
-            avg_loss = compute_time_series_cv(training_set, params, config)
+            avg_loss = compute_time_series_cv_folds(
+                cv_num_folds, training_set, params, config
+            )
 
             debug(f"Average loss for current combination: {avg_loss}")
 

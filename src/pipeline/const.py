@@ -176,11 +176,6 @@ TRAINING_MODEL_MODE = "train"
 EVALUATION_MODEL_MODE = "eval"
 MC_DROPOUT_MODEL_MODE = "mc_dropout"
 
-# ----------------------------
-# Validation
-# ----------------------------
-VALIDATION_PARAMS_SUFFIX = "_range"
-
 
 # ----------------------------
 # Monte Carlo (MC) Dropout

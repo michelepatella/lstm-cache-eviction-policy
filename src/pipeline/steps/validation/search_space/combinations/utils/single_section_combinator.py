@@ -2,12 +2,10 @@ import itertools
 from typing import Any, Dict, List
 
 from pipeline.const import CONFIG_SECTIONS_WITH_PARAMS
-from pipeline.steps.validation.search_space.flattener import (
-    flatten_search_space,
-)
 from pipeline.steps.validation.search_space.utils.section_params_wrapper import (
     wrap_section_params,
 )
+from utils.dict.flattener import flatten_dict
 from utils.dict.value_setter import (
     set_dict_value,
 )
@@ -39,7 +37,7 @@ def get_single_section_combinations(
     """
     try:
         # Flatten the section
-        flat_params = flatten_search_space(params_dict)
+        flat_params = flatten_dict(params_dict)
 
         # Extract keys and corresponding values
         keys = [key for key, _ in flat_params]

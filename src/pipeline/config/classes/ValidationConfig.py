@@ -48,14 +48,14 @@ class ModelSearchSpaceConfig(BaseModel):
     Model search space configuration for hyperparameter optimization.
 
     Attributes:
-        hidden_size_range (List[int]): Allowed range of hidden layer sizes (> 0).
-        num_layers_range (List[int]): Allowed range of number of layers (> 0).
-        dropout_range (List[float]): Allowed range of dropout values (in [0, 1)).
+        hidden_size (List[int]): Allowed range of hidden layer sizes (> 0).
+        num_layers (List[int]): Allowed range of number of layers (> 0).
+        dropout (List[float]): Allowed range of dropout values (in [0, 1)).
     """
 
-    hidden_size_range: List[conint(gt=0)]  # type: ignore[valid-type]
-    num_layers_range: List[conint(gt=0)]  # type: ignore[valid-type]
-    dropout_range: List[confloat(ge=0, lt=1)]  # type: ignore[valid-type]
+    hidden_size: List[conint(gt=0)]  # type: ignore[valid-type]
+    num_layers: List[conint(gt=0)]  # type: ignore[valid-type]
+    dropout: List[confloat(ge=0, lt=1)]  # type: ignore[valid-type]
 
 
 class TrainingSearchSpaceOptimizerConfig(BaseModel):
@@ -63,10 +63,10 @@ class TrainingSearchSpaceOptimizerConfig(BaseModel):
     Optimizer search space configuration for hyperparameter tuning.
 
     Attributes:
-        learning_rate_range (List[float]): Allowed learning rate values (> 0).
+        learning_rate (List[float]): Allowed learning rate values (> 0).
     """
 
-    learning_rate_range: List[confloat(gt=0)]  # type: ignore[valid-type]
+    learning_rate: List[confloat(gt=0)]  # type: ignore[valid-type]
 
 
 class TrainingSearchSpaceConfig(BaseModel):

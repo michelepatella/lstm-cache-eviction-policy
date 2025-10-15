@@ -100,12 +100,12 @@ validation:
     delta: 0.0005
   search_space:
     model:
-      hidden_size_range: [128, 256]
-      num_layers_range: [2, 3]
-      dropout_range: [0.1, 0.3]
+      hidden_size: [128, 256]
+      num_layers: [2, 3]
+      dropout: [0.1, 0.3]
     training:
       optimizer:
-        learning_rate_range: [0.001, 0.0005]
+        learning_rate: [0.001, 0.0005]
 
 training:
   general:
