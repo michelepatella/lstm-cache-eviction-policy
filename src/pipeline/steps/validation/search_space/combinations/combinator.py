@@ -1,6 +1,6 @@
 from typing import Any, Dict, List
 
-from pipeline.config import Config
+from pipeline.config.classes.Config import Config
 from pipeline.steps.validation.search_space.combinations.utils.all_sections_combinator import (
     get_all_sections_combinations,
 )

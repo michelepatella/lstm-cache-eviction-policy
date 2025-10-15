@@ -2,9 +2,9 @@ from typing import Any, Dict, List
 
 import numpy as np
 from box import Box
-from sklearn.model_selection import TimeSeriesSplit
 
 from pipeline.config.classes.Config import Config
+from pipeline.steps.validation.time_series_cv.builder import build_time_series_split
 from utils.data_loader.building.builder import (
     build_data_loader,
 )
@@ -71,18 +71,13 @@ def compute_time_series_cv(
 
     debug(f"Number of folds for time series cross-validation: {cv_num_folds}")
 
-    try:
-        # Instantiate time series split object
-        tscv = TimeSeriesSplit(n_splits=cv_num_folds)
-        fold_losses: List[float] = []
-    except ValueError as e:
-        msg = "Failed to instantiate TimeSeriesSplit"
-        error("%s: %s", msg, e)
-        raise RuntimeError(msg) from e
+    # Build TimeSeriesSplit object
+    tss = build_time_series_split(cv_num_folds)
 
+    fold_losses: List[float] = []
     # For each fold
     for fold_idx, (train_idx, val_idx) in enumerate(
-        tscv.split(np.arange(num_samples)), start=1
+        tss.split(np.arange(num_samples)), start=1
     ):
         try:
             # Box parameters

@@ -5,8 +5,7 @@ from pipeline.const import (
     LOGS_VALIDATION_PHASE,
     TRAINING_SPLIT_TYPE,
 )
-from pipeline.steps.validation.best_params.saver import save_best_params
-from pipeline.steps.validation.tuning.grid_search_runner import (
+from pipeline.steps.validation.grid_search.runner import (
     compute_grid_search,
 )
 from utils.data_loader.building.initializer import initialize_data_loader
@@ -24,7 +23,7 @@ def validate_model() -> None:
     This function validates the model, by orchestrating
     hyperparameter tuning (via time series cross-validation with
     grid search), and saving the best hyperparameters found
-    in a new configuration.
+    in a new configuration file.
 
     Returns:
         None
@@ -51,16 +50,14 @@ def validate_model() -> None:
     # Compute grid search for best parameters
     best_params = compute_grid_search(training_set, config)
 
-    # Save the best parameters and
-    # get new configuration
-    new_config = save_best_params(best_params, config)
+    # Merge original dictionary with the best
+    # parameters dictionary
+    updated_config_dict = merge_dicts(config.model_dump(), best_params)
 
-    # Merge updated dictionary with original one
-    updated_config = merge_dicts(config.model_dump(), new_config.model_dump())
-
-    # Save updated configuration file
+    # Save updated configuration dictionary
+    # as file
     abs_config_path = CONFIG_DIRECTORY_PATH / CONFIG_FILE_NAME
-    save_yaml(updated_config, abs_config_path)
+    save_yaml(updated_config_dict, abs_config_path)
 
     info("Model validation completed")
 

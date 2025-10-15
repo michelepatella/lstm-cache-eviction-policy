@@ -9,7 +9,7 @@ from pipeline.steps.validation.best_params.updater import (
 from pipeline.steps.validation.search_space.combinations.combinator import (
     get_parameters_combination,
 )
-from pipeline.steps.validation.tuning.time_series_cv_runner import (
+from pipeline.steps.validation.time_series_cv.runner import (
     compute_time_series_cv,
 )
 from utils.dataset.AccessLogsDataset import AccessLogsDataset
