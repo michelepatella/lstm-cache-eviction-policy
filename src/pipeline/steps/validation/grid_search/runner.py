@@ -6,7 +6,7 @@ from pipeline.config.classes.Config import Config
 from pipeline.steps.validation.best_params.updater import (
     check_and_update_best_params,
 )
-from pipeline.steps.validation.search_space.combinations.combinator import (
+from pipeline.steps.validation.search_space.combinator import (
     get_parameters_combination,
 )
 from pipeline.steps.validation.time_series_cv.folds_runner import (

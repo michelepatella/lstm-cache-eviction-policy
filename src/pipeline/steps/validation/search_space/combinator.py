@@ -1,12 +1,8 @@
 from typing import Any, Dict, List
 
 from pipeline.config.classes.Config import Config
-from pipeline.steps.validation.search_space.combinations.utils.all_sections_combinator import (
-    get_all_sections_combinations,
-)
-from pipeline.steps.validation.search_space.combinations.utils.single_section_combinator import (
-    get_single_section_combinations,
-)
+from utils.dict.combinations.nested_dicts_combinators import combine_nested_dicts
+from utils.dict.combinations.nested_dict_lists_combinator import combine_nested_dict_lists
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
@@ -32,32 +28,27 @@ def get_parameters_combination(
     Raises:
         RuntimeError: If an error occurs while
                       generating parameter combinations, e.g.:
-            * Expected keys are missing in the search space.
             * Search space or keys are of invalid type.
             * No parameter combinations could be generated.
     """
     try:
-        section_combinations = []
+        section_combination_dicts = []
 
         # Generate combinations per section
         # and save them
         search_space = config.validation.search_space.model_dump()
         for section, params_dict in search_space.items():
-            section_values = get_single_section_combinations(
-                section, params_dict
-            )
-            section_combinations.append((section, section_values))
+            section_values = combine_nested_dicts(params_dict)
+            section_combination_dicts.append((section, section_values))
 
         # Combine all sections into
         # final parameter configurations
-        param_combinations = get_all_sections_combinations(
-            section_combinations
-        )
+        param_combinations = combine_nested_dict_lists(section_combination_dicts)
 
         info("Parameter combinations generated")
 
         return param_combinations
-    except (KeyError, TypeError, ValueError) as e:
+    except (TypeError, ValueError) as e:
         msg = "Failed to generate parameter combinations"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
