@@ -5,11 +5,11 @@ import torch
 from utils.backpropagation.mc_dropout.runner import (
     compute_mc_dropout_forward_passes,
 )
+from utils.criterion.calculator import calculate_loss
 from utils.device.mover import move_to_device
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
-from utils.criterion.calculator import calculate_loss
 
 
 def infer_single_batch(

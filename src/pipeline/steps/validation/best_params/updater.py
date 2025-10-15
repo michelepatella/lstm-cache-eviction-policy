@@ -1,4 +1,4 @@
-from typing import Any, Dict, Tuple
+from typing import Dict, Tuple
 
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
@@ -8,9 +8,9 @@ from utils.logs.levels.info_logger import info
 def check_and_update_best_params(
     avg_loss: float,
     best_avg_loss: float | None,
-    curr_params: Dict[str, Any],
-    best_params: Dict[str, Any],
-) -> Tuple[float, Dict[str, Any]]:
+    curr_params: Dict[str, int | float | bool],
+    best_params: Dict[str, int | float | bool],
+) -> Tuple[float, Dict[str, int | float | bool]]:
     """
     Check and update the best parameters
     based on the average loss.
@@ -24,17 +24,21 @@ def check_and_update_best_params(
         avg_loss (float): Average loss of the current iteration.
         best_avg_loss (float | None): Best average loss found so far,
                                       or None if not set yet.
-        curr_params (Dict[str, Any]): Current parameter set being evaluated.
-        best_params (Dict[str, Any]): Best parameter set found so far.
+        curr_params (Dict[str, int | float | bool]): Current parameter set
+                                                     being evaluated.
+        best_params (Dict[str, int | float | bool]): Best parameter set found
+                                                     so far.
 
     Returns:
-        Tuple[float, Dict[str, Any]]:
+        Tuple[float, Dict[str, int | float | bool]]:
             - best_avg_loss: The updated best average loss after comparison.
             - best_params: The parameter set corresponding to the best average loss.
 
     Raises:
-        RuntimeError: If average loss or the best one
-                    (when provided) are not numeric.
+        RuntimeError: If an error occurs while checking and
+                      updating best params e.g.:
+                        * If average loss or the best one
+                          (when provided) are not numeric.
     """
     debug(f"Current avg loss: {avg_loss}")
     debug(f"Best avg loss so far: {best_avg_loss}")
@@ -52,7 +56,7 @@ def check_and_update_best_params(
         else:
             info("No improvement in average loss, best parameters unchanged")
     except ValueError as e:
-        msg = "Failed to check best parameters"
+        msg = "Failed to check and update best parameters"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 
