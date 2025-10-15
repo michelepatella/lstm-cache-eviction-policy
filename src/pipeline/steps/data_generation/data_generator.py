@@ -25,7 +25,7 @@ from pipeline.steps.data_generation.visualization.plots.key_usage_heatmap_plotte
 from pipeline.steps.data_generation.visualization.plots.zipf_loglog_plotter import (
     plot_zipf_loglog,
 )
-from utils.dataset.building.creator import create_dataset
+from utils.dataset.building.builder import build_dataset
 from utils.dataset.io.locator import get_dataset_abs_path
 from utils.dataset.io.saver import save_dataset
 from utils.logs.initializer import logs_phase
@@ -75,7 +75,7 @@ def generate_data() -> None:
 
     # Create a dataset where each row is composed of
     # a timestamp and the corresponding request
-    df = create_dataset(
+    df = build_dataset(
         {
             TIMESTAMP_COLUMN_NAME: timestamps_hours[: len(requests)],
             REQUEST_COLUMN_NAME: requests,

@@ -6,7 +6,7 @@ from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
 
-def create_data_loader(
+def build_data_loader(
     dataset: AccessLogsDataset | Subset, batch_size: int, shuffle: bool
 ) -> DataLoader:
     """
@@ -23,7 +23,7 @@ def create_data_loader(
         shuffle (bool): Whether to shuffle the data loader.
 
     Returns:
-        DataLoader: The data loader created.
+        DataLoader: The data loader built.
 
     Raises:
         RuntimeError: If an error occurs while creating
@@ -33,8 +33,8 @@ def create_data_loader(
             * If batch size or shuffle parameters
               are of incorrect type or invalid.
     """
-    debug(f"Batch size for the data loader to be created: {batch_size}")
-    debug(f"Shuffle for the data loader to be created: {shuffle}")
+    debug(f"Batch size for the data loader to be built: {batch_size}")
+    debug(f"Shuffle for the data loader to be built: {shuffle}")
 
     try:
         # Instantiate the data loader
@@ -48,6 +48,6 @@ def create_data_loader(
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 
-    info("Data loader created")
+    info("Data loader built")
 
     return loader

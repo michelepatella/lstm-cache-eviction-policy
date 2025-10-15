@@ -4,6 +4,7 @@ from torch.optim import Optimizer
 
 from pipeline.config.classes.Config import Config
 from pipeline.config.classes.ModelConfig import ModelParamsConfig
+from utils.criterion.builder import build_criterion
 from utils.device.mover import (
     move_to_device,
 )
@@ -16,7 +17,7 @@ from utils.logs.levels.info_logger import info
 from utils.model.building.builder import (
     build_model,
 )
-from utils.model.class_weights_calculator import (
+from utils.criterion.class_weights.calculator import (
     calculate_class_weight,
 )
 from utils.optimizer.builder import (
@@ -26,7 +27,6 @@ from utils.optimizer.builder import (
 
 def initialize_model_components(
     model_params: ModelParamsConfig,
-    learning_rate: float,
     config: Config,
     targets: torch.Tensor = None,
 ) -> tuple[torch.device, torch.nn.Module, torch.nn.Module, Optimizer]:
@@ -44,7 +44,6 @@ def initialize_model_components(
     Args:
         model_params (ModelParamsConfig): Dictionary containing model
                                                  hyperparameters.
-        learning_rate (float): Learning rate for the optimizer.
         config (Config): Configuration object.
         targets (torch.Tensor): Tensor of target labels for
                                 computing class weights.
@@ -82,25 +81,8 @@ def initialize_model_components(
 
     criterion = None
     if targets is not None:
-        # Compute class weights
-        class_weights = calculate_class_weight(targets, num_keys)
-
-        debug(f"Class weights computed: {class_weights}, for {num_keys} keys")
-
-        try:
-            # Define loss function
-            weight = torch.tensor(class_weights, dtype=torch.float32)
-            weight = move_to_device(weight, device)
-
-            criterion = nn.CrossEntropyLoss(weight=weight)
-
-            debug(
-                f"{criterion} initialized as loss function with class weights"
-            )
-        except (RuntimeError, TypeError) as e:
-            msg = "Failed to define loss function"
-            error("%s: %s", msg, e)
-            raise RuntimeError(msg) from e
+        # Build criterion
+        criterion = build_criterion(targets, num_keys, device)
 
     # Instantiate LSTM model
     model = build_model(
@@ -115,7 +97,7 @@ def initialize_model_components(
         model, optimizer_type, lr=learning_rate, weight_decay=weight_decay
     )
 
-    debug(f"Optimizer created: {optimizer}")
+    debug(f"Optimizer built: {optimizer}")
 
     info("Model training initialization completed")
 

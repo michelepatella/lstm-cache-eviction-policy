@@ -1,6 +1,6 @@
 from pipeline.config.configurator import prepare_config
 from pipeline.const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE
-from utils.data_loader.building.creator import create_data_loader
+from utils.data_loader.building.builder import build_data_loader
 from utils.data_loader.building.initializer import initialize_data_loader
 from utils.data_loader.targets.extractor import (
     extract_targets_from_data_loader,
@@ -45,7 +45,6 @@ def train_model() -> None:
     validation_shuffle = config.validation.general.shuffle
     validation_split = config.dataset.split.validation
     model_params = config.model.params
-    learning_rate = config.training.optimizer.params.learning_rate
     training_num_epochs = config.training.general.epochs
 
     # Get the model path
@@ -69,12 +68,12 @@ def train_model() -> None:
 
     # Create a loader both for
     # training and validation sets
-    training_loader = create_data_loader(
+    training_loader = build_data_loader(
         training_set,
         training_batch_size,
         training_shuffle,
     )
-    validation_loader = create_data_loader(
+    validation_loader = build_data_loader(
         validation_set,
         validation_batch_size,
         validation_shuffle,
@@ -85,7 +84,7 @@ def train_model() -> None:
 
     # Model setup for training
     device, criterion, model, optimizer = initialize_model_components(
-        model_params, learning_rate, config, targets
+        model_params, config, targets
     )
 
     # Train the model

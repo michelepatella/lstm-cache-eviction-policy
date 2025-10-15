@@ -5,8 +5,8 @@ from box import Box
 from sklearn.model_selection import TimeSeriesSplit
 
 from pipeline.config.classes.Config import Config
-from utils.data_loader.building.creator import (
-    create_data_loader,
+from utils.data_loader.building.builder import (
+    build_data_loader,
 )
 from utils.data_loader.targets.extractor import (
     extract_targets_from_data_loader,
@@ -104,12 +104,12 @@ def compute_time_series_cv(
 
             # Create DataLoaders both for
             # training and validation sets
-            training_loader = create_data_loader(
+            training_loader = build_data_loader(
                 training_dataset,
                 config.training.general.batch_size,
                 shuffle=training_shuffle,
             )
-            validation_loader = create_data_loader(
+            validation_loader = build_data_loader(
                 validation_dataset,
                 config.validation.general.batch_size,
                 shuffle=validation_shuffle,
@@ -121,7 +121,6 @@ def compute_time_series_cv(
             # Setup model
             device, criterion, model, optimizer = initialize_model_components(
                 params_box.model,
-                params_box.training.optimizer.learning_rate,
                 config,
                 targets,
             )

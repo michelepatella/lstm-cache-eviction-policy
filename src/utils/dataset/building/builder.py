@@ -8,7 +8,7 @@ from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
 
-def create_dataset(
+def build_dataset(
     columns: Dict[str, Union[Sequence, np.ndarray]],
 ) -> pd.DataFrame:
     """
@@ -22,7 +22,7 @@ def create_dataset(
                                                           dataset for.
 
     Returns:
-        pd.DataFrame: Pandas dataframe created from the given columns.
+        pd.DataFrame: Pandas dataframe built from the given columns.
 
     Raises:
         RuntimeError: If an error occurs while creating the dataset, e.g.:
@@ -30,10 +30,10 @@ def create_dataset(
             * The columns have a format that cannot be
               converted to create a Pandas DataFrame.
     """
-    debug(f"Columns number of dataset to be created: {len(columns)}")
+    debug(f"Columns number of dataset to be built: {len(columns)}")
     debug(
         f"Amount of data for dataframe to be"
-        f" created: {sum(len(v) for v in columns.values())}"
+        f" built: {sum(len(v) for v in columns.values())}"
     )
 
     try:
@@ -45,6 +45,6 @@ def create_dataset(
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 
-    info(f"Dataset created with {len(df)} rows and {len(df.columns)} columns")
+    info(f"Dataset built with {len(df)} rows and {len(df.columns)} columns")
 
     return df

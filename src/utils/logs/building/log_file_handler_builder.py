@@ -8,7 +8,7 @@ from pipeline.const import (
 )
 
 
-def create_logs_file_handler(
+def build_logs_file_handler(
     path: str,
     level: int,
     max_bytes: int = LOGS_FILE_MAX_BYTES,

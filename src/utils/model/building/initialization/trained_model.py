@@ -44,7 +44,6 @@ def initialize_trained_model(
     """
     # Prepare configuration
     model_params = config.model.params
-    learning_rate = config.training.optimizer.params.learning_rate
     data_distribution_mode = config.data.generation.mode
 
     # Get the model path
@@ -58,7 +57,7 @@ def initialize_trained_model(
 
     # Setup for model components
     device, criterion, model, _ = initialize_model_components(
-        model_params, learning_rate, config, targets
+        model_params, config, targets
     )
 
     # Load the trained model

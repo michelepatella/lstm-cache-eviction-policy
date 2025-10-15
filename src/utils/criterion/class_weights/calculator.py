@@ -10,7 +10,8 @@ from utils.logs.levels.info_logger import info
 
 def calculate_class_weight(
     targets: Tensor,
-    num_keys: int,
+    num_classes: int,
+    weight_type: str = CLASS_WEIGHT_TYPE,
 ) -> np.ndarray:
     """
     Compute balanced class weight for targets.
@@ -20,7 +21,8 @@ def calculate_class_weight(
 
     Args:
         targets (Tensor): Target labels.
-        num_keys (int): Number of classes (i.e., keys).
+        num_classes (int): Number of classes.
+        weight_type (str): The weight type to apply.
 
     Returns:
         np.ndarray: Array of class weights.
@@ -46,7 +48,7 @@ def calculate_class_weight(
 
         # Compute class weight for present classes
         weights = compute_class_weight(
-            class_weight=CLASS_WEIGHT_TYPE,
+            class_weight=weight_type,
             classes=present_classes,
             y=targets_array,
         )
@@ -54,7 +56,7 @@ def calculate_class_weight(
         debug(f"Weights for present classes: {weights}")
 
         # Initialize full class weights array
-        class_weights = np.ones(num_keys, dtype=np.float32)
+        class_weights = np.ones(num_classes, dtype=np.float32)
 
         # Update weights for appearing classes
         for cls, weight in zip(present_classes, weights):

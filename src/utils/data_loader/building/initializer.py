@@ -3,7 +3,7 @@ from typing import Tuple
 from torch.utils.data import DataLoader
 
 from pipeline.config.classes.Config import Config
-from utils.data_loader.building.creator import create_data_loader
+from utils.data_loader.building.builder import build_data_loader
 from utils.dataset.AccessLogsDataset import AccessLogsDataset
 from utils.logs.levels.info_logger import info
 
@@ -40,7 +40,7 @@ def initialize_data_loader(
     dataset = dataset_class(data_loader_type, config)
 
     # Create a data loader from the dataset
-    data_loader = create_data_loader(
+    data_loader = build_data_loader(
         dataset,
         batch_size=batch_size,
         shuffle=shuffle,
