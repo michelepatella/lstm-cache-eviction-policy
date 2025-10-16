@@ -114,18 +114,22 @@ dvc_pipeline_show:
 # Run the whole DVC pipeline
 dvc_pipeline_run:
 	dvc repro
+	dvc push
 
 # Run a specific pipeline stage
 dvc_pipeline_stage_run:
 	dvc repro $(STAGE_NAME)
+	dvc push
 
 # Run the whole DVC pipeline (Force)
 dvc_pipeline_run_force:
 	dvc repro --force
+	dvc push
 
 # Run a specific pipeline stage (Force)
 dvc_pipeline_stage_run_force:
 	dvc repro $(STAGE_NAME) --force
+	dvc push
 
 # Show metrics
 dvc_metrics_show:
