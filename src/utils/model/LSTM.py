@@ -6,6 +6,7 @@ import torch.nn as nn
 from pipeline.config.classes.Config import Config
 from pipeline.config.classes.ModelConfig import ModelParamsConfig
 from pipeline.const import LSTM_PARAM_NAMES, MC_DROPOUT_DEFAULT
+from utils.device.mover import move_to_device
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
@@ -30,36 +31,30 @@ class LSTM(torch.nn.Module):
         fc (nn.Linear): Fully connected layer producing logits.
     """
 
-    def _set_fields(
-        self: "LSTM",
-        params: ModelParamsConfig | Dict[str, int | float | bool],
-        min_key: int,
-        max_key: int,
-        embedding_dim: int,
-        num_features: int,
-        config: Config,
+    def _set_params(
+            self: "LSTM",
+            params: ModelParamsConfig | Dict[str, int | float | bool],
+            config: Config | None,
+            param_names: list[str] = LSTM_PARAM_NAMES
     ) -> None:
         """
-        Set LSTM model fields.
+        Set model parameters.
 
-        This function sets LSTM model fields using
-        provided parameters or configuration.
+        This function sets model parameters by using values provided directly,
+        or falling back to configuration values if not provided.
 
         Args:
-            self ("LSTM"): Current class instance.
-            params (ModelParamsConfig | Dict[str, int | float | bool]): Parameters specified for the model.
-            min_key (int): Maximum key.
-            max_key (int): Minimum key.
-            embedding_dim (int): Embedding dimension for embedding the keys.
-            num_features (int): Number of features for the LSTM model.
-            config (Config): Configuration object.
-
-        Returns:
-            None
+            self ("LSTM"): Current model instance.
+            params (ModelParamsConfig | Dict[str, int | float | bool]):
+                Dictionary of parameters explicitly passed.
+            config (Config | None): Configuration object.
+            param_names (list[str]): List of parameter names to set.
 
         Raises:
-            RuntimeError: If LSTM fields assignment fails, e.g.:
-                * Invalid values for embedding dimension or number of keys.
+            RuntimeError: If an error occurs while setting model parameters e.g.:
+                * Provided params dictionary is invalid.
+                * Configuration object is missing or malformed.
+                * Attribute assignment on the model instance fails.
         """
         try:
             # Prepare configuration model params
@@ -69,7 +64,7 @@ class LSTM(torch.nn.Module):
                 model_params = config.model.params
 
             # For each required parameter
-            for param in LSTM_PARAM_NAMES:
+            for param in param_names:
                 # Check whether the required parameter
                 # has been directly passed to the model
                 if param in params and params[param] is not None:
@@ -90,33 +85,96 @@ class LSTM(torch.nn.Module):
                     # Set the value specified by configuration
                     setattr(self, param, config_value)
 
-            # Set number of keys
-            self.num_keys = max_key - min_key + 1
+            info("Model parameters set")
+        except (AttributeError, TypeError, ValueError) as e:
+            msg = "Failed to set model parameters"
+            error("%s: %s", msg, e)
+            raise RuntimeError(msg) from e
 
-            debug(f"Number of keys for LSTM model: {self.num_keys}")
+    def _set_fields(
+        self: "LSTM",
+        params: ModelParamsConfig | Dict[str, int | float | bool],
+        min_key: int,
+        max_key: int,
+        embedding_dim: int,
+        num_features: int,
+        config: Config,
+    ) -> None:
+        """
+        Set LSTM model fields.
 
-            # Set model input size
-            self.input_size = num_features + embedding_dim
+        This function sets LSTM model fields using
+        provided parameters and/or configuration.
 
-            debug(f"Input size for LSTM model: {self.input_size}")
+        Args:
+            self ("LSTM"): Current class instance.
+            params (ModelParamsConfig | Dict[str, int | float | bool]):
+                Parameters specified for the model.
+            min_key (int): Maximum key.
+            max_key (int): Minimum key.
+            embedding_dim (int): Embedding dimension.
+            num_features (int): Number of features for the LSTM model.
+            config (Config): Configuration object.
 
-            # Set number of features
-            self.num_features = num_features
+        Returns:
+            None
+        """
+        # Set model params
+        self._set_params(params, config)
 
-            debug(f"Number of features for LSTM model: {self.num_features}")
+        # Set MC dropout default flag
+        self.mc_dropout = MC_DROPOUT_DEFAULT
+        debug(f"MC dropout set to default: {self.mc_dropout}")
 
-            # Apply embedding with specified dimension
-            self.embedding_dim = embedding_dim
+        # Set number of keys
+        self.num_keys = max_key - min_key + 1
+        debug(f"Number of keys for LSTM model: {self.num_keys}")
+
+        # Set model input size
+        self.input_size = num_features + embedding_dim
+        debug(f"Input size for LSTM model: {self.input_size}")
+
+        # Set number of features
+        self.num_features = num_features
+        debug(f"Number of features for LSTM model: {self.num_features}")
+
+        # Set embedding with specified dimension
+        self.embedding_dim = embedding_dim
+        debug(f"Embedding dimension for LSTM model: {self.embedding_dim}")
+
+        info("LSTM fields set")
+
+    def _set_layers(self: "LSTM") -> None:
+        """
+        Instantiate all the layers of the LSTM model.
+
+        This function creates and assigns the following layers to the model:
+            - Embedding layer
+            - Dropout layer
+            - Fully connected (linear) layer
+
+        Raises:
+            RuntimeError: If an error occurs while setting the model layers e.g.:
+                * Invalid input dimensions layers.
+                * Attributes required for layer creation are missing or None.
+        """
+        try:
+            # Instantiate embedding layer
             self.embedding = nn.Embedding(self.num_keys, self.embedding_dim)
+            debug(f"Embedding layer instantiated with dimension: {self.embedding_dim}")
 
-            debug(
-                f"Embedding layer for LSTM model"
-                f" instantiated with dimension: {self.embedding_dim}"
-            )
+            # Instantiate dropout layer
+            self.mc_dropout_layer = nn.Dropout(p=self.dropout)
+            debug(f"Dropout layer instantiated (p={self.dropout})")
 
-            info("LSTM fields set")
-        except (TypeError, ValueError) as e:
-            msg = "Failed to set LSTM fields"
+            # Instantiate fully connected layer
+            self.fc = nn.Linear(self.hidden_size, self.num_keys)
+            debug(f"Fully connected layer instantiated "
+                  f"(in_features={self.hidden_size}, out_features={self.num_keys})")
+
+            info("Model layers set")
+        except (TypeError, ValueError, AttributeError) as e:
+            msg = "Failed to set model layers"
             error("%s: %s", msg, e)
             raise RuntimeError(msg) from e
 
@@ -133,9 +191,8 @@ class LSTM(torch.nn.Module):
         Initialize the LSTM model.
 
         This function initializes the LSTM model, specifically:
-        set MC dropout default value, set all LSTM fields, instantiate
-        the LSTM class, as well as a dropout and a fully-connected (linear)
-        layer.
+        sets all LSTM fields, instantiates the LSTM class,
+        as well as all the model layers.
 
         Args:
             self ("LSTM"): Current class instance.
@@ -143,7 +200,7 @@ class LSTM(torch.nn.Module):
                 Model parameters.
             min_key (int): Maximum key.
             max_key (int): Minimum key.
-            embedding_dim (int): Embedding dimension for embedding the keys.
+            embedding_dim (int): Embedding dimension.
             num_features (int): Number of features for the LSTM model.
             config (Config): Configuration object.
 
@@ -152,17 +209,12 @@ class LSTM(torch.nn.Module):
         """
         super(LSTM, self).__init__()
 
-        # Set MC dropout default flag
-        self.mc_dropout = MC_DROPOUT_DEFAULT
-
-        debug(f"MC dropout set to default: {self.mc_dropout}")
-
         # Set model fields
         self._set_fields(
             params, min_key, max_key, embedding_dim, num_features, config
         )
 
-        # Instantiate the LSTM layer
+        # Instantiate the LSTM model
         self.lstm = nn.LSTM(
             input_size=self.input_size,
             hidden_size=self.hidden_size,
@@ -186,19 +238,8 @@ class LSTM(torch.nn.Module):
             + f"proj_size={self.proj_size}"
         )
 
-        # Instantiate a dropout layer
-        self.mc_dropout_layer = nn.Dropout(p=self.dropout)
-
-        debug(f"Dropout layer instantiated (p={self.dropout})")
-
-        # Instantiate a fully connected layer
-        self.fc = nn.Linear(self.hidden_size, self.num_keys)
-
-        debug(
-            f"Fully connected layer instantiated"
-            f" (in_features={self.hidden_size},"
-            f" out_features={self.num_keys})"
-        )
+        # Set all model layers
+        self._set_layers()
 
         info("LSTM model initialized")
 
@@ -234,14 +275,14 @@ class LSTM(torch.nn.Module):
                 f"keys shape: {x_keys.shape}"
             )
 
-            # Ensure keys are on the same device as the embedding layer
+            # Ensure keys are on the same device
+            # as the embedding layer
             device = self.embedding.weight.device
-            x_features = x_features.to(device)
-            x_keys = x_keys.to(device)
+            x_features = move_to_device(x_features, device)
+            x_keys = move_to_device(x_keys, device)
 
             # Perform embedding
             embedded_keys = self.embedding(x_keys)
-
             debug(f"Embedded keys shape: {embedded_keys.shape}")
 
             # Concatenate features with embedded keys
@@ -301,20 +342,17 @@ class LSTM(torch.nn.Module):
 
             # Pass the input through LSTM
             lstm_out, _ = self.lstm(x)
-
             debug(f"LSTM output shape: {lstm_out.shape}")
 
             # Apply MC dropout if enabled
             if self.mc_dropout:
                 lstm_out = self.mc_dropout_layer(lstm_out)
-
                 debug(
                     f"(After MC dropout) LSTM output shape: {lstm_out.shape}"
                 )
 
             # Compute logits from last timestep
             logits = self.fc(lstm_out[:, -1, :])
-
             debug(f"Logits shape: {logits.shape}")
 
             info("LSTM forward pass completed")
