@@ -6,26 +6,26 @@ from torch.utils.data import Dataset
 
 from pipeline.config.classes.Config import Config
 from pipeline.const import TRAINING_SPLIT_TYPE
-from utils.dataset.columns.extractor import extract_dataset_columns
-from utils.dataset.columns.shifter import shift_dataset_column
-from utils.dataset.extraction.features_target_from_columns_extractor import (
+from components.dataset.columns.extractor import extract_dataset_columns
+from components.dataset.columns.shifter import shift_dataset_column
+from components.dataset.extraction.features_target_from_columns_extractor import (
     extract_features_target_from_dataset_columns,
 )
-from utils.dataset.extraction.sliding_window_extractor import (
+from components.dataset.extraction.sliding_window_extractor import (
     extract_dataset_sliding_window,
 )
-from utils.dataset.io.loader import load_dataset
-from utils.dataset.io.locator import get_dataset_abs_path
-from utils.dataset.length.effective_length_calculator import (
+from components.dataset.io.loader import load_dataset
+from components.dataset.io.locator import get_dataset_abs_path
+from components.dataset.length.effective_length_calculator import (
     calculate_effective_dataset_length,
 )
-from utils.dataset.splitting.data_splitter import split_dataset_data
-from utils.dataset.splitting.index_calculator import (
+from components.dataset.splitting.data_splitter import split_dataset_data
+from components.dataset.splitting.index_calculator import (
     calculate_dataset_split_index,
 )
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 
 
 def add_dataset_column(df, column_name, column_values):

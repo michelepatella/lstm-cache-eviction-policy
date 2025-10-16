@@ -3,12 +3,12 @@ from typing import List, Tuple
 import numpy as np
 
 from pipeline.config.classes.Config import Config
-from pipeline.steps.data_generation.patterns.generator import (
+from components.data.patterns.core.generator import (
     generate_pattern_requests,
 )
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
-from utils.math.zipf_probs_calculator import (
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.info_logger import info
+from components.math.zipf_probs_calculator import (
     calculate_zipf_probs,
 )
 

@@ -3,9 +3,9 @@ from typing import List, Tuple
 import torch
 from torch.utils.data import DataLoader
 
-from utils.inference.single_batch_inferrer import infer_single_batch
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
+from components.inference.single_batch_inferrer import infer_single_batch
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.info_logger import info
 
 
 def infer_batches(

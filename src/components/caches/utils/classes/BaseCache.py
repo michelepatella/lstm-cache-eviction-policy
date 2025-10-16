@@ -2,11 +2,11 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from pipeline.config.classes.Config import Config
-from pipeline.steps.simulation.caches.utils.classes.CacheMetricsLogger import (
+from components.caches.utils.classes.CacheMetricsLogger import (
     CacheMetricsLogger,
 )
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.info_logger import info
 
 
 class BaseCache(ABC):

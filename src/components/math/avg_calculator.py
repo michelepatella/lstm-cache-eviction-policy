@@ -1,7 +1,7 @@
 from typing import List
 
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.info_logger import info
 
 
 def calculate_average(values: List[int | float]) -> float | None:

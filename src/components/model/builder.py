@@ -2,7 +2,7 @@ from typing import Dict
 
 from pipeline.config.classes.Config import Config
 from pipeline.config.classes.ModelConfig import ModelParamsConfig
-from utils.model.LSTM import LSTM
+from components.model.lstm import LSTM
 
 
 def build_model(

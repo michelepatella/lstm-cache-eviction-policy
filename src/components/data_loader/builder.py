@@ -1,9 +1,9 @@
 from torch.utils.data import DataLoader, Subset
 
-from utils.dataset.AccessLogsDataset import AccessLogsDataset
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
+from components.dataset.AccessLogsDataset import AccessLogsDataset
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 
 
 def build_data_loader(

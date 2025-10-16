@@ -8,7 +8,7 @@ from eviction_policy_api.const import (
     MAX_TIME_STEP_INCREMENT,
     TIEBREAK_STRATEGIES,
 )
-from utils.assertions.choice_field_validator import validate_choice_field
+from components.assertions.choice_field_assertor import assert_choice_field
 
 
 class APIKwargs(BaseModel):
@@ -67,7 +67,7 @@ class APIKwargs(BaseModel):
         Returns:
             None
         """
-        validate_choice_field(
+        assert_choice_field(
             self.tiebreak_strategy,
             TIEBREAK_STRATEGIES,
             "APIKwargs.tiebreak_strategy",

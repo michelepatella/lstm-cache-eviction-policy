@@ -1,14 +1,14 @@
 import torch
 from torch import nn
 
-from utils.criterion.class_weights.calculator import calculate_class_weight
-from utils.device.mover import move_to_device
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
+from components.loss.class_weights.calculator import calculate_class_weight
+from components.device.mover import move_to_device
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 
 
-def build_criterion(
+def build_loss(
     targets: torch.Tensor, num_classes: int, device: torch.device
 ) -> nn.CrossEntropyLoss:
     """
