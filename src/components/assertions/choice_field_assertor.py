@@ -1,11 +1,11 @@
 from typing import Any, List
 
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 
 
-def validate_choice_field(
+def assert_choice_field(
     field_value: Any,
     allowed_field_values: List[Any],
     context: str,
@@ -36,6 +36,7 @@ def validate_choice_field(
     debug(f"Allowed field values: {allowed_field_values}:")
 
     # Check whether allowed field values
+
     # is not a list
     if not isinstance(allowed_field_values, list):
         msg = f"Allowed field values the must be a list ({context})"

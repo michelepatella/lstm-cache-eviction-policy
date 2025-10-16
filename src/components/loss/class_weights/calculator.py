@@ -3,9 +3,9 @@ from sklearn.utils import compute_class_weight
 from torch import Tensor
 
 from pipeline.const import CLASS_WEIGHT_TYPE
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 
 
 def calculate_class_weight(

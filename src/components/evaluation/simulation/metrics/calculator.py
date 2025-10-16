@@ -1,18 +1,19 @@
 from typing import Dict, List, Tuple
 
+from components.evaluation.simulation.metrics.calculations.eviction_mistake_rate_calculator import \
+    calculate_eviction_mistake_rate
+from components.evaluation.simulation.metrics.calculations.hit_miss_rates_calculator import (
+    calculate_hit_miss_rate,
+)
 from pipeline.const import HIT_COUNTER_NAME, MISS_COUNTER_NAME
-from pipeline.steps.simulation.caches.utils.classes.CacheMetricsLogger import (
+from components.caches.utils.classes.CacheMetricsLogger import (
     CacheMetricsLogger,
 )
-from pipeline.steps.simulation.metrics.components.eviction_mistake_rate_calculator import (
-    calculate_eviction_mistake_rate,
-)
-from utils.logs.levels.info_logger import info
-from utils.math.avg_calculator import calculate_average
-from utils.math.percentage_calculator import calculate_percentage
+from components.logs.levels.info_logger import info
+from components.math.avg_calculator import calculate_average
 
 
-def calculate_cache_simulation_metrics(
+def calculate_simulation_metrics(
     counters: Dict[str, int],
     cache_latencies: List[float],
     mistake_window: int,
@@ -49,11 +50,10 @@ def calculate_cache_simulation_metrics(
     )
 
     # Calculate hit and miss rates
-    hit_rate = calculate_percentage(
-        counters[HIT_COUNTER_NAME], total_cache_accesses
-    )
-    miss_rate = calculate_percentage(
-        counters[MISS_COUNTER_NAME], total_cache_accesses
+    hit_rate, miss_rate = calculate_hit_miss_rate(
+        counters[HIT_COUNTER_NAME],
+        counters[MISS_COUNTER_NAME],
+        total_cache_accesses,
     )
 
     # Extract eviction and access data

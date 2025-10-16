@@ -6,15 +6,15 @@ from pipeline.const import (
     MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT,
     MODEL_METRICS_CLASS_REPORT_ZERO_DIVISION,
 )
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 
 
-def generate_class_report(
+def calculate_class_report(
     targets: List[int], predictions: List[int]
 ) -> Dict[str, float]:
     """
-    Generate a classification report.
+    Calculate a classification report.
 
     This function computes the classification report given
     the true targets and predicted labels.

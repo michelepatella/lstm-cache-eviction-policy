@@ -1,14 +1,14 @@
 from typing import Any, Dict, List
 
 from pipeline.config.classes.Config import Config
-from utils.dict.combinations.nested_dicts_combinators import (
+from components.dict.combinations.nested_dicts_combinator import (
     combine_nested_dicts,
 )
-from utils.dict.combinations.nested_dict_lists_combinator import (
+from components.dict.combinations.nested_dict_lists_combinator import (
     combine_nested_dict_lists,
 )
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 
 
 def get_parameters_combination(

@@ -2,13 +2,13 @@ from typing import Dict, Tuple
 
 import torch
 
-from utils.logs.levels.info_logger import info
-from utils.model.state_dict.copier import (
+from components.logs.levels.info_logger import info
+from components.model.state_dict.copier import (
     copy_model_state_dict,
 )
 
 
-def update_best_model(
+def check_update_best_model(
     avg_loss: float, best_avg_loss: float, model: torch.nn.Module
 ) -> Tuple[float, Dict[str, torch.Tensor] | None]:
     """
