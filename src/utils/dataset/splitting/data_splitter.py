@@ -1,10 +1,15 @@
 from typing import Any
+
+import pandas as pd
+
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
 
-def split_dataset_data(data: Any, split_idx: int, take_first: bool) -> Any:
+def split_dataset_data(
+    df: pd.DataFrame, split_idx: int, take_first: bool
+) -> Any:
     """
     Split data at a given index.
 
@@ -13,7 +18,7 @@ def split_dataset_data(data: Any, split_idx: int, take_first: bool) -> Any:
     part of the data as specified.
 
     Args:
-        data (Any): Data to split.
+        df (pd.DataFrame): Data to split.
         split_idx (int): Index at which to split.
         take_first (bool): If True, take the first part of data.
                            If False, take the second part of data.
@@ -32,7 +37,7 @@ def split_dataset_data(data: Any, split_idx: int, take_first: bool) -> Any:
     try:
         # Split data taking the first
         # or second part of it
-        split_data = data[:split_idx] if take_first else data[split_idx:]
+        split_data = df[:split_idx] if take_first else df[split_idx:]
 
         info("Dataset data split")
 

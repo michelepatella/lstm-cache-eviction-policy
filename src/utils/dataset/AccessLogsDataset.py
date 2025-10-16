@@ -7,11 +7,18 @@ from torch.utils.data import Dataset
 from pipeline.config.classes.Config import Config
 from pipeline.const import TRAINING_SPLIT_TYPE
 from utils.dataset.columns.extractor import extract_dataset_columns
+from utils.dataset.columns.shifter import shift_dataset_column
 from utils.dataset.extraction.features_target_from_columns_extractor import (
     extract_features_target_from_dataset_columns,
 )
+from utils.dataset.extraction.sliding_window_extractor import (
+    extract_dataset_sliding_window,
+)
 from utils.dataset.io.loader import load_dataset
 from utils.dataset.io.locator import get_dataset_abs_path
+from utils.dataset.length.effective_length_calculator import (
+    calculate_effective_dataset_length,
+)
 from utils.dataset.splitting.data_splitter import split_dataset_data
 from utils.dataset.splitting.index_calculator import (
     calculate_dataset_split_index,
@@ -42,7 +49,7 @@ class AccessLogsDataset(Dataset):
     """
 
     def _split_dataset(
-        self: "AccessLogsDataset", dataset_type: str, split_perc: int
+        self: "AccessLogsDataset", dataset_type: str, split_perc: float
     ) -> None:
         """
         Split the dataset based on the requested dataset type.
@@ -54,7 +61,7 @@ class AccessLogsDataset(Dataset):
         Args:
             self (AccessLogsDataset): Instance of AccessLogsDataset.
             dataset_type (str): The dataset type to split.
-            split_perc (int): The split percentage.
+            split_perc (float): The split percentage.
 
         Returns:
             None
@@ -72,8 +79,6 @@ class AccessLogsDataset(Dataset):
         self.data = split_dataset_data(
             self.data, dataset_split_idx, (dataset_type == TRAINING_SPLIT_TYPE)
         )
-
-        info("Dataset split")
 
     def _set_fields(
         self: "AccessLogsDataset", data: "pd.DataFrame", config: Config
@@ -118,25 +123,12 @@ class AccessLogsDataset(Dataset):
         Args:
             self (AccessLogsDataset): AccessLogsDataset class.
             dataset_type (str): The dataset type requested to
-                                be created (e.g. "training").
+                                be created.
             config (Config): Configuration object.
 
         Returns:
             None
-
-        Raises:
-            RuntimeError: If an error occurs while
-                          initializing the dataset, e.g.:
-                * dataset loaded is empty
-                  a value on the target column
-                  cannot be converted to integer
-                * a value on the target column is not
-                  compatible with astype(int)
-                * dataset loaded is not a Pandas DataFrame
-                  or missing columns attribute
         """
-        debug(f"AccessLogsDataset type to be initialized: {dataset_type}")
-
         # Prepare configuration
         data_distribution_mode = config.data.generation.mode
         training_split = config.dataset.split.training
@@ -149,26 +141,17 @@ class AccessLogsDataset(Dataset):
         # Load the dataset
         df = load_dataset(dataset_path)
 
-        try:
-            # Shift target column (requests),
-            # ensuring requests keys are in range
-            # (min_key - 1, max_key - 1)
-            column_name = df.columns[-1]
-            column_values = df[column_name].astype(int) - 1
-            add_dataset_column(df, column_name, column_values)
-        except (KeyError, ValueError, TypeError, AttributeError) as e:
-            msg = "Failed to initialize AccessLogsDataset"
-            error("%s: %s", msg, e)
-            raise RuntimeError(msg) from e
-
         # Set data
         self.data = df.copy()
 
-        # Split the dataset to assign data properly
+        # Split the dataset
         self._split_dataset(dataset_type, training_split)
 
         # Set the fields of the dataset
         self._set_fields(self.data, config)
+
+        # Shift target by -1
+        shift_dataset_column(self.data, self.target, -1)
 
         info("AccessLogsDataset initialized")
 
@@ -185,36 +168,8 @@ class AccessLogsDataset(Dataset):
         Returns:
             int: Number of available sequences
                  in the dataset.
-
-        Raises:
-            RuntimeError: If an error occurs while
-                          calculating dataset length, e.g.:
-                * self.data or self.seq_len is
-                  not properly set
-                * self.data is not iterable or sequence
-                  length is not an integer
-                * calculated length is negative
         """
-        try:
-            # Calculate the dataset length by
-            # removing from available data the
-            # sequence length
-            dataset_length = len(self.data) - self.seq_len
-
-            debug(f"Calculated dataset length: {dataset_length}")
-
-            # Check whether the dataset
-            # length is negative
-            if dataset_length < 0:
-                msg = "Calculated dataset length is negative"
-                error("%s", msg)
-                raise RuntimeError(msg)
-
-            return dataset_length
-        except (AttributeError, TypeError, ValueError) as e:
-            msg = "Failed to get dataset length"
-            error("%s: %s", msg, e)
-            raise RuntimeError(msg) from e
+        return calculate_effective_dataset_length(self.data, self.seq_len)
 
     def __getitem__(
         self: "AccessLogsDataset", idx: int
@@ -242,30 +197,35 @@ class AccessLogsDataset(Dataset):
         Raises:
             RuntimeError: If an error occurs while
                           retrieving a dataset item, e.g.:
-                * The requested index goes out of bounds
-                * Feature or target columns are missing
-                * Data types in features/target are invalid
-                * Conversion to int/float fails
-                * self.data, self.features, or self.target
-                  are not set properly
+                * The requested index goes out of bounds.
+                * Feature or target columns are missing.
+                * Conversion to int/float fails (TypeError, ValueError).
         """
         debug(f"Index of item to be retrieved: {idx}")
 
         try:
-            # Extract feature sequence
-            seq_data = self.data.iloc[idx : idx + self.seq_len]
+            # Extract data sequence
+            seq_data = extract_dataset_sliding_window(
+                self.data, idx + self.seq_len - 1, self.seq_len
+            )
 
-            # Convert features to float tensor
+            # Check whether there is not
+            # enough sequence data
+            if seq_data is None:
+                msg = "Not enough data to extract sequence"
+                error("%s", msg)
+                raise RuntimeError(msg)
+
+            # Convert features to float tensor and keys
+            # to long tensor
             x_features = torch.tensor(
                 seq_data[self.features].values.astype(float), dtype=torch.float
             )
-
-            # Convert keys to long tensor
             x_keys = torch.tensor(
                 seq_data[self.target].values.astype(int), dtype=torch.long
             )
 
-            # Get next target key
+            # Get the next target key
             target_row = self.data.iloc[idx + self.seq_len]
             y_key = torch.tensor(
                 int(target_row[self.target]), dtype=torch.long
@@ -279,7 +239,6 @@ class AccessLogsDataset(Dataset):
             KeyError,
             TypeError,
             ValueError,
-            AttributeError,
         ) as e:
             msg = "Failed to retrieve dataset item"
             error("%s: %s", msg, e)
