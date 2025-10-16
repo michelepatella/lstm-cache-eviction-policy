@@ -4,6 +4,9 @@ from typing import List
 import numpy as np
 from matplotlib import pyplot as plt
 
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 from const import (
     PLOT_LABEL_FONT_SIZE,
     PLOT_SIZE,
@@ -13,9 +16,6 @@ from const import (
     ZIPF_LOG_LOG_PLOT_X_LABEL,
     ZIPF_LOG_LOG_PLOT_Y_LABEL,
 )
-from components.logs.levels.debug_logger import debug
-from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def plot_zipf_loglog(requests: List[int], save_path: str) -> None:

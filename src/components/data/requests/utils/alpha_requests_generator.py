@@ -2,7 +2,6 @@ from typing import List, Tuple
 
 import numpy as np
 
-from pipeline.config.pydantic.config import Config
 from components.data.patterns.core.generator import (
     generate_pattern_requests,
 )
@@ -11,6 +10,7 @@ from components.logs.levels.info_logger import info
 from components.math.zipf_probs_calculator import (
     calculate_zipf_probs,
 )
+from pipeline.config.pydantic.config import Config
 
 
 def generate_requests_for_alpha(

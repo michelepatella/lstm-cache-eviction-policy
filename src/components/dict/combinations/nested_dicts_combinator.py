@@ -1,11 +1,11 @@
 import itertools
 from typing import Any, Dict, List
 
+from components.dict.operations.flattener import flatten_dict
+from components.dict.operations.value_setter import set_dict_value
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
-from components.dict.operations.flattener import flatten_dict
-from components.dict.operations.value_setter import set_dict_value
 
 
 def combine_nested_dicts(nested_dict: Dict[str, Any]) -> List[Dict[str, Any]]:

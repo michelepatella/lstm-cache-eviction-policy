@@ -2,7 +2,6 @@ from typing import List, Tuple
 
 import numpy as np
 
-from pipeline.config.pydantic.config import Config
 from components.data.requests.utils.alpha_requests_generator import (
     generate_requests_for_alpha,
 )
@@ -10,6 +9,7 @@ from components.logs.levels.debug_logger import debug
 from components.time.cyclics.seconds_to_hours_converter import (
     convert_seconds_to_hours_cyclic,
 )
+from pipeline.config.pydantic.config import Config
 
 
 def generate_requests_helper(

@@ -2,16 +2,16 @@ from typing import Tuple, Union
 
 import torch
 
+from components.backpropagation.core.forward_runner import compute_forward
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.info_logger import info
+from components.model.mode.setter import set_model_mode
 from const import (
     EVALUATION_MODEL_MODE,
     MC_DROPOUT_FLAG,
     MC_DROPOUT_MODEL_MODE,
     MC_DROPOUT_NUM_SAMPLES_DEFAULT,
 )
-from components.backpropagation.core.forward_runner import compute_forward
-from components.logs.levels.debug_logger import debug
-from components.logs.levels.info_logger import info
-from components.model.mode.setter import set_model_mode
 
 
 def compute_mc_dropout_forward(

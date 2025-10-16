@@ -1,14 +1,14 @@
 from typing import Dict, List
 
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
+from components.math.percentage_calculator import calculate_percentage
 from const import (
     HIT_COUNTER_NAME,
     MISS_COUNTER_NAME,
     TIMELINE_INDEX_NAME,
     TIMELINE_INSTANT_HIT_RATE_NAME,
 )
-from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
-from components.math.percentage_calculator import calculate_percentage
 
 
 def update_hit_miss_timeline(

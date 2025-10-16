@@ -2,6 +2,9 @@ from typing import Any, Dict, List
 
 import matplotlib.pyplot as plt
 
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 from const import (
     HIT_MISS_RATE_SUBPLOT_X_LABEL,
     HIT_MISS_RATES_PLOT_NUM_COLS,
@@ -20,9 +23,6 @@ from const import (
     TIMELINE_INSTANT_HIT_RATE_NAME,
     TIMELINE_NAME,
 )
-from components.logs.levels.debug_logger import debug
-from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def plot_hit_miss_rate(

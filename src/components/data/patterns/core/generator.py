@@ -2,17 +2,17 @@ from typing import List, Tuple
 
 import numpy as np
 
-from pipeline.config.pydantic.config import Config
-from const import (
-    DATA_GENERATION_INITIAL_CURRENT_DAY,
-    DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY,
-    DATA_GENERATION_INITIAL_TIMESTAMP,
-)
 from components.data.patterns.core.single_generator import (
     generate_single_pattern_request,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
+from const import (
+    DATA_GENERATION_INITIAL_CURRENT_DAY,
+    DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY,
+    DATA_GENERATION_INITIAL_TIMESTAMP,
+)
+from pipeline.config.pydantic.config import Config
 
 
 def generate_pattern_requests(

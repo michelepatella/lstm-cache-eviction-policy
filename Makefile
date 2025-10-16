@@ -14,10 +14,10 @@ DYNAMIC_PROCESSED_DATASET_PATH := data/processed/dynamic/dynamic_processed_datas
 STATIC_MODEL_PATH := models/static/trained_static_model.pt
 DYNAMIC_MODEL_PATH := models/dynamic/trained_dynamic_model.pt
 
-STATIC_MODEL_RESULTS_PATH := reports/results/static/model_results.json
-DYNAMIC_MODEL_RESULTS_PATH := reports/results/dynamic/model_results.json
-STATIC_SIMULATION_RESULTS_PATH := reports/results/static/simulation_results.json
-DYNAMIC_SIMULATION_RESULTS_PATH := reports/results/dynamic/simulation_results.json
+STATIC_MODEL_RESULTS_PATH := reports/results/static/static_model_results.json
+DYNAMIC_MODEL_RESULTS_PATH := reports/results/dynamic/dynamic_model_results.json
+STATIC_SIMULATION_RESULTS_PATH := reports/results/static/static_simulations_results.json
+DYNAMIC_SIMULATION_RESULTS_PATH := reports/results/dynamic/dynamic_simulations_results.json
 
 DVC_TARGET_PATHS := $(STATIC_RAW_DATASET_PATH) $(DYNAMIC_RAW_DATASET_PATH) \
                 $(STATIC_PROCESSED_DATASET_PATH) $(DYNAMIC_PROCESSED_DATASET_PATH) \
@@ -217,16 +217,3 @@ pycache_clean:
 # Clean DVC cache
 dvc_cache_clean:
 	dvc gc -a
-
-
-# -------------------------------
-# PHONY
-# -------------------------------
-.PHONY: deps_install deps_update \
-	dvc_vc_check_status dvc_vc_push dvc_pull dvc_add vc_commit dvc_vc_update_and_push \
-	dvc_list dvc_remove dvc_pull_version dvc_checkout dvc_checkout_file \
-	dvc_pipeline_show dvc_pipeline_run dvc_pipeline_stage_run \
-	vc_tag_checkout vc_tag_checkout_file vc_tag_create vc_tag_push vc_tag_delete_local vc_tag_delete_remote \
-	code_format code_sort_imports code_fix_style code_check_lint code_check_type code_check_quality \
-	docs_generate \
-	logs_clean pycache_clean dvc_cache_clean

@@ -1,14 +1,14 @@
 from typing import Any, Dict, List
 
-from pipeline.config.pydantic.config import Config
-from components.dict.combinations.nested_dicts_combinator import (
-    combine_nested_dicts,
-)
 from components.dict.combinations.nested_dict_lists_combinator import (
     combine_nested_dict_lists,
 )
+from components.dict.combinations.nested_dicts_combinator import (
+    combine_nested_dicts,
+)
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
+from pipeline.config.pydantic.config import Config
 
 
 def get_parameters_combination(

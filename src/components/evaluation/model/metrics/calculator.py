@@ -2,9 +2,15 @@ from typing import Dict, List
 
 import torch
 
-from components.evaluation.model.metrics.calculations.class_report_calculator import calculate_class_report
-from components.evaluation.model.metrics.calculations.cohen_kappa_score_calculator import calculate_cohen_kappa_score
-from components.evaluation.model.metrics.calculations.top_k_accuracy_calculator import calculate_top_k_accuracy
+from components.evaluation.model.metrics.calculations.class_report_calculator import (
+    calculate_class_report,
+)
+from components.evaluation.model.metrics.calculations.cohen_kappa_score_calculator import (
+    calculate_cohen_kappa_score,
+)
+from components.evaluation.model.metrics.calculations.top_k_accuracy_calculator import (
+    calculate_top_k_accuracy,
+)
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
 from const import (
@@ -12,7 +18,6 @@ from const import (
     MODEL_METRICS_COHEN_KAPPA_SCORE_NAME,
     MODEL_METRICS_TOP_K_ACCURACY_NAME,
 )
-
 
 
 def calculate_model_metrics(

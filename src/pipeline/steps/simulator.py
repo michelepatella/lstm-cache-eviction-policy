@@ -1,14 +1,11 @@
-from const import LOGS_SIMULATIONS_PHASE, LRU_CACHE_NAME, LFU_CACHE_NAME, FIFO_CACHE_NAME, RANDOM_CACHE_NAME, \
-    LSTM_CACHE_NAME, POLICY_NAME, HIT_RATE_NAME, MISS_RATE_NAME, HIT_COUNTER_NAME, MISS_COUNTER_NAME, TIMELINE_NAME, \
-    EVICTION_MISTAKE_RATE_NAME, AVG_CACHE_LATENCY_NAME, DATA_DISTRIBUTION_STATIC_MODE, \
-    STATIC_SIMULATIONS_RESULTS_FILE_NAME, DYNAMIC_SIMULATIONS_RESULTS_FILE_NAME, RESULTS_DIRECTORY_PATH, \
-    PLOTS_DIRECTORY_PATH, HIT_MISS_RATES_PLOT_FILE_NAME
-from pipeline.config.configurator import prepare_config
 from components.caches.implementations.fifo_cache import FIFOCache
 from components.caches.implementations.lfu_cache import LFUCache
 from components.caches.implementations.lru_cache import LRUCache
 from components.caches.implementations.lstm_cache import LSTMCache
 from components.caches.implementations.random_cache import RandomCache
+from components.caches.simulations.runner import (
+    run_cache_simulation,
+)
 from components.caches.utils.cache_metrics_logger import (
     CacheMetricsLogger,
 )
@@ -21,17 +18,37 @@ from components.evaluation.simulations.metrics.calculator import (
 from components.evaluation.simulations.metrics.io.saver import (
     save_simulations_metrics,
 )
-from components.caches.simulations.runner import (
-    run_cache_simulation,
-)
+from components.logs.initializer import initialize_logs, logs_phase
+from components.logs.levels.info_logger import info
 from components.visualization.plots.hit_miss_rates_plotter import (
     plot_hit_miss_rate,
 )
 from components.visualization.reports.simulation_reporter import (
     generate_simulations_report,
 )
-from components.logs.initializer import logs_phase, initialize_logs
-from components.logs.levels.info_logger import info
+from const import (
+    AVG_CACHE_LATENCY_NAME,
+    DATA_DISTRIBUTION_STATIC_MODE,
+    DYNAMIC_SIMULATIONS_RESULTS_FILE_NAME,
+    EVICTION_MISTAKE_RATE_NAME,
+    FIFO_CACHE_NAME,
+    HIT_COUNTER_NAME,
+    HIT_MISS_RATES_PLOT_FILE_NAME,
+    HIT_RATE_NAME,
+    LFU_CACHE_NAME,
+    LOGS_SIMULATIONS_PHASE,
+    LRU_CACHE_NAME,
+    LSTM_CACHE_NAME,
+    MISS_COUNTER_NAME,
+    MISS_RATE_NAME,
+    PLOTS_DIRECTORY_PATH,
+    POLICY_NAME,
+    RANDOM_CACHE_NAME,
+    RESULTS_DIRECTORY_PATH,
+    STATIC_SIMULATIONS_RESULTS_FILE_NAME,
+    TIMELINE_NAME,
+)
+from pipeline.config.configurator import prepare_config
 
 
 def run_simulations() -> None:

@@ -1,15 +1,19 @@
-from const import LOGS_VALIDATION_PHASE, TRAINING_SPLIT_TYPE, CONFIG_DIRECTORY_PATH, CONFIG_FILE_NAME
-from pipeline.config.configurator import prepare_config
-
-from components.validation.grid_search.runner import (
-    compute_grid_search,
-)
 from components.data_loader.initializer import initialize_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.dict.operations.merger import merge_dicts
-from components.logs.initializer import logs_phase, initialize_logs
+from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
+from components.validation.grid_search.runner import (
+    compute_grid_search,
+)
 from components.yaml.io.saver import save_yaml
+from const import (
+    CONFIG_DIRECTORY_PATH,
+    CONFIG_FILE_NAME,
+    LOGS_VALIDATION_PHASE,
+    TRAINING_SPLIT_TYPE,
+)
+from pipeline.config.configurator import prepare_config
 
 
 def validate_model() -> None:

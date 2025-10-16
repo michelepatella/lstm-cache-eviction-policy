@@ -1,11 +1,11 @@
 import torch
 from torch import nn
 
-from components.loss.class_weights.calculator import calculate_class_weight
 from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
+from components.loss.class_weights.calculator import calculate_class_weight
 
 
 def build_loss(

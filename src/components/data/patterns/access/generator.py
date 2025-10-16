@@ -2,15 +2,25 @@ from typing import List
 
 import numpy as np
 
-from components.data.patterns.access.variants.cycle_generator import generate_cycle_pattern
-from components.data.patterns.access.variants.distortion_generator import generate_distortion_pattern
-from components.data.patterns.access.variants.memory_fallback_generator import generate_memory_fallback_pattern
-from components.data.patterns.access.variants.repetition_generator import generate_repetition_pattern
-from components.data.patterns.access.variants.toggle_generator import generate_toggle_pattern
+from components.data.patterns.access.variants.cycle_generator import (
+    generate_cycle_pattern,
+)
+from components.data.patterns.access.variants.distortion_generator import (
+    generate_distortion_pattern,
+)
+from components.data.patterns.access.variants.memory_fallback_generator import (
+    generate_memory_fallback_pattern,
+)
+from components.data.patterns.access.variants.repetition_generator import (
+    generate_repetition_pattern,
+)
+from components.data.patterns.access.variants.toggle_generator import (
+    generate_toggle_pattern,
+)
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
-from pipeline.config.pydantic.config import Config
 from const import SECONDS_IN_DAY, SECONDS_IN_HOUR
+from pipeline.config.pydantic.config import Config
 
 
 def generate_access_pattern(

@@ -1,6 +1,9 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 from const import (
     DAILY_PROFILE_PLOT_ALIGN,
     DAILY_PROFILE_PLOT_BIN_SIZE,
@@ -15,9 +18,6 @@ from const import (
     PLOT_SIZE,
     PLOT_TITLE_FONT_SIZE,
 )
-from components.logs.levels.debug_logger import debug
-from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:

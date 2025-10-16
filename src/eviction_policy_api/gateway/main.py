@@ -4,6 +4,7 @@ import requests
 from box import Box
 from fastapi import FastAPI
 
+from components.json.io.loader import load_json
 from eviction_policy_api.const import (
     API_CONFIG_FILE_PATH,
     API_GATEWAY_ENDPOINT,
@@ -16,7 +17,6 @@ from eviction_policy_api.gateway.kwargs.builder import (
 from eviction_policy_api.gateway.kwargs.default_getter import (
     get_default_kwargs,
 )
-from components.json.io.loader import load_json
 
 app = FastAPI()
 

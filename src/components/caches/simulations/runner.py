@@ -3,15 +3,6 @@ from typing import Any, Dict, List, Tuple
 
 from tqdm import tqdm
 
-from components.time.transforms.trig_decoder import decode_time_trigonometrically
-from pipeline.config.pydantic.config import Config
-from const import (
-    HIT_COUNTER_NAME,
-    LSTM_CACHE_NAME,
-    MICROSECONDS_IN_SECOND,
-    MISS_COUNTER_NAME,
-    TESTING_SPLIT_TYPE,
-)
 from components.caches.simulations.hit_miss.checker_updater import (
     check_update_hit_miss,
 )
@@ -21,6 +12,17 @@ from components.caches.simulations.hit_miss.timeline_updater import (
 from components.data_loader.initializer import initialize_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.error_logger import error
+from components.time.transforms.trig_decoder import (
+    decode_time_trigonometrically,
+)
+from const import (
+    HIT_COUNTER_NAME,
+    LSTM_CACHE_NAME,
+    MICROSECONDS_IN_SECOND,
+    MISS_COUNTER_NAME,
+    TESTING_SPLIT_TYPE,
+)
+from pipeline.config.pydantic.config import Config
 
 
 def run_cache_simulation(

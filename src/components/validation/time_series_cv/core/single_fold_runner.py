@@ -3,7 +3,6 @@ from typing import Dict
 import numpy as np
 from box import Box
 
-from pipeline.config.pydantic.config import Config
 from components.data_loader.builder import build_data_loader
 from components.data_loader.targets.extractor import (
     extract_targets_from_data_loader,
@@ -14,9 +13,12 @@ from components.dataset.splits.training_validation_splitter import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
-from components.model.environment.initializer import initialize_model_environment
+from components.model.environment.initializer import (
+    initialize_model_environment,
+)
 from components.optimizer.builder import build_optimizer
 from components.training.core.epochs_trainer import train_epochs
+from pipeline.config.pydantic.config import Config
 
 
 def compute_single_time_series_cv_fold(

@@ -14,7 +14,6 @@ from const import (
     LOGS_PHASE_NAME,
 )
 
-
 # Contextual variable indicating
 # the current phase
 logs_phase = contextvars.ContextVar(

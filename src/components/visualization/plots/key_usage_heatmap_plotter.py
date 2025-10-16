@@ -3,6 +3,9 @@ from typing import List
 import numpy as np
 from matplotlib import pyplot as plt
 
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 from const import (
     DATA_GENERATION_FINAL_HOUR,
     DATA_GENERATION_INITIAL_HOUR,
@@ -18,9 +21,6 @@ from const import (
     PLOT_SIZE,
     PLOT_TITLE_FONT_SIZE,
 )
-from components.logs.levels.debug_logger import debug
-from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def plot_key_usage_heatmap(

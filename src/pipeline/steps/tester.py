@@ -1,21 +1,30 @@
 from box.box import Box
 
-from const import LOGS_TESTING_PHASE, TESTING_SPLIT_TYPE, EVALUATION_MODEL_MODE, DATA_DISTRIBUTION_STATIC_MODE, \
-    STATIC_MODEL_RESULTS_FILE_NAME, DYNAMIC_MODEL_RESULTS_FILE_NAME, RESULTS_DIRECTORY_PATH, \
-    MODEL_METRICS_CLASS_REPORT_NAME, MODEL_METRICS_TOP_K_ACCURACY_NAME, MODEL_METRICS_COHEN_KAPPA_SCORE_NAME
-from pipeline.config.configurator import prepare_config
-from components.visualization.reports.model_evaluation_reporter import (
-    generate_model_evaluation_report,
-)
 from components.data_loader.initializer import initialize_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.evaluation.model.evaluator import evaluate_model
-from components.logs.initializer import logs_phase, initialize_logs
+from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
-from components.model.mode.setter import set_model_mode
 from components.model.best.initializer import (
     initialize_best_model,
 )
+from components.model.mode.setter import set_model_mode
+from components.visualization.reports.model_evaluation_reporter import (
+    generate_model_evaluation_report,
+)
+from const import (
+    DATA_DISTRIBUTION_STATIC_MODE,
+    DYNAMIC_MODEL_RESULTS_FILE_NAME,
+    EVALUATION_MODEL_MODE,
+    LOGS_TESTING_PHASE,
+    MODEL_METRICS_CLASS_REPORT_NAME,
+    MODEL_METRICS_COHEN_KAPPA_SCORE_NAME,
+    MODEL_METRICS_TOP_K_ACCURACY_NAME,
+    RESULTS_DIRECTORY_PATH,
+    STATIC_MODEL_RESULTS_FILE_NAME,
+    TESTING_SPLIT_TYPE,
+)
+from pipeline.config.configurator import prepare_config
 
 
 def test_model() -> None:

@@ -2,10 +2,10 @@ from typing import Tuple
 
 import numpy as np
 
-from const import HOURS_IN_DAY
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
+from const import HOURS_IN_DAY
 
 
 def encode_time_trigonometrically(

@@ -2,9 +2,6 @@ from typing import Tuple
 
 import torch
 
-from pipeline.config.pydantic.config import Config
-from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
-from components.loss.builder import build_loss
 from components.device.mover import (
     move_to_device,
 )
@@ -12,9 +9,12 @@ from components.device.selector import (
     select_device,
 )
 from components.logs.levels.info_logger import info
+from components.loss.builder import build_loss
 from components.model.builder import (
     build_model,
 )
+from pipeline.config.pydantic.config import Config
+from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
 
 
 def initialize_model_environment(

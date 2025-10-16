@@ -4,20 +4,22 @@ import pandas as pd
 import torch
 from torch.utils.data import Dataset
 
-from pipeline.config.pydantic.config import Config
-from const import TRAINING_SPLIT_TYPE
-from components.dataset.columns.extractions.extractor import extract_dataset_columns
-from components.dataset.columns.manipulations.shifter import shift_dataset_column
+from components.dataset.columns.extractions.extractor import (
+    extract_dataset_columns,
+)
 from components.dataset.columns.extractions.features_target_extractor import (
     extract_features_target_from_dataset_columns,
 )
-from components.dataset.rows.extractions.sliding_window_extractor import (
-    extract_sliding_window_dataset_rows,
+from components.dataset.columns.manipulations.shifter import (
+    shift_dataset_column,
 )
 from components.dataset.io.loader import load_dataset
 from components.dataset.io.locator import get_dataset_abs_path
 from components.dataset.rows.calculations.effective_rows_calculator import (
     calculate_effective_dataset_rows,
+)
+from components.dataset.rows.extractions.sliding_window_extractor import (
+    extract_sliding_window_dataset_rows,
 )
 from components.dataset.splits.data_splitter import split_dataset_data
 from components.dataset.splits.index.calculator import (
@@ -26,6 +28,8 @@ from components.dataset.splits.index.calculator import (
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
+from const import TRAINING_SPLIT_TYPE
+from pipeline.config.pydantic.config import Config
 
 
 class AccessLogsDataset(Dataset):

@@ -7,9 +7,9 @@ from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
+from const import LSTM_PARAM_NAMES, MC_DROPOUT_DEFAULT
 from pipeline.config.pydantic.config import Config
 from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
-from const import LSTM_PARAM_NAMES, MC_DROPOUT_DEFAULT
 
 
 class LSTM(torch.nn.Module):

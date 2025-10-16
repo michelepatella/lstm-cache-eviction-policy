@@ -1,48 +1,494 @@
 stages:
-  setup:
-    cmd: PYTHONPATH=src python -m utils.logs.initializer
-    deps: []
-    outs: []
-
   generate_data:
-    cmd: PYTHONPATH=src python -m pipeline.data_generation.data_generator
-    deps: []
+    cmd: PYTHONPATH=src python -m pipeline.steps.data_generator
+    params:
+      - src/pipeline/config/config.yaml:
+        - data.generation.seed
+        - data.generation.mode
+        - data.generation.requests
+        - data.generation.keys.min
+        - data.generation.keys.max
+        - data.generation.pattern.access.zipf.alpha.fixed
+        - data.generation.pattern.access.zipf.alpha.min
+        - data.generation.pattern.access.zipf.alpha.max
+        - data.generation.pattern.access.zipf.steps
+        - data.generation.pattern.access.behavior.repetition.interval
+        - data.generation.pattern.access.behavior.repetition.offset
+        - data.generation.pattern.access.behavior.repetition.hours.start
+        - data.generation.pattern.access.behavior.repetition.hours.end
+        - data.generation.pattern.access.behavior.toggle.interval
+        - data.generation.pattern.access.behavior.toggle.hours.start
+        - data.generation.pattern.access.behavior.toggle.hours.end
+        - data.generation.pattern.access.behavior.toggle.base_requests.first
+        - data.generation.pattern.access.behavior.toggle.base_requests.second
+        - data.generation.pattern.access.behavior.toggle.offsets.forward
+        - data.generation.pattern.access.behavior.toggle.offsets.backward
+        - data.generation.pattern.access.behavior.cycle.base
+        - data.generation.pattern.access.behavior.cycle.mod
+        - data.generation.pattern.access.behavior.cycle.divisor
+        - data.generation.pattern.access.behavior.cycle.hours.start
+        - data.generation.pattern.access.behavior.cycle.hours.end
+        - data.generation.pattern.access.behavior.distortion.interval
+        - data.generation.pattern.access.behavior.distortion.hours.start
+        - data.generation.pattern.access.behavior.distortion.hours.end
+        - data.generation.pattern.access.behavior.distortion.offsets.history
+        - data.generation.pattern.access.behavior.distortion.offsets.correction
+        - data.generation.pattern.access.behavior.distortion.noise.min
+        - data.generation.pattern.access.behavior.distortion.noise.max
+        - data.generation.pattern.access.behavior.memory.interval
+        - data.generation.pattern.access.behavior.memory.offset
+        - data.generation.pattern.temporal.burstiness.high
+        - data.generation.pattern.temporal.burstiness.low
+        - data.generation.pattern.temporal.burstiness.hours.start
+        - data.generation.pattern.temporal.burstiness.hours.end
+        - data.generation.pattern.temporal.periodic.scale
+        - data.generation.pattern.temporal.periodic.amplitude
+    deps:
+      - src/components/assertions/choice_field_assertor.py
+      - src/components/assertions/min_max_assertor.py
+      - src/components/data/patterns/access/generator.py
+      - src/components/data/patterns/access/variants/cycle_generator.py
+      - src/components/data/patterns/access/variants/distortion_generator.py
+      - src/components/data/patterns/access/variants/memory_fallback_generator.py
+      - src/components/data/patterns/access/variants/repetition_generator.py
+      - src/components/data/patterns/access/variants/toggle_generator.py
+      - src/components/data/patterns/core/generator.py
+      - src/components/data/patterns/core/single_generator.py
+      - src/components/data/patterns/temporal/generator.py
+      - src/components/data/patterns/temporal/variants/burst_setter.py
+      - src/components/data/patterns/temporal/variants/periodic_calculator.py
+      - src/components/data/requests/core/dynamic_generator.py
+      - src/components/data/requests/core/static_generator.py
+      - src/components/data/requests/utils/alpha_requests_generator.py
+      - src/components/data/requests/utils/generation_helper.py
+      - src/components/dataset/builder.py
+      - src/components/dataset/io/locator.py
+      - src/components/dataset/io/saver.py
+      - src/components/logs/file_handlers/builder.py
+      - src/components/logs/initializer.py
+      - src/components/logs/levels/debug_logger.py
+      - src/components/logs/levels/error_logger.py
+      - src/components/logs/levels/info_logger.py
+      - src/components/math/zipf_probs_calculator.py
+      - src/components/time/cyclics/seconds_to_hours_converter.py
+      - src/components/time/cyclics/updater.py
+      - src/components/visualization/plots/daily_profile_plotter.py
+      - src/components/visualization/plots/key_usage_heatmap_plotter.py
+      - src/components/visualization/plots/zipf_loglog_plotter.py
+      - src/components/yaml/io/loader.py
+      - src/const.py
+      - src/pipeline/config/configurator.py
+      - src/pipeline/config/pydantic/config.py
+      - src/pipeline/config/pydantic/sections/data_config.py
+      - src/pipeline/config/pydantic/sections/dataset_config.py
+      - src/pipeline/config/pydantic/sections/hardware_config.py
+      - src/pipeline/config/pydantic/sections/model_config.py
+      - src/pipeline/config/pydantic/sections/simulation_config.py
+      - src/pipeline/config/pydantic/sections/testing_config.py
+      - src/pipeline/config/pydantic/sections/training_config.py
+      - src/pipeline/config/pydantic/sections/validation_config.py
+      - src/pipeline/steps/data_generator.py
     outs:
-      - data/raw/static/static_raw_dataset.csv
-      # - data/raw/dynamic/dynamic_raw_dataset.csv
+      - data/raw/${data.generation.mode}/${data.generation.mode}_raw_dataset.csv
+      - reports/plots/${data.generation.mode}/daily_profile.png
+      - reports/plots/${data.generation.mode}/key_usage.png
+      - reports/plots/${data.generation.mode}/zipf_log_log.png
 
   preprocess_data:
-    cmd: PYTHONPATH=src python -m pipeline.data_preprocessing.data_preprocessor
+    cmd: PYTHONPATH=src python -m pipeline.steps.data_preprocessor
+    params:
+      - src/pipeline/config/config.yaml:
+        - config.data.generation.mode
     deps:
-      - data/raw/static/static_raw_dataset.csv
-      # - data/raw/dynamic/dynamic_raw_dataset.csv
+      - src/components/assertions/choice_field_assertor.py
+      - src/components/assertions/min_max_assertor.py
+      - src/components/dataset/cleans/duplicates_remover.py
+      - src/components/dataset/cleans/missing_values_remover.py
+      - src/components/dataset/columns/manipulations/dropper.py
+      - src/components/dataset/columns/manipulations/reorderer.py
+      - src/components/dataset/columns/manipulations/setter.py
+      - src/components/dataset/features/builder.py
+      - src/components/dataset/io/loader.py
+      - src/components/dataset/io/locator.py
+      - src/components/dataset/io/saver.py
+      - src/components/logs/file_handlers/builder.py
+      - src/components/logs/initializer.py
+      - src/components/logs/levels/debug_logger.py
+      - src/components/logs/levels/error_logger.py
+      - src/components/logs/levels/info_logger.py
+      - src/components/time/transforms/trig_encoder.py
+      - src/components/yaml/io/loader.py
+      - src/const.py
+      - src/pipeline/config/configurator.py
+      - src/pipeline/config/pydantic/config.py
+      - src/pipeline/config/pydantic/sections/data_config.py
+      - src/pipeline/config/pydantic/sections/dataset_config.py
+      - src/pipeline/config/pydantic/sections/hardware_config.py
+      - src/pipeline/config/pydantic/sections/model_config.py
+      - src/pipeline/config/pydantic/sections/simulation_config.py
+      - src/pipeline/config/pydantic/sections/testing_config.py
+      - src/pipeline/config/pydantic/sections/training_config.py
+      - src/pipeline/config/pydantic/sections/validation_config.py
+      - src/pipeline/steps/data_preprocessor.py
+      - data/raw/${data.generation.mode}/${data.generation.mode}_raw_dataset.csv
     outs:
-      - data/processed/static/static_processed_dataset.csv
-      # - data/processed/dynamic/dynamic_processed_dataset.csv
+      - data/processed/${data.generation.mode}/${data.generation.mode}_processed_dataset.csv
 
   validate_model:
-    cmd: PYTHONPATH=src python -m pipeline.validation.validator
+    cmd: PYTHONPATH=src python -m pipeline.steps.validator
+    params:
+      - src/pipeline/config/config.yaml:
+        - config.hardware.device
+        - config.data.generation.mode
+        - config.data.generation.keys.min
+        - config.data.generation.keys.max
+        - config.dataset.split.training
+        - config.model.general.features
+        - config.model.params
+        - config.model.sequence.length
+        - config.model.sequence.embedding.dimension
+        - config.training.general.batch_size
+        - config.training.general.shuffle
+        - config.training.optimizer.params.learning_rate
+        - config.training.optimizer.params.weight_decay
+        - config.training.optimizer.type
+        - config.training.early_stopping.delta
+        - config.training.early_stopping.patience
+        - config.validation.general.batch_size
+        - config.validation.general.shuffle
+        - config.validation.cross_validation.folds
+        - config.validation.cross_validation.epochs
+        - config.validation.search_space
+        - config.validation.early_stopping.delta
+        - config.validation.early_stopping.patience
     deps:
-      - data/processed/static/static_processed_dataset.csv
-      # - data/processed/dynamic/dynamic_processed_dataset.csv
+      - src/components/assertions/choice_field_assertor.py
+      - src/components/assertions/min_max_assertor.py
+      - src/components/backpropagation/core/backward_runner.py
+      - src/components/backpropagation/core/forward_runner.py
+      - src/components/backpropagation/mc_dropout/forward_runner.py
+      - src/components/data_loader/builder.py
+      - src/components/data_loader/initializer.py
+      - src/components/data_loader/targets/extractor.py
+      - src/components/dataset/access_logs_dataset.py
+      - src/components/dataset/columns/extractions/extractor.py
+      - src/components/dataset/columns/extractions/features_target_extractor.py
+      - src/components/dataset/columns/manipulations/shifter.py
+      - src/components/dataset/io/loader.py
+      - src/components/dataset/io/locator.py
+      - src/components/dataset/rows/calculations/effective_rows_calculator.py
+      - src/components/dataset/rows/extractions/sliding_window_extractor.py
+      - src/components/dataset/splits/data_splitter.py
+      - src/components/dataset/splits/index/calculator.py
+      - src/components/dataset/splits/training_validation_splitter.py
+      - src/components/device/mover.py
+      - src/components/device/selector.py
+      - src/components/dict/combinations/nested_dict_lists_combinator.py
+      - src/components/dict/combinations/nested_dicts_combinator.py
+      - src/components/dict/operations/flattener.py
+      - src/components/dict/operations/merger.py
+      - src/components/dict/operations/value_setter.py
+      - src/components/evaluation/model/evaluator.py
+      - src/components/evaluation/model/metrics/calculations/class_report_calculator.py
+      - src/components/evaluation/model/metrics/calculations/cohen_kappa_score_calculator.py
+      - src/components/evaluation/model/metrics/calculations/top_k_accuracy_calculator.py
+      - src/components/evaluation/model/metrics/calculator.py
+      - src/components/evaluation/model/metrics/io/saver.py
+      - src/components/inference/batches_inferrer.py
+      - src/components/inference/single_batch_inferrer.py
+      - src/components/json/io/saver.py
+      - src/components/logs/file_handlers/builder.py
+      - src/components/logs/initializer.py
+      - src/components/logs/levels/debug_logger.py
+      - src/components/logs/levels/error_logger.py
+      - src/components/logs/levels/info_logger.py
+      - src/components/loss/builder.py
+      - src/components/loss/calculator.py
+      - src/components/loss/class_weights/calculator.py
+      - src/components/math/avg_calculator.py
+      - src/components/math/percentage_calculator.py
+      - src/components/model/best/checks_updates/checker_updater.py
+      - src/components/model/best/checks_updates/params_checker_updater.py
+      - src/components/model/builder.py
+      - src/components/model/environment/initializer.py
+      - src/components/model/lstm.py
+      - src/components/model/mode/setter.py
+      - src/components/model/state_dict/copier.py
+      - src/components/optimizer/builder.py
+      - src/components/training/callbacks/early_stopping.py
+      - src/components/training/core/epochs_trainer.py
+      - src/components/training/core/single_epoch_trainer.py
+      - src/components/validation/grid_search/runner.py
+      - src/components/validation/search_space/combinator.py
+      - src/components/validation/time_series_cv/builder.py
+      - src/components/validation/time_series_cv/core/folds_runner.py
+      - src/components/validation/time_series_cv/core/single_fold_runner.py
+      - src/components/yaml/io/loader.py
+      - src/components/yaml/io/saver.py
+      - src/const.py
+      - src/pipeline/config/configurator.py
+      - src/pipeline/config/pydantic/config.py
+      - src/pipeline/config/pydantic/sections/data_config.py
+      - src/pipeline/config/pydantic/sections/dataset_config.py
+      - src/pipeline/config/pydantic/sections/hardware_config.py
+      - src/pipeline/config/pydantic/sections/model_config.py
+      - src/pipeline/config/pydantic/sections/simulation_config.py
+      - src/pipeline/config/pydantic/sections/testing_config.py
+      - src/pipeline/config/pydantic/sections/training_config.py
+      - src/pipeline/config/pydantic/sections/validation_config.py
+      - src/pipeline/steps/validator.py
+      - data/processed/${data.generation.mode}/${data.generation.mode}_processed_dataset.csv
     outs: []
 
   train_model:
-    cmd: PYTHONPATH=src python -m pipeline.training.trainer
+    cmd: PYTHONPATH=src python -m pipeline.steps.trainer
+    params:
+      - src/pipeline/config/config.yaml:
+        - config.hardware.device
+        - config.data.generation.mode
+        - config.data.generation.keys.min
+        - config.data.generation.keys.max
+        - config.dataset.split.training
+        - config.dataset.split.validation
+        - config.model.general.features
+        - config.model.params
+        - config.model.sequence.length
+        - config.model.sequence.embedding.dimension
+        - config.training.general.batch_size
+        - config.training.general.epochs
+        - config.training.general.shuffle
+        - config.training.early_stopping.delta
+        - config.training.early_stopping.patience
+        - config.training.optimizer.params.learning_rate
+        - config.training.optimizer.params.weight_decay
+        - config.training.optimizer.type
+        - config.validation.general.batch_size
+        - config.validation.general.shuffle
+        - config.validation.early_stopping.delta
+        - config.validation.early_stopping.patience
     deps:
-      - data/processed/static/static_processed_dataset.csv
-      # - data/processed/dynamic/dynamic_processed_dataset.csv
-    outs: []
+      - src/components/assertions/choice_field_assertor.py
+      - src/components/assertions/min_max_assertor.py
+      - src/components/backpropagation/core/backward_runner.py
+      - src/components/backpropagation/core/forward_runner.py
+      - src/components/backpropagation/mc_dropout/forward_runner.py
+      - src/components/data_loader/builder.py
+      - src/components/data_loader/initializer.py
+      - src/components/data_loader/targets/extractor.py
+      - src/components/dataset/access_logs_dataset.py
+      - src/components/dataset/columns/extractions/extractor.py
+      - src/components/dataset/columns/extractions/features_target_extractor.py
+      - src/components/dataset/columns/manipulations/shifter.py
+      - src/components/dataset/io/loader.py
+      - src/components/dataset/io/locator.py
+      - src/components/dataset/rows/calculations/effective_rows_calculator.py
+      - src/components/dataset/rows/extractions/sliding_window_extractor.py
+      - src/components/dataset/splits/data_splitter.py
+      - src/components/dataset/splits/index/calculator.py
+      - src/components/dataset/splits/training_validation_splitter.py
+      - src/components/device/mover.py
+      - src/components/device/selector.py
+      - src/components/evaluation/model/evaluator.py
+      - src/components/evaluation/model/metrics/calculations/class_report_calculator.py
+      - src/components/evaluation/model/metrics/calculations/cohen_kappa_score_calculator.py
+      - src/components/evaluation/model/metrics/calculations/top_k_accuracy_calculator.py
+      - src/components/evaluation/model/metrics/calculator.py
+      - src/components/evaluation/model/metrics/io/saver.py
+      - src/components/inference/batches_inferrer.py
+      - src/components/inference/single_batch_inferrer.py
+      - src/components/json/io/saver.py
+      - src/components/logs/file_handlers/builder.py
+      - src/components/logs/initializer.py
+      - src/components/logs/levels/debug_logger.py
+      - src/components/logs/levels/error_logger.py
+      - src/components/logs/levels/info_logger.py
+      - src/components/loss/builder.py
+      - src/components/loss/calculator.py
+      - src/components/loss/class_weights/calculator.py
+      - src/components/math/avg_calculator.py
+      - src/components/math/percentage_calculator.py
+      - src/components/model/best/checks_updates/checker_updater.py
+      - src/components/model/builder.py
+      - src/components/model/environment/initializer.py
+      - src/components/model/io/locator.py
+      - src/components/model/io/saver.py
+      - src/components/model/lstm.py
+      - src/components/model/mode/setter.py
+      - src/components/model/state_dict/copier.py
+      - src/components/optimizer/builder.py
+      - src/components/training/callbacks/early_stopping.py
+      - src/components/training/core/epochs_trainer.py
+      - src/components/training/core/single_epoch_trainer.py
+      - src/components/yaml/io/loader.py
+      - src/const.py
+      - src/pipeline/config/configurator.py
+      - src/pipeline/config/pydantic/config.py
+      - src/pipeline/config/pydantic/sections/data_config.py
+      - src/pipeline/config/pydantic/sections/dataset_config.py
+      - src/pipeline/config/pydantic/sections/hardware_config.py
+      - src/pipeline/config/pydantic/sections/model_config.py
+      - src/pipeline/config/pydantic/sections/simulation_config.py
+      - src/pipeline/config/pydantic/sections/testing_config.py
+      - src/pipeline/config/pydantic/sections/training_config.py
+      - src/pipeline/config/pydantic/sections/validation_config.py
+      - src/pipeline/steps/trainer.py
+      - data/processed/${data.generation.mode}/${data.generation.mode}_processed_dataset.csv
+    outs:
+      - models/${data.generation.mode}/trained_${data.generation.mode}_model.pt
 
   test_model:
-    cmd: PYTHONPATH=src python -m pipeline.testing.tester
+    cmd: PYTHONPATH=src python -m pipeline.steps.tester
+    params:
+      - src/pipeline/config/config.yaml:
+        - config.hardware.device
+        - config.data.generation.mode
+        - config.data.generation.keys.min
+        - config.data.generation.keys.max
+        - config.dataset.split.training
+        - config.model.general.features
+        - config.model.params
+        - config.model.sequence.length
+        - config.model.sequence.embedding.dimension
+        - config.testing.general.batch_size
+        - config.testing.general.shuffle
+        - config.testing.metrics.top_k
     deps:
-      - data/processed/static/static_processed_dataset.csv
-      # - data/processed/dynamic/dynamic_processed_dataset.csv
-    outs: []
+      - src/components/assertions/choice_field_assertor.py
+      - src/components/assertions/min_max_assertor.py
+      - src/components/backpropagation/core/forward_runner.py
+      - src/components/backpropagation/mc_dropout/forward_runner.py
+      - src/components/data_loader/builder.py
+      - src/components/data_loader/initializer.py
+      - src/components/data_loader/targets/extractor.py
+      - src/components/dataset/access_logs_dataset.py
+      - src/components/dataset/columns/extractions/extractor.py
+      - src/components/dataset/columns/extractions/features_target_extractor.py
+      - src/components/dataset/columns/manipulations/shifter.py
+      - src/components/dataset/io/loader.py
+      - src/components/dataset/io/locator.py
+      - src/components/dataset/rows/calculations/effective_rows_calculator.py
+      - src/components/dataset/rows/extractions/sliding_window_extractor.py
+      - src/components/dataset/splits/data_splitter.py
+      - src/components/dataset/splits/index/calculator.py
+      - src/components/device/mover.py
+      - src/components/device/selector.py
+      - src/components/evaluation/model/evaluator.py
+      - src/components/evaluation/model/metrics/calculations/class_report_calculator.py
+      - src/components/evaluation/model/metrics/calculations/cohen_kappa_score_calculator.py
+      - src/components/evaluation/model/metrics/calculations/top_k_accuracy_calculator.py
+      - src/components/evaluation/model/metrics/calculator.py
+      - src/components/evaluation/model/metrics/io/saver.py
+      - src/components/inference/batches_inferrer.py
+      - src/components/inference/single_batch_inferrer.py
+      - src/components/json/io/saver.py
+      - src/components/logs/file_handlers/builder.py
+      - src/components/logs/initializer.py
+      - src/components/logs/levels/debug_logger.py
+      - src/components/logs/levels/error_logger.py
+      - src/components/logs/levels/info_logger.py
+      - src/components/loss/builder.py
+      - src/components/loss/calculator.py
+      - src/components/loss/class_weights/calculator.py
+      - src/components/math/avg_calculator.py
+      - src/components/math/percentage_calculator.py
+      - src/components/model/best/initializer.py
+      - src/components/model/builder.py
+      - src/components/model/environment/initializer.py
+      - src/components/model/io/locator.py
+      - src/components/model/lstm.py
+      - src/components/model/mode/setter.py
+      - src/components/model/state_dict/loader.py
+      - src/components/visualization/reports/model_evaluation_reporter.py
+      - src/components/yaml/io/loader.py
+      - src/const.py
+      - src/pipeline/config/configurator.py
+      - src/pipeline/config/pydantic/config.py
+      - src/pipeline/config/pydantic/sections/data_config.py
+      - src/pipeline/config/pydantic/sections/dataset_config.py
+      - src/pipeline/config/pydantic/sections/hardware_config.py
+      - src/pipeline/config/pydantic/sections/model_config.py
+      - src/pipeline/config/pydantic/sections/simulation_config.py
+      - src/pipeline/config/pydantic/sections/testing_config.py
+      - src/pipeline/config/pydantic/sections/training_config.py
+      - src/pipeline/config/pydantic/sections/validation_config.py
+      - src/pipeline/steps/tester.py
+      - data/processed/${data.generation.mode}/${data.generation.mode}_processed_dataset.csv
+      - models/${data.generation.mode}/trained_${data.generation.mode}_model.pt
+    outs:
+      - reports/results/${data.generation.mode}/${data.generation.mode}_model_results.json
 
-    run_simulations:
-      cmd: PYTHONPATH=src python -m pipeline.simulation.simulator
+  run_simulations:
+    cmd: PYTHONPATH=src python -m pipeline.steps.simulator
+    params:
+      - src/pipeline/config/config.yaml:
+        - config.data.generation.mode
+        - config.dataset.split.training
+        - config.model.sequence.length
+        - config.testing.general.batch_size
+        - config.testing.general.shuffle
+        - config.simulations.cache.general.dimension
+        - config.simulations.cache.general.ttl
+        - config.simulations.metrics.mistake_rate.window
+    deps:
+      - src/components/assertions/choice_field_assertor.py
+      - src/components/assertions/min_max_assertor.py
+      - src/components/caches/implementations/fifo_cache.py
+      - src/components/caches/implementations/lfu_cache.py
+      - src/components/caches/implementations/lru_cache.py
+      - src/components/caches/implementations/lstm_cache.py
+      - src/components/caches/implementations/random_cache.py
+      - src/components/caches/simulations/hit_miss/checker_updater.py
+      - src/components/caches/simulations/hit_miss/timeline_updater.py
+      - src/components/caches/simulations/runner.py
+      - src/components/caches/utils/base_cache.py
+      - src/components/caches/utils/cache_metrics_logger.py
+      - src/components/caches/utils/cache_wrapper.py
+      - src/components/data_loader/builder.py
+      - src/components/data_loader/initializer.py
+      - src/components/dataset/access_logs_dataset.py
+      - src/components/dataset/columns/extractions/extractor.py
+      - src/components/dataset/columns/extractions/features_target_extractor.py
+      - src/components/dataset/columns/manipulations/shifter.py
+      - src/components/dataset/io/loader.py
+      - src/components/dataset/io/locator.py
+      - src/components/dataset/rows/calculations/effective_rows_calculator.py
+      - src/components/dataset/rows/extractions/lasts_extractor.py
+      - src/components/dataset/rows/extractions/sliding_window_extractor.py
+      - src/components/dataset/rows/extractions/tuple_extractor.py
+      - src/components/dataset/splits/data_splitter.py
+      - src/components/dataset/splits/index/calculator.py
+      - src/components/evaluation/simulations/metrics/calculations/eviction_mistake_rate_calculator.py
+      - src/components/evaluation/simulations/metrics/calculations/hit_miss_rates_calculator.py
+      - src/components/evaluation/simulations/metrics/calculator.py
+      - src/components/evaluation/simulations/metrics/io/saver.py
+      - src/components/json/io/saver.py
+      - src/components/logs/file_handlers/builder.py
+      - src/components/logs/initializer.py
+      - src/components/logs/levels/debug_logger.py
+      - src/components/logs/levels/error_logger.py
+      - src/components/logs/levels/info_logger.py
+      - src/components/math/avg_calculator.py
+      - src/components/math/percentage_calculator.py
+      - src/components/time/transforms/trig_decoder.py
+      - src/components/visualization/plots/hit_miss_rates_plotter.py
+      - src/components/visualization/reports/simulation_reporter.py
+      - src/components/yaml/io/loader.py
+      - src/const.py
+      - src/pipeline/config/configurator.py
+      - src/pipeline/config/pydantic/config.py
+      - src/pipeline/config/pydantic/sections/data_config.py
+      - src/pipeline/config/pydantic/sections/dataset_config.py
+      - src/pipeline/config/pydantic/sections/hardware_config.py
+      - src/pipeline/config/pydantic/sections/model_config.py
+      - src/pipeline/config/pydantic/sections/simulation_config.py
+      - src/pipeline/config/pydantic/sections/testing_config.py
+      - src/pipeline/config/pydantic/sections/training_config.py
+      - src/pipeline/config/pydantic/sections/validation_config.py
+      - src/pipeline/steps/simulator.py
+      - data/processed/${data.generation.mode}/${data.generation.mode}_processed_dataset.csv
+    outs:
+      - reports/results/${data.generation.mode}/${data.generation.mode}_simulations_results.json
+      - reports/plots/${data.generation.mode}/hit_miss_rates.png
 
 artifacts:
   static-model:
@@ -67,12 +513,16 @@ artifacts:
 
 metrics:
   - reports/results/static/static_model_results.json
-  # - reports/results/dynamic/dynamic_model_results.json
+  - reports/results/dynamic/dynamic_model_results.json
+  - reports/results/static/static_simulations_results.json
+  - reports/results/dynamic/dynamic_simulations_results.json
 
 plots:
   - reports/plots/static/daily_profile.png
   - reports/plots/static/key_usage.png
   - reports/plots/static/zipf_log_log.png
-  # - reports/plots/dynamic/daily_profile.png
-  # - reports/plots/dynamic/key_usage.png
-  # - reports/plots/dynamic/zipf_log_log.png
+  - reports/plots/static/hit_miss_rates.png
+  - reports/plots/dynamic/daily_profile.png
+  - reports/plots/dynamic/key_usage.png
+  - reports/plots/dynamic/hit_miss_rates.png
+  - reports/plots/dynamic/zipf_log_log.png

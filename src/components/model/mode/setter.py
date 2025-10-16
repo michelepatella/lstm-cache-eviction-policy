@@ -1,9 +1,9 @@
 import torch
 
-from const import MC_DROPOUT_MODEL_MODE, TRAINING_MODEL_MODE
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
+from const import MC_DROPOUT_MODEL_MODE, TRAINING_MODEL_MODE
 
 
 def set_model_mode(

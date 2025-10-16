@@ -2,8 +2,8 @@ from typing import List
 
 import numpy as np
 
-from const import SECONDS_IN_DAY, SECONDS_IN_HOUR
 from components.logs.levels.info_logger import info
+from const import SECONDS_IN_DAY, SECONDS_IN_HOUR
 
 
 def convert_seconds_to_hours_cyclic(

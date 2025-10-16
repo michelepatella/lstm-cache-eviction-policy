@@ -1,8 +1,8 @@
 from typing import Dict, List
 
-from const import TIMELINE_NAME
 from components.json.io.saver import save_json
 from components.logs.levels.debug_logger import debug
+from const import TIMELINE_NAME
 
 
 def save_simulations_metrics(results: List[Dict], path: str) -> None:

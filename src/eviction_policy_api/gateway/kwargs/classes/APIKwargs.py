@@ -2,13 +2,13 @@ from typing import List
 
 from pydantic import BaseModel, confloat, conint, model_validator
 
+from components.assertions.choice_field_assertor import assert_choice_field
 from eviction_policy_api.const import (
     MAX_MC_DROPOUT_SAMPLES,
     MAX_ROLLOUT_HORIZON,
     MAX_TIME_STEP_INCREMENT,
     TIEBREAK_STRATEGIES,
 )
-from components.assertions.choice_field_assertor import assert_choice_field
 
 
 class APIKwargs(BaseModel):

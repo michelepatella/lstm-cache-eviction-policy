@@ -4,17 +4,19 @@ import torch
 from torch import nn
 from torch.utils.data import DataLoader
 
-from pipeline.config.pydantic.config import Config
-from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
 from components.data_loader.targets.extractor import (
     extract_targets_from_data_loader,
 )
 from components.logs.levels.info_logger import info
-from components.model.environment.initializer import initialize_model_environment
+from components.model.environment.initializer import (
+    initialize_model_environment,
+)
 from components.model.io.locator import get_model_abs_path
 from components.model.state_dict.loader import (
     load_model_state_dict,
 )
+from pipeline.config.pydantic.config import Config
+from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
 
 
 def initialize_best_model(

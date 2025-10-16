@@ -1,8 +1,12 @@
-from const import LOGS_CONFIGURATION_PHASE, CONFIG_DIRECTORY_PATH, CONFIG_FILE_NAME
-from pipeline.config.pydantic.config import Config
 from components.logs.initializer import logs_phase
 from components.logs.levels.info_logger import info
 from components.yaml.io.loader import load_yaml
+from const import (
+    CONFIG_DIRECTORY_PATH,
+    CONFIG_FILE_NAME,
+    LOGS_CONFIGURATION_PHASE,
+)
+from pipeline.config.pydantic.config import Config
 
 
 def prepare_config() -> Config:

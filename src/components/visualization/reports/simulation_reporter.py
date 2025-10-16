@@ -1,5 +1,7 @@
 from typing import Any, Dict, List
 
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 from const import (
     AVG_CACHE_LATENCY_NAME,
     EVICTION_MISTAKE_RATE_NAME,
@@ -7,8 +9,6 @@ from const import (
     MISS_RATE_NAME,
     POLICY_NAME,
 )
-from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def generate_simulations_report(

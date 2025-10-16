@@ -1,3 +1,5 @@
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.info_logger import info
 from const import (
     DATA_DISTRIBUTION_STATIC_MODE,
     TRAINED_MODEL_DYNAMIC_DIRECTORY,
@@ -5,8 +7,6 @@ from const import (
     TRAINED_MODEL_STATIC_DIRECTORY,
     TRAINED_MODEL_STATIC_FILE_NAME,
 )
-from components.logs.levels.debug_logger import debug
-from components.logs.levels.info_logger import info
 
 
 def get_model_abs_path(data_distribution_mode: str) -> str:

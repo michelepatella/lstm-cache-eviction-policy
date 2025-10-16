@@ -3,7 +3,6 @@ from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from const import TRAINING_MODEL_MODE
 from components.backpropagation.core.backward_runner import (
     compute_backward,
 )
@@ -12,6 +11,7 @@ from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.model.mode.setter import set_model_mode
+from const import TRAINING_MODEL_MODE
 
 
 def train_single_epoch(

@@ -1,5 +1,3 @@
-from const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE
-from pipeline.config.configurator import prepare_config
 from components.data_loader.builder import build_data_loader
 from components.data_loader.initializer import initialize_data_loader
 from components.data_loader.targets.extractor import (
@@ -9,13 +7,17 @@ from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.dataset.splits.training_validation_splitter import (
     split_training_validation_sets,
 )
-from components.logs.initializer import logs_phase, initialize_logs
+from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
-from components.model.environment.initializer import initialize_model_environment
+from components.model.environment.initializer import (
+    initialize_model_environment,
+)
 from components.model.io.locator import get_model_abs_path
 from components.model.io.saver import save_model
 from components.optimizer.builder import build_optimizer
 from components.training.core.epochs_trainer import train_epochs
+from const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE
+from pipeline.config.configurator import prepare_config
 
 
 def train_model() -> None:

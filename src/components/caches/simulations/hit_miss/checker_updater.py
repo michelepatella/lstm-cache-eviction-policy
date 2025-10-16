@@ -1,7 +1,7 @@
 from typing import Any, Dict
 
-from const import HIT_COUNTER_NAME, MISS_COUNTER_NAME
 from components.logs.levels.info_logger import info
+from const import HIT_COUNTER_NAME, MISS_COUNTER_NAME
 
 
 def check_update_hit_miss(

@@ -4,15 +4,15 @@ from typing import Dict, List, Tuple
 import torch
 from fastapi import FastAPI
 
-from eviction_policy_api.const import AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT
-from eviction_policy_api.services.autoregressive_rollout.initialization.initializer import (
-    initialize_autoregressive_rollout,
-)
 from components.device.mover import (
     move_to_device,
 )
 from components.logs.levels.info_logger import info
 from components.mc.forward_runner import mc_forward_passes
+from eviction_policy_api.const import AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT
+from eviction_policy_api.services.autoregressive_rollout.initialization.initializer import (
+    initialize_autoregressive_rollout,
+)
 
 app = FastAPI()
 

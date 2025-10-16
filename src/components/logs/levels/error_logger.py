@@ -1,8 +1,8 @@
 import logging
 from typing import Any
 
-from const import LOGS_PHASE_NAME
 from components.logs.initializer import logs_phase
+from const import LOGS_PHASE_NAME
 
 
 def error(

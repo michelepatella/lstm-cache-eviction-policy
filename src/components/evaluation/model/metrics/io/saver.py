@@ -1,5 +1,7 @@
 from typing import Dict
 
+from components.json.io.saver import save_json
+from components.logs.levels.debug_logger import debug
 from const import (
     MODEL_METRICS_ACCURACY_NAME,
     MODEL_METRICS_AVG_LOSS,
@@ -7,8 +9,6 @@ from const import (
     MODEL_METRICS_MACRO_AVG_NAME,
     MODEL_METRICS_WEIGHTED_AVG_NAME,
 )
-from components.json.io.saver import save_json
-from components.logs.levels.debug_logger import debug
 
 
 def save_model_metrics(

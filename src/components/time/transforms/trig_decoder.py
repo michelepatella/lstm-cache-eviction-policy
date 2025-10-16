@@ -1,8 +1,8 @@
 import math
 
-from const import HOURS_IN_DAY, SECONDS_IN_HOUR
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
+from const import HOURS_IN_DAY, SECONDS_IN_HOUR
 
 
 def decode_time_trigonometrically(

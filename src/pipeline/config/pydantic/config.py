@@ -6,10 +6,14 @@ from pipeline.config.pydantic.sections.data_config import DataConfig
 from pipeline.config.pydantic.sections.dataset_config import DatasetConfig
 from pipeline.config.pydantic.sections.hardware_config import HardwareConfig
 from pipeline.config.pydantic.sections.model_config import ModelConfig
-from pipeline.config.pydantic.sections.simulation_config import SimulationsConfig
+from pipeline.config.pydantic.sections.simulation_config import (
+    SimulationsConfig,
+)
 from pipeline.config.pydantic.sections.testing_config import TestingConfig
 from pipeline.config.pydantic.sections.training_config import TrainingConfig
-from pipeline.config.pydantic.sections.validation_config import ValidationConfig
+from pipeline.config.pydantic.sections.validation_config import (
+    ValidationConfig,
+)
 
 # Definition of configuration value
 # and dictionary types

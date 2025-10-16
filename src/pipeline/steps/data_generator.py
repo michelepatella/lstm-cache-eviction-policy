@@ -1,14 +1,15 @@
-from const import LOGS_DATA_GENERATION_PHASE, DATA_DISTRIBUTION_STATIC_MODE, TIMESTAMP_COLUMN_NAME, REQUEST_COLUMN_NAME, \
-    DATASET_RAW_TYPE, PLOTS_DIRECTORY_PATH, ZIPF_LOG_LOG_PLOT_FILE_NAME, DAILY_PROFILE_PLOT_FILE_NAME, \
-    KEY_USAGE_HEATMAP_FILE_NAME
-from pipeline.config.configurator import prepare_config
-
 from components.data.requests.core.dynamic_generator import (
     generate_dynamic_requests,
 )
 from components.data.requests.core.static_generator import (
     generate_static_requests,
 )
+from components.dataset.builder import build_dataset
+from components.dataset.io.locator import get_dataset_abs_path
+from components.dataset.io.saver import save_dataset
+from components.logs.initializer import initialize_logs, logs_phase
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.info_logger import info
 from components.visualization.plots.daily_profile_plotter import (
     plot_daily_profile,
 )
@@ -18,12 +19,18 @@ from components.visualization.plots.key_usage_heatmap_plotter import (
 from components.visualization.plots.zipf_loglog_plotter import (
     plot_zipf_loglog,
 )
-from components.dataset.builder import build_dataset
-from components.dataset.io.locator import get_dataset_abs_path
-from components.dataset.io.saver import save_dataset
-from components.logs.initializer import logs_phase, initialize_logs
-from components.logs.levels.debug_logger import debug
-from components.logs.levels.info_logger import info
+from const import (
+    DAILY_PROFILE_PLOT_FILE_NAME,
+    DATA_DISTRIBUTION_STATIC_MODE,
+    DATASET_RAW_TYPE,
+    KEY_USAGE_HEATMAP_FILE_NAME,
+    LOGS_DATA_GENERATION_PHASE,
+    PLOTS_DIRECTORY_PATH,
+    REQUEST_COLUMN_NAME,
+    TIMESTAMP_COLUMN_NAME,
+    ZIPF_LOG_LOG_PLOT_FILE_NAME,
+)
+from pipeline.config.configurator import prepare_config
 
 
 def generate_data() -> None:

@@ -4,20 +4,22 @@ from typing import Any
 import requests
 from torch.utils.data import DataLoader
 
-from components.dataset.rows.extractions.lasts_extractor import extract_last_rows_from_dataset
+from components.caches.utils.base_cache import BaseCache
+from components.caches.utils.cache_metrics_logger import (
+    CacheMetricsLogger,
+)
+from components.dataset.rows.extractions.lasts_extractor import (
+    extract_last_rows_from_dataset,
+)
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
-from pipeline.config.pydantic.config import Config
 from const import (
     EVICTION_POLICY_API_ENDPOINT,
     EVICTION_POLICY_API_KEYS_IN_CACHE_PARAM_NAME,
     EVICTION_POLICY_API_LAST_ACCESSES_PARAM_NAME,
     EVICTION_POLICY_API_USER_KWARGS_PARAM_NAME,
 )
-from components.caches.utils.base_cache import BaseCache
-from components.caches.utils.cache_metrics_logger import (
-    CacheMetricsLogger,
-)
+from pipeline.config.pydantic.config import Config
 
 
 class LSTMCache(BaseCache):

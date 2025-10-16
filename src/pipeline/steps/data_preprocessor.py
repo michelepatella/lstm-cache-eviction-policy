@@ -1,16 +1,23 @@
-from components.dataset.cleans.duplicates_remover import remove_dataset_duplicates
-from components.dataset.cleans.missing_values_remover import remove_dataset_missing_values
-from components.dataset.io.loader import load_dataset
-from components.dataset.io.locator import get_dataset_abs_path
-from components.dataset.io.saver import save_dataset
-from components.logs.initializer import logs_phase, initialize_logs
-from components.logs.levels.info_logger import info
-from const import LOGS_DATA_PREPROCESSING_PHASE, DATASET_RAW_TYPE, TIMESTAMP_COLUMN_NAME
-from pipeline.config.configurator import prepare_config
-
+from components.dataset.cleans.duplicates_remover import (
+    remove_dataset_duplicates,
+)
+from components.dataset.cleans.missing_values_remover import (
+    remove_dataset_missing_values,
+)
 from components.dataset.features.builder import (
     build_features,
 )
+from components.dataset.io.loader import load_dataset
+from components.dataset.io.locator import get_dataset_abs_path
+from components.dataset.io.saver import save_dataset
+from components.logs.initializer import initialize_logs, logs_phase
+from components.logs.levels.info_logger import info
+from const import (
+    DATASET_RAW_TYPE,
+    LOGS_DATA_PREPROCESSING_PHASE,
+    TIMESTAMP_COLUMN_NAME,
+)
+from pipeline.config.configurator import prepare_config
 
 
 def preprocess_data() -> None:

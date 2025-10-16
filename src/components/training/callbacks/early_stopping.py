@@ -1,10 +1,10 @@
 import numpy as np
 
-from pipeline.config.pydantic.config import Config
-from const import LOGS_VALIDATION_PHASE
 from components.logs.initializer import logs_phase
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
+from const import LOGS_VALIDATION_PHASE
+from pipeline.config.pydantic.config import Config
 
 
 class EarlyStopping:

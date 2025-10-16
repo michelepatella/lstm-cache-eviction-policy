@@ -3,14 +3,14 @@ from typing import Tuple
 import pandas as pd
 import torch
 
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 from const import (
     COS_TIME_COLUMN_NAME,
     REQUEST_COLUMN_NAME,
     SIN_TIME_COLUMN_NAME,
 )
-from components.logs.levels.debug_logger import debug
-from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def extract_tuple_from_dataset_row(

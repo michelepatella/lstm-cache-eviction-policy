@@ -1,3 +1,6 @@
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 from const import (
     DATA_DISTRIBUTION_STATIC_MODE,
     DATASET_RAW_TYPE,
@@ -10,9 +13,6 @@ from const import (
     STATIC_RAW_DATASET_DIRECTORY,
     STATIC_RAW_DATASET_FILE_NAME,
 )
-from components.logs.levels.debug_logger import debug
-from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def get_dataset_abs_path(

@@ -1,16 +1,17 @@
 from typing import Dict, List, Tuple
 
-from components.evaluation.simulations.metrics.calculations.eviction_mistake_rate_calculator import \
-    calculate_eviction_mistake_rate
-from components.evaluation.simulations.metrics.calculations.hit_miss_rates_calculator import (
-    calculate_hit_miss_rate,
-)
-from const import HIT_COUNTER_NAME, MISS_COUNTER_NAME
 from components.caches.utils.cache_metrics_logger import (
     CacheMetricsLogger,
 )
+from components.evaluation.simulations.metrics.calculations.eviction_mistake_rate_calculator import (
+    calculate_eviction_mistake_rate,
+)
+from components.evaluation.simulations.metrics.calculations.hit_miss_rates_calculator import (
+    calculate_hit_miss_rate,
+)
 from components.logs.levels.info_logger import info
 from components.math.avg_calculator import calculate_average
+from const import HIT_COUNTER_NAME, MISS_COUNTER_NAME
 
 
 def calculate_simulation_metrics(
