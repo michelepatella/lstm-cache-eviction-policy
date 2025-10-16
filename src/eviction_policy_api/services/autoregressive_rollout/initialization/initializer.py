@@ -2,16 +2,16 @@ from typing import Dict, Tuple
 
 import torch
 
-from utils.device.mover import (
+from components.device.mover import (
     move_to_device,
 )
-from utils.device.selector import (
+from components.device.selector import (
     select_device,
 )
-from utils.model.building.builder import (
+from components.model.builder import (
     build_model,
 )
-from utils.model.state_dict.loader import (
+from components.model.state_dict.loader import (
     load_model_state_dict,
 )
 

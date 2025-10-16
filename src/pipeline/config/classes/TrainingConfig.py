@@ -1,8 +1,8 @@
 from pydantic import BaseModel, confloat, conint, model_validator
 
 from pipeline.const import TRAINING_OPTIMIZERS
-from utils.assertions.choice_field_validator import (
-    validate_choice_field,
+from components.assertions.choice_field_assertor import (
+    assert_choice_field,
 )
 
 
@@ -64,7 +64,7 @@ class OptimizerConfig(BaseModel):
         Returns:
             None.
         """
-        validate_choice_field(
+        assert_choice_field(
             self.type,
             TRAINING_OPTIMIZERS,
             "training.optimizer.type",

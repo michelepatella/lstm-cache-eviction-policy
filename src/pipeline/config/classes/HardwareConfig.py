@@ -1,8 +1,8 @@
 from pydantic import BaseModel, model_validator
 
 from pipeline.const import HW_DEVICES
-from utils.assertions.choice_field_validator import (
-    validate_choice_field,
+from components.assertions.choice_field_assertor import (
+    assert_choice_field,
 )
 
 
@@ -29,7 +29,7 @@ class HardwareConfig(BaseModel):
         Returns:
             None.
         """
-        validate_choice_field(
+        assert_choice_field(
             self.device,
             HW_DEVICES,
             "hardware.device",

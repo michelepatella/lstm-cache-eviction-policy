@@ -16,7 +16,7 @@ from eviction_policy_api.gateway.kwargs.builder import (
 from eviction_policy_api.gateway.kwargs.default_getter import (
     get_default_kwargs,
 )
-from utils.json.loader import load_json
+from components.json.io.loader import load_json
 
 app = FastAPI()
 

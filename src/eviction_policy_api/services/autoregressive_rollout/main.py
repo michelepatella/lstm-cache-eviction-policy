@@ -8,11 +8,11 @@ from eviction_policy_api.const import AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT
 from eviction_policy_api.services.autoregressive_rollout.initialization.initializer import (
     initialize_autoregressive_rollout,
 )
-from utils.device.mover import (
+from components.device.mover import (
     move_to_device,
 )
-from utils.logs.levels.info_logger import info
-from utils.mc.forward_runner import mc_forward_passes
+from components.logs.levels.info_logger import info
+from components.mc.forward_runner import mc_forward_passes
 
 app = FastAPI()
 
