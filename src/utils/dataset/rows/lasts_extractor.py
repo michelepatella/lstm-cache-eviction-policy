@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader
 from pipeline.const import (
     SECONDS_IN_HOUR,
 )
-from utils.dataset.building.sliding_window_extractor import (
+from utils.dataset.extraction.sliding_window_extractor import (
     extract_dataset_sliding_window,
 )
 from utils.dataset.rows.tuple_extractor import extract_tuple_from_dataset_row

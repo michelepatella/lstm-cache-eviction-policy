@@ -6,6 +6,10 @@ from torch.utils.data import Dataset
 
 from pipeline.config.classes.Config import Config
 from pipeline.const import TRAINING_SPLIT_TYPE
+from utils.dataset.columns.extractor import extract_dataset_columns
+from utils.dataset.extraction.features_target_from_columns_extractor import (
+    extract_features_target_from_dataset_columns,
+)
 from utils.dataset.io.loader import load_dataset
 from utils.dataset.io.locator import get_dataset_abs_path
 from utils.dataset.splitting.data_splitter import split_dataset_data
@@ -66,9 +70,7 @@ class AccessLogsDataset(Dataset):
         # Split dataset data according
         # to the calculated index
         self.data = split_dataset_data(
-            self.data,
-            dataset_split_idx,
-            (dataset_type == TRAINING_SPLIT_TYPE)
+            self.data, dataset_split_idx, (dataset_type == TRAINING_SPLIT_TYPE)
         )
 
         info("Dataset split")
@@ -80,8 +82,7 @@ class AccessLogsDataset(Dataset):
         Set the feature, target, and sequence length fields of the dataset.
 
         This function sets the dataset columns, identifies feature columns
-        and target column (assuming target is the last column), and retrieves
-        the sequence length from the configuration.
+        and target colum, and retrieves the sequence length.
 
         Args:
             self (AccessLogsDataset): Instance of AccessLogsDataset.
@@ -90,41 +91,17 @@ class AccessLogsDataset(Dataset):
 
         Returns:
             None
-
-        Raises:
-            RuntimeError: If an error occurs while
-                          setting dataset fields, e.g.:
-                * data is not a Pandas DataFrame
-                * data columns or sequence length are of wrong type
-                * data does not contain any columns
         """
-        try:
-            # Extract column names
-            self.columns = data.columns.tolist()
+        # Set column names extracted from data
+        self.columns = extract_dataset_columns(data)
 
-            debug(f"Dataset columns extracted: {self.columns}")
-        except (AttributeError, TypeError) as e:
-            msg = "Failed to extract dataset columns"
-            error("%s: %s", msg, e)
-            raise RuntimeError(msg) from e
+        # Set features and target extracted from columns
+        self.features, self.target = (
+            extract_features_target_from_dataset_columns(self.columns)
+        )
 
-        try:
-            # Identify features and target
-            self.features = self.columns[
-                :-1
-            ]  # All the columns except the last one
-            self.target = self.columns[-1]  # Only the last one
-
-            # Retrieve sequence length
-            self.seq_len = config.model.sequence.length
-
-            debug(f"Feature dataset columns: {self.features}")
-            debug(f"Target dataset column: {self.target}")
-            debug(f"Sequence length: {self.seq_len}")
-        except (IndexError, AttributeError, TypeError) as e:
-            msg = "Failed to set dataset fields"
-            error("%s: %s", msg, e)
-            raise RuntimeError(msg) from e
+        # Set sequence length
+        self.seq_len = config.model.sequence.length
 
         info("Dataset fields set")
 

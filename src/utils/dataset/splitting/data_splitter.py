@@ -4,11 +4,7 @@ from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
 
-def split_dataset_data(
-    data: Any,
-    split_idx: int,
-    take_first: bool
-) -> Any:
+def split_dataset_data(data: Any, split_idx: int, take_first: bool) -> Any:
     """
     Split data at a given index.
 
