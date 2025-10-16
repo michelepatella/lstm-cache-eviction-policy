@@ -2,7 +2,7 @@ import logging
 from typing import Any
 
 from pipeline.const import LOGS_PHASE_NAME
-from utils.logs.initializer import logs_phase
+from components.logs.initializer import logs_phase
 
 
 def debug(

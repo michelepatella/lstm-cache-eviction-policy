@@ -5,11 +5,11 @@ from pipeline.const import (
     DATA_GENERATION_FINAL_HOUR,
     DATA_GENERATION_INITIAL_HOUR,
 )
-from utils.assertions.choice_field_validator import (
-    validate_choice_field,
+from components.assertions.choice_field_assertor import (
+    assert_choice_field,
 )
-from utils.assertions.min_max_validator import (
-    are_min_max_valid,
+from components.assertions.min_max_assertor import (
+    assert_min_less_than_max,
 )
 
 
@@ -59,7 +59,7 @@ class KeysConfig(BaseModel):
             KeysConfig: Validated model instance.
         """
         # Check min/max validity
-        are_min_max_valid(
+        assert_min_less_than_max(
             self.min,
             self.max,
             context="data.general.keys",
@@ -181,7 +181,7 @@ class NoiseConfig(BaseModel):
         Returns:
             NoiseConfig: Validated model instance.
         """
-        are_min_max_valid(
+        assert_min_less_than_max(
             self.min,
             self.max,
             context="data.pattern.access.behavior.distortion.noise",
@@ -330,7 +330,7 @@ class BurstinessConfig(BaseModel):
             BurstinessConfig: Validated model instance.
         """
         # Check min/max validity
-        are_min_max_valid(
+        assert_min_less_than_max(
             self.high,
             self.low,
             context="data.pattern.temporal.burstiness",
@@ -413,7 +413,7 @@ class GenerationConfig(BaseModel):
         Returns:
             None
         """
-        validate_choice_field(
+        assert_choice_field(
             self.mode,
             DATA_DISTRIBUTION_MODES,
             "data.general.mode",

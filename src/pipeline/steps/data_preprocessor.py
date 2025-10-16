@@ -4,20 +4,20 @@ from pipeline.const import (
     LOGS_DATA_PREPROCESSING_PHASE,
     TIMESTAMP_COLUMN_NAME,
 )
-from pipeline.steps.data_preprocessing.features.builder import (
-    build_time_features,
+from components.dataset.features.builder import (
+    build_features,
 )
-from utils.dataset.cleaning.duplicates_remover import (
+from features.dataset.cleaning.duplicates_remover import (
     remove_dataset_duplicates,
 )
-from utils.dataset.cleaning.missing_values_remover import (
+from features.dataset.cleaning.missing_values_remover import (
     remove_dataset_missing_values,
 )
-from utils.dataset.io.loader import load_dataset
-from utils.dataset.io.locator import get_dataset_abs_path
-from utils.dataset.io.saver import save_dataset
-from utils.logs.initializer import logs_phase
-from utils.logs.levels.info_logger import info
+from features.dataset.io.loader import load_dataset
+from features.dataset.io.locator import get_dataset_abs_path
+from features.dataset.io.saver import save_dataset
+from features.logs.initializer import logs_phase
+from features.logs.levels.info_logger import info
 
 
 def preprocess_data() -> None:
@@ -57,7 +57,7 @@ def preprocess_data() -> None:
     df = remove_dataset_duplicates(df, [TIMESTAMP_COLUMN_NAME])
 
     # Build new features
-    df = build_time_features(df)
+    df = build_features(df)
 
     # Save preprocessed dataset
     save_dataset(df, dataset_path)

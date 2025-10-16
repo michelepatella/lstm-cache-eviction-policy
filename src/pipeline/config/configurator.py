@@ -4,9 +4,9 @@ from pipeline.const import (
     CONFIG_FILE_NAME,
     LOGS_CONFIGURATION_PHASE,
 )
-from utils.logs.initializer import logs_phase
-from utils.logs.levels.info_logger import info
-from utils.yaml.loader import load_yaml
+from components.logs.initializer import logs_phase
+from components.logs.levels.info_logger import info
+from components.yaml.io.loader import load_yaml
 
 
 def prepare_config() -> Config:

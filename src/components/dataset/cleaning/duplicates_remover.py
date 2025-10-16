@@ -2,8 +2,8 @@ from typing import List
 
 import pandas as pd
 
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 
 
 def remove_dataset_duplicates(

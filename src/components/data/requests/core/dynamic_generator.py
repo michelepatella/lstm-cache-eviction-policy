@@ -3,7 +3,7 @@ from typing import List, Tuple
 import numpy as np
 
 from pipeline.config.classes.Config import Config
-from pipeline.steps.data_generation.requests.utils.generation_helper import (
+from components.data.requests.utils.generation_helper import (
     generate_requests_helper,
 )
 from utils.logs.levels.debug_logger import debug

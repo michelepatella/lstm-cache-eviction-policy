@@ -10,27 +10,27 @@ from pipeline.const import (
     TIMESTAMP_COLUMN_NAME,
     ZIPF_LOG_LOG_PLOT_FILE_NAME,
 )
-from pipeline.steps.data_generation.requests.dynamic_generator import (
+from components.data.requests.core.dynamic_generator import (
     generate_dynamic_requests,
 )
-from pipeline.steps.data_generation.requests.static_generator import (
+from components.data.requests.core.static_generator import (
     generate_static_requests,
 )
-from pipeline.steps.data_generation.visualization.plots.daily_profile_plotter import (
+from components.visualization.plots.daily_profile_plotter import (
     plot_daily_profile,
 )
-from pipeline.steps.data_generation.visualization.plots.key_usage_heatmap_plotter import (
+from components.visualization.plots.key_usage_heatmap_plotter import (
     plot_key_usage_heatmap,
 )
-from pipeline.steps.data_generation.visualization.plots.zipf_loglog_plotter import (
+from components.visualization.plots.zipf_loglog_plotter import (
     plot_zipf_loglog,
 )
-from utils.dataset.building.builder import build_dataset
-from utils.dataset.io.locator import get_dataset_abs_path
-from utils.dataset.io.saver import save_dataset
-from utils.logs.initializer import logs_phase
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
+from components.dataset.builder import build_dataset
+from components.dataset.io.locator import get_dataset_abs_path
+from components.dataset.io.saver import save_dataset
+from components.logs.initializer import logs_phase
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.info_logger import info
 
 
 def generate_data() -> None:

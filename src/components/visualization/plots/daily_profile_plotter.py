@@ -15,9 +15,9 @@ from pipeline.const import (
     PLOT_SIZE,
     PLOT_TITLE_FONT_SIZE,
 )
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.error_logger import error
-from utils.logs.levels.info_logger import info
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 
 
 def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
