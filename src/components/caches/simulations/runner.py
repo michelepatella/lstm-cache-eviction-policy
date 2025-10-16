@@ -3,6 +3,7 @@ from typing import Any, Dict, List, Tuple
 
 from tqdm import tqdm
 
+from components.time.transforms.trig_decoder import decode_time_trigonometrically
 from pipeline.config.pydantic.config import Config
 from const import (
     HIT_COUNTER_NAME,
@@ -88,7 +89,14 @@ def run_cache_simulation(
 
             # Extrapolate current time and requested
             # key from the current row
-            current_time, key = extract_time_key_from_row(row)
+            features, _, target = row
+
+            # Decode time
+            sin_time, cos_time = features[0]
+            current_time = decode_time_trigonometrically(sin_time, cos_time)
+
+            # Decode key
+            key = target.item()
 
             # Start timer to keep track of cache latency
             start_time = time.perf_counter()

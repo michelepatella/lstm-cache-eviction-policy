@@ -6,7 +6,7 @@ from components.assertions.choice_field_assertor import (
 from components.assertions.min_max_assertor import (
     assert_min_less_than_max,
 )
-from const import DATA_GENERATION_INITIAL_HOUR, DATA_GENERATION_FINAL_HOUR
+from const import DATA_GENERATION_INITIAL_HOUR, DATA_GENERATION_FINAL_HOUR, DATA_DISTRIBUTION_MODES
 
 
 class HoursConfig(BaseModel):
