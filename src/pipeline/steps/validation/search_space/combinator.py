@@ -1,8 +1,12 @@
 from typing import Any, Dict, List
 
 from pipeline.config.classes.Config import Config
-from utils.dict.combinations.nested_dicts_combinators import combine_nested_dicts
-from utils.dict.combinations.nested_dict_lists_combinator import combine_nested_dict_lists
+from utils.dict.combinations.nested_dicts_combinators import (
+    combine_nested_dicts,
+)
+from utils.dict.combinations.nested_dict_lists_combinator import (
+    combine_nested_dict_lists,
+)
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
@@ -43,7 +47,9 @@ def get_parameters_combination(
 
         # Combine all sections into
         # final parameter configurations
-        param_combinations = combine_nested_dict_lists(section_combination_dicts)
+        param_combinations = combine_nested_dict_lists(
+            section_combination_dicts
+        )
 
         info("Parameter combinations generated")
 

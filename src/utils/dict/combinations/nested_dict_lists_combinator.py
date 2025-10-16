@@ -7,7 +7,9 @@ from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
 
 
-def combine_nested_dict_lists(dict_lists: List[List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
+def combine_nested_dict_lists(
+    dict_lists: List[List[Dict[str, Any]]],
+) -> List[Dict[str, Any]]:
     """
     Combine multiple lists of nested dictionaries into all possible full combinations.
 
@@ -40,7 +42,9 @@ def combine_nested_dict_lists(dict_lists: List[List[Dict[str, Any]]]) -> List[Di
                     merged[k] = copy.deepcopy(v)
             combined_dicts.append(merged)
 
-        debug(f"Total combined nested dictionaries lists: {len(combined_dicts)}")
+        debug(
+            f"Total combined nested dictionaries lists: {len(combined_dicts)}"
+        )
         info("Nested dictionary lists combined")
 
         return combined_dicts

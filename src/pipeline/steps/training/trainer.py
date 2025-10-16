@@ -6,7 +6,7 @@ from utils.data_loader.targets.extractor import (
     extract_targets_from_data_loader,
 )
 from utils.dataset.AccessLogsDataset import AccessLogsDataset
-from utils.dataset.building.training_validation_splitter import (
+from utils.dataset.splitting.training_validation_splitter import (
     split_training_validation,
 )
 from utils.logs.initializer import logs_phase

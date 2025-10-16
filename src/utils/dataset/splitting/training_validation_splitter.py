@@ -4,6 +4,9 @@ import numpy as np
 from torch.utils.data import Subset
 
 from utils.dataset.AccessLogsDataset import AccessLogsDataset
+from utils.dataset.splitting.index_calculator import (
+    calculate_dataset_split_index,
+)
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
@@ -48,8 +51,12 @@ def split_training_validation(
             debug(f"Total training set size: {total_training_size}")
 
             # Calculate training and validation sizes
-            training_size = int((1.0 - validation_split) * total_training_size)
-            validation_size = int(validation_split * total_training_size)
+            training_size = calculate_dataset_split_index(
+                total_training_size, 1 - validation_split
+            )
+            validation_size = calculate_dataset_split_index(
+                total_training_size, validation_split
+            )
 
             debug(
                 f"Calculated training size: {training_size},"

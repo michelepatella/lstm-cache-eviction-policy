@@ -48,7 +48,9 @@ def combine_nested_dicts(nested_dict: Dict[str, Any]) -> List[Dict[str, Any]]:
                 set_dict_value(combo, key_path, value)
             combination_dicts.append(combo)
 
-        debug(f"{len(combination_dicts)} combinations generated from nested dictionary")
+        debug(
+            f"{len(combination_dicts)} combinations generated from nested dictionary"
+        )
         info("Nested dictionary combinations generated")
 
         return combination_dicts

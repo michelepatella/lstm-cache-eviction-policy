@@ -8,6 +8,10 @@ from pipeline.config.classes.Config import Config
 from pipeline.const import TRAINING_SPLIT_TYPE
 from utils.dataset.io.loader import load_dataset
 from utils.dataset.io.locator import get_dataset_abs_path
+from utils.dataset.splitting.data_splitter import split_dataset_data
+from utils.dataset.splitting.index_calculator import (
+    calculate_dataset_split_index,
+)
 from utils.logs.levels.debug_logger import debug
 from utils.logs.levels.error_logger import error
 from utils.logs.levels.info_logger import info
@@ -34,59 +38,38 @@ class AccessLogsDataset(Dataset):
     """
 
     def _split_dataset(
-        self: "AccessLogsDataset", dataset_type: str, config: Config
+        self: "AccessLogsDataset", dataset_type: str, split_perc: int
     ) -> None:
         """
         Split the dataset based on the requested dataset type.
 
         This function splits the dataset into either training
         or testing portions according to the train percentage
-        defined in the configuration.
+        provided.
 
         Args:
             self (AccessLogsDataset): Instance of AccessLogsDataset.
-            dataset_type (str): The dataset type to split (e.g., "training").
-            config (Config): Configuration object.
+            dataset_type (str): The dataset type to split.
+            split_perc (int): The split percentage.
 
         Returns:
             None
-
-        Raises:
-            RuntimeError: If an error occurs during dataset splitting, e.g.:
-                * self.data is not a Pandas DataFrame.
-                * self.data length or train % is of wrong type.
-                * self.data length or train % cannot be converted to int.
-                * the split index is out of bounds for self.data.
         """
         debug(f"Dataset splitting type: {dataset_type}")
 
-        try:
-            # Calculate split index based on the train %
-            train_perc = config.dataset.split.training
-            dataset_split_idx = int(len(self.data) * train_perc)
+        # Calculate dataset split index
+        # based on split percentage
+        dataset_split_idx = calculate_dataset_split_index(
+            len(self.data), split_perc
+        )
 
-            debug(f"Dataset split index calculated: {dataset_split_idx}")
-        except (AttributeError, TypeError, ValueError) as e:
-            msg = "Failed to calculate dataset split index"
-            error("%s: %s", msg, e)
-            raise RuntimeError(msg) from e
-
-        try:
-            # Perform dataset split
-            if dataset_type == TRAINING_SPLIT_TYPE:
-                # Training -> Take the first dataset
-                # split index elements
-                self.data = self.data[:dataset_split_idx]
-            else:
-                # Testing (Otherwise) -> Take the last dataset
-                # split index elements
-                self.data = self.data[dataset_split_idx:]
-
-            debug(f"Dataset shape after splitting: {self.data.shape}")
-        except (TypeError, IndexError, AttributeError) as e:
-            msg = "Failed to split dataset"
-            error("%s: %s", msg, e)
-            raise RuntimeError(msg) from e
+        # Split dataset data according
+        # to the calculated index
+        self.data = split_dataset_data(
+            self.data,
+            dataset_split_idx,
+            (dataset_type == TRAINING_SPLIT_TYPE)
+        )
 
         info("Dataset split")
 
@@ -179,6 +162,7 @@ class AccessLogsDataset(Dataset):
 
         # Prepare configuration
         data_distribution_mode = config.data.generation.mode
+        training_split = config.dataset.split.training
 
         # Retrieve path to load dataset from
         dataset_path = get_dataset_abs_path(
@@ -204,7 +188,7 @@ class AccessLogsDataset(Dataset):
         self.data = df.copy()
 
         # Split the dataset to assign data properly
-        self._split_dataset(dataset_type, config)
+        self._split_dataset(dataset_type, training_split)
 
         # Set the fields of the dataset
         self._set_fields(self.data, config)
