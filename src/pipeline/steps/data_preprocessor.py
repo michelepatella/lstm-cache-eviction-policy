@@ -5,12 +5,9 @@ from components.dataset.io.locator import get_dataset_abs_path
 from components.dataset.io.saver import save_dataset
 from components.logs.initializer import logs_phase, initialize_logs
 from components.logs.levels.info_logger import info
+from const import LOGS_DATA_PREPROCESSING_PHASE, DATASET_RAW_TYPE, TIMESTAMP_COLUMN_NAME
 from pipeline.config.configurator import prepare_config
-from const import (
-    DATASET_RAW_TYPE,
-    LOGS_DATA_PREPROCESSING_PHASE,
-    TIMESTAMP_COLUMN_NAME,
-)
+
 from components.dataset.features.builder import (
     build_features,
 )

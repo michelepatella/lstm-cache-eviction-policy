@@ -2,22 +2,17 @@ from typing import Dict, List
 
 import torch
 
+from components.evaluation.model.metrics.calculations.class_report_calculator import calculate_class_report
+from components.evaluation.model.metrics.calculations.cohen_kappa_score_calculator import calculate_cohen_kappa_score
+from components.evaluation.model.metrics.calculations.top_k_accuracy_calculator import calculate_top_k_accuracy
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.info_logger import info
 from const import (
     MODEL_METRICS_CLASS_REPORT_NAME,
     MODEL_METRICS_COHEN_KAPPA_SCORE_NAME,
     MODEL_METRICS_TOP_K_ACCURACY_NAME,
 )
-from calculations.evaluation.model.metrics.calculations.class_report_generator import (
-    generate_class_report,
-)
-from calculations.evaluation.model.metrics.calculations.cohen_kappa_score_calculator import (
-    calculate_cohen_kappa_score,
-)
-from calculations.evaluation.model.metrics.calculations.top_k_accuracy_calculator import (
-    calculate_top_k_accuracy,
-)
-from calculations.logs.levels.debug_logger import debug
-from calculations.logs.levels.info_logger import info
+
 
 
 def calculate_model_metrics(
@@ -59,7 +54,7 @@ def calculate_model_metrics(
     debug(f"Top-k: {top_k}")
 
     # Generate a class report
-    class_report = generate_class_report(targets, predictions)
+    class_report = calculate_class_report(targets, predictions)
 
     # Calculate top-k accuracy
     top_k_accuracy = calculate_top_k_accuracy(targets, outputs, top_k)

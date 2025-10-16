@@ -1,4 +1,4 @@
-from components.caches.utils.BaseCache import BaseCache
+from components.caches.utils.base_cache import BaseCache
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 

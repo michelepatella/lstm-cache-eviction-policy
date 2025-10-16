@@ -6,7 +6,7 @@ from components.evaluation.simulations.metrics.calculations.hit_miss_rates_calcu
     calculate_hit_miss_rate,
 )
 from const import HIT_COUNTER_NAME, MISS_COUNTER_NAME
-from components.caches.utils.CacheMetricsLogger import (
+from components.caches.utils.cache_metrics_logger import (
     CacheMetricsLogger,
 )
 from components.logs.levels.info_logger import info

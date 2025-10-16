@@ -1,5 +1,5 @@
-from pipeline.config.configurator import prepare_config
 from const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE
+from pipeline.config.configurator import prepare_config
 from components.data_loader.builder import build_data_loader
 from components.data_loader.initializer import initialize_data_loader
 from components.data_loader.targets.extractor import (

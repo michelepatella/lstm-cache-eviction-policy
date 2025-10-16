@@ -28,10 +28,6 @@ from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 
 
-def add_dataset_column(df, column_name, column_values):
-    pass
-
-
 class AccessLogsDataset(Dataset):
     """
     Dataset class for access logs, compatible with PyTorch.

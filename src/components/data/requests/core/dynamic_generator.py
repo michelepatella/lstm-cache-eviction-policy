@@ -2,12 +2,13 @@ from typing import List, Tuple
 
 import numpy as np
 
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.info_logger import info
 from pipeline.config.pydantic.config import Config
 from components.data.requests.utils.generation_helper import (
     generate_requests_helper,
 )
-from utils.logs.levels.debug_logger import debug
-from utils.logs.levels.info_logger import info
+
 
 
 def generate_dynamic_requests(

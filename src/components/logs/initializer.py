@@ -1,7 +1,7 @@
 import contextvars
 import logging
 
-from components.logs.file_handler.builder import build_logs_file_handler
+from components.logs.file_handlers.builder import build_logs_file_handler
 from const import (
     LOGS_DEBUG_FILE_PATH,
     LOGS_ERROR_FILE_PATH,

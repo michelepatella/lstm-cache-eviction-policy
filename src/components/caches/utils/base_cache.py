@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from pipeline.config.pydantic.config import Config
-from components.caches.utils.CacheMetricsLogger import (
+from components.caches.utils.cache_metrics_logger import (
     CacheMetricsLogger,
 )
 from components.logs.levels.debug_logger import debug

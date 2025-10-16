@@ -1,10 +1,6 @@
+from const import LOGS_VALIDATION_PHASE, TRAINING_SPLIT_TYPE, CONFIG_DIRECTORY_PATH, CONFIG_FILE_NAME
 from pipeline.config.configurator import prepare_config
-from const import (
-    CONFIG_DIRECTORY_PATH,
-    CONFIG_FILE_NAME,
-    LOGS_VALIDATION_PHASE,
-    TRAINING_SPLIT_TYPE,
-)
+
 from components.validation.grid_search.runner import (
     compute_grid_search,
 )
