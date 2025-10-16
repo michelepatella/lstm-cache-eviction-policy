@@ -3,13 +3,13 @@ from typing import Dict
 import torch
 import torch.nn as nn
 
-from pipeline.config.classes.Config import Config
-from pipeline.config.classes.ModelConfig import ModelParamsConfig
-from pipeline.const import LSTM_PARAM_NAMES, MC_DROPOUT_DEFAULT
-from components.device.mover import move_to_device
-from components.logs.levels.debug_logger import debug
-from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
+from pipeline.config.pydantic.config import Config
+from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
+from const import LSTM_PARAM_NAMES, MC_DROPOUT_DEFAULT
+from environment.device.mover import move_to_device
+from environment.logs.levels.debug_logger import debug
+from environment.logs.levels.error_logger import error
+from environment.logs.levels.info_logger import info
 
 
 class LSTM(torch.nn.Module):

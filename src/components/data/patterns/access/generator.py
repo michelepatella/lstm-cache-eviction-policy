@@ -2,8 +2,8 @@ from typing import List
 
 import numpy as np
 
-from pipeline.config.classes.Config import Config
-from pipeline.const import SECONDS_IN_DAY, SECONDS_IN_HOUR
+from pipeline.config.pydantic.config import Config
+from const import SECONDS_IN_DAY, SECONDS_IN_HOUR
 from variants.data.patterns.access.variants.cycle_generator import (
     generate_cycle_pattern,
 )

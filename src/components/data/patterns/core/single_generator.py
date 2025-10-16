@@ -2,8 +2,8 @@ from typing import List, Tuple
 
 import numpy as np
 
-from pipeline.config.classes.Config import Config
-from pipeline.const import SECONDS_IN_DAY
+from pipeline.config.pydantic.config import Config
+from const import SECONDS_IN_DAY
 from components.data.patterns.access.generator import (
     generate_access_pattern,
 )
@@ -12,7 +12,7 @@ from components.data.patterns.temporal.generator import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
-from components.time.cyclic.updater import (
+from components.time.cyclics.updater import (
     update_cyclic_time,
 )
 

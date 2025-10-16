@@ -5,11 +5,11 @@ from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from pipeline.config.classes.Config import Config
+from pipeline.config.pydantic.config import Config
 from components.evaluation.model.evaluator import evaluate_model
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
-from components.model.best.checks.checker_updater import (
+from components.model.best.checks_updates.checker_updater import (
     check_update_best_model,
 )
 from components.model.state_dict.copier import (

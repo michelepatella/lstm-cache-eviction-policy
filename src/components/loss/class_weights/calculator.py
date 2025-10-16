@@ -2,7 +2,7 @@ import numpy as np
 from sklearn.utils import compute_class_weight
 from torch import Tensor
 
-from pipeline.const import CLASS_WEIGHT_TYPE
+from const import CLASS_WEIGHT_TYPE
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info

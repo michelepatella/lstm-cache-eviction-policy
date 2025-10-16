@@ -1,4 +1,4 @@
-from pipeline.const import (
+from const import (
     DATA_DISTRIBUTION_STATIC_MODE,
     TRAINED_MODEL_DYNAMIC_DIRECTORY,
     TRAINED_MODEL_DYNAMIC_FILE_NAME,

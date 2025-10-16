@@ -4,7 +4,7 @@ from typing import List
 import numpy as np
 from matplotlib import pyplot as plt
 
-from pipeline.const import (
+from const import (
     PLOT_LABEL_FONT_SIZE,
     PLOT_SIZE,
     PLOT_TITLE_FONT_SIZE,

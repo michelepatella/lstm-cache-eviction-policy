@@ -1,17 +1,17 @@
 import pandas as pd
 
-from pipeline.const import (
+from const import (
     COS_TIME_COLUMN_NAME,
     REQUEST_COLUMN_NAME,
     SIN_TIME_COLUMN_NAME,
     TIMESTAMP_COLUMN_NAME,
 )
-from components.dataset.columns.dropper import drop_dataset_column
-from components.dataset.columns.reorderer import reorder_dataset_columns
-from components.dataset.columns.setter import set_dataset_column
+from components.dataset.columns.manipulations.dropper import drop_dataset_column
+from components.dataset.columns.manipulations.reorderer import reorder_dataset_columns
+from components.dataset.columns.manipulations.setter import set_dataset_column
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
-from components.time.encoding_decoding.trig_encoder import (
+from components.time.transforms.trig_encoder import (
     encode_time_trigonometrically,
 )
 

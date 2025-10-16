@@ -1,7 +1,7 @@
 from box.box import Box
 
 from pipeline.config.configurator import prepare_config
-from pipeline.const import (
+from const import (
     DATA_DISTRIBUTION_STATIC_MODE,
     DYNAMIC_MODEL_RESULTS_FILE_NAME,
     EVALUATION_MODEL_MODE,
@@ -17,9 +17,9 @@ from components.visualization.reports.model_evaluation_reporter import (
     generate_model_evaluation_report,
 )
 from components.data_loader.initializer import initialize_data_loader
-from components.dataset.AccessLogsDataset import AccessLogsDataset
+from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.evaluation.model.evaluator import evaluate_model
-from components.logs.initializer import logs_phase
+from components.logs.initializer import logs_phase, initialize_logs
 from components.logs.levels.info_logger import info
 from components.model.mode.setter import set_model_mode
 from components.model.best.initializer import (
@@ -41,8 +41,9 @@ def test_model() -> None:
     # Set the new state
     logs_phase.set(LOGS_TESTING_PHASE)
 
-    # Read configuration
+    # Setup
     config = prepare_config()
+    initialize_logs()
 
     # Prepare configuration
     data_distribution_mode = config.data.generation.mode

@@ -1,6 +1,6 @@
 from typing import Any, Dict, List
 
-from pipeline.const import (
+from const import (
     AVG_CACHE_LATENCY_NAME,
     EVICTION_MISTAKE_RATE_NAME,
     HIT_RATE_NAME,
@@ -11,11 +11,11 @@ from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 
 
-def generate_simulation_report(
+def generate_simulations_report(
     results: List[Dict[str, Any]],
 ) -> None:
     """
-    Generate a report for cache simulation evaluation results.
+    Generate a report for cache simulations evaluation results.
 
     This function reports the evaluation results for each simulated
     cache eviction policy, including hit/miss rates, average latency,
@@ -29,12 +29,12 @@ def generate_simulation_report(
         None
 
     Raises:
-        RuntimeError: If an error occurs while generating simulation
+        RuntimeError: If an error occurs while generating simulations
                       report e.g.:
                         * If metric results are missed.
                         * If results are of wrong type.
     """
-    info("=== Simulation Report ===")
+    info("=== Simulations Report ===")
 
     try:
         # Iterate through each cache policy result
@@ -57,8 +57,8 @@ def generate_simulation_report(
                 f"Eviction Mistake Rate: {eviction_mistake_rate}%"
             )
     except (TypeError, ValueError) as e:
-        msg = "Failed to generate simulation report"
+        msg = "Failed to generate simulations report"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 
-    info("=== End of Simulation Report ===")
+    info("=== End of Simulations Report ===")

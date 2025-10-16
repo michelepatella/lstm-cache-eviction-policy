@@ -2,7 +2,7 @@ from typing import Dict, List
 
 from sklearn.metrics import classification_report
 
-from pipeline.const import (
+from const import (
     MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT,
     MODEL_METRICS_CLASS_REPORT_ZERO_DIVISION,
 )

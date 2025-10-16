@@ -3,7 +3,7 @@ from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from pipeline.const import TRAINING_MODEL_MODE
+from const import TRAINING_MODEL_MODE
 from components.backpropagation.core.backward_runner import (
     compute_backward,
 )

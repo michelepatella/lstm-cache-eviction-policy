@@ -1,15 +1,15 @@
 from pipeline.config.configurator import prepare_config
-from pipeline.const import (
+from const import (
     AVG_CACHE_LATENCY_NAME,
     DATA_DISTRIBUTION_STATIC_MODE,
-    DYNAMIC_SIMULATION_RESULTS_FILE_NAME,
+    DYNAMIC_SIMULATIONS_RESULTS_FILE_NAME,
     EVICTION_MISTAKE_RATE_NAME,
     FIFO_CACHE_NAME,
     HIT_COUNTER_NAME,
     HIT_MISS_RATES_PLOT_FILE_NAME,
     HIT_RATE_NAME,
     LFU_CACHE_NAME,
-    LOGS_SIMULATION_PHASE,
+    LOGS_SIMULATIONS_PHASE,
     LRU_CACHE_NAME,
     LSTM_CACHE_NAME,
     MISS_COUNTER_NAME,
@@ -18,36 +18,36 @@ from pipeline.const import (
     POLICY_NAME,
     RANDOM_CACHE_NAME,
     RESULTS_DIRECTORY_PATH,
-    STATIC_SIMULATION_RESULTS_FILE_NAME,
+    STATIC_SIMULATIONS_RESULTS_FILE_NAME,
     TIMELINE_NAME,
 )
-from components.caches.FIFOCache import FIFOCache
-from components.caches.LFUCache import LFUCache
-from components.caches.LRUCache import LRUCache
-from components.caches.LSTMCache import LSTMCache
-from components.caches.RandomCache import RandomCache
-from components.caches.utils.classes.CacheMetricsLogger import (
+from components.caches.implementations.FIFOCache import FIFOCache
+from components.caches.implementations.LFUCache import LFUCache
+from components.caches.implementations.LRUCache import LRUCache
+from components.caches.implementations.LSTMCache import LSTMCache
+from components.caches.implementations.RandomCache import RandomCache
+from components.caches.utils.CacheMetricsLogger import (
     CacheMetricsLogger,
 )
-from components.caches.utils.classes.CacheWrapper import (
+from components.caches.utils.CacheWrapper import (
     CacheWrapper,
 )
-from components.evaluation.simulation.metrics.calculator import (
+from components.evaluation.simulations.metrics.calculator import (
     calculate_simulation_metrics,
 )
-from components.evaluation.simulation.metrics.io.saver import (
-    save_simulation_metrics,
+from components.evaluation.simulations.metrics.io.saver import (
+    save_simulations_metrics,
 )
-from components.caches.simulation.running.simulation_runner import (
+from components.caches.simulations.runner import (
     run_cache_simulation,
 )
 from components.visualization.plots.hit_miss_rates_plotter import (
     plot_hit_miss_rate,
 )
 from components.visualization.reports.simulation_reporter import (
-    generate_simulation_report,
+    generate_simulations_report,
 )
-from components.logs.initializer import logs_phase
+from components.logs.initializer import logs_phase, initialize_logs
 from components.logs.levels.info_logger import info
 
 
@@ -55,7 +55,7 @@ def run_simulations() -> None:
     """
     Run cache simulations for multiple cache eviction policies.
 
-    This function executes a complete cache simulation workflow
+    This function executes a complete cache simulations workflow
     across different cache eviction strategies. For each policy,
     it initializes the cache, runs the cache simulation, calculates
     key performance metrics, saves the results, and plots performance data.
@@ -64,14 +64,15 @@ def run_simulations() -> None:
         None
     """
     # Set new state
-    logs_phase.set(LOGS_SIMULATION_PHASE)
+    logs_phase.set(LOGS_SIMULATIONS_PHASE)
 
-    # Read configuration
+    # Setup
     config = prepare_config()
+    initialize_logs()
 
     # Prepare configuration
     data_distribution_mode = config.data.generation.mode
-    mistake_window = config.simulation.metrics.mistake_rate.window
+    mistake_window = config.simulations.metrics.mistake_rate.window
 
     # Data setup and initialization
     cache_eviction_policies = {
@@ -140,23 +141,23 @@ def run_simulations() -> None:
         # Save metrics
         results.append(metrics)
 
-    # Generate a report for simulation results
-    generate_simulation_report(results)
+    # Generate a report for simulations results
+    generate_simulations_report(results)
 
     # Determine results file name according
     # to data distribution mode
     if data_distribution_mode == DATA_DISTRIBUTION_STATIC_MODE:
-        results_file_name = STATIC_SIMULATION_RESULTS_FILE_NAME
+        results_file_name = STATIC_SIMULATIONS_RESULTS_FILE_NAME
     else:
-        results_file_name = DYNAMIC_SIMULATION_RESULTS_FILE_NAME
+        results_file_name = DYNAMIC_SIMULATIONS_RESULTS_FILE_NAME
 
     # Build results save path
     results_save_path = (
         RESULTS_DIRECTORY_PATH / data_distribution_mode / results_file_name
     )
 
-    # Save simulation results
-    save_simulation_metrics(results, results_save_path)
+    # Save simulations results
+    save_simulations_metrics(results, results_save_path)
 
     # Plot hit and miss rates over time
     hit_miss_rate_plot_save_path = (

@@ -2,7 +2,7 @@ from typing import Any, Dict, List
 
 import matplotlib.pyplot as plt
 
-from pipeline.const import (
+from const import (
     HIT_MISS_RATE_SUBPLOT_X_LABEL,
     HIT_MISS_RATES_PLOT_NUM_COLS,
     HIT_MISS_RATES_PLOT_NUM_ROWS,
@@ -38,7 +38,7 @@ def plot_hit_miss_rate(
     metric over time across different cache policies.
 
     Args:
-        results (List[Dict[str, Any]]): List of simulation results.
+        results (List[Dict[str, Any]]): List of simulations results.
         path (str): Path where to save the figure.
 
     Returns:

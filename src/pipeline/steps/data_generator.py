@@ -1,5 +1,5 @@
 from pipeline.config.configurator import prepare_config
-from pipeline.const import (
+from const import (
     DAILY_PROFILE_PLOT_FILE_NAME,
     DATA_DISTRIBUTION_STATIC_MODE,
     DATASET_RAW_TYPE,
@@ -28,7 +28,7 @@ from components.visualization.plots.zipf_loglog_plotter import (
 from components.dataset.builder import build_dataset
 from components.dataset.io.locator import get_dataset_abs_path
 from components.dataset.io.saver import save_dataset
-from components.logs.initializer import logs_phase
+from components.logs.initializer import logs_phase, initialize_logs
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
 
@@ -54,8 +54,9 @@ def generate_data() -> None:
     # Set the new state
     logs_phase.set(LOGS_DATA_GENERATION_PHASE)
 
-    # Read configuration
+    # Setup
     config = prepare_config()
+    initialize_logs()
 
     # Prepare configuration
     data_distribution_mode = config.data.generation.mode

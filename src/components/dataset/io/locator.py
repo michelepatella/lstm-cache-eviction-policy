@@ -1,4 +1,4 @@
-from pipeline.const import (
+from const import (
     DATA_DISTRIBUTION_STATIC_MODE,
     DATASET_RAW_TYPE,
     DYNAMIC_PROCESSED_DATASET_DIRECTORY,

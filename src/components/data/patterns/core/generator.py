@@ -2,8 +2,8 @@ from typing import List, Tuple
 
 import numpy as np
 
-from pipeline.config.classes.Config import Config
-from pipeline.const import (
+from pipeline.config.pydantic.config import Config
+from const import (
     DATA_GENERATION_INITIAL_CURRENT_DAY,
     DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY,
     DATA_GENERATION_INITIAL_TIMESTAMP,

@@ -2,7 +2,7 @@ from typing import Tuple, Union
 
 import torch
 
-from pipeline.const import (
+from const import (
     EVALUATION_MODEL_MODE,
     MC_DROPOUT_FLAG,
     MC_DROPOUT_MODEL_MODE,

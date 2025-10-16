@@ -1,7 +1,7 @@
 import numpy as np
 
-from pipeline.config.classes.Config import Config
-from pipeline.const import SECONDS_IN_HOUR
+from pipeline.config.pydantic.config import Config
+from const import SECONDS_IN_HOUR
 from variants.data.patterns.temporal.variants.burst_setter import (
     set_bursty_scale,
 )

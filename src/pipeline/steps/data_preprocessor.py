@@ -1,5 +1,12 @@
+from components.dataset.cleans.duplicates_remover import remove_dataset_duplicates
+from components.dataset.cleans.missing_values_remover import remove_dataset_missing_values
+from components.dataset.io.loader import load_dataset
+from components.dataset.io.locator import get_dataset_abs_path
+from components.dataset.io.saver import save_dataset
+from components.logs.initializer import logs_phase, initialize_logs
+from components.logs.levels.info_logger import info
 from pipeline.config.configurator import prepare_config
-from pipeline.const import (
+from const import (
     DATASET_RAW_TYPE,
     LOGS_DATA_PREPROCESSING_PHASE,
     TIMESTAMP_COLUMN_NAME,
@@ -7,17 +14,6 @@ from pipeline.const import (
 from components.dataset.features.builder import (
     build_features,
 )
-from features.dataset.cleaning.duplicates_remover import (
-    remove_dataset_duplicates,
-)
-from features.dataset.cleaning.missing_values_remover import (
-    remove_dataset_missing_values,
-)
-from features.dataset.io.loader import load_dataset
-from features.dataset.io.locator import get_dataset_abs_path
-from features.dataset.io.saver import save_dataset
-from features.logs.initializer import logs_phase
-from features.logs.levels.info_logger import info
 
 
 def preprocess_data() -> None:
@@ -36,8 +32,9 @@ def preprocess_data() -> None:
     # Set the new state
     logs_phase.set(LOGS_DATA_PREPROCESSING_PHASE)
 
-    # Read configuration
+    # Setup
     config = prepare_config()
+    initialize_logs()
 
     # Prepare configuration
     data_distribution_mode = config.data.generation.mode

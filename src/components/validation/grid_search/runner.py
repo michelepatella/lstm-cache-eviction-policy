@@ -2,17 +2,17 @@ from typing import Any, Dict
 
 from tqdm import tqdm
 
-from pipeline.config.classes.Config import Config
-from components.model.best.checks.params_checker_updater import (
+from pipeline.config.pydantic.config import Config
+from components.model.best.checks_updates.params_checker_updater import (
     check_update_best_model_params,
 )
 from components.validation.search_space.combinator import (
     get_parameters_combination,
 )
-from components.validation.time_series_cv.folds_runner import (
+from components.validation.time_series_cv.core.folds_runner import (
     compute_time_series_cv_folds,
 )
-from components.dataset.AccessLogsDataset import AccessLogsDataset
+from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
 

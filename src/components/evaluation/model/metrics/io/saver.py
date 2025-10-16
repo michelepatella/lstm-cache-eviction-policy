@@ -1,6 +1,6 @@
 from typing import Dict
 
-from pipeline.const import (
+from const import (
     MODEL_METRICS_ACCURACY_NAME,
     MODEL_METRICS_AVG_LOSS,
     MODEL_METRICS_CLASS_REPORT_NAME,

@@ -1,17 +1,17 @@
 from pipeline.config.configurator import prepare_config
-from pipeline.const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE
+from const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE
 from components.data_loader.builder import build_data_loader
 from components.data_loader.initializer import initialize_data_loader
 from components.data_loader.targets.extractor import (
     extract_targets_from_data_loader,
 )
-from components.dataset.AccessLogsDataset import AccessLogsDataset
-from components.dataset.splitting.training_validation_splitter import (
-    split_training_validation,
+from components.dataset.access_logs_dataset import AccessLogsDataset
+from components.dataset.splits.training_validation_splitter import (
+    split_training_validation_sets,
 )
-from components.logs.initializer import logs_phase
+from components.logs.initializer import logs_phase, initialize_logs
 from components.logs.levels.info_logger import info
-from components.model.components.initializer import initialize_model_components
+from components.model.environment.initializer import initialize_model_environment
 from components.model.io.locator import get_model_abs_path
 from components.model.io.saver import save_model
 from components.optimizer.builder import build_optimizer
@@ -33,8 +33,9 @@ def train_model() -> None:
     # Set the new state
     logs_phase.set(LOGS_TRAINING_PHASE)
 
-    # Read configuration
+    # Setup
     config = prepare_config()
+    initialize_logs()
 
     # Prepare configuration
     data_distribution_mode = config.data.generation.mode
@@ -64,7 +65,7 @@ def train_model() -> None:
 
     # Split training set into training
     # and validation sets
-    training_set, validation_set = split_training_validation(
+    training_set, validation_set = split_training_validation_sets(
         training_set, validation_split
     )
 
@@ -85,7 +86,7 @@ def train_model() -> None:
     targets = extract_targets_from_data_loader(training_loader)
 
     # Model setup for training
-    device, criterion, model = initialize_model_components(
+    device, criterion, model = initialize_model_environment(
         model_params, config, targets
     )
 

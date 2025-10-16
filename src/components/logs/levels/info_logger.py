@@ -1,7 +1,7 @@
 import logging
 from typing import Any
 
-from pipeline.const import LOGS_PHASE_NAME
+from const import LOGS_PHASE_NAME
 from components.logs.initializer import logs_phase
 
 

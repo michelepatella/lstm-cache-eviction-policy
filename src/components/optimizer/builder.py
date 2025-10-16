@@ -3,7 +3,7 @@ from typing import Any, Dict
 import torch
 from torch.optim import Optimizer
 
-from pipeline.const import ADAM_OPTIMIZER, ADAMW_OPTIMIZER, SGD_OPTIMIZER
+from const import ADAM_OPTIMIZER, ADAMW_OPTIMIZER, SGD_OPTIMIZER
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info

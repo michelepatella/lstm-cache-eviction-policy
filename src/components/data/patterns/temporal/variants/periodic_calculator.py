@@ -1,6 +1,6 @@
 import numpy as np
 
-from pipeline.const import HOURS_IN_DAY
+from const import HOURS_IN_DAY
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
 

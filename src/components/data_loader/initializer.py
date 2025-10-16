@@ -2,9 +2,9 @@ from typing import Tuple
 
 from torch.utils.data import DataLoader
 
-from pipeline.config.classes.Config import Config
+from pipeline.config.pydantic.config import Config
 from components.data_loader.builder import build_data_loader
-from components.dataset.AccessLogsDataset import AccessLogsDataset
+from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.info_logger import info
 
 

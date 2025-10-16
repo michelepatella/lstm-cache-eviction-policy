@@ -1,5 +1,5 @@
 from pipeline.config.configurator import prepare_config
-from pipeline.const import (
+from const import (
     CONFIG_DIRECTORY_PATH,
     CONFIG_FILE_NAME,
     LOGS_VALIDATION_PHASE,
@@ -9,9 +9,9 @@ from components.validation.grid_search.runner import (
     compute_grid_search,
 )
 from components.data_loader.initializer import initialize_data_loader
-from components.dataset.AccessLogsDataset import AccessLogsDataset
+from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.dict.operations.merger import merge_dicts
-from components.logs.initializer import logs_phase
+from components.logs.initializer import logs_phase, initialize_logs
 from components.logs.levels.info_logger import info
 from components.yaml.io.saver import save_yaml
 
@@ -31,8 +31,9 @@ def validate_model() -> None:
     # Set the new state
     logs_phase.set(LOGS_VALIDATION_PHASE)
 
-    # Read configuration
+    # Setup
     config = prepare_config()
+    initialize_logs()
 
     # Prepare configuration
     validation_batch_size = config.validation.general.batch_size

@@ -4,7 +4,7 @@ import torch
 from torch import Tensor
 from torch.utils.data import DataLoader
 
-from pipeline.const import MODEL_COMPUTE_METRICS_DEFAULT
+from const import MODEL_COMPUTE_METRICS_DEFAULT
 from components.evaluation.model.metrics.calculator import (
     calculate_model_metrics,
 )

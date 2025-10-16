@@ -1,7 +1,7 @@
 import json
 from typing import Dict, List
 
-from pipeline.const import JSON_INDENT
+from const import JSON_INDENT
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info

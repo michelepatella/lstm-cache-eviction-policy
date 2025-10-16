@@ -2,7 +2,7 @@ from typing import List, Tuple
 
 import numpy as np
 
-from pipeline.config.classes.Config import Config
+from pipeline.config.pydantic.config import Config
 from components.data.patterns.core.generator import (
     generate_pattern_requests,
 )

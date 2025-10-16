@@ -3,7 +3,7 @@ from typing import List
 import numpy as np
 from matplotlib import pyplot as plt
 
-from pipeline.const import (
+from const import (
     DATA_GENERATION_FINAL_HOUR,
     DATA_GENERATION_INITIAL_HOUR,
     KEY_USAGE_HEATMAP_ASPECT,

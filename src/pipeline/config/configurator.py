@@ -1,5 +1,5 @@
-from pipeline.config.classes.Config import Config
-from pipeline.const import (
+from pipeline.config.pydantic.config import Config
+from const import (
     CONFIG_DIRECTORY_PATH,
     CONFIG_FILE_NAME,
     LOGS_CONFIGURATION_PHASE,

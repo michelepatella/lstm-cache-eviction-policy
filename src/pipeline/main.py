@@ -4,15 +4,9 @@ from pipeline.steps.simulator import run_simulations
 from pipeline.steps.tester import test_model
 from pipeline.steps.trainer import train_model
 from pipeline.steps.validator import validate_model
-from components.logs.initializer import initialize_logs
 
 
 def main():
-    # -----------------------
-    # Setup
-    # -----------------------
-    initialize_logs()
-
     # -----------------------
     # Pipeline
     # -----------------------
@@ -31,7 +25,7 @@ def main():
     # (5) Model testing
     test_model()
 
-    # (6) Simulation
+    # (6) Simulations
     run_simulations()
 
 

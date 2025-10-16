@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-from pipeline.const import (
+from const import (
     DAILY_PROFILE_PLOT_ALIGN,
     DAILY_PROFILE_PLOT_BIN_SIZE,
     DAILY_PROFILE_PLOT_EDGE_COLOR,

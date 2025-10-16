@@ -2,7 +2,7 @@ from typing import Dict, List
 
 import torch
 
-from pipeline.const import (
+from const import (
     MODEL_METRICS_CLASS_REPORT_NAME,
     MODEL_METRICS_COHEN_KAPPA_SCORE_NAME,
     MODEL_METRICS_TOP_K_ACCURACY_NAME,

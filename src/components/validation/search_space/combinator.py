@@ -1,6 +1,6 @@
 from typing import Any, Dict, List
 
-from pipeline.config.classes.Config import Config
+from pipeline.config.pydantic.config import Config
 from components.dict.combinations.nested_dicts_combinator import (
     combine_nested_dicts,
 )

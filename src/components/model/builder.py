@@ -1,8 +1,8 @@
 from typing import Dict
 
-from pipeline.config.classes.Config import Config
-from pipeline.config.classes.ModelConfig import ModelParamsConfig
-from components.model.lstm import LSTM
+from pipeline.config.pydantic.config import Config
+from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
+from environment.model.lstm import LSTM
 
 
 def build_model(
