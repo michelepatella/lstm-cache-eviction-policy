@@ -3,12 +3,245 @@ stages:
   setup:
     cmd: PYTHONPATH=src python -m utils.logs.initializer
   generate_data:
-    cmd: PYTHONPATH=src python -m pipeline.data_generation.data_generator
+    cmd: PYTHONPATH=src python -m pipeline.steps.data_generator
+    deps:
+    - path: src/components/assertions/choice_field_assertor.py
+      hash: md5
+      md5: bb8138e69e66000e5ad18bf9eb1cf080
+      size: 1635
+    - path: src/components/assertions/min_max_assertor.py
+      hash: md5
+      md5: 2d2312cffd5f6519e209221d11a796fb
+      size: 1480
+    - path: src/components/data/patterns/access/generator.py
+      hash: md5
+      md5: ebb7a882ad820a2e53d8e3c1ce960ab6
+      size: 6123
+    - path: src/components/data/patterns/access/variants/cycle_generator.py
+      hash: md5
+      md5: 3d5ec0677463ec0bbdc4a71374ea604e
+      size: 2202
+    - path: src/components/data/patterns/access/variants/distortion_generator.py
+      hash: md5
+      md5: 6a5ba04a838b4be62c90665263d3f9c3
+      size: 3114
+    - path: 
+        src/components/data/patterns/access/variants/memory_fallback_generator.py
+      hash: md5
+      md5: 5c2e2ff2f8c74204936bfaad1836d08a
+      size: 2234
+    - path: src/components/data/patterns/access/variants/repetition_generator.py
+      hash: md5
+      md5: f2b91f978cd371747b7e362bb7cfae7d
+      size: 2098
+    - path: src/components/data/patterns/access/variants/toggle_generator.py
+      hash: md5
+      md5: bf1caedde8caa53257460dcd004bb422
+      size: 3659
+    - path: src/components/data/patterns/core/generator.py
+      hash: md5
+      md5: 662204bd4524db34c6f31fbaac85352a
+      size: 2939
+    - path: src/components/data/patterns/core/single_generator.py
+      hash: md5
+      md5: f0eed9d600d7c77818e75c7fd3b0e5a9
+      size: 2670
+    - path: src/components/data/patterns/temporal/generator.py
+      hash: md5
+      md5: 9a375d6d59aebe6669d46690b2c174e6
+      size: 3506
+    - path: src/components/data/patterns/temporal/variants/burst_setter.py
+      hash: md5
+      md5: 8e736125e15ab38041fecb15e9420f84
+      size: 1523
+    - path: 
+        src/components/data/patterns/temporal/variants/periodic_calculator.py
+      hash: md5
+      md5: e16d394b32f0ec38fd3d10cafb52ae91
+      size: 1394
+    - path: src/components/data/requests/core/dynamic_generator.py
+      hash: md5
+      md5: 3c6406f51513e602ca9e416591475d75
+      size: 1958
+    - path: src/components/data/requests/core/static_generator.py
+      hash: md5
+      md5: 1ef1e5142257e1c3646998d6f2dc6ad6
+      size: 1199
+    - path: src/components/data/requests/utils/alpha_requests_generator.py
+      hash: md5
+      md5: b377ddb4626605dea3326dc4ca66ac17
+      size: 1634
+    - path: src/components/data/requests/utils/generation_helper.py
+      hash: md5
+      md5: 6ae0917dc75da4db975b7c0bb05d1536
+      size: 2833
+    - path: src/components/dataset/builder.py
+      hash: md5
+      md5: 46c36e62cd73695ab9f515935aa2521d
+      size: 1497
+    - path: src/components/dataset/io/locator.py
+      hash: md5
+      md5: 3fa8c46377bb221e22da4b19461181a9
+      size: 2673
+    - path: src/components/dataset/io/saver.py
+      hash: md5
+      md5: 3e5405da9ec903b764660d85d505b6c6
+      size: 1004
+    - path: src/components/logs/file_handlers/builder.py
+      hash: md5
+      md5: ae68fe97de6d87865f383e1b3c927f92
+      size: 1334
+    - path: src/components/logs/initializer.py
+      hash: md5
+      md5: 6a224568797441022bc00c5d16372a49
+      size: 2350
+    - path: src/components/logs/levels/debug_logger.py
+      hash: md5
+      md5: 6812087fa04c0bf1382413edcce305bb
+      size: 872
+    - path: src/components/logs/levels/error_logger.py
+      hash: md5
+      md5: 3d6544a139b9a9237ff5db4b2f823c16
+      size: 889
+    - path: src/components/logs/levels/info_logger.py
+      hash: md5
+      md5: efaf6c5d62bee5eb4ed294ee8036b494
+      size: 886
+    - path: src/components/math/zipf_probs_calculator.py
+      hash: md5
+      md5: 8725bb99c5ccfc0bf0edaecba45991b1
+      size: 1857
+    - path: src/components/time/cyclics/seconds_to_hours_converter.py
+      hash: md5
+      md5: 22509b85f722fbbdc72f236ec34df452
+      size: 813
+    - path: src/components/time/cyclics/updater.py
+      hash: md5
+      md5: 665937525c733b76fe44b89255e51613
+      size: 1556
+    - path: src/components/visualization/plots/daily_profile_plotter.py
+      hash: md5
+      md5: 50fae492d961eebeab1835edbcd6bc29
+      size: 3517
+    - path: src/components/visualization/plots/key_usage_heatmap_plotter.py
+      hash: md5
+      md5: d4ba7eae00a4c52be5932a6c8f07b92a
+      size: 4773
+    - path: src/components/visualization/plots/zipf_loglog_plotter.py
+      hash: md5
+      md5: 3319a765809a33ceb8da474bda5df111
+      size: 2635
+    - path: src/components/yaml/io/loader.py
+      hash: md5
+      md5: 7906cf806b9368daf62cf9ded29a1cf3
+      size: 1054
+    - path: src/const.py
+      hash: md5
+      md5: c99f26986929c477f62d91c37c7df895
+      size: 9029
+    - path: src/pipeline/config/configurator.py
+      hash: md5
+      md5: 3bf5eddccc3922e39c5204bb82f58ac1
+      size: 1240
+    - path: src/pipeline/config/pydantic/config.py
+      hash: md5
+      md5: b02766c3170ec3205de7657c5bcd14dc
+      size: 1959
+    - path: src/pipeline/config/pydantic/sections/data_config.py
+      hash: md5
+      md5: 454b0b8084088fe816a9ca7226609f46
+      size: 11165
+    - path: src/pipeline/config/pydantic/sections/dataset_config.py
+      hash: md5
+      md5: 22817a51603523968235ba8e7742d868
+      size: 666
+    - path: src/pipeline/config/pydantic/sections/hardware_config.py
+      hash: md5
+      md5: 93f92ecea9e9be358192b7dfaf86e40c
+      size: 846
+    - path: src/pipeline/config/pydantic/sections/model_config.py
+      hash: md5
+      md5: 6532190b3697d67bff8709fea82a114f
+      size: 2094
+    - path: src/pipeline/config/pydantic/sections/simulation_config.py
+      hash: md5
+      md5: db902354f13675ef47a0cbf1be6d058c
+      size: 1104
+    - path: src/pipeline/config/pydantic/sections/testing_config.py
+      hash: md5
+      md5: 6ebb8fbadb62dafcd89d9302ec60a231
+      size: 912
+    - path: src/pipeline/config/pydantic/sections/training_config.py
+      hash: md5
+      md5: e4de21f80a52bab53eb346539a48d68d
+      size: 2789
+    - path: src/pipeline/config/pydantic/sections/validation_config.py
+      hash: md5
+      md5: 14ba9b7928165e35e0e2ad17e9a3789a
+      size: 3459
+    - path: src/pipeline/steps/data_generator.py
+      hash: md5
+      md5: 3044e03b361edd9e6c516ac74bf290bb
+      size: 3859
+    params:
+      src/pipeline/config/config.yaml:
+        data.generation.keys.max: 500
+        data.generation.keys.min: 1
+        data.generation.mode: static
+        data.generation.pattern.access.behavior.cycle.base: 5
+        data.generation.pattern.access.behavior.cycle.divisor: 100
+        data.generation.pattern.access.behavior.cycle.hours.end: 19
+        data.generation.pattern.access.behavior.cycle.hours.start: 14
+        data.generation.pattern.access.behavior.cycle.mod: 2
+        data.generation.pattern.access.behavior.distortion.hours.end: 23
+        data.generation.pattern.access.behavior.distortion.hours.start: 19
+        data.generation.pattern.access.behavior.distortion.interval: 4
+        data.generation.pattern.access.behavior.distortion.noise.max: 1
+        data.generation.pattern.access.behavior.distortion.noise.min: 0
+        data.generation.pattern.access.behavior.distortion.offsets.correction: 1
+        data.generation.pattern.access.behavior.distortion.offsets.history: 2
+        data.generation.pattern.access.behavior.memory.interval: 5
+        data.generation.pattern.access.behavior.memory.offset: 3
+        data.generation.pattern.access.behavior.repetition.hours.end: 9
+        data.generation.pattern.access.behavior.repetition.hours.start: 4
+        data.generation.pattern.access.behavior.repetition.interval: 7
+        data.generation.pattern.access.behavior.repetition.offset: 3
+        data.generation.pattern.access.behavior.toggle.base_requests.first: 1
+        data.generation.pattern.access.behavior.toggle.base_requests.second: 2
+        data.generation.pattern.access.behavior.toggle.hours.end: 14
+        data.generation.pattern.access.behavior.toggle.hours.start: 9
+        data.generation.pattern.access.behavior.toggle.interval: 20
+        data.generation.pattern.access.behavior.toggle.offsets.backward: 2
+        data.generation.pattern.access.behavior.toggle.offsets.forward: 1
+        data.generation.pattern.access.zipf.alpha.fixed: 1.5
+        data.generation.pattern.access.zipf.alpha.max: 2.0
+        data.generation.pattern.access.zipf.alpha.min: 0.5
+        data.generation.pattern.access.zipf.steps: 5
+        data.generation.pattern.temporal.burstiness.high: 0.8
+        data.generation.pattern.temporal.burstiness.hours.end: 18
+        data.generation.pattern.temporal.burstiness.hours.start: 10
+        data.generation.pattern.temporal.burstiness.low: 1.2
+        data.generation.pattern.temporal.periodic.amplitude: 50
+        data.generation.pattern.temporal.periodic.scale: 90
+        data.generation.requests: 500000
+        data.generation.seed: 42
     outs:
     - path: data/raw/static/static_raw_dataset.csv
       hash: md5
       md5: 4b2049918ccb762e4216bcbd7570510a
       size: 10803865
+    - path: reports/plots/static/daily_profile.png
+      hash: md5
+      md5: 20e6161129d08c9ef277877f1724e009
+      size: 78877
+    - path: reports/plots/static/key_usage.png
+      hash: md5
+      md5: 6b2f7826807ae5e897192f2a87f02010
+      size: 106116
+    - path: reports/plots/static/zipf_log_log.png
+      hash: md5
+      md5: 31de66246049335488f4f99169bdce59
+      size: 112142
   preprocess_data:
     cmd: PYTHONPATH=src python -m pipeline.data_preprocessing.data_preprocessor
     deps:

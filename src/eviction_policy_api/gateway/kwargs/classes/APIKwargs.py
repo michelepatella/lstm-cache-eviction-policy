@@ -53,7 +53,7 @@ class APIKwargs(BaseModel):
     @model_validator(mode="after")
     def check_tiebreak_strategy(
         self: "APIKwargs",
-    ) -> None:
+    ) -> "APIKwargs":
         """
         Check whether tiebreak strategy is valid.
 
@@ -65,10 +65,12 @@ class APIKwargs(BaseModel):
             self ("APIKwargs"): Current model instance.
 
         Returns:
-            None
+            "APIKwargs": Validated model instance.
         """
         assert_choice_field(
             self.tiebreak_strategy,
             TIEBREAK_STRATEGIES,
             "APIKwargs.tiebreak_strategy",
         )
+
+        return self

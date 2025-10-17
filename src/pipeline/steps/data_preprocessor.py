@@ -13,9 +13,8 @@ from components.dataset.io.saver import save_dataset
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
 from const import (
-    DATASET_RAW_TYPE,
     LOGS_DATA_PREPROCESSING_PHASE,
-    TIMESTAMP_COLUMN_NAME,
+    TIMESTAMP_COLUMN_NAME, DATASET_PROCESSED_TYPE, DATASET_RAW_TYPE,
 )
 from pipeline.config.configurator import prepare_config
 
@@ -44,12 +43,12 @@ def preprocess_data() -> None:
     data_distribution_mode = config.data.generation.mode
 
     # Retrieve path to load dataset from
-    dataset_path = get_dataset_abs_path(
+    dataset_raw_path = get_dataset_abs_path(
         DATASET_RAW_TYPE, data_distribution_mode
     )
 
     # Load the dataset
-    df = load_dataset(dataset_path)
+    df = load_dataset(dataset_raw_path)
 
     # Remove missing values
     df = remove_dataset_missing_values(df)
@@ -60,8 +59,13 @@ def preprocess_data() -> None:
     # Build new features
     df = build_features(df)
 
+    # Retrieve path to save dataset from
+    dataset_processed_path = get_dataset_abs_path(
+        DATASET_PROCESSED_TYPE, data_distribution_mode
+    )
+
     # Save preprocessed dataset
-    save_dataset(df, dataset_path)
+    save_dataset(df, dataset_processed_path)
 
     info("Data preprocessing completed")
 

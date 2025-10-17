@@ -43,7 +43,7 @@ def get_parameters_combination(
         search_space = config.validation.search_space.model_dump()
         for section, params_dict in search_space.items():
             section_values = combine_nested_dicts(params_dict)
-            section_combination_dicts.append((section, section_values))
+            section_combination_dicts.append(section_values)
 
         # Combine all sections into
         # final parameter configurations

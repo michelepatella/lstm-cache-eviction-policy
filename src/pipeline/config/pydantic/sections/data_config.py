@@ -399,7 +399,7 @@ class GenerationConfig(BaseModel):
     @model_validator(mode="after")
     def check_data_distribution_mode(
         self: "GenerationConfig",
-    ) -> None:
+    ) -> "GenerationConfig":
         """
         Check whether data distribution
         mode is valid or not.
@@ -411,13 +411,15 @@ class GenerationConfig(BaseModel):
             self (GenerationConfig): Current model instance.
 
         Returns:
-            None
+            "GenerationConfig": Validated model instance.
         """
         assert_choice_field(
             self.mode,
             DATA_DISTRIBUTION_MODES,
             "data.general.mode",
         )
+
+        return self
 
 
 class DataConfig(BaseModel):

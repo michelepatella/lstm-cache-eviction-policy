@@ -11,7 +11,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 # ----------------------------
 # Configuration
 # ----------------------------
-CONFIG_DIRECTORY_PATH = PROJECT_ROOT / "pipeline"
+CONFIG_DIRECTORY_PATH = PROJECT_ROOT / "src" / "pipeline" / "config"
 CONFIG_FILE_NAME = "config.yaml"
 
 CONFIG_SECTIONS_WITH_PARAMS = {
@@ -89,7 +89,7 @@ SIN_TIME_COLUMN_NAME = "sin_time"
 COS_TIME_COLUMN_NAME = "cos_time"
 
 DATASET_RAW_TYPE = "raw"
-DATASET_PREPROCESSED_TYPE = "preprocessed"
+DATASET_PROCESSED_TYPE = "processed"
 
 TRAINING_SPLIT_TYPE = "training"
 TESTING_SPLIT_TYPE = "testing"

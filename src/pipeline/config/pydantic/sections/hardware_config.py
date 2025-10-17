@@ -17,7 +17,7 @@ class HardwareConfig(BaseModel):
     device: str
 
     @model_validator(mode="after")
-    def check_device(self: "HardwareConfig") -> None:
+    def check_device(self: "HardwareConfig") -> "HardwareConfig":
         """
         Check whether device is valid or not.
 
@@ -27,10 +27,12 @@ class HardwareConfig(BaseModel):
             self (HardwareConfig): Current model instance.
 
         Returns:
-            None.
+            "HardwareConfig": Validated model instance.
         """
         assert_choice_field(
             self.device,
             HW_DEVICES,
             "hardware.device",
         )
+
+        return self

@@ -51,7 +51,7 @@ class OptimizerConfig(BaseModel):
     @model_validator(mode="after")
     def check_data_distribution_mode(
         self: "OptimizerConfig",
-    ) -> None:
+    ) -> "OptimizerConfig":
         """
         Check whether optimizer is valid or not.
 
@@ -62,13 +62,15 @@ class OptimizerConfig(BaseModel):
             self (OptimizerConfig): Current model instance.
 
         Returns:
-            None.
+            "OptimizerConfig": Validated model instance.
         """
         assert_choice_field(
             self.type,
             TRAINING_OPTIMIZERS,
             "training.optimizer.type",
         )
+
+        return self
 
 
 class EarlyStoppingTrainingConfig(BaseModel):
