@@ -1,3 +1,5 @@
+from typing import Union
+
 import torch
 
 from components.logs.levels.error_logger import error
@@ -5,26 +7,26 @@ from components.logs.levels.info_logger import info
 
 
 def move_to_device(
-    obj: torch.nn.Module | torch.Tensor, device: torch.device
-) -> torch.nn.Module | torch.Tensor:
+    obj: Union[torch.nn.Module, torch.Tensor], device: torch.device
+) -> Union[torch.nn.Module, torch.Tensor]:
     """
     Move an object to the specified device.
 
-    This function moves the provided object (a PyTorch model
-    or a Tensor) to the requested device and returns it.
+    This function moves the provided object (a PyTorch model or a Tensor)
+    to the requested device and returns it.
 
     Args:
-        obj (torch.nn.Module | torch.Tensor): Model or tensor to move.
+        obj (Union[torch.nn.Module, torch.Tensor]): Model/tensor to move to device.
         device (torch.device): Target device.
 
     Returns:
-        torch.nn.Module | torch.Tensor: The object on the specified device.
+        Union[torch.nn.Module, torch.Tensor]: The object moved to the specified device.
 
     Raises:
-        RuntimeError: If an error occurs while moving the object
-                      to the specified device, e.g.:
-            * If the device type is invalid or not recognized.
-            * If the object cannot be moved due to runtime constraints.
+        RuntimeError: If moving the object to the specified device fails:
+            * Device type is invalid or not recognized (TypeError).
+            * Object cannot be moved due to runtime constraints, such as insufficient
+              memory or incompatible object type (RuntimeError).
     """
     try:
         # Move object to device

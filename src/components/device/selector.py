@@ -7,34 +7,34 @@ from components.logs.levels.info_logger import info
 
 def select_device(device_type: str) -> torch.device:
     """
-    Select and return the computation device.
+    Select and return the requested computation device.
 
-    This function selects a computation device —
-    according to device type received — returning it.
+    This function selects and returns a computation device, according
+    to device type requested.
 
     Args:
-        device_type (str): The type of device to use.
+        device_type (str): The type of device to be selected.
 
     Returns:
-        torch.device: The PyTorch device object corresponding
-                      to the requested device type.
+        torch.device: The PyTorch device object corresponding to the
+                      requested device type.
 
     Raises:
-        RuntimeError: If an error occurs during device selection, e.g.:
-            * If the device type is invalid or not recognized.
-            * If the device cannot be used due to runtime constraints.
+        RuntimeError: If selecting the requested device fails:
+            * Device type is invalid or not recognized (TypeError).
+            * Device cannot be used due to runtime constraints (RuntimeError).
     """
+    debug(f"Device type to be selected: {device_type}")
+
     try:
-        debug(f"Device type to be instantiated: {device_type}")
-
         # Instantiate device based on
-        # device type passed
+        # device type requested
         device = torch.device(device_type)
-
-        info(f"Device selected")
-
-        return device
     except (TypeError, RuntimeError) as e:
         msg = "Failed to select device"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
+
+    info(f"Device selected")
+
+    return device
