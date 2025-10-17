@@ -36,15 +36,14 @@ def assert_choice_field(
     debug(f"Allowed field values: {allowed_field_values}:")
 
     # Check whether allowed field values
-
     # is not a list
     if not isinstance(allowed_field_values, list):
         msg = f"Allowed field values the must be a list ({context})"
         error("%s", msg)
         raise TypeError(msg)
 
-    # Check whether the field value has not
-    # allowed type
+    # Check whether the field has not
+    # allowed value
     if field_value not in allowed_field_values:
         msg = (
             f"{context} must be one of the following"

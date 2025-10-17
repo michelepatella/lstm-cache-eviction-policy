@@ -10,15 +10,15 @@ def assert_min_less_than_max(
 ) -> None:
     """
     Check whether a maximum value is greater than
-    or equal to a minimum one.
+    or equal to a minimum one or not.
 
-    This function, given the least and the greatest
+    This function, given the minimum and the maximum
     values, checks whether the first is less than or equal to the
-    second one, with respect to a given context.
+    second one.
 
     Args:
-        min_val (int | float): The least value.
-        max_val (int | float): The greatest value.
+        min_val (int | float): The maximum value.
+        max_val (int | float): The minimum value.
         context (str): Context for error messages.
 
     Returns:
@@ -26,8 +26,9 @@ def assert_min_less_than_max(
 
     Raises:
         ValueError: If the minimum value is greater
-                    than or equal to the maximum.
-        RuntimeError: If an error occurs during validation.
+                    than or equal to the maximum one.
+        RuntimeError: If validation of minimum and maximum values fails:
+            * Minimum and/or maximum values are of wrong type (ValueError).
     """
     debug(
         f"Min/Max values to be validated: {min_val}, {max_val} from {context}"
@@ -41,7 +42,7 @@ def assert_min_less_than_max(
             error("%s", msg)
             raise ValueError(msg)
     except TypeError as e:
-        msg = "Failed to compare min/max values"
+        msg = "Failed to compare min/max values for validation"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 
