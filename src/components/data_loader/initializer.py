@@ -16,35 +16,33 @@ def initialize_data_loader(
     config: Config,
 ) -> Tuple[AccessLogsDataset, DataLoader]:
     """
-    Set up a data loader for further usage.
+    Set up a data loader.
 
-    This function setups a data loader
-    of a specific type (e.g. training), by
-    instantiating the dataset class and creating
-    a dataloader from the instance.
+    This function setups a data loader of a specific type (e.g., training),
+    by instantiating the dataset class and creating a data loader from that
+    instance.
 
     Args:
-        data_loader_type (str): Type of data loader to create.
+        data_loader_type (str): Type of data loader to create (e.g., training).
         batch_size (int): Batch size for the data loader to create.
-        shuffle (bool): Whether to apply shuffle to the data loader.
+        shuffle (bool): Whether to apply shuffle to the data loader to create.
+        dataset_class (type[AccessLogsDataset]): Dataset class to instantiate.
         config (Config): Configuration object.
-        dataset_class (type[AccessLogsDataset]): Dataset class to instantiate
-                                                 and from which to create the
-                                                 data loader.
 
     Returns:
         Tuple[AccessLogsDataset, DataLoader]:
             - dataset: Instantiated dataset object of the specified class.
             - data_loader: DataLoader created from the dataset instance.
     """
-    # Get a dataset instance
+    # Instantiate the dataset class
     dataset = dataset_class(data_loader_type, config)
 
-    # Create a data loader from the dataset
+    # Create a data loader from the
+    # dataset instance
     data_loader = build_data_loader(
         dataset,
-        batch_size=batch_size,
-        shuffle=shuffle,
+        batch_size,
+        shuffle,
     )
 
     info("Data loader initialization completed")

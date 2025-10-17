@@ -26,7 +26,9 @@ def compute_mc_dropout_forward(
     num_features: int,
     num_mc_dropout_samples: Optional[int] = MC_DROPOUT_NUM_SAMPLES_DEFAULT,
     mc_dropout_flag: Optional[str] = MC_DROPOUT_FLAG,
-    mc_dropout_unbiased_variance: Optional[bool] = MC_DROPOUT_UNBIASED_VARIANCE,
+    mc_dropout_unbiased_variance: Optional[
+        bool
+    ] = MC_DROPOUT_UNBIASED_VARIANCE,
 ) -> Tuple[torch.Tensor, Optional[torch.Tensor]]:
     """
     Perform forward pass with optional Monte Carlo (MC) Dropout.
@@ -125,7 +127,9 @@ def compute_mc_dropout_forward(
     outputs_var = None
     if num_mc_dropout_samples > MC_DROPOUT_NUM_SAMPLES_DEFAULT:
         try:
-            outputs_var = all_outputs_tensor.var(dim=0, unbiased=mc_dropout_unbiased_variance)
+            outputs_var = all_outputs_tensor.var(
+                dim=0, unbiased=mc_dropout_unbiased_variance
+            )
             debug(f"Outputs variance shape: {outputs_var.shape}")
         except (RuntimeError, TypeError) as e:
             msg = "Failed to compute variance of MC dropout forward outputs"

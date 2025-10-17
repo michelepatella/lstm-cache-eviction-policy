@@ -61,9 +61,7 @@ def generate_temporal_pattern(
         current_hour_in_day,
     )
 
-    burstiness_pattern_config = (
-        config.data.pattern.temporal.burstiness
-    )
+    burstiness_pattern_config = config.data.pattern.temporal.burstiness
     # Get burst high and low for burstiness,
     # as well as burst start and end hours
     burst_high = burstiness_pattern_config.high

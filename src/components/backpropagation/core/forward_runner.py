@@ -14,7 +14,7 @@ from components.loss.calculator import calculate_loss
 def compute_forward(
     batch: Union[
         Tuple[torch.Tensor, torch.Tensor, torch.Tensor],
-        Tuple[torch.Tensor, torch.Tensor]
+        Tuple[torch.Tensor, torch.Tensor],
     ],
     model: torch.nn.Module,
     device: torch.device,
