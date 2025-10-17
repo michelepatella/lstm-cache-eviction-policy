@@ -47,7 +47,7 @@ def generate_temporal_pattern(
         f"for temporal pattern generation"
     )
 
-    periodic_pattern_config = config.data.generation.pattern.temporal.periodic
+    periodic_pattern_config = config.data.pattern.temporal.periodic
     # Get scale and amplitude for
     # periodic component generation
     periodic_scale = periodic_pattern_config.scale
@@ -62,7 +62,7 @@ def generate_temporal_pattern(
     )
 
     burstiness_pattern_config = (
-        config.data.generation.pattern.temporal.burstiness
+        config.data.pattern.temporal.burstiness
     )
     # Get burst high and low for burstiness,
     # as well as burst start and end hours

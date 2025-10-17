@@ -71,7 +71,7 @@ def run_simulations() -> None:
     initialize_logs()
 
     # Prepare configuration
-    data_distribution_mode = config.data.generation.mode
+    data_distribution_mode = config.data.mode
     mistake_window = config.simulations.metrics.mistake_rate.window
 
     # Data setup and initialization

@@ -33,7 +33,7 @@ def generate_dynamic_requests(
             - timestamps_hours: Corresponding timestamps of requests in hours.
     """
     # Retrieve Zipfian config
-    zipf_config = config.data.generation.pattern.access.zipf
+    zipf_config = config.data.pattern.access.zipf
     alpha_min = zipf_config.alpha.min
     alpha_max = zipf_config.alpha.max
     steps = zipf_config.steps

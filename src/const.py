@@ -186,6 +186,8 @@ MC_DROPOUT_NUM_SAMPLES_DEFAULT = 1
 
 MC_DROPOUT_FLAG = "mc_dropout"
 
+MC_DROPOUT_UNBIASED_VARIANCE = False
+
 
 # ----------------------------
 # Cache simulations

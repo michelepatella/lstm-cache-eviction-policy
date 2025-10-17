@@ -46,8 +46,8 @@ def initialize_model_environment(
     """
     # Prepare configuration
     device_type = config.hardware.device
-    min_key = config.data.generation.keys.min
-    max_key = config.data.generation.keys.max
+    min_key = config.data.keys.min
+    max_key = config.data.keys.max
     num_keys = max_key - min_key + 1
     embedding_dim = config.model.sequence.embedding.dimension
     num_features = config.model.general.features

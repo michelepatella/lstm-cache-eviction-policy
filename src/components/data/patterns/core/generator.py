@@ -49,21 +49,19 @@ def generate_pattern_requests(
     current_day = DATA_GENERATION_INITIAL_CURRENT_DAY
     current_seconds_in_day = DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY
 
-    general_data_config = config.data.generation
-
     # Get the number of requests
     # to be generated
     num_requests = (
         time_step_duration
         if time_step_duration is not None
-        else general_data_config.requests
+        else config.data.requests
     )
 
     debug(f"Number of requests to be generated: {num_requests}")
 
     # Define a seed to make the
     # generation process deterministic
-    seed = general_data_config.seed
+    seed = config.data.seed
     np.random.seed(seed)
 
     debug(f"Seed for requests generation: {seed}")

@@ -40,7 +40,7 @@ def train_model() -> None:
     initialize_logs()
 
     # Prepare configuration
-    data_distribution_mode = config.data.generation.mode
+    data_distribution_mode = config.data.mode
     training_batch_size = config.training.general.batch_size
     training_shuffle = config.training.general.shuffle
     validation_batch_size = config.validation.general.batch_size

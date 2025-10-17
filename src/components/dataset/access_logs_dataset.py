@@ -130,7 +130,7 @@ class AccessLogsDataset(Dataset):
             None
         """
         # Prepare configuration
-        data_distribution_mode = config.data.generation.mode
+        data_distribution_mode = config.data.mode
         training_split = config.dataset.split.training
 
         # Retrieve path to load dataset from

@@ -74,7 +74,7 @@ def infer_single_batch(
         )
 
         # Perform MC Dropout forward passes
-        outputs_mean, outputs_var, _ = compute_mc_dropout_forward(
+        outputs_mean, outputs_var = compute_mc_dropout_forward(
             model, (features, keys, targets), device, num_features
         )
 

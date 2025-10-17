@@ -73,7 +73,7 @@ def generate_access_pattern(
         f" to {first_key+keys_range_size}"
     )
 
-    behavior_config = config.data.generation.pattern.access.behavior
+    behavior_config = config.data.pattern.access.behavior
 
     # Prepare repetition pattern configuration
     repetition_interval = behavior_config.repetition.interval

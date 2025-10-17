@@ -70,7 +70,7 @@ def autoregressive_rollout_service(
         delta_t = (time_step_increment / 24) * (2 * math.pi)
 
         for _ in range(rollout_horizon):
-            outputs_mean, outputs_var, _ = mc_forward_passes(
+            outputs_mean, outputs_var = mc_forward_passes(
                 model,
                 (x_features_seq, x_keys_seq),
                 device,

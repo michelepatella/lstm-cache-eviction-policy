@@ -3,46 +3,46 @@ stages:
     cmd: PYTHONPATH=src python -m pipeline.steps.data_generator
     params:
       - src/pipeline/config/config.yaml:
-        - data.generation.seed
-        - data.generation.mode
-        - data.generation.requests
-        - data.generation.keys.min
-        - data.generation.keys.max
-        - data.generation.pattern.access.zipf.alpha.fixed
-        - data.generation.pattern.access.zipf.alpha.min
-        - data.generation.pattern.access.zipf.alpha.max
-        - data.generation.pattern.access.zipf.steps
-        - data.generation.pattern.access.behavior.repetition.interval
-        - data.generation.pattern.access.behavior.repetition.offset
-        - data.generation.pattern.access.behavior.repetition.hours.start
-        - data.generation.pattern.access.behavior.repetition.hours.end
-        - data.generation.pattern.access.behavior.toggle.interval
-        - data.generation.pattern.access.behavior.toggle.hours.start
-        - data.generation.pattern.access.behavior.toggle.hours.end
-        - data.generation.pattern.access.behavior.toggle.base_requests.first
-        - data.generation.pattern.access.behavior.toggle.base_requests.second
-        - data.generation.pattern.access.behavior.toggle.offsets.forward
-        - data.generation.pattern.access.behavior.toggle.offsets.backward
-        - data.generation.pattern.access.behavior.cycle.base
-        - data.generation.pattern.access.behavior.cycle.mod
-        - data.generation.pattern.access.behavior.cycle.divisor
-        - data.generation.pattern.access.behavior.cycle.hours.start
-        - data.generation.pattern.access.behavior.cycle.hours.end
-        - data.generation.pattern.access.behavior.distortion.interval
-        - data.generation.pattern.access.behavior.distortion.hours.start
-        - data.generation.pattern.access.behavior.distortion.hours.end
-        - data.generation.pattern.access.behavior.distortion.offsets.history
-        - data.generation.pattern.access.behavior.distortion.offsets.correction
-        - data.generation.pattern.access.behavior.distortion.noise.min
-        - data.generation.pattern.access.behavior.distortion.noise.max
-        - data.generation.pattern.access.behavior.memory.interval
-        - data.generation.pattern.access.behavior.memory.offset
-        - data.generation.pattern.temporal.burstiness.high
-        - data.generation.pattern.temporal.burstiness.low
-        - data.generation.pattern.temporal.burstiness.hours.start
-        - data.generation.pattern.temporal.burstiness.hours.end
-        - data.generation.pattern.temporal.periodic.scale
-        - data.generation.pattern.temporal.periodic.amplitude
+        - data.seed
+        - data.mode
+        - data.requests
+        - data.keys.min
+        - data.keys.max
+        - data.pattern.access.zipf.alpha.fixed
+        - data.pattern.access.zipf.alpha.min
+        - data.pattern.access.zipf.alpha.max
+        - data.pattern.access.zipf.steps
+        - data.pattern.access.behavior.repetition.interval
+        - data.pattern.access.behavior.repetition.offset
+        - data.pattern.access.behavior.repetition.hours.start
+        - data.pattern.access.behavior.repetition.hours.end
+        - data.pattern.access.behavior.toggle.interval
+        - data.pattern.access.behavior.toggle.hours.start
+        - data.pattern.access.behavior.toggle.hours.end
+        - data.pattern.access.behavior.toggle.base_requests.first
+        - data.pattern.access.behavior.toggle.base_requests.second
+        - data.pattern.access.behavior.toggle.offsets.forward
+        - data.pattern.access.behavior.toggle.offsets.backward
+        - data.pattern.access.behavior.cycle.base
+        - data.pattern.access.behavior.cycle.mod
+        - data.pattern.access.behavior.cycle.divisor
+        - data.pattern.access.behavior.cycle.hours.start
+        - data.pattern.access.behavior.cycle.hours.end
+        - data.pattern.access.behavior.distortion.interval
+        - data.pattern.access.behavior.distortion.hours.start
+        - data.pattern.access.behavior.distortion.hours.end
+        - data.pattern.access.behavior.distortion.offsets.history
+        - data.pattern.access.behavior.distortion.offsets.correction
+        - data.pattern.access.behavior.distortion.noise.min
+        - data.pattern.access.behavior.distortion.noise.max
+        - data.pattern.access.behavior.memory.interval
+        - data.pattern.access.behavior.memory.offset
+        - data.pattern.temporal.burstiness.high
+        - data.pattern.temporal.burstiness.low
+        - data.pattern.temporal.burstiness.hours.start
+        - data.pattern.temporal.burstiness.hours.end
+        - data.pattern.temporal.periodic.scale
+        - data.pattern.temporal.periodic.amplitude
     deps:
       - src/components/assertions/choice_field_assertor.py
       - src/components/assertions/min_max_assertor.py
@@ -89,16 +89,16 @@ stages:
       - src/pipeline/config/pydantic/sections/validation_config.py
       - src/pipeline/steps/data_generator.py
     outs:
-      - data/raw/${data.generation.mode}/${data.generation.mode}_raw_dataset.csv
-      - reports/plots/${data.generation.mode}/daily_profile.png
-      - reports/plots/${data.generation.mode}/key_usage.png
-      - reports/plots/${data.generation.mode}/zipf_log_log.png
+      - data/raw/${data.mode}/${data.mode}_raw_dataset.csv
+      - reports/plots/${data.mode}/daily_profile.png
+      - reports/plots/${data.mode}/key_usage.png
+      - reports/plots/${data.mode}/zipf_log_log.png
 
   preprocess_data:
     cmd: PYTHONPATH=src python -m pipeline.steps.data_preprocessor
     params:
       - src/pipeline/config/config.yaml:
-        - config.data.generation.mode
+        - config.data.mode
     deps:
       - src/components/assertions/choice_field_assertor.py
       - src/components/assertions/min_max_assertor.py
@@ -130,18 +130,18 @@ stages:
       - src/pipeline/config/pydantic/sections/training_config.py
       - src/pipeline/config/pydantic/sections/validation_config.py
       - src/pipeline/steps/data_preprocessor.py
-      - data/raw/${data.generation.mode}/${data.generation.mode}_raw_dataset.csv
+      - data/raw/${data.mode}/${data.mode}_raw_dataset.csv
     outs:
-      - data/processed/${data.generation.mode}/${data.generation.mode}_processed_dataset.csv
+      - data/processed/${data.mode}/${data.mode}_processed_dataset.csv
 
   validate_model:
     cmd: PYTHONPATH=src python -m pipeline.steps.validator
     params:
       - src/pipeline/config/config.yaml:
         - config.hardware.device
-        - config.data.generation.mode
-        - config.data.generation.keys.min
-        - config.data.generation.keys.max
+        - config.data.mode
+        - config.data.keys.min
+        - config.data.keys.max
         - config.dataset.split.training
         - config.model.general.features
         - config.model.params
@@ -237,7 +237,7 @@ stages:
       - src/pipeline/config/pydantic/sections/training_config.py
       - src/pipeline/config/pydantic/sections/validation_config.py
       - src/pipeline/steps/validator.py
-      - data/processed/${data.generation.mode}/${data.generation.mode}_processed_dataset.csv
+      - data/processed/${data.mode}/${data.mode}_processed_dataset.csv
     outs: []
 
   train_model:
@@ -245,9 +245,9 @@ stages:
     params:
       - src/pipeline/config/config.yaml:
         - config.hardware.device
-        - config.data.generation.mode
-        - config.data.generation.keys.min
-        - config.data.generation.keys.max
+        - config.data.mode
+        - config.data.keys.min
+        - config.data.keys.max
         - config.dataset.split.training
         - config.dataset.split.validation
         - config.model.general.features
@@ -332,18 +332,18 @@ stages:
       - src/pipeline/config/pydantic/sections/training_config.py
       - src/pipeline/config/pydantic/sections/validation_config.py
       - src/pipeline/steps/trainer.py
-      - data/processed/${data.generation.mode}/${data.generation.mode}_processed_dataset.csv
+      - data/processed/${data.mode}/${data.mode}_processed_dataset.csv
     outs:
-      - models/${data.generation.mode}/trained_${data.generation.mode}_model.pt
+      - models/${data.mode}/trained_${data.mode}_model.pt
 
   test_model:
     cmd: PYTHONPATH=src python -m pipeline.steps.tester
     params:
       - src/pipeline/config/config.yaml:
         - config.hardware.device
-        - config.data.generation.mode
-        - config.data.generation.keys.min
-        - config.data.generation.keys.max
+        - config.data.mode
+        - config.data.keys.min
+        - config.data.keys.max
         - config.dataset.split.training
         - config.model.general.features
         - config.model.params
@@ -412,16 +412,16 @@ stages:
       - src/pipeline/config/pydantic/sections/training_config.py
       - src/pipeline/config/pydantic/sections/validation_config.py
       - src/pipeline/steps/tester.py
-      - data/processed/${data.generation.mode}/${data.generation.mode}_processed_dataset.csv
-      - models/${data.generation.mode}/trained_${data.generation.mode}_model.pt
+      - data/processed/${data.mode}/${data.mode}_processed_dataset.csv
+      - models/${data.mode}/trained_${data.mode}_model.pt
     outs:
-      - reports/results/${data.generation.mode}/${data.generation.mode}_model_results.json
+      - reports/results/${data.mode}/${data.mode}_model_results.json
 
   run_simulations:
     cmd: PYTHONPATH=src python -m pipeline.steps.simulator
     params:
       - src/pipeline/config/config.yaml:
-        - config.data.generation.mode
+        - config.data.mode
         - config.dataset.split.training
         - config.model.sequence.length
         - config.testing.general.batch_size
@@ -485,10 +485,10 @@ stages:
       - src/pipeline/config/pydantic/sections/training_config.py
       - src/pipeline/config/pydantic/sections/validation_config.py
       - src/pipeline/steps/simulator.py
-      - data/processed/${data.generation.mode}/${data.generation.mode}_processed_dataset.csv
+      - data/processed/${data.mode}/${data.mode}_processed_dataset.csv
     outs:
-      - reports/results/${data.generation.mode}/${data.generation.mode}_simulations_results.json
-      - reports/plots/${data.generation.mode}/hit_miss_rates.png
+      - reports/results/${data.mode}/${data.mode}_simulations_results.json
+      - reports/plots/${data.mode}/hit_miss_rates.png
 
 artifacts:
   static-model:

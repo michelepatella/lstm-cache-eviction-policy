@@ -37,7 +37,7 @@ def generate_requests_helper(
             - timestamps_hours: Corresponding timestamps of the requests in hours.
     """
     # Retrieve keys range from configuration
-    keys_config = config.data.generation.keys
+    keys_config = config.data.keys
     min_key = keys_config.min
     max_key = keys_config.max
     keys_range = np.arange(min_key, max_key + 1)
@@ -51,13 +51,13 @@ def generate_requests_helper(
     if alpha_range is None:
         # Use static fixed alpha and
         # don't consider any time step duration
-        alpha_fixed = config.data.generation.pattern.access.zipf.alpha.fixed
+        alpha_fixed = config.data.pattern.access.zipf.alpha.fixed
         alpha_range = [alpha_fixed]
         time_step_duration = None
     else:
         # Otherwise, split requests
         # into several time steps
-        num_requests = config.data.generation.requests
+        num_requests = config.data.requests
         time_step_duration = num_requests // len(alpha_range)
 
         debug(

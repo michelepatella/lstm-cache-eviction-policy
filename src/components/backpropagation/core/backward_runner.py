@@ -1,6 +1,7 @@
 import torch
 from torch.optim import Optimizer
 
+from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 
 
@@ -8,9 +9,8 @@ def compute_backward(loss: torch.nn.Module, optimizer: Optimizer) -> None:
     """
     Perform a backward pass and update model parameters.
 
-    This function computes gradients via backpropagation
-    from the provided loss and updates the model parameters
-    using the given optimizer.
+    This function computes gradients via backpropagation from the
+    provided loss and updates the model parameters using the given optimizer.
 
     Args:
         loss (torch.nn.Module): Loss tensor from which to compute gradients.
@@ -18,11 +18,23 @@ def compute_backward(loss: torch.nn.Module, optimizer: Optimizer) -> None:
 
     Returns:
         None
+
+    Raises:
+    RuntimeError: If backward pass fails:
+        * Gradient computation fails due to invalid loss tensor or autograd
+          errors (RuntimeError).
+        * Optimizer update fails because optimizer received invalid types or
+          parameters (TypeError, ValueError).
     """
-    # Compute gradients
-    loss.backward()
+    try:
+        # Compute gradients
+        loss.backward()
 
-    # Update model parameters
-    optimizer.step()
+        # Update model parameters
+        optimizer.step()
 
-    info("Backward pass completed")
+        info("Backward pass completed")
+    except (RuntimeError, TypeError, ValueError) as e:
+        msg = "Failed to compute backward pass"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e

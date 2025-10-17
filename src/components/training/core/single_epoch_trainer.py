@@ -86,8 +86,8 @@ def train_single_epoch(
             loss, _ = compute_forward(
                 batch,
                 model,
-                criterion,
                 device,
+                criterion,
             )
 
             debug(

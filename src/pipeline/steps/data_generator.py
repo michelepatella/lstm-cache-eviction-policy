@@ -59,9 +59,9 @@ def generate_data() -> None:
     initialize_logs()
 
     # Prepare configuration
-    data_distribution_mode = config.data.generation.mode
-    min_key = config.data.generation.keys.min
-    max_key = config.data.generation.keys.max
+    data_distribution_mode = config.data.mode
+    min_key = config.data.keys.min
+    max_key = config.data.keys.max
 
     debug(f"Data distribution mode: {data_distribution_mode}")
 

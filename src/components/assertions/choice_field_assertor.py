@@ -11,12 +11,10 @@ def assert_choice_field(
     context: str,
 ) -> None:
     """
-    Check whether a choice field
-    is valid or not.
+    Check whether a choice field is valid or not.
 
-    This function validates the choice field,
-    ensuring its value it's a valid one, according
-    to a list of allowed values.
+    This function validates the choice field, ensuring its value it's
+    a valid one, according to a list of allowed values.
 
     Args:
         field_value (Any): Value of the choice field.
@@ -27,10 +25,8 @@ def assert_choice_field(
         None
 
     Raises:
-        ValueError: If the choice field is not valid (i.e.,
-                    is not a value among allowed ones).
-        TypeError: If allowed field values data structure is
-                   not a list.
+        ValueError: If the choice field is not valid.
+        TypeError: If allowed field values data structure is not a list.
     """
     debug(f"Field value to be validated: {field_value}:")
     debug(f"Allowed field values: {allowed_field_values}:")

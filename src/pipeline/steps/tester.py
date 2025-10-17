@@ -46,7 +46,7 @@ def test_model() -> None:
     initialize_logs()
 
     # Prepare configuration
-    data_distribution_mode = config.data.generation.mode
+    data_distribution_mode = config.data.mode
     testing_batch_size = config.testing.general.batch_size
     testing_shuffle = config.testing.general.shuffle
     num_features = config.model.general.features

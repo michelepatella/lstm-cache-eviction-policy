@@ -14,7 +14,9 @@ from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
 from const import (
     LOGS_DATA_PREPROCESSING_PHASE,
-    TIMESTAMP_COLUMN_NAME, DATASET_PROCESSED_TYPE, DATASET_RAW_TYPE,
+    TIMESTAMP_COLUMN_NAME,
+    DATASET_PROCESSED_TYPE,
+    DATASET_RAW_TYPE,
 )
 from pipeline.config.configurator import prepare_config
 
@@ -40,7 +42,7 @@ def preprocess_data() -> None:
     initialize_logs()
 
     # Prepare configuration
-    data_distribution_mode = config.data.generation.mode
+    data_distribution_mode = config.data.mode
 
     # Retrieve path to load dataset from
     dataset_raw_path = get_dataset_abs_path(
