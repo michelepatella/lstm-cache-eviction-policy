@@ -35,8 +35,8 @@ def extract_targets_from_data_loader(data_loader: DataLoader) -> torch.Tensor:
         for batch in data_loader:
             # Assumption: batch is a tuple/list of
             # tensors, with the target as the last element
-            targets = batch[-1]
-            all_targets.append(targets)
+            target = batch[-1]
+            all_targets.append(target)
     except (TypeError, IndexError) as e:
         msg = "Failed to extract targets from data loader"
         error("%s: %s", msg, e)

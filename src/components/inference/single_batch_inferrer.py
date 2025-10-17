@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 import torch
 
@@ -6,33 +6,29 @@ from components.backpropagation.mc_dropout.forward_runner import (
     compute_mc_dropout_forward,
 )
 from components.device.mover import move_to_device
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.loss.calculator import calculate_loss
 
 
 def infer_single_batch(
-    batch_idx: int,
     batch: Tuple[torch.Tensor, torch.Tensor, torch.Tensor],
     model: torch.nn.Module,
     criterion: torch.nn.Module,
     device: torch.device,
     num_features: int,
 ) -> Tuple[
-    float, List[int], List[int], List[torch.Tensor], List[torch.Tensor]
+    float, List[int], List[int], List[torch.Tensor], Optional[List[torch.Tensor]]
 ]:
     """
     Perform inference on a single batch.
 
     This function processes one batch of data, moves tensors to the specified device,
-    performs MC Dropout forward passes through the model, computes the batch loss,
+    performs MC Dropout forward through the model, computes the batch loss,
     and extracts predictions, targets, outputs, and optionally variances.
 
     Args:
-        batch_idx (int): Index of the current batch.
-        batch (Tuple[torch.Tensor, torch.Tensor, torch.Tensor]):
-            The batch to process (features, keys, targets).
+        batch (Tuple[torch.Tensor, torch.Tensor, torch.Tensor]): The batch to process.
         model (torch.nn.Module): Model to perform inference with.
         criterion (torch.nn.Module): Loss function for computing batch loss.
         device (torch.device): Device to run computations on.
@@ -40,61 +36,58 @@ def infer_single_batch(
 
         Returns:
             Tuple[
-                float, List[int], List[int], List[torch.Tensor], List[torch.Tensor]
+                float, List[int], List[int], List[torch.Tensor], Optional[List[torch.Tensor]]
             ]:
                 - loss: Float representing the computed loss for the batch.
                 - predictions: List of predicted class indices for each sample in the batch.
-                - targets_list: List of ground truth labels corresponding to each sample in the batch.
-                - outputs_list: List of tensors containing model outputs for each sample in the batch.
-                - variances: List of tensors containing MC Dropout variances for each sample (empty if not computed).
+                - targets_list: List of ground truth labels corresponding to each sample
+                                in the batch.
+                - outputs_list: List of tensors containing model outputs for each sample in
+                                the batch.
+                - variances: List of tensors containing MC Dropout variances for each sample
+                             (None if not computed).
 
     Raises:
-        RuntimeError: If an error occurs during batch processing, e.g.:
-            * Batch unpacking fails.
-            * Moving tensors to device fails.
-            * Forward pass or loss computation fails.
-            * Argmax or conversion to NumPy fails.
+        RuntimeError: If single batch inference fails:
+            * Extracting the target fails because the batch is not a tuple/list
+              of tensors or is empty (TypeError, IndexError).
+            * Computing loss fails because outputs or target tensors are incompatible
+              with the criterion (RuntimeError).
+            * Preparing return data fails due to invalid tensor shapes, types,
+              or operations (RuntimeError, TypeError, AttributeError, IndexError).
     """
+    # Move entire batch to device
+    batch = tuple(move_to_device(t, device) for t in batch)
+
+    # Perform MC Dropout forward
+    outputs_mean, outputs_var = compute_mc_dropout_forward(
+        model, batch, device, num_features
+    )
+
     try:
-        # Unpack batch
-        features, keys, targets = batch
+        # Extract target from batch
+        target = batch[-1]
+    except (TypeError, IndexError) as e:
+        msg = "Failed to extract target from batch"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
 
-        debug(
-            f"Processing batch {batch_idx}: "
-            f"features shape: {features.shape}, "
-            f"keys shape: {keys.shape}, "
-            f"targets shape: {targets.shape}"
-        )
+    # Compute batch loss
+    loss = calculate_loss(outputs_mean, target, criterion)
 
-        # Move tensors to device
-        features, keys, targets = (
-            move_to_device(features, device),
-            move_to_device(keys, device),
-            move_to_device(targets, device),
-        )
-
-        # Perform MC Dropout forward passes
-        outputs_mean, outputs_var = compute_mc_dropout_forward(
-            model, (features, keys, targets), device, num_features
-        )
-
-        debug(f"Outputs mean shape: {outputs_mean.shape}")
-
-        # Compute batch loss
-        loss = calculate_loss(outputs_mean, targets, criterion).item()
-
-        # Collect data to be returned
+    try:
+        # Prepare data to be returned
         predictions = torch.argmax(outputs_mean, dim=1).cpu().numpy().tolist()
-        targets_list = targets.cpu().numpy().tolist()
-        outputs_list = [t.cpu() for t in outputs_mean]
+        targets = target.cpu().numpy().tolist()
+        outputs = [t.cpu() for t in outputs_mean]
         variances = (
             [t.cpu() for t in outputs_var] if outputs_var is not None else []
         )
 
         info("Single batch inference completed")
 
-        return loss, predictions, targets_list, outputs_list, variances
-    except (IndexError, ValueError, RuntimeError, TypeError) as e:
-        msg = "Failed to infer single batch"
+        return loss, predictions, targets, outputs, variances
+    except (RuntimeError, TypeError, AttributeError, IndexError) as e:
+        msg = "Failed to return data collected during single batch inference"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e

@@ -40,7 +40,7 @@ def calculate_loss(
         debug(f"Loss calculated: {loss.item()}, using criterion: {criterion}")
         info("Loss calculation completed")
 
-        return loss
+        return loss.item()
     except TypeError as e:
         msg = "Failed to calculate loss"
         error("%s: %s", msg, e)
