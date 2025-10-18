@@ -62,7 +62,7 @@ class KeysConfig(BaseModel):
         assert_min_less_than_max(
             self.min,
             self.max,
-            context="data.general.keys",
+            context="data.keys",
         )
 
         return self
@@ -378,9 +378,9 @@ class PatternConfig(BaseModel):
     temporal: TemporalConfig
 
 
-class GenerationConfig(BaseModel):
+class DataConfig(BaseModel):
     """
-    Data generation configuration.
+    Data configuration.
 
     Attributes:
         seed (int): Random seed for generation (>= 0).
@@ -398,8 +398,8 @@ class GenerationConfig(BaseModel):
 
     @model_validator(mode="after")
     def check_data_distribution_mode(
-        self: "GenerationConfig",
-    ) -> "GenerationConfig":
+            self: "DataConfig",
+    ) -> "DataConfig":
         """
         Check whether data distribution
         mode is valid or not.
@@ -408,26 +408,15 @@ class GenerationConfig(BaseModel):
         distribution mode.
 
         Args:
-            self (GenerationConfig): Current model instance.
+            self (DataConfig): Current model instance.
 
         Returns:
-            "GenerationConfig": Validated model instance.
+            "DataConfig": Validated model instance.
         """
         assert_choice_field(
             self.mode,
             DATA_DISTRIBUTION_MODES,
-            "data.general.mode",
+            "data.mode",
         )
 
         return self
-
-
-class DataConfig(BaseModel):
-    """
-    Data configuration.
-
-    Attributes:
-        generation (GenerationConfig): Data generation configuration.
-    """
-
-    generation: GenerationConfig
