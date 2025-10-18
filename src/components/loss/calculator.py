@@ -1,3 +1,5 @@
+from typing import Optional
+
 import torch
 
 from components.logs.levels.debug_logger import debug
@@ -9,39 +11,44 @@ def calculate_loss(
     outputs: torch.Tensor,
     targets: torch.Tensor,
     criterion: torch.nn.Module,
-) -> torch.Tensor | None:
+) -> Optional[float]:
     """
-    Calculate the loss.
+    Calculate the loss for outputs and targets.
 
     This function calculates the loss between model outputs
-    and target tensors using the provided criterion.
+    and targets using the provided criterion.
 
     Args:
         outputs (torch.Tensor): Model predictions.
-        targets (torch.Tensor): Ground truth target tensor.
+        targets (torch.Tensor): Ground truth targets.
         criterion (torch.nn.Module): Criterion to use for loss calculation.
 
     Returns:
-        torch.Tensor | None: Calculated loss (None if something went wrong).
+        Optional[float]: Calculated loss (None if something went wrong).
 
     Raises:
-        RuntimeError: If loss calculation fails e.g.:
-            * Invalid input types.
+        RuntimeError: If loss calculation fails:
+            * Criterion computation fails due to invalid input types or
+              shapes (TypeError, RuntimeError).
     """
+    debug(f"Number of outputs for loss calculation: {len(outputs)}")
+    debug(f"Number of targets for loss calculation: {len(targets)}")
+    debug(f"Criterion for loss calculation: {criterion}")
+
     try:
         # Check whether criterion is not provided
         if criterion is None:
             # Loss is not calculated (None)
             loss = None
         else:
-            # Calculate loss
-            loss = criterion(outputs, targets)
-
-        debug(f"Loss calculated: {loss.item()}, using criterion: {criterion}")
-        info("Loss calculation completed")
-
-        return loss.item()
+            # Calculate loss with
+            # provided criterion
+            loss = criterion(outputs, targets).item()
     except TypeError as e:
         msg = "Failed to calculate loss"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
+
+    info(f"Loss calculated: {loss}")
+
+    return loss

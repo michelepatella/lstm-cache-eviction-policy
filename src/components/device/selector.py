@@ -35,6 +35,6 @@ def select_device(device_type: str) -> torch.device:
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 
-    info(f"Device selected")
+    info(f"Device '{device_type}' selected")
 
     return device

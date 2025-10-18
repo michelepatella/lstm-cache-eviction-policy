@@ -204,7 +204,7 @@ stages:
       - src/components/logs/levels/info_logger.py
       - src/components/loss/builder.py
       - src/components/loss/calculator.py
-      - src/components/loss/class_weights/calculator.py
+      - src/components/loss/class_weight/calculator.py
       - src/components/math/avg_calculator.py
       - src/components/math/percentage_calculator.py
       - src/components/model/best/checks_updates/checker_updater.py
@@ -304,7 +304,7 @@ stages:
       - src/components/logs/levels/info_logger.py
       - src/components/loss/builder.py
       - src/components/loss/calculator.py
-      - src/components/loss/class_weights/calculator.py
+      - src/components/loss/class_weight/calculator.py
       - src/components/math/avg_calculator.py
       - src/components/math/percentage_calculator.py
       - src/components/model/best/checks_updates/checker_updater.py
@@ -388,7 +388,7 @@ stages:
       - src/components/logs/levels/info_logger.py
       - src/components/loss/builder.py
       - src/components/loss/calculator.py
-      - src/components/loss/class_weights/calculator.py
+      - src/components/loss/class_weight/calculator.py
       - src/components/math/avg_calculator.py
       - src/components/math/percentage_calculator.py
       - src/components/model/best/initializer.py
