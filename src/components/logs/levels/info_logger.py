@@ -28,11 +28,4 @@ def info(
     Returns:
         None
     """
-    log(
-        logging.INFO,
-        msg,
-        *args,
-        log_phase_name,
-        log_phase,
-        **kwargs
-    )
+    log(logging.INFO, msg, *args, log_phase_name, log_phase, **kwargs)

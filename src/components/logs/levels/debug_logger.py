@@ -28,11 +28,4 @@ def debug(
     Returns:
         None
     """
-    log(
-        logging.DEBUG,
-        msg,
-        *args,
-        log_phase_name,
-        log_phase,
-        **kwargs
-    )
+    log(logging.DEBUG, msg, *args, log_phase_name, log_phase, **kwargs)

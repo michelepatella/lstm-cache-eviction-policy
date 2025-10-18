@@ -180,7 +180,8 @@ MC_DROPOUT_MODEL_MODE = "mc_dropout"
 # ----------------------------
 # Monte Carlo (MC) Dropout
 # ----------------------------
-MC_DROPOUT_DEFAULT = False
+MC_DROPOUT_DISABLED = False
+MC_DROPOUT_ENABLED = True
 
 MC_DROPOUT_NUM_SAMPLES_DEFAULT = 1
 

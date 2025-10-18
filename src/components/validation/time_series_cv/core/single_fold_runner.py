@@ -48,10 +48,6 @@ def compute_single_time_series_cv_fold(
     Returns:
         float: Average loss for the current fold.
     """
-    # Box parameters for
-    # easy attribute access
-    params_box = Box(params)
-
     debug(f"Fold {fold_idx}, training index: {train_idx}")
     debug(f"Fold {fold_idx}, validation index: {val_idx}")
 
@@ -78,7 +74,7 @@ def compute_single_time_series_cv_fold(
 
     # Initialize model components
     device, criterion, model = initialize_model_environment(
-        params_box,
+        params,
         config,
         targets,
     )

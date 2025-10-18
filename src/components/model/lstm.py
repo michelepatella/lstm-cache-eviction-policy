@@ -7,7 +7,7 @@ from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
-from const import LSTM_PARAM_NAMES, MC_DROPOUT_DEFAULT
+from const import LSTM_PARAM_NAMES, MC_DROPOUT_DISABLED
 from pipeline.config.pydantic.config import Config
 from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
 
@@ -123,7 +123,7 @@ class LSTM(torch.nn.Module):
         self._set_params(params, config)
 
         # Set MC dropout default flag
-        self.mc_dropout = MC_DROPOUT_DEFAULT
+        self.mc_dropout = MC_DROPOUT_DISABLED
         debug(f"MC dropout set to default: {self.mc_dropout}")
 
         # Set number of keys

@@ -28,11 +28,4 @@ def error(
     Returns:
         None
     """
-    log(
-        logging.ERROR,
-        msg,
-        *args,
-        log_phase_name,
-        log_phase,
-        **kwargs
-    )
+    log(logging.ERROR, msg, *args, log_phase_name, log_phase, **kwargs)

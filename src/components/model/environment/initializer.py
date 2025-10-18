@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Optional, Dict, Union
 
 import torch
 
@@ -18,10 +18,10 @@ from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
 
 
 def initialize_model_environment(
-    model_params: ModelParamsConfig,
+    model_params: Union[ModelParamsConfig, Dict[str, Union[int, float, bool]]],
     config: Config,
-    targets: torch.Tensor = None,
-) -> Tuple[torch.device, torch.nn.Module, torch.nn.Module]:
+    targets: Optional[torch.Tensor],
+) -> Tuple[torch.device, Optional[torch.nn.Module], torch.nn.Module]:
     """
     Set up the model environment.
 
@@ -32,35 +32,35 @@ def initialize_model_environment(
         - Instantiates the PyTorch model and moves it to the device
 
     Args:
-        model_params (ModelParamsConfig): Dictionary containing model
-                                          hyperparameters.
+        model_params (Union[ModelParamsConfig, Dict[str, Union[int, float, bool]]]):
+            Model parameters.
         config (Config): Configuration object.
-        targets (torch.Tensor): Tensor of target labels for
-                                computing class weights.
+        targets (Optional[torch.Tensor]): Target labels for computing class weights.
 
     Returns:
-        Tuple[torch.device, torch.nn.Module, torch.nn.Module]:
+        Tuple[torch.device, Optional[torch.nn.Module], torch.nn.Module]:
             - device: The device used for computations.
-            - criterion: Loss function initialized with class weights.
-            - model: Pre-trained model ready for inference or testing.
+            - criterion: Loss function initialized with class weights (None if no targets
+              provided).
+            - model: PyTorch model.
     """
-    # Prepare configuration
     device_type = config.hardware.device
     min_key = config.data.keys.min
     max_key = config.data.keys.max
     num_keys = max_key - min_key + 1
-    embedding_dim = config.model.sequence.embedding.dimension
     num_features = config.model.general.features
+    embedding_dim = config.model.sequence.embedding.dimension
 
-    # Define the device
+    # Define the device for computations
     device = select_device(device_type)
 
+    # Build criterion if targets
+    # have been provided
     criterion = None
     if targets is not None:
-        # Build criterion
         criterion = build_loss(targets, num_keys, device)
 
-    # Instantiate LSTM model
+    # Instantiate model
     model = build_model(
         model_params, min_key, max_key, embedding_dim, num_features, config
     )

@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Optional
 
 import torch
 from torch import nn
@@ -23,26 +23,27 @@ def initialize_best_model(
     model_params: ModelParamsConfig,
     data_distribution_mode: str,
     config: Config,
-    data_loader: DataLoader = None,
+    data_loader: Optional[DataLoader],
 ) -> Tuple[torch.device, nn.Module, nn.Module]:
     """
-    Prepare a trained model for further usage.
+    Prepare a trained PyTorch model.
 
-    This function extracts the target labels, sets up the model components,
-    and loads pre-trained weights.
+    This function extracts the target labels, sets up the PyTorch model environment,
+    and loads pre-trained weights referring to the best PyTorch model.
 
     Args:
         model_params (ModelParamsConfig): Model hyperparameters.
-        data_distribution_mode (str): Mode to determine the path of the trained model.
+        data_distribution_mode (str): Data distribution mode to determine the path
+                                      of the trained model.
         config (Config): Configuration object.
-        data_loader (DataLoader | None): DataLoader containing the
-                                         dataset to be used.
+        data_loader (Optional[DataLoader]): DataLoader containing the dataset to be
+                                            used (if any).
 
     Returns:
         Tuple[torch.device, nn.Module, nn.Module]:
             - device: The device on which the model is loaded.
             - criterion: Loss function initialized with class weights.
-            - model: Pre-trained model ready for inference or testing.
+            - model: Pre-trained model ready for inference.
     """
     # Get the model path
     model_path = get_model_abs_path(data_distribution_mode)
@@ -51,7 +52,7 @@ def initialize_best_model(
     # provided data loader
     targets = extract_targets_from_data_loader(data_loader)
 
-    # Setup for model components
+    # Setup for model environment
     device, criterion, model = initialize_model_environment(
         model_params, config, targets
     )
@@ -59,6 +60,6 @@ def initialize_best_model(
     # Load the trained model
     model = load_model_state_dict(model_path, model, device)
 
-    info("Trained model initialization completed")
+    info("Best model initialized")
 
     return device, criterion, model

@@ -18,7 +18,7 @@ def compute_forward(
     ],
     model: torch.nn.Module,
     device: torch.device,
-    criterion: Optional[torch.nn.Module] = None,
+    criterion: Optional[torch.nn.Module],
 ) -> Tuple[Optional[torch.Tensor], torch.Tensor]:
     """
     Compute a forward pass through the model.

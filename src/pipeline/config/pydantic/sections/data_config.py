@@ -398,7 +398,7 @@ class DataConfig(BaseModel):
 
     @model_validator(mode="after")
     def check_data_distribution_mode(
-            self: "DataConfig",
+        self: "DataConfig",
     ) -> "DataConfig":
         """
         Check whether data distribution

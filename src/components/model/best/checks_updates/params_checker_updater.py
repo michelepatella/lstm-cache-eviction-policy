@@ -1,4 +1,4 @@
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Union, Optional
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -6,60 +6,62 @@ from components.logs.levels.info_logger import info
 
 
 def check_update_best_model_params(
-    avg_loss: float,
-    best_avg_loss: float | None,
-    curr_params: Dict[str, int | float | bool],
-    best_params: Dict[str, int | float | bool],
-) -> Tuple[float, Dict[str, int | float | bool]]:
+    curr_avg_loss: float,
+    best_avg_loss: Optional[float],
+    curr_model_params: Dict[str, Union[int, float, bool]],
+    best_model_params: Dict[str, Union[int, float, bool]],
+) -> Tuple[float, Dict[str, Union[int, float, bool]]]:
     """
-    Check and update the best parameters
-    based on the average loss.
+    Check and update the best model parameters based on the average loss.
 
-    This function compares the current average loss
-    with the best one found so far. If the new loss
-    improves upon the previous best, both the best loss and
-    corresponding parameters are updated.
+    This function compares the current average loss with the best one found
+    so far. If the new loss improves upon the previous best, both the best
+    average loss and corresponding parameters are updated.
 
     Args:
-        avg_loss (float): Average loss of the current iteration.
-        best_avg_loss (float | None): Best average loss found so far,
-                                      or None if not set yet.
-        curr_params (Dict[str, int | float | bool]): Current parameter set
-                                                     being evaluated.
-        best_params (Dict[str, int | float | bool]): Best parameter set found
-                                                     so far.
+        curr_avg_loss (float): Average loss of the current iteration.
+        best_avg_loss (Optional[float]): Best average loss found so far (None if not
+                                         set yet).
+        curr_model_params (Dict[str, Union[int, float, bool]]): Current model parameters.
+        best_model_params (Dict[str, Union[int, float, bool]]): Best model parameters
+                                                                found so far.
 
     Returns:
-        Tuple[float, Dict[str, int | float | bool]]:
-            - best_avg_loss: The updated best average loss after comparison.
-            - best_params: The parameter set corresponding to the best average loss.
+        Tuple[float, Dict[str, Union[int, float, bool]]]:
+            - best_avg_loss: Best average loss (updated or not).
+            - best_params: The model parameters corresponding to the best average loss
+                           (updated or not).
 
     Raises:
-        RuntimeError: If an error occurs while checking and
-                      updating best params e.g.:
-                        * If average loss or the best one
-                          (when provided) are not numeric.
+        RuntimeError: If checking and updating the best model parameters fails:
+            * Comparison between current and best average loss fails due to
+              invalid types (TypeError).
     """
-    debug(f"Current avg loss: {avg_loss}")
-    debug(f"Best avg loss so far: {best_avg_loss}")
+    debug(f"Current average loss: {curr_avg_loss}")
+    debug(f"Best average loss: {best_avg_loss}")
+    debug(f"Current model parameters: {curr_model_params}")
+    debug(f"Best model parameters: {best_model_params}")
 
     try:
-        # Update the best parameters if
-        # improvement is found
-        if best_avg_loss is None or avg_loss < best_avg_loss:
-            best_avg_loss = avg_loss
-            best_params = curr_params
+        # Update the best model parameters if
+        # improvement in loss is found (or best average loss
+        # not still set)
+        if best_avg_loss is None or curr_avg_loss < best_avg_loss:
+            best_avg_loss = curr_avg_loss
+            best_model_params = curr_model_params
 
-            info("Updated best parameters and average loss")
-            debug(f"New best parameters: {best_params}")
-            debug(f"New best avg loss: {best_avg_loss}")
+            info(
+                f"Best model parameters check and update completed "
+                f"(New best model parameters: {best_model_params}, "
+                f"new best average loss: {best_avg_loss})"
+            )
         else:
-            info("No improvement in average loss, best parameters unchanged")
-    except ValueError as e:
-        msg = "Failed to check and update best parameters"
+            info(
+                "Best model parameters check and update completed (No improvement)"
+            )
+    except TypeError as e:
+        msg = "Failed to check and update best model parameters"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 
-    info("Best parameters check completed")
-
-    return best_avg_loss, best_params
+    return best_avg_loss, best_model_params
