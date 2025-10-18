@@ -1,56 +1,63 @@
 import numpy as np
 
 from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 
 
 def calculate_zipf_probs(items: np.ndarray, alpha: float) -> np.ndarray:
     """
-    Calculate Zipfian probabilities for the given items,
-    given a specific Zipfian parameter.
+    Calculate Zipf probabilities for the items.
 
-    This function calculates the Zipfian probabilities
-    for all the given items, using alpha parameter as Zipfian parameter.
-    The resulting probabilities — which will sum to 1 — of the first items
-    will be greater than those of later ones, according to the Zipfian
-    distribution governed by alpha parameter.
+    This function calculates the Zipf probabilities for all the
+    given items, using alpha as Zipf parameter. The resulting
+    probabilities of the first items will be greater than those of
+    later ones.
 
     Args:
-        items (np.ndarray): Items to calculate Zipfian probabilities for.
-        alpha (float): The Zipfian parameter which governs its distribution.
+        items (np.ndarray): Items to calculate Zipf probabilities for.
+        alpha (float): The Zipf parameter.
 
     Returns:
-        np.ndarray: List of Zipfian probabilities — which sum to 1 —
-                    for all the given items.
+        np.ndarray: List of Zipf probabilities for all the given items.
+
+    Raises:
+        RuntimeError: If calculation of Zipf probabilities fails:
+            * If items is not a valid NumPy array or contains invalid
+              types (TypeError).
+            * If items contains zeros leading to division by zero
+              (ZeroDivisionError).
+            * If normalization fails due to empty array or invalid operations
+              (ValueError).
     """
-    debug(f"Zipfian parameter for probabilities calculation: {alpha}")
+    try:
+        debug(f"Number of items for Zipf probabilities calculation: {len(items)}")
+        debug(f"Zipf parameter for probabilities calculation: {alpha}")
 
-    # Calculate the probability of the items
-    # according to the Zipf's distribution formula
-    zipf_probs = 1.0 / np.power(items, alpha)
+        # Calculate the probability of the items
+        # according to the Zipf's distribution formula
+        zipf_probs = 1.0 / np.power(items, alpha)
+        debug(
+            f"(Before normalization) Zipf probabilities "
+            f"range: [{np.min(zipf_probs)}, {np.max(zipf_probs)}]"
+        )
 
-    debug(
-        f"(Before normalization) Zipfian probabilities "
-        f"range: [{np.min(zipf_probs)}, {np.max(zipf_probs)}]"
-    )
+        # Normalize probabilities to make sum to 1
+        zipf_probs_norm = zipf_probs / np.sum(zipf_probs)
+        debug(
+            f"(After normalization) Zipf probabilities"
+            f" range: [{np.min(zipf_probs_norm)},"
+            f" {np.max(zipf_probs_norm)}]"
+        )
+        debug(
+            f"Sum of Zipf items probabilities"
+            f" after normalization: {np.sum(zipf_probs_norm)}"
+        )
+    except (TypeError, ZeroDivisionError, ValueError) as e:
+        msg = "Failed to calculate Zipf probabilities"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
 
-    # Normalize probabilities to
-    # make sum to 1
-    zipf_probs_normalized = zipf_probs / np.sum(zipf_probs)
+    info("Zipf probabilities calculated")
 
-    debug(
-        f"(After normalization) Zipfian probabilities"
-        f" range: [{np.min(zipf_probs_normalized)},"
-        f" {np.max(zipf_probs_normalized)}]"
-    )
-    debug(
-        f"Sum of Zipfian items probabilities"
-        f" after normalization: {np.sum(zipf_probs_normalized)}"
-    )
-
-    info(
-        f"{len(zipf_probs_normalized)} Zipfian "
-        f"probabilities calculated for {len(items)} items"
-    )
-
-    return zipf_probs_normalized
+    return zipf_probs_norm

@@ -1,53 +1,41 @@
+from typing import Union
+
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 
 
-def calculate_percentage(counter: int | float, total: int | float) -> float:
+def calculate_percentage(value: Union[int, float], total: Union[int, float]) -> float:
     """
-    Calculate the percentage of a counter.
+    Calculate the percentage of a value.
 
     This function, given a total, calculates the percentage of
-    a provided counter.
+    a provided value.
 
     Args:
-        counter (int | float): Counter for which to calculate the percentage.
-        total (int | float): The total used for calculating the percentage.
+        value (Union[int, float]): Value for which to calculate the percentage.
+        total (Union[int, float]): The total used for calculating the percentage.
 
     Returns:
-        float: Percentage of the counter.
+        float: Percentage of the value.
 
     Raises:
-        RuntimeError: If the counter and/or total are not valid inputs.
+        RuntimeError: If the value and/or total are not valid inputs.
     """
-    debug(f"Counter: {counter}, and total: {total}, to calculate % for")
+    debug(f"Value: {value}, and total: {total} to calculate percentage")
 
-    # Check inputs validity
-    if counter < 0 or total < 0:
-        msg = (
-            "Counter and total must be non-negative numbers for % calculation"
-        )
-        error("%s", msg)
-        raise RuntimeError(msg)
-
-    if not isinstance(counter, int | float) or not isinstance(
-        total, int | float
-    ):
-        msg = "Counter and total must be integers or floats for % calculation"
-        error("%s", msg)
-        raise RuntimeError(msg)
-
-    if counter > total:
-        msg = "Counter cannot be greater than total for % calculation"
-        error("%s", msg)
-        raise RuntimeError(msg)
-
-    # Calculate percentage
-    if total == 0:
-        # If total is zero, return zero
-        percentage = 0.0
-    else:
-        percentage = counter / total * 100
+    try:
+        # If total is not zero calculate
+        # percentage, otherwise set
+        # percentage to zero
+        if total == 0:
+            percentage = 0.0
+        else:
+            percentage = value / total * 100
+    except (TypeError, ZeroDivisionError) as e:
+        msg = "Failed to calculate percentage"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
 
     info(f"Percentage calculated: {percentage}%")
 

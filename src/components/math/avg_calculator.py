@@ -1,33 +1,38 @@
-from typing import List
+from typing import List, Union, Optional
 
 from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 
 
-def calculate_average(values: List[int | float]) -> float | None:
+def calculate_average(values: List[Union[int, float]]) -> Optional[float]:
     """
     Calculate the average of a list of numeric values.
 
-    This function computes the average of a list
-    of numeric values (integers or floats). If the list
-    is empty, the function returns None.
+    This function computes the average of a list of numeric values.
 
     Args:
-        values (List[int | float]): List of numeric values to average.
+        values (List[Union[int, float]]): List of numeric values to average.
 
     Returns:
-        float | None: Average value, or None if
-                      no values are provided.
+        Optional[float]: Average value (None if no values are provided).
+
+    Raises:
+        RuntimeError: If average calculation fails:
+            * List contains non-numeric values (TypeError).
     """
-    avg_value = None
+    try:
+        debug(f"Number of values to average: {len(values)}")
 
-    debug(f"Number of values to average: {len(values)}")
-
-    # If there is at least a value
-    # in the list
-    if len(values) != 0:
-        # Calculate average value
-        avg_value = sum(values) / len(values)
+        # Calculate average of values if there
+        # is at least one element in the list
+        avg_value = None
+        if len(values) != 0:
+            avg_value = sum(values) / len(values)
+    except TypeError as e:
+        msg = "Failed to calculate average"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
 
     info(f"Average value calculated: {avg_value}")
 
