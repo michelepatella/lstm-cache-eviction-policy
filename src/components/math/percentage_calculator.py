@@ -24,9 +24,9 @@ def calculate_percentage(
     Raises:
         RuntimeError: If the value and/or total are not valid inputs.
     """
-    debug(f"Value: {value}, and total: {total} to calculate percentage")
-
     try:
+        debug(f"Value: {value}, and total: {total} to calculate percentage")
+
         # If total is not zero calculate
         # percentage, otherwise set
         # percentage to zero
@@ -34,11 +34,11 @@ def calculate_percentage(
             percentage = 0.0
         else:
             percentage = value / total * 100
+
+        info(f"Percentage calculated: {percentage}%")
+
+        return percentage
     except (TypeError, ZeroDivisionError) as e:
         msg = "Failed to calculate percentage"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info(f"Percentage calculated: {percentage}%")
-
-    return percentage

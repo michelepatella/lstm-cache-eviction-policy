@@ -37,12 +37,12 @@ def check_update_best_model_params(
             * Comparison between current and best average loss fails due to
               invalid types (TypeError).
     """
-    debug(f"Current average loss: {curr_avg_loss}")
-    debug(f"Best average loss: {best_avg_loss}")
-    debug(f"Current model parameters: {curr_model_params}")
-    debug(f"Best model parameters: {best_model_params}")
-
     try:
+        debug(f"Current average loss: {curr_avg_loss}")
+        debug(f"Best average loss: {best_avg_loss}")
+        debug(f"Current model parameters: {curr_model_params}")
+        debug(f"Best model parameters: {best_model_params}")
+
         # Update the best model parameters if
         # improvement in loss is found (or best average loss
         # not still set)
@@ -59,9 +59,9 @@ def check_update_best_model_params(
             info(
                 "Best model parameters check and update completed (No improvement)"
             )
+
+        return best_avg_loss, best_model_params
     except TypeError as e:
         msg = "Failed to check and update best model parameters"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    return best_avg_loss, best_model_params

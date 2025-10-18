@@ -26,16 +26,16 @@ def save_yaml(data_dict: Dict[str, Any], path: str) -> None:
             * File cannot be written due to operating system errors (OSError).
             * File cannot be written due to permission issues (OSError).
     """
-    debug(f"Path to save YAML file at: {path}")
-
     try:
+        debug(f"Path to save YAML file at: {path}")
+
         # Save provided data dictionary at
         # specified path
         with open(path, "w") as f:
             yaml.dump(data_dict, f)
+
+        info(f"YAML file saved to: {path}")
     except OSError as e:
         msg = "Failed to save YAML file"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info(f"YAML file saved to: {path}")

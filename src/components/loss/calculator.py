@@ -31,11 +31,11 @@ def calculate_loss(
             * Criterion computation fails due to invalid input types or
               shapes (TypeError, RuntimeError).
     """
-    debug(f"Number of outputs for loss calculation: {len(outputs)}")
-    debug(f"Number of targets for loss calculation: {len(targets)}")
-    debug(f"Criterion for loss calculation: {criterion}")
-
     try:
+        debug(f"Number of outputs for loss calculation: {len(outputs)}")
+        debug(f"Number of targets for loss calculation: {len(targets)}")
+        debug(f"Criterion for loss calculation: {criterion}")
+
         # Check whether criterion is not provided
         if criterion is None:
             # Loss is not calculated (None)
@@ -44,11 +44,11 @@ def calculate_loss(
             # Calculate loss with
             # provided criterion
             loss = criterion(outputs, targets).item()
+
+        info(f"Loss calculated: {loss}")
+
+        return loss
     except TypeError as e:
         msg = "Failed to calculate loss"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info(f"Loss calculated: {loss}")
-
-    return loss

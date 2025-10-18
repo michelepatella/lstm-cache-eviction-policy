@@ -41,21 +41,21 @@ def build_optimizer(
             * Model parameters are invalid or incompatible with optimizer
               (TypeError, ValueError).
     """
-    debug(f"Optimizer type to be built: {optimizer_type}")
-    debug(f"Optimizer parameters: {optimizer_kwargs}")
-
-    # Retrieve requested optimizer
-    # instance from mapping
-    optimizer_cls = OPTIMIZER_MAP.get(optimizer_type)
-
     try:
+        debug(f"Optimizer type to be built: {optimizer_type}")
+        debug(f"Optimizer parameters: {optimizer_kwargs}")
+
+        # Retrieve requested optimizer
+        # instance from mapping
+        optimizer_cls = OPTIMIZER_MAP.get(optimizer_type)
+
         # Instantiate optimizer
         optimizer = optimizer_cls(model.parameters(), **optimizer_kwargs)
+
+        info(f"Optimizer built: {optimizer_type}")
+
+        return optimizer
     except (TypeError, ValueError) as e:
         msg = "Failed to build optimizer"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info(f"Optimizer built: {optimizer_type}")
-
-    return optimizer

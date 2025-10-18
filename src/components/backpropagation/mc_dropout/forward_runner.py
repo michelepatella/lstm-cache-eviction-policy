@@ -70,72 +70,57 @@ def compute_mc_dropout_forward(
         * Computation of outputs variance fails because the outputs tensor is invalid or
           unsupported operation occurs (RuntimeError, TypeError).
     """
-    # Set model mode depending on the
-    # number of samples passed
-    if num_mc_dropout_samples > MC_DROPOUT_NUM_SAMPLES_DEFAULT:
-        # MC Dropout mode
-        set_model_mode(model, MC_DROPOUT_MODEL_MODE, mc_dropout_flag)
-    else:
-        # Evaluation mode
-        set_model_mode(model, EVALUATION_MODEL_MODE)
+    try:
+        # Set model mode depending on the
+        # number of samples passed
+        if num_mc_dropout_samples > MC_DROPOUT_NUM_SAMPLES_DEFAULT:
+            # MC Dropout mode
+            set_model_mode(model, MC_DROPOUT_MODEL_MODE, mc_dropout_flag)
+        else:
+            # Evaluation mode
+            set_model_mode(model, EVALUATION_MODEL_MODE)
 
-    all_outputs = []
-    with torch.no_grad():
-        # For each MC dropout sample provided
-        for i in range(num_mc_dropout_samples):
-            # Compute forward pass and get the
-            # model outputs
-            if isinstance(batch, tuple) and len(batch) == num_features + 1:
-                _, outputs = compute_forward(batch, model, device)
-            else:
-                try:
+        all_outputs = []
+        with torch.no_grad():
+            # For each MC dropout sample provided
+            for i in range(num_mc_dropout_samples):
+                # Compute forward pass and get the
+                # model outputs
+                if isinstance(batch, tuple) and len(batch) == num_features + 1:
+                    _, outputs = compute_forward(batch, model, device)
+                else:
                     outputs = model(*batch)
-                except (RuntimeError, TypeError) as e:
-                    msg = "Failed to compute forward pass"
-                    error("%s: %s", msg, e)
-                    raise RuntimeError(msg) from e
 
-            try:
                 # Save the current model outputs
                 all_outputs.append(outputs.unsqueeze(0))
-            except (RuntimeError, AttributeError) as e:
-                msg = "Failed to save MC dropout forward pass output"
-                error("%s: %s", msg, e)
-                raise RuntimeError(msg) from e
 
-            debug(
-                f"MC sample {i + 1}/{num_mc_dropout_samples} "
-                f"completed, outputs shape: {outputs.shape}"
-            )
+                debug(
+                    f"MC sample {i + 1}/{num_mc_dropout_samples} "
+                    f"completed, outputs shape: {outputs.shape}"
+                )
 
-    try:
         # Concatenate outputs as a tensor
         all_outputs_tensor = torch.cat(all_outputs, dim=0)
         debug(f"Outputs tensor shape: {all_outputs_tensor.shape}")
-    except (RuntimeError, TypeError) as e:
-        msg = "Failed to concatenate MC dropout forward pass outputs"
-        error("%s: %s", msg, e)
-        raise RuntimeError(msg) from e
 
-    # Calculate outputs mean
-    outputs_mean = all_outputs_tensor.mean(dim=0)
-    debug(f"Outputs mean shape: {outputs_mean.shape}")
+        # Calculate outputs mean
+        outputs_mean = all_outputs_tensor.mean(dim=0)
+        debug(f"Outputs mean shape: {outputs_mean.shape}")
 
-    # Calculate outputs variance provided that
-    # the number of MC dropout sample is greater
-    # than the default value
-    outputs_var = None
-    if num_mc_dropout_samples > MC_DROPOUT_NUM_SAMPLES_DEFAULT:
-        try:
+        # Calculate outputs variance provided that
+        # the number of MC dropout sample is greater
+        # than the default value
+        outputs_var = None
+        if num_mc_dropout_samples > MC_DROPOUT_NUM_SAMPLES_DEFAULT:
             outputs_var = all_outputs_tensor.var(
                 dim=0, unbiased=mc_dropout_unbiased_variance
             )
             debug(f"Outputs variance shape: {outputs_var.shape}")
-        except (RuntimeError, TypeError) as e:
-            msg = "Failed to compute variance of MC dropout forward outputs"
-            error("%s: %s", msg, e)
-            raise RuntimeError(msg) from e
 
-    info("MC forward pass(es) completed")
+        info("MC forward pass(es) completed")
 
-    return outputs_mean, outputs_var
+        return outputs_mean, outputs_var
+    except (TypeError, AttributeError, RuntimeError) as e:
+        msg = "Failed to compute MC Dropout forward"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e

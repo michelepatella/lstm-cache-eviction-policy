@@ -45,12 +45,7 @@ def calculate_class_weight(
         debug(
             f"Targets array shape for class weight calculation: {targets_array.shape}"
         )
-    except (TypeError, AttributeError) as e:
-        msg = "Failed to convert targets to NumPy array"
-        error("%s: %s", msg, e)
-        raise RuntimeError(msg) from e
 
-    try:
         # Identify present classes in targets
         present_classes = np.unique(targets_array)
         debug(f"Present classes in targets: {present_classes}")
@@ -62,21 +57,16 @@ def calculate_class_weight(
             y=targets_array,
         )
         debug(f"Weights for present classes: {weights}")
-    except (ValueError, TypeError) as e:
-        msg = "Failed to compute weights for present classes"
-        error("%s: %s", msg, e)
-        raise RuntimeError(msg) from e
 
-    try:
         # Set weight for appearing classes
         class_weight = np.ones(num_classes, dtype=np.float32)
         for cls, weight in zip(present_classes, weights):
             class_weight[cls] = weight
-    except IndexError as e:
-        msg = "Failed to set class weight"
+
+        info(f"Class weight calculated: {class_weight}")
+
+        return class_weight
+    except (TypeError, AttributeError, IndexError, ValueError) as e:
+        msg = "Failed to calculate class weight"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info(f"Class weight calculated: {class_weight}")
-
-    return class_weight

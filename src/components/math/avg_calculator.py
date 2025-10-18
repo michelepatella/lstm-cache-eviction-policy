@@ -29,11 +29,11 @@ def calculate_average(values: List[Union[int, float]]) -> Optional[float]:
         avg_value = None
         if len(values) != 0:
             avg_value = sum(values) / len(values)
+
+        info(f"Average value calculated: {avg_value}")
+
+        return avg_value
     except TypeError as e:
         msg = "Failed to calculate average"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info(f"Average value calculated: {avg_value}")
-
-    return avg_value

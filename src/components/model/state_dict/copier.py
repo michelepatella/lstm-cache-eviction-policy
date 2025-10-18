@@ -29,11 +29,11 @@ def copy_model_state_dict(model: torch.nn.Module) -> Dict[str, torch.Tensor]:
     try:
         # Copy model state dictionary
         model_state_dict = copy.deepcopy(model.state_dict())
+
+        info("Model state dictionary copied")
+
+        return model_state_dict
     except TypeError as e:
         msg = "Failed to copy model state dictionary"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info("Model state dictionary copied")
-
-    return model_state_dict

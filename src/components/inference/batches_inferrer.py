@@ -50,16 +50,16 @@ def infer_batches(
             * If any of the batch results cannot be added or extended due to
               incorrect types (TypeError).
     """
-    total_loss = 0.0
-    all_predictions = []
-    all_targets = []
-    all_outputs = []
-    all_variances = []
+    try:
+        total_loss = 0.0
+        all_predictions = []
+        all_targets = []
+        all_outputs = []
+        all_variances = []
 
-    with torch.no_grad():
-        # Iterate over all the batches of the
-        # data loader
-        try:
+        with torch.no_grad():
+            # Iterate over all the batches of the
+            # data loader
             for batch_idx, batch in enumerate(data_loader):
                 # Infer the current batch
                 (
@@ -80,10 +80,17 @@ def infer_batches(
                 all_variances.extend(variances)
 
                 debug(f"Batch {batch_idx} inferred")
-        except TypeError as e:
-            msg = "Failed to infer batches"
-            error("%s: %s", msg, e)
 
-    info("Batches inference completed")
+        info("Batches inference completed")
 
-    return total_loss, all_predictions, all_targets, all_outputs, all_variances
+        return (
+            total_loss,
+            all_predictions,
+            all_targets,
+            all_outputs,
+            all_variances,
+        )
+    except TypeError as e:
+        msg = "Failed to infer batches"
+        error("%s: %s", msg, e)
+        raise RuntimeError(e) from e

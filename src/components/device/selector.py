@@ -24,17 +24,17 @@ def select_device(device_type: str) -> torch.device:
             * Device type is invalid or not recognized (TypeError).
             * Device cannot be used due to runtime constraints (RuntimeError).
     """
-    debug(f"Device type to be selected: {device_type}")
-
     try:
+        debug(f"Device type to be selected: {device_type}")
+
         # Instantiate device based on
         # device type requested
         device = torch.device(device_type)
+
+        info(f"Device '{device_type}' selected")
+
+        return device
     except (TypeError, RuntimeError) as e:
         msg = "Failed to select device"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info(f"Device '{device_type}' selected")
-
-    return device

@@ -33,16 +33,16 @@ def save_json(
                 * Writing to the file fails due to missing path, permission issues,
                   or other I/O errors (OSError).
     """
-    debug(f"Path to save JSON to: {path}")
-
     try:
+        debug(f"Path to save JSON to: {path}")
+
         # Save data dictionary as JSON file
         # to the specified path
         with open(path, "w") as f:
             json.dump(data_dict, f, indent=json_indent)
+
+        info(f"JSON saved to: {path}")
     except (TypeError, OSError) as e:
         msg = "Failed to save JSON"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info(f"JSON saved to: {path}")

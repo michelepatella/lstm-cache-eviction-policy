@@ -37,21 +37,16 @@ def extract_targets_from_data_loader(data_loader: DataLoader) -> torch.Tensor:
             # tensors, with the target as the last element
             target = batch[-1]
             all_targets.append(target)
-    except (TypeError, IndexError) as e:
-        msg = "Failed to extract targets from data loader"
-        error("%s: %s", msg, e)
-        raise RuntimeError(msg) from e
 
-    try:
         # Concatenate extracted targets
         # as a unique tensor
         concatenated_targets = torch.cat(all_targets)
         debug(f"Concatenated targets shape: {concatenated_targets.shape}")
-    except (RuntimeError, TypeError) as e:
-        msg = "Failed to concatenate targets extracted from data loader"
+
+        info("Target extraction from data loader completed")
+
+        return concatenated_targets
+    except (TypeError, IndexError, RuntimeError) as e:
+        msg = "Failed to extract targets from data loader"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info("Target extraction from data loader completed")
-
-    return concatenated_targets

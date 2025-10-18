@@ -33,24 +33,24 @@ def load_json(
             * Decoding the JSON content fails because the file is not valid JSON
               (json.JSONDecodeError).
     """
-    debug(f"Path to load JSON from: {path}")
-
     try:
+        debug(f"Path to load JSON from: {path}")
+
         # Load JSON data from file at
         # specified path
         with open(path, "r") as f:
             json_data = json.load(f)
+
+        info(f"JSON loaded from: {path}")
+
+        # Check whether to wrap JSON
+        # data into a Box object, allowing
+        # dot-notation access
+        if wrap:
+            return Box(json_data)
+        else:
+            return json_data
     except (OSError, json.JSONDecodeError) as e:
         msg = "Failed to load JSON"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info(f"JSON loaded from: {path}")
-
-    # Check whether to wrap JSON
-    # data into a Box object, allowing
-    # dot-notation access
-    if wrap:
-        return Box(json_data)
-    else:
-        return json_data

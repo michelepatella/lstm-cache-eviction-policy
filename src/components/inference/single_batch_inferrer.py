@@ -60,26 +60,21 @@ def infer_single_batch(
             * Preparing return data fails due to invalid tensor shapes, types,
               or operations (RuntimeError, TypeError, AttributeError, IndexError).
     """
-    # Move entire batch to device
-    batch = tuple(move_to_device(t, device) for t in batch)
-
-    # Perform MC Dropout forward
-    outputs_mean, outputs_var = compute_mc_dropout_forward(
-        model, batch, device, num_features
-    )
-
     try:
+        # Move entire batch to device
+        batch = tuple(move_to_device(t, device) for t in batch)
+
+        # Perform MC Dropout forward
+        outputs_mean, outputs_var = compute_mc_dropout_forward(
+            model, batch, device, num_features
+        )
+
         # Extract target from batch
         target = batch[-1]
-    except (TypeError, IndexError) as e:
-        msg = "Failed to extract target from batch"
-        error("%s: %s", msg, e)
-        raise RuntimeError(msg) from e
 
-    # Compute batch loss
-    loss = calculate_loss(outputs_mean, target, criterion)
+        # Compute batch loss
+        loss = calculate_loss(outputs_mean, target, criterion)
 
-    try:
         # Prepare data to be returned
         predictions = torch.argmax(outputs_mean, dim=1).cpu().numpy().tolist()
         targets = target.cpu().numpy().tolist()
@@ -91,7 +86,7 @@ def infer_single_batch(
         info("Single batch inference completed")
 
         return loss, predictions, targets, outputs, variances
-    except (RuntimeError, TypeError, AttributeError, IndexError) as e:
-        msg = "Failed to return data collected during single batch inference"
+    except (TypeError, IndexError, AttributeError, RuntimeError) as e:
+        msg = "Failed to infer single batch"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e

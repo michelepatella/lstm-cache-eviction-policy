@@ -15,7 +15,7 @@ from const import (
 def set_model_mode(
     model: torch.nn.Module,
     mode: str,
-    mc_dropout_flag_name: Optional[str],
+    mc_dropout_flag_name: Optional[str] = None,
     mc_dropout_flag_value: Optional[bool] = MC_DROPOUT_ENABLED,
 ) -> None:
     """
@@ -69,9 +69,9 @@ def set_model_mode(
         else:
             # Set model to evaluation mode
             model.eval()
+
+        info(f"Model mode set: {mode}")
     except (AttributeError, ValueError, TypeError) as e:
         msg = "Failed to set model mode"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info(f"Model mode set: {mode}")

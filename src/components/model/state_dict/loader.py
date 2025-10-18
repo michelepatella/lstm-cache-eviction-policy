@@ -30,26 +30,21 @@ def load_model_state_dict(
             * Applying the loaded state dictionary to the model fails due to
               shape mismatch, missing keys, or type issues (RuntimeError, TypeError).
     """
-    debug(f"Path to load model state dictionary from: {path}")
-
     try:
+        debug(f"Path to load model state dictionary from: {path}")
+
         # Load model state dictionary from specified
         # path, mapping to passed device
         model_state_dict = torch.load(path, map_location=device)
+
+        # Apply state dictionary loaded
+        # to provided model
+        model.load_state_dict(model_state_dict)
+
+        info(f"Model state dictionary loaded from: {path}")
+
+        return model
     except (OSError, RuntimeError, TypeError) as e:
         msg = "Failed to load model state dictionary"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    try:
-        # Apply state dictionary loaded
-        # to provided model
-        model.load_state_dict(model_state_dict)
-    except (RuntimeError, TypeError) as e:
-        msg = "Failed to apply loaded state dictionary to the model"
-        error("%s: %s", msg, e)
-        raise RuntimeError(msg) from e
-
-    info(f"Model state dictionary loaded from: {path}")
-
-    return model

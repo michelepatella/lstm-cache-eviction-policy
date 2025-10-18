@@ -35,14 +35,14 @@ def build_loss(
             * Creating CrossEntropyLoss with the class weight fails due to
               invalid tensor or shape (RuntimeError, TypeError).
     """
-    debug(f"Number of targets for building loss: {len(targets)}")
-    debug(f"Number of classes for building loss: {num_classes}")
-    debug(f"Device for loss: {device}")
-
-    # Compute class weight
-    class_weight = calculate_class_weight(targets, num_classes)
-
     try:
+        debug(f"Number of targets for building loss: {len(targets)}")
+        debug(f"Number of classes for building loss: {num_classes}")
+        debug(f"Device for loss: {device}")
+
+        # Compute class weight
+        class_weight = calculate_class_weight(targets, num_classes)
+
         # Move class weight as tensor to
         # the specified device
         class_weight_tensor = torch.tensor(class_weight, dtype=torch.float32)
@@ -50,11 +50,11 @@ def build_loss(
 
         # Build criterion with computed weight
         criterion = nn.CrossEntropyLoss(weight=class_weight_tensor)
+
+        info("Loss built")
+
+        return criterion
     except (RuntimeError, TypeError) as e:
         msg = "Failed to build loss"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info("Loss built")
-
-    return criterion

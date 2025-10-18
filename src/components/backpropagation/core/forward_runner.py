@@ -18,7 +18,7 @@ def compute_forward(
     ],
     model: torch.nn.Module,
     device: torch.device,
-    criterion: Optional[torch.nn.Module],
+    criterion: Optional[torch.nn.Module] = None,
 ) -> Tuple[Optional[torch.Tensor], torch.Tensor]:
     """
     Compute a forward pass through the model.
@@ -57,29 +57,24 @@ def compute_forward(
         debug(f"First input shape: {first_input.shape}")
         debug(f"Second input shape: {second_input.shape}")
         debug(f"Target shape: {target.shape}")
-    except (ValueError, TypeError) as e:
-        msg = "Failed to unpack batch"
-        error("%s: %s", msg, e)
-        raise RuntimeError(msg) from e
 
-    # Move batch to device
-    first_input = move_to_device(first_input, device)
-    second_input = move_to_device(second_input, device)
-    target = move_to_device(target, device)
-    debug(f"Batch moved to device: {device}")
+        # Move batch to device
+        first_input = move_to_device(first_input, device)
+        second_input = move_to_device(second_input, device)
+        target = move_to_device(target, device)
+        debug(f"Batch moved to device: {device}")
 
-    try:
         # Compute forward pass
         outputs = model(first_input, second_input)
         debug(f"Model outputs shape: {outputs.shape}")
-    except RuntimeError as e:
-        msg = "Failed to compute forward pass"
+
+        # Calculate loss
+        loss = calculate_loss(outputs, target, criterion)
+
+        info("Forward pass completed")
+
+        return loss, outputs
+    except (ValueError, TypeError) as e:
+        msg = "Failed to compute forward"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    # Calculate loss
-    loss = calculate_loss(outputs, target, criterion)
-
-    info("Forward pass completed")
-
-    return loss, outputs

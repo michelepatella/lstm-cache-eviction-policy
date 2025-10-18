@@ -33,21 +33,21 @@ def build_data_loader(
             * Dataset is not compatible with torch.utils.data.Dataset (TypeError).
             * Batch size or shuffle parameters are invalid (TypeError, ValueError).
     """
-    debug(f"Batch size for the data loader to be built: {batch_size}")
-    debug(f"Shuffle for the data loader to be built: {shuffle}")
-
     try:
+        debug(f"Batch size for the data loader to be built: {batch_size}")
+        debug(f"Shuffle for the data loader to be built: {shuffle}")
+
         # Instantiate the data loader
         data_loader = DataLoader(
             dataset,
             batch_size=batch_size,
             shuffle=shuffle,
         )
+
+        info("Data loader built")
+
+        return data_loader
     except (TypeError, ValueError) as e:
         msg = "Failed to build data loader"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info("Data loader built")
-
-    return data_loader

@@ -55,11 +55,11 @@ def calculate_zipf_probs(items: np.ndarray, alpha: float) -> np.ndarray:
             f"Sum of Zipf items probabilities"
             f" after normalization: {np.sum(zipf_probs_norm)}"
         )
+
+        info("Zipf probabilities calculated")
+
+        return zipf_probs_norm
     except (TypeError, ZeroDivisionError, ValueError) as e:
         msg = "Failed to calculate Zipf probabilities"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info("Zipf probabilities calculated")
-
-    return zipf_probs_norm

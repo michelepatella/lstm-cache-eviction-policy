@@ -25,12 +25,16 @@ def load_yaml(path: str) -> Dict[str, Any]:
             * File cannot be accessed or read (OSError).
             * YAML parsing fails due to invalid format (YAMLError).
     """
-    debug(f"Path to load YAML file from: {path}")
-
     try:
+        debug(f"Path to load YAML file from: {path}")
+
         # Load the YAML file from its path
         with open(path, "r") as f:
             yaml_file = yaml.safe_load(f)
+
+        info(f"YAML file loaded from: {path}")
+
+        return yaml_file
     except (
         OSError,
         YAMLError,
@@ -38,7 +42,3 @@ def load_yaml(path: str) -> Dict[str, Any]:
         msg = "Failed to load YAML file"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info(f"YAML file loaded from: {path}")
-
-    return yaml_file

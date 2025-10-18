@@ -31,20 +31,20 @@ def assert_min_less_than_max(
         RuntimeError: If validation fails due to invalid types preventing
                       comparison (TypeError).
     """
-    debug(
-        f"Min/Max values to be validated: {min_val}, {max_val} from {context}"
-    )
-
     try:
+        debug(
+            f"Min/Max values to be validated: {min_val}, {max_val} from {context}"
+        )
+
         # Check whether the minimum value is greater
         # than or equal to the maximum one
         if max_val <= min_val:
             msg = f"{max_val} must be greater than {min_val} ({context})"
             error("%s", msg)
             raise ValueError(msg)
+
+        info(f"{min_val} and {max_val} validated for {context}")
     except TypeError as e:
         msg = "Failed to validate minimum and maximum values"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info(f"{min_val} and {max_val} validated for {context}")

@@ -25,15 +25,15 @@ def save_model(model: torch.nn.Module, path: str) -> None:
             * Model contains non-serializable objects (TypeError).
             * General runtime failure during saving (RuntimeError).
     """
-    debug(f"Path to save the model at: {path}")
-
     try:
+        debug(f"Path to save the model at: {path}")
+
         # Save model state dictionary
         # at specified path
         torch.save(model.state_dict(), path)
+
+        info(f"Model saved to: {path}")
     except (FileNotFoundError, PermissionError, TypeError, RuntimeError) as e:
         msg = "Failed to save model"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info(f"Model saved to: {path}")

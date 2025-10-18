@@ -35,10 +35,10 @@ def check_update_best_model(
             * Comparison between average loss and best average loss fails due to
               invalid types (TypeError).
     """
-    debug(f"Current average loss: {curr_avg_loss}")
-    debug(f"Best average loss: {best_avg_loss}")
-
     try:
+        debug(f"Current average loss: {curr_avg_loss}")
+        debug(f"Best average loss: {best_avg_loss}")
+
         # Check for an average loss improvement
         if curr_avg_loss < best_avg_loss:
             # Update both best average loss
@@ -51,11 +51,11 @@ def check_update_best_model(
             )
 
             return best_avg_loss, best_model_weights
+
+        info("Model check and update completed (No improvement)")
+
+        return best_avg_loss, None
     except TypeError as e:
         msg = "Failed to check and update the best model"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info("Model check and update completed (No improvement)")
-
-    return best_avg_loss, None
