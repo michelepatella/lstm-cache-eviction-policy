@@ -42,7 +42,9 @@ def calculate_class_weight(
     try:
         # Convert targets to NumPy array
         targets_array = targets.cpu().numpy()
-        debug(f"Targets array shape for class weight calculation: {targets_array.shape}")
+        debug(
+            f"Targets array shape for class weight calculation: {targets_array.shape}"
+        )
     except (TypeError, AttributeError) as e:
         msg = "Failed to convert targets to NumPy array"
         error("%s: %s", msg, e)

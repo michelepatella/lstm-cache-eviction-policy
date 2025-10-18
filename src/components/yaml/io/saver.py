@@ -2,43 +2,40 @@ from typing import Any, Dict
 
 import yaml
 
+from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 
 
-def save_yaml(data: Dict[str, Any], path: str) -> None:
+def save_yaml(data_dict: Dict[str, Any], path: str) -> None:
     """
-    Save a dictionary as a YAML file.
+    Save a data dictionary as a YAML file.
 
-    This function saves the provided dictionary
-    into a YAML file at the specified path.
+    This function saves the provided data dictionary
+    as a YAML file at the specified path.
 
     Args:
-        data (Dict[str, Any]): Dictionary to save as YAML.
-        path (str): Path where the YAML file will be saved.
+        data_dict (Dict[str, Any]): Data dictionary to save as YAML.
+        path (str): Path to save YAML file at.
 
     Returns:
         None
 
     Raises:
-        RuntimeError: If an error occurs while saving YAML file e.g.:
-                        * YAML file cannot be written due to
-                          operating system errors.
-                        * YAML file cannot be written due to
-                          permission issues.
+        RuntimeError: If saving YAML file fails:
+            * File cannot be written due to operating system errors (OSError).
+            * File cannot be written due to permission issues (OSError).
     """
+    debug(f"Path to save YAML file at: {path}")
+
     try:
-        # Save provided data dictionary to
+        # Save provided data dictionary at
         # specified path
         with open(path, "w") as f:
-            yaml.dump(
-                data,
-                f,
-                default_flow_style=False,
-            )
+            yaml.dump(data_dict, f)
     except OSError as e:
         msg = "Failed to save YAML file"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 
-    info(f"YAML file saved to {path}")
+    info(f"YAML file saved to: {path}")

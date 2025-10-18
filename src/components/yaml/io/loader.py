@@ -21,10 +21,11 @@ def load_yaml(path: str) -> Dict[str, Any]:
         Dict[str, Any]: YAML file loaded.
 
     Raises:
-        RuntimeError: If the YAML file cannot be loaded
-                      due to file errors or YAML parsing issues.
+        RuntimeError: If YAML file loading fails:
+            * File cannot be accessed or read (OSError).
+            * YAML parsing fails due to invalid format (YAMLError).
     """
-    debug(f"YAML file path to be loaded: {path}")
+    debug(f"Path to load YAML file from: {path}")
 
     try:
         # Load the YAML file from its path
@@ -38,6 +39,6 @@ def load_yaml(path: str) -> Dict[str, Any]:
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 
-    info(f"YAML file loaded from {path}")
+    info(f"YAML file loaded from: {path}")
 
     return yaml_file
