@@ -1,5 +1,5 @@
 import json
-from typing import Dict, List
+from typing import Dict, List, Union, Optional
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -7,26 +7,31 @@ from components.logs.levels.info_logger import info
 from const import JSON_INDENT
 
 
-def save_json(data_dict: Dict | List[Dict], path: str) -> None:
+def save_json(
+    data_dict: Union[Dict, List[Dict]],
+    path: str,
+    json_indent: Optional[int] = JSON_INDENT,
+) -> None:
     """
     Save a data dictionary as a JSON file.
 
     This function saves a data dictionary as a
-    JSON file to the provided path.
+    JSON file at the specified path.
 
     Args:
-        data_dict (Dict | List[Dict]): Data to save.
+        data_dict (Union[Dict, List[Dict]]): Data to save.
         path (str): File path where the JSON will be saved.
+        json_indent (Optional[int]): Indent for the JSON file.
 
     Returns:
         None
 
-    Raises:
-        RuntimeError: If an error occurs while saving JSON file e.g.:
-            * If a value of data dictionary cannot be
-              serialized to JSON.
-            * If an operating system error occurs while
-              JSON file.
+        Raises:
+            RuntimeError: If saving the JSON file fails:
+                * Serialization of the data dictionary fails because one or more
+                  values cannot be encoded into valid JSON (TypeError).
+                * Writing to the file fails due to missing path, permission issues,
+                  or other I/O errors (OSError).
     """
     debug(f"Path to save JSON to: {path}")
 
@@ -34,10 +39,10 @@ def save_json(data_dict: Dict | List[Dict], path: str) -> None:
         # Save data dictionary as JSON file
         # to the specified path
         with open(path, "w") as f:
-            json.dump(data_dict, f, indent=JSON_INDENT)
+            json.dump(data_dict, f, indent=json_indent)
     except (TypeError, OSError) as e:
         msg = "Failed to save JSON"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 
-    info(f"JSON saved to {path}")
+    info(f"JSON saved to: {path}")

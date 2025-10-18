@@ -84,7 +84,6 @@ def infer_batches(
             msg = "Failed to infer batches"
             error("%s: %s", msg, e)
 
-
     info("Batches inference completed")
 
     return total_loss, all_predictions, all_targets, all_outputs, all_variances

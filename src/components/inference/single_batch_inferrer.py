@@ -18,7 +18,11 @@ def infer_single_batch(
     device: torch.device,
     num_features: int,
 ) -> Tuple[
-    float, List[int], List[int], List[torch.Tensor], Optional[List[torch.Tensor]]
+    float,
+    List[int],
+    List[int],
+    List[torch.Tensor],
+    Optional[List[torch.Tensor]],
 ]:
     """
     Perform inference on a single batch.
