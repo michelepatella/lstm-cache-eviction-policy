@@ -31,7 +31,9 @@ def calculate_zipf_probs(items: np.ndarray, alpha: float) -> np.ndarray:
               (ValueError).
     """
     try:
-        debug(f"Number of items for Zipf probabilities calculation: {len(items)}")
+        debug(
+            f"Number of items for Zipf probabilities calculation: {len(items)}"
+        )
         debug(f"Zipf parameter for probabilities calculation: {alpha}")
 
         # Calculate the probability of the items

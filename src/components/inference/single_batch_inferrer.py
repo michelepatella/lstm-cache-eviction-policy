@@ -33,7 +33,7 @@ def infer_single_batch(
 
     Args:
         batch (Tuple[torch.Tensor, torch.Tensor, torch.Tensor]): The batch to process.
-        model (torch.nn.Module): Model to perform inference with.
+        model (torch.nn.Module): PyTorch model to perform inference with.
         criterion (torch.nn.Module): Loss function for computing batch loss.
         device (torch.device): Device to run computations on.
         num_features (int): Number of features for the model.

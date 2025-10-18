@@ -26,7 +26,7 @@ def infer_batches(
     and variances.
 
     Args:
-        model (torch.nn.Module): The model to perform inference with.
+        model (torch.nn.Module): The PyTorch model to perform inference with.
         data_loader (DataLoader): DataLoader providing batches of data.
         criterion (torch.nn.Module): Loss function for computing batch loss.
         device (torch.device): Device on which to perform computation.

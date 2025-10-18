@@ -5,7 +5,9 @@ from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 
 
-def calculate_percentage(value: Union[int, float], total: Union[int, float]) -> float:
+def calculate_percentage(
+    value: Union[int, float], total: Union[int, float]
+) -> float:
     """
     Calculate the percentage of a value.
 
