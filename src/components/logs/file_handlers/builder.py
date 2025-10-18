@@ -1,5 +1,6 @@
 import logging
 from logging.handlers import RotatingFileHandler
+from typing import Optional
 
 from const import (
     LOGS_FILE_BACKUP_COUNT,
@@ -11,12 +12,12 @@ from const import (
 def build_logs_file_handler(
     path: str,
     level: int,
-    max_bytes: int = LOGS_FILE_MAX_BYTES,
-    backup_count: int = LOGS_FILE_BACKUP_COUNT,
-    file_format: str = LOGS_FORMAT,
+    max_bytes: Optional[int] = LOGS_FILE_MAX_BYTES,
+    backup_count: Optional[int] = LOGS_FILE_BACKUP_COUNT,
+    file_format: Optional[str] = LOGS_FORMAT,
 ) -> RotatingFileHandler:
     """
-    Set up a RotatingFileHandler for logging to a file.
+    Set up a rotating file handler for logging to a file.
 
     This function creates and configures a rotating file handler
     with the standard formatter and specified logs level. It is
@@ -26,9 +27,9 @@ def build_logs_file_handler(
     Args:
         path (str): Path to the logs file.
         level (int): Logging level.
-        max_bytes (int): Maximum file size in bytes before rotation.
-        backup_count (int): Number of backup files to keep.
-        file_format (str): Format string for logs messages.
+        max_bytes (Optional[int]): Maximum file size in bytes before rotation.
+        backup_count (Optional[int]): Number of backup files to keep.
+        file_format (Optional[str]): Format string for logs messages.
 
     Returns:
         RotatingFileHandler: Rotating file handler configured.

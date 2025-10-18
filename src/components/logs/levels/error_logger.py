@@ -1,38 +1,38 @@
 import logging
-from typing import Any
+from typing import Any, Optional
 
-from components.logs.initializer import logs_phase
-from const import LOGS_PHASE_NAME
+from components.logs.levels.utils.logger import log
+from const import LOGS_PHASE_NAME, LOGS_PHASE_DEFAULT
 
 
 def error(
     msg: str,
     *args: Any,
-    log_phase_name: str = LOGS_PHASE_NAME,
-    log_phase: str = None,
+    log_phase_name: Optional[str] = LOGS_PHASE_NAME,
+    log_phase: Optional[str] = LOGS_PHASE_DEFAULT,
     **kwargs: Any
 ) -> None:
     """
-    Log an error-level message with the current phase context.
+    Log an error-level message.
+
+    This function logs a contextual error-level message, using log phase
+    as context.
 
     Args:
         msg (str): The message to log.
-        args (Any): Positional arguments for message formatting.
-        log_phase_name (str): The name of the log phase.
-        log_phase (str): Current log phase.
+        args (Any): Positional arguments for the message.
+        log_phase_name (Optional[str]): The name of the log phase.
+        log_phase (Optional[str]): Current log phase.
         kwargs (Any): Keyword arguments for the logging function.
 
     Returns:
         None
     """
-    # Retrieve current log phase
-    # if None is passed
-    if log_phase is None:
-        log_phase = logs_phase.get()
-
-    logging.error(
+    log(
+        logging.ERROR,
         msg,
         *args,
-        extra={log_phase_name: log_phase},
-        **kwargs,
+        log_phase_name,
+        log_phase,
+        **kwargs
     )
