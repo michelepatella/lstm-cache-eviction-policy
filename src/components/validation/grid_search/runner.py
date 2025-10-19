@@ -89,12 +89,19 @@ def compute_grid_search(
                 # To update the progress bar
                 pbar.update(1)
 
-        info(f"Grid search completed with best parameters: \n{best_params}\n"
-             f"achieving average loss: {best_avg_loss}"
+        info(
+            f"Grid search completed with best parameters: \n{best_params}\n"
+            f"achieving average loss: {best_avg_loss}"
         )
 
         return best_params
-    except (TypeError, AttributeError, ValueError, FloatingPointError, RuntimeError) as e:
+    except (
+        TypeError,
+        AttributeError,
+        ValueError,
+        FloatingPointError,
+        RuntimeError,
+    ) as e:
         msg = "Failed to compute grid search"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e

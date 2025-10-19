@@ -39,7 +39,9 @@ def get_parameters_combination(
     try:
         # Prepare configuration
         search_space = config.validation.search_space.model_dump()
-        debug(f"Search space to generate parameters combinations from: {search_space}")
+        debug(
+            f"Search space to generate parameters combinations from: {search_space}"
+        )
 
         # Generate combinations per search
         # space section and save them

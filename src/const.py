@@ -183,7 +183,6 @@ MC_DROPOUT_MODEL_MODE = "mc_dropout"
 GRID_SEARCH_DESC = "Grid Search"
 
 
-
 # ----------------------------
 # Training
 # ----------------------------
@@ -290,8 +289,6 @@ ZIPF_LOG_LOG_PLOT_Y_LABEL = "Frequency"
 DAILY_PROFILE_PLOT_FILE_NAME = "daily_profile.png"
 DAILY_PROFILE_PLOT_STEP = 1
 DAILY_PROFILE_PLOT_BIN_SIZE = 0.5
-DAILY_PROFILE_PLOT_ALIGN: Literal["center", "edge"] = "center"
-DAILY_PROFILE_PLOT_EDGE_COLOR = "black"
 DAILY_PROFILE_PLOT_TITLE = "Distribution of Requests Over Day"
 DAILY_PROFILE_PLOT_X_LABEL = "Hour of Day"
 DAILY_PROFILE_PLOT_Y_LABEL = "Number of Requests"

@@ -73,12 +73,13 @@ def compute_time_series_cv_folds(
         # parameters configuration
         final_avg_loss = calculate_average(fold_losses)
 
-        info(f"Time series cross-validation completed with "
-             f"final average loss: {final_avg_loss}"
+        info(
+            f"Time series cross-validation completed with "
+            f"final average loss: {final_avg_loss}"
         )
 
         return final_avg_loss
     except TypeError as e:
         msg = "Failed to compute time series cross-validation"
         error("%s: %s", msg, e)
-        raise RuntimeError (msg) from e
+        raise RuntimeError(msg) from e

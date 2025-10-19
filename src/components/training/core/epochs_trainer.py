@@ -133,7 +133,9 @@ def train_epochs(
         # before returning the trained model
         model.load_state_dict(best_model_weights)
 
-        info(f"Training epochs completed with best average loss: {best_avg_loss}")
+        info(
+            f"Training epochs completed with best average loss: {best_avg_loss}"
+        )
 
         return best_avg_loss, model
     except TypeError as e:

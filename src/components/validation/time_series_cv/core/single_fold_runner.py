@@ -91,10 +91,7 @@ def compute_single_time_series_cv_fold(
 
     # Build optimizer
     optimizer = build_optimizer(
-        model,
-        optimizer_type,
-        lr=learning_rate,
-        weight_decay=weight_decay
+        model, optimizer_type, lr=learning_rate, weight_decay=weight_decay
     )
 
     # Train model
@@ -107,11 +104,12 @@ def compute_single_time_series_cv_fold(
         criterion,
         device,
         logs_phase.get(),
-        config
+        config,
     )
 
-    info(f"Single time series CV fold computation completed"
-         f" with average loss: {avg_loss}"
+    info(
+        f"Single time series CV fold computation completed"
+        f" with average loss: {avg_loss}"
     )
 
     return avg_loss

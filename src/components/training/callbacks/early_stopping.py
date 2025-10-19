@@ -98,7 +98,9 @@ class EarlyStopping:
                   due to invalid types (TypeError).
         """
         try:
-            debug(f"Current best average loss for early stopping check: {self.best_avg_loss}")
+            debug(
+                f"Current best average loss for early stopping check: {self.best_avg_loss}"
+            )
             debug(f"Average loss for current early stopping check: {avg_loss}")
             debug(f"Counter before early stopping check: {self.counter}")
 
@@ -109,8 +111,9 @@ class EarlyStopping:
                 self.best_avg_loss = avg_loss
                 self.counter = 0
 
-                info(f"Early stopping check completed (New best average "
-                     f"loss: {self.best_avg_loss}, counter set to: {self.counter})"
+                info(
+                    f"Early stopping check completed (New best average "
+                    f"loss: {self.best_avg_loss}, counter set to: {self.counter})"
                 )
             else:
                 # No significant improvement:
@@ -121,11 +124,14 @@ class EarlyStopping:
                 if self.counter >= self.patience:
                     self.early_stop = EARLY_STOPPING_ENABLED
 
-                    info(f"Early stopping check completed (early stopping triggered, "
-                         f"counter ({self.counter}) >= patience({self.patience}))")
+                    info(
+                        f"Early stopping check completed (early stopping triggered, "
+                        f"counter ({self.counter}) >= patience({self.patience}))"
+                    )
                 else:
-                    info(f"Early stopping check completed (early stopping not triggered,"
-                         f"counter ({self.counter}) < patience({self.patience}))"
+                    info(
+                        f"Early stopping check completed (early stopping not triggered,"
+                        f"counter ({self.counter}) < patience({self.patience}))"
                     )
         except TypeError as e:
             msg = "Failed to check early stopping"
