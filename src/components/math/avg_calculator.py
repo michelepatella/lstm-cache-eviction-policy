@@ -1,4 +1,4 @@
-from typing import List, Union, Optional
+from typing import List, Optional, Union
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error

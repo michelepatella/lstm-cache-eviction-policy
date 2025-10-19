@@ -18,10 +18,7 @@ from const import (
 )
 
 
-def plot_daily_profile(
-    timestamps_hours: np.ndarray,
-    save_path: str
-) -> None:
+def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
     """
     Plot daily profile of requests.
 

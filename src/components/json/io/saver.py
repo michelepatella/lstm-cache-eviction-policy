@@ -1,5 +1,5 @@
 import json
-from typing import Dict, List, Union, Optional
+from typing import Dict, List, Optional, Union
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error

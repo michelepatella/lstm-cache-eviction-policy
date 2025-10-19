@@ -1,4 +1,4 @@
-from typing import Dict, Tuple, Union, Optional
+from typing import Dict, Optional, Tuple, Union
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error

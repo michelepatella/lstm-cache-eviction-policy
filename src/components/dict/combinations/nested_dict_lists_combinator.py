@@ -2,7 +2,6 @@ import copy
 import itertools
 from typing import Any, Dict, List
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 
@@ -11,7 +10,8 @@ def combine_nested_dict_lists(
     dict_lists: List[List[Dict[str, Any]]],
 ) -> List[Dict[str, Any]]:
     """
-    Combine multiple lists of nested dictionaries into all possible full combinations.
+    Combine multiple lists of nested dictionaries into all possible
+    full combinations.
 
     Each list contains dictionaries representing a set of options.
     This function computes the Cartesian product across all lists and merges
@@ -21,20 +21,24 @@ def combine_nested_dict_lists(
         dict_lists (List[List[Dict[str, Any]]]): List of lists of nested dictionaries.
 
     Returns:
-        List[Dict[str, Any]]: List of merged nested dictionaries for all possible combinations.
+        List[Dict[str, Any]]: List of merged nested dictionaries for all possible
+                              combinations.
 
     Raises:
-        RuntimeError: If an error occurs while combining dictionaries, e.g.:
-            * Input is not a list of lists of dictionaries.
-            * One of the dictionaries has unexpected types that prevent deep copying.
+        RuntimeError: If combination of nested dictionary lists fails:
+            * Input is not a list of lists of dictionaries (TypeError).
+            * Deep copying or merging dictionaries fails due to unsupported
+              types (TypeError).
+            * Cartesian product computation fails due to invalid input structure
+              (ValueError).
     """
     try:
         # Compute Cartesian product across all dictionary lists
         all_combos = list(itertools.product(*dict_lists))
 
-        combined_dicts: List[Dict[str, Any]] = []
+        combined_dicts = []
         for combo_tuple in all_combos:
-            merged: Dict[str, Any] = {}
+            merged = {}
             for d in combo_tuple:
                 for k, v in d.items():
                     # Deep copy to avoid mutating
@@ -42,10 +46,9 @@ def combine_nested_dict_lists(
                     merged[k] = copy.deepcopy(v)
             combined_dicts.append(merged)
 
-        debug(
-            f"Total combined nested dictionaries lists: {len(combined_dicts)}"
+        info(
+            f"Nested dictionary lists combined ({len(combined_dicts)} combinations)"
         )
-        info("Nested dictionary lists combined")
 
         return combined_dicts
     except (TypeError, ValueError) as e:

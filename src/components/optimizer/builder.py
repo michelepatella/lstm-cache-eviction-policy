@@ -7,7 +7,6 @@ from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from const import ADAM_OPTIMIZER, ADAMW_OPTIMIZER, SGD_OPTIMIZER
 
-
 # Map each optimizer type to
 # its PyTorch instance
 OPTIMIZER_MAP: Dict[str, type[torch.optim.Optimizer]] = {

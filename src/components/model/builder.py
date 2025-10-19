@@ -1,4 +1,4 @@
-from typing import Dict, Union, Optional
+from typing import Dict, Optional, Union
 
 from components.model.lstm import LSTM
 from pipeline.config.pydantic.config import Config

@@ -2,7 +2,7 @@ import logging
 from typing import Any, Optional
 
 from components.logs.levels.utils.logger import log
-from const import LOGS_PHASE_NAME, LOGS_PHASE_DEFAULT
+from const import LOGS_PHASE_DEFAULT, LOGS_PHASE_NAME
 
 
 def debug(

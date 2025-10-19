@@ -3,7 +3,6 @@ from typing import Any, Dict, List
 
 from components.dict.operations.flattener import flatten_dict
 from components.dict.operations.value_setter import set_dict_value
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 
@@ -12,9 +11,8 @@ def combine_nested_dicts(nested_dict: Dict[str, Any]) -> List[Dict[str, Any]]:
     """
     Generate all possible combinations from a nested dictionary.
 
-    Each leaf value in the dictionary can be a list of options. This function
-    computes the Cartesian product of all possible leaf values and reconstructs
-    nested dictionaries for each combination.
+    This function computes the Cartesian product of all possible leaf values
+    in the dictionary and reconstructs nested dictionaries for each combination.
 
     Args:
         nested_dict (Dict[str, Any]): Nested dictionary with leaf values that are
@@ -25,9 +23,13 @@ def combine_nested_dicts(nested_dict: Dict[str, Any]) -> List[Dict[str, Any]]:
                               combinations of values.
 
     Raises:
-        RuntimeError: If an error occurs while generating combinations, e.g.:
-            * Input is not a dictionary or has unexpected types.
-            * Leaf values cannot be iterated or deep copied.
+        RuntimeError: If generating combinations from the nested dictionary fails:
+            * Input is not a dictionary (TypeError).
+            * Leaf values cannot be iterated or copied properly (TypeError).
+            * Cartesian product computation fails due to invalid input structure
+              (ValueError).
+            * Setting values in nested dictionaries fails due to incorrect key paths
+              or incompatible types (TypeError).
     """
     try:
         # Flatten the dictionary to get key paths and values
@@ -41,17 +43,17 @@ def combine_nested_dicts(nested_dict: Dict[str, Any]) -> List[Dict[str, Any]]:
         all_combinations = list(itertools.product(*value_lists))
 
         # Reconstruct nested dictionaries for each combination
-        combination_dicts: List[Dict[str, Any]] = []
+        combination_dicts = []
         for values in all_combinations:
-            combo: Dict[str, Any] = {}
+            combo = {}
             for key_path, value in zip(keys, values):
                 set_dict_value(combo, key_path, value)
             combination_dicts.append(combo)
 
-        debug(
-            f"{len(combination_dicts)} combinations generated from nested dictionary"
+        info(
+            f"Nested dictionary combinations generated "
+            f"({len(combination_dicts)} combinations)"
         )
-        info("Nested dictionary combinations generated")
 
         return combination_dicts
     except (TypeError, ValueError) as e:
