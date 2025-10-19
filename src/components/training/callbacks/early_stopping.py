@@ -1,65 +1,57 @@
 import numpy as np
 
-from components.logs.initializer import logs_phase
 from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
-from const import LOGS_VALIDATION_PHASE
-from pipeline.config.pydantic.config import Config
+from const import EARLY_STOPPING_DISABLED, EARLY_STOPPING_ENABLED
 
 
 class EarlyStopping:
     """
-    Early stopping handler for model training and validation.
+    Early stopping callback for model training and validation.
 
-    Monitors the average loss during training or validation.
-    If no significant improvement is observed for a number of epochs
-    equal to the patience value, training is stopped early to prevent
-    overfitting or wasted computation.
+    This class implements early stopping callback which monitors
+    the average loss during training and validation. If no significant
+    improvement is observed for a number of epochs equal to the patience
+    value, training is stopped early to prevent overfitting or wasted
+    computation.
 
     Attributes:
-        patience (int): Number of epochs to wait without improvement
-                        before stopping.
-        delta (float): Minimum change in average loss to qualify as
-                       an improvement.
+        patience (int): Number of epochs to wait without improvement before
+                        triggering early stopping.
+        delta (float): Minimum change in average loss to qualify as an
+                       improvement.
         best_avg_loss (float): Best observed average loss so far.
         counter (int): Number of consecutive epochs without improvement.
-        early_stop (bool): Flag indicating whether early stopping
-                           has been triggered.
+        early_stop (bool): Flag indicating whether early stopping has been
+                           triggered.
     """
 
-    def __init__(self: "EarlyStopping", config: Config) -> None:
+    def __init__(self: "EarlyStopping", patience: int, delta: float) -> None:
         """
-        Initialize EarlyStopping with configuration.
+        Initialize EarlyStopping.
 
-        This function initializes EarlyStopping, setting
-        patience and delta, as well as initializing the best
-        average loss, counter, and early stropping triggering flag.
+        This function initializes EarlyStopping, setting patience and delta,
+        as well as initializing the best average loss, counter, and early
+        stropping triggering flag.
 
         Args:
             self ("EarlyStopping"): Current class instance.
-            config (Config): Configuration object.
+            patience (int): Number of epochs to wait for improvement before
+                            triggering early stopping.
+            delta (float): Minimum change in the monitored average loss to
+                           qualify as an improvement.
 
         Returns:
             None
         """
-        # Read the current pipeline phase
-        current_phase = logs_phase.get()
+        # Set patience (how many epochs to
+        # wait before stopping)
+        self.patience = patience
 
-        debug(f"Current pipeline phase: {current_phase}")
-
-        # Set patience (how many epochs to wait before stopping)
-        self.patience = (
-            config.validation.early_stopping.patience
-            if current_phase == LOGS_VALIDATION_PHASE
-            else config.training.early_stopping.patience
-        )
-
-        # Set delta (minimum improvement to reset counter)
-        self.delta = (
-            config.validation.early_stopping.delta
-            if current_phase == LOGS_VALIDATION_PHASE
-            else config.training.early_stopping.delta
-        )
+        # Set delta (minimum improvement
+        # to reset counter)
+        self.delta = delta
 
         # Initialize best average loss
         self.best_avg_loss = np.inf
@@ -70,9 +62,7 @@ class EarlyStopping:
 
         # Flag indicating whether early stopping
         # should be triggered
-        self.early_stop = False
-
-        info("EarlyStopping initialized")
+        self.early_stop = EARLY_STOPPING_DISABLED
 
         debug(
             "EarlyStopping initial settings:\n"
@@ -82,6 +72,7 @@ class EarlyStopping:
             + f"Counter: {self.counter}\n"
             + f"Early stopping: {self.early_stop}"
         )
+        info("EarlyStopping initialized")
 
     def __call__(self: "EarlyStopping", avg_loss: float) -> None:
         """
@@ -98,31 +89,45 @@ class EarlyStopping:
 
         Returns:
             None
+
+        Raises:
+            RuntimeError: If checking early stopping fails:
+                * Comparison between average loss and best average loss fails
+                  due to invalid types (TypeError).
+                * Incrementing counter or setting early stopping flag fails
+                  due to invalid types (TypeError).
         """
-        debug(f"Current best average loss: {self.best_avg_loss}")
-        debug(f"Average loss for current check: {avg_loss}")
+        try:
+            debug(f"Current best average loss for early stopping check: {self.best_avg_loss}")
+            debug(f"Average loss for current early stopping check: {avg_loss}")
+            debug(f"Counter before early stopping check: {self.counter}")
 
-        # Check for improvement beyond delta tolerance
-        if avg_loss < self.best_avg_loss - self.delta:
-            # Improvement detected: update the best
-            # average loss and reset counter
-            self.best_avg_loss = avg_loss
-            self.counter = 0
+            # Check for improvement beyond delta tolerance
+            if avg_loss < self.best_avg_loss - self.delta:
+                # Improvement detected: update the best
+                # average loss and reset counter
+                self.best_avg_loss = avg_loss
+                self.counter = 0
 
-            debug(f"New best average loss: {self.best_avg_loss}")
-            debug(f"Early stopping counter reset to: {self.counter}")
-        else:
-            # No significant improvement:
-            # increment counter
-            self.counter += 1
+                info(f"Early stopping check completed (New best average "
+                     f"loss: {self.best_avg_loss}, counter set to: {self.counter})"
+                )
+            else:
+                # No significant improvement:
+                # increment counter
+                self.counter += 1
 
-            debug("No improvement in average loss")
-            debug(f"Early stopping counter incremented to: {self.counter}")
+                # Trigger early stopping if patience exceeded
+                if self.counter >= self.patience:
+                    self.early_stop = EARLY_STOPPING_ENABLED
 
-            # Trigger early stopping if patience exceeded
-            if self.counter >= self.patience:
-                self.early_stop = True
-
-                debug("Patience exceeded: early stopping triggered")
-
-        info("Early stopping check completed")
+                    info(f"Early stopping check completed (early stopping triggered, "
+                         f"counter ({self.counter}) >= patience({self.patience}))")
+                else:
+                    info(f"Early stopping check completed (early stopping not triggered,"
+                         f"counter ({self.counter}) < patience({self.patience}))"
+                    )
+        except TypeError as e:
+            msg = "Failed to check early stopping"
+            error("%s: %s", msg, e)
+            raise RuntimeError(msg) from e

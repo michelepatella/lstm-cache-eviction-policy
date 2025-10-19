@@ -178,6 +178,13 @@ MC_DROPOUT_MODEL_MODE = "mc_dropout"
 
 
 # ----------------------------
+# Early Stopping
+# ----------------------------
+EARLY_STOPPING_ENABLED = True
+EARLY_STOPPING_DISABLED = False
+
+
+# ----------------------------
 # Monte Carlo (MC) Dropout
 # ----------------------------
 MC_DROPOUT_DISABLED = False
