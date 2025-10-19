@@ -20,11 +20,8 @@ from components.evaluation.simulations.metrics.io.saver import (
 )
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
-from components.visualization.plots.hit_miss_rates_plotter import (
+from components.visualization.hit_miss_rates_plotter import (
     plot_hit_miss_rate,
-)
-from components.visualization.reports.simulation_reporter import (
-    generate_simulations_report,
 )
 from const import (
     AVG_CACHE_LATENCY_NAME,
@@ -140,9 +137,6 @@ def run_simulations() -> None:
 
         # Save metrics
         results.append(metrics)
-
-    # Generate a report for simulations results
-    generate_simulations_report(results)
 
     # Determine results file name according
     # to data distribution mode

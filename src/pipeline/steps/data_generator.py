@@ -10,13 +10,13 @@ from components.dataset.io.saver import save_dataset
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
-from components.visualization.plots.daily_profile_plotter import (
+from components.visualization.daily_profile_plotter import (
     plot_daily_profile,
 )
-from components.visualization.plots.key_usage_heatmap_plotter import (
+from components.visualization.key_usage_heatmap_plotter import (
     plot_key_usage_heatmap,
 )
-from components.visualization.plots.zipf_loglog_plotter import (
+from components.visualization.zipf_loglog_plotter import (
     plot_zipf_loglog,
 )
 from const import (

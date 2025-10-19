@@ -1,5 +1,3 @@
-from box.box import Box
-
 from components.data_loader.initializer import initialize_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.evaluation.model.evaluator import evaluate_model
@@ -9,17 +7,11 @@ from components.model.best.initializer import (
     initialize_best_model,
 )
 from components.model.mode.setter import set_model_mode
-from components.visualization.reports.model_evaluation_reporter import (
-    generate_model_evaluation_report,
-)
 from const import (
     DATA_DISTRIBUTION_STATIC_MODE,
     DYNAMIC_MODEL_RESULTS_FILE_NAME,
     EVALUATION_MODEL_MODE,
     LOGS_TESTING_PHASE,
-    MODEL_METRICS_CLASS_REPORT_NAME,
-    MODEL_METRICS_COHEN_KAPPA_SCORE_NAME,
-    MODEL_METRICS_TOP_K_ACCURACY_NAME,
     RESULTS_DIRECTORY_PATH,
     STATIC_MODEL_RESULTS_FILE_NAME,
     TESTING_SPLIT_TYPE,
@@ -99,23 +91,6 @@ def test_model() -> None:
         top_k,
         model_results_save_path,
         compute_metrics=True,
-    )
-
-    # Box for model evaluation metrics
-    metrics = Box(metrics)
-
-    # Retrieve metrics
-    class_report = getattr(metrics, MODEL_METRICS_CLASS_REPORT_NAME)
-    top_k_accuracy = getattr(metrics, MODEL_METRICS_TOP_K_ACCURACY_NAME)
-    kappa_score = getattr(metrics, MODEL_METRICS_COHEN_KAPPA_SCORE_NAME)
-
-    # Show report to display testing results
-    generate_model_evaluation_report(
-        class_report,
-        top_k_accuracy,
-        kappa_score,
-        avg_loss,
-        top_k,
     )
 
     info("Model testing completed")

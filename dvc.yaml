@@ -73,9 +73,9 @@ stages:
       - src/components/math/zipf_probs_calculator.py
       - src/components/time/cyclics/seconds_to_hours_converter.py
       - src/components/time/cyclics/updater.py
-      - src/components/visualization/plots/daily_profile_plotter.py
-      - src/components/visualization/plots/key_usage_heatmap_plotter.py
-      - src/components/visualization/plots/zipf_loglog_plotter.py
+      - src/components/visualization/daily_profile_plotter.py
+      - src/components/visualization/key_usage_heatmap_plotter.py
+      - src/components/visualization/zipf_loglog_plotter.py
       - src/components/yaml/io/loader.py
       - src/const.py
       - src/pipeline/config/configurator.py
@@ -403,7 +403,6 @@ stages:
       - src/components/model/lstm.py
       - src/components/model/mode/setter.py
       - src/components/model/state_dict/loader.py
-      - src/components/visualization/reports/model_evaluation_reporter.py
       - src/components/yaml/io/loader.py
       - src/const.py
       - src/pipeline/config/configurator.py
@@ -476,8 +475,7 @@ stages:
       - src/components/math/avg_calculator.py
       - src/components/math/percentage_calculator.py
       - src/components/time/transforms/trig_decoder.py
-      - src/components/visualization/plots/hit_miss_rates_plotter.py
-      - src/components/visualization/reports/simulation_reporter.py
+      - src/components/visualization/hit_miss_rates_plotter.py
       - src/components/yaml/io/loader.py
       - src/const.py
       - src/pipeline/config/configurator.py
@@ -500,7 +498,7 @@ artifacts:
   static-model:
     path: models/static/trained_static_model.pt
     type: model
-    desc: "LSTM model trained on static data logs"
+    desc: "LSTM model trained on static access data logs"
     labels:
       - LSTM
       - static data
@@ -510,7 +508,7 @@ artifacts:
   dynamic-model:
     path: models/dynamic/trained_dynamic_model.pt
     type: model
-    desc: "LSTM model trained on dynamic data logs"
+    desc: "LSTM model trained on dynamic access data logs"
     labels:
       - LSTM
       - dynamic data
