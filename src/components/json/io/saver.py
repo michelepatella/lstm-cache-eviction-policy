@@ -26,12 +26,12 @@ def save_json(
     Returns:
         None
 
-        Raises:
-            RuntimeError: If saving the JSON file fails:
-                * Serialization of the data dictionary fails because one or more
-                  values cannot be encoded into valid JSON (TypeError).
-                * Writing to the file fails due to missing path, permission issues,
-                  or other I/O errors (OSError).
+    Raises:
+        RuntimeError: If saving the JSON file fails:
+            * Serialization of the data dictionary fails because one or more
+              values cannot be encoded into valid JSON (TypeError).
+            * Writing to the file fails due to missing path, permission issues,
+              or other I/O errors (OSError).
     """
     try:
         debug(f"Path to save JSON to: {path}")

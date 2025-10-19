@@ -106,7 +106,8 @@ def train_model() -> None:
         optimizer,
         criterion,
         device,
-        config,
+        logs_phase.get(),
+        config
     )
 
     # Save the best model trained

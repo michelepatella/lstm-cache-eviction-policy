@@ -11,6 +11,7 @@ from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.dataset.splits.training_validation_splitter import (
     split_training_validation_sets,
 )
+from components.logs.initializer import logs_phase
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
 from components.model.environment.initializer import (
@@ -96,7 +97,8 @@ def compute_single_time_series_cv_fold(
         optimizer,
         criterion,
         device,
-        config,
+        logs_phase.get(),
+        config
     )
 
     info(f"Single time series CV fold computation completed")

@@ -178,6 +178,13 @@ MC_DROPOUT_MODEL_MODE = "mc_dropout"
 
 
 # ----------------------------
+# Training
+# ----------------------------
+TRAINING_EPOCHS_DESC = "Training"
+TRAINING_SINGLE_EPOCH_DESC = "Epoch"
+
+
+# ----------------------------
 # Early Stopping
 # ----------------------------
 EARLY_STOPPING_ENABLED = True

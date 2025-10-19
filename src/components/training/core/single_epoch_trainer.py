@@ -11,7 +11,7 @@ from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.model.mode.setter import set_model_mode
-from const import TRAINING_MODEL_MODE
+from const import TRAINING_MODEL_MODE, TRAINING_SINGLE_EPOCH_DESC
 
 
 def train_single_epoch(
@@ -43,46 +43,43 @@ def train_single_epoch(
         None
 
     Raises:
-        RuntimeError: If an error occurs during processing of a batch e.g.:
-            * Invalid batch shapes.
-            * Type errors.
-            * Loss computation failure.
+        RuntimeError: If training a single epoch fails:
+            * One or more batches contain invalid shapes or unsupported
+              data types (TypeError).
+            * Forward pass fails during loss computation due to incompatible
+              model output or criterion (TypeError).
+            * Backward pass fails during gradient computation or parameter
+              update (AttributeError or TypeError).
+            * Optimizer fails to apply gradients due to internal
+              incompatibility (AttributeError).
     """
-    debug(
-        f"One-epoch training configuration:\n"
-        f"- Current epoch number: {epoch}\n"
-        f"- Training loader size: {len(training_loader)}\n"
-        f"- Optimizer: {optimizer}\n"
-        f"- Criterion: {criterion}\n"
-        f"- Device: {device}"
-    )
+    try:
+        debug(
+            f"Single epoch training configuration:\n"
+            f"- Current epoch number: {epoch}\n"
+            f"- Training loader size: {len(training_loader)}\n"
+            f"- Optimizer: {optimizer}\n"
+            f"- Criterion: {criterion}\n"
+            f"- Device: {device}"
+        )
 
-    # To display the one-epoch progress
-    training_loader = tqdm(
-        training_loader,
-        desc=f"Epoch {epoch}",
-        leave=False,
-    )
+        # To display the one-epoch progress
+        training_loader_tqdm = tqdm(
+            training_loader,
+            desc=TRAINING_SINGLE_EPOCH_DESC + f"{epoch}",
+        )
 
-    # Set the model to training mode
-    set_model_mode(model, TRAINING_MODEL_MODE)
+        # Set the model to training mode
+        set_model_mode(model, TRAINING_MODEL_MODE)
 
-    # For each batch in the training loader
-    # run backpropagation algorithm
-    for batch in training_loader:
-        try:
-            debug(
-                f"Current batch shapes during "
-                f"one-epoch training: {[t.shape for t in batch]}"
-            )
-
+        # For each batch in the training loader
+        # run backpropagation algorithm
+        for batch in training_loader_tqdm:
             # Reset the gradients
             optimizer.zero_grad()
 
-            # Compute the forward pass
-            # (to calculate the output — moving from
-            # input layer to output layer — and the loss
-            # after comparing model prediction with expected one)
+            # Compute the forward pass to get
+            # model outputs and calculate loss
             loss, _ = compute_forward(
                 batch,
                 model,
@@ -90,22 +87,16 @@ def train_single_epoch(
                 criterion,
             )
 
-            debug(
-                f"Current batch loss during one-epoch training: {loss.item()}"
-            )
-
-            # Compute backward pass
-            # (to calculate the gradients of loss with
-            # respect to the weights and update weights
-            # consequently)
+            # Compute backward pass to update model
+            # weights according to gradients of loss
             compute_backward(loss, optimizer)
 
             # Update progress bar and show
             # the current loss
-            training_loader.set_postfix(loss=loss.item())
-        except (TypeError, AttributeError, ValueError) as e:
-            msg = "Failed to compute one-epoch training"
-            error("%s: %s", msg, e)
-            raise RuntimeError(msg) from e
+            training_loader_tqdm.set_postfix(loss=loss)
 
-    info("One-epoch training completed")
+        info("Training single epoch completed")
+    except (TypeError, AttributeError) as e:
+        msg = "Failed to perform training single epoch"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
