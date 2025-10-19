@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Dict, List, Union
 
 from components.dict.combinations.nested_dict_lists_combinator import (
     combine_nested_dict_lists,
@@ -6,6 +6,7 @@ from components.dict.combinations.nested_dict_lists_combinator import (
 from components.dict.combinations.nested_dicts_combinator import (
     combine_nested_dicts,
 )
+from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from pipeline.config.pydantic.config import Config
@@ -13,7 +14,7 @@ from pipeline.config.pydantic.config import Config
 
 def get_parameters_combination(
     config: Config,
-) -> List[Dict[str, Any]]:
+) -> List[Dict[str, Union[int, float, bool]]]:
     """
     Generate all possible parameter combinations from the search space.
 
@@ -26,35 +27,37 @@ def get_parameters_combination(
         config (Config): Configuration object.
 
     Returns:
-        List[Dict[str, Any]]: List of nested dictionaries
-                              representing all parameter combinations.
+        List[Dict[str, Union[int, float, bool]]]: List of nested dictionaries
+                                                  representing all parameter
+                                                  combinations.
 
     Raises:
-        RuntimeError: If an error occurs while
-                      generating parameter combinations, e.g.:
-            * Search space or keys are of invalid type.
-            * No parameter combinations could be generated.
+        RuntimeError: If parameter combinations generation fails:
+            * The configuration object does not contain a valid search space
+              or fails during access (AttributeError).
     """
     try:
-        section_combination_dicts = []
-
-        # Generate combinations per section
-        # and save them
+        # Prepare configuration
         search_space = config.validation.search_space.model_dump()
+        debug(f"Search space to generate parameters combinations from: {search_space}")
+
+        # Generate combinations per search
+        # space section and save them
+        section_combination_dicts = []
         for section, params_dict in search_space.items():
             section_values = combine_nested_dicts(params_dict)
             section_combination_dicts.append(section_values)
 
-        # Combine all sections into
-        # final parameter configurations
+        # Combine all sections to get all the
+        # final parameter combinations
         param_combinations = combine_nested_dict_lists(
             section_combination_dicts
         )
 
-        info("Parameter combinations generated")
+        info(f"{len(param_combinations)} parameter combinations generated")
 
         return param_combinations
-    except (TypeError, ValueError) as e:
+    except AttributeError as e:
         msg = "Failed to generate parameter combinations"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
