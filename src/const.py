@@ -180,6 +180,13 @@ MC_DROPOUT_MODEL_MODE = "mc_dropout"
 # ----------------------------
 # Training
 # ----------------------------
+GRID_SEARCH_DESC = "Grid Search"
+
+
+
+# ----------------------------
+# Training
+# ----------------------------
 TRAINING_EPOCHS_DESC = "Training"
 TRAINING_SINGLE_EPOCH_DESC = "Epoch"
 
