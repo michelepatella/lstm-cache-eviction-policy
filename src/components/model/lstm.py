@@ -334,9 +334,7 @@ class LSTM(torch.nn.Module):
             # Apply MC dropout if enabled
             if self.mc_dropout:
                 output = self.mc_dropout_layer(output)
-                debug(
-                    f"(After MC dropout) Model output shape: {output.shape}"
-                )
+                debug(f"(After MC dropout) Model output shape: {output.shape}")
 
             # Compute logits from last step
             logits = self.fc(output[:, -1, :])

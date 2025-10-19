@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Optional
 
 import numpy as np
 
@@ -9,53 +9,54 @@ from const import HOURS_IN_DAY
 
 
 def encode_time_trigonometrically(
-    time_column: np.ndarray,
-    cycle_length: float = HOURS_IN_DAY,
+    timestamps: np.ndarray,
+    cycle_length: Optional[float] = HOURS_IN_DAY,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
-    Encode a time list trigonometrically.
+    Encode a list of timestamps trigonometrically.
 
-    This function converts a time list into sine and cosine
-    features, representing cyclical time.
+    This function encodes a list of timestamps trigonometrically through
+    their sine and cosine representations.
 
     Args:
-        time_column (np.ndarray): Time list to be transformed.
-        cycle_length (float): Length of the repeating cycle (default 24).
+        timestamps (np.ndarray): Time list to be encoded.
+        cycle_length (Optional[float]): Length of the repeating cycle.
 
     Returns:
         Tuple[np.ndarray, np.ndarray]:
             - cos_time: Numpy array of cosine values representing cyclical time.
             - sin_time: Numpy array of sine values representing cyclical time.
-
     Raises:
-        RuntimeError: If an error occurs while
-                      encoding time trigonometrically, e.g.:
-            * If the time list contains non-numeric values.
+        RuntimeError: If encoding time trigonometrically fails:
+            * Input timestamps are not numeric or not iterable (TypeError).
+            * Cycle length is invalid or non-numeric (TypeError).
+            * Computation of sine or cosine values fails due to invalid input
+              (TypeError).
     """
     try:
         debug(
-            f"(Time before normalization) Min:"
-            f" {min(time_column)}, "
-            f"Max: {max(time_column)}"
+            f"(Timestamps to encode before normalization) min:"
+            f" {min(timestamps)}, max: {max(timestamps)}"
         )
 
-        # Normalize time so that to have time in cycle
-        time_in_cycle = (time_column % cycle_length) / cycle_length
-
+        # Normalize time so that to be in cycle
+        time_in_cycle = (timestamps % cycle_length) / cycle_length
         debug(
-            f"(Time after normalization) Min:"
-            f" {min(time_column)}, "
-            f"Max: {max(time_column)}"
+            f"(Timestamps to encode after normalization) min:"
+            f" {min(timestamps)}, max: {max(timestamps)}"
         )
 
-        # Use normalized time in cycle
-        # to get angles in radians
+        # Compute angles (in radians) of
+        # timestamps in cycle
         angles = time_in_cycle * 2 * np.pi
+        debug(
+            f"Cyclic timestamp angles (radians) min: {angles.min()},"
+            f" max: {angles.max()}"
+        )
 
-        debug(f"Angles (radians) min: {angles.min()}, max: {angles.max()}")
-
-        # Create sin and cos time
-        sin_time, cos_time = np.sin(angles), np.cos(angles)
+        # Get sin and cos components from angles
+        sin_time = np.sin(angles)
+        cos_time = np.cos(angles)
 
         info("Time encoded trigonometrically")
 
