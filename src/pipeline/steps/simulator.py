@@ -159,6 +159,12 @@ def run_simulations() -> None:
         / data_distribution_mode
         / HIT_MISS_RATES_PLOT_FILE_NAME
     )
-    plot_hit_miss_rate(results, hit_miss_rate_plot_save_path)
+    plot_hit_miss_rate(
+        [
+            {POLICY_NAME: r[POLICY_NAME], TIMELINE_NAME: r[TIMELINE_NAME]}
+            for r in results
+        ],
+        hit_miss_rate_plot_save_path,
+    )
 
     info("Cache simulations completed")

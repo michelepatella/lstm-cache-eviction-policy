@@ -30,12 +30,12 @@ def plot_hit_miss_rate(
     path: str,
 ) -> None:
     """
-    Plot the evolution of hit and miss rates over time
-    for multiple cache eviction policies.
+    Plot the evolution of hit and miss rates over time for multiple
+    cache eviction policies.
 
-    This function generates two subplots — one for hit rate
-    and one for miss rate — showing the evolution of each
-    metric over time across different cache policies.
+    This function generates two subplots: one for hit rate and one for
+    miss rate. The generated subplots show the evolution of hit and miss
+    rates over time across different cache policies.
 
     Args:
         results (List[Dict[str, Any]]): List of simulations results.
@@ -45,14 +45,17 @@ def plot_hit_miss_rate(
         None
 
     Raises:
-        RuntimeError: If an error occurs while plotting hit
-                      and miss rates, e.g.:
-                        * If one of the timeline fields is not numeric.
-                        * If expected keys are missing.
-                        * If matplotlib receives invalid data for plotting.
+        RuntimeError: If plotting the hit and miss rates fails:
+            * Results or timeline entries are not of expected type (TypeError).
+            * Required keys are missing (KeyError).
+            * Data shapes or plotting values are invalid (ValueError).
+            * matplotlib objects do not have expected attributes (AttributeError).
+            * Subplot axes indexing fails (IndexError).
     """
     try:
-        debug(f"Number of policies to plot hit/miss rates: {len(results)}")
+        debug(
+            f"Number of policies to plot hit and miss rates for: {len(results)}"
+        )
 
         # Setup for the whole plot
         fig, axes = plt.subplots(
@@ -108,13 +111,13 @@ def plot_hit_miss_rate(
             )
             axes[i].legend()
 
+        # Show and save plot
         plt.savefig(path)
-
         plt.show()
         plt.close(fig)
 
-        info(f"Hit and miss rates plotted and saved to {path}")
-    except (TypeError, KeyError, ValueError) as e:
-        msg = "Failed to plot hit/miss rates"
+        info(f"Hit and miss rates plotted and saved to: {path}")
+    except (TypeError, KeyError, ValueError, AttributeError, IndexError) as e:
+        msg = "Failed to plot hit and miss rates"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e

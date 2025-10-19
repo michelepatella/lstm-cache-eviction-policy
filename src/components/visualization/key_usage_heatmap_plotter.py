@@ -28,43 +28,51 @@ def plot_key_usage_heatmap(
     max_key: int,
     requests: List[int],
     timestamps_hours: np.ndarray,
-    path: str,
+    save_path: str,
 ) -> None:
     """
     Plot key usage heatmap over hours of the day.
 
-    This function generates a heatmap showing the frequency
-    of accesses for each key across the hours of the day.
+    This function generates a heatmap showing the frequency of
+    accesses for each key across the hours of the day.
 
     Args:
         min_key (int): The lowest key.
         max_key (int): The greatest key.
         requests (List[int]): List of key accesses.
         timestamps_hours (np.ndarray): Array of request timestamps in hours.
-        path (str): Path to save the figure.
+        save_path (str): Path to save the figure.
 
     Returns:
         None
 
     Raises:
-        RuntimeError: If an error occurs while
-                      plotting key usage heatmap, e.g.:
-            * If requests or timestamps data contain invalid
-              values or mismatched lengths.
-            * If requests data is not iterable or timestamps data is not a
-              NumPy array of numeric values.
+        RuntimeError: If plotting the key usage heatmap fails:
+            * Input sequences are not valid or cannot be iterated (TypeError).
+            * Values in requests or timestamps cannot be converted to int or
+              used in array indexing (TypeError or ValueError).
+            * NumPy operations fail due to invalid parameters (ValueError).
     """
     try:
-        # Initialize heatmap
+        debug(f"Number of requests for key usage heatmap: {len(requests)}")
+
+        # Calculate number of hours to
+        # show in the heatmap
         num_hours = (
             DATA_GENERATION_FINAL_HOUR - DATA_GENERATION_INITIAL_HOUR + 1
         )
+        debug(f"Number of hours for key usage heatmap: {num_hours}")
+
+        # Calculate number of keys involved
+        # in the heatmap
         num_keys = max_key - min_key + 1
+        debug(f"Number of keys for key usage heatmap: {num_keys}")
+
+        # Initialize heatmap
         heatmap = np.zeros(
             (num_hours, num_keys),
             dtype=int,
         )
-
         debug(f"Key usage heatmap shape (hours x keys): {heatmap.shape}")
 
         # Fill heatmap
@@ -101,7 +109,7 @@ def plot_key_usage_heatmap(
                     requested_key_idx,
                 ] += 1
 
-        # Plot key usage heatmap
+        # Prepare, show, and save plot
         plt.figure(figsize=(PLOT_SIZE, PLOT_SIZE))
         plt.imshow(
             heatmap,
@@ -139,11 +147,11 @@ def plot_key_usage_heatmap(
             fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.tight_layout()
-        plt.savefig(path)
+        plt.savefig(save_path)
         plt.show()
         plt.close()
 
-        info(f"Key usage heatmap plotted and saved to {path}")
+        info(f"Key usage heatmap plotted and saved to: {save_path}")
     except (TypeError, ValueError) as e:
         msg = "Failed to plot key usage heatmap"
         error("%s: %s", msg, e)
