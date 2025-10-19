@@ -1,7 +1,6 @@
-from typing import Dict
+from typing import Dict, Union
 
 import numpy as np
-from box import Box
 
 from components.data_loader.builder import build_data_loader
 from components.data_loader.targets.extractor import (
@@ -27,23 +26,24 @@ def compute_single_time_series_cv_fold(
     train_idx: np.ndarray,
     val_idx: np.ndarray,
     training_set: AccessLogsDataset,
-    params: Dict[str, int | float | bool],
+    params: Dict[str, Union[int, float, bool]],
     config: Config,
 ) -> float:
     """
     Execute a single fold of time series cross-validation.
 
-    This function handles all steps for one fold: dataset splitting,
-    DataLoader creation, model initialization, optimizer building,
-    model training, and average loss computation.
+    This function handles all steps for time series cross-validation on
+    one fold: dataset splitting, DataLoader creation, model environment
+    initialization, optimizer building, and model training with resulting
+    average loss.
 
     Args:
         fold_idx (int): Index of the current fold.
         train_idx (np.ndarray): Indices for training samples in this fold.
         val_idx (np.ndarray): Indices for validation samples in this fold.
-        training_set (AccessLogsDataset): Full training dataset.
-        params (Dict[str, int | float | bool]): Hyperparameter configuration
-                                                for this fold.
+        training_set (AccessLogsDataset): Full training set.
+        params (Dict[str, Union[int, float, bool]]): Parameters configuration
+                                                     for the current fold.
         config (Config): Configuration object.
 
     Returns:
@@ -52,28 +52,37 @@ def compute_single_time_series_cv_fold(
     debug(f"Fold {fold_idx}, training index: {train_idx}")
     debug(f"Fold {fold_idx}, validation index: {val_idx}")
 
-    # Split dataset for this fold into training
-    # and validation sets
-    training_dataset, validation_dataset = split_training_validation_sets(
+    # Prepare configuration
+    training_batch_size = config.training.general.batch_size
+    training_shuffle = config.training.general.shuffle
+    validation_batch_size = config.validation.general.batch_size
+    validation_shuffle = config.validation.general.shuffle
+    optimizer_type = config.training.optimizer.type
+    learning_rate = config.training.optimizer.params.learning_rate
+    weight_decay = config.training.optimizer.params.weight_decay
+    num_epochs = config.validation.cross_validation.epochs
+
+    # Split training set into training and validation sets
+    training_set, validation_set = split_training_validation_sets(
         training_set, training_idx=train_idx, validation_idx=val_idx
     )
 
     # Build DataLoaders for both sets
     training_loader = build_data_loader(
-        training_dataset,
-        config.training.general.batch_size,
-        shuffle=config.training.general.shuffle,
+        training_set,
+        training_batch_size,
+        training_shuffle,
     )
     validation_loader = build_data_loader(
-        validation_dataset,
-        config.validation.general.batch_size,
-        shuffle=config.validation.general.shuffle,
+        validation_set,
+        validation_batch_size,
+        validation_shuffle,
     )
 
     # Extract targets for model initialization
     targets = extract_targets_from_data_loader(training_loader)
 
-    # Initialize model components
+    # Initialize model environment
     device, criterion, model = initialize_model_environment(
         params,
         config,
@@ -83,14 +92,14 @@ def compute_single_time_series_cv_fold(
     # Build optimizer
     optimizer = build_optimizer(
         model,
-        config.training.optimizer.type,
-        lr=config.training.optimizer.params.learning_rate,
-        weight_decay=config.training.optimizer.params.weight_decay,
+        optimizer_type,
+        lr=learning_rate,
+        weight_decay=weight_decay
     )
 
-    # Train model for the number of epochs in this fold
+    # Train model
     avg_loss, _ = train_epochs(
-        config.validation.cross_validation.epochs,
+        num_epochs,
         model,
         training_loader,
         validation_loader,
@@ -101,6 +110,8 @@ def compute_single_time_series_cv_fold(
         config
     )
 
-    info(f"Single time series CV fold computation completed")
+    info(f"Single time series CV fold computation completed"
+         f" with average loss: {avg_loss}"
+    )
 
     return avg_loss
