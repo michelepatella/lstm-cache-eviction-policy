@@ -4,7 +4,6 @@ import torch
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def calculate_loss(
@@ -45,7 +44,7 @@ def calculate_loss(
             # provided criterion
             loss = criterion(outputs, targets).item()
 
-        info(f"Loss calculated: {loss}")
+        debug(f"Loss calculated: {loss}")
 
         return loss
     except TypeError as e:

@@ -62,6 +62,8 @@ def run_cache_simulation(
           missing or malformed elements (ValueError, TypeError, AttributeError).
     """
     try:
+        info(f"{policy} simulation started")
+
         # Prepare configuration
         testing_batch_size = config.testing.general.batch_size
         testing_shuffle = config.testing.general.shuffle

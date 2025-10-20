@@ -8,7 +8,6 @@ from components.dict.combinations.nested_dicts_combinator import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from pipeline.config.pydantic.config import Config
 
 
@@ -56,7 +55,7 @@ def get_parameters_combination(
             section_combination_dicts
         )
 
-        info(f"{len(param_combinations)} parameter combinations generated")
+        debug(f"{len(param_combinations)} parameter combinations generated")
 
         return param_combinations
     except AttributeError as e:

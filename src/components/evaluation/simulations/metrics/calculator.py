@@ -11,6 +11,7 @@ from components.evaluation.simulations.metrics.calculations.hit_miss_rates_calcu
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 from components.math.avg_calculator import calculate_average
 from const import HIT_COUNTER_NAME, MISS_COUNTER_NAME
 
@@ -80,6 +81,7 @@ def calculate_simulation_metrics(
 
         # Calculate average cache latency
         avg_cache_latency = calculate_average(cache_latencies)
+        info(f"Average cache latency: {avg_cache_latency}")
 
         debug("Cache simulation metrics calculated")
 

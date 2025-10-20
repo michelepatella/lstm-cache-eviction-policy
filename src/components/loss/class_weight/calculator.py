@@ -1,12 +1,9 @@
-from typing import Optional
-
 import numpy as np
 from sklearn.utils import compute_class_weight
 from sympy.printing.pytorch import torch
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from const import CLASS_WEIGHT_TYPE
 
 
@@ -63,7 +60,7 @@ def calculate_class_weight(
         for cls, weight in zip(present_classes, weights):
             class_weight[cls] = weight
 
-        info(f"Class weight calculated: {class_weight}")
+        debug(f"Class weight calculated: {class_weight}")
 
         return class_weight
     except (TypeError, AttributeError, IndexError, ValueError) as e:

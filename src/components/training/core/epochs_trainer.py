@@ -99,6 +99,7 @@ def train_epochs(
         best_avg_loss = np.inf
 
         # Train the model over each epoch
+        epoch = None
         for epoch in tqdm(range(1, num_epochs + 1), desc=TRAINING_EPOCHS_DESC):
             # Train one epoch
             train_single_epoch(
@@ -134,7 +135,8 @@ def train_epochs(
         model.load_state_dict(best_model_weights)
 
         info(
-            f"Training epochs completed with best average loss: {best_avg_loss}"
+            f"Training completed with best average loss: {best_avg_loss}, "
+            f"over {epoch} epochs"
         )
 
         return best_avg_loss, model

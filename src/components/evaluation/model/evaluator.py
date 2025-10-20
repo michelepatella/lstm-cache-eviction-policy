@@ -73,7 +73,7 @@ def evaluate_model(
 
     # Calculate average loss
     avg_loss = calculate_average([total_loss / len(data_loader)])
-    info(f"Average loss: {avg_loss}")
+    info(f"Average loss calculated: {avg_loss}")
 
     # Compute metrics if requested
     metrics = None
