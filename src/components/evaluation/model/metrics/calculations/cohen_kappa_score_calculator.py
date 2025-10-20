@@ -25,23 +25,21 @@ def calculate_cohen_kappa_score(
         float: Cohen's kappa score.
 
     Raises:
-        RuntimeError: If an error occurs while calculating
-                      Cohen's kappa score, e.g.:
-            * Targets and predictions have different lengths.
-            * Targets and/or predictions have not compatible type with
-              Cohen's kappa score calculation.
+        RuntimeError: If cohen kappa score calculation fails:
+            * Invalid target or prediction types (TypeError).
+            * Mismatched lengths or invalid values (ValueError).
     """
-    debug(f"Targets length for Cohen's kappa score: {len(targets)}")
-    debug(f"Predictions length for Cohen's kappa score: {len(predictions)}")
-
     try:
+        debug(f"Targets length for Cohen's kappa score: {len(targets)}")
+        debug(f"Predictions length for Cohen's kappa score: {len(predictions)}")
+
         # Calculate Cohen's kappa score
         kappa = cohen_kappa_score(targets, predictions)
+
+        info(f"Cohen's kappa score calculated: {kappa}")
+
+        return kappa
     except (ValueError, TypeError) as e:
         msg = "Failed to calculate Cohen's kappa score"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info("Cohen's kappa score calculated")
-
-    return kappa

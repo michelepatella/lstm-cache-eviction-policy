@@ -40,7 +40,9 @@ def build_dataset(
         # given columns
         df = pd.DataFrame(columns)
 
-        info(f"Dataset built with {len(df)} rows and {len(df.columns)} columns")
+        info(
+            f"Dataset built with {len(df)} rows and {len(df.columns)} columns"
+        )
 
         return df
     except (ValueError, TypeError) as e:

@@ -28,12 +28,10 @@ def calculate_top_k_accuracy(
         float: Top-k accuracy.
 
     Raises:
-        RuntimeError: If an error occurs while computing top-k accuracy, e.g.:
-            * Outputs tensor has incompatible shape.
-            * Top-k value is larger than number of classes.
-            * Number of targets differs from number of predictions.
-            * Targets or outputs are of incompatible type.
-            * Targets list is empty.
+        RuntimeError: If top-k accuracy calculation fails:
+            * Invalid output tensors (TypeError, RuntimeError).
+            * Indexing errors while comparing predictions (IndexError).
+            * Division by zero if no targets are provided (ZeroDivisionError).
     """
     try:
         debug(f"Targets length: {len(targets)}")
@@ -46,7 +44,6 @@ def calculate_top_k_accuracy(
         top_k_predictions = (
             torch.topk(outputs_tensor, k=top_k, dim=1).indices.cpu().numpy()
         )
-
         debug(f"Top-{top_k} predictions shape: {top_k_predictions.shape}")
 
         # Count correct predictions
@@ -61,10 +58,10 @@ def calculate_top_k_accuracy(
             correct_predictions, len(targets)
         )
 
-        info(f"Top-{top_k} accuracy calculated")
+        info(f"Top-{top_k} accuracy calculated: {top_k_accuracy}")
+
+        return top_k_accuracy
     except (RuntimeError, IndexError, TypeError, ZeroDivisionError) as e:
         msg = "Failed to compute top-k accuracy"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    return top_k_accuracy

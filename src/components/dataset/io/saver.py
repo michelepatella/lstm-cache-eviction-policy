@@ -6,7 +6,9 @@ from components.logs.levels.info_logger import info
 from const import DATASET_INDEX
 
 
-def save_dataset(df: pd.DataFrame, path: str, index: bool = DATASET_INDEX) -> None:
+def save_dataset(
+    df: pd.DataFrame, path: str, index: bool = DATASET_INDEX
+) -> None:
     """
     Save Pandas dataframe.
 

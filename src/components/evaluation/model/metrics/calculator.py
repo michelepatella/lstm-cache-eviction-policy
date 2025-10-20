@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import torch
 
@@ -25,12 +25,11 @@ def calculate_model_metrics(
     predictions: List[int],
     outputs: List[torch.Tensor],
     top_k: int,
-) -> Dict[str, int | float]:
+) -> Dict[str, Union[int, float]]:
     """
     Calculate evaluation metrics for a model.
 
-    This function calculates multiple evaluation metrics for
-    a model, including:
+    This function calculates multiple evaluation metrics for a model, including:
         - Class-wise precision, recall, f1-score (class report).
         - Top-k accuracy.
         - Cohen’s kappa score.
@@ -42,16 +41,9 @@ def calculate_model_metrics(
         top_k (int): Top-k to be considered for accuracy calculation.
 
     Returns:
-        Dict[str, int | float]: Dictionary containing class
-                                report with precision,
-                                recall, f1-score, top-k accuracy,
-                                and Cohen's kappa score.
-
-    Raises:
-        RuntimeError: If an error occurs while
-                      computing model metrics, e.g.:
-            * Failed to compute class report due to
-              mismatched lengths or invalid inputs.
+        Dict[str, Union[int, float]]: Dictionary containing class report with precision,
+                                      recall, f1-score, top-k accuracy, and Cohen's kappa
+                                      score.
     """
     debug(f"Targets length: {len(targets)}")
     debug(f"Predictions length: {len(predictions)}")

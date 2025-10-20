@@ -91,7 +91,9 @@ def generate_temporal_pattern(
         # burst as minimum value for the
         # frequency scale to be calculated next
         min_freq_scale = min(burst_high, burst_low)
-        debug(f"Minimum for frequency scale of temporal pattern: {min_freq_scale}")
+        debug(
+            f"Minimum for frequency scale of temporal pattern: {min_freq_scale}"
+        )
 
         # Combine periodic component and bursty
         # scale to get the frequency scale (i.e., mean

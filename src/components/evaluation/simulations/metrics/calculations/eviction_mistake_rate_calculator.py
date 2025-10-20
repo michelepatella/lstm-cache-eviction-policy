@@ -28,10 +28,17 @@ def calculate_eviction_mistake_rate(
 
     Returns:
         float: Eviction mistake rate in percentage.
-    """
-    debug(f"Eviction mistake rate window: {mistake_window}")
 
+    Raises:
+        RuntimeError: If eviction mistake rate calculation fails:
+            * Evicted items or access events are not dictionaries (TypeError).
+            * Eviction times or access times contain invalid values
+              (TypeError, ValueError).
+            * Attributes of inputs are missing (AttributeError).
+    """
     try:
+        debug(f"Eviction mistake rate window: {mistake_window}")
+
         # Initialize counter
         tot_eviction_mistakes = 0
         tot_eviction_events = 0

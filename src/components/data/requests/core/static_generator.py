@@ -31,7 +31,9 @@ def generate_static_requests(
 
     # Use common helper to generate
     # requests based on a fixed alpha value
-    requests, timestamps_hours = generate_requests_helper([alpha_fixed], config)
+    requests, timestamps_hours = generate_requests_helper(
+        [alpha_fixed], config
+    )
 
     info(
         f"{len(requests)} static requests and "

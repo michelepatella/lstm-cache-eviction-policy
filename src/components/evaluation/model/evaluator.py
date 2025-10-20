@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Union, Optional
 
 import torch
 from torch import Tensor
@@ -25,7 +25,11 @@ def evaluate_model(
     model_results_save_path: str = None,
     compute_metrics: bool = MODEL_COMPUTE_METRICS_DEFAULT,
 ) -> Tuple[
-    float, Dict[str, int | float] | None, List[Tensor], List[int], List[Tensor]
+    float,
+    Optional[Dict[str, Union[int, float]]],
+    List[Tensor],
+    List[int],
+    List[Tensor],
 ]:
     """
     Evaluate a model on a given data loader.
@@ -43,25 +47,20 @@ def evaluate_model(
         num_features (int): Number of features for the model.
         top_k (int): Top-k for accuracy computation.
         model_results_save_path (str): Path to save metrics.
-        compute_metrics (bool): Whether to compute evaluation metrics
-                                in addition to loss.
+        compute_metrics (bool): Whether to compute evaluation metrics in addition to loss.
 
     Returns:
         Tuple[
-        float, Dict[str, int | float] | None, List[Tensor], List[int], List[Tensor]
+            float, Optional[Dict[str, Union[int, float]]], List[Tensor],
+            List[int], List[Tensor]
         ]:
             - avg_loss: Float representing the average loss over the data loader.
-            - metrics: Optional dictionary of evaluation metrics (classification report, top-k accuracy, Cohen’s kappa), or None if not computed.
+            - metrics: Optional dictionary of evaluation metrics (classification report,
+                       top-k accuracy, Cohen’s kappa), or None if not computed.
             - all_outputs: List of tensors containing the model outputs per batch.
             - all_targets: List of ground truth labels corresponding to the inputs.
-            - all_variances: List of tensors containing variances from MC dropout (if applicable), otherwise empty.
-
-    Raises:
-        RuntimeError: If an error occurs during the
-                      calculation of average loss, e.g.:
-            * Division by zero if the data loader is empty.
-            * Invalid type or attribute error when
-              accessing the data loader length.
+            - all_variances: List of tensors containing variances from MC dropout
+                             (if applicable), otherwise empty.
     """
     # Perform inference
     (
@@ -74,7 +73,6 @@ def evaluate_model(
 
     # Calculate average loss
     avg_loss = calculate_average([total_loss / len(data_loader)])
-
     debug(f"Average loss: {avg_loss}")
 
     # Compute metrics if requested

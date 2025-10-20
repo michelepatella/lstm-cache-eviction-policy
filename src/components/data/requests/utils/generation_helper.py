@@ -53,9 +53,7 @@ def generate_requests_helper(
             f"Requests generation for keys range: [{min_key},"
             f" {max_key}] (total: {len(keys_range)} keys)"
         )
-        debug(
-            f"Time step duration for data generation: {time_step_duration}"
-        )
+        debug(f"Time step duration for data generation: {time_step_duration}")
 
         # Iterate over alpha values
         # (static: one alpha, dynamic: multiple)

@@ -27,14 +27,17 @@ def extract_features_target_from_dataset_columns(
             * Columns list is empty (IndexError).
     """
     try:
-        debug(f"Dataset columns to extract features and target from: {columns}")
+        debug(
+            f"Dataset columns to extract features and target from: {columns}"
+        )
 
         # Extract features and target
         features = columns[:-1]
         target = columns[-1]
 
-        info(f"Features ({features}) and target ({target}) extracted"
-             f" from dataset columns"
+        info(
+            f"Features ({features}) and target ({target}) extracted"
+            f" from dataset columns"
         )
 
         return features, target
