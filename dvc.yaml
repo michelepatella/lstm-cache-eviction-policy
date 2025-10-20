@@ -441,10 +441,19 @@ stages:
       - src/components/caches/implementations/lru_cache.py
       - src/components/caches/implementations/lstm_cache.py
       - src/components/caches/implementations/random_cache.py
+      - src/components/caches/implementations/items/operations/checker.py
+      - src/components/caches/implementations/items/operations/deleter.py
+      - src/components/caches/implementations/items/operations/inserter.py
+      - src/components/caches/implementations/items/operations/popper.py
+      - src/components/caches/implementations/items/operations/retriever.py
+      - src/components/caches/implementations/items/evictions/lest_frequent_item_evictor.py
+      - src/components/caches/implementations/items/evictions/oldest_item_evictor.py
+      - src/components/caches/implementations/utils/base_cache.py
+      - src/components/caches/implementations/utils/cache_cleaner.py
+      - src/components/caches/implementations/utils/cache_size_calculator.py
       - src/components/caches/simulations/hit_miss/checker_updater.py
       - src/components/caches/simulations/hit_miss/timeline_updater.py
       - src/components/caches/simulations/runner.py
-      - src/components/caches/utils/base_cache.py
       - src/components/caches/utils/cache_metrics_logger.py
       - src/components/caches/utils/cache_wrapper.py
       - src/components/data_loader/builder.py

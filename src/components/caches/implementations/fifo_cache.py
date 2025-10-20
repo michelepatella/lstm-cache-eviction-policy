@@ -3,8 +3,29 @@ from typing import Any, Callable, Optional
 
 from cachetools import Cache
 
+from components.caches.implementations.items.operations.checker import (
+    check_item_into_cache,
+)
+from components.caches.implementations.items.operations.deleter import (
+    delete_item_from_cache,
+)
+from components.caches.implementations.items.operations.inserter import (
+    insert_item_into_cache,
+)
+from components.caches.implementations.items.operations.popper import (
+    pop_item_from_cache,
+)
+from components.caches.implementations.items.operations.retriever import (
+    get_item_from_cache,
+)
+from components.caches.implementations.items.evictions.oldest_item_evictor import (
+    evict_oldest_item,
+)
+from components.caches.implementations.utils.cache_cleaner import clear_cache
+from components.caches.implementations.utils.cache_size_calculator import (
+    calculate_cache_size,
+)
 from components.logs.levels.debug_logger import debug
-from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 
 
@@ -47,38 +68,27 @@ class FIFOCache(Cache):
 
         info(f"FIFO cache initialized (maxsize={self.maxsize})")
 
-    def __getitem__(self: "FIFOCache", key: int) -> Any:
+    def __getitem__(self: "FIFOCache", key: Any) -> Any:
         """
         Retrieve a key item from the FIFO cache.
 
-        This function, given a key, retrieves its
-        item from the FIFO cache.
+        This function, given a key, retrieves its item from the FIFO cache.
 
         Args:
             self ("FIFOCache"): Current class instance.
-            key (int): Key to look up in the cache.
+            key (Any): Key to look up in the cache.
 
         Returns:
             Any: Retrieved key item.
-
-        Raises:
-            RuntimeError: If retrieving the FIFO cache item fails:
-                * The requested key is not found in the FIFO cache (KeyError).
-                * Internal cache data structure is invalid or uninitialized
-                  (AttributeError, TypeError).
         """
-        try:
-            debug(f"Key to retrieve item from FIFO cache for: {key}")
+        debug(f"Key to get item from FIFO cache for: {key}")
 
-            item = self._data[key]
+        # Retrieve item
+        item = get_item_from_cache(self._data, key)
 
-            info(f"FIFO cache item retrieved: {item} (key={key})")
+        debug(f"FIFO cache item get: {item} (key={key})")
 
-            return item
-        except KeyError as e:
-            msg = "Failed to retrieve item from FIFO cache"
-            error("%s: %s", msg, e)
-            raise RuntimeError(msg) from e
+        return item
 
     def _evict_oldest_item(self: "FIFOCache") -> None:
         """
@@ -92,29 +102,13 @@ class FIFOCache(Cache):
 
         Returns:
             None
-
-        Raises:
-            RuntimeError: If eviction of the oldest FIFO cache item fails:
-                * The cache is empty when attempting to evict an item (KeyError).
-                * The internal cache data structure is invalid or uninitialized
-                  (AttributeError, TypeError).
         """
-        try:
-            # Remove the oldest key and its item
-            # from the cache
-            oldest_key, oldest_item = self._data.popitem(last=False)
+        # Evict the oldest item from cache
+        oldest_key, oldest_item = evict_oldest_item(self._data, self.callback)
 
-            info(f"FIFO cache item evicted: {oldest_item} (key={oldest_key})")
+        debug(f"FIFO cache item evicted: {oldest_item} (key={oldest_key})")
 
-            # Callback (if provided)
-            if self.callback:
-                self.callback(oldest_key)
-        except (KeyError, AttributeError, TypeError) as e:
-            msg = "Failed to evict item from FIFO cache"
-            error("%s: %s", msg, e)
-            raise RuntimeError(msg) from e
-
-    def __setitem__(self: "FIFOCache", key: int, item: Any) -> None:
+    def __setitem__(self: "FIFOCache", key: Any, item: Any) -> None:
         """
         Insert or update a key item in the FIFO cache.
 
@@ -124,41 +118,22 @@ class FIFOCache(Cache):
 
         Args:
             self ("FIFOCache"): Current class instance.
-            key (int): Key to store in the cache.
+            key (Any): Key to store in the cache.
             item (Any): Value associated with the key.
 
         Returns:
             None
-
-        Raises:
-            RuntimeError: If inserting the item into the FIFO cache fails:
-                * The key is not hashable or the cache dictionary does not support
-                  assignment (TypeError).
-                * The cache dictionary is not initialized or invalid (AttributeError).
-                * Evicting the oldest item fails due to the cache being empty or
-                  internal errors (RuntimeError).
         """
-        try:
-            debug(f"Key and item to insert into FIFO cache: {key}, {item}")
+        debug(f"Key and item to insert into FIFO cache: {key}, {item}")
 
-            # If the key is not cached but there is
-            # no space enough to cache it
-            if len(self._data) >= self.maxsize and key not in self._data:
-                # Remove the oldest inserted key from
-                # the cache, along with its item
-                self._evict_oldest_item()
+        # Insert item into cache
+        insert_item_into_cache(
+            self._data, key, item, self.maxsize, self._evict_oldest_item
+        )
 
-            # Put the requested key in the cache,
-            # along with its item
-            self._data[key] = item
+        debug(f"FIFO cache item inserted: {item} (key={key})")
 
-            info(f"FIFO cache item inserted: {item} (key={key})")
-        except (TypeError, AttributeError, RuntimeError) as e:
-            msg = "Failed to insert item into FIFO cache"
-            error("%s: %s", msg, e)
-            raise RuntimeError(msg) from e
-
-    def __delitem__(self: "FIFOCache", key: int) -> None:
+    def __delitem__(self: "FIFOCache", key: Any) -> None:
         """
         Delete a key and its item from the FIFO cache.
 
@@ -167,29 +142,19 @@ class FIFOCache(Cache):
 
         Args:
             self ("FIFOCache"): Current class instance.
-            key (int): Key to delete.
+            key (Any): Key to delete.
 
         Returns:
             None
-
-        Raises:
-            RuntimeError: If deleting the key from the FIFO cache fails:
-                * The key does not exist in the cache (KeyError).
-                * The cache dictionary is not initialized or invalid
-                  (AttributeError).
         """
-        try:
-            debug(f"Key to delete from FIFO cache: {key}")
+        debug(f"Key to delete from FIFO cache: {key}")
 
-            del self._data[key]
+        # Delete item from cache
+        delete_item_from_cache(self._data, key)
 
-            info(f"FIFO cache key deleted: {key}")
-        except KeyError as e:
-            msg = "Failed to delete key from FIFO cache"
-            error("%s: %s", msg, e)
-            raise RuntimeError(msg) from e
+        debug(f"FIFO cache key deleted: {key}")
 
-    def __contains__(self: "FIFOCache", key: int) -> bool:
+    def __contains__(self: "FIFOCache", key: Any) -> bool:
         """
         Check if a key exists in the FIFO cache.
 
@@ -202,24 +167,12 @@ class FIFOCache(Cache):
 
         Returns:
             bool: True if key exists in the FIFO cache, False otherwise.
-
-        Raises:
-            RuntimeError: If checking key existence fails:
-                * The cache data structure is uninitialized or invalid
-                  (AttributeError).
-                * The key is not hashable and cannot be used in the cache
-                  (TypeError).
         """
-        try:
-            debug(f"Key existence check into FIFO cache: {key}")
+        debug(f"Key existence check into FIFO cache: {key}")
 
-            return key in self._data
-        except (AttributeError, TypeError) as e:
-            msg = "Failed to check key existence into FIFO cache"
-            error("%s: %s", msg, e)
-            raise RuntimeError(msg) from e
+        return check_item_into_cache(self._data, key)
 
-    def pop(self: "FIFOCache", key: int) -> Optional[Any]:
+    def pop(self: "FIFOCache", key: Any) -> Optional[Any]:
         """
         Remove a key from the FIFO cache and return its item.
 
@@ -229,31 +182,18 @@ class FIFOCache(Cache):
 
         Args:
             self ("FIFOCache"): Current class instance.
-            key (int): Key to remove.
+            key (Any): Key to remove.
 
         Returns:
             Optional[Any]: Item associated with the key removed
                           (None if its key is not found into FIFO cache).
-
-        Raises:
-            RuntimeError: If popping the key from FIFO cache fails:
-                * The cache data structure is uninitialized or invalid
-                  (AttributeError).
-                * The key is not hashable and cannot be used in the cache
-                  (TypeError).
         """
-        try:
-            # Remove key from the cache and get its item
-            # (None if the key is not found)
-            item = self._data.pop(key, None)
+        debug(f"Key to pop from FIFO cache: {key}")
 
-            info(f"FIFO cache item popped: {item} (key={key})")
+        # Remove item from cache
+        item = pop_item_from_cache(self._data, key)
 
-            return item
-        except (AttributeError, TypeError) as e:
-            msg = "Failed to pop item from FIFO cache"
-            error("%s: %s", msg, e)
-            raise RuntimeError(msg) from e
+        debug(f"FIFO cache item popped: {item} (key={key})")
 
     def __len__(self: "FIFOCache") -> int:
         """
@@ -267,25 +207,13 @@ class FIFOCache(Cache):
 
         Returns:
             int: Number of cached items.
-
-        Raises:
-            RuntimeError: If accessing the cache size fails:
-                * The cache data structure is uninitialized or invalid
-                  (AttributeError).
-                * The cache data structure does not support the method
-                  to calculate its length (TypeError).
         """
-        try:
-            # Calculate cache size
-            cache_size = len(self._data)
+        # Calculate cache size
+        cache_size = calculate_cache_size(self._data)
 
-            info(f"FIFO cache size calculated: {cache_size}")
+        debug(f"FIFO cache size calculated: {cache_size}")
 
-            return cache_size
-        except (AttributeError, TypeError) as e:
-            msg = "Failed to get length of FIFO cache"
-            error("%s: %s", msg, e)
-            raise RuntimeError(msg) from e
+        return cache_size
 
     def clear(self: "FIFOCache") -> None:
         """
@@ -299,18 +227,8 @@ class FIFOCache(Cache):
 
         Returns:
             None
-
-        Raises:
-            RuntimeError: If clearing the FIFO cache fails:
-                * The cache data structure is uninitialized or invalid
-                  (AttributeError).
-                * The cache data structure does not support the method
-                  to clear the cache (TypeError).
         """
-        try:
-            self._data.clear()
-            info("FIFO cache cleared")
-        except (AttributeError, TypeError) as e:
-            msg = "Failed to clear FIFO cache"
-            error("%s: %s", msg, e)
-            raise RuntimeError(msg) from e
+        # Clear cache
+        clear_cache(self._data)
+
+        debug("FIFO cache cleared")

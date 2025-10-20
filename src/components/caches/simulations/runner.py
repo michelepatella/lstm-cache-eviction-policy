@@ -31,15 +31,12 @@ def run_cache_simulation(
     config: Config,
 ) -> Tuple[Dict[str, int], List[Dict[str, float]], List[float]]:
     """
-    Run a full cache simulation for a given cache
-    eviction policy.
+    Run a full cache simulation for a given cache eviction policy.
 
-    This function runs a cache simulation over the
-    testing dataset, managing requests one by one
-    according to the provided eviction policy (either
-    LSTM-based or baseline). It collects key metrics
-    such as hit/miss counters, timeline evolution,
-    and cache access latencies.
+    This function runs a cache simulation over the testing dataset, managing
+    requests one by one according to the provided eviction policy (either
+    LSTM-based or baseline). It collects key metrics such as hit/miss counters,
+    timeline evolution, and cache access latencies.
 
     Args:
         cache (Any): Cache object implementing the eviction policy.
@@ -49,42 +46,46 @@ def run_cache_simulation(
     Returns:
         Tuple[Dict[str, int], List[Dict[str, float]], List[float]]:
             - counters: Dictionary containing hit and miss counts.
-            - timeline: List of dictionaries showing the evolution of hits and misses over time.
+            - timeline: List of dictionaries showing the evolution of hits and misses
+                        over time.
             - cache_latencies: List of cache access latencies in microseconds.
 
     Raises:
-        RuntimeError: If an error occurs during the cache simulation, e.g.:
-            * The cache object does not implement required methods.
-            * The input dataset row structure is invalid.
-            * Required dictionary keys are missing.
+    RuntimeError: If simulating the cache policy fails:
+        * Accessing the testing set by index fails due to an invalid
+          index or data structure (IndexError, TypeError).
+        * Unpacking the dataset row fails due to unexpected row format or
+          type (ValueError, TypeError).
+        * Extracting features or target from the dataset row fails due to
+          missing or malformed elements (ValueError, TypeError, AttributeError).
     """
-    # Prepare configuration
-    testing_batch_size = config.testing.general.batch_size
-    testing_shuffle = config.testing.general.shuffle
-
-    # Initialize data
-    counters = {
-        HIT_COUNTER_NAME: 0,
-        MISS_COUNTER_NAME: 0,
-    }
-    timeline = []
-    cache_latencies = []
-
-    # Get testing set
-    testing_set, testing_loader = initialize_data_loader(
-        TESTING_SPLIT_TYPE,
-        testing_batch_size,
-        testing_shuffle,
-        AccessLogsDataset,
-        config,
-    )
-
     try:
+        # Prepare configuration
+        testing_batch_size = config.testing.general.batch_size
+        testing_shuffle = config.testing.general.shuffle
+
+        # Initialize data
+        counters = {
+            HIT_COUNTER_NAME: 0,
+            MISS_COUNTER_NAME: 0,
+        }
+        timeline = []
+        cache_latencies = []
+
+        # Get testing set
+        testing_set, testing_loader = initialize_data_loader(
+            TESTING_SPLIT_TYPE,
+            testing_batch_size,
+            testing_shuffle,
+            AccessLogsDataset,
+            config,
+        )
+
         # Iterate over testing set, assuming each
         # row represents a request to be satisfied
         for idx in tqdm(
             range(len(testing_set)),
-            desc=f"Simulating {policy}",
+            desc=f"{policy}",
         ):
             # Extract the current row from the dataset
             row = testing_set[idx]
@@ -125,9 +126,9 @@ def run_cache_simulation(
 
             # Update number of hits and misses
             timeline = update_hit_miss_timeline(idx, counters, timeline)
-    except (TypeError, KeyError, AttributeError) as e:
-        msg = "Simulations failed"
+
+        return counters, timeline, cache_latencies
+    except (TypeError, IndexError, ValueError, AttributeError) as e:
+        msg = "Failed to simulate cache policy"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    return counters, timeline, cache_latencies

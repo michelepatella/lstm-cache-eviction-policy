@@ -1,15 +1,20 @@
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
+from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from const import HIT_COUNTER_NAME, MISS_COUNTER_NAME
 
 
 def check_update_hit_miss(
-    cache: Any, key: int, current_time: float, counters: Dict[str, int]
+    cache: Any,
+    key: Any,
+    current_time: float,
+    counters: Dict[str, int],
+    hit_counter_name: Optional[str] = HIT_COUNTER_NAME,
+    miss_counter_name: Optional[str] = MISS_COUNTER_NAME,
 ) -> bool:
     """
-    Check key presence in the cache
-    and update hit and miss counters.
+    Check key presence in the cache and update hit and miss counters.
 
     This function checks whether a given key exists in the cache
     and is still valid based on its expiration time. It updates
@@ -17,26 +22,39 @@ def check_update_hit_miss(
 
     Args:
         cache (Any): Cache object implementing a contains method.
-        key (int): Key to look up in the cache.
+        key (Any): Key to look up in the cache.
         current_time (float): Current timestamp for validation.
-        counters (Dict[str, int]): Dictionary containing cache
-                                   hit/miss counters.
+        counters (Dict[str, int]): Dictionary containing cache hit/miss counters.
+        hit_counter_name (Optional[str]): Name of cache hit counter.
+        miss_counter_name (Optional[str]): Name of cache miss counter.
 
     Returns:
         bool: True if the key is found in the cache, False otherwise.
+
+    Raises:
+        RuntimeError: If checking and updating hit and miss counters fails:
+            * The cache object is invalid or lacks required methods
+              (AttributeError, TypeError).
+            * The counters dictionary is invalid or missing keys
+              (AttributeError, KeyError).
     """
-    # Check whether the cache contains the key
-    if cache.contains(key, current_time):
-        # Increase hit counter by one
-        counters[HIT_COUNTER_NAME] += 1
+    try:
+        # Check whether the cache contains the key
+        if cache.contains(key, current_time):
+            # Increase hit counter by one
+            counters[hit_counter_name] += 1
 
-        info(f"Cache HIT — Key: {key}, Time: {current_time}")
+            info(f"Cache HIT — Key: {key}, Time: {current_time}")
 
-        return True
+            return True
 
-    # Increase miss counter by one
-    counters[MISS_COUNTER_NAME] += 1
+        # Increase miss counter by one
+        counters[miss_counter_name] += 1
 
-    info(f"Cache MISS — Key: {key}, Time: {current_time}")
+        info(f"Cache MISS — Key: {key}, Time: {current_time}")
 
-    return False
+        return False
+    except (AttributeError, TypeError, KeyError) as e:
+        msg = "Failed to check and update cache hit and miss counters"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e
