@@ -11,8 +11,8 @@ def reorder_dataset_columns(
     """
     Reorder the dataset columns.
 
-    This function reorders the DataFrame columns so
-    that the provided target column is the last one.
+    This function reorders the DataFrame columns so that the
+    provided target column is the last one.
 
     Args:
         df (pd.DataFrame): Dataset to update.
@@ -21,10 +21,9 @@ def reorder_dataset_columns(
     Returns:
         pd.DataFrame: DataFrame with target column as last column.
 
-    Raises:
-        RuntimeError: If an error occurs while reordering the dataset
-                      e.g.:
-                        * The target column does not exist.
+     Raises:
+        RuntimeError: If reordering columns fails:
+            * Target column does not exist in the dataset (KeyError).
     """
     try:
         # Consider all the columns different

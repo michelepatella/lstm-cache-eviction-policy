@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 from torch.utils.data import DataLoader
 
@@ -24,28 +24,30 @@ def extract_last_rows_from_dataset(
     seq_len: int,
     df: DataLoader,
     time_conversion_factor: float = SECONDS_IN_HOUR,
-) -> List[Tuple[float, int]] | None:
+) -> Optional[List[Tuple[float, int]]]:
     """
     Extract the last rows from a dataset.
 
-    This function extracts the last rows from a dataset,
-    returning them as a list of tuples (hour, key).
+    This function extracts the last rows from a dataset, returning
+    them as a list of tuples (hour, key).
 
     Args:
         current_idx (int): Current dataset index.
         seq_len (int): Sequence length to extract.
         df (DataLoader): Dataset to extract rows from.
-        time_conversion_factor (float): Factor to convert extracted
-                                        seconds to desired unit.
+        time_conversion_factor (float): Factor to convert extracted seconds to
+                                        desired unit.
 
     Returns:
-        List[Tuple[float, int]]: Each tuple is (hour, key), None if no
-                                 enough data is available.
+        Optional[List[Tuple[float, int]]]: Each tuple is (hour, key), None if no
+                                           enough data is available.
 
     Raises:
-        RuntimeError: If an error occurs while extracting last rows
-                      from dataset, e.g.:
-            * Missing dataset attributes.
+        RuntimeError: If last rows extraction from dataset fails:
+            * Invalid arguments or data types (AttributeError, TypeError, ValueError)
+            * DataLoader does not contain attribute data (AttributeError)
+            * Dataset rows cannot be iterated (TypeError)
+            * Row tuples cannot be decoded from features (ValueError)
     """
     try:
         debug(
@@ -82,9 +84,7 @@ def extract_last_rows_from_dataset(
                 (current_time / time_conversion_factor, y_key.item())
             )
 
-        debug(f"Extracted last rows from dataset: {last_rows}")
-
-        info("Last rows extracted from dataset")
+        info(f"Last rows extracted from dataset: {last_rows}")
 
         return last_rows
     except AttributeError as e:

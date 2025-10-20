@@ -195,15 +195,15 @@ class AccessLogsDataset(Dataset):
                and a tensor for the next key.
 
         Raises:
-            RuntimeError: If an error occurs while
-                          retrieving a dataset item, e.g.:
-                * The requested index goes out of bounds.
-                * Feature or target columns are missing.
+            RuntimeError: If an error occurs while retrieving a dataset item:
+                * Requested index goes out of bounds (IndexError).
+                * Feature or target columns are missing (KeyError).
                 * Conversion to int/float fails (TypeError, ValueError).
+                * Not enough data to extract sequence (custom RuntimeError).
         """
-        debug(f"Index of item to be retrieved: {idx}")
-
         try:
+            debug(f"Index of item to be retrieved: {idx}")
+
             # Extract data sequence
             seq_data = extract_sliding_window_dataset_rows(
                 self.data, idx + self.seq_len - 1, self.seq_len
@@ -265,19 +265,20 @@ class AccessLogsDataset(Dataset):
         Returns:
             AccessLogsDataset: Initialized dataset instance.
 
-        Raises:
-            RuntimeError: If an error occurs while
-                          instantiating from dataframe, e.g.:
-                * The dataframe does not have expected attributes
-                * The provided object is not a Pandas DataFrame
-                * The dataframe does not contain any columns
-        """
-        debug(
-            f"Dataframe shape to be instantiated"
-            f" as AccessLogsDataset: {df.shape}"
-        )
 
+        Raises:
+            RuntimeError: If instantiation from dataframe fails, e.g.:
+                * Dataframe is invalid or missing expected attributes
+                  (AttributeError).
+                * Configuration object is invalid (TypeError).
+                * Sequence length or column indices are incorrect (IndexError).
+        """
         try:
+            debug(
+                f"Dataframe shape to be instantiated"
+                f" as AccessLogsDataset: {df.shape}"
+            )
+
             # Create a new dataset instance
             instance = cls.__new__(cls)
 
@@ -286,11 +287,11 @@ class AccessLogsDataset(Dataset):
 
             # Set dataset fields
             instance._set_fields(df, config)
+
+            info("AccessLogsDataset instantiated from dataframe")
+
+            return instance
         except (AttributeError, TypeError, IndexError) as e:
             msg = "Failed to instantiate AccessLogsDataset from dataframe"
             error("%s: %s", msg, e)
             raise RuntimeError(msg) from e
-
-        info("AccessLogsDataset instantiated from dataframe")
-
-        return instance

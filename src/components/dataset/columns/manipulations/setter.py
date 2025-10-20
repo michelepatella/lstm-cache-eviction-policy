@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 
+from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 
 
@@ -10,9 +11,8 @@ def set_dataset_column(
     """
     Set a column to the dataset.
 
-    This function, given a dataframe and a column
-    name along with its values, set it to the
-    provided dataset.
+    This function, given a dataframe and a column name along with
+    its values, set it to the provided dataset.
 
     Args:
         df (pd.DataFrame): Dataset to update.
@@ -21,10 +21,20 @@ def set_dataset_column(
 
     Returns:
         pd.DataFrame: DataFrame with the column set.
+
+    Raises:
+        RuntimeError: If setting the column fails:
+            * Column values length mismatch with dataset (ValueError).
+            * Invalid dataframe or column values type (TypeError, AttributeError).
     """
-    # Set column to dataset
-    df[column_name] = column_values
+    try:
+        # Set column to dataset
+        df[column_name] = column_values
 
-    info(f"Column set to dataset: '{column_name}'")
+        info(f"Column set to dataset: '{column_name}'")
 
-    return df
+        return df
+    except (ValueError, TypeError, AttributeError) as e:
+        msg = f"Failed to set column '{column_name}' in dataset"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e

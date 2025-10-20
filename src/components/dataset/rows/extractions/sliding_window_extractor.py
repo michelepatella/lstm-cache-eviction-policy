@@ -1,3 +1,5 @@
+from typing import Optional
+
 import pandas as pd
 
 from components.logs.levels.debug_logger import debug
@@ -7,7 +9,7 @@ from components.logs.levels.info_logger import info
 
 def extract_sliding_window_dataset_rows(
     df: pd.DataFrame, idx: int, window_size: int
-) -> pd.DataFrame | None:
+) -> Optional[pd.DataFrame]:
     """
     Extract a sliding window of rows from a dataset.
 
@@ -20,14 +22,11 @@ def extract_sliding_window_dataset_rows(
         window_size (int): Number of rows to extract.
 
     Returns:
-        pd.DataFrame | None: The extracted window, or None if not enough rows.
+        Optional[pd.DataFrame]: The extracted window, or None if not enough rows.
 
     Raises:
-        RuntimeError: If the extraction fails due to invalid input
-                      types or values, e.g.:
-            * Provided dataset is not a pandas DataFrame.
-            * Index or window size are not integers.
-            * Window size is negative or zero.
+        RuntimeError: If sliding window extraction from dataset fails:
+            * Invalid arguments or data types (TypeError, ValueError).
     """
     try:
         # Determine the boundaries of the

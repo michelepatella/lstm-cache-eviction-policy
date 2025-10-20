@@ -25,26 +25,25 @@ def build_dataset(
         pd.DataFrame: Pandas dataframe built from the given columns.
 
     Raises:
-        RuntimeError: If an error occurs while creating the dataset, e.g.:
-            * The columns have not the same length.
-            * The columns have a format that cannot be
-              converted to create a Pandas DataFrame.
+        RuntimeError: If dataset building fails:
+            * Invalid column data type (TypeError).
+            * Mismatched lengths of column values (ValueError).
     """
-    debug(f"Columns number of dataset to be built: {len(columns)}")
-    debug(
-        f"Amount of data for dataframe to be"
-        f" built: {sum(len(v) for v in columns.values())}"
-    )
-
     try:
+        debug(f"Columns number of dataset to be built: {len(columns)}")
+        debug(
+            f"Amount of data for dataframe to be"
+            f" built: {sum(len(v) for v in columns.values())}"
+        )
+
         # Create dataframe for the
         # given columns
         df = pd.DataFrame(columns)
+
+        info(f"Dataset built with {len(df)} rows and {len(df.columns)} columns")
+
+        return df
     except (ValueError, TypeError) as e:
         msg = "Failed to create dataset"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info(f"Dataset built with {len(df)} rows and {len(df.columns)} columns")
-
-    return df

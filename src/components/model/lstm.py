@@ -35,7 +35,7 @@ class LSTM(torch.nn.Module):
         self: "LSTM",
         params: Union[ModelParamsConfig, Dict[str, Union[int, float, bool]]],
         config: Optional[Config],
-        param_names: Optional[List[str]] = LSTM_PARAM_NAMES,
+        param_names: List[str] = LSTM_PARAM_NAMES,
     ) -> None:
         """
         Set model parameters.
@@ -48,7 +48,7 @@ class LSTM(torch.nn.Module):
             params (Union[ModelParamsConfig, Dict[str, Union[int, float, bool]]]):
                 Model parameters to be set.
             config (Optional[Config]): Configuration object.
-            param_names (Optional[List[str]]): List of parameter names to set.
+            param_names (List[str]): List of parameter names to set.
 
         Raises:
             RuntimeError: If setting model parameters fails:

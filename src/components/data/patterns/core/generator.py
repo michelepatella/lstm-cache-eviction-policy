@@ -1,4 +1,4 @@
-from typing import List, Tuple, Optional
+from typing import List, Tuple
 
 import numpy as np
 
@@ -20,12 +20,10 @@ def generate_pattern_requests(
     keys_range: np.ndarray,
     zipf_probs: np.ndarray,
     config: Config,
-    time_step_duration: Optional[int] = None,
-    initial_timestamp: Optional[float] = DATA_GENERATION_INITIAL_TIMESTAMP,
-    initial_current_day: Optional[int] = DATA_GENERATION_INITIAL_CURRENT_DAY,
-    initial_current_seconds_in_day: Optional[
-        int
-    ] = DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY,
+    time_step_duration: int = None,
+    initial_timestamp: float = DATA_GENERATION_INITIAL_TIMESTAMP,
+    initial_current_day: int = DATA_GENERATION_INITIAL_CURRENT_DAY,
+    initial_current_seconds_in_day: int = DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY,
 ) -> Tuple[List[int], List[float]]:
     """
     Generate requests according to specific access and temporal patterns.
@@ -39,11 +37,11 @@ def generate_pattern_requests(
         keys_range (np.ndarray): List of keys to generate requests for.
         zipf_probs (np.ndarray): List of Zipfian probabilities of the given keys.
         config (Config): Configuration object.
-        time_step_duration (Optional[int]): Time step to generate requests for.
-        initial_timestamp (Optional[float]): Initial timestamp in seconds.
-        initial_current_day (Optional[int]): Initial current day.
-        initial_current_seconds_in_day (Optional[int]): Initial seconds elapsed in
-                                                        the current day.
+        time_step_duration (int): Time step to generate requests for.
+        initial_timestamp (float): Initial timestamp in seconds.
+        initial_current_day (int): Initial current day.
+        initial_current_seconds_in_day (int): Initial seconds elapsed in
+                                              the current day.
 
     Returns:
         Tuple[List[int], List[float]]:

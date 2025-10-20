@@ -83,6 +83,8 @@ DATA_DISTRIBUTION_MODES = [
 # ----------------------------
 # Dataset
 # ----------------------------
+DATASET_INDEX = False
+
 TIMESTAMP_COLUMN_NAME = "timestamp"
 REQUEST_COLUMN_NAME = "request"
 SIN_TIME_COLUMN_NAME = "sin_time"

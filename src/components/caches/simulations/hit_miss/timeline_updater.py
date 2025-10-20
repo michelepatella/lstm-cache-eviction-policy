@@ -15,12 +15,10 @@ def update_hit_miss_timeline(
     idx: int,
     counters: Dict[str, int],
     timeline: List[Dict[str, int]],
-    timeline_index_name: Optional[str] = TIMELINE_INDEX_NAME,
-    timeline_instant_hit_rate_name: Optional[
-        str
-    ] = TIMELINE_INSTANT_HIT_RATE_NAME,
-    hit_counter_name: Optional[str] = HIT_COUNTER_NAME,
-    miss_counter_name: Optional[str] = MISS_COUNTER_NAME,
+    timeline_index_name: str = TIMELINE_INDEX_NAME,
+    timeline_instant_hit_rate_name: str = TIMELINE_INSTANT_HIT_RATE_NAME,
+    hit_counter_name: str = HIT_COUNTER_NAME,
+    miss_counter_name: str = MISS_COUNTER_NAME,
 ) -> List[Dict[str, int]]:
     """
     Update the timeline with the current hit and miss counts.
@@ -36,14 +34,13 @@ def update_hit_miss_timeline(
         idx (int): Current request index.
         timeline (List[Dict[str, int]]): List storing the timeline of hit
                                          and miss statistics.
-        timeline_index_name (Optional[str]): Key name for storing the request
-                                             index in the timeline entry.
-        timeline_instant_hit_rate_name (Optional[str]): Key name for storing
-                                                        the instant hit rate.
-        hit_counter_name (Optional[str]): Key name of the hit counter in the
-                                          counters' dictionary.
-        miss_counter_name (Optional[str]): Key name of the miss counter in the
-                                           counters' dictionary.
+        timeline_index_name (str): Key name for storing the request index in the
+                                   timeline entry.
+        timeline_instant_hit_rate_name (str): Key name for storing the instant hit rate.
+        hit_counter_name (str): Key name of the hit counter in the counters'
+                                dictionary.
+        miss_counter_name (str): Key name of the miss counter in the counters'
+                                 dictionary.
 
     Returns:
         List[Dict[str, int]]: Updated timeline including the latest hit and miss

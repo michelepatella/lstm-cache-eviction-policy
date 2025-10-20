@@ -21,8 +21,8 @@ def get_dataset_abs_path(
     """
     Retrieve the dataset absolute path.
 
-    This function retrieves the dataset absolute path
-    dynamically, based on data distribution mode.
+    This function retrieves the dataset absolute path dynamically,
+    based on data distribution mode.
 
     Args:
         dataset_type (str): Type of dataset requested (raw or preprocessed).
@@ -34,6 +34,10 @@ def get_dataset_abs_path(
     Raises:
         RuntimeError: If configuration object has
                       unexpected structure.
+
+    Raises:
+        RuntimeError: If retrieving the dataset path fails:
+            * Misconfigured directory or wrong filename constants (AttributeError).
     """
     try:
         debug(

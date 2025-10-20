@@ -24,11 +24,9 @@ def compute_mc_dropout_forward(
     ],
     device: torch.device,
     num_features: int,
-    num_mc_dropout_samples: Optional[int] = MC_DROPOUT_NUM_SAMPLES_DEFAULT,
-    mc_dropout_flag: Optional[str] = MC_DROPOUT_FLAG,
-    mc_dropout_unbiased_variance: Optional[
-        bool
-    ] = MC_DROPOUT_UNBIASED_VARIANCE,
+    num_mc_dropout_samples: int = MC_DROPOUT_NUM_SAMPLES_DEFAULT,
+    mc_dropout_flag: str = MC_DROPOUT_FLAG,
+    mc_dropout_unbiased_variance = MC_DROPOUT_UNBIASED_VARIANCE,
 ) -> Tuple[torch.Tensor, Optional[torch.Tensor]]:
     """
     Perform forward pass with optional Monte Carlo (MC) Dropout.
@@ -47,11 +45,10 @@ def compute_mc_dropout_forward(
             ready for model.
         device (torch.device): Device on which to run the forward passes.
         num_features (int): Number of features to use.
-        num_mc_dropout_samples (Optional[int]): Number of MC Dropout samples
-                                                to perform.
-        mc_dropout_flag (Optional[str]): Flag to enable MC Dropout on the model.
-        mc_dropout_unbiased_variance (Optional[bool]): Whether to compute MC Dropout
-                                                       variance using unbiased estimator.
+        num_mc_dropout_samples (int): Number of MC Dropout samples to perform.
+        mc_dropout_flag (str): Flag to enable MC Dropout on the model.
+        mc_dropout_unbiased_variance (bool): Whether to compute MC Dropout
+                                             variance using unbiased estimator.
 
     Returns:
         Tuple[torch.Tensor, Optional[torch.Tensor]]:

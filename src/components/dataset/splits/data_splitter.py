@@ -13,23 +13,22 @@ def split_dataset_data(
     """
     Split data at a given index.
 
-    This function splits provided data based on
-    the received index, taking the first or the second
-    part of the data as specified.
+    This function splits provided data based on the received index,
+    taking the first or the second part of the data as specified.
 
     Args:
         df (pd.DataFrame): Data to split.
         split_idx (int): Index at which to split.
-        take_first (bool): If True, take the first part of data.
-                           If False, take the second part of data.
+        take_first (bool): If True, take the first part of data. If False,
+                           take the second part of data.
 
     Returns:
         Any: Split data.
 
     Raises:
-        RuntimeError: If an error occurs while splitting dataset data e.g.:
-            * Data does not support slicing or length calculations.
-            * Split index is out of bounds.
+        RuntimeError: If dataset splitting fails:
+            * Invalid index type or value (TypeError, IndexError)
+            * Provided object is not a DataFrame (AttributeError)
     """
     debug(f"Split index to split dataset data: {split_idx}")
     debug(f"Take first for splitting dataset data: {take_first}")

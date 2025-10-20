@@ -20,18 +20,17 @@ def load_dataset(path: str) -> pd.DataFrame:
         pd.DataFrame: Dataset loaded.
 
     Raises:
-        RuntimeError: If an error occurs while loading the dataset, e.g.:
-            * Generic I/O error.
-            * The dataset file is empty.
-            * An error occurred while parsing the dataset file.
+        RuntimeError: If an error occurs while loading the dataset:
+            * Generic I/O errors (OSError).
+            * The dataset file is empty (pd.errors.EmptyDataError).
+            * Parsing errors while reading the dataset (pd.errors.ParserError).
     """
-    debug(f"Path to load dataset from: {path}")
-
     try:
+        debug(f"Path to load dataset from: {path}")
+
         # Load dataset from
         # retrieved path
         df = pd.read_csv(path)
-
         debug(f"Shape of dataset loaded: {df.shape}")
 
         info(f"Dataset loaded from: {path}")

@@ -7,7 +7,7 @@ from components.logs.levels.info_logger import info
 
 def flatten_dict(
     nested_dict: Dict[str, Any],
-    parent_key: Optional[Tuple[str, ...]] = (),
+    parent_key: Tuple[str, ...] = (),
 ) -> List[Tuple[Tuple[str, ...], Any]]:
     """
     Recursively flatten a nested dictionary.
@@ -18,8 +18,8 @@ def flatten_dict(
 
     Args:
         nested_dict (Dict[str, Any]): Dictionary to flatten.
-        parent_key (Optional[Tuple[str, ...]]): Accumulated key path from previous
-                                                recursion levels.
+        parent_key (Tuple[str, ...]): Accumulated key path from previous
+                                      recursion levels.
 
     Returns:
         List[Tuple[Tuple[str, ...], Any]]: List of tuples containing the

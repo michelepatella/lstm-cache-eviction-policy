@@ -12,21 +12,20 @@ def remove_dataset_duplicates(
     """
     Remove duplicates from dataset.
 
-    This function removes rows with duplicated values
-    from a given subset of dataset column(s),
-    returning a new clean dataset.
+    This function removes rows with duplicated values from a given
+    subset of dataset column(s), returning a new clean dataset.
 
     Args:
         df (pd.DataFrame): Dataset to remove duplicates from.
-        subset (List[str]): Column(s) of dataset to remove
-                            duplicates from.
+        subset (List[str]): Column(s) of dataset to remove duplicates from.
 
     Returns:
         pd.DataFrame: Dataset without duplicated values.
 
-    Raises:
-        RuntimeError: If dataframe to be cleaned is
-                      not a pd.DataFrame.
+     Raises:
+        RuntimeError: If removing duplicates fails:
+            * Dataset object is not a valid DataFrame (AttributeError).
+            * Specified subset columns are invalid (KeyError, TypeError).
     """
     try:
         # Remove duplicates from dataset
@@ -35,7 +34,7 @@ def remove_dataset_duplicates(
         info("Dataset duplicates removal completed")
 
         return new_df
-    except AttributeError as e:
+    except (AttributeError, KeyError, TypeError) as e:
         msg = "Failed to remove duplicates from dataset"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e

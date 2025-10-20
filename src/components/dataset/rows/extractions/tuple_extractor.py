@@ -36,14 +36,17 @@ def extract_tuple_from_dataset_row(
 
     Returns:
         Tuple[torch.Tensor, torch.Tensor]:
-            - features: Tensor containing the extracted feature value(s) from the dataset row.
-            - target: Tensor containing the extracted target value from the dataset row.
+            - features: Tensor containing the extracted feature value(s) from
+                        the dataset row.
+            - target: Tensor containing the extracted target value from the
+                      dataset row.
 
     Raises:
-        RuntimeError: If an error occurs while extracting a tuple from
-                      the dataset row, e.g.:
-            * Missing or invalid column names.
-            * Incompatible data types for tensor conversion.
+        RuntimeError: If tuple extraction from dataset row fails:
+            * Feature columns missing (KeyError).
+            * Target column missing (KeyError).
+            * Invalid data types (TypeError).
+            * Invalid values (ValueError).
     """
     try:
         # Extract feature tensor(s)

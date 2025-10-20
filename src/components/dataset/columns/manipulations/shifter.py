@@ -1,3 +1,5 @@
+from typing import Union
+
 import pandas as pd
 
 from components.logs.levels.debug_logger import debug
@@ -6,36 +8,37 @@ from components.logs.levels.info_logger import info
 
 
 def shift_dataset_column(
-    df: pd.DataFrame, column_name: str, shift: int | float
+    df: pd.DataFrame, column_name: str, shift: Union[int, float]
 ) -> None:
     """
     Shift the values of a dataset column.
 
-    This function applies the given shift and updates
-    the dataset in-place.
+    This function applies the given shift and updates the
+    dataset in-place.
 
     Args:
         df (pd.DataFrame): Dataset containing the column to shift.
         column_name (str): Name of the column to shift.
-        shift (int | float): Value to add/subtract from column values.
+        shift (Union[int, float]): Value to add/subtract from column values.
 
     Returns:
         None
 
     Raises:
-        RuntimeError: If an error occurs while shifting the dataset column, e.g.:
-            * Dataset column does not exist.
-            * Dataset is not valid.
+        RuntimeError: If shifting the column fails:
+            * Column not found in dataset (KeyError).
+            * Dataset or column values not suitable for arithmetic
+              (TypeError, AttributeError).
     """
-    debug(f"Dataset column to shift: {column_name}")
-    debug(f"Shift to apply to dataset column: {shift}")
-
     try:
+        debug(f"Dataset column to shift: {column_name}")
+        debug(f"Shift to apply to dataset column: {shift}")
+
         # Cast to int and apply shift to column
         df[column_name] = df[column_name] + shift
+
+        info("Dataset column shifted")
     except (TypeError, AttributeError, KeyError) as e:
         msg = "Failed to shift dataset column"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info("Dataset column shifted")

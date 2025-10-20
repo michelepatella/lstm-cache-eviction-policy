@@ -1,5 +1,4 @@
 import math
-from typing import Optional
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -10,8 +9,8 @@ from const import HOURS_IN_DAY, SECONDS_IN_HOUR
 def decode_time_trigonometrically(
     sin_time: float,
     cos_time: float,
-    cycle_length: Optional[float] = HOURS_IN_DAY,
-    cycle_unit_scale: Optional[float] = SECONDS_IN_HOUR,
+    cycle_length: float = HOURS_IN_DAY,
+    cycle_unit_scale: float = SECONDS_IN_HOUR,
 ) -> float:
     """
     Decode time from its trigonometric encoding.
@@ -23,8 +22,8 @@ def decode_time_trigonometrically(
     Args:
         sin_time (float): Sine component of encoded time.
         cos_time (float): Cosine component of encoded time.
-        cycle_length (Optional[float]): Length of one full cycle.
-        cycle_unit_scale (Optional[float]): Scaling factor for the output unit.
+        cycle_length (float): Length of one full cycle.
+        cycle_unit_scale (float): Scaling factor for the output unit.
 
     Returns:
         float: Decoded time in specified unit within the given cycle.

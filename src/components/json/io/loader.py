@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Union
 
 from box import Box
 
@@ -10,7 +10,7 @@ from const import JSON_WRAP_BOX_DEFAULT
 
 
 def load_json(
-    path: str, wrap: Optional[bool] = JSON_WRAP_BOX_DEFAULT
+    path: str, wrap: bool = JSON_WRAP_BOX_DEFAULT
 ) -> Union[Dict[Any, Any], Box]:
     """
     Load a JSON file.
@@ -21,7 +21,7 @@ def load_json(
 
     Args:
         path (str): Path to load JSON file from.
-        wrap (Optional[bool]): Whether to wrap the output in Box.
+        wrap (bool): Whether to wrap the output in Box.
 
     Returns:
         Union[Dict[Any, Any], Box]: Loaded JSON data, optionally wrapped in Box.

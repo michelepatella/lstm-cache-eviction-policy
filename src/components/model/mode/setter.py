@@ -1,5 +1,3 @@
-from typing import Optional
-
 import torch
 
 from components.logs.levels.debug_logger import debug
@@ -15,8 +13,8 @@ from const import (
 def set_model_mode(
     model: torch.nn.Module,
     mode: str,
-    mc_dropout_flag_name: Optional[str] = None,
-    mc_dropout_flag_value: Optional[bool] = MC_DROPOUT_ENABLED,
+    mc_dropout_flag_name: str = None,
+    mc_dropout_flag_value: bool = MC_DROPOUT_ENABLED,
 ) -> None:
     """
     Set the mode of a PyTorch model.
@@ -27,11 +25,11 @@ def set_model_mode(
     Args:
         model (torch.nn.Module): PyTorch model for which mode is to set.
         mode (str): Desired mode.
-        mc_dropout_flag_name (Optional[str]): Attribute to set as flag on the model
-                                              (only if requested mode is MC Dropout).
-        mc_dropout_flag_value (Optional[bool]): Value corresponding to the attribute
-                                                to set as flag on the model (only if
-                                                requested mode is MC Dropout).
+        mc_dropout_flag_name (str): Attribute to set as flag on the model
+                                    (only if requested mode is MC Dropout).
+        mc_dropout_flag_value (bool): Value corresponding to the attribute
+                                      to set as flag on the model (only if
+                                      requested mode is MC Dropout).
 
     Returns:
         None

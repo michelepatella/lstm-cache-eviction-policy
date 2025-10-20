@@ -9,8 +9,8 @@ def drop_dataset_column(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
     """
     Drop a column from the dataset.
 
-    This function, given a DataFrame and a column name,
-    removes the column from the dataset.
+    This function, given a DataFrame and a column name, removes the
+    column from the dataset.
 
     Args:
         df (pd.DataFrame): Dataset to update.
@@ -20,8 +20,8 @@ def drop_dataset_column(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
         pd.DataFrame: DataFrame with the column removed.
 
     Raises:
-        RuntimeError: If the column cannot be dropped e.g.:
-            * The column to be dropped does not exist.
+        RuntimeError: If dropping the column fails:
+            * Column does not exist in the dataset (KeyError).
     """
     try:
         debug(f"Column to be dropped from dataset: '{column_name}'")

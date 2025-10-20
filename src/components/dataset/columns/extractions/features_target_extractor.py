@@ -23,25 +23,22 @@ def extract_features_target_from_dataset_columns(
         Tuple[List[str], str]: List of features and target extracted.
 
     Raises:
-        RuntimeError: If an error occurs while extracting features and target
-                      from dataset columns e.g.:
-                        * If column list is empty.
+        RuntimeError: If extracting features or target fails:
+            * Columns list is empty (IndexError).
     """
-    debug(f"Dataset columns to extract features and target from: {columns}")
-
     try:
+        debug(f"Dataset columns to extract features and target from: {columns}")
+
         # Extract features and target
         features = columns[:-1]
         target = columns[-1]
 
-        debug(
-            f"Features: {features}, target: {target}, extracted from dataset columns"
+        info(f"Features ({features}) and target ({target}) extracted"
+             f" from dataset columns"
         )
+
+        return features, target
     except IndexError as e:
         msg = "Failed to extract features and target from dataset columns"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-
-    info(f"Features and target extracted from dataset columns")
-
-    return features, target

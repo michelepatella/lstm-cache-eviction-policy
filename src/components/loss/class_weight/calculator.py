@@ -13,7 +13,7 @@ from const import CLASS_WEIGHT_TYPE
 def calculate_class_weight(
     targets: torch.Tensor,
     num_classes: int,
-    weight_type: Optional[str] = CLASS_WEIGHT_TYPE,
+    weight_type: str = CLASS_WEIGHT_TYPE,
 ) -> np.ndarray:
     """
     Compute balanced class weight for targets.
@@ -25,7 +25,7 @@ def calculate_class_weight(
     Args:
         targets (torch.Tensor): Target labels.
         num_classes (int): Number of classes.
-        weight_type (Optional[str]): The weight type to apply.
+        weight_type (str): The weight type to apply.
 
     Returns:
         np.ndarray: Array of class weight.

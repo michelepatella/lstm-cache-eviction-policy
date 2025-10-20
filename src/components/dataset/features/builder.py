@@ -38,9 +38,9 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
                       and target column reordered as the last column.
 
     Raises:
-        RuntimeError: If an error occurs while building features, e.g.:
-            * If the time or target column does not exist in the dataset.
-            * If the dataframe or columns are not of the expected type.
+        RuntimeError: If building features fails:
+            * Time column not found (KeyError).
+            * Dataset or column values not suitable for processing (TypeError).
     """
     try:
         # Retrieve time column and convert it to

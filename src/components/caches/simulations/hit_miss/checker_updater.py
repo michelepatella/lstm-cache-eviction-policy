@@ -10,8 +10,8 @@ def check_update_hit_miss(
     key: Any,
     current_time: float,
     counters: Dict[str, int],
-    hit_counter_name: Optional[str] = HIT_COUNTER_NAME,
-    miss_counter_name: Optional[str] = MISS_COUNTER_NAME,
+    hit_counter_name: str = HIT_COUNTER_NAME,
+    miss_counter_name: str = MISS_COUNTER_NAME,
 ) -> bool:
     """
     Check key presence in the cache and update hit and miss counters.
@@ -25,8 +25,8 @@ def check_update_hit_miss(
         key (Any): Key to look up in the cache.
         current_time (float): Current timestamp for validation.
         counters (Dict[str, int]): Dictionary containing cache hit/miss counters.
-        hit_counter_name (Optional[str]): Name of cache hit counter.
-        miss_counter_name (Optional[str]): Name of cache miss counter.
+        hit_counter_name (str): Name of cache hit counter.
+        miss_counter_name (str): Name of cache miss counter.
 
     Returns:
         bool: True if the key is found in the cache, False otherwise.

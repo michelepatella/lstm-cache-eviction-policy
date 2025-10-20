@@ -20,10 +20,9 @@ def calculate_effective_dataset_rows(df: pd.DataFrame, seq_len: int) -> int:
         int: Number of available sequences.
 
     Raises:
-        RuntimeError: If an error occurs while calculating effective
-                      dataset length e.g.:
-                        * If calculated length is negative.
-                        * If dataset is invalid.
+        RuntimeError: If dataset effective rows calculation fails:
+            * Invalid arguments or data types (TypeError, ValueError).
+            * Dataset is not a DataFrame (AttributeError).
     """
     try:
         debug(
@@ -40,7 +39,7 @@ def calculate_effective_dataset_rows(df: pd.DataFrame, seq_len: int) -> int:
             error("%s", msg)
             raise RuntimeError(msg)
 
-        info("Dataset length calculation completed")
+        info("Dataset length calculated")
 
         return dataset_length
     except (TypeError, AttributeError, ValueError) as e:
