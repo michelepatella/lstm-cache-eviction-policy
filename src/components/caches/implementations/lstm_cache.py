@@ -4,7 +4,7 @@ from typing import Any
 import requests
 from torch.utils.data import DataLoader
 
-from components.caches.utils.base_cache import BaseCache
+from components.caches.implementations.utils.base_cache import BaseCache
 from components.caches.utils.cache_metrics_logger import (
     CacheMetricsLogger,
 )
@@ -57,7 +57,7 @@ class LSTMCache(BaseCache):
 
         info("LSTM cache initialized")
 
-    def evict_key(self: "LSTMCache", key: int) -> None:
+    def evict_key(self: "LSTMCache", key: Any) -> None:
         """
         Evict a key from the cache.
 
@@ -67,7 +67,7 @@ class LSTMCache(BaseCache):
 
         Args:
             self ("LSTMCache"): Current class instance.
-            key (int): Key to remove from the cache.
+            key (Any): Key to remove from the cache.
 
         Returns:
             None
@@ -79,7 +79,7 @@ class LSTMCache(BaseCache):
 
         debug(f"LSTM cache evicted key: {key}")
 
-    def _put_key(self: "LSTMCache", key: int, current_time: float) -> None:
+    def _put_key(self: "LSTMCache", key: Any, current_time: float) -> None:
         """
         Put a key in the cache.
 
@@ -88,7 +88,7 @@ class LSTMCache(BaseCache):
 
         Args:
             self ("LSTMCache"): Current class instance.
-            key (int): Key to insert in the cache.
+            key (Any): Key to insert in the cache.
             current_time (float): Current time.
 
         Returns:
@@ -106,7 +106,7 @@ class LSTMCache(BaseCache):
 
     def put(
         self: "LSTMCache",
-        key: int,
+        key: Any,
         current_time: float,
         current_idx: int,
         testing_set: DataLoader,
@@ -122,7 +122,7 @@ class LSTMCache(BaseCache):
 
         Args:
             self ("LSTMCache"): Current class instance.
-            key (int): Key to insert.
+            key (Any): Key to insert.
             current_time (float): Current time.
             current_idx (int): Index of the current request.
             testing_set (DataLoader): Testing dataset for sequence extraction.

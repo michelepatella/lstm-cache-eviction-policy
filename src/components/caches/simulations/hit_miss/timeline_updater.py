@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
@@ -15,10 +15,13 @@ def update_hit_miss_timeline(
     idx: int,
     counters: Dict[str, int],
     timeline: List[Dict[str, int]],
+    timeline_index_name: Optional[str] = TIMELINE_INDEX_NAME,
+    timeline_instant_hit_rate_name: Optional[str] = TIMELINE_INSTANT_HIT_RATE_NAME,
+    hit_counter_name: Optional[str] = HIT_COUNTER_NAME,
+    miss_counter_name: Optional[str] = MISS_COUNTER_NAME,
 ) -> List[Dict[str, int]]:
     """
-    Update the timeline with the current hit
-    and miss counts.
+    Update the timeline with the current hit and miss counts.
 
     This function calculates the instant hit rate based on the
     cumulative number of hits and the number of requests processed
@@ -26,41 +29,55 @@ def update_hit_miss_timeline(
     the current statistics.
 
     Args:
-        counters (Dict[str, int]): Dictionary containing current
-                                   hit and miss counters.
+        counters (Dict[str, int]): Dictionary containing current hit and miss
+                                   counters.
         idx (int): Current request index.
-        timeline (List[Dict[str, int]]): List storing the timeline of
-                                         hit/miss statistics.
+        timeline (List[Dict[str, int]]): List storing the timeline of hit
+                                         and miss statistics.
+        timeline_index_name (Optional[str]): Key name for storing the request
+                                             index in the timeline entry.
+        timeline_instant_hit_rate_name (Optional[str]): Key name for storing
+                                                        the instant hit rate.
+        hit_counter_name (Optional[str]): Key name of the hit counter in the
+                                          counters' dictionary.
+        miss_counter_name (Optional[str]): Key name of the miss counter in the
+                                           counters' dictionary.
 
     Returns:
-        List[Dict[str, int]]: Updated timeline including the latest
-                              hit/miss statistics.
+        List[Dict[str, int]]: Updated timeline including the latest hit and miss
+                              statistics.
+
+    Raises:
+        RuntimeError: If updating the hit and miss timeline fails:
+            * Hit and miss counters missing in the dictionary (KeyError).
+            * Timeline data structure is invalid (TypeError, AttributeError).
     """
     try:
         # Calculate instant hit rate
         instant_hit_rate = calculate_percentage(
-            counters[HIT_COUNTER_NAME], idx + 1
+            counters[hit_counter_name], idx + 1
         )
 
         # Append current metrics to the timeline
         timeline.append(
             {
-                TIMELINE_INDEX_NAME: idx,
-                TIMELINE_INSTANT_HIT_RATE_NAME: instant_hit_rate,
-                HIT_COUNTER_NAME: counters[HIT_COUNTER_NAME],
-                MISS_COUNTER_NAME: counters[MISS_COUNTER_NAME],
+                timeline_index_name: idx,
+                timeline_instant_hit_rate_name: instant_hit_rate,
+                hit_counter_name: counters[hit_counter_name],
+                miss_counter_name: counters[miss_counter_name],
             }
         )
 
         info(
             f"Timeline updated for request index {idx}:\n"
-            f"hits: {counters[HIT_COUNTER_NAME]}\n"
-            f"misses: {counters[MISS_COUNTER_NAME]}\n"
+            f"hits: {counters[hit_counter_name]}\n"
+            f"misses: {counters[miss_counter_name]}\n"
             f"instant hit rate: {instant_hit_rate}"
         )
-    except KeyError as e:
-        msg = "Failed to update timeline"
+
+        return timeline
+    except (KeyError, TypeError, AttributeError) as e:
+        msg = "Failed to update hit and miss timeline"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
 
-    return timeline
