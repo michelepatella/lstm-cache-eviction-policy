@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 import numpy as np
 
@@ -17,7 +17,7 @@ def generate_requests_for_alpha(
     alpha: float,
     keys_range: np.ndarray,
     config: Config,
-    time_step_duration: int = None,
+    time_step_duration: Optional[int] = None,
 ) -> Tuple[List[int], List[float]]:
     """
     Generate requests for a single alpha value.
@@ -29,7 +29,7 @@ def generate_requests_for_alpha(
         alpha (float): Alpha parameter for Zipfian distribution.
         keys_range (np.ndarray): List of available keys.
         config (Config): Configuration object.
-        time_step_duration (int): Time step duration for generation.
+        time_step_duration (Optional[int]): Time step duration for generation.
 
     Returns:
         Tuple[List[int], List[float]]:

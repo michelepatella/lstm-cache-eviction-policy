@@ -16,7 +16,9 @@ def update_hit_miss_timeline(
     counters: Dict[str, int],
     timeline: List[Dict[str, int]],
     timeline_index_name: Optional[str] = TIMELINE_INDEX_NAME,
-    timeline_instant_hit_rate_name: Optional[str] = TIMELINE_INSTANT_HIT_RATE_NAME,
+    timeline_instant_hit_rate_name: Optional[
+        str
+    ] = TIMELINE_INSTANT_HIT_RATE_NAME,
     hit_counter_name: Optional[str] = HIT_COUNTER_NAME,
     miss_counter_name: Optional[str] = MISS_COUNTER_NAME,
 ) -> List[Dict[str, int]]:
@@ -80,4 +82,3 @@ def update_hit_miss_timeline(
         msg = "Failed to update hit and miss timeline"
         error("%s: %s", msg, e)
         raise RuntimeError(msg) from e
-

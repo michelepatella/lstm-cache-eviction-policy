@@ -74,7 +74,6 @@ def generate_single_pattern_request(
         requests,
         config,
     )
-
     debug(
         f"Generated request {request} at "
         f"absolute seconds {absolute_seconds}"

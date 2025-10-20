@@ -1,6 +1,7 @@
 import numpy as np
 
 from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 
 
@@ -12,57 +13,66 @@ def generate_cycle_pattern(
     keys_range: np.ndarray,
 ) -> int:
     """
-    Determine the next key to be accessed
-    according to cycle pattern.
+    Determine the next key to be accessed according to cycle pattern.
 
-    This function determines which is the next
-    key to be accessed according to cycle
-    pattern. This pattern simulates cyclic accesses
-    to a subset of keys dynamically built, depending
-    on the number of requests already generated.
+    This function determines which is the next key to be accessed according
+    to cycle pattern. This pattern simulates cyclic accesses to a subset of
+    keys dynamically built, depending on the number of requests already generated.
 
     Args:
         cycle_base (int): Minimum number of keys in the cycle.
-        cycle_divisor (int): Divisor controlling how quickly the
-                             cycle length increases.
-        cycle_mod (int): Modulo that limits the growth of the
-                         cycle length.
+        cycle_divisor (int): Divisor controlling how quickly the cycle length increases.
+        cycle_mod (int): Modulo that limits the growth of the cycle length.
         requests_count (int): Number of requests generated so far.
         keys_range (np.ndarray): List of available keys.
 
     Returns:
       int: Index of the next accessed key.
+
+    Raises:
+        RuntimeError: If generating the cycle pattern fails:
+            * Accessing the keys range due to invalid or empty array
+              (IndexError, ValueError).
+            * Using invalid argument types or non-numeric inputs (TypeError).
+            * Accessing an invalid index in the cycle subset (IndexError).
     """
-    debug(
-        f"Cycle base to determine cycle length in cycle pattern: {cycle_base}"
-    )
-    debug(
-        f"Cycle divisor to determine cycle"
-        f" length in cycle pattern: {cycle_divisor}"
-    )
-    debug(f"Cycle mod to determine cycle length in cycle pattern: {cycle_mod}")
+    try:
+        debug(
+            f"Cycle base to determine cycle length in cycle pattern: {cycle_base}"
+        )
+        debug(
+            f"Cycle divisor to determine cycle"
+            f" length in cycle pattern: {cycle_divisor}"
+        )
+        debug(
+            f"Cycle mod to determine cycle length in cycle pattern: {cycle_mod}"
+        )
 
-    # Calculate the cycle length dynamically,
-    # based on number of requests generated so far
-    # (cycle base ensures minimum cycle length)
-    cycle_length = cycle_base + (requests_count // cycle_divisor) % cycle_mod
+        # Calculate the cycle length dynamically,
+        # based on number of requests generated so far
+        # (cycle base ensures minimum cycle length)
+        cycle_length = (
+            cycle_base + (requests_count // cycle_divisor) % cycle_mod
+        )
+        debug(f"Cycle length for cycle pattern: {cycle_length}")
 
-    debug(f"Cycle length for cycle pattern: {cycle_length}")
+        # Select a subset of keys of
+        # cycle length size, starting from
+        # the head of the keys list
+        cycle = keys_range[:cycle_length]
+        debug(f"Candidate keys selected for cycle pattern: {cycle}")
 
-    # Select a subset of keys of
-    # cycle length size, starting from
-    # the head of the keys list
-    cycle = keys_range[:cycle_length]
+        # Determine the requested key
+        # within the subset of key just
+        # selected, based on the number of
+        # requests generated so far as well as
+        # the cycle length
+        requested_key = int(cycle[requests_count % cycle_length])
 
-    debug(f"Candidate keys selected for cycle pattern: {cycle}")
+        info(f"(Cycle pattern) Key requested: {requested_key}")
 
-    # Determine the requested key
-    # within the subset of key just
-    # selected, based on the number of
-    # requests generated so far as well as
-    # the cycle length
-    requested_key = int(cycle[requests_count % cycle_length])
-
-    info(f"(Cycle pattern) Key requested: {requested_key}")
-
-    return requested_key
+        return requested_key
+    except (IndexError, TypeError, ValueError) as e:
+        msg = "Failed to generate cycle pattern"
+        error("%s: %s", msg, e)
+        raise RuntimeError(msg) from e

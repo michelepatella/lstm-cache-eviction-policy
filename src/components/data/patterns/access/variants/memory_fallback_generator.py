@@ -15,22 +15,17 @@ def generate_memory_fallback_pattern(
     zipf_probs: np.ndarray,
 ) -> int:
     """
-    Determine the next key to be accessed
-    according to the memory/fallback pattern.
+    Determine the next key to be accessed according to the memory/fallback pattern.
 
-    This function simulates accesses based
-    on a memory interval, or zipfian accesses.
-    If the current request index matches the memory
-    interval and enough history exists, it selects a key
-    previously accessed memory offset steps back.
-    Otherwise, it selects a key randomly according
-    to the provided Zipfian probabilities.
+    This function simulates accesses based on a memory interval, or zipfian
+    accesses. If the current request index matches the memory  interval and
+    enough history exists, it selects a key previously accessed memory offset
+    steps back. Otherwise, it  selects a key randomly according to the provided
+    Zipfian probabilities.
 
     Args:
-        memory_interval (int): Number of requests between
-                               memory-based accesses.
-        memory_offset (int): Steps back in request history to
-                             pick the key.
+        memory_interval (int): Number of requests between memory-based accesses.
+        memory_offset (int): Steps back in request history to pick the key.
         requests (List[int]): List of keys requested so far.
         requests_count (int): Number of requests generated so far.
         keys_range (np.ndarray): List of available keys.
@@ -39,28 +34,40 @@ def generate_memory_fallback_pattern(
 
     Returns:
         int: Index of the next accessed key.
+
+    Raises:
+        RuntimeError: If generating the memory/fallback pattern fails:
+            * Accessing the request history due to empty or too short
+              list (IndexError, ValueError).
+            * Random selection from Zipfian probabilities due to invalid
+              shape or normalization (ValueError).
+            * Using invalid arguments or data types (TypeError).
     """
-    debug(f"Memory interval for memory/fallback pattern: {memory_interval}")
-
-    # Based on the memory interval
-    if (requests_count % memory_interval == 0) and (
-        requests_count > memory_offset
-    ):
-        # Requested key as the one requested
-        # memory offset steps back in the history
-        requested_key = requests[-memory_offset]
-
+    try:
         debug(
-            f"Requested key selected looking "
-            f"at {memory_offset} steps back in the history"
+            f"Memory interval for memory/fallback pattern: {memory_interval}"
         )
-    else:
-        # Determine the requested key randomly,
-        # according to Zipfian key probabilities
-        requested_key = np.random.choice(keys_range, p=zipf_probs)
 
-        debug("Requested key selected by fallback pattern")
+        # Based on the memory interval
+        if (requests_count % memory_interval == 0) and (
+            requests_count > memory_offset
+        ):
+            # Requested key as the one requested
+            # memory offset steps back in the history
+            requested_key = requests[-memory_offset]
+            debug(
+                f"Requested key selected looking "
+                f"at {memory_offset} steps back in the history"
+            )
+        else:
+            # Determine the requested key randomly,
+            # according to Zipfian key probabilities
+            requested_key = np.random.choice(keys_range, p=zipf_probs)
+            debug("Requested key selected by fallback pattern")
 
-    info(f"(Memory/fallback pattern) Key requested: {requested_key}")
+        info(f"(Memory/fallback pattern) Key requested: {requested_key}")
 
-    return requested_key
+        return requested_key
+    except (IndexError, TypeError, ValueError) as e:
+        msg = "Failed to generate memory/fallback pattern"
+        raise RuntimeError(msg) from e

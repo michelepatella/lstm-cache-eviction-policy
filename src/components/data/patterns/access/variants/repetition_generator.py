@@ -15,14 +15,12 @@ def generate_repetition_pattern(
     num_keys: int,
 ) -> int:
     """
-    Determine the next key to be accessed
-    according to repetition pattern.
+    Determine the next key to be accessed according to repetition pattern.
 
-    This function determines which is the next
-    key to be accessed according to repetition
-    pattern. This pattern simulates some keys are
-    accessed regularly, while other accesses involve
-    keys randomly selected from a subset of initial keys.
+    This function determines which is the next key to be accessed according
+    to repetition pattern. This pattern simulates some keys are accessed
+    regularly, while other accesses involve keys randomly selected from a
+    subset of initial keys.
 
     Args:
         repetition_interval (int): Integer indicating how many times
@@ -36,27 +34,39 @@ def generate_repetition_pattern(
 
     Returns:
           int: Index of the next accessed key.
+
+    Raises:
+        RuntimeError: If generating the repetition pattern fails:
+            * Accessing the request history due to empty or too short list
+              (IndexError, ValueError).
+            * Random selection from keys due to invalid shape or empty
+              subset (ValueError).
+            * Using invalid arguments or data types (TypeError).
     """
-    debug(f"Repetition interval for repetition pattern: {repetition_interval}")
-    debug(f"Repetition offset for repetition pattern: {repetition_offset}")
-
-    # Based on a repetition interval
-    if requests_count % repetition_interval == 0:
-        # Regular access to a key
-        requested_key = requests[-repetition_offset]
-
-        debug("Regular repetition pattern access")
-    else:
-        slice_length = max(1, (num_keys // repetition_offset))
-        # Random access to a key taken from
-        # a subset of initial keys
-        requested_key = np.random.choice(keys_range[:slice_length])
-
+    try:
         debug(
-            f"Random repetition pattern access "
-            f"among the first {slice_length} keys"
+            f"Repetition interval for repetition pattern: {repetition_interval}"
         )
+        debug(f"Repetition offset for repetition pattern: {repetition_offset}")
 
-    info(f"(Repetition pattern) Key requested: {requested_key}")
+        # Based on a repetition interval
+        if requests_count % repetition_interval == 0:
+            # Regular access to a key
+            requested_key = requests[-repetition_offset]
+            debug("Regular repetition pattern access")
+        else:
+            slice_length = max(1, (num_keys // repetition_offset))
+            # Random access to a key taken from
+            # a subset of initial keys
+            requested_key = np.random.choice(keys_range[:slice_length])
+            debug(
+                f"Random repetition pattern access "
+                f"among the first {slice_length} keys"
+            )
 
-    return requested_key
+        info(f"(Repetition pattern) Key requested: {requested_key}")
+
+        return requested_key
+    except (IndexError, TypeError, ValueError) as e:
+        msg = "Failed to generate repetition pattern"
+        raise RuntimeError(msg) from e
