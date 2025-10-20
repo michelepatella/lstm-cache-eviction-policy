@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
@@ -44,14 +44,14 @@ def check_update_hit_miss(
             # Increase hit counter by one
             counters[hit_counter_name] += 1
 
-            info(f"Cache HIT — Key: {key}, Time: {current_time}")
+            info(f"Cache HIT — key: {key}, time: {current_time}")
 
             return True
 
         # Increase miss counter by one
         counters[miss_counter_name] += 1
 
-        info(f"Cache MISS — Key: {key}, Time: {current_time}")
+        info(f"Cache MISS — key: {key}, time: {current_time}")
 
         return False
     except (AttributeError, TypeError, KeyError) as e:

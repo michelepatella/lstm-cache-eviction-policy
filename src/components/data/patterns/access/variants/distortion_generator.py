@@ -4,7 +4,6 @@ import numpy as np
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def generate_distortion_pattern(
@@ -90,7 +89,7 @@ def generate_distortion_pattern(
                 f"noise: {noise} (within: {noise_min}, {noise_max})"
             )
 
-        info(f"(Distortion pattern) Key requested: {requested_key}")
+        debug(f"(Distortion pattern) Key requested: {requested_key}")
 
         return requested_key
     except (IndexError, TypeError, ValueError) as e:

@@ -51,7 +51,7 @@ def build_optimizer(
         # Instantiate optimizer
         optimizer = optimizer_cls(model.parameters(), **optimizer_kwargs)
 
-        info(f"Optimizer built: {optimizer_type}")
+        debug(f"Optimizer built: {optimizer_type}")
 
         return optimizer
     except (TypeError, ValueError) as e:

@@ -2,7 +2,6 @@ import numpy as np
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def calculate_zipf_probs(items: np.ndarray, alpha: float) -> np.ndarray:
@@ -56,7 +55,7 @@ def calculate_zipf_probs(items: np.ndarray, alpha: float) -> np.ndarray:
             f" after normalization: {np.sum(zipf_probs_norm)}"
         )
 
-        info("Zipf probabilities calculated")
+        debug("Zipf probabilities calculated")
 
         return zipf_probs_norm
     except (TypeError, ZeroDivisionError, ValueError) as e:

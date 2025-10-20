@@ -3,7 +3,6 @@ from typing import Dict, List, Union
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from const import JSON_INDENT
 
 
@@ -41,7 +40,7 @@ def save_json(
         with open(path, "w") as f:
             json.dump(data_dict, f, indent=json_indent)
 
-        info(f"JSON saved to: {path}")
+        debug(f"JSON saved to: {path}")
     except (TypeError, OSError) as e:
         msg = "Failed to save JSON"
         error("%s: %s", msg, e)

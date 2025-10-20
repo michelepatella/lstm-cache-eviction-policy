@@ -5,7 +5,6 @@ import pandas as pd
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def build_dataset(
@@ -40,7 +39,7 @@ def build_dataset(
         # given columns
         df = pd.DataFrame(columns)
 
-        info(
+        debug(
             f"Dataset built with {len(df)} rows and {len(df.columns)} columns"
         )
 

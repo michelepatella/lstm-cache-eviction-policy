@@ -5,7 +5,6 @@ import torch
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from const import (
     COS_TIME_COLUMN_NAME,
     REQUEST_COLUMN_NAME,
@@ -65,8 +64,6 @@ def extract_tuple_from_dataset_row(
             f"Feature(s): {features}, and target: {target} "
             f"extracted from dataset row"
         )
-
-        info("Tuple extracted from dataset row")
 
         return features, target
     except (KeyError, TypeError, ValueError) as e:

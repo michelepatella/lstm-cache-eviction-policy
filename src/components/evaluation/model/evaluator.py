@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple, Union, Optional
+from typing import Dict, List, Optional, Tuple, Union
 
 import torch
 from torch import Tensor
@@ -73,7 +73,7 @@ def evaluate_model(
 
     # Calculate average loss
     avg_loss = calculate_average([total_loss / len(data_loader)])
-    debug(f"Average loss: {avg_loss}")
+    info(f"Average loss: {avg_loss}")
 
     # Compute metrics if requested
     metrics = None
@@ -90,6 +90,6 @@ def evaluate_model(
         if model_results_save_path is not None:
             save_model_metrics(metrics, avg_loss, model_results_save_path)
 
-    info("Model evaluation completed")
+    debug("Model evaluation completed")
 
     return avg_loss, metrics, all_outputs, all_targets, all_variances

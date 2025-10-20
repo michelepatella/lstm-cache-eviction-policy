@@ -2,7 +2,6 @@ from typing import List, Optional, Union
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def calculate_average(values: List[Union[int, float]]) -> Optional[float]:
@@ -30,7 +29,7 @@ def calculate_average(values: List[Union[int, float]]) -> Optional[float]:
         if len(values) != 0:
             avg_value = sum(values) / len(values)
 
-        info(f"Average value calculated: {avg_value}")
+        debug(f"Average value calculated: {avg_value}")
 
         return avg_value
     except TypeError as e:

@@ -2,7 +2,6 @@ import torch
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def select_device(device_type: str) -> torch.device:
@@ -31,7 +30,7 @@ def select_device(device_type: str) -> torch.device:
         # device type requested
         device = torch.device(device_type)
 
-        info(f"Device '{device_type}' selected")
+        debug(f"Device '{device_type}' selected")
 
         return device
     except (TypeError, RuntimeError) as e:

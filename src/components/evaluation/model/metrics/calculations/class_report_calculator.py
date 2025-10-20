@@ -2,8 +2,8 @@ from typing import Dict, List
 
 from sklearn.metrics import classification_report
 
+from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from const import (
     MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT,
     MODEL_METRICS_CLASS_REPORT_ZERO_DIVISION,
@@ -45,7 +45,7 @@ def calculate_class_report(
             zero_division=zero_division,
         )
 
-        info("Classification report generated")
+        debug("Classification report generated")
 
         return class_report
     except (ValueError, TypeError) as e:

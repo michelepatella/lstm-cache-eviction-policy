@@ -2,7 +2,6 @@ from typing import Any, List
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def assert_choice_field(
@@ -48,4 +47,4 @@ def assert_choice_field(
         error("%s", msg)
         raise ValueError(msg)
 
-    info(f"{context}: {field_value}, validated")
+    debug(f"{context}: {field_value}, validated")

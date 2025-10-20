@@ -3,6 +3,9 @@ from typing import Any, Callable, Optional
 
 from cachetools import Cache
 
+from components.caches.implementations.items.evictions.oldest_item_evictor import (
+    evict_oldest_item,
+)
 from components.caches.implementations.items.operations.checker import (
     check_item_into_cache,
 )
@@ -17,9 +20,6 @@ from components.caches.implementations.items.operations.popper import (
 )
 from components.caches.implementations.items.operations.retriever import (
     get_item_from_cache,
-)
-from components.caches.implementations.items.evictions.oldest_item_evictor import (
-    evict_oldest_item,
 )
 from components.caches.implementations.utils.cache_cleaner import clear_cache
 from components.caches.implementations.utils.cache_size_calculator import (

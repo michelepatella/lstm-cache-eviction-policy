@@ -2,7 +2,6 @@ import pandas as pd
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def reorder_dataset_columns(
@@ -38,8 +37,6 @@ def reorder_dataset_columns(
         new_df = df[features + [target_column]]
 
         debug(f"Reordered dataset columns: {new_df.columns}")
-
-        info("Dataset columns reordered")
 
         return new_df
     except KeyError as e:

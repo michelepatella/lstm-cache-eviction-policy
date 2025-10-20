@@ -6,7 +6,6 @@ from torch.utils.data import DataLoader
 from components.inference.single_batch_inferrer import infer_single_batch
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def infer_batches(
@@ -81,7 +80,7 @@ def infer_batches(
 
                 debug(f"Batch {batch_idx} inferred")
 
-        info("Batches inference completed")
+        debug("Batches inference completed")
 
         return (
             total_loss,

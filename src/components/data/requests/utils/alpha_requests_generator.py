@@ -1,4 +1,4 @@
-from typing import List, Tuple, Optional
+from typing import List, Optional, Tuple
 
 import numpy as np
 
@@ -6,7 +6,6 @@ from components.data.patterns.core.generator import (
     generate_pattern_requests,
 )
 from components.logs.levels.debug_logger import debug
-from components.logs.levels.info_logger import info
 from components.math.zipf_probs_calculator import (
     calculate_zipf_probs,
 )
@@ -49,6 +48,6 @@ def generate_requests_for_alpha(
         time_step_duration=time_step_duration,
     )
 
-    info(f"{len(requests)} requests generated for alpha: {alpha}")
+    debug(f"{len(requests)} requests generated for alpha: {alpha}")
 
     return requests, timestamps_seconds

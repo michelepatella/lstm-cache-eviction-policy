@@ -2,8 +2,8 @@ from typing import List
 
 import numpy as np
 
+from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from const import SECONDS_IN_DAY, SECONDS_IN_HOUR
 
 
@@ -35,7 +35,7 @@ def convert_seconds_to_hours_cyclic(
             np.array(timestamps_seconds) % SECONDS_IN_DAY
         ) / SECONDS_IN_HOUR
 
-        info("Timestamps converted from seconds to hours cyclically")
+        debug("Timestamps converted from seconds to hours cyclically")
 
         return timestamps_hours
     except (TypeError, ValueError) as e:

@@ -1,4 +1,4 @@
-from typing import List, Tuple, Optional
+from typing import List, Optional, Tuple
 
 from torch.utils.data import DataLoader
 
@@ -10,7 +10,6 @@ from components.dataset.rows.extractions.tuple_extractor import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from components.time.transforms.trig_decoder import (
     decode_time_trigonometrically,
 )
@@ -84,7 +83,7 @@ def extract_last_rows_from_dataset(
                 (current_time / time_conversion_factor, y_key.item())
             )
 
-        info(f"Last rows extracted from dataset: {last_rows}")
+        debug(f"Last rows extracted from dataset: {last_rows}")
 
         return last_rows
     except AttributeError as e:

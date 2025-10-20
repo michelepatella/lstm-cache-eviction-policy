@@ -2,7 +2,6 @@ from sklearn.model_selection import TimeSeriesSplit
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def build_time_series_split(num_folds: int) -> TimeSeriesSplit:
@@ -29,7 +28,7 @@ def build_time_series_split(num_folds: int) -> TimeSeriesSplit:
         # Instantiate the TimeSeriesSplit object
         tss = TimeSeriesSplit(n_splits=num_folds)
 
-        info(f"TimeSeriesSplit built")
+        debug(f"TimeSeriesSplit built")
 
         return tss
     except (ValueError, TypeError) as e:

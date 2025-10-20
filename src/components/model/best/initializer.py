@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 from components.data_loader.targets.extractor import (
     extract_targets_from_data_loader,
 )
-from components.logs.levels.info_logger import info
+from components.logs.levels.debug_logger import debug
 from components.model.environment.initializer import (
     initialize_model_environment,
 )
@@ -60,6 +60,6 @@ def initialize_best_model(
     # Load the trained model
     model = load_model_state_dict(model_path, model, device)
 
-    info("Best model initialized")
+    debug("Best model initialized")
 
     return device, criterion, model

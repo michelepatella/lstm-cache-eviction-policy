@@ -2,7 +2,6 @@ import pandas as pd
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def drop_dataset_column(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
@@ -29,7 +28,7 @@ def drop_dataset_column(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
         # Drop column from dataset
         new_df = df.drop(columns=[column_name])
 
-        info(f"Column '{column_name}' dropped from dataset")
+        debug(f"Column '{column_name}' dropped from dataset")
 
         return new_df
     except KeyError as e:

@@ -31,7 +31,9 @@ def calculate_cohen_kappa_score(
     """
     try:
         debug(f"Targets length for Cohen's kappa score: {len(targets)}")
-        debug(f"Predictions length for Cohen's kappa score: {len(predictions)}")
+        debug(
+            f"Predictions length for Cohen's kappa score: {len(predictions)}"
+        )
 
         # Calculate Cohen's kappa score
         kappa = cohen_kappa_score(targets, predictions)

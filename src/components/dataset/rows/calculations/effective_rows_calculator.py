@@ -2,7 +2,6 @@ import pandas as pd
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def calculate_effective_dataset_rows(df: pd.DataFrame, seq_len: int) -> int:
@@ -38,8 +37,6 @@ def calculate_effective_dataset_rows(df: pd.DataFrame, seq_len: int) -> int:
             msg = "Calculated effective dataset length is negative"
             error("%s", msg)
             raise RuntimeError(msg)
-
-        info("Dataset length calculated")
 
         return dataset_length
     except (TypeError, AttributeError, ValueError) as e:

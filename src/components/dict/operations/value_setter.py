@@ -2,7 +2,6 @@ from typing import Any, Dict, Sequence
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def set_dict_value(
@@ -53,7 +52,7 @@ def set_dict_value(
         # position
         current_dict[keys[-1]] = value
 
-        info(f"Value set in dictionary ({keys} -> {value})")
+        debug(f"Value set in dictionary ({keys} -> {value})")
     except (TypeError, AttributeError) as e:
         msg = "Failed to set value in dictionary"
         error("%s: %s", msg, e)

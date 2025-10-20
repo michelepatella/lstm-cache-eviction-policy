@@ -5,7 +5,6 @@ import torch
 from components.backpropagation.core.forward_runner import compute_forward
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from components.model.mode.setter import set_model_mode
 from const import (
     EVALUATION_MODEL_MODE,
@@ -114,7 +113,7 @@ def compute_mc_dropout_forward(
             )
             debug(f"Outputs variance shape: {outputs_var.shape}")
 
-        info("MC forward pass(es) completed")
+        debug("MC forward pass(es) completed")
 
         return outputs_mean, outputs_var
     except (TypeError, AttributeError, RuntimeError) as e:

@@ -1,5 +1,6 @@
 from typing import Tuple
 
+from components.logs.levels.info_logger import info
 from components.math.percentage_calculator import calculate_percentage
 
 
@@ -23,5 +24,7 @@ def calculate_hit_miss_rate(
     # Calculate hit and miss rates
     hit_rate = calculate_percentage(num_hits, total_cache_accesses)
     miss_rate = calculate_percentage(num_misses, total_cache_accesses)
+
+    info(f"Hit and miss rates calculated: {hit_rate}%, {miss_rate}%")
 
     return hit_rate, miss_rate

@@ -5,7 +5,6 @@ from box import Box
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from const import JSON_WRAP_BOX_DEFAULT
 
 
@@ -41,7 +40,7 @@ def load_json(
         with open(path, "r") as f:
             json_data = json.load(f)
 
-        info(f"JSON loaded from: {path}")
+        debug(f"JSON loaded from: {path}")
 
         # Check whether to wrap JSON
         # data into a Box object, allowing

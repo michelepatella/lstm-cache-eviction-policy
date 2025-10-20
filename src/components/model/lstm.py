@@ -6,7 +6,6 @@ import torch.nn as nn
 from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from const import LSTM_PARAM_NAMES, MC_DROPOUT_DISABLED
 from pipeline.config.pydantic.config import Config
 from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
@@ -85,7 +84,7 @@ class LSTM(torch.nn.Module):
                     # Set the value specified by configuration
                     setattr(self, param, config_value)
 
-            info("Model parameters set")
+            debug("Model parameters set")
         except (AttributeError, TypeError, ValueError) as e:
             msg = "Failed to set model parameters"
             error("%s: %s", msg, e)
@@ -141,7 +140,7 @@ class LSTM(torch.nn.Module):
         self.embedding_dim = embedding_dim
         debug(f"Embedding dimension for model: {self.embedding_dim}")
 
-        info("Model fields set")
+        debug("Model fields set")
 
     def _set_layers(self: "LSTM") -> None:
         """
@@ -183,7 +182,7 @@ class LSTM(torch.nn.Module):
                 f"(in_features={self.hidden_size}, out_features={self.num_keys})"
             )
 
-            info("Model layers set")
+            debug("Model layers set")
         except (TypeError, ValueError, AttributeError) as e:
             msg = "Failed to set model layers"
             error("%s: %s", msg, e)
@@ -250,7 +249,7 @@ class LSTM(torch.nn.Module):
         # Set all model layers
         self._set_layers()
 
-        info("Model initialized")
+        debug("Model initialized")
 
     def _build_model_input(
         self: "LSTM", x_features: torch.Tensor, x_keys: torch.Tensor
@@ -292,7 +291,7 @@ class LSTM(torch.nn.Module):
             x = torch.cat((x_features, embedded_keys), dim=-1)
             debug(f"Model input shape: {x.shape}")
 
-            info("Model input retrieved")
+            debug("Model input retrieved")
 
             return x
         except (AttributeError, TypeError, RuntimeError) as e:
@@ -340,7 +339,7 @@ class LSTM(torch.nn.Module):
             logits = self.fc(output[:, -1, :])
             debug(f"Logits shape: {logits.shape}")
 
-            info("Model forward pass completed")
+            debug("Model forward pass completed")
 
             return logits
         except (IndexError, RuntimeError) as e:

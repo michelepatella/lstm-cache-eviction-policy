@@ -2,7 +2,6 @@ from typing import Union
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def calculate_percentage(
@@ -35,7 +34,7 @@ def calculate_percentage(
         else:
             percentage = value / total * 100
 
-        info(f"Percentage calculated: {percentage}%")
+        debug(f"Percentage calculated: {percentage}%")
 
         return percentage
     except (TypeError, ZeroDivisionError) as e:

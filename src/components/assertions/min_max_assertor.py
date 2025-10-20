@@ -2,7 +2,6 @@ from typing import Union
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def assert_min_less_than_max(
@@ -43,7 +42,7 @@ def assert_min_less_than_max(
             error("%s", msg)
             raise ValueError(msg)
 
-        info(f"{min_val} and {max_val} validated for {context}")
+        debug(f"{min_val} and {max_val} validated for {context}")
     except TypeError as e:
         msg = "Failed to validate minimum and maximum values"
         error("%s: %s", msg, e)

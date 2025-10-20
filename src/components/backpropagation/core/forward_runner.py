@@ -7,7 +7,6 @@ from components.device.mover import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from components.loss.calculator import calculate_loss
 
 
@@ -71,7 +70,7 @@ def compute_forward(
         # Calculate loss
         loss = calculate_loss(outputs, target, criterion)
 
-        info("Forward pass completed")
+        debug("Forward pass completed")
 
         return loss, outputs
     except (ValueError, TypeError) as e:

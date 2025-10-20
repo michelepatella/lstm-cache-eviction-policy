@@ -2,7 +2,6 @@ import math
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from const import HOURS_IN_DAY, SECONDS_IN_HOUR
 
 
@@ -49,7 +48,7 @@ def decode_time_trigonometrically(
         # Convert angle back to specified unit
         current_time = angle / (2 * math.pi) * cycle_length * cycle_unit_scale
 
-        info(f"Time decoded trigonometrically: {current_time}")
+        debug(f"Time decoded trigonometrically: {current_time}")
 
         return current_time
     except TypeError as e:

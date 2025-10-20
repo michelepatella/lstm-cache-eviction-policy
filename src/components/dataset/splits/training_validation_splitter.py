@@ -1,4 +1,4 @@
-from typing import Tuple, Optional
+from typing import Optional, Tuple
 
 import numpy as np
 from torch.utils.data import Subset
@@ -9,7 +9,6 @@ from components.dataset.splits.index.calculator import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def split_training_validation_sets(
@@ -81,7 +80,7 @@ def split_training_validation_sets(
         final_training_set = Subset(training_set, training_idx)
         final_validation_set = Subset(training_set, validation_idx)
 
-        info("Training and validation sets split")
+        debug("Training and validation sets split")
 
         return final_training_set, final_validation_set
     except (TypeError, ValueError, AttributeError, IndexError, NameError) as e:

@@ -2,8 +2,8 @@ from typing import Union
 
 import torch
 
+from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def move_to_device(
@@ -32,7 +32,7 @@ def move_to_device(
         # Move object to device
         obj = obj.to(device)
 
-        info(f"{obj} moved to {device}")
+        debug(f"{obj} moved to {device}")
 
         return obj
     except (TypeError, RuntimeError) as e:

@@ -4,7 +4,7 @@ from torch.utils.data import DataLoader
 
 from components.data_loader.builder import build_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
-from components.logs.levels.info_logger import info
+from components.logs.levels.debug_logger import debug
 from pipeline.config.pydantic.config import Config
 
 
@@ -45,6 +45,6 @@ def initialize_data_loader(
         shuffle,
     )
 
-    info("Data loader initialization completed")
+    debug("Data loader initialization completed")
 
     return dataset, data_loader

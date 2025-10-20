@@ -3,7 +3,7 @@ from typing import List
 import numpy as np
 
 from components.logs.levels.debug_logger import debug
-from components.logs.levels.info_logger import info
+from components.logs.levels.error_logger import error
 
 
 def generate_repetition_pattern(
@@ -64,9 +64,10 @@ def generate_repetition_pattern(
                 f"among the first {slice_length} keys"
             )
 
-        info(f"(Repetition pattern) Key requested: {requested_key}")
+        debug(f"(Repetition pattern) Key requested: {requested_key}")
 
         return requested_key
     except (IndexError, TypeError, ValueError) as e:
         msg = "Failed to generate repetition pattern"
+        error("%s: %s", msg, e)
         raise RuntimeError(msg) from e

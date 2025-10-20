@@ -59,7 +59,7 @@ def save_model_metrics(
         # Save metrics as JSON file
         save_json(metrics_to_save, path)
 
-        info(f"Model metrics saved to {path}")
+        info(f"Model metrics saved to: {path}")
     except TypeError as e:
         msg = "Failed to save model metrics"
         error("%s: %s", msg, e)

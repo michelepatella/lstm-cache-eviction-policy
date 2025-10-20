@@ -2,7 +2,6 @@ from typing import List, Tuple
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def extract_features_target_from_dataset_columns(
@@ -35,7 +34,7 @@ def extract_features_target_from_dataset_columns(
         features = columns[:-1]
         target = columns[-1]
 
-        info(
+        debug(
             f"Features ({features}) and target ({target}) extracted"
             f" from dataset columns"
         )

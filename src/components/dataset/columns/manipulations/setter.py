@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 
+from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def set_dataset_column(
@@ -31,7 +31,7 @@ def set_dataset_column(
         # Set column to dataset
         df[column_name] = column_values
 
-        info(f"Column set to dataset: '{column_name}'")
+        debug(f"Column set to dataset: '{column_name}'")
 
         return df
     except (ValueError, TypeError, AttributeError) as e:

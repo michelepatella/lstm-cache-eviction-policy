@@ -3,7 +3,6 @@ import itertools
 from typing import Any, Dict, List
 
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def combine_nested_dict_lists(
@@ -46,7 +45,7 @@ def combine_nested_dict_lists(
                     merged[k] = copy.deepcopy(v)
             combined_dicts.append(merged)
 
-        info(
+        debug(
             f"Nested dictionary lists combined ({len(combined_dicts)} combinations)"
         )
 

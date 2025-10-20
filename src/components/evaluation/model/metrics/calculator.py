@@ -66,6 +66,6 @@ def calculate_model_metrics(
         MODEL_METRICS_COHEN_KAPPA_SCORE_NAME: cohen_kappa_score,
     }
 
-    info("Model metrics calculated")
+    debug("Model metrics calculated")
 
     return metrics

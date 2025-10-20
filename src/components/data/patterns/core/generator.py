@@ -7,7 +7,6 @@ from components.data.patterns.core.single_generator import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from const import (
     DATA_GENERATION_INITIAL_CURRENT_DAY,
     DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY,
@@ -96,7 +95,7 @@ def generate_pattern_requests(
             requests.append(request)
             timestamps_seconds.append(absolute_seconds)
 
-        info("Pattern requests generated")
+        debug("Pattern requests generated")
 
         return requests, timestamps_seconds
     except (IndexError, ValueError, TypeError) as e:

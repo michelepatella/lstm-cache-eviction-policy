@@ -1,6 +1,5 @@
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def calculate_dataset_split_index(dataset_len: int, split_perc: float) -> int:
@@ -28,8 +27,7 @@ def calculate_dataset_split_index(dataset_len: int, split_perc: float) -> int:
 
         # Calculate split index
         split_idx = int(dataset_len * split_perc)
-
-        info(f"Split index calculated: {split_idx}")
+        debug(f"Split index calculated: {split_idx}")
 
         return split_idx
     except (TypeError, ValueError) as e:

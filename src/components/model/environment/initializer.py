@@ -8,7 +8,7 @@ from components.device.mover import (
 from components.device.selector import (
     select_device,
 )
-from components.logs.levels.info_logger import info
+from components.logs.levels.debug_logger import debug
 from components.loss.builder import build_loss
 from components.model.builder import (
     build_model,
@@ -68,6 +68,6 @@ def initialize_model_environment(
     # Move model to device
     model = move_to_device(model, device)
 
-    info("Model components initialization completed")
+    debug("Model components initialization completed")
 
     return device, criterion, model

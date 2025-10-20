@@ -4,7 +4,6 @@ import pandas as pd
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def shift_dataset_column(
@@ -37,7 +36,7 @@ def shift_dataset_column(
         # Cast to int and apply shift to column
         df[column_name] = df[column_name] + shift
 
-        info("Dataset column shifted")
+        debug("Dataset column shifted")
     except (TypeError, AttributeError, KeyError) as e:
         msg = "Failed to shift dataset column"
         error("%s: %s", msg, e)

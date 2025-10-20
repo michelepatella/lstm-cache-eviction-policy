@@ -75,7 +75,7 @@ def get_dataset_abs_path(
                     / DYNAMIC_PROCESSED_DATASET_FILE_NAME
                 )
 
-        info(f"Dataset absolute path retrieved: {dataset_abs_path}")
+        info(f"Dataset absolute path: {dataset_abs_path}")
 
         return dataset_abs_path
     except AttributeError as e:

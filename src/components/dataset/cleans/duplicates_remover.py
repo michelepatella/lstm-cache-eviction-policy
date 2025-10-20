@@ -2,8 +2,8 @@ from typing import List
 
 import pandas as pd
 
+from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def remove_dataset_duplicates(
@@ -31,7 +31,7 @@ def remove_dataset_duplicates(
         # Remove duplicates from dataset
         new_df = df.drop_duplicates(subset=subset)
 
-        info("Dataset duplicates removal completed")
+        debug("Dataset duplicates removal completed")
 
         return new_df
     except (AttributeError, KeyError, TypeError) as e:

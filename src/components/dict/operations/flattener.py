@@ -1,8 +1,7 @@
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Tuple
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def flatten_dict(
@@ -47,7 +46,7 @@ def flatten_dict(
                 items.append((new_key, value))
                 debug(f"Added flattened key: {new_key} -> value: {value}")
 
-        info("Dictionary flattened at level {parent_key}: {items}")
+        debug(f"Dictionary flattened at level {parent_key}: {items}")
 
         return items
     except (TypeError, RecursionError, AttributeError) as e:

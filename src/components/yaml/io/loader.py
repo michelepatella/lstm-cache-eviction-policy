@@ -5,7 +5,6 @@ from yaml import YAMLError
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def load_yaml(path: str) -> Dict[str, Any]:
@@ -32,7 +31,7 @@ def load_yaml(path: str) -> Dict[str, Any]:
         with open(path, "r") as f:
             yaml_file = yaml.safe_load(f)
 
-        info(f"YAML file loaded from: {path}")
+        debug(f"YAML file loaded from: {path}")
 
         return yaml_file
     except (

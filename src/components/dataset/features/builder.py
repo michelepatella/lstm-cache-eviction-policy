@@ -7,8 +7,8 @@ from components.dataset.columns.manipulations.reorderer import (
     reorder_dataset_columns,
 )
 from components.dataset.columns.manipulations.setter import set_dataset_column
+from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from components.time.transforms.trig_encoder import (
     encode_time_trigonometrically,
 )
@@ -60,7 +60,7 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
         # Reorder columns so that target is last
         df = reorder_dataset_columns(df, REQUEST_COLUMN_NAME)
 
-        info("Dataset features built")
+        debug("Dataset features built")
 
         return df
     except (KeyError, TypeError) as e:

@@ -4,7 +4,6 @@ import pandas as pd
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def extract_sliding_window_dataset_rows(
@@ -49,7 +48,7 @@ def extract_sliding_window_dataset_rows(
             debug("Sliding window size less than window size")
             return None
 
-        info("Sliding window extracted from dataset")
+        debug("Sliding window extracted from dataset")
 
         return window
     except (TypeError, ValueError) as e:

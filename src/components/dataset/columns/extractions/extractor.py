@@ -2,8 +2,8 @@ from typing import List
 
 import pandas as pd
 
+from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def extract_dataset_columns(df: pd.DataFrame) -> List[str]:
@@ -28,7 +28,7 @@ def extract_dataset_columns(df: pd.DataFrame) -> List[str]:
         # Extract column names
         columns = df.columns.tolist()
 
-        info(f"{columns} columns extracted from dataset")
+        debug(f"{columns} columns extracted from dataset")
 
         return columns
     except (AttributeError, TypeError) as e:

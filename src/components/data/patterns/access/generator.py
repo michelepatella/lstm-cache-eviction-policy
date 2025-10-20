@@ -19,7 +19,6 @@ from components.data.patterns.access.variants.toggle_generator import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from const import SECONDS_IN_DAY, SECONDS_IN_HOUR
 from pipeline.config.pydantic.config import Config
 
@@ -191,7 +190,7 @@ def generate_access_pattern(
                 zipf_probs,
             )
 
-        info("Requests access pattern generated")
+        debug("Requests access pattern generated")
 
         return requested_key
     except (IndexError, TypeError, AttributeError, ValueError) as e:

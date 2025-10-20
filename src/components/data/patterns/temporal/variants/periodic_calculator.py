@@ -2,7 +2,6 @@ import numpy as np
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from const import HOURS_IN_DAY
 
 
@@ -43,7 +42,7 @@ def calculate_periodic_component(
             2 * np.pi * (current_hour_in_day / HOURS_IN_DAY)
         )
 
-        info(
+        debug(
             f"Periodic component: {periodic_component}, "
             f"calculated for hour in day: {current_hour_in_day}"
         )

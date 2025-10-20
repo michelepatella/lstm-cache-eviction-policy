@@ -5,7 +5,6 @@ from torch.utils.data import DataLoader, Subset
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def build_data_loader(
@@ -44,7 +43,7 @@ def build_data_loader(
             shuffle=shuffle,
         )
 
-        info("Data loader built")
+        debug("Data loader built")
 
         return data_loader
     except (TypeError, ValueError) as e:

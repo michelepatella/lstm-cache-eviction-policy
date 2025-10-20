@@ -3,7 +3,6 @@ from typing import Any
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 class CacheMetricsLogger:
@@ -41,7 +40,7 @@ class CacheMetricsLogger:
         self.access_events = defaultdict(list)
         self.evicted_keys = defaultdict(list)
 
-        info("CacheMetricsLogger initialized")
+        debug("CacheMetricsLogger initialized")
 
     def log_put(
         self: "CacheMetricsLogger", key: Any, time: float, ttl: float

@@ -1,8 +1,8 @@
 import torch
 from torch.optim import Optimizer
 
+from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def compute_backward(loss: torch.Tensor, optimizer: Optimizer) -> None:
@@ -27,13 +27,18 @@ def compute_backward(loss: torch.Tensor, optimizer: Optimizer) -> None:
           parameters (TypeError, ValueError).
     """
     try:
+        debug(
+            f"Computing backward pass with loss: "
+            f"{loss.item()} and optimizer: {optimizer}"
+        )
+
         # Compute gradients
         loss.backward()
 
         # Update model parameters
         optimizer.step()
 
-        info("Backward pass completed")
+        debug("Backward pass completed")
     except (RuntimeError, TypeError, ValueError) as e:
         msg = "Failed to compute backward pass"
         error("%s: %s", msg, e)

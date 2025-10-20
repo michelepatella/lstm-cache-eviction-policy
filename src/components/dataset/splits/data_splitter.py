@@ -4,7 +4,6 @@ import pandas as pd
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def split_dataset_data(
@@ -38,7 +37,7 @@ def split_dataset_data(
         # or second part of it
         split_data = df[:split_idx] if take_first else df[split_idx:]
 
-        info("Dataset data split")
+        debug("Dataset data split")
 
         return split_data
     except (TypeError, IndexError, AttributeError) as e:

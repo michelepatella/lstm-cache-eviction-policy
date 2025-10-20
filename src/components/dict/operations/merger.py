@@ -2,7 +2,6 @@ from typing import Any, Dict, Union
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def merge_dicts(
@@ -47,7 +46,7 @@ def merge_dicts(
                 original_dict[key] = value
                 debug(f"Merged key '{key}' in dictionaries to value '{value}'")
 
-        info("Dictionaries merged")
+        debug("Dictionaries merged")
 
         return original_dict
     except TypeError as e:

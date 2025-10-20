@@ -9,7 +9,6 @@ from components.backpropagation.core.backward_runner import (
 from components.backpropagation.core.forward_runner import compute_forward
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from components.model.mode.setter import set_model_mode
 from const import TRAINING_MODEL_MODE, TRAINING_SINGLE_EPOCH_DESC
 
@@ -95,7 +94,7 @@ def train_single_epoch(
             # the current loss
             training_loader_tqdm.set_postfix(loss=loss)
 
-        info("Training single epoch completed")
+        debug("Training single epoch completed")
     except (TypeError, AttributeError) as e:
         msg = "Failed to perform training single epoch"
         error("%s: %s", msg, e)

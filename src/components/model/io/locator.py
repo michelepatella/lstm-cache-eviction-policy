@@ -38,6 +38,6 @@ def get_model_abs_path(data_distribution_mode: str) -> str:
             TRAINED_MODEL_DYNAMIC_DIRECTORY / TRAINED_MODEL_DYNAMIC_FILE_NAME
         )
 
-    info(f"Model absolute path retrieved: {model_abs_path}")
+    info(f"Model absolute path: {model_abs_path}")
 
     return model_abs_path

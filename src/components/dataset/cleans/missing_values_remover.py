@@ -2,8 +2,8 @@ from typing import Literal
 
 import pandas as pd
 
+from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from const import (
     MISSING_VALUES_REMOVAL_DROPNA_AXIS,
     MISSING_VALUES_REMOVAL_DROPNA_HOW,
@@ -43,7 +43,7 @@ def remove_dataset_missing_values(
             how=dropna_how,
         )
 
-        info("Dataset missing values removal completed")
+        debug("Dataset missing values removal completed")
 
         return new_df
     except (AttributeError, TypeError, ValueError) as e:

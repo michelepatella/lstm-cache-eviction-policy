@@ -3,7 +3,6 @@ from torch.utils.data import DataLoader
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def extract_targets_from_data_loader(data_loader: DataLoader) -> torch.Tensor:
@@ -43,7 +42,7 @@ def extract_targets_from_data_loader(data_loader: DataLoader) -> torch.Tensor:
         concatenated_targets = torch.cat(all_targets)
         debug(f"Concatenated targets shape: {concatenated_targets.shape}")
 
-        info("Target extraction from data loader completed")
+        debug("Target extraction from data loader completed")
 
         return concatenated_targets
     except (TypeError, IndexError, RuntimeError) as e:

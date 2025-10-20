@@ -27,7 +27,6 @@ from components.dataset.splits.index.calculator import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from const import TRAINING_SPLIT_TYPE
 from pipeline.config.pydantic.config import Config
 
@@ -108,7 +107,7 @@ class AccessLogsDataset(Dataset):
         # Set sequence length
         self.seq_len = config.model.sequence.length
 
-        info("Dataset fields set")
+        debug("Dataset fields set")
 
     def __init__(
         self: "AccessLogsDataset", dataset_type: str, config: Config
@@ -153,7 +152,7 @@ class AccessLogsDataset(Dataset):
         # Shift target by -1
         shift_dataset_column(self.data, self.target, -1)
 
-        info("AccessLogsDataset initialized")
+        debug("AccessLogsDataset initialized")
 
     def __len__(self: "AccessLogsDataset") -> int:
         """
@@ -288,7 +287,7 @@ class AccessLogsDataset(Dataset):
             # Set dataset fields
             instance._set_fields(df, config)
 
-            info("AccessLogsDataset instantiated from dataframe")
+            debug("AccessLogsDataset instantiated from dataframe")
 
             return instance
         except (AttributeError, TypeError, IndexError) as e:

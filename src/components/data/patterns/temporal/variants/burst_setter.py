@@ -1,6 +1,5 @@
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def set_bursty_scale(
@@ -46,7 +45,7 @@ def set_bursty_scale(
         else:
             bursty_scale = burst_low
 
-        info(
+        debug(
             f"Bursty scale: {bursty_scale}, set for"
             f" current hour in day: {current_hour_in_day}"
         )

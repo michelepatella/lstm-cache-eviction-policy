@@ -4,7 +4,6 @@ import yaml
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def save_yaml(data_dict: Dict[str, Any], path: str) -> None:
@@ -34,7 +33,7 @@ def save_yaml(data_dict: Dict[str, Any], path: str) -> None:
         with open(path, "w") as f:
             yaml.dump(data_dict, f)
 
-        info(f"YAML file saved to: {path}")
+        debug(f"YAML file saved to: {path}")
     except OSError as e:
         msg = "Failed to save YAML file"
         error("%s: %s", msg, e)

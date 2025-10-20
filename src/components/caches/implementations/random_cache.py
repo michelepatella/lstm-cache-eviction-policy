@@ -70,6 +70,11 @@ class RandomCache(BaseCache):
                   (AttributeError, TypeError).
         """
         try:
+            debug(
+                f"Key to put into random cache: {key}, "
+                f"at time: {current_time}"
+            )
+
             # Remove expired keys before insertion
             self._remove_expired_keys(current_time)
 

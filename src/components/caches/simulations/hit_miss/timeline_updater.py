@@ -1,7 +1,7 @@
-from typing import Dict, List, Optional
+from typing import Dict, List
 
+from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from components.math.percentage_calculator import calculate_percentage
 from const import (
     HIT_COUNTER_NAME,
@@ -67,7 +67,7 @@ def update_hit_miss_timeline(
             }
         )
 
-        info(
+        debug(
             f"Timeline updated for request index {idx}:\n"
             f"hits: {counters[hit_counter_name]}\n"
             f"misses: {counters[miss_counter_name]}\n"

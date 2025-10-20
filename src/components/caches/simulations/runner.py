@@ -11,7 +11,9 @@ from components.caches.simulations.hit_miss.timeline_updater import (
 )
 from components.data_loader.initializer import initialize_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
+from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 from components.time.transforms.trig_decoder import (
     decode_time_trigonometrically,
 )
@@ -101,6 +103,8 @@ def run_cache_simulation(
             # Decode key
             key = target.item()
 
+            debug(f"Row {idx} (key={key}, current_time={current_time})")
+
             # Start timer to keep track of cache latency
             start_time = time.perf_counter()
 
@@ -126,6 +130,8 @@ def run_cache_simulation(
 
             # Update number of hits and misses
             timeline = update_hit_miss_timeline(idx, counters, timeline)
+
+        info(f"{policy} simulation completed")
 
         return counters, timeline, cache_latencies
     except (TypeError, IndexError, ValueError, AttributeError) as e:

@@ -4,7 +4,6 @@ import numpy as np
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from const import HOURS_IN_DAY
 
 
@@ -58,7 +57,7 @@ def encode_time_trigonometrically(
         sin_time = np.sin(angles)
         cos_time = np.cos(angles)
 
-        info("Time encoded trigonometrically")
+        debug("Time encoded trigonometrically")
 
         return sin_time, cos_time
     except TypeError as e:

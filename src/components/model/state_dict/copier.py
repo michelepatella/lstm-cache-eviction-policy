@@ -3,8 +3,8 @@ from typing import Dict
 
 import torch
 
+from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def copy_model_state_dict(model: torch.nn.Module) -> Dict[str, torch.Tensor]:
@@ -30,7 +30,7 @@ def copy_model_state_dict(model: torch.nn.Module) -> Dict[str, torch.Tensor]:
         # Copy model state dictionary
         model_state_dict = copy.deepcopy(model.state_dict())
 
-        info("Model state dictionary copied")
+        debug("Model state dictionary copied")
 
         return model_state_dict
     except TypeError as e:

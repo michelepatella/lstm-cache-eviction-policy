@@ -8,7 +8,6 @@ from components.data.patterns.temporal.variants.periodic_calculator import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from const import SECONDS_IN_HOUR
 from pipeline.config.pydantic.config import Config
 
@@ -110,7 +109,7 @@ def generate_temporal_pattern(
         # frequency scale
         delta_t = np.random.exponential(scale=freq_scale)
 
-        info(
+        debug(
             f"Delta time: {delta_t}, calculated for"
             f" current hour in day: {current_hour_in_day}"
         )

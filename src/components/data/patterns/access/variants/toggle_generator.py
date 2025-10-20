@@ -2,7 +2,6 @@ from typing import List
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def generate_toggle_pattern(
@@ -108,7 +107,7 @@ def generate_toggle_pattern(
             ) + first_key
             debug("Backward toggle state access")
 
-        info(f"(Toggle pattern) Key requested: {requested_key}")
+        debug(f"(Toggle pattern) Key requested: {requested_key}")
 
         return requested_key
     except (ValueError, IndexError, TypeError) as e:

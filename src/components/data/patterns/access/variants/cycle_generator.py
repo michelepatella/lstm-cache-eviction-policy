@@ -2,7 +2,6 @@ import numpy as np
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def generate_cycle_pattern(
@@ -68,8 +67,7 @@ def generate_cycle_pattern(
         # requests generated so far as well as
         # the cycle length
         requested_key = int(cycle[requests_count % cycle_length])
-
-        info(f"(Cycle pattern) Key requested: {requested_key}")
+        debug(f"(Cycle pattern) Key requested: {requested_key}")
 
         return requested_key
     except (IndexError, TypeError, ValueError) as e:

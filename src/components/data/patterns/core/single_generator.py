@@ -9,7 +9,6 @@ from components.data.patterns.temporal.generator import (
     generate_temporal_pattern,
 )
 from components.logs.levels.debug_logger import debug
-from components.logs.levels.info_logger import info
 from components.time.cyclics.updater import (
     update_cyclic_time,
 )
@@ -78,7 +77,5 @@ def generate_single_pattern_request(
         f"Generated request {request} at "
         f"absolute seconds {absolute_seconds}"
     )
-
-    info("Single request generated")
 
     return request, absolute_seconds, current_seconds_in_day, current_day

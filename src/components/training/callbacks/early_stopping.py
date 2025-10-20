@@ -2,7 +2,6 @@ import numpy as np
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from const import EARLY_STOPPING_DISABLED, EARLY_STOPPING_ENABLED
 
 
@@ -72,7 +71,7 @@ class EarlyStopping:
             + f"Counter: {self.counter}\n"
             + f"Early stopping: {self.early_stop}"
         )
-        info("EarlyStopping initialized")
+        debug("EarlyStopping initialized")
 
     def __call__(self: "EarlyStopping", avg_loss: float) -> None:
         """
@@ -111,7 +110,7 @@ class EarlyStopping:
                 self.best_avg_loss = avg_loss
                 self.counter = 0
 
-                info(
+                debug(
                     f"Early stopping check completed (New best average "
                     f"loss: {self.best_avg_loss}, counter set to: {self.counter})"
                 )
@@ -124,12 +123,12 @@ class EarlyStopping:
                 if self.counter >= self.patience:
                     self.early_stop = EARLY_STOPPING_ENABLED
 
-                    info(
+                    debug(
                         f"Early stopping check completed (early stopping triggered, "
                         f"counter ({self.counter}) >= patience({self.patience}))"
                     )
                 else:
-                    info(
+                    debug(
                         f"Early stopping check completed (early stopping not triggered,"
                         f"counter ({self.counter}) < patience({self.patience}))"
                     )

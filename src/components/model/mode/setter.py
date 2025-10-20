@@ -2,7 +2,6 @@ import torch
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from const import (
     MC_DROPOUT_ENABLED,
     MC_DROPOUT_MODEL_MODE,
@@ -68,7 +67,7 @@ def set_model_mode(
             # Set model to evaluation mode
             model.eval()
 
-        info(f"Model mode set: {mode}")
+        debug(f"Model mode set: {mode}")
     except (AttributeError, ValueError, TypeError) as e:
         msg = "Failed to set model mode"
         error("%s: %s", msg, e)

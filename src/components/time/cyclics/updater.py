@@ -2,7 +2,6 @@ from typing import Tuple
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def update_cyclic_time(
@@ -53,7 +52,7 @@ def update_cyclic_time(
             # Still in the current cycle
             current_time_in_cycle += delta_t
 
-        info(
+        debug(
             f"Time updated (current time in cycle: {current_time_in_cycle}, "
             f"cycle count: {cycle_count})"
         )
