@@ -77,7 +77,7 @@ def calculate_eviction_mistake_rate(
             tot_eviction_mistakes, tot_eviction_events
         )
 
-        info(f"Eviction mistake rate calculated: {eviction_mistake_rate}")
+        info(f"Eviction mistake rate: {eviction_mistake_rate}")
 
         return eviction_mistake_rate
     except (AttributeError, TypeError, ValueError) as e:

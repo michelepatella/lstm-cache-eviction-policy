@@ -45,7 +45,7 @@ def calculate_class_report(
             zero_division=zero_division,
         )
 
-        info(f"Classification report generated: {class_report}")
+        info(f"Classification report: {class_report}")
 
         return class_report
     except (ValueError, TypeError) as e:

@@ -1,6 +1,5 @@
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from const import (
     DATA_DISTRIBUTION_STATIC_MODE,
     DATASET_RAW_TYPE,
@@ -75,7 +74,7 @@ def get_dataset_abs_path(
                     / DYNAMIC_PROCESSED_DATASET_FILE_NAME
                 )
 
-        info(f"Dataset absolute path: {dataset_abs_path}")
+        debug(f"Dataset absolute path: {dataset_abs_path}")
 
         return dataset_abs_path
     except AttributeError as e:

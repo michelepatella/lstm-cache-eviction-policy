@@ -38,6 +38,8 @@ def generate_dynamic_requests(
             * Converting alpha values to list due to invalid sequence (TypeError).
     """
     try:
+        info("Dynamic requests generation started")
+
         # Prepare configuration
         zipf_config = config.data.pattern.access.zipf
         alpha_min = zipf_config.alpha.min
@@ -66,8 +68,8 @@ def generate_dynamic_requests(
         )
 
         info(
-            f"{len(requests)} dynamic requests and"
-            f" {len(timestamps_hours)} timestamps in hours generated"
+            f"Dynamic requests generated ({len(requests)} requests, "
+            f"{len(timestamps_hours)} timestamps in hours)"
         )
 
         return requests, timestamps_hours

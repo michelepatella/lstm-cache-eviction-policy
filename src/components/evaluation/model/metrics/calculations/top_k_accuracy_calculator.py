@@ -58,7 +58,7 @@ def calculate_top_k_accuracy(
             correct_predictions, len(targets)
         )
 
-        info(f"Top-{top_k} accuracy calculated: {top_k_accuracy}")
+        info(f"Top-{top_k} accuracy: {top_k_accuracy}")
 
         return top_k_accuracy
     except (RuntimeError, IndexError, TypeError, ZeroDivisionError) as e:

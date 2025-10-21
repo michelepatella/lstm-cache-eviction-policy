@@ -1,5 +1,4 @@
 from components.logs.levels.debug_logger import debug
-from components.logs.levels.info_logger import info
 from const import (
     DATA_DISTRIBUTION_STATIC_MODE,
     TRAINED_MODEL_DYNAMIC_DIRECTORY,
@@ -38,6 +37,6 @@ def get_model_abs_path(data_distribution_mode: str) -> str:
             TRAINED_MODEL_DYNAMIC_DIRECTORY / TRAINED_MODEL_DYNAMIC_FILE_NAME
         )
 
-    info(f"Model absolute path: {model_abs_path}")
+    debug(f"Model absolute path: {model_abs_path}")
 
     return model_abs_path

@@ -6,7 +6,6 @@ from components.caches.utils.cache_metrics_logger import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from pipeline.config.pydantic.config import Config
 
 
@@ -81,7 +80,7 @@ class BaseCache(ABC):
             self.scores = {}
             self._last_put_time = None
 
-            info("BaseCache initialized")
+            debug("BaseCache initialized")
         except (TypeError, AttributeError, ValueError) as e:
             msg = "Failed to initialize base cache"
             error("%s: %s", msg, e)

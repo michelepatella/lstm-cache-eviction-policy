@@ -74,8 +74,8 @@ def compute_time_series_cv_folds(
         final_avg_loss = calculate_average(fold_losses)
 
         info(
-            f"Time series cross-validation completed with "
-            f"final average loss: {final_avg_loss}"
+            f"Time series cross-validation completed ("
+            f"average loss: {final_avg_loss})"
         )
 
         return final_avg_loss

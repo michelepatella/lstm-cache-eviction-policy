@@ -109,7 +109,7 @@ def compute_single_time_series_cv_fold(
 
     info(
         f"Single time series CV fold computation completed"
-        f" with average loss: {avg_loss}"
+        f" (average loss: {avg_loss})"
     )
 
     return avg_loss

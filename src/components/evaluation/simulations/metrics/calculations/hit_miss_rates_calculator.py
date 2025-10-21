@@ -25,6 +25,6 @@ def calculate_hit_miss_rate(
     hit_rate = calculate_percentage(num_hits, total_cache_accesses)
     miss_rate = calculate_percentage(num_misses, total_cache_accesses)
 
-    info(f"Hit and miss rates calculated: {hit_rate}%, {miss_rate}%")
+    info(f"Hit and miss rates: {hit_rate}%, {miss_rate}%")
 
     return hit_rate, miss_rate

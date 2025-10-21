@@ -1,4 +1,4 @@
-from components.logs.levels.info_logger import info
+from components.logs.levels.debug_logger import debug
 
 
 def calculate_key_scores(num_keys, num_steps, prob_matrix, conf_matrix):
@@ -20,6 +20,6 @@ def calculate_key_scores(num_keys, num_steps, prob_matrix, conf_matrix):
     score_range = max_score - min_score if max_score != min_score else 1.0
     scores = {k: (v - min_score) / score_range for k, v in scores.items()}
 
-    info("Key scores calculated.")
+    debug("Key scores calculated.")
 
     return scores

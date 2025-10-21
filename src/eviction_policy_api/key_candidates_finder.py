@@ -1,7 +1,7 @@
 import numpy as np
 from torch.nn.functional import softmax
 
-from components.logs.levels.info_logger import info
+from components.logs.levels.debug_logger import debug
 from eviction_policy_api.key_score_calculator import (
     calculate_key_scores,
 )
@@ -43,6 +43,6 @@ def find_key_candidates(all_outputs, upper_ci, lower_ci):
     # select the keys
     keys = list(scores.keys())
 
-    info("Key candidates found.")
+    debug("Key candidates found.")
 
     return keys, scores

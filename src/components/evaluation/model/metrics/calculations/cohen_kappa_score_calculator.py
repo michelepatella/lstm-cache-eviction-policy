@@ -38,7 +38,7 @@ def calculate_cohen_kappa_score(
         # Calculate Cohen's kappa score
         kappa = cohen_kappa_score(targets, predictions)
 
-        info(f"Cohen's kappa score calculated: {kappa}")
+        info(f"Cohen's kappa score: {kappa}")
 
         return kappa
     except (ValueError, TypeError) as e:

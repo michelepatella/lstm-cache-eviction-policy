@@ -90,8 +90,8 @@ def compute_grid_search(
                 pbar.update(1)
 
         info(
-            f"Grid search completed with best parameters: \n{best_params}\n"
-            f"achieving average loss: {best_avg_loss}"
+            f"Grid search completed (best parameters: \n{best_params}\n"
+            f"average loss: {best_avg_loss})"
         )
 
         return best_params

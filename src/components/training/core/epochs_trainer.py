@@ -135,8 +135,8 @@ def train_epochs(
         model.load_state_dict(best_model_weights)
 
         info(
-            f"Training completed with best average loss: {best_avg_loss}, "
-            f"over {epoch} epochs"
+            f"Training completed (best average loss: {best_avg_loss}, "
+            f"total epochs: {epoch})"
         )
 
         return best_avg_loss, model

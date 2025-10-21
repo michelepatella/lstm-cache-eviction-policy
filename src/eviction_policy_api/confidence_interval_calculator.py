@@ -1,7 +1,7 @@
 import torch
 from scipy.stats import norm
 
-from components.logs.levels.info_logger import info
+from components.logs.levels.debug_logger import debug
 
 
 def calculate_confidence_interval(all_outputs, all_variances, config_settings):
@@ -18,6 +18,6 @@ def calculate_confidence_interval(all_outputs, all_variances, config_settings):
     lower_ci = outputs_tensor - z_score * outputs_std
     upper_ci = outputs_tensor + z_score * outputs_std
 
-    info("Confidence intervals calculated.")
+    debug("Confidence intervals calculated.")
 
     return lower_ci, upper_ci

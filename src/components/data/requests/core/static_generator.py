@@ -27,6 +27,8 @@ def generate_static_requests(
             - requests: List of generated keys requested.
             - timestamps_hours: Corresponding timestamps of requests in hours.
     """
+    info("Static requests generation started")
+
     alpha_fixed = config.data.pattern.access.zipf.alpha.fixed
 
     # Use common helper to generate
@@ -36,8 +38,8 @@ def generate_static_requests(
     )
 
     info(
-        f"{len(requests)} static requests and "
-        f"{len(timestamps_hours)} timestamps in hours generated"
+        f"Static requests generated ({len(requests)} requests, "
+        f"{len(timestamps_hours)} timestamps in hours)"
     )
 
     return requests, timestamps_hours
