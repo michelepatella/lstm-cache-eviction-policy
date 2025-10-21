@@ -1,13 +1,13 @@
 import pandas as pd
 
+from components.const import DATASET_INDEX_DISABLED
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
-from const import DATASET_INDEX
 
 
 def save_dataset(
-    df: pd.DataFrame, path: str, index: bool = DATASET_INDEX
+    df: pd.DataFrame, path: str, index: bool = DATASET_INDEX_DISABLED
 ) -> None:
     """
     Save Pandas dataframe.

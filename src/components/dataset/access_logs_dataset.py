@@ -27,7 +27,7 @@ from components.dataset.splits.index.calculator import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import TRAINING_SPLIT_TYPE
+from const import DATASET_TRAINING_SPLIT_TYPE
 from pipeline.config.pydantic.config import Config
 
 
@@ -76,7 +76,9 @@ class AccessLogsDataset(Dataset):
         # Split dataset data according
         # to the calculated index
         self.data = split_dataset_data(
-            self.data, dataset_split_idx, (dataset_type == TRAINING_SPLIT_TYPE)
+            self.data,
+            dataset_split_idx,
+            (dataset_type == DATASET_TRAINING_SPLIT_TYPE),
         )
 
     def _set_fields(

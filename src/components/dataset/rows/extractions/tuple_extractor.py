@@ -7,7 +7,7 @@ from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from const import (
     COS_TIME_COLUMN_NAME,
-    REQUEST_COLUMN_NAME,
+    DATASET_REQUEST_COLUMN_NAME,
     SIN_TIME_COLUMN_NAME,
 )
 
@@ -15,7 +15,7 @@ from const import (
 def extract_tuple_from_dataset_row(
     row: pd.Series,
     feature_columns: Tuple[str] = (COS_TIME_COLUMN_NAME, SIN_TIME_COLUMN_NAME),
-    target_column: str = REQUEST_COLUMN_NAME,
+    target_column: str = DATASET_REQUEST_COLUMN_NAME,
     feature_dtype: torch.dtype = torch.float,
     target_dtype: torch.dtype = torch.long,
 ) -> Tuple[torch.Tensor, torch.Tensor]:

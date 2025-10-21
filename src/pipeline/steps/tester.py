@@ -6,17 +6,17 @@ from components.logs.levels.info_logger import info
 from components.model.best.initializer import (
     initialize_best_model,
 )
-from components.model.mode.setter import set_model_mode
 from const import (
     DATA_DISTRIBUTION_STATIC_MODE,
-    DYNAMIC_MODEL_RESULTS_FILE_NAME,
-    EVALUATION_MODEL_MODE,
-    LOGS_TESTING_PHASE,
-    RESULTS_DIRECTORY_PATH,
-    STATIC_MODEL_RESULTS_FILE_NAME,
-    TESTING_SPLIT_TYPE,
+    DATASET_TESTING_SPLIT_TYPE,
 )
 from pipeline.config.configurator import prepare_config
+from pipeline.const import (
+    LOGS_TESTING_PHASE,
+    MODEL_COMPUTE_METRICS_ENABLED,
+    RESULTS_DYNAMIC_MODEL_FILE_PATH,
+    RESULTS_STATIC_MODEL_FILE_PATH,
+)
 
 
 def test_model() -> None:
@@ -30,7 +30,7 @@ def test_model() -> None:
     Returns:
         None
     """
-    # Set the new state
+    # Set the new pipeline step
     logs_phase.set(LOGS_TESTING_PHASE)
 
     # Setup
@@ -47,7 +47,7 @@ def test_model() -> None:
 
     # Setup testing data loader
     _, testing_loader = initialize_data_loader(
-        TESTING_SPLIT_TYPE,
+        DATASET_TESTING_SPLIT_TYPE,
         testing_batch_size,
         testing_shuffle,
         AccessLogsDataset,
@@ -59,21 +59,11 @@ def test_model() -> None:
         model_params, data_distribution_mode, config, testing_loader
     )
 
-    # Set model in evaluation phase
-    set_model_mode(model, EVALUATION_MODEL_MODE)
-
     # Prepare file name where to save model results
     if data_distribution_mode == DATA_DISTRIBUTION_STATIC_MODE:
-        model_results_file_name = STATIC_MODEL_RESULTS_FILE_NAME
+        model_results_save_path = RESULTS_STATIC_MODEL_FILE_PATH
     else:
-        model_results_file_name = DYNAMIC_MODEL_RESULTS_FILE_NAME
-
-    # Build path to save model metrics
-    model_results_save_path = (
-        RESULTS_DIRECTORY_PATH
-        / data_distribution_mode
-        / model_results_file_name
-    )
+        model_results_save_path = RESULTS_DYNAMIC_MODEL_FILE_PATH
 
     # Evaluate model
     (
@@ -90,7 +80,7 @@ def test_model() -> None:
         num_features,
         top_k,
         model_results_save_path,
-        compute_metrics=True,
+        compute_metrics=MODEL_COMPUTE_METRICS_ENABLED,
     )
 
     info("Model testing completed")

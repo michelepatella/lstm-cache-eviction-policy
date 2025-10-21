@@ -4,18 +4,18 @@ from typing import List
 import numpy as np
 from matplotlib import pyplot as plt
 
-from components.logs.levels.debug_logger import debug
-from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
-from const import (
+from components.const import (
     PLOT_LABEL_FONT_SIZE,
     PLOT_SIZE,
     PLOT_TITLE_FONT_SIZE,
-    ZIPF_LOG_LOG_PLOT_MARKER,
-    ZIPF_LOG_LOG_PLOT_TITLE,
-    ZIPF_LOG_LOG_PLOT_X_LABEL,
-    ZIPF_LOG_LOG_PLOT_Y_LABEL,
+    PLOT_ZIPF_LOG_LOG_MARKER,
+    PLOT_ZIPF_LOG_LOG_TITLE,
+    PLOT_ZIPF_LOG_LOG_X_LABEL,
+    PLOT_ZIPF_LOG_LOG_Y_LABEL,
 )
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 
 
 def plot_zipf_loglog(requests: List[int], save_path: str) -> None:
@@ -60,18 +60,18 @@ def plot_zipf_loglog(requests: List[int], save_path: str) -> None:
         plt.loglog(
             ranks,
             key_frequencies,
-            marker=ZIPF_LOG_LOG_PLOT_MARKER,
+            marker=PLOT_ZIPF_LOG_LOG_MARKER,
         )
         plt.title(
-            ZIPF_LOG_LOG_PLOT_TITLE,
+            PLOT_ZIPF_LOG_LOG_TITLE,
             fontsize=PLOT_TITLE_FONT_SIZE,
         )
         plt.xlabel(
-            ZIPF_LOG_LOG_PLOT_X_LABEL,
+            PLOT_ZIPF_LOG_LOG_X_LABEL,
             fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.ylabel(
-            ZIPF_LOG_LOG_PLOT_Y_LABEL,
+            PLOT_ZIPF_LOG_LOG_Y_LABEL,
             fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.tight_layout()

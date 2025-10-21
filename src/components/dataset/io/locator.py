@@ -1,17 +1,12 @@
+from components.const import (
+    DATASET_DYNAMIC_PROCESSED_FILE_PATH,
+    DATASET_DYNAMIC_RAW_FILE_PATH,
+    DATASET_STATIC_PROCESSED_FILE_PATH,
+    DATASET_STATIC_RAW_FILE_PATH,
+)
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import (
-    DATA_DISTRIBUTION_STATIC_MODE,
-    DATASET_RAW_TYPE,
-    DYNAMIC_PROCESSED_DATASET_DIRECTORY,
-    DYNAMIC_PROCESSED_DATASET_FILE_NAME,
-    DYNAMIC_RAW_DATASET_DIRECTORY,
-    DYNAMIC_RAW_DATASET_FILE_NAME,
-    STATIC_PROCESSED_DATASET_DIRECTORY,
-    STATIC_PROCESSED_DATASET_FILE_NAME,
-    STATIC_RAW_DATASET_DIRECTORY,
-    STATIC_RAW_DATASET_FILE_NAME,
-)
+from const import DATA_DISTRIBUTION_STATIC_MODE, DATASET_RAW_TYPE
 
 
 def get_dataset_abs_path(
@@ -50,29 +45,18 @@ def get_dataset_abs_path(
             # For static data distribution mode
             if dataset_type == DATASET_RAW_TYPE:
                 # For raw dataset
-                dataset_abs_path = (
-                    STATIC_RAW_DATASET_DIRECTORY / STATIC_RAW_DATASET_FILE_NAME
-                )
+                dataset_abs_path = DATASET_STATIC_RAW_FILE_PATH
             else:
                 # For preprocessed dataset
-                dataset_abs_path = (
-                    STATIC_PROCESSED_DATASET_DIRECTORY
-                    / STATIC_PROCESSED_DATASET_FILE_NAME
-                )
+                dataset_abs_path = DATASET_STATIC_PROCESSED_FILE_PATH
         else:
             # For dynamic data distribution mode
             if dataset_type == DATASET_RAW_TYPE:
                 # For raw dataset
-                dataset_abs_path = (
-                    DYNAMIC_RAW_DATASET_DIRECTORY
-                    / DYNAMIC_RAW_DATASET_FILE_NAME
-                )
+                dataset_abs_path = DATASET_DYNAMIC_RAW_FILE_PATH
             else:
                 # For preprocessed dataset
-                dataset_abs_path = (
-                    DYNAMIC_PROCESSED_DATASET_DIRECTORY
-                    / DYNAMIC_PROCESSED_DATASET_FILE_NAME
-                )
+                dataset_abs_path = DATASET_DYNAMIC_PROCESSED_FILE_PATH
 
         debug(f"Dataset absolute path: {dataset_abs_path}")
 

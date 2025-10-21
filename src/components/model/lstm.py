@@ -3,10 +3,10 @@ from typing import Dict, List, Optional, Union
 import torch
 import torch.nn as nn
 
+from components.const import MC_DROPOUT_DISABLED, MODEL_PARAM_NAMES
 from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import LSTM_PARAM_NAMES, MC_DROPOUT_DISABLED
 from pipeline.config.pydantic.config import Config
 from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
 
@@ -34,7 +34,7 @@ class LSTM(torch.nn.Module):
         self: "LSTM",
         params: Union[ModelParamsConfig, Dict[str, Union[int, float, bool]]],
         config: Optional[Config],
-        param_names: List[str] = LSTM_PARAM_NAMES,
+        param_names: List[str] = MODEL_PARAM_NAMES,
     ) -> None:
         """
         Set model parameters.

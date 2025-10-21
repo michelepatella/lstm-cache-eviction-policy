@@ -1,8 +1,8 @@
 import numpy as np
 
+from components.const import TIME_HOURS_IN_DAY
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import HOURS_IN_DAY
 
 
 def calculate_periodic_component(
@@ -39,7 +39,7 @@ def calculate_periodic_component(
 
         # Calculate the periodic component
         periodic_component = scale + amplitude * np.cos(
-            2 * np.pi * (current_hour_in_day / HOURS_IN_DAY)
+            2 * np.pi * (current_hour_in_day / TIME_HOURS_IN_DAY)
         )
 
         debug(

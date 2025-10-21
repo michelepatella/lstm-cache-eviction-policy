@@ -3,7 +3,6 @@ from typing import Dict, List, Tuple
 
 import torch
 from fastapi import FastAPI
-from pipeline.utils.model.backpropagation.mc.mc_forward_runner import mc_forward_passes
 
 from components.device.mover import (
     move_to_device,
@@ -12,6 +11,9 @@ from components.logs.levels.debug_logger import debug
 from eviction_policy_api.const import AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT
 from eviction_policy_api.services.autoregressive_rollout.initialization.initializer import (
     initialize_autoregressive_rollout,
+)
+from pipeline.utils.model.backpropagation.mc.mc_forward_runner import (
+    mc_forward_passes,
 )
 
 app = FastAPI()

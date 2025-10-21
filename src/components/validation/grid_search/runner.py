@@ -3,6 +3,7 @@ from typing import Dict, Union
 import numpy as np
 from tqdm import tqdm
 
+from components.const import GRID_SEARCH_DESC
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -16,7 +17,6 @@ from components.validation.search_space.combinator import (
 from components.validation.time_series_cv.core.folds_runner import (
     compute_time_series_cv_folds,
 )
-from const import GRID_SEARCH_DESC
 from pipeline.config.pydantic.config import Config
 
 

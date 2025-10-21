@@ -6,6 +6,7 @@ from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
+from components.const import TRAINING_EPOCHS_DESC
 from components.evaluation.model.evaluator import evaluate_model
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -18,7 +19,7 @@ from components.model.state_dict.copier import (
 )
 from components.training.callbacks.early_stopping import EarlyStopping
 from components.training.core.single_epoch_trainer import train_single_epoch
-from const import LOGS_VALIDATION_PHASE, TRAINING_EPOCHS_DESC
+from const import LOGS_VALIDATION_PHASE
 from pipeline.config.pydantic.config import Config
 
 

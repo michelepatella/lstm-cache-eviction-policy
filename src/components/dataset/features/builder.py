@@ -1,5 +1,9 @@
 import pandas as pd
 
+from components.const import (
+    DATASET_COS_TIME_COLUMN_NAME,
+    DATASET_SIN_TIME_COLUMN_NAME,
+)
 from components.dataset.columns.manipulations.dropper import (
     drop_dataset_column,
 )
@@ -12,12 +16,7 @@ from components.logs.levels.error_logger import error
 from components.time.transforms.trig_encoder import (
     encode_time_trigonometrically,
 )
-from const import (
-    COS_TIME_COLUMN_NAME,
-    REQUEST_COLUMN_NAME,
-    SIN_TIME_COLUMN_NAME,
-    TIMESTAMP_COLUMN_NAME,
-)
+from const import DATASET_REQUEST_COLUMN_NAME, DATASET_TIMESTAMP_COLUMN_NAME
 
 
 def build_features(df: pd.DataFrame) -> pd.DataFrame:
@@ -45,20 +44,20 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     try:
         # Retrieve time column and convert it to
         # numpy array
-        time_column_array = df[TIMESTAMP_COLUMN_NAME].to_numpy()
+        time_column_array = df[DATASET_TIMESTAMP_COLUMN_NAME].to_numpy()
 
         # Encode time trigonometrically
         sin_time, cos_time = encode_time_trigonometrically(time_column_array)
 
         # Add new columns
-        df = set_dataset_column(df, SIN_TIME_COLUMN_NAME, sin_time)
-        df = set_dataset_column(df, COS_TIME_COLUMN_NAME, cos_time)
+        df = set_dataset_column(df, DATASET_SIN_TIME_COLUMN_NAME, sin_time)
+        df = set_dataset_column(df, DATASET_COS_TIME_COLUMN_NAME, cos_time)
 
         # Drop the original time column
-        df = drop_dataset_column(df, TIMESTAMP_COLUMN_NAME)
+        df = drop_dataset_column(df, DATASET_TIMESTAMP_COLUMN_NAME)
 
         # Reorder columns so that target is last
-        df = reorder_dataset_columns(df, REQUEST_COLUMN_NAME)
+        df = reorder_dataset_columns(df, DATASET_REQUEST_COLUMN_NAME)
 
         debug("Dataset features built")
 

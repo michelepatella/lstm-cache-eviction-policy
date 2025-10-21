@@ -1,8 +1,8 @@
 import numpy as np
 
+from components.const import EARLY_STOPPING_DISABLED, EARLY_STOPPING_ENABLED
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import EARLY_STOPPING_DISABLED, EARLY_STOPPING_ENABLED
 
 
 class EarlyStopping:

@@ -1,5 +1,6 @@
 import numpy as np
 
+from components.const import TIME_SECONDS_IN_HOUR
 from components.data.patterns.temporal.variants.burst_setter import (
     set_bursty_scale,
 )
@@ -8,7 +9,6 @@ from components.data.patterns.temporal.variants.periodic_calculator import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import SECONDS_IN_HOUR
 from pipeline.config.pydantic.config import Config
 
 
@@ -49,7 +49,7 @@ def generate_temporal_pattern(
 
         # Move from current seconds to
         # current hour in day
-        current_hour_in_day = current_seconds_in_day / SECONDS_IN_HOUR
+        current_hour_in_day = current_seconds_in_day / TIME_SECONDS_IN_HOUR
         debug(
             f"Current hour in day: {current_hour_in_day} "
             f"for temporal pattern generation"

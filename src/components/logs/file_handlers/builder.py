@@ -1,7 +1,7 @@
 import logging
 from logging.handlers import RotatingFileHandler
 
-from const import (
+from components.const import (
     LOGS_FILE_BACKUP_COUNT,
     LOGS_FILE_MAX_BYTES,
     LOGS_FORMAT,

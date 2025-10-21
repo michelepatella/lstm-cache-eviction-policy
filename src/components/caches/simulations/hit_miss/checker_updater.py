@@ -1,8 +1,11 @@
 from typing import Any, Dict
 
-from components.logs.levels.error_logger import error
 from components.logs.levels.debug_logger import debug
-from const import HIT_COUNTER_NAME, MISS_COUNTER_NAME
+from components.logs.levels.error_logger import error
+from const import (
+    SIMULATIONS_METRICS_HIT_COUNTER_NAME,
+    SIMULATIONS_METRICS_MISS_COUNTER_NAME,
+)
 
 
 def check_update_hit_miss(
@@ -10,8 +13,8 @@ def check_update_hit_miss(
     key: Any,
     current_time: float,
     counters: Dict[str, int],
-    hit_counter_name: str = HIT_COUNTER_NAME,
-    miss_counter_name: str = MISS_COUNTER_NAME,
+    hit_counter_name: str = SIMULATIONS_METRICS_HIT_COUNTER_NAME,
+    miss_counter_name: str = SIMULATIONS_METRICS_MISS_COUNTER_NAME,
 ) -> bool:
     """
     Check key presence in the cache and update hit and miss counters.

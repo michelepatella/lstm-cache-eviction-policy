@@ -1,20 +1,22 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
+from components.const import (
+    PLOT_DAILY_PROFILE_BIN_SIZE,
+    PLOT_DAILY_PROFILE_STEP,
+    PLOT_DAILY_PROFILE_TITLE,
+    PLOT_DAILY_PROFILE_X_LABEL,
+    PLOT_DAILY_PROFILE_Y_LABEL,
+    PLOT_LABEL_FONT_SIZE,
+    PLOT_SIZE,
+    PLOT_TITLE_FONT_SIZE,
+)
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from const import (
-    DAILY_PROFILE_PLOT_BIN_SIZE,
-    DAILY_PROFILE_PLOT_STEP,
-    DAILY_PROFILE_PLOT_TITLE,
-    DAILY_PROFILE_PLOT_X_LABEL,
-    DAILY_PROFILE_PLOT_Y_LABEL,
     DATA_GENERATION_FINAL_HOUR,
     DATA_GENERATION_INITIAL_HOUR,
-    PLOT_LABEL_FONT_SIZE,
-    PLOT_SIZE,
-    PLOT_TITLE_FONT_SIZE,
 )
 
 
@@ -44,7 +46,7 @@ def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
         num_bins = (
             int(
                 (DATA_GENERATION_FINAL_HOUR - DATA_GENERATION_INITIAL_HOUR)
-                / DAILY_PROFILE_PLOT_BIN_SIZE
+                / PLOT_DAILY_PROFILE_BIN_SIZE
             )
             + 1
         )
@@ -72,25 +74,25 @@ def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
         plt.bar(
             bins[:-1],
             bins_counts,
-            width=DAILY_PROFILE_PLOT_BIN_SIZE,
+            width=PLOT_DAILY_PROFILE_BIN_SIZE,
         )
         plt.title(
-            DAILY_PROFILE_PLOT_TITLE,
+            PLOT_DAILY_PROFILE_TITLE,
             fontsize=PLOT_TITLE_FONT_SIZE,
         )
         plt.xlabel(
-            DAILY_PROFILE_PLOT_X_LABEL,
+            PLOT_DAILY_PROFILE_X_LABEL,
             fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.ylabel(
-            DAILY_PROFILE_PLOT_Y_LABEL,
+            PLOT_DAILY_PROFILE_Y_LABEL,
             fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.xticks(
             np.arange(
                 DATA_GENERATION_INITIAL_HOUR,
                 DATA_GENERATION_FINAL_HOUR + 1,
-                step=DAILY_PROFILE_PLOT_STEP,
+                step=PLOT_DAILY_PROFILE_STEP,
             ),
             fontsize=PLOT_LABEL_FONT_SIZE,
         )

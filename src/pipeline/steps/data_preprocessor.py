@@ -13,12 +13,14 @@ from components.dataset.io.saver import save_dataset
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
 from const import (
-    DATASET_PROCESSED_TYPE,
     DATASET_RAW_TYPE,
-    LOGS_DATA_PREPROCESSING_PHASE,
-    TIMESTAMP_COLUMN_NAME,
+    DATASET_TIMESTAMP_COLUMN_NAME,
 )
 from pipeline.config.configurator import prepare_config
+from pipeline.const import (
+    DATASET_PROCESSED_TYPE,
+    LOGS_DATA_PREPROCESSING_PHASE,
+)
 
 
 def preprocess_data() -> None:
@@ -34,7 +36,7 @@ def preprocess_data() -> None:
     Returns:
         None
     """
-    # Set the new state
+    # Set the new pipeline step
     logs_phase.set(LOGS_DATA_PREPROCESSING_PHASE)
 
     # Setup
@@ -56,7 +58,7 @@ def preprocess_data() -> None:
     df = remove_dataset_missing_values(df)
 
     # Remove duplicates
-    df = remove_dataset_duplicates(df, [TIMESTAMP_COLUMN_NAME])
+    df = remove_dataset_duplicates(df, [DATASET_TIMESTAMP_COLUMN_NAME])
 
     # Build new features
     df = build_features(df)

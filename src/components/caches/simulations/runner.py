@@ -9,6 +9,7 @@ from components.caches.simulations.hit_miss.checker_updater import (
 from components.caches.simulations.hit_miss.timeline_updater import (
     update_hit_miss_timeline,
 )
+from components.const import TIME_MICROSECONDS_IN_SECOND
 from components.data_loader.initializer import initialize_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.debug_logger import debug
@@ -18,11 +19,10 @@ from components.time.transforms.trig_decoder import (
     decode_time_trigonometrically,
 )
 from const import (
-    HIT_COUNTER_NAME,
-    LSTM_CACHE_NAME,
-    MICROSECONDS_IN_SECOND,
-    MISS_COUNTER_NAME,
-    TESTING_SPLIT_TYPE,
+    CACHE_LSTM_NAME,
+    DATASET_TESTING_SPLIT_TYPE,
+    SIMULATIONS_METRICS_HIT_COUNTER_NAME,
+    SIMULATIONS_METRICS_MISS_COUNTER_NAME,
 )
 from pipeline.config.pydantic.config import Config
 
@@ -70,15 +70,15 @@ def run_cache_simulation(
 
         # Initialize data
         counters = {
-            HIT_COUNTER_NAME: 0,
-            MISS_COUNTER_NAME: 0,
+            SIMULATIONS_METRICS_HIT_COUNTER_NAME: 0,
+            SIMULATIONS_METRICS_MISS_COUNTER_NAME: 0,
         }
         timeline = []
         cache_latencies = []
 
         # Get testing set
         testing_set, testing_loader = initialize_data_loader(
-            TESTING_SPLIT_TYPE,
+            DATASET_TESTING_SPLIT_TYPE,
             testing_batch_size,
             testing_shuffle,
             AccessLogsDataset,
@@ -116,7 +116,7 @@ def run_cache_simulation(
 
             # If the requested key is not into the cache
             if not is_hit:
-                if policy == LSTM_CACHE_NAME:
+                if policy == CACHE_LSTM_NAME:
                     # Put the requested key into the LSTM cache
                     cache.put(key, current_time, idx, testing_set, config)
                 else:
@@ -127,7 +127,9 @@ def run_cache_simulation(
             end_time = time.perf_counter()
 
             # Store cache latency
-            cache_latency = (end_time - start_time) * MICROSECONDS_IN_SECOND
+            cache_latency = (
+                end_time - start_time
+            ) * TIME_MICROSECONDS_IN_SECOND
             cache_latencies.append(cache_latency)
 
             # Update number of hits and misses

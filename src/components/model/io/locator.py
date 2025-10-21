@@ -1,11 +1,9 @@
-from components.logs.levels.debug_logger import debug
-from const import (
-    DATA_DISTRIBUTION_STATIC_MODE,
-    TRAINED_MODEL_DYNAMIC_DIRECTORY,
-    TRAINED_MODEL_DYNAMIC_FILE_NAME,
-    TRAINED_MODEL_STATIC_DIRECTORY,
-    TRAINED_MODEL_STATIC_FILE_NAME,
+from components.const import (
+    MODEL_TRAINED_DYNAMIC_FILE_PATH,
+    MODEL_TRAINED_STATIC_FILE_PATH,
 )
+from components.logs.levels.debug_logger import debug
+from const import DATA_DISTRIBUTION_STATIC_MODE
 
 
 def get_model_abs_path(data_distribution_mode: str) -> str:
@@ -29,13 +27,9 @@ def get_model_abs_path(data_distribution_mode: str) -> str:
     # Define model path according to
     # data distribution mode
     if data_distribution_mode == DATA_DISTRIBUTION_STATIC_MODE:
-        model_abs_path = (
-            TRAINED_MODEL_STATIC_DIRECTORY / TRAINED_MODEL_STATIC_FILE_NAME
-        )
+        model_abs_path = MODEL_TRAINED_STATIC_FILE_PATH
     else:
-        model_abs_path = (
-            TRAINED_MODEL_DYNAMIC_DIRECTORY / TRAINED_MODEL_DYNAMIC_FILE_NAME
-        )
+        model_abs_path = MODEL_TRAINED_DYNAMIC_FILE_PATH
 
     debug(f"Model absolute path: {model_abs_path}")
 

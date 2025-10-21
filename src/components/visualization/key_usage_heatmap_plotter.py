@@ -3,23 +3,25 @@ from typing import List
 import numpy as np
 from matplotlib import pyplot as plt
 
+from components.const import (
+    PLOT_KEY_USAGE_HEATMAP_ASPECT,
+    PLOT_KEY_USAGE_HEATMAP_CMAP,
+    PLOT_KEY_USAGE_HEATMAP_COLORBAR_LABEL,
+    PLOT_KEY_USAGE_HEATMAP_ROTATION,
+    PLOT_KEY_USAGE_HEATMAP_STEP,
+    PLOT_KEY_USAGE_HEATMAP_TITLE,
+    PLOT_KEY_USAGE_HEATMAP_X_LABEL,
+    PLOT_KEY_USAGE_HEATMAP_Y_LABEL,
+    PLOT_LABEL_FONT_SIZE,
+    PLOT_SIZE,
+    PLOT_TITLE_FONT_SIZE,
+)
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from const import (
     DATA_GENERATION_FINAL_HOUR,
     DATA_GENERATION_INITIAL_HOUR,
-    KEY_USAGE_HEATMAP_ASPECT,
-    KEY_USAGE_HEATMAP_CMAP,
-    KEY_USAGE_HEATMAP_COLORBAR_LABEL,
-    KEY_USAGE_HEATMAP_ROTATION,
-    KEY_USAGE_HEATMAP_STEP,
-    KEY_USAGE_HEATMAP_TITLE,
-    KEY_USAGE_HEATMAP_X_LABEL,
-    KEY_USAGE_HEATMAP_Y_LABEL,
-    PLOT_LABEL_FONT_SIZE,
-    PLOT_SIZE,
-    PLOT_TITLE_FONT_SIZE,
 )
 
 
@@ -113,20 +115,20 @@ def plot_key_usage_heatmap(
         plt.figure(figsize=(PLOT_SIZE, PLOT_SIZE))
         plt.imshow(
             heatmap,
-            aspect=KEY_USAGE_HEATMAP_ASPECT,
-            cmap=KEY_USAGE_HEATMAP_CMAP,
+            aspect=PLOT_KEY_USAGE_HEATMAP_ASPECT,
+            cmap=PLOT_KEY_USAGE_HEATMAP_CMAP,
         )
         plt.title(
-            KEY_USAGE_HEATMAP_TITLE,
+            PLOT_KEY_USAGE_HEATMAP_TITLE,
             fontsize=PLOT_TITLE_FONT_SIZE,
         )
-        plt.colorbar(label=KEY_USAGE_HEATMAP_COLORBAR_LABEL)
+        plt.colorbar(label=PLOT_KEY_USAGE_HEATMAP_COLORBAR_LABEL)
         plt.xlabel(
-            KEY_USAGE_HEATMAP_X_LABEL,
+            PLOT_KEY_USAGE_HEATMAP_X_LABEL,
             fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.ylabel(
-            KEY_USAGE_HEATMAP_Y_LABEL,
+            PLOT_KEY_USAGE_HEATMAP_Y_LABEL,
             fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.yticks(
@@ -141,9 +143,11 @@ def plot_key_usage_heatmap(
             fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.xticks(
-            ticks=np.arange(0, num_keys, KEY_USAGE_HEATMAP_STEP),
-            labels=np.arange(min_key, max_key + 1, KEY_USAGE_HEATMAP_STEP),
-            rotation=KEY_USAGE_HEATMAP_ROTATION,
+            ticks=np.arange(0, num_keys, PLOT_KEY_USAGE_HEATMAP_STEP),
+            labels=np.arange(
+                min_key, max_key + 1, PLOT_KEY_USAGE_HEATMAP_STEP
+            ),
+            rotation=PLOT_KEY_USAGE_HEATMAP_ROTATION,
             fontsize=PLOT_LABEL_FONT_SIZE,
         )
         plt.tight_layout()

@@ -2,14 +2,14 @@ from typing import Tuple
 
 import numpy as np
 
+from components.const import TIME_HOURS_IN_DAY
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import HOURS_IN_DAY
 
 
 def encode_time_trigonometrically(
     timestamps: np.ndarray,
-    cycle_length: float = HOURS_IN_DAY,
+    cycle_length: float = TIME_HOURS_IN_DAY,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Encode a list of timestamps trigonometrically.

@@ -13,7 +13,10 @@ from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.math.avg_calculator import calculate_average
-from const import HIT_COUNTER_NAME, MISS_COUNTER_NAME
+from const import (
+    SIMULATIONS_METRICS_HIT_COUNTER_NAME,
+    SIMULATIONS_METRICS_MISS_COUNTER_NAME,
+)
 
 
 def calculate_simulation_metrics(
@@ -21,8 +24,8 @@ def calculate_simulation_metrics(
     cache_latencies: List[float],
     mistake_window: int,
     metrics_logger: CacheMetricsLogger,
-    hit_counter_name: str = HIT_COUNTER_NAME,
-    miss_counter_name: str = MISS_COUNTER_NAME,
+    hit_counter_name: str = SIMULATIONS_METRICS_HIT_COUNTER_NAME,
+    miss_counter_name: str = SIMULATIONS_METRICS_MISS_COUNTER_NAME,
 ) -> Tuple[float, float, float, float]:
     """
     Calculate cache simulations metrics.

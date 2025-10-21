@@ -1,23 +1,22 @@
 import contextvars
 import logging
-from typing import Optional
 
-from components.logs.file_handlers.builder import build_logs_file_handler
-from const import (
+from components.const import (
     LOGS_DEBUG_FILE_PATH,
+    LOGS_DEFAULT_PHASE,
     LOGS_ERROR_FILE_PATH,
     LOGS_FILE_BACKUP_COUNT,
     LOGS_FILE_BASE_LEVEL,
     LOGS_FILE_MAX_BYTES,
     LOGS_FORMAT,
     LOGS_INFO_FILE_PATH,
-    LOGS_PHASE_DEFAULT,
     LOGS_PHASE_NAME,
 )
+from components.logs.file_handlers.builder import build_logs_file_handler
 
 # Contextual variable for logging messages
 logs_phase = contextvars.ContextVar(
-    LOGS_PHASE_NAME, default=LOGS_PHASE_DEFAULT
+    LOGS_PHASE_NAME, default=LOGS_DEFAULT_PHASE
 )
 
 

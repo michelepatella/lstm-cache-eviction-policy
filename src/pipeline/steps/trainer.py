@@ -16,8 +16,9 @@ from components.model.io.locator import get_model_abs_path
 from components.model.io.saver import save_model
 from components.optimizer.builder import build_optimizer
 from components.training.core.epochs_trainer import train_epochs
-from const import LOGS_TRAINING_PHASE, TRAINING_SPLIT_TYPE
+from const import DATASET_TRAINING_SPLIT_TYPE
 from pipeline.config.configurator import prepare_config
+from pipeline.const import LOGS_TRAINING_PHASE
 
 
 def train_model() -> None:
@@ -32,7 +33,7 @@ def train_model() -> None:
     Returns:
         None
     """
-    # Set the new state
+    # Set the new pipeline step
     logs_phase.set(LOGS_TRAINING_PHASE)
 
     # Setup
@@ -58,7 +59,7 @@ def train_model() -> None:
     # Load the training set and the
     # training loader
     training_set, training_loader = initialize_data_loader(
-        TRAINING_SPLIT_TYPE,
+        DATASET_TRAINING_SPLIT_TYPE,
         training_batch_size,
         validation_shuffle,
         AccessLogsDataset,

@@ -1,12 +1,12 @@
 import torch
 
+from components.const import (
+    MC_DROPOUT_ENABLED,
+    MODEL_MC_DROPOUT_MODE,
+    MODEL_TRAINING_MODE,
+)
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import (
-    MC_DROPOUT_ENABLED,
-    MC_DROPOUT_MODEL_MODE,
-    TRAINING_MODEL_MODE,
-)
 
 
 def set_model_mode(
@@ -41,7 +41,7 @@ def set_model_mode(
     """
     try:
         # MC Dropout mode
-        if mode == MC_DROPOUT_MODEL_MODE:
+        if mode == MODEL_MC_DROPOUT_MODE:
             # Set all model layers to
             # evaluation mode
             model.eval()
@@ -58,7 +58,7 @@ def set_model_mode(
                 debug(f"MC Dropout flag set to model")
 
         # Training mode
-        elif mode == TRAINING_MODEL_MODE:
+        elif mode == MODEL_TRAINING_MODE:
             # Set model to training mode
             model.train()
 

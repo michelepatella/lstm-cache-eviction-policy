@@ -4,15 +4,14 @@ import torch
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
-from const import ADAM_OPTIMIZER, ADAMW_OPTIMIZER, SGD_OPTIMIZER
+from const import OPTIMIZER_ADAM_NAME, OPTIMIZER_ADAMW_NAME, OPTIMIZER_SGD_NAME
 
 # Map each optimizer type to
 # its PyTorch instance
 OPTIMIZER_MAP: Dict[str, type[torch.optim.Optimizer]] = {
-    ADAM_OPTIMIZER: torch.optim.Adam,
-    ADAMW_OPTIMIZER: torch.optim.AdamW,
-    SGD_OPTIMIZER: torch.optim.SGD,
+    OPTIMIZER_ADAM_NAME: torch.optim.Adam,
+    OPTIMIZER_ADAMW_NAME: torch.optim.AdamW,
+    OPTIMIZER_SGD_NAME: torch.optim.SGD,
 }
 
 

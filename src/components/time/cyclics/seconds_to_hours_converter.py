@@ -2,9 +2,9 @@ from typing import List
 
 import numpy as np
 
+from components.const import TIME_SECONDS_IN_DAY, TIME_SECONDS_IN_HOUR
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import SECONDS_IN_DAY, SECONDS_IN_HOUR
 
 
 def convert_seconds_to_hours_cyclic(
@@ -32,8 +32,8 @@ def convert_seconds_to_hours_cyclic(
     try:
         # Move from seconds to hours
         timestamps_hours = (
-            np.array(timestamps_seconds) % SECONDS_IN_DAY
-        ) / SECONDS_IN_HOUR
+            np.array(timestamps_seconds) % TIME_SECONDS_IN_DAY
+        ) / TIME_SECONDS_IN_HOUR
 
         debug("Timestamps converted from seconds to hours cyclically")
 

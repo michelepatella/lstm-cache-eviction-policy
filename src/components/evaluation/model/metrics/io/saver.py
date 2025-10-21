@@ -1,15 +1,15 @@
 from typing import Dict, Union
 
-from components.json.io.saver import save_json
-from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
-from const import (
+from components.const import (
     MODEL_METRICS_ACCURACY_NAME,
-    MODEL_METRICS_AVG_LOSS,
+    MODEL_METRICS_AVG_LOSS_NAME,
     MODEL_METRICS_CLASS_REPORT_NAME,
     MODEL_METRICS_MACRO_AVG_NAME,
     MODEL_METRICS_WEIGHTED_AVG_NAME,
 )
+from components.json.io.saver import save_json
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 
 
 def save_model_metrics(
@@ -54,7 +54,7 @@ def save_model_metrics(
         }
 
         # Add average loss
-        metrics_to_save[MODEL_METRICS_AVG_LOSS] = avg_loss
+        metrics_to_save[MODEL_METRICS_AVG_LOSS_NAME] = avg_loss
 
         # Save metrics as JSON file
         save_json(metrics_to_save, path)

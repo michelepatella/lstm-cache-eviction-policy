@@ -77,7 +77,9 @@ stages:
       - src/components/visualization/key_usage_heatmap_plotter.py
       - src/components/visualization/zipf_loglog_plotter.py
       - src/components/yaml/io/loader.py
+      - src/components/const.py
       - src/const.py
+      - src/pipeline/const.py
       - src/pipeline/config/configurator.py
       - src/pipeline/config/pydantic/config.py
       - src/pipeline/config/pydantic/sections/data_config.py
@@ -120,7 +122,9 @@ stages:
       - src/components/logs/levels/utils/logger.py
       - src/components/time/transforms/trig_encoder.py
       - src/components/yaml/io/loader.py
+      - src/components/const.py
       - src/const.py
+      - src/pipeline/const.py
       - src/pipeline/config/configurator.py
       - src/pipeline/config/pydantic/config.py
       - src/pipeline/config/pydantic/sections/data_config.py
@@ -228,7 +232,9 @@ stages:
       - src/components/validation/time_series_cv/core/single_fold_runner.py
       - src/components/yaml/io/loader.py
       - src/components/yaml/io/saver.py
+      - src/components/const.py
       - src/const.py
+      - src/pipeline/const.py
       - src/pipeline/config/configurator.py
       - src/pipeline/config/pydantic/config.py
       - src/pipeline/config/pydantic/sections/data_config.py
@@ -324,7 +330,9 @@ stages:
       - src/components/training/core/epochs_trainer.py
       - src/components/training/core/single_epoch_trainer.py
       - src/components/yaml/io/loader.py
+      - src/components/const.py
       - src/const.py
+      - src/pipeline/const.py
       - src/pipeline/config/configurator.py
       - src/pipeline/config/pydantic/config.py
       - src/pipeline/config/pydantic/sections/data_config.py
@@ -404,7 +412,9 @@ stages:
       - src/components/model/mode/setter.py
       - src/components/model/state_dict/loader.py
       - src/components/yaml/io/loader.py
+      - src/components/const.py
       - src/const.py
+      - src/pipeline/const.py
       - src/pipeline/config/configurator.py
       - src/pipeline/config/pydantic/config.py
       - src/pipeline/config/pydantic/sections/data_config.py
@@ -486,7 +496,9 @@ stages:
       - src/components/time/transforms/trig_decoder.py
       - src/components/visualization/hit_miss_rates_plotter.py
       - src/components/yaml/io/loader.py
+      - src/components/const.py
       - src/const.py
+      - src/pipeline/const.py
       - src/pipeline/config/configurator.py
       - src/pipeline/config/pydantic/config.py
       - src/pipeline/config/pydantic/sections/data_config.py
@@ -531,11 +543,11 @@ metrics:
   - reports/results/dynamic/dynamic_simulations_results.json
 
 plots:
-  - reports/plots/static/daily_profile.png
-  - reports/plots/static/key_usage.png
-  - reports/plots/static/zipf_log_log.png
-  - reports/plots/static/hit_miss_rates.png
-  - reports/plots/dynamic/daily_profile.png
-  - reports/plots/dynamic/key_usage.png
-  - reports/plots/dynamic/hit_miss_rates.png
-  - reports/plots/dynamic/zipf_log_log.png
+  - reports/plots/static/static_daily_profile.png
+  - reports/plots/static/static_key_usage.png
+  - reports/plots/static/static_zipf_log_log.png
+  - reports/plots/static/static_hit_miss_rates.png
+  - reports/plots/dynamic/dynamic_daily_profile.png
+  - reports/plots/dynamic/dynamic_key_usage.png
+  - reports/plots/dynamic/dynamic_hit_miss_rates.png
+  - reports/plots/dynamic/dynamic_zipf_log_log.png

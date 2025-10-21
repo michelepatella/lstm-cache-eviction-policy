@@ -2,15 +2,15 @@ import numpy as np
 from sklearn.utils import compute_class_weight
 from sympy.printing.pytorch import torch
 
+from components.const import CRITERION_CLASS_WEIGHT_TYPE
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import CLASS_WEIGHT_TYPE
 
 
 def calculate_class_weight(
     targets: torch.Tensor,
     num_classes: int,
-    weight_type: str = CLASS_WEIGHT_TYPE,
+    weight_type: str = CRITERION_CLASS_WEIGHT_TYPE,
 ) -> np.ndarray:
     """
     Compute balanced class weight for targets.

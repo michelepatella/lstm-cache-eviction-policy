@@ -2,6 +2,7 @@ from typing import List
 
 import numpy as np
 
+from components.const import TIME_SECONDS_IN_DAY, TIME_SECONDS_IN_HOUR
 from components.data.patterns.access.variants.cycle_generator import (
     generate_cycle_pattern,
 )
@@ -19,7 +20,6 @@ from components.data.patterns.access.variants.toggle_generator import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import SECONDS_IN_DAY, SECONDS_IN_HOUR
 from pipeline.config.pydantic.config import Config
 
 
@@ -59,8 +59,8 @@ def generate_access_pattern(
     try:
         # Get the current hour in day
         current_hour_in_day = (
-            current_abs_seconds % SECONDS_IN_DAY
-        ) / SECONDS_IN_HOUR
+            current_abs_seconds % TIME_SECONDS_IN_DAY
+        ) / TIME_SECONDS_IN_HOUR
         debug(
             f"Current hour in day for access "
             f"pattern generation: {current_hour_in_day}"

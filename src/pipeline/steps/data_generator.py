@@ -20,38 +20,38 @@ from components.visualization.zipf_loglog_plotter import (
     plot_zipf_loglog,
 )
 from const import (
-    DAILY_PROFILE_PLOT_FILE_NAME,
     DATA_DISTRIBUTION_STATIC_MODE,
     DATASET_RAW_TYPE,
-    KEY_USAGE_HEATMAP_FILE_NAME,
-    LOGS_DATA_GENERATION_PHASE,
-    PLOTS_DIRECTORY_PATH,
-    REQUEST_COLUMN_NAME,
-    TIMESTAMP_COLUMN_NAME,
-    ZIPF_LOG_LOG_PLOT_FILE_NAME,
+    DATASET_REQUEST_COLUMN_NAME,
+    DATASET_TIMESTAMP_COLUMN_NAME,
 )
 from pipeline.config.configurator import prepare_config
+from pipeline.const import (
+    LOGS_DATA_GENERATION_PHASE,
+    PLOT_DYNAMIC_DAILY_PROFILE_FILE_PATH,
+    PLOT_DYNAMIC_KEY_USAGE_HEATMAP_FILE_PATH,
+    PLOT_DYNAMIC_ZIPF_LOG_LOG_FILE_PATH,
+    PLOT_STATIC_DAILY_PROFILE_FILE_PATH,
+    PLOT_STATIC_KEY_USAGE_HEATMAP_FILE_PATH,
+    PLOT_STATIC_ZIPF_LOG_LOG_FILE_PATH,
+)
 
 
 def generate_data() -> None:
     """
-    Generate data according
-    to a specified data distribution mode.
+    Generate data according to a specified data distribution mode.
 
-    This function generates data according
-    to a specified data distribution mode, by
-    orchestrating the generation of both access
-    and temporal data patterns of requests. These
-    patterns aim to reflect real-world data access
-    patterns. Data generated — including a requested
-    key and the corresponding timestamp in hours —
-    is used to create a dataframe saved as CSV dataset next.
-    Finally, data generated is validated by proper plots.
+    This function generates data according to a specified data distribution mode,
+    by orchestrating the generation of both access and temporal data patterns of
+    requests. These patterns aim to reflect real-world data access patterns.
+    Data generated — including a requested key and the corresponding timestamp in
+    hours — is used to create a dataframe saved as CSV dataset next. Finally, data
+    generated is validated by proper plots.
 
     Returns:
         None
     """
-    # Set the new state
+    # Set the new pipeline step
     logs_phase.set(LOGS_DATA_GENERATION_PHASE)
 
     # Setup
@@ -70,16 +70,30 @@ def generate_data() -> None:
     if data_distribution_mode == DATA_DISTRIBUTION_STATIC_MODE:
         # Static requests generation
         requests, timestamps_hours = generate_static_requests(config)
+
+        # Prepare save paths based on data distribution mode
+        zipf_log_log_plot_save_path = PLOT_STATIC_ZIPF_LOG_LOG_FILE_PATH
+        daily_profile_plot_save_path = PLOT_STATIC_DAILY_PROFILE_FILE_PATH
+        key_usage_heatmap_plot_save_path = (
+            PLOT_STATIC_KEY_USAGE_HEATMAP_FILE_PATH
+        )
     else:
         # Dynamic requests generation
         requests, timestamps_hours = generate_dynamic_requests(config)
+
+        # Prepare save paths based on data distribution mode
+        zipf_log_log_plot_save_path = PLOT_DYNAMIC_ZIPF_LOG_LOG_FILE_PATH
+        daily_profile_plot_save_path = PLOT_DYNAMIC_DAILY_PROFILE_FILE_PATH
+        key_usage_heatmap_plot_save_path = (
+            PLOT_DYNAMIC_KEY_USAGE_HEATMAP_FILE_PATH
+        )
 
     # Create a dataset where each row is composed of
     # a timestamp and the corresponding request
     df = build_dataset(
         {
-            TIMESTAMP_COLUMN_NAME: timestamps_hours[: len(requests)],
-            REQUEST_COLUMN_NAME: requests,
+            DATASET_TIMESTAMP_COLUMN_NAME: timestamps_hours[: len(requests)],
+            DATASET_REQUEST_COLUMN_NAME: requests,
         }
     )
 
@@ -92,32 +106,15 @@ def generate_data() -> None:
     # Save just created dataset
     save_dataset(df, dataset_path)
 
-    # Prepare save paths
-    zipf_log_log_save_path = (
-        PLOTS_DIRECTORY_PATH
-        / data_distribution_mode
-        / ZIPF_LOG_LOG_PLOT_FILE_NAME
-    )
-    daily_profile_save_path = (
-        PLOTS_DIRECTORY_PATH
-        / data_distribution_mode
-        / DAILY_PROFILE_PLOT_FILE_NAME
-    )
-    key_usage_heatmap_save_path = (
-        PLOTS_DIRECTORY_PATH
-        / data_distribution_mode
-        / KEY_USAGE_HEATMAP_FILE_NAME
-    )
-
     # Show data generation -related plots
-    plot_zipf_loglog(requests, zipf_log_log_save_path)
-    plot_daily_profile(timestamps_hours, daily_profile_save_path)
+    plot_zipf_loglog(requests, zipf_log_log_plot_save_path)
+    plot_daily_profile(timestamps_hours, daily_profile_plot_save_path)
     plot_key_usage_heatmap(
         min_key,
         max_key,
         requests,
         timestamps_hours,
-        key_usage_heatmap_save_path,
+        key_usage_heatmap_plot_save_path,
     )
 
     info("Data generation completed")

@@ -4,7 +4,7 @@ from components.json.io.saver import save_json
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
-from const import TIMELINE_NAME
+from const import SIMULATIONS_METRICS_TIMELINE_NAME
 
 
 def save_simulations_metrics(results: List[Dict], path: str) -> None:
@@ -29,7 +29,11 @@ def save_simulations_metrics(results: List[Dict], path: str) -> None:
     try:
         # Filter metrics to be saved
         results_to_save = [
-            {k: v for k, v in result.items() if k != TIMELINE_NAME}
+            {
+                k: v
+                for k, v in result.items()
+                if k != SIMULATIONS_METRICS_TIMELINE_NAME
+            }
             for result in results
         ]
 

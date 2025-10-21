@@ -24,28 +24,29 @@ from components.visualization.hit_miss_rates_plotter import (
     plot_hit_miss_rate,
 )
 from const import (
-    AVG_CACHE_LATENCY_NAME,
+    CACHE_LSTM_NAME,
     DATA_DISTRIBUTION_STATIC_MODE,
-    DYNAMIC_SIMULATIONS_RESULTS_FILE_NAME,
-    EVICTION_MISTAKE_RATE_NAME,
-    FIFO_CACHE_NAME,
-    HIT_COUNTER_NAME,
-    HIT_MISS_RATES_PLOT_FILE_NAME,
-    HIT_RATE_NAME,
-    LFU_CACHE_NAME,
-    LOGS_SIMULATIONS_PHASE,
-    LRU_CACHE_NAME,
-    LSTM_CACHE_NAME,
-    MISS_COUNTER_NAME,
-    MISS_RATE_NAME,
-    PLOTS_DIRECTORY_PATH,
-    POLICY_NAME,
-    RANDOM_CACHE_NAME,
-    RESULTS_DIRECTORY_PATH,
-    STATIC_SIMULATIONS_RESULTS_FILE_NAME,
-    TIMELINE_NAME,
+    SIMULATIONS_METRICS_HIT_COUNTER_NAME,
+    SIMULATIONS_METRICS_MISS_COUNTER_NAME,
+    SIMULATIONS_METRICS_POLICY_NAME,
+    SIMULATIONS_METRICS_TIMELINE_NAME,
 )
 from pipeline.config.configurator import prepare_config
+from pipeline.const import (
+    CACHE_FIFO_NAME,
+    CACHE_LFU_NAME,
+    CACHE_LRU_NAME,
+    CACHE_RANDOM_NAME,
+    LOGS_SIMULATIONS_PHASE,
+    PLOT_DYNAMIC_HIT_MISS_RATES_FILE_PATH,
+    PLOT_STATIC_HIT_MISS_RATES_FILE_PATH,
+    RESULTS_DYNAMIC_SIMULATIONS_FILE_PATH,
+    RESULTS_STATIC_SIMULATIONS_FILE_PATH,
+    SIMULATIONS_METRICS_AVG_CACHE_LATENCY_NAME,
+    SIMULATIONS_METRICS_EVICTION_MISTAKE_RATE_NAME,
+    SIMULATIONS_METRICS_HIT_RATE_NAME,
+    SIMULATIONS_METRICS_MISS_RATE_NAME,
+)
 
 
 def run_simulations() -> None:
@@ -60,7 +61,7 @@ def run_simulations() -> None:
     Returns:
         None
     """
-    # Set new state
+    # Set the new pipeline step
     logs_phase.set(LOGS_SIMULATIONS_PHASE)
 
     # Setup
@@ -73,27 +74,27 @@ def run_simulations() -> None:
 
     # Data setup and initialization
     cache_eviction_policies = {
-        LRU_CACHE_NAME: CacheWrapper(
+        CACHE_LRU_NAME: CacheWrapper(
             LRUCache,
             CacheMetricsLogger(),
             config,
         ),
-        LFU_CACHE_NAME: CacheWrapper(
+        CACHE_LFU_NAME: CacheWrapper(
             LFUCache,
             CacheMetricsLogger(),
             config,
         ),
-        FIFO_CACHE_NAME: CacheWrapper(
+        CACHE_FIFO_NAME: CacheWrapper(
             FIFOCache,
             CacheMetricsLogger(),
             config,
         ),
-        RANDOM_CACHE_NAME: RandomCache(
+        CACHE_RANDOM_NAME: RandomCache(
             None,
             CacheMetricsLogger(),
             config,
         ),
-        LSTM_CACHE_NAME: LSTMCache(
+        CACHE_LSTM_NAME: LSTMCache(
             None,
             CacheMetricsLogger(),
             config,
@@ -125,14 +126,18 @@ def run_simulations() -> None:
         # Collect metrics together for the
         # current cache eviction policy
         metrics = {
-            POLICY_NAME: policy,
-            HIT_RATE_NAME: hit_rate,
-            MISS_RATE_NAME: miss_rate,
-            HIT_COUNTER_NAME: counters[HIT_COUNTER_NAME],
-            MISS_COUNTER_NAME: counters[MISS_COUNTER_NAME],
-            TIMELINE_NAME: timeline,
-            EVICTION_MISTAKE_RATE_NAME: eviction_mistake_rate,
-            AVG_CACHE_LATENCY_NAME: avg_cache_latency,
+            SIMULATIONS_METRICS_POLICY_NAME: policy,
+            SIMULATIONS_METRICS_HIT_RATE_NAME: hit_rate,
+            SIMULATIONS_METRICS_MISS_RATE_NAME: miss_rate,
+            SIMULATIONS_METRICS_HIT_COUNTER_NAME: counters[
+                SIMULATIONS_METRICS_HIT_COUNTER_NAME
+            ],
+            SIMULATIONS_METRICS_MISS_COUNTER_NAME: counters[
+                SIMULATIONS_METRICS_MISS_COUNTER_NAME
+            ],
+            SIMULATIONS_METRICS_TIMELINE_NAME: timeline,
+            SIMULATIONS_METRICS_EVICTION_MISTAKE_RATE_NAME: eviction_mistake_rate,
+            SIMULATIONS_METRICS_AVG_CACHE_LATENCY_NAME: avg_cache_latency,
         }
 
         # Save metrics
@@ -141,30 +146,29 @@ def run_simulations() -> None:
     # Determine results file name according
     # to data distribution mode
     if data_distribution_mode == DATA_DISTRIBUTION_STATIC_MODE:
-        results_file_name = STATIC_SIMULATIONS_RESULTS_FILE_NAME
+        results_file_path = RESULTS_STATIC_SIMULATIONS_FILE_PATH
+        plot_save_path = PLOT_STATIC_HIT_MISS_RATES_FILE_PATH
     else:
-        results_file_name = DYNAMIC_SIMULATIONS_RESULTS_FILE_NAME
-
-    # Build results save path
-    results_save_path = (
-        RESULTS_DIRECTORY_PATH / data_distribution_mode / results_file_name
-    )
+        results_file_path = RESULTS_DYNAMIC_SIMULATIONS_FILE_PATH
+        plot_save_path = PLOT_DYNAMIC_HIT_MISS_RATES_FILE_PATH
 
     # Save simulations results
-    save_simulations_metrics(results, results_save_path)
+    save_simulations_metrics(results, results_file_path)
 
     # Plot hit and miss rates over time
-    hit_miss_rate_plot_save_path = (
-        PLOTS_DIRECTORY_PATH
-        / data_distribution_mode
-        / HIT_MISS_RATES_PLOT_FILE_NAME
-    )
     plot_hit_miss_rate(
         [
-            {POLICY_NAME: r[POLICY_NAME], TIMELINE_NAME: r[TIMELINE_NAME]}
+            {
+                SIMULATIONS_METRICS_POLICY_NAME: r[
+                    SIMULATIONS_METRICS_POLICY_NAME
+                ],
+                SIMULATIONS_METRICS_TIMELINE_NAME: r[
+                    SIMULATIONS_METRICS_TIMELINE_NAME
+                ],
+            }
             for r in results
         ],
-        hit_miss_rate_plot_save_path,
+        plot_save_path,
     )
 
     info("Cache simulations completed")

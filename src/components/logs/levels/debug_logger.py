@@ -1,15 +1,15 @@
 import logging
-from typing import Any, Optional
+from typing import Any
 
+from components.const import LOGS_DEFAULT_PHASE, LOGS_PHASE_NAME
 from components.logs.levels.utils.logger import log
-from const import LOGS_PHASE_DEFAULT, LOGS_PHASE_NAME
 
 
 def debug(
     msg: str,
     *args: Any,
     log_phase_name: str = LOGS_PHASE_NAME,
-    log_phase: str = LOGS_PHASE_DEFAULT,
+    log_phase: str = LOGS_DEFAULT_PHASE,
     **kwargs: Any
 ) -> None:
     """

@@ -11,7 +11,7 @@ def main():
     # Pipeline
     # -----------------------
     # (1) Data generation
-    # generate_data()
+    generate_data()
 
     # (2) Data preprocessing
     preprocess_data()

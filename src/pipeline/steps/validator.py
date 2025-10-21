@@ -8,12 +8,11 @@ from components.validation.grid_search.runner import (
 )
 from components.yaml.io.saver import save_yaml
 from const import (
-    CONFIG_DIRECTORY_PATH,
-    CONFIG_FILE_NAME,
+    DATASET_TRAINING_SPLIT_TYPE,
     LOGS_VALIDATION_PHASE,
-    TRAINING_SPLIT_TYPE,
 )
 from pipeline.config.configurator import prepare_config
+from pipeline.const import CONFIG_FILE_PATH
 
 
 def validate_model() -> None:
@@ -28,7 +27,7 @@ def validate_model() -> None:
     Returns:
         None
     """
-    # Set the new state
+    # Set the new pipeline step
     logs_phase.set(LOGS_VALIDATION_PHASE)
 
     # Setup
@@ -41,7 +40,7 @@ def validate_model() -> None:
 
     # Load the training set
     training_set, _ = initialize_data_loader(
-        TRAINING_SPLIT_TYPE,
+        DATASET_TRAINING_SPLIT_TYPE,
         validation_batch_size,
         validation_shuffle,
         AccessLogsDataset,
@@ -55,10 +54,8 @@ def validate_model() -> None:
     # parameters dictionary
     updated_config_dict = merge_dicts(config.model_dump(), best_params)
 
-    # Save updated configuration dictionary
-    # as file
-    abs_config_path = CONFIG_DIRECTORY_PATH / CONFIG_FILE_NAME
-    save_yaml(updated_config_dict, abs_config_path)
+    # Save updated configuration dictionary as file
+    save_yaml(updated_config_dict, CONFIG_FILE_PATH)
 
     info("Model validation completed")
 

@@ -2,6 +2,7 @@ from typing import List, Tuple
 
 import numpy as np
 
+from components.const import TIME_SECONDS_IN_DAY
 from components.data.patterns.access.generator import (
     generate_access_pattern,
 )
@@ -12,7 +13,6 @@ from components.logs.levels.debug_logger import debug
 from components.time.cyclics.updater import (
     update_cyclic_time,
 )
-from const import SECONDS_IN_DAY
 from pipeline.config.pydantic.config import Config
 
 
@@ -58,12 +58,14 @@ def generate_single_pattern_request(
     current_seconds_in_day, current_day = update_cyclic_time(
         current_seconds_in_day,
         current_day,
-        SECONDS_IN_DAY,
+        TIME_SECONDS_IN_DAY,
         delta_t,
     )
 
     # Compute absolute timestamp
-    absolute_seconds = current_day * SECONDS_IN_DAY + current_seconds_in_day
+    absolute_seconds = (
+        current_day * TIME_SECONDS_IN_DAY + current_seconds_in_day
+    )
 
     # Generate access request
     request = generate_access_pattern(

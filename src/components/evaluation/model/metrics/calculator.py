@@ -2,6 +2,11 @@ from typing import Dict, List, Union
 
 import torch
 
+from components.const import (
+    MODEL_METRICS_CLASS_REPORT_NAME,
+    MODEL_METRICS_COHEN_KAPPA_SCORE_NAME,
+    MODEL_METRICS_TOP_K_ACCURACY_NAME,
+)
 from components.evaluation.model.metrics.calculations.class_report_calculator import (
     calculate_class_report,
 )
@@ -13,11 +18,6 @@ from components.evaluation.model.metrics.calculations.top_k_accuracy_calculator 
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
-from const import (
-    MODEL_METRICS_CLASS_REPORT_NAME,
-    MODEL_METRICS_COHEN_KAPPA_SCORE_NAME,
-    MODEL_METRICS_TOP_K_ACCURACY_NAME,
-)
 
 
 def calculate_model_metrics(

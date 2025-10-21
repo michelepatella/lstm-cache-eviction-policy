@@ -3,13 +3,13 @@ from typing import Any, Dict, Union
 
 from box import Box
 
+from components.const import JSON_WRAP_BOX_ENABLED
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import JSON_WRAP_BOX_DEFAULT
 
 
 def load_json(
-    path: str, wrap: bool = JSON_WRAP_BOX_DEFAULT
+    path: str, wrap: bool = JSON_WRAP_BOX_ENABLED
 ) -> Union[Dict[Any, Any], Box]:
     """
     Load a JSON file.

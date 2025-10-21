@@ -4,6 +4,7 @@ import torch
 from torch import Tensor
 from torch.utils.data import DataLoader
 
+from components.const import MODEL_COMPUTE_METRICS_DISABLED
 from components.evaluation.model.metrics.calculator import (
     calculate_model_metrics,
 )
@@ -12,7 +13,6 @@ from components.inference.batches_inferrer import infer_batches
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
 from components.math.avg_calculator import calculate_average
-from const import MODEL_COMPUTE_METRICS_DEFAULT
 
 
 def evaluate_model(
@@ -23,7 +23,7 @@ def evaluate_model(
     num_features: int,
     top_k: int = None,
     model_results_save_path: str = None,
-    compute_metrics: bool = MODEL_COMPUTE_METRICS_DEFAULT,
+    compute_metrics: bool = MODEL_COMPUTE_METRICS_DISABLED,
 ) -> Tuple[
     float,
     Optional[Dict[str, Union[int, float]]],

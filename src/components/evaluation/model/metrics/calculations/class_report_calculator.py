@@ -2,18 +2,18 @@ from typing import Dict, List
 
 from sklearn.metrics import classification_report
 
-from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
-from const import (
-    MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT,
+from components.const import (
+    MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT_ENABLED,
     MODEL_METRICS_CLASS_REPORT_ZERO_DIVISION,
 )
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
 
 
 def calculate_class_report(
     targets: List[int],
     predictions: List[int],
-    output_dict: bool = MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT,
+    output_dict: bool = MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT_ENABLED,
     zero_division: int = MODEL_METRICS_CLASS_REPORT_ZERO_DIVISION,
 ) -> Dict[str, float]:
     """
