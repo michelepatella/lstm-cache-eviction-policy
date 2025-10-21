@@ -7,6 +7,14 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 
 # ----------------------------
+# MLFlow
+# ----------------------------
+MLFLOW_MAIN_RUN_NAME = "Pipeline"
+MLFLOW_NESTED_ENABLED = True
+MLFLOW_MLRUNS_FILE_PATH = PROJECT_ROOT / "mlruns"
+
+
+# ----------------------------
 # Logs
 # ----------------------------
 LOGS_VALIDATION_PHASE = "validation"

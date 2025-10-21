@@ -1,7 +1,6 @@
 import time
 from typing import Any, Dict, List, Tuple
 
-import mlflow
 from tqdm import tqdm
 
 from components.caches.simulations.hit_miss.checker_updater import (
@@ -19,7 +18,7 @@ from components.logs.levels.info_logger import info
 from components.time.transforms.trig_decoder import (
     decode_time_trigonometrically,
 )
-from const import (
+from src.const import (
     CACHE_LSTM_NAME,
     DATASET_TESTING_SPLIT_TYPE,
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
@@ -135,8 +134,6 @@ def run_cache_simulation(
 
             # Update number of hits and misses
             timeline = update_hit_miss_timeline(idx, counters, timeline)
-
-        mlflow.log_metric("num_simulated_requests", len(testing_set))
 
         info(f"{policy} simulation completed")
 

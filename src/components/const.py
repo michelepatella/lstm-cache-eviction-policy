@@ -1,7 +1,13 @@
 import logging
 from typing import Literal
+from pathlib import Path
 
-from const import PROJECT_ROOT
+
+# ----------------------------
+# Project
+# ----------------------------
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+
 
 # ----------------------------
 # Logs

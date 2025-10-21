@@ -58,8 +58,8 @@ class BaseCache(ABC):
         """
         try:
             # Prepare configuration
-            cache_dimension = config.simulations.cache.general.dimension
-            ttl = config.simulations.cache.general.ttl
+            cache_dimension = config.simulations.cache.dimension
+            ttl = config.simulations.cache.ttl
             debug(f"Base cache dimension: {cache_dimension}")
             debug(f"Base cache TTL: {ttl}")
 

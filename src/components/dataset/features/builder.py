@@ -16,7 +16,7 @@ from components.logs.levels.error_logger import error
 from components.time.transforms.trig_encoder import (
     encode_time_trigonometrically,
 )
-from const import DATASET_REQUEST_COLUMN_NAME, DATASET_TIMESTAMP_COLUMN_NAME
+from src.const import DATASET_REQUEST_COLUMN_NAME, DATASET_TIMESTAMP_COLUMN_NAME
 
 
 def build_features(df: pd.DataFrame) -> pd.DataFrame:

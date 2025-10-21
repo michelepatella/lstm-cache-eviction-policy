@@ -13,8 +13,8 @@ from components.logs.levels.error_logger import error
 from components.time.transforms.trig_decoder import (
     decode_time_trigonometrically,
 )
-from const import (
-    SECONDS_IN_HOUR,
+from components.const import (
+    TIME_SECONDS_IN_HOUR,
 )
 
 
@@ -22,7 +22,7 @@ def extract_last_rows_from_dataset(
     current_idx: int,
     seq_len: int,
     df: DataLoader,
-    time_conversion_factor: float = SECONDS_IN_HOUR,
+    time_conversion_factor: float = TIME_SECONDS_IN_HOUR,
 ) -> Optional[List[Tuple[float, int]]]:
     """
     Extract the last rows from a dataset.

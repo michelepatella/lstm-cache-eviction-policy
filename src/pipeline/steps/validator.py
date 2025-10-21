@@ -9,9 +9,9 @@ from components.validation.grid_search.runner import (
     compute_grid_search,
 )
 from components.yaml.io.saver import save_yaml
-from const import (
+from src.const import (
     DATASET_TRAINING_SPLIT_TYPE,
-    LOGS_VALIDATION_PHASE,
+    LOGS_VALIDATION_PHASE, MLFLOW_NESTED_ENABLED,
 )
 from pipeline.config.configurator import prepare_config
 from pipeline.const import CONFIG_FILE_PATH
@@ -30,46 +30,47 @@ def validate_model() -> None:
     """
     # Set the new pipeline step
     logs_phase.set(LOGS_VALIDATION_PHASE)
-    mlflow.start_run(run_name=LOGS_VALIDATION_PHASE, nested=True)
+    with mlflow.start_run(run_name=LOGS_VALIDATION_PHASE, nested=MLFLOW_NESTED_ENABLED):
 
-    # Setup
-    config = prepare_config()
-    initialize_logs()
+        # Setup
+        config = prepare_config()
+        initialize_logs()
 
-    info("Validation started")
+        info("Validation started")
 
-    # Prepare configuration
-    validation_batch_size = config.validation.general.batch_size
-    validation_shuffle = config.validation.general.shuffle
+        # Prepare configuration
+        validation_batch_size = config.validation.general.batch_size
+        validation_shuffle = config.validation.general.shuffle
 
-    # Load the training set
-    dataset_split_type = DATASET_TRAINING_SPLIT_TYPE
-    training_set, _ = initialize_data_loader(
-        dataset_split_type,
-        validation_batch_size,
-        validation_shuffle,
-        AccessLogsDataset,
-        config,
-    )
+        # Load the training set
+        dataset_split_type = DATASET_TRAINING_SPLIT_TYPE
+        training_set, _ = initialize_data_loader(
+            dataset_split_type,
+            validation_batch_size,
+            validation_shuffle,
+            AccessLogsDataset,
+            config,
+        )
 
-    # Compute grid search for best parameters
-    best_params, best_avg_loss = compute_grid_search(training_set, config)
+        # Compute grid search for best parameters
+        best_params, best_avg_loss = compute_grid_search(training_set, config)
 
-    # Merge original dictionary with the best
-    # parameters dictionary
-    updated_config_dict = merge_dicts(config.model_dump(), best_params)
+        # Merge original dictionary with the best
+        # parameters dictionary
+        updated_config_dict = merge_dicts(config.model_dump(), best_params)
 
-    # Save updated configuration dictionary as file
-    save_yaml(updated_config_dict, CONFIG_FILE_PATH)
+        # Save updated configuration dictionary as file
+        save_yaml(updated_config_dict, CONFIG_FILE_PATH)
 
-    mlflow.log_metrics(
-        {
-            "num_training_samples": len(training_set),
-            "best_avg_loss": best_avg_loss,
-        }
-    )
-    mlflow.log_artifact(CONFIG_FILE_PATH)
-    mlflow.end_run()
+        # Experiment tracking
+        mlflow.log_metrics(
+            {
+                "num_training_samples": len(training_set),
+                "best_avg_loss": best_avg_loss,
+            }
+        )
+        mlflow.log_artifact(CONFIG_FILE_PATH)
+        mlflow.end_run()
 
     info("Validation completed")
 

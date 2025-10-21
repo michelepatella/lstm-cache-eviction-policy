@@ -18,7 +18,7 @@ from components.validation.search_space.combinator import (
 from components.validation.time_series_cv.core.folds_runner import (
     compute_time_series_cv_folds,
 )
-from const import LOGS_VALIDATION_PHASE
+from src.const import LOGS_VALIDATION_PHASE, MLFLOW_NESTED_ENABLED
 from pipeline.config.pydantic.config import Config
 
 
@@ -77,32 +77,33 @@ def compute_grid_search(
         ) as pbar:
             for idx, params in enumerate(params_combinations, start=1):
                 debug(f"Evaluating parameters combination: {params}")
-                mlflow.start_run(
+
+                with mlflow.start_run(
                     run_name=f"{LOGS_VALIDATION_PHASE} ({idx}/{len(params_combinations)})",
-                    nested=True,
-                )
+                    nested=MLFLOW_NESTED_ENABLED,
+                ):
+                    # Perform time series CV
+                    avg_loss, fold_losses = compute_time_series_cv_folds(
+                        cv_num_folds, training_set, params, config
+                    )
 
-                # Perform time series CV
-                avg_loss, fold_losses = compute_time_series_cv_folds(
-                    cv_num_folds, training_set, params, config
-                )
+                    # Check and update the best parameters
+                    # if improvement found
+                    best_avg_loss, best_params = check_update_best_model_params(
+                        avg_loss, best_avg_loss, params, best_params
+                    )
 
-                # Check and update the best parameters
-                # if improvement found
-                best_avg_loss, best_params = check_update_best_model_params(
-                    avg_loss, best_avg_loss, params, best_params
-                )
-
-                mlflow.log_params(params)
-                mlflow.log_metrics(
-                    {
-                        "avg_loss": avg_loss,
-                        "std_loss": np.std(fold_losses),
-                        "min_loss": np.min(fold_losses),
-                        "max_loss": np.max(fold_losses),
-                    }
-                )
-                mlflow.end_run()
+                    # Experiment tracking
+                    mlflow.log_params(params)
+                    mlflow.log_metrics(
+                        {
+                            "avg_loss": avg_loss,
+                            "std_loss": np.std(fold_losses),
+                            "min_loss": np.min(fold_losses),
+                            "max_loss": np.max(fold_losses),
+                        }
+                    )
+                    mlflow.end_run()
 
                 # To update the progress bar
                 pbar.update(1)

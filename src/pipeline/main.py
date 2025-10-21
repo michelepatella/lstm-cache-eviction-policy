@@ -1,5 +1,6 @@
 import mlflow
 
+from src.const import MLFLOW_MLRUNS_FILE_PATH, MLFLOW_MAIN_RUN_NAME
 from pipeline.config.configurator import prepare_config
 from pipeline.steps.data_generator import generate_data
 from pipeline.steps.data_preprocessor import preprocess_data
@@ -13,28 +14,31 @@ def main():
     # -----------------------
     # Pipeline
     # -----------------------
-    mlflow.start_run()
 
-    # (1) Data generation
-    generate_data()
+    mlflow.set_tracking_uri(MLFLOW_MLRUNS_FILE_PATH)
+    with mlflow.start_run(run_name=MLFLOW_MAIN_RUN_NAME):
 
-    # (2) Data preprocessing
-    preprocess_data()
+        # (1) Data generation
+        generate_data()
 
-    # (3) Model validation
-    validate_model()
+        # (2) Data preprocessing
+        preprocess_data()
 
-    # (4) Model training
-    train_model()
+        # (3) Model validation
+        validate_model()
 
-    # (5) Model testing
-    test_model()
+        # (4) Model training
+        train_model()
 
-    # (6) Simulations
-    run_simulations()
+        # (5) Model testing
+        test_model()
 
-    mlflow.log_params(prepare_config().model_dump())
-    mlflow.end_run()
+        # (6) Simulations
+        run_simulations()
+
+        # Experiment tracking
+        mlflow.log_params(prepare_config().model_dump())
+        mlflow.end_run()
 
 
 if __name__ == "__main__":

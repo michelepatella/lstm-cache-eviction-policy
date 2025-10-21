@@ -1,4 +1,11 @@
-from const import PROJECT_ROOT
+from pathlib import Path
+
+
+# ----------------------------
+# Project
+# ----------------------------
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+
 
 # ----------------------------
 # Config

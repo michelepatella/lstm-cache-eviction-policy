@@ -14,9 +14,9 @@ from components.dataset.io.locator import get_dataset_abs_path
 from components.dataset.io.saver import save_dataset
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
-from const import (
+from src.const import (
     DATASET_RAW_TYPE,
-    DATASET_TIMESTAMP_COLUMN_NAME,
+    DATASET_TIMESTAMP_COLUMN_NAME, MLFLOW_NESTED_ENABLED,
 )
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
@@ -39,59 +39,60 @@ def preprocess_data() -> None:
     """
     # Set the new pipeline step
     logs_phase.set(LOGS_DATA_PREPROCESSING_PHASE)
-    mlflow.start_run(run_name=LOGS_DATA_PREPROCESSING_PHASE, nested=True)
+    with mlflow.start_run(run_name=LOGS_DATA_PREPROCESSING_PHASE, nested=MLFLOW_NESTED_ENABLED):
 
-    # Setup
-    config = prepare_config()
-    initialize_logs()
+        # Setup
+        config = prepare_config()
+        initialize_logs()
 
-    info("Data preprocessing started")
+        info("Data preprocessing started")
 
-    # Prepare configuration
-    data_distribution_mode = config.data.mode
+        # Prepare configuration
+        data_distribution_mode = config.data.mode
 
-    # Retrieve path to load dataset from
-    dataset_raw_path = get_dataset_abs_path(
-        DATASET_RAW_TYPE, data_distribution_mode
-    )
+        # Retrieve path to load dataset from
+        dataset_raw_path = get_dataset_abs_path(
+            DATASET_RAW_TYPE, data_distribution_mode
+        )
 
-    # Load the dataset
-    initial_df = load_dataset(dataset_raw_path)
+        # Load the dataset
+        initial_df = load_dataset(dataset_raw_path)
 
-    # Remove missing values
-    missing_values_removed_df = remove_dataset_missing_values(initial_df)
+        # Remove missing values
+        missing_values_removed_df = remove_dataset_missing_values(initial_df)
 
-    # Remove duplicates
-    duplicates_removed_df = remove_dataset_duplicates(
-        missing_values_removed_df, [DATASET_TIMESTAMP_COLUMN_NAME]
-    )
+        # Remove duplicates
+        duplicates_removed_df = remove_dataset_duplicates(
+            missing_values_removed_df, [DATASET_TIMESTAMP_COLUMN_NAME]
+        )
 
-    # Build new features
-    final_df = build_features(duplicates_removed_df)
+        # Build new features
+        final_df = build_features(duplicates_removed_df)
 
-    # Retrieve path to save dataset from
-    dataset_processed_path = get_dataset_abs_path(
-        DATASET_PROCESSED_TYPE, data_distribution_mode
-    )
+        # Retrieve path to save dataset from
+        dataset_processed_path = get_dataset_abs_path(
+            DATASET_PROCESSED_TYPE, data_distribution_mode
+        )
 
-    # Save preprocessed dataset
-    save_dataset(final_df, dataset_processed_path)
+        # Save preprocessed dataset
+        save_dataset(final_df, dataset_processed_path)
 
-    mlflow.log_metrics(
-        {
-            "dataset_num_rows": len(final_df),
-            "dataset_num_columns": len(final_df.columns),
-            "removals_missing_values": len(initial_df)
-            - len(missing_values_removed_df),
-            "removals_duplicates": len(missing_values_removed_df)
-            - len(duplicates_removed_df),
-            "removals_total": len(initial_df) - len(final_df),
-            "removals_ratio": (len(initial_df) - len(final_df))
-            / len(initial_df),
-        }
-    )
-    mlflow.log_artifact(dataset_processed_path)
-    mlflow.end_run()
+        # Experiment tracking
+        mlflow.log_metrics(
+            {
+                "dataset_num_rows": len(final_df),
+                "dataset_num_columns": len(final_df.columns),
+                "removals_missing_values": len(initial_df)
+                - len(missing_values_removed_df),
+                "removals_duplicates": len(missing_values_removed_df)
+                - len(duplicates_removed_df),
+                "removals_total": len(initial_df) - len(final_df),
+                "removals_ratio": (len(initial_df) - len(final_df))
+                / len(initial_df),
+            }
+        )
+        mlflow.log_artifact(dataset_processed_path)
+        mlflow.end_run()
 
     info("Data preprocessing completed")
 

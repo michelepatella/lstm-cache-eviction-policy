@@ -4,7 +4,7 @@ from components.json.io.saver import save_json
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
-from const import SIMULATIONS_METRICS_TIMELINE_NAME
+from src.const import SIMULATIONS_METRICS_TIMELINE_NAME
 
 
 def save_simulations_metrics(results: List[Dict], path: str) -> None:

@@ -1,6 +1,6 @@
-artifact_location: mlflow-artifacts:/0
-creation_time: 1761079256512
+artifact_location: /Users/michelepatella/Repositories/conf-aware-ar-lstm-cache-policy/mlruns/0
+creation_time: 1761088582865
 experiment_id: '0'
-last_update_time: 1761079256512
+last_update_time: 1761088582865
 lifecycle_stage: active
 name: Default

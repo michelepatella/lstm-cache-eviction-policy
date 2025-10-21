@@ -29,7 +29,7 @@ def compute_backward(loss: torch.Tensor, optimizer: Optimizer) -> None:
     try:
         debug(
             f"Computing backward pass with loss: "
-            f"{loss.item()} and optimizer: {optimizer}"
+            f"{loss} and optimizer: {optimizer}"
         )
 
         # Compute gradients

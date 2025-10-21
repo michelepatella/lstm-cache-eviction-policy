@@ -2,7 +2,7 @@ from typing import Any, Dict
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import (
+from src.const import (
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
 )

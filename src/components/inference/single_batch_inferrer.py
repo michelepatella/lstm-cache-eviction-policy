@@ -73,7 +73,7 @@ def infer_single_batch(
         target = batch[-1]
 
         # Compute batch loss
-        loss = calculate_loss(outputs_mean, target, criterion)
+        loss = calculate_loss(outputs_mean, target, criterion).item()
 
         # Prepare data to be returned
         predictions = torch.argmax(outputs_mean, dim=1).cpu().numpy().tolist()

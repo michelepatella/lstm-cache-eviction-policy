@@ -19,7 +19,7 @@ from components.const import (
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
-from const import (
+from src.const import (
     DATA_GENERATION_FINAL_HOUR,
     DATA_GENERATION_INITIAL_HOUR,
 )

@@ -65,7 +65,7 @@ def train_single_epoch(
         # To display the one-epoch progress
         training_loader_tqdm = tqdm(
             training_loader,
-            desc=TRAINING_SINGLE_EPOCH_DESC + f"{epoch}",
+            desc=TRAINING_SINGLE_EPOCH_DESC + f" {epoch}",
         )
 
         # Set the model to training mode
@@ -92,7 +92,7 @@ def train_single_epoch(
 
             # Update progress bar and show
             # the current loss
-            training_loader_tqdm.set_postfix(loss=loss)
+            training_loader_tqdm.set_postfix(loss=loss.item())
 
         debug("Training single epoch completed")
     except (TypeError, AttributeError) as e:

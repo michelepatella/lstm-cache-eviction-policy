@@ -6,7 +6,7 @@ from components.const import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import DATA_DISTRIBUTION_STATIC_MODE, DATASET_RAW_TYPE
+from src.const import DATA_DISTRIBUTION_STATIC_MODE, DATASET_RAW_TYPE
 
 
 def get_dataset_abs_path(

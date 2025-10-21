@@ -3,7 +3,7 @@ from pydantic import BaseModel, confloat, conint, model_validator
 from components.assertions.choice_field_assertor import (
     assert_choice_field,
 )
-from const import OPTIMIZER_NAMES
+from src.const import OPTIMIZER_NAMES
 
 
 class TrainingGeneralConfig(BaseModel):

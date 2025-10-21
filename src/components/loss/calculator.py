@@ -10,7 +10,7 @@ def calculate_loss(
     outputs: torch.Tensor,
     targets: torch.Tensor,
     criterion: torch.nn.Module,
-) -> Optional[float]:
+) -> Optional[torch.Tensor]:
     """
     Calculate the loss for outputs and targets.
 
@@ -23,7 +23,7 @@ def calculate_loss(
         criterion (torch.nn.Module): Criterion to use for loss calculation.
 
     Returns:
-        Optional[float]: Calculated loss (None if something went wrong).
+        Optional[torch.Tensor]: Calculated loss (None if something went wrong).
 
     Raises:
         RuntimeError: If loss calculation fails:
@@ -42,7 +42,7 @@ def calculate_loss(
         else:
             # Calculate loss with
             # provided criterion
-            loss = criterion(outputs, targets).item()
+            loss = criterion(outputs, targets)
 
         debug(f"Loss calculated: {loss}")
 
