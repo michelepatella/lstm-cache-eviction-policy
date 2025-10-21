@@ -1,3 +1,9 @@
+import mlflow
+import numpy as np
+import pandas as pd
+from opentelemetry.sdk.metrics import Counter
+
+from components.const import TIME_HOURS_IN_DAY
 from components.data.requests.core.dynamic_generator import (
     generate_dynamic_requests,
 )
@@ -52,6 +58,7 @@ def generate_data() -> None:
     """
     # Set the new pipeline step
     logs_phase.set(LOGS_DATA_GENERATION_PHASE)
+    mlflow.start_run(run_name=LOGS_DATA_GENERATION_PHASE, nested=True)
 
     # Setup
     config = prepare_config()
@@ -115,6 +122,36 @@ def generate_data() -> None:
         timestamps_hours,
         key_usage_heatmap_plot_save_path,
     )
+
+    mlflow.log_metrics(
+        {
+            "dataset_num_rows": len(df),
+            "dataset_num_columns": len(df.columns),
+            "requests_num_unique": len(np.unique(requests)),
+            "requests_max_count": max(Counter(requests)),
+            "requests_min_count": min(Counter(requests)),
+            "requests_mean": float(np.mean(requests)),
+            "requests_std": float(np.std(requests)),
+            "requests_skew": float(pd.Series(requests).skew()),
+            "requests_kurt": float(pd.Series(requests).kurt()),
+            "timestamps_min": float(min(timestamps_hours)),
+            "timestamps_max": float(max(timestamps_hours)),
+            "timestamps_mean": float(np.mean(timestamps_hours)),
+            "timestamps_std": float(np.std(timestamps_hours)),
+            "timestamps_diff_mean": float(np.mean(np.diff(timestamps_hours))),
+            "timestamps_diff_std": float(np.std(np.diff(timestamps_hours))),
+            "timestamps_diff_min": float(np.min(np.diff(timestamps_hours))),
+            "timestamps_diff_max": float(np.max(np.diff(timestamps_hours))),
+            "total_hours": max(timestamps_hours) - min(timestamps_hours),
+            "total_days": (max(timestamps_hours) - min(timestamps_hours))
+            / TIME_HOURS_IN_DAY,
+        }
+    )
+    mlflow.log_artifact(dataset_path)
+    mlflow.log_artifact(zipf_log_log_plot_save_path)
+    mlflow.log_artifact(daily_profile_plot_save_path)
+    mlflow.log_artifact(key_usage_heatmap_plot_save_path)
+    mlflow.end_run()
 
     info("Data generation completed")
 

@@ -11,7 +11,6 @@ CONFIG_FILE_PATH = PROJECT_ROOT / "src" / "pipeline" / "config" / "config.yaml"
 # ----------------------------
 LOGS_DATA_GENERATION_PHASE = "data generation"
 LOGS_DATA_PREPROCESSING_PHASE = "data preprocessing"
-LOGS_TRAINING_PHASE = "training"
 LOGS_TESTING_PHASE = "testing"
 LOGS_SIMULATIONS_PHASE = "simulations"
 

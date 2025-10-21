@@ -101,7 +101,6 @@ def generate_temporal_pattern(
             min_freq_scale,
             periodic_component * bursty_scale,
         )
-
         debug(f"Frequency scale for temporal pattern: {freq_scale}")
 
         # Draw the next inter-request time from an

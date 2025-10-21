@@ -1,3 +1,6 @@
+import mlflow
+
+from pipeline.config.configurator import prepare_config
 from pipeline.steps.data_generator import generate_data
 from pipeline.steps.data_preprocessor import preprocess_data
 from pipeline.steps.simulator import run_simulations
@@ -10,6 +13,8 @@ def main():
     # -----------------------
     # Pipeline
     # -----------------------
+    mlflow.start_run()
+
     # (1) Data generation
     generate_data()
 
@@ -27,6 +32,9 @@ def main():
 
     # (6) Simulations
     run_simulations()
+
+    mlflow.log_params(prepare_config().model_dump())
+    mlflow.end_run()
 
 
 if __name__ == "__main__":

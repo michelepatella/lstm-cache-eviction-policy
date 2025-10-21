@@ -1,5 +1,6 @@
 from typing import Tuple
 
+import mlflow
 import numpy as np
 import torch
 from torch.optim import Optimizer
@@ -19,7 +20,7 @@ from components.model.state_dict.copier import (
 )
 from components.training.callbacks.early_stopping import EarlyStopping
 from components.training.core.single_epoch_trainer import train_single_epoch
-from const import LOGS_VALIDATION_PHASE
+from const import LOGS_TRAINING_PHASE, LOGS_VALIDATION_PHASE
 from pipeline.config.pydantic.config import Config
 
 
@@ -102,6 +103,11 @@ def train_epochs(
         # Train the model over each epoch
         epoch = None
         for epoch in tqdm(range(1, num_epochs + 1), desc=TRAINING_EPOCHS_DESC):
+            mlflow.start_run(
+                run_name=f"{LOGS_TRAINING_PHASE} — ({epoch}/{num_epochs})",
+                nested=True,
+            )
+
             # Train one epoch
             train_single_epoch(
                 model, training_loader, optimizer, criterion, device, epoch
@@ -122,6 +128,9 @@ def train_epochs(
             # Update best model weights (if any)
             if new_model_weights:
                 best_model_weights = new_model_weights
+
+            mlflow.log_metric("avg_loss", avg_loss)
+            mlflow.end_run()
 
             # Early stopping check
             # (check whether to stop training process

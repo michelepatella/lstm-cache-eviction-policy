@@ -1,3 +1,5 @@
+import mlflow
+
 from components.dataset.cleans.duplicates_remover import (
     remove_dataset_duplicates,
 )
@@ -37,6 +39,7 @@ def preprocess_data() -> None:
     """
     # Set the new pipeline step
     logs_phase.set(LOGS_DATA_PREPROCESSING_PHASE)
+    mlflow.start_run(run_name=LOGS_DATA_PREPROCESSING_PHASE, nested=True)
 
     # Setup
     config = prepare_config()
@@ -53,16 +56,18 @@ def preprocess_data() -> None:
     )
 
     # Load the dataset
-    df = load_dataset(dataset_raw_path)
+    initial_df = load_dataset(dataset_raw_path)
 
     # Remove missing values
-    df = remove_dataset_missing_values(df)
+    missing_values_removed_df = remove_dataset_missing_values(initial_df)
 
     # Remove duplicates
-    df = remove_dataset_duplicates(df, [DATASET_TIMESTAMP_COLUMN_NAME])
+    duplicates_removed_df = remove_dataset_duplicates(
+        missing_values_removed_df, [DATASET_TIMESTAMP_COLUMN_NAME]
+    )
 
     # Build new features
-    df = build_features(df)
+    final_df = build_features(duplicates_removed_df)
 
     # Retrieve path to save dataset from
     dataset_processed_path = get_dataset_abs_path(
@@ -70,7 +75,23 @@ def preprocess_data() -> None:
     )
 
     # Save preprocessed dataset
-    save_dataset(df, dataset_processed_path)
+    save_dataset(final_df, dataset_processed_path)
+
+    mlflow.log_metrics(
+        {
+            "dataset_num_rows": len(final_df),
+            "dataset_num_columns": len(final_df.columns),
+            "removals_missing_values": len(initial_df)
+            - len(missing_values_removed_df),
+            "removals_duplicates": len(missing_values_removed_df)
+            - len(duplicates_removed_df),
+            "removals_total": len(initial_df) - len(final_df),
+            "removals_ratio": (len(initial_df) - len(final_df))
+            / len(initial_df),
+        }
+    )
+    mlflow.log_artifact(dataset_processed_path)
+    mlflow.end_run()
 
     info("Data preprocessing completed")
 

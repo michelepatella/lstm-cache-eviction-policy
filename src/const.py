@@ -10,6 +10,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 # Logs
 # ----------------------------
 LOGS_VALIDATION_PHASE = "validation"
+LOGS_TRAINING_PHASE = "training"
 
 
 # ----------------------------

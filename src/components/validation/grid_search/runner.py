@@ -1,5 +1,6 @@
-from typing import Dict, Union
+from typing import Dict, Tuple, Union
 
+import mlflow
 import numpy as np
 from tqdm import tqdm
 
@@ -17,12 +18,13 @@ from components.validation.search_space.combinator import (
 from components.validation.time_series_cv.core.folds_runner import (
     compute_time_series_cv_folds,
 )
+from const import LOGS_VALIDATION_PHASE
 from pipeline.config.pydantic.config import Config
 
 
 def compute_grid_search(
     training_set: AccessLogsDataset, config: Config
-) -> Dict[str, Union[int, float, bool]]:
+) -> Tuple[Dict[str, Union[int, float, bool]], float]:
     """
     Perform grid search to find the best parameters.
 
@@ -36,8 +38,9 @@ def compute_grid_search(
         config (Config): Configuration object.
 
     Returns:
-        Dict[str, Union[int, float, bool]]: Dictionary containing the best
-                                            parameters found.
+        Tuple[Dict[str, Union[int, float, bool]], float]:
+            - best_params: Dictionary containing the best parameters found.
+            - best_avg_loss: Average loss of the best parameters.
 
     Raises:
         RuntimeError: If grid search computation fails:
@@ -72,11 +75,15 @@ def compute_grid_search(
             total=len(params_combinations),
             desc=GRID_SEARCH_DESC,
         ) as pbar:
-            for params in params_combinations:
+            for idx, params in enumerate(params_combinations, start=1):
                 debug(f"Evaluating parameters combination: {params}")
+                mlflow.start_run(
+                    run_name=f"{LOGS_VALIDATION_PHASE} ({idx}/{len(params_combinations)})",
+                    nested=True,
+                )
 
                 # Perform time series CV
-                avg_loss = compute_time_series_cv_folds(
+                avg_loss, fold_losses = compute_time_series_cv_folds(
                     cv_num_folds, training_set, params, config
                 )
 
@@ -86,6 +93,17 @@ def compute_grid_search(
                     avg_loss, best_avg_loss, params, best_params
                 )
 
+                mlflow.log_params(params)
+                mlflow.log_metrics(
+                    {
+                        "avg_loss": avg_loss,
+                        "std_loss": np.std(fold_losses),
+                        "min_loss": np.min(fold_losses),
+                        "max_loss": np.max(fold_losses),
+                    }
+                )
+                mlflow.end_run()
+
                 # To update the progress bar
                 pbar.update(1)
 
@@ -94,7 +112,7 @@ def compute_grid_search(
             f"average loss: {best_avg_loss})"
         )
 
-        return best_params
+        return best_params, best_avg_loss
     except (
         TypeError,
         AttributeError,

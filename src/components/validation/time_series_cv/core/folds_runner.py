@@ -1,4 +1,4 @@
-from typing import Dict, Union
+from typing import Dict, List, Tuple, Union
 
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.debug_logger import debug
@@ -19,7 +19,7 @@ def compute_time_series_cv_folds(
     training_set: AccessLogsDataset,
     params: Dict[str, Union[int, float, bool]],
     config: Config,
-) -> float:
+) -> Tuple[float, List[float]]:
     """
     Compute Time Series Cross-Validation (CV).
 
@@ -34,7 +34,9 @@ def compute_time_series_cv_folds(
         config (Config): Configuration object.
 
     Returns:
-        float: Average loss across all folds.
+        Tuple[float, List[float]]:
+            - final_avg_loss: Final average loss over all fold losses.
+            - fold_losses: List of all fold losses.
 
     Raises:
         RuntimeError: If time series cross-validation fails:
@@ -78,7 +80,7 @@ def compute_time_series_cv_folds(
             f"average loss: {final_avg_loss})"
         )
 
-        return final_avg_loss
+        return final_avg_loss, fold_losses
     except TypeError as e:
         msg = "Failed to compute time series cross-validation"
         error("%s: %s", msg, e)

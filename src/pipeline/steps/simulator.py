@@ -1,3 +1,5 @@
+import mlflow
+
 from components.caches.implementations.fifo_cache import FIFOCache
 from components.caches.implementations.lfu_cache import LFUCache
 from components.caches.implementations.lru_cache import LRUCache
@@ -63,6 +65,7 @@ def run_simulations() -> None:
     """
     # Set the new pipeline step
     logs_phase.set(LOGS_SIMULATIONS_PHASE)
+    mlflow.start_run(run_name=LOGS_SIMULATIONS_PHASE, nested=True)
 
     # Setup
     config = prepare_config()
@@ -74,7 +77,7 @@ def run_simulations() -> None:
     data_distribution_mode = config.data.mode
     mistake_window = config.simulations.metrics.mistake_rate.window
 
-    # Data setup and initialization
+    # Define cache eviction policies to simulate
     cache_eviction_policies = {
         CACHE_LRU_NAME: CacheWrapper(
             LRUCache,
@@ -102,10 +105,14 @@ def run_simulations() -> None:
             config,
         ),
     }
-    results = []
 
     # For each cache eviction policy run a simulation
+    results = []
     for policy, cache in cache_eviction_policies.items():
+        mlflow.start_run(
+            run_name=f"{LOGS_SIMULATIONS_PHASE} — {policy}", nested=True
+        )
+
         # Simulate a cache policy and
         # get simulation insights
         counters, timeline, cache_latencies = run_cache_simulation(
@@ -145,6 +152,20 @@ def run_simulations() -> None:
         # Save metrics
         results.append(metrics)
 
+        mlflow.log_metrics(
+            {
+                "num_hits": counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME],
+                "num_misses": counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME],
+                "hit_rate": hit_rate,
+                "miss_rate": miss_rate,
+                "eviction_mistake_rate": eviction_mistake_rate,
+                "min_cache_latency": min(cache_latencies),
+                "max_cache_latency": max(cache_latencies),
+                "avg_cache_latency": avg_cache_latency,
+            }
+        )
+        mlflow.end_run()
+
     # Determine results and plot file path according
     # to data distribution mode
     if data_distribution_mode == DATA_DISTRIBUTION_STATIC_MODE:
@@ -172,5 +193,10 @@ def run_simulations() -> None:
         ],
         plot_save_path,
     )
+
+    mlflow.log_param("cache_policies", list(cache_eviction_policies.keys()))
+    mlflow.log_artifacts(results_file_path)
+    mlflow.log_artifacts(plot_save_path)
+    mlflow.end_run()
 
     info("Simulations completed")

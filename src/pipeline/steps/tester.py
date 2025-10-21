@@ -1,3 +1,6 @@
+import mlflow
+from box import Box
+
 from components.data_loader.initializer import initialize_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.evaluation.model.evaluator import evaluate_model
@@ -31,6 +34,7 @@ def test_model() -> None:
     """
     # Set the new pipeline step
     logs_phase.set(LOGS_TESTING_PHASE)
+    mlflow.start_run(run_name=LOGS_TESTING_PHASE, nested=True)
 
     # Setup
     config = prepare_config()
@@ -47,7 +51,7 @@ def test_model() -> None:
     model_params = config.model.params
 
     # Setup testing data loader
-    _, testing_loader = initialize_data_loader(
+    testing_set, testing_loader = initialize_data_loader(
         DATASET_TESTING_SPLIT_TYPE,
         testing_batch_size,
         testing_shuffle,
@@ -83,6 +87,18 @@ def test_model() -> None:
         model_results_save_path,
         compute_metrics=MODEL_COMPUTE_METRICS_ENABLED,
     )
+
+    mlflow.log_metrics(
+        {
+            "num_testing_samples": len(testing_set),
+            "avg_loss": avg_loss,
+            "class_report": Box(metrics).class_report,
+            "top_k_accuracy": Box(metrics).top_k_accuracy,
+            "cohen_kappa_score": Box(metrics).cohen_kappa_score,
+        }
+    )
+    mlflow.log_artifact(model_results_save_path)
+    mlflow.end_run()
 
     info("Testing completed")
 

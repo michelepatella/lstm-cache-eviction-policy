@@ -1,3 +1,5 @@
+import mlflow
+
 from components.data_loader.initializer import initialize_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.dict.operations.merger import merge_dicts
@@ -28,6 +30,7 @@ def validate_model() -> None:
     """
     # Set the new pipeline step
     logs_phase.set(LOGS_VALIDATION_PHASE)
+    mlflow.start_run(run_name=LOGS_VALIDATION_PHASE, nested=True)
 
     # Setup
     config = prepare_config()
@@ -40,8 +43,9 @@ def validate_model() -> None:
     validation_shuffle = config.validation.general.shuffle
 
     # Load the training set
+    dataset_split_type = DATASET_TRAINING_SPLIT_TYPE
     training_set, _ = initialize_data_loader(
-        DATASET_TRAINING_SPLIT_TYPE,
+        dataset_split_type,
         validation_batch_size,
         validation_shuffle,
         AccessLogsDataset,
@@ -49,7 +53,7 @@ def validate_model() -> None:
     )
 
     # Compute grid search for best parameters
-    best_params = compute_grid_search(training_set, config)
+    best_params, best_avg_loss = compute_grid_search(training_set, config)
 
     # Merge original dictionary with the best
     # parameters dictionary
@@ -57,6 +61,15 @@ def validate_model() -> None:
 
     # Save updated configuration dictionary as file
     save_yaml(updated_config_dict, CONFIG_FILE_PATH)
+
+    mlflow.log_metrics(
+        {
+            "num_training_samples": len(training_set),
+            "best_avg_loss": best_avg_loss,
+        }
+    )
+    mlflow.log_artifact(CONFIG_FILE_PATH)
+    mlflow.end_run()
 
     info("Validation completed")
 
