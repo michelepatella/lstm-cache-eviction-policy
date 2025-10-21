@@ -23,9 +23,8 @@ def test_model() -> None:
     """
     Test the trained model.
 
-    This function tests the trained model on the
-    testing set. Results are shown via report and
-    plots providing model performance insights.
+    This function tests the trained model on the testing set. Results are
+    shown via report and plots providing model performance insights.
 
     Returns:
         None
@@ -36,6 +35,8 @@ def test_model() -> None:
     # Setup
     config = prepare_config()
     initialize_logs()
+
+    info("Testing started")
 
     # Prepare configuration
     data_distribution_mode = config.data.mode
@@ -83,7 +84,7 @@ def test_model() -> None:
         compute_metrics=MODEL_COMPUTE_METRICS_ENABLED,
     )
 
-    info("Model testing completed")
+    info("Testing completed")
 
 
 if __name__ == "__main__":

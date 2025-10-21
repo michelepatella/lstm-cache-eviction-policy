@@ -6,8 +6,7 @@ class MistakeRateConfig(BaseModel):
     Configuration for mistake rate calculation.
 
     Attributes:
-        window (int): Sliding window size used to compute the
-                      mistake rate (> 0).
+        window (int): Sliding window size used to compute the mistake rate (> 0).
     """
 
     window: conint(gt=0)
@@ -18,8 +17,7 @@ class MetricsConfig(BaseModel):
     Metrics configuration for the simulations.
 
     Attributes:
-        mistake_rate (MistakeRateConfig): Configuration for mistake
-                                          rate metric.
+        mistake_rate (MistakeRateConfig): Configuration for mistake rate metric.
     """
 
     mistake_rate: MistakeRateConfig

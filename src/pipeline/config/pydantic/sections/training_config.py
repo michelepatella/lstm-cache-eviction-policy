@@ -55,8 +55,7 @@ class OptimizerConfig(BaseModel):
         """
         Check whether optimizer is valid or not.
 
-        This function validates the training
-        optimizer specified.
+        This function validates the training optimizer specified.
 
         Args:
             self (OptimizerConfig): Current model instance.

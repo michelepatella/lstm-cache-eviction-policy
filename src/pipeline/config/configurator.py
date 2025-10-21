@@ -1,3 +1,4 @@
+from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
 from components.yaml.io.loader import load_yaml
 from pipeline.config.pydantic.config import Config
@@ -23,6 +24,6 @@ def prepare_config() -> Config:
     # Validate and parse YAML configuration file
     config = Config(**config_file)
 
-    info("Configuration loading and validation completed")
+    debug("Configuration loaded and validated")
 
     return config

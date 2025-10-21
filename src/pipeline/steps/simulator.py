@@ -68,6 +68,8 @@ def run_simulations() -> None:
     config = prepare_config()
     initialize_logs()
 
+    info("Simulations started")
+
     # Prepare configuration
     data_distribution_mode = config.data.mode
     mistake_window = config.simulations.metrics.mistake_rate.window
@@ -143,7 +145,7 @@ def run_simulations() -> None:
         # Save metrics
         results.append(metrics)
 
-    # Determine results file name according
+    # Determine results and plot file path according
     # to data distribution mode
     if data_distribution_mode == DATA_DISTRIBUTION_STATIC_MODE:
         results_file_path = RESULTS_STATIC_SIMULATIONS_FILE_PATH
@@ -171,4 +173,4 @@ def run_simulations() -> None:
         plot_save_path,
     )
 
-    info("Cache simulations completed")
+    info("Simulations completed")

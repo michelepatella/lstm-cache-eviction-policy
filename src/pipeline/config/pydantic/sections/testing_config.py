@@ -19,8 +19,7 @@ class MetricsConfig(BaseModel):
     Metrics configuration for testing.
 
     Attributes:
-        top_k (int): Number of top predictions to
-                     consider for evaluation (> 0).
+        top_k (int): Number of top predictions to consider for evaluation (> 0).
     """
 
     top_k: conint(gt=0)  # type: ignore[valid-type]

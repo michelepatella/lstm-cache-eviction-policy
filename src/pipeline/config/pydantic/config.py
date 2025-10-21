@@ -1,5 +1,3 @@
-from typing import Dict, List, TypeAlias, Union
-
 from pydantic import BaseModel
 
 from pipeline.config.pydantic.sections.data_config import DataConfig
@@ -15,27 +13,14 @@ from pipeline.config.pydantic.sections.validation_config import (
     ValidationConfig,
 )
 
-# Definition of configuration value
-# and dictionary types
-ConfigValue: TypeAlias = Union[
-    int,
-    float,
-    str,
-    bool,
-    List[Union[int, float]],
-    Dict[str, "ConfigValue"],
-]
-ConfigDict: TypeAlias = Dict[str, ConfigValue]
-
 
 class Config(BaseModel):
     """
     Represents the full configuration of the system.
 
-    This class aggregates all configuration sections used
-    across the system, providing structured access
-    to hardware, data, dataset, model, simulations, training,
-    testing, and validation configurations.
+    This class aggregates all configuration sections used across the system,
+    providing structured access to hardware, data, dataset, model, validation,
+    training, testing, and simulations configurations.
 
     Attributes:
         hardware (HardwareConfig): Hardware configuration.

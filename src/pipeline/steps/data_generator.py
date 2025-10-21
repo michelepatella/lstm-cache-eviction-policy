@@ -8,7 +8,6 @@ from components.dataset.builder import build_dataset
 from components.dataset.io.locator import get_dataset_abs_path
 from components.dataset.io.saver import save_dataset
 from components.logs.initializer import initialize_logs, logs_phase
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
 from components.visualization.daily_profile_plotter import (
     plot_daily_profile,
@@ -58,12 +57,12 @@ def generate_data() -> None:
     config = prepare_config()
     initialize_logs()
 
+    info("Data generation started")
+
     # Prepare configuration
     data_distribution_mode = config.data.mode
     min_key = config.data.keys.min
     max_key = config.data.keys.max
-
-    debug(f"Data distribution mode: {data_distribution_mode}")
 
     # Generate requests with corresponding timestamps,
     # based on the data distribution mode
@@ -71,7 +70,7 @@ def generate_data() -> None:
         # Static requests generation
         requests, timestamps_hours = generate_static_requests(config)
 
-        # Prepare save paths based on data distribution mode
+        # Prepare static save paths
         zipf_log_log_plot_save_path = PLOT_STATIC_ZIPF_LOG_LOG_FILE_PATH
         daily_profile_plot_save_path = PLOT_STATIC_DAILY_PROFILE_FILE_PATH
         key_usage_heatmap_plot_save_path = (
@@ -81,7 +80,7 @@ def generate_data() -> None:
         # Dynamic requests generation
         requests, timestamps_hours = generate_dynamic_requests(config)
 
-        # Prepare save paths based on data distribution mode
+        # Prepare dynamic save paths
         zipf_log_log_plot_save_path = PLOT_DYNAMIC_ZIPF_LOG_LOG_FILE_PATH
         daily_profile_plot_save_path = PLOT_DYNAMIC_DAILY_PROFILE_FILE_PATH
         key_usage_heatmap_plot_save_path = (

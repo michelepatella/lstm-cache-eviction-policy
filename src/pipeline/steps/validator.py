@@ -19,10 +19,9 @@ def validate_model() -> None:
     """
     Validate model to find the best hyperparameters.
 
-    This function validates the model, by orchestrating
-    hyperparameter tuning (via time series cross-validation with
-    grid search), and saving the best hyperparameters found
-    in a new configuration file.
+    This function validates the model, by orchestrating hyperparameter
+    tuning (via time series cross-validation with grid search), and saving
+    the best hyperparameters found in a new configuration file.
 
     Returns:
         None
@@ -33,6 +32,8 @@ def validate_model() -> None:
     # Setup
     config = prepare_config()
     initialize_logs()
+
+    info("Validation started")
 
     # Prepare configuration
     validation_batch_size = config.validation.general.batch_size
@@ -57,7 +58,7 @@ def validate_model() -> None:
     # Save updated configuration dictionary as file
     save_yaml(updated_config_dict, CONFIG_FILE_PATH)
 
-    info("Model validation completed")
+    info("Validation completed")
 
 
 if __name__ == "__main__":

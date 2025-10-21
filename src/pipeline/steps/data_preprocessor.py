@@ -27,11 +27,10 @@ def preprocess_data() -> None:
     """
     Preprocess generated data.
 
-    This function preprocesses generated data by
-    orchestrating missing values, duplicated values
-    and invalid values removal. Finally, it orchestrates
-    new features construction, saving the final
-    preprocessed dataset for further usage.
+    This function preprocesses generated data by orchestrating missing values,
+    duplicated values and invalid values removal. Finally, it orchestrates
+    new features construction, saving the final preprocessed dataset for further
+    usage.
 
     Returns:
         None
@@ -42,6 +41,8 @@ def preprocess_data() -> None:
     # Setup
     config = prepare_config()
     initialize_logs()
+
+    info("Data preprocessing started")
 
     # Prepare configuration
     data_distribution_mode = config.data.mode

@@ -25,10 +25,9 @@ def train_model() -> None:
     """
     Train LSTM model.
 
-    This function trains the LSTM model, by orchestrating
-    model and training setup, as well as training itself.
-    The best model found during training process is saved
-    for further usage.
+    This function trains the LSTM model, by orchestrating model and
+    training setup, as well as training itself. The best model found
+    during training process is saved for further usage.
 
     Returns:
         None
@@ -39,6 +38,8 @@ def train_model() -> None:
     # Setup
     config = prepare_config()
     initialize_logs()
+
+    info("Training started")
 
     # Prepare configuration
     data_distribution_mode = config.data.mode
@@ -114,7 +115,7 @@ def train_model() -> None:
     # Save the best model trained
     save_model(model, model_path)
 
-    info("Model training completed")
+    info("Training completed")
 
 
 if __name__ == "__main__":

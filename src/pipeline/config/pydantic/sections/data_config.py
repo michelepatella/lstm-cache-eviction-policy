@@ -49,8 +49,8 @@ class KeysConfig(BaseModel):
         self: "KeysConfig",
     ) -> "KeysConfig":
         """
-        Check whether the least key is greater than
-        or equal to the greatest key or not.
+        Check whether the least key is greater than or equal to the
+        greatest key or not.
 
         Args:
             self (KeysConfig): Current model instance.
@@ -70,8 +70,7 @@ class KeysConfig(BaseModel):
 
 class ZipfAlphaConfig(BaseModel):
     """
-    Configuration for alpha parameters of
-    Zipf distribution.
+    Configuration for alpha parameters of Zipf distribution.
 
     Attributes:
         fixed (float): Fixed alpha value (> 0).
@@ -172,8 +171,8 @@ class NoiseConfig(BaseModel):
         self: "NoiseConfig",
     ) -> "NoiseConfig":
         """
-        Check whether the least noise value is
-        greater than or equal to the greatest one or not.
+        Check whether the least noise value is greater than or equal to
+        the greatest one or not.
 
         Args:
             self (NoiseConfig): Current model instance.
@@ -320,8 +319,8 @@ class BurstinessConfig(BaseModel):
         self: "BurstinessConfig",
     ) -> "BurstinessConfig":
         """
-        Check whether the highest burst value is
-        greater than or equal to the lowest one or not.
+        Check whether the highest burst value is greater than or equal to the
+        lowest one or not.
 
         Args:
             self (BurstinessConfig): Current model instance.
@@ -401,11 +400,9 @@ class DataConfig(BaseModel):
         self: "DataConfig",
     ) -> "DataConfig":
         """
-        Check whether data distribution
-        mode is valid or not.
+        Check whether data distribution mode is valid or not.
 
-        This function validates the data
-        distribution mode.
+        This function validates the data distribution mode.
 
         Args:
             self (DataConfig): Current model instance.
