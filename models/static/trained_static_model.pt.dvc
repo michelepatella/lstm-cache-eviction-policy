@@ -1,5 +1,5 @@
 outs:
-- md5: d41d8cd98f00b204e9800998ecf8427e
-  size: 0
+- md5: 17b50f8701b2719c659d0ce605732df7
+  size: 865978
   hash: md5
   path: trained_static_model.pt
