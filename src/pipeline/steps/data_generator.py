@@ -1,7 +1,8 @@
+from collections import Counter
+
 import mlflow
 import numpy as np
 import pandas as pd
-from collections import Counter
 
 from components.const import TIME_HOURS_IN_DAY
 from components.data.requests.core.dynamic_generator import (
@@ -24,12 +25,6 @@ from components.visualization.key_usage_heatmap_plotter import (
 from components.visualization.zipf_loglog_plotter import (
     plot_zipf_loglog,
 )
-from src.const import (
-    DATA_DISTRIBUTION_STATIC_MODE,
-    DATASET_RAW_TYPE,
-    DATASET_REQUEST_COLUMN_NAME,
-    DATASET_TIMESTAMP_COLUMN_NAME, MLFLOW_NESTED_ENABLED,
-)
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
     LOGS_DATA_GENERATION_PHASE,
@@ -39,6 +34,13 @@ from pipeline.const import (
     PLOT_STATIC_DAILY_PROFILE_FILE_PATH,
     PLOT_STATIC_KEY_USAGE_HEATMAP_FILE_PATH,
     PLOT_STATIC_ZIPF_LOG_LOG_FILE_PATH,
+)
+from src.const import (
+    DATA_DISTRIBUTION_STATIC_MODE,
+    DATASET_RAW_TYPE,
+    DATASET_REQUEST_COLUMN_NAME,
+    DATASET_TIMESTAMP_COLUMN_NAME,
+    MLFLOW_NESTED_ENABLED,
 )
 
 
@@ -58,7 +60,9 @@ def generate_data() -> None:
     """
     # Set the new pipeline step
     logs_phase.set(LOGS_DATA_GENERATION_PHASE)
-    with mlflow.start_run(run_name=LOGS_DATA_GENERATION_PHASE, nested=MLFLOW_NESTED_ENABLED):
+    with mlflow.start_run(
+        run_name=LOGS_DATA_GENERATION_PHASE, nested=MLFLOW_NESTED_ENABLED
+    ):
 
         # Setup
         config = prepare_config()
@@ -98,7 +102,9 @@ def generate_data() -> None:
         # a timestamp and the corresponding request
         df = build_dataset(
             {
-                DATASET_TIMESTAMP_COLUMN_NAME: timestamps_hours[: len(requests)],
+                DATASET_TIMESTAMP_COLUMN_NAME: timestamps_hours[
+                    : len(requests)
+                ],
                 DATASET_REQUEST_COLUMN_NAME: requests,
             }
         )
@@ -123,6 +129,7 @@ def generate_data() -> None:
             key_usage_heatmap_plot_save_path,
         )
 
+        # Experiment tracking
         mlflow.log_metrics(
             {
                 "dataset_num_rows": len(df),
@@ -138,10 +145,18 @@ def generate_data() -> None:
                 "timestamps_max": float(max(timestamps_hours)),
                 "timestamps_mean": float(np.mean(timestamps_hours)),
                 "timestamps_std": float(np.std(timestamps_hours)),
-                "timestamps_diff_mean": float(np.mean(np.diff(timestamps_hours))),
-                "timestamps_diff_std": float(np.std(np.diff(timestamps_hours))),
-                "timestamps_diff_min": float(np.min(np.diff(timestamps_hours))),
-                "timestamps_diff_max": float(np.max(np.diff(timestamps_hours))),
+                "timestamps_diff_mean": float(
+                    np.mean(np.diff(timestamps_hours))
+                ),
+                "timestamps_diff_std": float(
+                    np.std(np.diff(timestamps_hours))
+                ),
+                "timestamps_diff_min": float(
+                    np.min(np.diff(timestamps_hours))
+                ),
+                "timestamps_diff_max": float(
+                    np.max(np.diff(timestamps_hours))
+                ),
                 "total_hours": max(timestamps_hours) - min(timestamps_hours),
                 "total_days": (max(timestamps_hours) - min(timestamps_hours))
                 / TIME_HOURS_IN_DAY,

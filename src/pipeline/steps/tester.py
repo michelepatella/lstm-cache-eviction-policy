@@ -9,16 +9,17 @@ from components.logs.levels.info_logger import info
 from components.model.best.initializer import (
     initialize_best_model,
 )
-from src.const import (
-    DATA_DISTRIBUTION_STATIC_MODE,
-    DATASET_TESTING_SPLIT_TYPE, MLFLOW_NESTED_ENABLED,
-)
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
     LOGS_TESTING_PHASE,
     MODEL_COMPUTE_METRICS_ENABLED,
     RESULTS_DYNAMIC_MODEL_FILE_PATH,
     RESULTS_STATIC_MODEL_FILE_PATH,
+)
+from src.const import (
+    DATA_DISTRIBUTION_STATIC_MODE,
+    DATASET_TESTING_SPLIT_TYPE,
+    MLFLOW_NESTED_ENABLED,
 )
 
 
@@ -34,7 +35,9 @@ def test_model() -> None:
     """
     # Set the new pipeline step
     logs_phase.set(LOGS_TESTING_PHASE)
-    with mlflow.start_run(run_name=LOGS_TESTING_PHASE, nested=MLFLOW_NESTED_ENABLED):
+    with mlflow.start_run(
+        run_name=LOGS_TESTING_PHASE, nested=MLFLOW_NESTED_ENABLED
+    ):
 
         # Setup
         config = prepare_config()
@@ -92,17 +95,17 @@ def test_model() -> None:
         metrics = Box(metrics, delimiter="_")
         mlflow.log_metrics(
             {
-                "num_testing_samples": len(testing_set),
-                "avg_loss": avg_loss,
+                "testing_samples_num": len(testing_set),
+                "loss_avg": avg_loss,
                 "accuracy": metrics.class_report.accuracy,
-                "precision_macro": metrics.class_report.macro_avg.precision,
-                "recall_macro": metrics.class_report.macro_avg.recall,
-                "f1_macro": metrics.class_report.macro_avg.f1_score,
-                "support_macro": metrics.class_report.macro_avg.support,
-                "precision_weighted": metrics.class_report.weighted_avg.precision,
-                "recall_weighted": metrics.class_report.weighted_avg.recall,
-                "f1_weighted": metrics.class_report.weighted_avg.f1_score,
-                "support_weighted": metrics.class_report.weighted_avg.support,
+                "macro_precision": metrics.class_report.macro_avg.precision,
+                "macro_recall": metrics.class_report.macro_avg.recall,
+                "macro_f1": metrics.class_report.macro_avg.f1_score,
+                "macro_support": metrics.class_report.macro_avg.support,
+                "weighted_precision": metrics.class_report.weighted_avg.precision,
+                "weighted_recall": metrics.class_report.weighted_avg.recall,
+                "weighted_f1": metrics.class_report.weighted_avg.f1_score,
+                "weighted_support": metrics.class_report.weighted_avg.support,
                 "top_k_accuracy": metrics.top_k_accuracy,
                 "cohen_kappa_score": metrics.cohen_kappa_score,
             }

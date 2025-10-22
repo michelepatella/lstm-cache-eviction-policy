@@ -27,8 +27,8 @@ from components.dataset.splits.index.calculator import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from src.const import DATASET_TRAINING_SPLIT_TYPE
 from pipeline.config.pydantic.config import Config
+from src.const import DATASET_TRAINING_SPLIT_TYPE
 
 
 class AccessLogsDataset(Dataset):

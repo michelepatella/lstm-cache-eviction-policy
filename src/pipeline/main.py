@@ -1,6 +1,5 @@
 import mlflow
 
-from src.const import MLFLOW_MLRUNS_FILE_PATH, MLFLOW_MAIN_RUN_NAME
 from pipeline.config.configurator import prepare_config
 from pipeline.steps.data_generator import generate_data
 from pipeline.steps.data_preprocessor import preprocess_data
@@ -8,6 +7,7 @@ from pipeline.steps.simulator import run_simulations
 from pipeline.steps.tester import test_model
 from pipeline.steps.trainer import train_model
 from pipeline.steps.validator import validate_model
+from src.const import MLFLOW_MAIN_RUN_NAME, MLFLOW_MLRUNS_FILE_PATH
 
 
 def main():

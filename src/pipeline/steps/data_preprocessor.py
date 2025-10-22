@@ -14,14 +14,15 @@ from components.dataset.io.locator import get_dataset_abs_path
 from components.dataset.io.saver import save_dataset
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
-from src.const import (
-    DATASET_RAW_TYPE,
-    DATASET_TIMESTAMP_COLUMN_NAME, MLFLOW_NESTED_ENABLED,
-)
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
     DATASET_PROCESSED_TYPE,
     LOGS_DATA_PREPROCESSING_PHASE,
+)
+from src.const import (
+    DATASET_RAW_TYPE,
+    DATASET_TIMESTAMP_COLUMN_NAME,
+    MLFLOW_NESTED_ENABLED,
 )
 
 
@@ -39,7 +40,9 @@ def preprocess_data() -> None:
     """
     # Set the new pipeline step
     logs_phase.set(LOGS_DATA_PREPROCESSING_PHASE)
-    with mlflow.start_run(run_name=LOGS_DATA_PREPROCESSING_PHASE, nested=MLFLOW_NESTED_ENABLED):
+    with mlflow.start_run(
+        run_name=LOGS_DATA_PREPROCESSING_PHASE, nested=MLFLOW_NESTED_ENABLED
+    ):
 
         # Setup
         config = prepare_config()
@@ -82,13 +85,15 @@ def preprocess_data() -> None:
             {
                 "dataset_num_rows": len(final_df),
                 "dataset_num_columns": len(final_df.columns),
-                "removals_missing_values": len(initial_df)
+                "missing_values_num": len(initial_df)
                 - len(missing_values_removed_df),
-                "removals_duplicates": len(missing_values_removed_df)
+                "duplicates_num": len(missing_values_removed_df)
                 - len(duplicates_removed_df),
                 "removals_total": len(initial_df) - len(final_df),
                 "removals_ratio": (len(initial_df) - len(final_df))
                 / len(initial_df),
+                "features_num_built": len(final_df.columns)
+                - len(initial_df.columns),
             }
         )
         mlflow.log_artifact(dataset_processed_path)

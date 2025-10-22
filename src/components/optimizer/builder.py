@@ -4,7 +4,11 @@ import torch
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from src.const import OPTIMIZER_ADAM_NAME, OPTIMIZER_ADAMW_NAME, OPTIMIZER_SGD_NAME
+from src.const import (
+    OPTIMIZER_ADAM_NAME,
+    OPTIMIZER_ADAMW_NAME,
+    OPTIMIZER_SGD_NAME,
+)
 
 # Map each optimizer type to
 # its PyTorch instance

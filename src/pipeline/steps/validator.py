@@ -9,12 +9,13 @@ from components.validation.grid_search.runner import (
     compute_grid_search,
 )
 from components.yaml.io.saver import save_yaml
-from src.const import (
-    DATASET_TRAINING_SPLIT_TYPE,
-    LOGS_VALIDATION_PHASE, MLFLOW_NESTED_ENABLED,
-)
 from pipeline.config.configurator import prepare_config
 from pipeline.const import CONFIG_FILE_PATH
+from src.const import (
+    DATASET_TRAINING_SPLIT_TYPE,
+    LOGS_VALIDATION_PHASE,
+    MLFLOW_NESTED_ENABLED,
+)
 
 
 def validate_model() -> None:
@@ -30,7 +31,9 @@ def validate_model() -> None:
     """
     # Set the new pipeline step
     logs_phase.set(LOGS_VALIDATION_PHASE)
-    with mlflow.start_run(run_name=LOGS_VALIDATION_PHASE, nested=MLFLOW_NESTED_ENABLED):
+    with mlflow.start_run(
+        run_name=LOGS_VALIDATION_PHASE, nested=MLFLOW_NESTED_ENABLED
+    ):
 
         # Setup
         config = prepare_config()
@@ -43,9 +46,8 @@ def validate_model() -> None:
         validation_shuffle = config.validation.general.shuffle
 
         # Load the training set
-        dataset_split_type = DATASET_TRAINING_SPLIT_TYPE
         training_set, _ = initialize_data_loader(
-            dataset_split_type,
+            DATASET_TRAINING_SPLIT_TYPE,
             validation_batch_size,
             validation_shuffle,
             AccessLogsDataset,
@@ -65,8 +67,8 @@ def validate_model() -> None:
         # Experiment tracking
         mlflow.log_metrics(
             {
-                "num_training_samples": len(training_set),
-                "best_avg_loss": best_avg_loss,
+                "training_samples_num": len(training_set),
+                "loss_best_avg": best_avg_loss,
             }
         )
         mlflow.log_artifact(CONFIG_FILE_PATH)

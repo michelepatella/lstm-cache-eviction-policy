@@ -18,13 +18,13 @@ from components.logs.levels.info_logger import info
 from components.time.transforms.trig_decoder import (
     decode_time_trigonometrically,
 )
+from pipeline.config.pydantic.config import Config
 from src.const import (
     CACHE_LSTM_NAME,
     DATASET_TESTING_SPLIT_TYPE,
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
 )
-from pipeline.config.pydantic.config import Config
 
 
 def run_cache_simulation(

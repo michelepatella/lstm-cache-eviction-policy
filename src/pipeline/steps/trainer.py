@@ -18,8 +18,12 @@ from components.model.io.locator import get_model_abs_path
 from components.model.io.saver import save_model
 from components.optimizer.builder import build_optimizer
 from components.training.core.epochs_trainer import train_epochs
-from src.const import DATASET_TRAINING_SPLIT_TYPE, LOGS_TRAINING_PHASE, MLFLOW_NESTED_ENABLED
 from pipeline.config.configurator import prepare_config
+from src.const import (
+    DATASET_TRAINING_SPLIT_TYPE,
+    LOGS_TRAINING_PHASE,
+    MLFLOW_NESTED_ENABLED,
+)
 
 
 def train_model() -> None:
@@ -35,7 +39,9 @@ def train_model() -> None:
     """
     # Set the new pipeline step
     logs_phase.set(LOGS_TRAINING_PHASE)
-    with mlflow.start_run(run_name=LOGS_TRAINING_PHASE, nested=MLFLOW_NESTED_ENABLED):
+    with mlflow.start_run(
+        run_name=LOGS_TRAINING_PHASE, nested=MLFLOW_NESTED_ENABLED
+    ):
 
         # Setup
         config = prepare_config()
@@ -120,9 +126,9 @@ def train_model() -> None:
         # Experiment tracking
         mlflow.log_metrics(
             {
-                "num_training_samples": len(training_set),
-                "num_validation_samples": len(validation_set),
-                "best_avg_loss": best_avg_loss,
+                "training_samples_num": len(training_set),
+                "validation_samples_num": len(validation_set),
+                "loss_best_avg": best_avg_loss,
             }
         )
         mlflow.log_artifact(model_path)

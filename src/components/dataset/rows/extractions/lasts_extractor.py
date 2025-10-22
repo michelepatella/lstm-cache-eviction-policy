@@ -2,6 +2,9 @@ from typing import List, Optional, Tuple
 
 from torch.utils.data import DataLoader
 
+from components.const import (
+    TIME_SECONDS_IN_HOUR,
+)
 from components.dataset.rows.extractions.sliding_window_extractor import (
     extract_sliding_window_dataset_rows,
 )
@@ -12,9 +15,6 @@ from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.time.transforms.trig_decoder import (
     decode_time_trigonometrically,
-)
-from components.const import (
-    TIME_SECONDS_IN_HOUR,
 )
 
 

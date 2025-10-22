@@ -18,8 +18,8 @@ from components.validation.search_space.combinator import (
 from components.validation.time_series_cv.core.folds_runner import (
     compute_time_series_cv_folds,
 )
-from src.const import LOGS_VALIDATION_PHASE, MLFLOW_NESTED_ENABLED
 from pipeline.config.pydantic.config import Config
+from src.const import LOGS_VALIDATION_PHASE, MLFLOW_NESTED_ENABLED
 
 
 def compute_grid_search(
@@ -89,18 +89,20 @@ def compute_grid_search(
 
                     # Check and update the best parameters
                     # if improvement found
-                    best_avg_loss, best_params = check_update_best_model_params(
-                        avg_loss, best_avg_loss, params, best_params
+                    best_avg_loss, best_params = (
+                        check_update_best_model_params(
+                            avg_loss, best_avg_loss, params, best_params
+                        )
                     )
 
                     # Experiment tracking
                     mlflow.log_params(params)
                     mlflow.log_metrics(
                         {
-                            "avg_loss": avg_loss,
-                            "std_loss": np.std(fold_losses),
-                            "min_loss": np.min(fold_losses),
-                            "max_loss": np.max(fold_losses),
+                            "loss_avg": avg_loss,
+                            "loss_std": np.std(fold_losses),
+                            "loss_min": np.min(fold_losses),
+                            "loss_max": np.max(fold_losses),
                         }
                     )
                     mlflow.end_run()

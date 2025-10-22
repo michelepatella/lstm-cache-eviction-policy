@@ -1,4 +1,5 @@
 import mlflow
+import numpy as np
 
 from components.caches.implementations.fifo_cache import FIFOCache
 from components.caches.implementations.lfu_cache import LFUCache
@@ -25,14 +26,6 @@ from components.logs.levels.info_logger import info
 from components.visualization.hit_miss_rates_plotter import (
     plot_hit_miss_rate,
 )
-from src.const import (
-    CACHE_LSTM_NAME,
-    DATA_DISTRIBUTION_STATIC_MODE,
-    SIMULATIONS_METRICS_HIT_COUNTER_NAME,
-    SIMULATIONS_METRICS_MISS_COUNTER_NAME,
-    SIMULATIONS_METRICS_POLICY_NAME,
-    SIMULATIONS_METRICS_TIMELINE_NAME, MLFLOW_NESTED_ENABLED,
-)
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
     CACHE_FIFO_NAME,
@@ -48,6 +41,15 @@ from pipeline.const import (
     SIMULATIONS_METRICS_EVICTION_MISTAKE_RATE_NAME,
     SIMULATIONS_METRICS_HIT_RATE_NAME,
     SIMULATIONS_METRICS_MISS_RATE_NAME,
+)
+from src.const import (
+    CACHE_LSTM_NAME,
+    DATA_DISTRIBUTION_STATIC_MODE,
+    MLFLOW_NESTED_ENABLED,
+    SIMULATIONS_METRICS_HIT_COUNTER_NAME,
+    SIMULATIONS_METRICS_MISS_COUNTER_NAME,
+    SIMULATIONS_METRICS_POLICY_NAME,
+    SIMULATIONS_METRICS_TIMELINE_NAME,
 )
 
 
@@ -65,7 +67,9 @@ def run_simulations() -> None:
     """
     # Set the new pipeline step
     logs_phase.set(LOGS_SIMULATIONS_PHASE)
-    with mlflow.start_run(run_name=LOGS_SIMULATIONS_PHASE, nested=MLFLOW_NESTED_ENABLED):
+    with mlflow.start_run(
+        run_name=LOGS_SIMULATIONS_PHASE, nested=MLFLOW_NESTED_ENABLED
+    ):
 
         # Setup
         config = prepare_config()
@@ -99,68 +103,84 @@ def run_simulations() -> None:
                 CacheMetricsLogger(),
                 config,
             ),
-            #CACHE_LSTM_NAME: LSTMCache(
+            # CACHE_LSTM_NAME: LSTMCache(
             #    None,
             #    CacheMetricsLogger(),
             #    config,
-            #),
+            # ),
         }
 
         # For each cache eviction policy run a simulation
         results = []
         for policy, cache in cache_eviction_policies.items():
-            # Simulate a cache policy and
-            # get simulation insights
-            counters, timeline, cache_latencies = run_cache_simulation(
-                cache,
-                policy,
-                config,
-            )
+            with mlflow.start_run(
+                run_name=f"{LOGS_SIMULATIONS_PHASE} ({policy})",
+                nested=MLFLOW_NESTED_ENABLED,
+            ):
+                # Simulate a cache policy and
+                # get simulation insights
+                counters, timeline, cache_latencies = run_cache_simulation(
+                    cache,
+                    policy,
+                    config,
+                )
 
-            # Calculate metrics at the end
-            # of cache simulation
-            (
-                hit_rate,
-                miss_rate,
-                eviction_mistake_rate,
-                avg_cache_latency,
-            ) = calculate_simulation_metrics(
-                counters, cache_latencies, mistake_window, cache.metrics_logger
-            )
+                # Calculate metrics at the end
+                # of cache simulation
+                (
+                    hit_rate,
+                    miss_rate,
+                    eviction_mistake_rate,
+                    avg_cache_latency,
+                ) = calculate_simulation_metrics(
+                    counters,
+                    cache_latencies,
+                    mistake_window,
+                    cache.metrics_logger,
+                )
 
-            # Collect metrics together for the
-            # current cache eviction policy
-            metrics = {
-                SIMULATIONS_METRICS_POLICY_NAME: policy,
-                SIMULATIONS_METRICS_HIT_RATE_NAME: hit_rate,
-                SIMULATIONS_METRICS_MISS_RATE_NAME: miss_rate,
-                SIMULATIONS_METRICS_HIT_COUNTER_NAME: counters[
-                    SIMULATIONS_METRICS_HIT_COUNTER_NAME
-                ],
-                SIMULATIONS_METRICS_MISS_COUNTER_NAME: counters[
-                    SIMULATIONS_METRICS_MISS_COUNTER_NAME
-                ],
-                SIMULATIONS_METRICS_TIMELINE_NAME: timeline,
-                SIMULATIONS_METRICS_EVICTION_MISTAKE_RATE_NAME: eviction_mistake_rate,
-                SIMULATIONS_METRICS_AVG_CACHE_LATENCY_NAME: avg_cache_latency,
-            }
-
-            # Save metrics
-            results.append(metrics)
-
-            # Experiment tracking
-            mlflow.log_metrics(
-                {
-                    "num_hits": counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME],
-                    "num_misses": counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME],
-                    "hit_rate": hit_rate,
-                    "miss_rate": miss_rate,
-                    "eviction_mistake_rate": eviction_mistake_rate,
-                    "min_cache_latency": min(cache_latencies),
-                    "max_cache_latency": max(cache_latencies),
-                    "avg_cache_latency": avg_cache_latency,
+                # Collect metrics together for the
+                # current cache eviction policy
+                metrics = {
+                    SIMULATIONS_METRICS_POLICY_NAME: policy,
+                    SIMULATIONS_METRICS_HIT_RATE_NAME: hit_rate,
+                    SIMULATIONS_METRICS_MISS_RATE_NAME: miss_rate,
+                    SIMULATIONS_METRICS_HIT_COUNTER_NAME: counters[
+                        SIMULATIONS_METRICS_HIT_COUNTER_NAME
+                    ],
+                    SIMULATIONS_METRICS_MISS_COUNTER_NAME: counters[
+                        SIMULATIONS_METRICS_MISS_COUNTER_NAME
+                    ],
+                    SIMULATIONS_METRICS_TIMELINE_NAME: timeline,
+                    SIMULATIONS_METRICS_EVICTION_MISTAKE_RATE_NAME: eviction_mistake_rate,
+                    SIMULATIONS_METRICS_AVG_CACHE_LATENCY_NAME: avg_cache_latency,
                 }
-            )
+
+                # Save metrics
+                results.append(metrics)
+
+                # Experiment tracking
+                mlflow.log_metrics(
+                    {
+                        "requests_tot": counters[
+                            SIMULATIONS_METRICS_HIT_COUNTER_NAME
+                        ]
+                        + counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME],
+                        "hit_num": counters[
+                            SIMULATIONS_METRICS_HIT_COUNTER_NAME
+                        ],
+                        "miss_num": counters[
+                            SIMULATIONS_METRICS_MISS_COUNTER_NAME
+                        ],
+                        "hit_rate": hit_rate,
+                        "miss_rate": miss_rate,
+                        "eviction_mistake_rate": eviction_mistake_rate,
+                        "latency_min": min(cache_latencies),
+                        "latency_max": max(cache_latencies),
+                        "latency_avg": avg_cache_latency,
+                        "latency_std": np.std(cache_latencies),
+                    }
+                )
 
         # Determine results and plot file path according
         # to data distribution mode
@@ -191,9 +211,8 @@ def run_simulations() -> None:
         )
 
         # Experiment tracking
-        mlflow.log_param("cache_policies", list(cache_eviction_policies.keys()))
-        mlflow.log_artifacts(results_file_path)
-        mlflow.log_artifacts(plot_save_path)
+        mlflow.log_artifact(results_file_path)
+        mlflow.log_artifact(plot_save_path)
         mlflow.end_run()
 
     info("Simulations completed")

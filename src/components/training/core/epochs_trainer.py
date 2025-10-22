@@ -19,8 +19,8 @@ from components.model.state_dict.copier import (
 )
 from components.training.callbacks.early_stopping import EarlyStopping
 from components.training.core.single_epoch_trainer import train_single_epoch
-from src.const import LOGS_TRAINING_PHASE, LOGS_VALIDATION_PHASE
 from pipeline.config.pydantic.config import Config
+from src.const import LOGS_TRAINING_PHASE, LOGS_VALIDATION_PHASE
 
 
 def train_epochs(
