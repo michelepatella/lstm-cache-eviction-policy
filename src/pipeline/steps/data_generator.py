@@ -1,6 +1,7 @@
 from collections import Counter
 
-import mlflow
+import dagshub
+
 import numpy as np
 import pandas as pd
 
@@ -40,7 +41,7 @@ from src.const import (
     DATASET_RAW_TYPE,
     DATASET_REQUEST_COLUMN_NAME,
     DATASET_TIMESTAMP_COLUMN_NAME,
-    MLFLOW_NESTED_ENABLED,
+    MLFLOW_NESTED_ENABLED, DAGS_HUB_REPO_OWNER, DAGS_HUB_REPO_NAME, DAGS_HUB_MLFLOW_ENABLED,
 )
 
 
@@ -60,6 +61,14 @@ def generate_data() -> None:
     """
     # Set the new pipeline step
     logs_phase.set(LOGS_DATA_GENERATION_PHASE)
+
+    dagshub.init(
+        repo_owner=DAGS_HUB_REPO_OWNER,
+        repo_name=DAGS_HUB_REPO_NAME,
+        mlflow=DAGS_HUB_MLFLOW_ENABLED,
+    )
+
+    import mlflow
     with mlflow.start_run(
         run_name=LOGS_DATA_GENERATION_PHASE, nested=MLFLOW_NESTED_ENABLED
     ):
@@ -130,6 +139,7 @@ def generate_data() -> None:
         )
 
         # Experiment tracking
+        mlflow.log_params(prepare_config().model_dump())
         mlflow.log_metrics(
             {
                 "dataset_num_rows": len(df),

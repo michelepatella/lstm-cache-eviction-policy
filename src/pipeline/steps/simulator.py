@@ -1,4 +1,4 @@
-import mlflow
+import dagshub
 import numpy as np
 
 from components.caches.implementations.fifo_cache import FIFOCache
@@ -49,7 +49,7 @@ from src.const import (
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
     SIMULATIONS_METRICS_POLICY_NAME,
-    SIMULATIONS_METRICS_TIMELINE_NAME,
+    SIMULATIONS_METRICS_TIMELINE_NAME, DAGS_HUB_REPO_OWNER, DAGS_HUB_REPO_NAME, DAGS_HUB_MLFLOW_ENABLED,
 )
 
 
@@ -67,6 +67,14 @@ def run_simulations() -> None:
     """
     # Set the new pipeline step
     logs_phase.set(LOGS_SIMULATIONS_PHASE)
+
+    dagshub.init(
+        repo_owner=DAGS_HUB_REPO_OWNER,
+        repo_name=DAGS_HUB_REPO_NAME,
+        mlflow=DAGS_HUB_MLFLOW_ENABLED,
+    )
+
+    import mlflow
     with mlflow.start_run(
         run_name=LOGS_SIMULATIONS_PHASE, nested=MLFLOW_NESTED_ENABLED
     ):
@@ -211,6 +219,7 @@ def run_simulations() -> None:
         )
 
         # Experiment tracking
+        mlflow.log_params(prepare_config().model_dump())
         mlflow.log_artifact(results_file_path)
         mlflow.log_artifact(plot_save_path)
         mlflow.end_run()

@@ -1,0 +1,143 @@
+data:
+  keys:
+    max: 10
+    min: 1
+  mode: static
+  pattern:
+    access:
+      behavior:
+        cycle:
+          base: 5
+          divisor: 100
+          hours:
+            end: 19
+            start: 14
+          mod: 2
+        distortion:
+          hours:
+            end: 23
+            start: 19
+          interval: 4
+          noise:
+            max: 1
+            min: 0
+          offsets:
+            correction: 1
+            history: 2
+        memory:
+          interval: 5
+          offset: 3
+        repetition:
+          hours:
+            end: 9
+            start: 4
+          interval: 7
+          offset: 3
+        toggle:
+          base_requests:
+            first: 1
+            second: 2
+          hours:
+            end: 14
+            start: 9
+          interval: 20
+          offsets:
+            backward: 2
+            forward: 1
+      zipf:
+        alpha:
+          fixed: 1.5
+          max: 2.0
+          min: 0.5
+        steps: 5
+    temporal:
+      burstiness:
+        high: 0.8
+        hours:
+          end: 18
+          start: 10
+        low: 1.2
+      periodic:
+        amplitude: 50
+        scale: 90
+  requests: 100
+  seed: 42
+dataset:
+  split:
+    training: 0.7
+    validation: 0.2
+dropout: 0.3
+hardware:
+  device: mps
+hidden_size: 256
+model:
+  general:
+    features: 2
+  params:
+    batch_first: true
+    bias: false
+    bidirectional: false
+    dropout: 0.3
+    hidden_size: 128
+    num_layers: 2
+    proj_size: 0
+  sequence:
+    embedding:
+      dimension: 32
+    length: 25
+num_layers: 2
+optimizer:
+  r: 0.0005
+simulations:
+  cache:
+    dimension: 5
+    ttl: 300
+  metrics:
+    mistake_rate:
+      window: 100
+testing:
+  general:
+    batch_size: 128
+    shuffle: false
+  metrics:
+    top_k: 3
+training:
+  early_stopping:
+    delta: 0.0001
+    patience: 10
+  general:
+    batch_size: 128
+    epochs: 500
+    shuffle: true
+  optimizer:
+    params:
+      learning_rate: 0.0005
+      momentum: 0.9
+      weight_decay: 0.05
+    type: adamw
+validation:
+  cross_validation:
+    epochs: 5
+    folds: 5
+  early_stopping:
+    delta: 0.0005
+    patience: 5
+  general:
+    batch_size: 128
+    shuffle: false
+  search_space:
+    model:
+      dropout:
+      - 0.1
+      - 0.3
+      hidden_size:
+      - 128
+      - 256
+      num_layers:
+      - 2
+      - 3
+    training:
+      optimizer:
+        learning_rate:
+        - 0.001
+        - 0.0005

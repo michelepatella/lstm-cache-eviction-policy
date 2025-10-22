@@ -1,11 +1,5 @@
-import dagshub
+import mlflow
 
-from src.const import (
-    DAGS_HUB_MLFLOW_ENABLED,
-    DAGS_HUB_REPO_NAME,
-    DAGS_HUB_REPO_OWNER,
-    MLFLOW_MAIN_RUN_NAME,
-)
 from pipeline.config.configurator import prepare_config
 from pipeline.steps.data_generator import generate_data
 from pipeline.steps.data_preprocessor import preprocess_data
@@ -20,36 +14,23 @@ def main():
     # Pipeline
     # -----------------------
 
-    dagshub.init(
-        repo_owner=DAGS_HUB_REPO_OWNER,
-        repo_name=DAGS_HUB_REPO_NAME,
-        mlflow=DAGS_HUB_MLFLOW_ENABLED,
-    )
+    # (1) Data generation
+    generate_data()
 
-    import mlflow
-    with mlflow.start_run(run_name=MLFLOW_MAIN_RUN_NAME):
+    # (2) Data preprocessing
+    preprocess_data()
 
-        # (1) Data generation
-        generate_data()
+    # (3) Model validation
+    validate_model()
 
-        # (2) Data preprocessing
-        preprocess_data()
+    # (4) Model training
+    train_model()
 
-        # (3) Model validation
-        validate_model()
+    # (5) Model testing
+    test_model()
 
-        # (4) Model training
-        train_model()
-
-        # (5) Model testing
-        test_model()
-
-        # (6) Simulations
-        run_simulations()
-
-        # Experiment tracking
-        mlflow.log_params(prepare_config().model_dump())
-        mlflow.end_run()
+    # (6) Simulations
+    run_simulations()
 
 
 if __name__ == "__main__":

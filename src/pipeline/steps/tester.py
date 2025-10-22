@@ -1,4 +1,4 @@
-import mlflow
+import dagshub
 from box import Box
 
 from components.data_loader.initializer import initialize_data_loader
@@ -19,7 +19,7 @@ from pipeline.const import (
 from src.const import (
     DATA_DISTRIBUTION_STATIC_MODE,
     DATASET_TESTING_SPLIT_TYPE,
-    MLFLOW_NESTED_ENABLED,
+    MLFLOW_NESTED_ENABLED, DAGS_HUB_REPO_OWNER, DAGS_HUB_REPO_NAME, DAGS_HUB_MLFLOW_ENABLED,
 )
 
 
@@ -35,6 +35,14 @@ def test_model() -> None:
     """
     # Set the new pipeline step
     logs_phase.set(LOGS_TESTING_PHASE)
+
+    dagshub.init(
+        repo_owner=DAGS_HUB_REPO_OWNER,
+        repo_name=DAGS_HUB_REPO_NAME,
+        mlflow=DAGS_HUB_MLFLOW_ENABLED,
+    )
+
+    import mlflow
     with mlflow.start_run(
         run_name=LOGS_TESTING_PHASE, nested=MLFLOW_NESTED_ENABLED
     ):
@@ -93,6 +101,7 @@ def test_model() -> None:
 
         # Experiment tracking
         metrics = Box(metrics, delimiter="_")
+        mlflow.log_params(prepare_config().model_dump())
         mlflow.log_metrics(
             {
                 "testing_samples_num": len(testing_set),

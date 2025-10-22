@@ -1,4 +1,4 @@
-import mlflow
+import dagshub
 
 from components.data_loader.builder import build_data_loader
 from components.data_loader.initializer import initialize_data_loader
@@ -22,7 +22,7 @@ from pipeline.config.configurator import prepare_config
 from src.const import (
     DATASET_TRAINING_SPLIT_TYPE,
     LOGS_TRAINING_PHASE,
-    MLFLOW_NESTED_ENABLED,
+    MLFLOW_NESTED_ENABLED, DAGS_HUB_REPO_OWNER, DAGS_HUB_REPO_NAME, DAGS_HUB_MLFLOW_ENABLED,
 )
 
 
@@ -39,6 +39,14 @@ def train_model() -> None:
     """
     # Set the new pipeline step
     logs_phase.set(LOGS_TRAINING_PHASE)
+
+    dagshub.init(
+        repo_owner=DAGS_HUB_REPO_OWNER,
+        repo_name=DAGS_HUB_REPO_NAME,
+        mlflow=DAGS_HUB_MLFLOW_ENABLED,
+    )
+
+    import mlflow
     with mlflow.start_run(
         run_name=LOGS_TRAINING_PHASE, nested=MLFLOW_NESTED_ENABLED
     ):
@@ -124,6 +132,7 @@ def train_model() -> None:
         save_model(model, model_path)
 
         # Experiment tracking
+        mlflow.log_params(prepare_config().model_dump())
         mlflow.log_metrics(
             {
                 "training_samples_num": len(training_set),

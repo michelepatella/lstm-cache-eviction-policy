@@ -19,15 +19,27 @@ DYNAMIC_MODEL_RESULTS_PATH := reports/results/dynamic/dynamic_model_results.json
 STATIC_SIMULATION_RESULTS_PATH := reports/results/static/static_simulations_results.json
 DYNAMIC_SIMULATION_RESULTS_PATH := reports/results/dynamic/dynamic_simulations_results.json
 
+STATIC_DAILY_PROFILE_PLOT_PATH := reports/plots/static/static_daily_profile.png
+DYNAMIC_DAILY_PROFILE_PLOT_PATH := reports/plots/dynamic/dynamic_daily_profile.png
+STATIC_KEY_USAGE_PLOT_PATH := reports/plots/static/static_key_usage.png
+DYNAMIC_KEY_USAGE_PLOT_PATH := reports/plots/dynamic/dynamic_key_usage.png
+STATIC_ZIPF_LOG_LOG_PLOT_PATH := reports/plots/static/static_zipf_log_log.png
+DYNAMIC_ZIPF_LOG_LOG_PLOT_PATH := reports/plots/dynamic/dynamic_zipf_log_log.png
+STATIC_HIT_MISS_RATES_PLOT_PATH := reports/plots/static/static_hit_miss_rates.png
+DYNAMIC_HIT_MISS_RATES_PLOT_PATH := reports/plots/dynamic/dynamic_hit_miss_rates.png
+
 DVC_TARGET_PATHS := $(STATIC_RAW_DATASET_PATH) $(DYNAMIC_RAW_DATASET_PATH) \
                 $(STATIC_PROCESSED_DATASET_PATH) $(DYNAMIC_PROCESSED_DATASET_PATH) \
                 $(STATIC_MODEL_PATH) $(DYNAMIC_MODEL_PATH) $(STATIC_MODEL_RESULTS_PATH) \
                 $(DYNAMIC_MODEL_RESULTS_PATH) $(STATIC_SIMULATION_RESULTS_PATH) \
-                $(DYNAMIC_SIMULATION_RESULTS_PATH)
+                $(DYNAMIC_SIMULATION_RESULTS_PATH) $(STATIC_DAILY_PROFILE_PLOT_PATH) \
+                $(DYNAMIC_DAILY_PROFILE_PLOT_PATH) $(STATIC_KEY_USAGE_PLOT_PATH) \
+                $(DYNAMIC_KEY_USAGE_PLOT_PATH) $(STATIC_ZIPF_LOG_LOG_PLOT_PATH) \
+                $(DYNAMIC_ZIPF_LOG_LOG_PLOT_PATH)
 
 DATASETS_DVC_DIRECTORY_PATTERN := data/**/*.dvc
 MODELS_DVC_DIRECTORY_PATTERN := models/**/*.dvc
-RESULTS_DVC_DIRECTORY_PATTERN := reports/results/**/*.dvc
+RESULTS_DVC_DIRECTORY_PATTERN := reports/**/*.dvc
 
 VC_COMMIT_DVC_TARGET_DIRECTORY_PATTERNS := $(DATASETS_DVC_DIRECTORY_PATTERN) $(MODELS_DVC_DIRECTORY_PATTERN) $(RESULTS_DVC_DIRECTORY_PATTERN)
 VC_COMMIT_MESSAGE := "dvc: Update tracked files"
@@ -123,22 +135,22 @@ dvc_pipeline_show:
 # Run the whole DVC pipeline
 dvc_pipeline_run:
 	dvc repro
-	dvc push
+	dvc dvc_vc_update_and_push
 
 # Run a specific pipeline stage
 dvc_pipeline_stage_run:
 	dvc repro $(STAGE_NAME)
-	dvc push
+	dvc dvc_vc_update_and_push
 
 # Run the whole DVC pipeline (Force)
 dvc_pipeline_run_force:
 	dvc repro --force
-	dvc push
+	dvc dvc_vc_update_and_push
 
 # Run a specific pipeline stage (Force)
 dvc_pipeline_stage_run_force:
 	dvc repro $(STAGE_NAME) --force
-	dvc push
+	dvc dvc_vc_update_and_push
 
 # Show metrics
 dvc_metrics_show:

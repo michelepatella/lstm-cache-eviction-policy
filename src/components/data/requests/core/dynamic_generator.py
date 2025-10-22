@@ -44,7 +44,7 @@ def generate_dynamic_requests(
         zipf_config = config.data.pattern.access.zipf
         alpha_min = zipf_config.alpha.min
         alpha_max = zipf_config.alpha.max
-        steps = zipf_config.step
+        steps = zipf_config.steps
         num_requests = config.data.requests
 
         debug(

@@ -9,7 +9,6 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 # ----------------------------
 # MLFlow
 # ----------------------------
-MLFLOW_MAIN_RUN_NAME = "Pipeline"
 MLFLOW_NESTED_ENABLED = True
 
 

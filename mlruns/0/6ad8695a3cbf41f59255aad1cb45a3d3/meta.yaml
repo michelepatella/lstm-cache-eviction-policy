@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/michelepatella/Repositories/conf-aware-ar-lstm-cache-policy/mlruns/0/6ad8695a3cbf41f59255aad1cb45a3d3/artifacts
+end_time: 1761176506485
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 6ad8695a3cbf41f59255aad1cb45a3d3
+run_name: validation (9/16)
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761176487913
+status: 3
+tags: []
+user_id: michelepatella

@@ -1,5 +1,0 @@
-outs:
-- md5: 9c5ebf9ceeed671705b139cc96ef1495
-  size: 495
-  hash: md5
-  path: static_model_results.json
