@@ -1,4 +1,0 @@
-[core]
-    remote = localremote
-['remote "localremote"']
-    url = /Users/michelepatella/dvc_remote

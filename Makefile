@@ -82,13 +82,21 @@ dvc_vc_push:
 dvc_vc_update_and_push: dvc_vc_check_status dvc_add vc_commit dvc_vc_push
 
 # (DVC) Others:
+# List DVC remotes
+dvc_remote_list:
+	dvc remote list
+
 # List DVC-tracked files
-dvc_list:
+dvc_file_list:
 	dvc list .
 
 # Remove tracked files from DVC
-dvc_remove:
+dvc_file_remove:
 	dvc remove $(PATH)
+
+# Remove DVC remote
+dvc_remote_remove:
+	dvc remote remove $(REMOTE_NAME)
 
 # Pull latest files from DVC
 dvc_pull:

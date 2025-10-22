@@ -5,6 +5,7 @@ __pycache__/
 *.so
 
 *.db
+data/
 
 .Python
 env/
