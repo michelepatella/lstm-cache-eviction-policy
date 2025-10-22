@@ -11,7 +11,14 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 # ----------------------------
 MLFLOW_MAIN_RUN_NAME = "Pipeline"
 MLFLOW_NESTED_ENABLED = True
-MLFLOW_MLRUNS_FILE_PATH = PROJECT_ROOT / "mlruns"
+
+
+# ----------------------------
+# Dagshub
+# ----------------------------
+DAGS_HUB_REPO_OWNER = "anonymous_dev"
+DAGS_HUB_REPO_NAME = "lstm-cache-eviction-policy"
+DAGS_HUB_MLFLOW_ENABLED = True
 
 
 # ----------------------------

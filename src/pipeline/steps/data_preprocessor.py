@@ -92,8 +92,6 @@ def preprocess_data() -> None:
                 "removals_total": len(initial_df) - len(final_df),
                 "removals_ratio": (len(initial_df) - len(final_df))
                 / len(initial_df),
-                "features_num_built": len(final_df.columns)
-                - len(initial_df.columns),
             }
         )
         mlflow.log_artifact(dataset_processed_path)
