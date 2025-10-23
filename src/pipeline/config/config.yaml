@@ -60,7 +60,7 @@ data:
       periodic:
         amplitude: 50
         scale: 90
-  requests: 100
+  requests: 110
   seed: 42
 dataset:
   split:
@@ -87,7 +87,7 @@ model:
     length: 25
 num_layers: 2
 optimizer:
-  r: 0.0005
+  r: 0.001
 simulations:
   cache:
     dimension: 5

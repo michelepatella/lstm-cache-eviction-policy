@@ -6,6 +6,8 @@
 REQUIREMENTS_PATH := requirements.txt
 
 # VC / DVC
+DVC_LOCK_FILE_PATH := dvc.lock
+
 STATIC_RAW_DATASET_PATH := data/raw/static/static_raw_dataset.csv
 DYNAMIC_RAW_DATASET_PATH := data/raw/dynamic/dynamic_raw_dataset.csv
 STATIC_PROCESSED_DATASET_PATH := data/processed/static/static_processed_dataset.csv
@@ -37,11 +39,8 @@ DVC_TARGET_PATHS := $(STATIC_RAW_DATASET_PATH) $(DYNAMIC_RAW_DATASET_PATH) \
                 $(DYNAMIC_KEY_USAGE_PLOT_PATH) $(STATIC_ZIPF_LOG_LOG_PLOT_PATH) \
                 $(DYNAMIC_ZIPF_LOG_LOG_PLOT_PATH)
 
-DATASETS_DVC_DIRECTORY_PATTERN := data/**/*.dvc
-MODELS_DVC_DIRECTORY_PATTERN := models/**/*.dvc
-RESULTS_DVC_DIRECTORY_PATTERN := reports/**/*.dvc
 
-VC_COMMIT_DVC_TARGET_DIRECTORY_PATTERNS := $(DATASETS_DVC_DIRECTORY_PATTERN) $(MODELS_DVC_DIRECTORY_PATTERN) $(RESULTS_DVC_DIRECTORY_PATTERN)
+VC_COMMIT_DVC_TARGET_DIRECTORY_PATTERNS := $(DVC_LOCK_FILE_PATH)
 VC_COMMIT_MESSAGE := "dvc: Update tracked files"
 
 # Quality Assurance & Documentation
@@ -71,30 +70,6 @@ deps_update:
 # DVC / VC
 # -------------------------------
 
-# Pipeline for tracked files:
-# (1) Check DVC / VC status
-dvc_vc_check_status:
-	dvc status
-	git status
-
-# (2) Add to DVC
-dvc_add:
-	dvc add $(DVC_TARGET_PATHS)
-
-# (3) Commit to VC
-vc_commit:
-	git add $(VC_COMMIT_DVC_TARGET_DIRECTORY_PATTERNS) .gitignore
-	git commit -m $(VC_COMMIT_MESSAGE)
-
-# (4) Push to DVC / VC
-dvc_vc_push:
-	dvc push
-	git push
-
-# (1)-(5) Pipeline for DVC tracked files
-dvc_vc_update_and_push: dvc_vc_check_status dvc_add vc_commit dvc_vc_push
-
-# (DVC) Others:
 # List DVC remotes
 dvc_remote_list:
 	dvc remote list
@@ -135,18 +110,34 @@ dvc_pipeline_show:
 # Run the whole DVC pipeline
 dvc_pipeline_run:
 	dvc repro
+	git add $(VC_COMMIT_DVC_TARGET_DIRECTORY_PATTERNS) .gitignore
+	git commit -m $(VC_COMMIT_MESSAGE)
+	dvc push
+	git push
 
 # Run a specific pipeline stage
 dvc_pipeline_stage_run:
 	dvc repro $(STAGE_NAME)
+	git add $(VC_COMMIT_DVC_TARGET_DIRECTORY_PATTERNS) .gitignore
+	git commit -m $(VC_COMMIT_MESSAGE)
+	dvc push
+	git push
 
 # Run the whole DVC pipeline (Force)
 dvc_pipeline_run_force:
 	dvc repro --force
+	git add $(VC_COMMIT_DVC_TARGET_DIRECTORY_PATTERNS) .gitignore
+	git commit -m $(VC_COMMIT_MESSAGE)
+	dvc push
+	git push
 
 # Run a specific pipeline stage (Force)
 dvc_pipeline_stage_run_force:
 	dvc repro $(STAGE_NAME) --force
+	git add $(VC_COMMIT_DVC_TARGET_DIRECTORY_PATTERNS) .gitignore
+	git commit -m $(VC_COMMIT_MESSAGE)
+	dvc push
+	git push
 
 # Show metrics
 dvc_metrics_show:
@@ -160,7 +151,6 @@ dvc_metrics_diff:
 dvc_plots_show:
 	dvc plots show
 
-# (VC) Others:
 # Checkout VC files via version tag
 vc_tag_checkout:
 	git checkout $(TAG_NAME)
