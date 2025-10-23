@@ -108,7 +108,6 @@ def preprocess_data() -> None:
             }
         )
         mlflow.log_artifact(dataset_processed_path)
-        mlflow.end_run()
 
     info("Data preprocessing completed")
 

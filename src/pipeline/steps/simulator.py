@@ -226,6 +226,5 @@ def run_simulations() -> None:
         mlflow.log_params(prepare_config().model_dump())
         mlflow.log_artifact(results_file_path)
         mlflow.log_artifact(plot_save_path)
-        mlflow.end_run()
 
     info("Simulations completed")

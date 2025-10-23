@@ -85,7 +85,6 @@ def validate_model() -> None:
             }
         )
         mlflow.log_artifact(CONFIG_FILE_PATH)
-        mlflow.end_run()
 
     info("Validation completed")
 

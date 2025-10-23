@@ -105,7 +105,6 @@ def compute_grid_search(
                             "loss_max": np.max(fold_losses),
                         }
                     )
-                    mlflow.end_run()
 
                 # To update the progress bar
                 pbar.update(1)

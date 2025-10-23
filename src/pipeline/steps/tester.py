@@ -124,7 +124,6 @@ def test_model() -> None:
             }
         )
         mlflow.log_artifact(model_results_save_path)
-        mlflow.end_run()
 
     info("Testing completed")
 

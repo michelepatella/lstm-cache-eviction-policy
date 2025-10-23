@@ -71,7 +71,6 @@ def generate_data() -> None:
     )
 
     import mlflow
-
     with mlflow.start_run(
         run_name=LOGS_DATA_GENERATION_PHASE, nested=MLFLOW_NESTED_ENABLED
     ):
@@ -179,7 +178,6 @@ def generate_data() -> None:
         mlflow.log_artifact(zipf_log_log_plot_save_path)
         mlflow.log_artifact(daily_profile_plot_save_path)
         mlflow.log_artifact(key_usage_heatmap_plot_save_path)
-        mlflow.end_run()
 
     info("Data generation completed")
 

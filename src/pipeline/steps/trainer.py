@@ -144,8 +144,7 @@ def train_model() -> None:
                 "loss_best_avg": best_avg_loss,
             }
         )
-        mlflow.log_artifact(model_path)
-        mlflow.end_run()
+        mlflow.pytorch.log_model(model)
 
     info("Training completed")
 
