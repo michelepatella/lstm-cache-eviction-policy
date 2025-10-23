@@ -145,8 +145,8 @@ stages:
       size: 1070
     - path: src/const.py
       hash: md5
-      md5: e7201b27379c7deb9a8171f891006f88
-      size: 1846
+      md5: 63c45cb3bbd79eb0a0ac211e27e7f78e
+      size: 1812
     - path: src/pipeline/config/configurator.py
       hash: md5
       md5: b0909c9bb11f49eac644dfa791a2d54f
@@ -193,8 +193,8 @@ stages:
       size: 3111
     - path: src/pipeline/steps/data_generator.py
       hash: md5
-      md5: d22bd4ca0a44ef7fd1650e66667d7090
-      size: 6411
+      md5: d92c1df786ad888134ff44a673ee4c2e
+      size: 6710
     params:
       src/pipeline/config/config.yaml:
         data.keys.max: 10
@@ -343,8 +343,8 @@ stages:
       size: 1070
     - path: src/const.py
       hash: md5
-      md5: e7201b27379c7deb9a8171f891006f88
-      size: 1846
+      md5: 63c45cb3bbd79eb0a0ac211e27e7f78e
+      size: 1812
     - path: src/pipeline/config/configurator.py
       hash: md5
       md5: b0909c9bb11f49eac644dfa791a2d54f
@@ -391,8 +391,8 @@ stages:
       size: 3111
     - path: src/pipeline/steps/data_preprocessor.py
       hash: md5
-      md5: 64a01ecf8392fe0b528a23e9cd6f5342
-      size: 3212
+      md5: a718fd516591aff0050f1f3aed3e7a34
+      size: 3511
     params:
       src/pipeline/config/config.yaml:
         data.mode: static
@@ -635,8 +635,8 @@ stages:
       size: 1070
     - path: src/const.py
       hash: md5
-      md5: e7201b27379c7deb9a8171f891006f88
-      size: 1846
+      md5: 63c45cb3bbd79eb0a0ac211e27e7f78e
+      size: 1812
     - path: src/pipeline/config/configurator.py
       hash: md5
       md5: b0909c9bb11f49eac644dfa791a2d54f
@@ -683,8 +683,8 @@ stages:
       size: 3111
     - path: src/pipeline/steps/trainer.py
       hash: md5
-      md5: 3692e289b063d7304c2590d0c0a13bfa
-      size: 4476
+      md5: 6cf46418c5cba22639e8dd8c8cccafef
+      size: 4775
     params:
       src/pipeline/config/config.yaml:
         data.keys.max: 10
@@ -719,7 +719,7 @@ stages:
     outs:
     - path: models/static/trained_static_model.pt
       hash: md5
-      md5: b3ee0ec470034c72b61cb2b7134978d6
+      md5: 20e1a514b41a6e7a76e0e0fa562af943
       size: 865978
   test_model:
     cmd: PYTHONPATH=src python -m pipeline.steps.tester
@@ -730,7 +730,7 @@ stages:
       size: 4014
     - path: models/static/trained_static_model.pt
       hash: md5
-      md5: b3ee0ec470034c72b61cb2b7134978d6
+      md5: 20e1a514b41a6e7a76e0e0fa562af943
       size: 865978
     - path: src/components/assertions/choice_field_assertor.py
       hash: md5
@@ -931,8 +931,8 @@ stages:
       size: 1070
     - path: src/const.py
       hash: md5
-      md5: e7201b27379c7deb9a8171f891006f88
-      size: 1846
+      md5: 63c45cb3bbd79eb0a0ac211e27e7f78e
+      size: 1812
     - path: src/pipeline/config/configurator.py
       hash: md5
       md5: b0909c9bb11f49eac644dfa791a2d54f
@@ -979,8 +979,8 @@ stages:
       size: 3111
     - path: src/pipeline/steps/tester.py
       hash: md5
-      md5: 0243ca86dd93c4255d94bba203881aea
-      size: 3957
+      md5: 0c7bed15fbe2c7d199e9a9f81234d431
+      size: 4256
     params:
       src/pipeline/config/config.yaml:
         data.keys.max: 10
@@ -1005,8 +1005,8 @@ stages:
     outs:
     - path: reports/results/static/static_model_results.json
       hash: md5
-      md5: 915de34dc46146bae0e7c636302ded9a
-      size: 463
+      md5: 387d83991d4172722b7481780dc36871
+      size: 509
   validate_model:
     cmd: PYTHONPATH=src python -m pipeline.steps.validator
     deps:
@@ -1281,8 +1281,8 @@ stages:
       size: 1121
     - path: src/const.py
       hash: md5
-      md5: e7201b27379c7deb9a8171f891006f88
-      size: 1846
+      md5: 63c45cb3bbd79eb0a0ac211e27e7f78e
+      size: 1812
     - path: src/pipeline/config/configurator.py
       hash: md5
       md5: b0909c9bb11f49eac644dfa791a2d54f
@@ -1329,8 +1329,8 @@ stages:
       size: 3111
     - path: src/pipeline/steps/validator.py
       hash: md5
-      md5: 881617219f3c7a8cd242a12e4434502f
-      size: 2482
+      md5: 28fd583da1a0b0de1799aad6d744cf27
+      size: 2781
     params:
       src/pipeline/config/config.yaml:
         data.keys.max: 10
@@ -1378,3 +1378,299 @@ stages:
               learning_rate:
               - 0.001
               - 0.0005
+  run_simulations:
+    cmd: PYTHONPATH=src python -m pipeline.steps.simulator
+    deps:
+    - path: data/processed/static/static_processed_dataset.csv
+      hash: md5
+      md5: 1e075d66d71a53059a14ff549bcfdcd2
+      size: 4014
+    - path: src/components/assertions/choice_field_assertor.py
+      hash: md5
+      md5: 1c95565b46b169529ee8d6cd7b403a49
+      size: 1489
+    - path: src/components/assertions/min_max_assertor.py
+      hash: md5
+      md5: 9d10cba56569814e267b207845b12983
+      size: 1544
+    - path: src/components/caches/implementations/fifo_cache.py
+      hash: md5
+      md5: fd31f98e25aa08567e34316f7ef89f51
+      size: 6996
+    - path: 
+        src/components/caches/implementations/items/evictions/least_frequent_item_evictor.py
+      hash: md5
+      md5: bf83decf736c73094d995c7a7a19a50c
+      size: 2588
+    - path: 
+        src/components/caches/implementations/items/evictions/oldest_item_evictor.py
+      hash: md5
+      md5: 6713a7004d693484d917f6c8e12c4669
+      size: 1432
+    - path: src/components/caches/implementations/items/operations/checker.py
+      hash: md5
+      md5: 234a7921c0590f34ff8d3f0ad51ea169
+      size: 892
+    - path: src/components/caches/implementations/items/operations/deleter.py
+      hash: md5
+      md5: f012719a8aee9b7dffe64bb796aea57d
+      size: 1311
+    - path: src/components/caches/implementations/items/operations/inserter.py
+      hash: md5
+      md5: 872d96b8c98a988867e07a6fd3a1bc40
+      size: 1864
+    - path: src/components/caches/implementations/items/operations/popper.py
+      hash: md5
+      md5: b1d3b6077bf837adb9b3bd90d8e22b3e
+      size: 1417
+    - path: src/components/caches/implementations/items/operations/retriever.py
+      hash: md5
+      md5: ac07351cd6e056fa0ad49a1978a1ed1c
+      size: 931
+    - path: src/components/caches/implementations/lfu_cache.py
+      hash: md5
+      md5: 67b61c73b57bf68a133f770ec5356f4a
+      size: 7539
+    - path: src/components/caches/implementations/lru_cache.py
+      hash: md5
+      md5: e8d8f3bd42d38176cd27d6a3db7557d9
+      size: 8000
+    - path: src/components/caches/implementations/lstm_cache.py
+      hash: md5
+      md5: e4380479cbe74563657cb434347114a6
+      size: 5612
+    - path: src/components/caches/implementations/random_cache.py
+      hash: md5
+      md5: d57ca2038ea00354a34b87acf5efe7a3
+      size: 3592
+    - path: src/components/caches/implementations/utils/base_cache.py
+      hash: md5
+      md5: f7fb79e209ad0cf7b46e334b967cf2df
+      size: 10214
+    - path: src/components/caches/implementations/utils/cache_cleaner.py
+      hash: md5
+      md5: 5d2a34bebc05331ed068b72481db576b
+      size: 949
+    - path: src/components/caches/implementations/utils/cache_size_calculator.py
+      hash: md5
+      md5: 9e50d800f58a8ab1de33823bb7a6a712
+      size: 928
+    - path: src/components/caches/simulations/hit_miss/checker_updater.py
+      hash: md5
+      md5: cf0e823440d870727003eaca50ecf331
+      size: 2199
+    - path: src/components/caches/simulations/hit_miss/timeline_updater.py
+      hash: md5
+      md5: 0b842c35dadb57f5f9b7dc7f2c4c92ed
+      size: 3286
+    - path: src/components/caches/simulations/runner.py
+      hash: md5
+      md5: e38e96930ea68ea4a500b1c97a72ab4a
+      size: 5210
+    - path: src/components/caches/utils/cache_metrics_logger.py
+      hash: md5
+      md5: 21e564ca8ec8f4ca3170fd313d058429
+      size: 5015
+    - path: src/components/caches/utils/cache_wrapper.py
+      hash: md5
+      md5: 7785fae02adddfb6e5a31d94282cca86
+      size: 2712
+    - path: src/components/const.py
+      hash: md5
+      md5: 5898a0c0e8eba7cc1387eb2fdd38d611
+      size: 6683
+    - path: src/components/data_loader/builder.py
+      hash: md5
+      md5: 4bfe7c32e2a8700537d4eeff5b1b8c50
+      size: 1684
+    - path: src/components/data_loader/initializer.py
+      hash: md5
+      md5: c348cdc098536a506fb4b8b1d0bc18e1
+      size: 1618
+    - path: src/components/dataset/access_logs_dataset.py
+      hash: md5
+      md5: 4cf6884063de39243d265ff73804e04d
+      size: 10145
+    - path: src/components/dataset/columns/extractions/extractor.py
+      hash: md5
+      md5: 119964f1b7ff85a95585e5ffbb619e8c
+      size: 1036
+    - path: 
+        src/components/dataset/columns/extractions/features_target_extractor.py
+      hash: md5
+      md5: c52c394cec8c9a2cf9d1688a81e025c6
+      size: 1373
+    - path: src/components/dataset/columns/manipulations/shifter.py
+      hash: md5
+      md5: c35169ed053e6c403f81ac853ff5f1b5
+      size: 1304
+    - path: src/components/dataset/io/loader.py
+      hash: md5
+      md5: 48eb27519df6e2f12745fa1ff02330cc
+      size: 1241
+    - path: src/components/dataset/io/locator.py
+      hash: md5
+      md5: 9c97811e1fbe8c45b02baffeec4167c8
+      size: 2285
+    - path: 
+        src/components/dataset/rows/calculations/effective_rows_calculator.py
+      hash: md5
+      md5: ff2ea2f65c4c2fc5abf0a33860abe23f
+      size: 1477
+    - path: src/components/dataset/rows/extractions/lasts_extractor.py
+      hash: md5
+      md5: 31947aa48137c0c561ed25fce4624b97
+      size: 3191
+    - path: src/components/dataset/rows/extractions/sliding_window_extractor.py
+      hash: md5
+      md5: e43f1e832aed2b524b6aca6279149c8b
+      size: 1765
+    - path: src/components/dataset/rows/extractions/tuple_extractor.py
+      hash: md5
+      md5: 4b928bca783e58bfa80f75af498a3fc6
+      size: 2432
+    - path: src/components/dataset/splits/data_splitter.py
+      hash: md5
+      md5: c70b175afc115d9c1aec5e16c089217f
+      size: 1410
+    - path: src/components/dataset/splits/index/calculator.py
+      hash: md5
+      md5: bae43ee4cd31c09baf4f17e953d90c92
+      size: 1183
+    - path: 
+        src/components/evaluation/simulations/metrics/calculations/eviction_mistake_rate_calculator.py
+      hash: md5
+      md5: fc89561fd140cf86afad223e3fc94efa
+      size: 3243
+    - path: 
+        src/components/evaluation/simulations/metrics/calculations/hit_miss_rates_calculator.py
+      hash: md5
+      md5: 7ff280681d2ce180c9f56b178ac4e163
+      size: 952
+    - path: src/components/evaluation/simulations/metrics/calculator.py
+      hash: md5
+      md5: 950622c96a0a6db151742ea9b404a515
+      size: 3939
+    - path: src/components/evaluation/simulations/metrics/io/saver.py
+      hash: md5
+      md5: 3eca28c96622e2620cd6b304035887e7
+      size: 1465
+    - path: src/components/json/io/saver.py
+      hash: md5
+      md5: 8c76b1422d374c6c54d37365c5110fe0
+      size: 1418
+    - path: src/components/logs/file_handlers/builder.py
+      hash: md5
+      md5: f09cab1e2fbfd0166b27143f901af499
+      size: 1347
+    - path: src/components/logs/initializer.py
+      hash: md5
+      md5: 60a18d4fdf1a1815d176fe7e7bbd02ca
+      size: 2271
+    - path: src/components/logs/levels/debug_logger.py
+      hash: md5
+      md5: 76ac3be45b729082fed9f092ad019838
+      size: 823
+    - path: src/components/logs/levels/error_logger.py
+      hash: md5
+      md5: 98d9fa31117b4baa924be8943dd72f96
+      size: 824
+    - path: src/components/logs/levels/info_logger.py
+      hash: md5
+      md5: 50906e90cc47519d5bc8ed5b93af3ce0
+      size: 820
+    - path: src/components/logs/levels/utils/logger.py
+      hash: md5
+      md5: 0cc5461ae90ace20df5e98ccfe898da2
+      size: 1095
+    - path: src/components/math/avg_calculator.py
+      hash: md5
+      md5: 9b86b288bde32ed639e02cf0fc1d7e15
+      size: 1160
+    - path: src/components/math/percentage_calculator.py
+      hash: md5
+      md5: d9b92551bc9437322b051af34489c44a
+      size: 1235
+    - path: src/components/time/transforms/trig_decoder.py
+      hash: md5
+      md5: b2d7c66c4b47b4eaff381f80bf2d9400
+      size: 1922
+    - path: src/components/visualization/hit_miss_rates_plotter.py
+      hash: md5
+      md5: 90932384576e0c6ccfe47b814f7289dd
+      size: 4548
+    - path: src/components/yaml/io/loader.py
+      hash: md5
+      md5: c2cdc2e6c8475ab5a3d1e7428e355309
+      size: 1070
+    - path: src/const.py
+      hash: md5
+      md5: 63c45cb3bbd79eb0a0ac211e27e7f78e
+      size: 1812
+    - path: src/pipeline/config/configurator.py
+      hash: md5
+      md5: b0909c9bb11f49eac644dfa791a2d54f
+      size: 973
+    - path: src/pipeline/config/pydantic/config.py
+      hash: md5
+      md5: 3b591920bfd0b47a85ce244a2a33a948
+      size: 1667
+    - path: src/pipeline/config/pydantic/sections/data_config.py
+      hash: md5
+      md5: ed970517433d95a37958ae861b3a5a71
+      size: 10900
+    - path: src/pipeline/config/pydantic/sections/dataset_config.py
+      hash: md5
+      md5: 9d9ec7b6643e0d92d656a3170952a86f
+      size: 612
+    - path: src/pipeline/config/pydantic/sections/hardware_config.py
+      hash: md5
+      md5: 7115c1ee0aa660072a115507a94d7370
+      size: 865
+    - path: src/pipeline/config/pydantic/sections/model_config.py
+      hash: md5
+      md5: 6532190b3697d67bff8709fea82a114f
+      size: 2094
+    - path: src/pipeline/config/pydantic/sections/simulation_config.py
+      hash: md5
+      md5: 424d4af4caba50fe35d733b8fceccfeb
+      size: 1040
+    - path: src/pipeline/config/pydantic/sections/testing_config.py
+      hash: md5
+      md5: b65fb8490981aefca9354029cd148e72
+      size: 891
+    - path: src/pipeline/config/pydantic/sections/training_config.py
+      hash: md5
+      md5: 712f2c865fc079820d02eeb8de3763de
+      size: 2777
+    - path: src/pipeline/config/pydantic/sections/validation_config.py
+      hash: md5
+      md5: 14ba9b7928165e35e0e2ad17e9a3789a
+      size: 3459
+    - path: src/pipeline/const.py
+      hash: md5
+      md5: cd3a7892072a68cb2dff055e4c8d242c
+      size: 3111
+    - path: src/pipeline/steps/simulator.py
+      hash: md5
+      md5: 61624f903459ab0429173c55b5b49d8b
+      size: 8052
+    params:
+      src/pipeline/config/config.yaml:
+        data.mode: static
+        dataset.split.training: 0.7
+        model.sequence.length: 25
+        simulations.cache.dimension: 5
+        simulations.cache.ttl: 300
+        simulations.metrics.mistake_rate.window: 100
+        testing.general.batch_size: 128
+        testing.general.shuffle: false
+    outs:
+    - path: reports/plots/static/static_hit_miss_rates.png
+      hash: md5
+      md5: bdf9f195dd3ac1e71fb4dcce771a4752
+      size: 139679
+    - path: reports/results/static/static_simulations_results.json
+      hash: md5
+      md5: 482cb2e2ee6e1606b9a0ccc9c4b710d0
+      size: 916

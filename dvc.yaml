@@ -440,8 +440,8 @@ stages:
         - model.sequence.length
         - testing.general.batch_size
         - testing.general.shuffle
-        - simulations.cache.general.dimension
-        - simulations.cache.general.ttl
+        - simulations.cache.dimension
+        - simulations.cache.ttl
         - simulations.metrics.mistake_rate.window
     deps:
       - src/components/assertions/choice_field_assertor.py
