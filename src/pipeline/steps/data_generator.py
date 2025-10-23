@@ -1,7 +1,6 @@
 from collections import Counter
 
 import dagshub
-
 import numpy as np
 import pandas as pd
 
@@ -37,11 +36,14 @@ from pipeline.const import (
     PLOT_STATIC_ZIPF_LOG_LOG_FILE_PATH,
 )
 from src.const import (
+    DAGS_HUB_MLFLOW_ENABLED,
+    DAGS_HUB_REPO_NAME,
+    DAGS_HUB_REPO_OWNER,
     DATA_DISTRIBUTION_STATIC_MODE,
     DATASET_RAW_TYPE,
     DATASET_REQUEST_COLUMN_NAME,
     DATASET_TIMESTAMP_COLUMN_NAME,
-    MLFLOW_NESTED_ENABLED, DAGS_HUB_REPO_OWNER, DAGS_HUB_REPO_NAME, DAGS_HUB_MLFLOW_ENABLED,
+    MLFLOW_NESTED_ENABLED,
 )
 
 
@@ -69,6 +71,7 @@ def generate_data() -> None:
     )
 
     import mlflow
+
     with mlflow.start_run(
         run_name=LOGS_DATA_GENERATION_PHASE, nested=MLFLOW_NESTED_ENABLED
     ):

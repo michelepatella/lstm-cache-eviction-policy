@@ -1,6 +1,3 @@
-import mlflow
-
-from pipeline.config.configurator import prepare_config
 from pipeline.steps.data_generator import generate_data
 from pipeline.steps.data_preprocessor import preprocess_data
 from pipeline.steps.simulator import run_simulations

@@ -12,9 +12,12 @@ from components.yaml.io.saver import save_yaml
 from pipeline.config.configurator import prepare_config
 from pipeline.const import CONFIG_FILE_PATH
 from src.const import (
+    DAGS_HUB_MLFLOW_ENABLED,
+    DAGS_HUB_REPO_NAME,
+    DAGS_HUB_REPO_OWNER,
     DATASET_TRAINING_SPLIT_TYPE,
     LOGS_VALIDATION_PHASE,
-    MLFLOW_NESTED_ENABLED, DAGS_HUB_REPO_OWNER, DAGS_HUB_REPO_NAME, DAGS_HUB_MLFLOW_ENABLED,
+    MLFLOW_NESTED_ENABLED,
 )
 
 
@@ -39,6 +42,7 @@ def validate_model() -> None:
     )
 
     import mlflow
+
     with mlflow.start_run(
         run_name=LOGS_VALIDATION_PHASE, nested=MLFLOW_NESTED_ENABLED
     ):

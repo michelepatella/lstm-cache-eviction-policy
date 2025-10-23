@@ -17,9 +17,12 @@ from pipeline.const import (
     RESULTS_STATIC_MODEL_FILE_PATH,
 )
 from src.const import (
+    DAGS_HUB_MLFLOW_ENABLED,
+    DAGS_HUB_REPO_NAME,
+    DAGS_HUB_REPO_OWNER,
     DATA_DISTRIBUTION_STATIC_MODE,
     DATASET_TESTING_SPLIT_TYPE,
-    MLFLOW_NESTED_ENABLED, DAGS_HUB_REPO_OWNER, DAGS_HUB_REPO_NAME, DAGS_HUB_MLFLOW_ENABLED,
+    MLFLOW_NESTED_ENABLED,
 )
 
 
@@ -43,6 +46,7 @@ def test_model() -> None:
     )
 
     import mlflow
+
     with mlflow.start_run(
         run_name=LOGS_TESTING_PHASE, nested=MLFLOW_NESTED_ENABLED
     ):

@@ -20,9 +20,12 @@ from pipeline.const import (
     LOGS_DATA_PREPROCESSING_PHASE,
 )
 from src.const import (
+    DAGS_HUB_MLFLOW_ENABLED,
+    DAGS_HUB_REPO_NAME,
+    DAGS_HUB_REPO_OWNER,
     DATASET_RAW_TYPE,
     DATASET_TIMESTAMP_COLUMN_NAME,
-    MLFLOW_NESTED_ENABLED, DAGS_HUB_REPO_OWNER, DAGS_HUB_REPO_NAME, DAGS_HUB_MLFLOW_ENABLED,
+    MLFLOW_NESTED_ENABLED,
 )
 
 
@@ -48,6 +51,7 @@ def preprocess_data() -> None:
     )
 
     import mlflow
+
     with mlflow.start_run(
         run_name=LOGS_DATA_PREPROCESSING_PHASE, nested=MLFLOW_NESTED_ENABLED
     ):
