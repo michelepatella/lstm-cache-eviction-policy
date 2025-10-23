@@ -78,7 +78,6 @@ def run_simulations() -> None:
     )
 
     import mlflow
-
     with mlflow.start_run(
         run_name=LOGS_SIMULATIONS_PHASE, nested=MLFLOW_NESTED_ENABLED
     ):
@@ -228,3 +227,7 @@ def run_simulations() -> None:
         mlflow.log_artifact(plot_save_path)
 
     info("Simulations completed")
+
+
+if __name__ == "__main__":
+    run_simulations()
