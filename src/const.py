@@ -10,6 +10,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 # MLFlow
 # ----------------------------
 MLFLOW_NESTED_ENABLED = True
+MLFLOW_PYTORCH_SAVE_MODEL_PATH = "model"
 
 
 # ----------------------------

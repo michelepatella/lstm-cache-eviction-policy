@@ -1,5 +1,7 @@
 import dagshub
 
+import tempfile
+
 from components.data_loader.builder import build_data_loader
 from components.data_loader.initializer import initialize_data_loader
 from components.data_loader.targets.extractor import (
@@ -26,6 +28,7 @@ from src.const import (
     DATASET_TRAINING_SPLIT_TYPE,
     LOGS_TRAINING_PHASE,
     MLFLOW_NESTED_ENABLED,
+    MLFLOW_PYTORCH_SAVE_MODEL_PATH,
 )
 
 
@@ -50,7 +53,6 @@ def train_model() -> None:
     )
 
     import mlflow
-
     with mlflow.start_run(
         run_name=LOGS_TRAINING_PHASE, nested=MLFLOW_NESTED_ENABLED
     ):
@@ -144,7 +146,15 @@ def train_model() -> None:
                 "loss_best_avg": best_avg_loss,
             }
         )
-        mlflow.pytorch.log_model(model)
+        with tempfile.TemporaryDirectory() as MLFLOW_PYTORCH_SAVE_MODEL_TEMP_PATH:
+            mlflow.pytorch.save_model(
+                pytorch_model=model,
+                path=MLFLOW_PYTORCH_SAVE_MODEL_TEMP_PATH,
+            )
+            mlflow.log_artifacts(
+                local_dir=MLFLOW_PYTORCH_SAVE_MODEL_TEMP_PATH,
+                artifact_path=MLFLOW_PYTORCH_SAVE_MODEL_PATH
+            )
 
     info("Training completed")
 

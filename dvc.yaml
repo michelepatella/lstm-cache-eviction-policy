@@ -1,5 +1,5 @@
 stages:
-  generate_data:
+  data_generation:
     cmd: PYTHONPATH=src python -m pipeline.steps.data_generator
     params:
       - src/pipeline/config/config.yaml:
@@ -97,7 +97,7 @@ stages:
       - reports/plots/${data.mode}/${data.mode}_key_usage.png
       - reports/plots/${data.mode}/${data.mode}_zipf_log_log.png
 
-  preprocess_data:
+  data_preprocessing:
     cmd: PYTHONPATH=src python -m pipeline.steps.data_preprocessor
     params:
       - src/pipeline/config/config.yaml:
@@ -140,7 +140,7 @@ stages:
     outs:
       - data/processed/${data.mode}/${data.mode}_processed_dataset.csv
 
-  validate_model:
+  validation:
     cmd: PYTHONPATH=src python -m pipeline.steps.validator
     params:
       - src/pipeline/config/config.yaml:
@@ -249,7 +249,7 @@ stages:
       - data/processed/${data.mode}/${data.mode}_processed_dataset.csv
     outs: []
 
-  train_model:
+  training:
     cmd: PYTHONPATH=src python -m pipeline.steps.trainer
     params:
       - src/pipeline/config/config.yaml:
@@ -348,7 +348,7 @@ stages:
     outs:
       - models/${data.mode}/trained_${data.mode}_model.pt
 
-  test_model:
+  testing:
     cmd: PYTHONPATH=src python -m pipeline.steps.tester
     params:
       - src/pipeline/config/config.yaml:
@@ -431,7 +431,7 @@ stages:
     outs:
       - reports/results/${data.mode}/${data.mode}_model_results.json
 
-  run_simulations:
+  simulations:
     cmd: PYTHONPATH=src python -m pipeline.steps.simulator
     params:
       - src/pipeline/config/config.yaml:
