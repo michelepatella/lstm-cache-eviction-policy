@@ -68,7 +68,7 @@ class EarlyStopping:
             extra={
                 "patience": self.patience,
                 "delta": self.delta,
-                "best_avg_loss": self.best_avg_loss,
+                "loss_avg_best": self.best_avg_loss,
                 "counter": self.counter,
                 "early_stop_flag": self.early_stop,
                 "context": "EarlyStopping",
@@ -117,8 +117,8 @@ class EarlyStopping:
             debug(
                 "EarlyStopping state updated",
                 extra={
-                    "avg_loss": avg_loss,
-                    "best_avg_loss": self.best_avg_loss,
+                    "loss_avg": avg_loss,
+                    "loss_avg_best": self.best_avg_loss,
                     "delta": self.delta,
                     "counter": self.counter,
                     "patience": self.patience,
@@ -132,8 +132,8 @@ class EarlyStopping:
                 msg,
                 extra={
                     "exception": str(e),
-                    "avg_loss": avg_loss,
-                    "best_avg_loss": getattr(self, "best_avg_loss", None),
+                    "loss_avg": avg_loss,
+                    "loss_avg_best": getattr(self, "best_avg_loss", None),
                     "delta": getattr(self, "delta", None),
                     "counter": getattr(self, "counter", None),
                     "patience": getattr(self, "patience", None),

@@ -58,9 +58,9 @@ def compute_time_series_cv_folds(
         info(
             "Time Series CV started",
             extra={
-                "cv_num_folds": cv_num_folds,
-                "num_samples": num_samples,
-                "num_fold_indices": len(fold_indices),
+                "folds_num": cv_num_folds,
+                "samples_num": num_samples,
+                "fold_indices_num": len(fold_indices),
                 "params": params,
                 "training_set_type": type(training_set).__name__,
                 "context": "Time Series CV",
@@ -86,9 +86,9 @@ def compute_time_series_cv_folds(
         info(
             "Time Series CV completed",
             extra={
-                "final_avg_loss": final_avg_loss,
+                "loss_avg_final": final_avg_loss,
                 "fold_losses": fold_losses,
-                "num_folds_completed": len(fold_indices),
+                "folds_completed_num": len(fold_indices),
                 "params": params,
                 "context": "Time Series CV",
             },
@@ -101,7 +101,7 @@ def compute_time_series_cv_folds(
             msg,
             extra={
                 "exception": str(e),
-                "cv_num_folds": cv_num_folds,
+                "folds_num": cv_num_folds,
                 "training_set_type": type(training_set).__name__,
                 "params": params,
                 "context": "Time Series CV",

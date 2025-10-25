@@ -31,7 +31,7 @@ def extract_targets_from_data_loader(data_loader: DataLoader) -> torch.Tensor:
         debug(
             "Targets extraction from data loader started",
             extra={
-                "num_batches": len(data_loader),
+                "batches_num": len(data_loader),
                 "context": "Targets extraction from data loader",
             },
         )
@@ -52,7 +52,7 @@ def extract_targets_from_data_loader(data_loader: DataLoader) -> torch.Tensor:
         debug(
             "Targets extraction from data loader completed",
             extra={
-                "total_targets_extracted": concatenated_targets.size(0),
+                "targets_extracted_num": concatenated_targets.size(0),
                 "targets_shape": list(concatenated_targets.shape),
                 "context": "Targets extraction from data loader",
             },
@@ -65,7 +65,7 @@ def extract_targets_from_data_loader(data_loader: DataLoader) -> torch.Tensor:
             msg,
             extra={
                 "exception": str(e),
-                "num_batches": len(data_loader),
+                "batches_num": len(data_loader),
                 "context": "Targets extraction from data loader",
             },
         )

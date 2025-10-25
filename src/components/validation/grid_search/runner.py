@@ -68,8 +68,8 @@ def compute_grid_search(
             "Grid search started",
             extra={
                 "training_set_len": len(training_set),
-                "total_param_combinations": len(params_combinations),
-                "cv_num_folds": cv_num_folds,
+                "param_combinations_num": len(params_combinations),
+                "folds_num": cv_num_folds,
                 "context": "Grid search",
             },
         )
@@ -118,9 +118,9 @@ def compute_grid_search(
         info(
             "Grid search completed",
             extra={
-                "best_params": best_params,
-                "best_avg_loss": best_avg_loss,
-                "total_param_combinations": len(params_combinations),
+                "params_best": best_params,
+                "loss_avg_best": best_avg_loss,
+                "param_combinations_num": len(params_combinations),
                 "context": "Grid search",
             },
         )
@@ -141,15 +141,15 @@ def compute_grid_search(
                 "training_set_len": (
                     len(training_set) if training_set else None
                 ),
-                "num_folds": getattr(
+                "folds_num": getattr(
                     config.validation.cross_validation, "folds", None
                 ),
-                "total_param_combinations": (
+                "param_combinations_num": (
                     len(params_combinations)
                     if "params_combinations" in locals()
                     else None
                 ),
-                "current_best_avg_loss": (
+                "loss_avg_best_current": (
                     best_avg_loss if "best_avg_loss" in locals() else None
                 ),
                 "context": "Grid search",

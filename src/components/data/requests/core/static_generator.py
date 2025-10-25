@@ -46,8 +46,8 @@ def generate_static_requests(
     info(
         "Static requests generation completed",
         extra={
-            "num_requests_generated": len(requests),
-            "num_timestamps_generated": len(timestamps_hours),
+            "requests_generated_num": len(requests),
+            "timestamps_generated_num": len(timestamps_hours),
             "alpha_fixed": alpha_fixed,
             "context": "Static requests generation",
         },

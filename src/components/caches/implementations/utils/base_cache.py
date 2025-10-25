@@ -209,7 +209,7 @@ class BaseCache(ABC):
                 extra={
                     "exception": str(e),
                     "current_time": current_time,
-                    "num_expired_keys": (
+                    "expired_keys_num": (
                         len(expired_keys) if "expired_keys" in locals() else 0
                     ),
                     "expiry_type": (

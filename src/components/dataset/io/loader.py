@@ -41,8 +41,8 @@ def load_dataset(path: str) -> pd.DataFrame:
             "Dataset loading completed",
             extra={
                 "dataset_path": path,
-                "num_rows": len(df),
-                "num_columns": len(df.columns),
+                "rows_num": len(df),
+                "columns_num": len(df.columns),
                 "columns": df.columns.tolist(),
                 "context": "Dataset loading",
             },

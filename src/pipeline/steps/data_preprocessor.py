@@ -26,7 +26,9 @@ from src.const import (
     DAGS_HUB_MLFLOW_ENABLED,
     DATASET_RAW_TYPE,
     DATASET_TIMESTAMP_COLUMN_NAME,
-    MLFLOW_NESTED_ENABLED, DAGS_HUB_REPO_OWNER_ENV_VAR_NAME, DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
+    MLFLOW_NESTED_ENABLED,
+    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
+    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
 )
 
 
@@ -66,10 +68,16 @@ def preprocess_data() -> None:
         # Setup
         config = prepare_config()
 
-        info("Data preprocessing started")
-
         # Prepare configuration
         data_distribution_mode = config.data.mode
+
+        info(
+            "Data preprocessing started",
+            extra={
+                "data_distribution_mode": data_distribution_mode,
+                "context": "Data preprocessing",
+            },
+        )
 
         # Retrieve path to load dataset from
         dataset_raw_path = get_dataset_abs_path(
@@ -108,14 +116,24 @@ def preprocess_data() -> None:
                 - len(missing_values_removed_df),
                 "duplicates_num": len(missing_values_removed_df)
                 - len(duplicates_removed_df),
-                "removals_total": len(initial_df) - len(final_df),
+                "removals_tot": len(initial_df) - len(final_df),
                 "removals_ratio": (len(initial_df) - len(final_df))
                 / len(initial_df),
             }
         )
         mlflow.log_artifact(dataset_processed_path)
 
-    info("Data preprocessing completed")
+    info(
+        "Data preprocessing completed",
+        extra={
+            "data_distribution_mode": data_distribution_mode,
+            "dataset_raw_save_path": dataset_raw_path,
+            "dataset_processed_save_path": dataset_processed_path,
+            "rows_final_num": len(final_df),
+            "columns_final_num": len(final_df.columns),
+            "context": "Data preprocessing",
+        },
+    )
 
 
 if __name__ == "__main__":

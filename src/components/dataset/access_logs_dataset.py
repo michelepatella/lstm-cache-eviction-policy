@@ -110,7 +110,7 @@ class AccessLogsDataset(Dataset):
         debug(
             "Dataset fields setting executed",
             extra={
-                "total_columns": len(self.columns),
+                "columns_num": len(self.columns),
                 "feature_columns": self.features,
                 "target_column": self.target,
                 "sequence_length": self.seq_len,
@@ -165,8 +165,8 @@ class AccessLogsDataset(Dataset):
             "AccessLogsDataset initialization executed",
             extra={
                 "dataset_type": dataset_type,
-                "num_rows": len(self.data),
-                "num_columns": len(self.data.columns),
+                "rows_num": len(self.data),
+                "columns_num": len(self.data.columns),
                 "feature_columns": self.features,
                 "target_column": self.target,
                 "sequence_length": self.seq_len,
@@ -235,7 +235,7 @@ class AccessLogsDataset(Dataset):
                     extra={
                         "index_requested": idx,
                         "sequence_length": self.seq_len,
-                        "available_rows": len(self.data),
+                        "rows_available": len(self.data),
                         "context": "AccessLogsDataset",
                     },
                 )

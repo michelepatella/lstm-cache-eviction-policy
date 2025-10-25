@@ -55,8 +55,8 @@ def infer_batches(
             extra={
                 "model_name": model.__class__.__name__,
                 "device": str(device),
-                "num_features": num_features,
-                "num_batches": (
+                "features_num": num_features,
+                "batches_num": (
                     len(data_loader)
                     if hasattr(data_loader, "__len__")
                     else None
@@ -96,11 +96,11 @@ def infer_batches(
         debug(
             "Batches inference completed",
             extra={
-                "total_loss": total_loss,
-                "num_predictions": len(all_predictions),
-                "num_targets": len(all_targets),
-                "num_outputs": len(all_outputs),
-                "num_variances": len(all_variances),
+                "loss_tot": total_loss,
+                "predictions_num": len(all_predictions),
+                "targets_num": len(all_targets),
+                "outputs_num": len(all_outputs),
+                "variances_num": len(all_variances),
                 "context": "Batches inference",
             },
         )
@@ -120,7 +120,7 @@ def infer_batches(
                 "exception": str(e),
                 "model_name": model.__class__.__name__,
                 "device": str(device),
-                "num_features": num_features,
+                "features_num": num_features,
                 "context": "Batches inference",
             },
         )

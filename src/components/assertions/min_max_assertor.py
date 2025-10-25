@@ -34,8 +34,8 @@ def assert_min_less_than_max(
         debug(
             "Min/max validation started",
             extra={
-                "min_val": min_val,
-                "max_val": max_val,
+                "min": min_val,
+                "max": max_val,
                 "values_context": values_context,
                 "context": "Min/max assertion",
             },
@@ -48,10 +48,10 @@ def assert_min_less_than_max(
             error(
                 msg,
                 extra={
-                    "min_val": min_val,
-                    "max_val": max_val,
-                    "min_val_type": type(min_val).__name__,
-                    "max_val_type": type(max_val).__name__,
+                    "min": min_val,
+                    "max": max_val,
+                    "min_type": type(min_val).__name__,
+                    "max_type": type(max_val).__name__,
                     "values_context": values_context,
                     "status": "Invalid",
                     "context": "Min/max assertion",
@@ -62,8 +62,8 @@ def assert_min_less_than_max(
         debug(
             "Min/max validation completed",
             extra={
-                "min_val": min_val,
-                "max_val": max_val,
+                "min": min_val,
+                "max": max_val,
                 "values_context": values_context,
                 "status": "Valid",
                 "context": "Min/max assertion",
@@ -75,10 +75,10 @@ def assert_min_less_than_max(
             msg,
             extra={
                 "exception": str(e),
-                "min_val": min_val,
-                "max_val": max_val,
-                "min_val_type": type(min_val).__name__,
-                "max_val_type": type(max_val).__name__,
+                "min": min_val,
+                "max": max_val,
+                "min_type": type(min_val).__name__,
+                "max_type": type(max_val).__name__,
                 "values_context": values_context,
                 "status": "Invalid",
                 "context": "Min/max assertion",

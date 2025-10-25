@@ -23,7 +23,9 @@ from src.const import (
     DAGS_HUB_MLFLOW_ENABLED,
     DATA_DISTRIBUTION_STATIC_MODE,
     DATASET_TESTING_SPLIT_TYPE,
-    MLFLOW_NESTED_ENABLED, DAGS_HUB_REPO_NAME_ENV_VAR_NAME, DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
+    MLFLOW_NESTED_ENABLED,
+    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
+    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
 )
 
 
@@ -61,8 +63,6 @@ def test_model() -> None:
         # Setup
         config = prepare_config()
 
-        info("Testing started")
-
         # Prepare configuration
         data_distribution_mode = config.data.mode
         testing_batch_size = config.testing.general.batch_size
@@ -70,6 +70,18 @@ def test_model() -> None:
         num_features = config.model.general.features
         top_k = config.testing.metrics.top_k
         model_params = config.model.params
+
+        info(
+            "Testing started",
+            extra={
+                "data_distribution_mode": data_distribution_mode,
+                "testing_batch_size": testing_batch_size,
+                "testing_shuffle": testing_shuffle,
+                "features_num": num_features,
+                "top_k": top_k,
+                "context": "Testing",
+            },
+        )
 
         # Setup testing data loader
         testing_set, testing_loader = initialize_data_loader(
@@ -131,7 +143,17 @@ def test_model() -> None:
         )
         mlflow.log_artifact(model_results_save_path)
 
-    info("Testing completed")
+    info(
+        "Testing completed",
+        extra={
+            "testing_samples_num": len(testing_set),
+            "loss_avg": avg_loss,
+            "accuracy": metrics.class_report.accuracy,
+            "top_k_accuracy": metrics.top_k_accuracy,
+            "model_results_save_path": model_results_save_path,
+            "context": "Testing",
+        },
+    )
 
 
 if __name__ == "__main__":

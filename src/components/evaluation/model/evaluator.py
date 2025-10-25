@@ -66,7 +66,7 @@ def evaluate_model(
         "Model evaluation started",
         extra={
             "device": str(device),
-            "num_features": num_features,
+            "features_num": num_features,
             "top_k": top_k,
             "compute_metrics": compute_metrics,
             "model_type": type(model).__name__,
@@ -89,10 +89,10 @@ def evaluate_model(
     info(
         "Average loss computed",
         extra={
-            "avg_loss": avg_loss,
-            "num_batches": len(data_loader),
-            "num_outputs": len(all_outputs),
-            "num_targets": len(all_targets),
+            "loss_avg": avg_loss,
+            "batches_num": len(data_loader),
+            "outputs_num": len(all_outputs),
+            "targets_num": len(all_targets),
             "context": "Model evaluation",
         },
     )
@@ -115,12 +115,12 @@ def evaluate_model(
     debug(
         "Model evaluation completed",
         extra={
-            "avg_loss": avg_loss,
+            "loss_avg": avg_loss,
             "metrics_computed": metrics is not None,
-            "num_batches": len(data_loader),
-            "num_outputs": len(all_outputs),
-            "num_targets": len(all_targets),
-            "num_variances": len(all_variances),
+            "batches_num": len(data_loader),
+            "outputs_num": len(all_outputs),
+            "targets_num": len(all_targets),
+            "variances_num": len(all_variances),
             "context": "Model evaluation",
         },
     )

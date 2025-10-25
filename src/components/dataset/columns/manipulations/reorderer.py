@@ -40,7 +40,7 @@ def reorder_dataset_columns(
             extra={
                 "exception": str(e),
                 "target_column": target_column,
-                "available_columns": (
+                "columns_available": (
                     df.columns.tolist() if hasattr(df, "columns") else None
                 ),
                 "context": "Dataset columns reordering",

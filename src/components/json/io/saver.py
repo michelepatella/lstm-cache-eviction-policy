@@ -39,7 +39,7 @@ def save_json(
                 "path": path,
                 "json_indent": json_indent,
                 "data_type": type(data_dict).__name__,
-                "num_items": (
+                "items_num": (
                     len(data_dict)
                     if isinstance(data_dict, (dict, list))
                     else None
@@ -59,7 +59,7 @@ def save_json(
                 "path": path,
                 "json_indent": json_indent,
                 "data_type": type(data_dict).__name__,
-                "num_items": (
+                "items_num": (
                     len(data_dict)
                     if isinstance(data_dict, (dict, list))
                     else None

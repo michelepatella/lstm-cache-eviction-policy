@@ -53,7 +53,9 @@ from src.const import (
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
     SIMULATIONS_METRICS_POLICY_NAME,
-    SIMULATIONS_METRICS_TIMELINE_NAME, DAGS_HUB_REPO_NAME_ENV_VAR_NAME, DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
+    SIMULATIONS_METRICS_TIMELINE_NAME,
+    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
+    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
 )
 
 # Load env variables
@@ -92,8 +94,6 @@ def run_simulations() -> None:
         # Setup
         config = prepare_config()
 
-        info("Simulations started")
-
         # Prepare configuration
         data_distribution_mode = config.data.mode
         mistake_window = config.simulations.metrics.mistake_rate.window
@@ -126,6 +126,16 @@ def run_simulations() -> None:
             #    config,
             # ),
         }
+
+        info(
+            "Simulations started",
+            extra={
+                "data_distribution_mode": data_distribution_mode,
+                "policies_simulated": list(cache_eviction_policies.keys()),
+                "mistake_window": mistake_window,
+                "context": "Simulations",
+            },
+        )
 
         # For each cache eviction policy run a simulation
         results = []
@@ -183,10 +193,10 @@ def run_simulations() -> None:
                             SIMULATIONS_METRICS_HIT_COUNTER_NAME
                         ]
                         + counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME],
-                        "hit_num": counters[
+                        "hits_num": counters[
                             SIMULATIONS_METRICS_HIT_COUNTER_NAME
                         ],
-                        "miss_num": counters[
+                        "misses_num": counters[
                             SIMULATIONS_METRICS_MISS_COUNTER_NAME
                         ],
                         "hit_rate": hit_rate,
@@ -232,7 +242,30 @@ def run_simulations() -> None:
         mlflow.log_artifact(results_file_path)
         mlflow.log_artifact(plot_save_path)
 
-    info("Simulations completed")
+    info(
+        "Simulations completed",
+        extra={
+            "results": [
+                {
+                    "policy": r[SIMULATIONS_METRICS_POLICY_NAME],
+                    "hit_rate": r[SIMULATIONS_METRICS_HIT_RATE_NAME],
+                    "miss_rate": r[SIMULATIONS_METRICS_MISS_RATE_NAME],
+                    "eviction_mistake_rate": r[
+                        SIMULATIONS_METRICS_EVICTION_MISTAKE_RATE_NAME
+                    ],
+                    "cache_latency_avg": r[
+                        SIMULATIONS_METRICS_AVG_CACHE_LATENCY_NAME
+                    ],
+                    "hits_num": r[SIMULATIONS_METRICS_HIT_COUNTER_NAME],
+                    "misses_num": r[SIMULATIONS_METRICS_MISS_COUNTER_NAME],
+                }
+                for r in results
+            ],
+            "results_save_path": results_file_path,
+            "plot_save_paths": plot_save_path,
+            "context": "Simulations",
+        },
+    )
 
 
 if __name__ == "__main__":

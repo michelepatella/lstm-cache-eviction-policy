@@ -61,8 +61,8 @@ def set_dict_value(
         debug(
             "Dictionary value setting completed",
             extra={
-                "final_keys": keys,
-                "final_value": value,
+                "keys_final": keys,
+                "value_final": value,
                 "context": "Dictionary value setting",
             },
         )

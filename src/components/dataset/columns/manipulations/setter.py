@@ -43,7 +43,7 @@ def set_dataset_column(
                     if hasattr(column_values, "__len__")
                     else None
                 ),
-                "existing_columns": (
+                "columns_existing": (
                     df.columns.tolist() if hasattr(df, "columns") else None
                 ),
                 "context": "Dataset column setting",

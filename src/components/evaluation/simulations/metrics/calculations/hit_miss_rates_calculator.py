@@ -30,9 +30,9 @@ def calculate_hit_miss_rate(
         extra={
             "hit_rate": hit_rate,
             "miss_rate": miss_rate,
-            "num_hits": num_hits,
-            "num_misses": num_misses,
-            "total_cache_accesses": total_cache_accesses,
+            "hits_num": num_hits,
+            "misses_num": num_misses,
+            "cache_accesses_num": total_cache_accesses,
             "context": "Hit/miss rates calculation",
         },
     )

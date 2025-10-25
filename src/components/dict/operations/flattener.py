@@ -38,7 +38,7 @@ def flatten_dict(
             extra={
                 "parent_key": parent_key,
                 "nested_dict_type": type(nested_dict).__name__,
-                "num_keys_at_level": (
+                "keys_at_level_num": (
                     len(nested_dict) if isinstance(nested_dict, dict) else None
                 ),
                 "context": "Dictionary flattening",
@@ -67,7 +67,7 @@ def flatten_dict(
             "Dictionary flattering completed",
             extra={
                 "parent_key": parent_key,
-                "num_flattened_items": len(items),
+                "flattened_items_num": len(items),
                 "context": "Dictionary flattening",
             },
         )

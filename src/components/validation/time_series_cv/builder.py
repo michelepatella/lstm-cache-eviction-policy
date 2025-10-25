@@ -26,7 +26,7 @@ def build_time_series_split(num_folds: int) -> TimeSeriesSplit:
         debug(
             "TimeSeriesSplit building started",
             extra={
-                "num_folds_requested": num_folds,
+                "folds_requested_num": num_folds,
                 "context": "TimeSeriesSplit building",
             },
         )
@@ -37,7 +37,7 @@ def build_time_series_split(num_folds: int) -> TimeSeriesSplit:
         debug(
             "TimeSeriesSplit building completed",
             extra={
-                "num_folds_actual": tss.n_splits,
+                "folds_actual_num": tss.n_splits,
                 "tss_object_type": type(tss).__name__,
                 "context": "TimeSeriesSplit building",
             },
@@ -50,7 +50,7 @@ def build_time_series_split(num_folds: int) -> TimeSeriesSplit:
             msg,
             extra={
                 "exception": str(e),
-                "num_folds_requested": num_folds,
+                "folds_requested_num": num_folds,
                 "context": "TimeSeriesSplit building",
             },
         )

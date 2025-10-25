@@ -35,7 +35,9 @@ class ElasticHandler(logging.Handler):
         """
         # Prepare doc to send to Elasticsearch
         doc = {
-            LOGS_ELASTIC_TIMESTAMP_FIELD_NAME: datetime.now(timezone.utc).isoformat(),
+            LOGS_ELASTIC_TIMESTAMP_FIELD_NAME: datetime.now(
+                timezone.utc
+            ).isoformat(),
             LOGS_ELASTIC_LEVEL_FIELD_NAME: record.levelname,
             LOGS_ELASTIC_LOGGER_FIELD_NAME: record.name,
             LOGS_ELASTIC_MESSAGE_FIELD_NAME: record.getMessage(),

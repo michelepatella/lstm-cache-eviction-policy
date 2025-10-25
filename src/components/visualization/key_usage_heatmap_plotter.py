@@ -147,10 +147,10 @@ def plot_key_usage_heatmap(
             "Key usage heatmap plotted and saved",
             extra={
                 "save_path": save_path,
-                "num_hours": num_hours,
-                "num_keys": num_keys,
-                "num_requests": len(requests),
-                "num_timestamps": len(timestamps_hours),
+                "hours_num": num_hours,
+                "keys_num": num_keys,
+                "requests_num": len(requests),
+                "timestamps_num": len(timestamps_hours),
                 "heatmap_shape": heatmap.shape,
                 "context": "Key usage heatmap",
             },
@@ -162,12 +162,12 @@ def plot_key_usage_heatmap(
             extra={
                 "exception": str(e),
                 "save_path": save_path,
-                "min_key": min_key,
-                "max_key": max_key,
-                "num_requests": (
+                "key_min": min_key,
+                "key_max": max_key,
+                "requests_num": (
                     len(requests) if isinstance(requests, list) else None
                 ),
-                "num_timestamps": (
+                "timestamps_num": (
                     len(timestamps_hours)
                     if isinstance(timestamps_hours, np.ndarray)
                     else None

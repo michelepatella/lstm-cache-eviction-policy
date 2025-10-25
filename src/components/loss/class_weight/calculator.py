@@ -40,7 +40,7 @@ def calculate_class_weight(
         debug(
             "Class weight calculation started",
             extra={
-                "num_classes": num_classes,
+                "classes_num": num_classes,
                 "weight_type": weight_type,
                 "targets_type": type(targets).__name__,
                 "targets_shape": (
@@ -73,9 +73,9 @@ def calculate_class_weight(
         debug(
             "Class weight calculation completed",
             extra={
-                "present_classes": present_classes.tolist(),
+                "classes_present": present_classes.tolist(),
                 "weights_computed": weights.tolist(),
-                "final_class_weight": class_weight.tolist(),
+                "class_weights": class_weight.tolist(),
                 "context": "Class weight calculation",
             },
         )
@@ -87,7 +87,7 @@ def calculate_class_weight(
             msg,
             extra={
                 "exception": str(e),
-                "num_classes": num_classes,
+                "classes_num": num_classes,
                 "weight_type": weight_type,
                 "targets_type": type(targets).__name__,
                 "targets_shape": (

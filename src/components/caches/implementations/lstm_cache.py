@@ -54,7 +54,7 @@ class LSTMCache(BaseCache):
         # Cache class initialization
         super().__init__(cache_class, metrics_logger, config)
 
-        info(
+        debug(
             "Cache initialization executed",
             extra={
                 "maxsize": self.maxsize,

@@ -43,7 +43,9 @@ from src.const import (
     DATASET_RAW_TYPE,
     DATASET_REQUEST_COLUMN_NAME,
     DATASET_TIMESTAMP_COLUMN_NAME,
-    MLFLOW_NESTED_ENABLED, DAGS_HUB_REPO_OWNER_ENV_VAR_NAME, DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
+    MLFLOW_NESTED_ENABLED,
+    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
+    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
 )
 
 
@@ -86,12 +88,20 @@ def generate_data() -> None:
         config = prepare_config()
         initialize_logs()
 
-        info("Data generation started")
-
         # Prepare configuration
         data_distribution_mode = config.data.mode
         min_key = config.data.keys.min
         max_key = config.data.keys.max
+
+        info(
+            "Data generation started",
+            extra={
+                "data_distribution_mode": data_distribution_mode,
+                "key_min": min_key,
+                "key_max": max_key,
+                "context": "Data generation",
+            },
+        )
 
         # Generate requests with corresponding timestamps,
         # based on the data distribution mode
@@ -154,8 +164,8 @@ def generate_data() -> None:
                 "dataset_num_rows": len(df),
                 "dataset_num_columns": len(df.columns),
                 "requests_num_unique": len(np.unique(requests)),
-                "requests_max_count": max(Counter(requests)),
-                "requests_min_count": min(Counter(requests)),
+                "requests_max_num": max(Counter(requests)),
+                "requests_min_num": min(Counter(requests)),
                 "requests_mean": float(np.mean(requests)),
                 "requests_std": float(np.std(requests)),
                 "requests_skew": float(pd.Series(requests).skew()),
@@ -176,8 +186,8 @@ def generate_data() -> None:
                 "timestamps_diff_max": float(
                     np.max(np.diff(timestamps_hours))
                 ),
-                "total_hours": max(timestamps_hours) - min(timestamps_hours),
-                "total_days": (max(timestamps_hours) - min(timestamps_hours))
+                "tot_hours": max(timestamps_hours) - min(timestamps_hours),
+                "tot_days": (max(timestamps_hours) - min(timestamps_hours))
                 / TIME_HOURS_IN_DAY,
             }
         )
@@ -186,7 +196,22 @@ def generate_data() -> None:
         mlflow.log_artifact(daily_profile_plot_save_path)
         mlflow.log_artifact(key_usage_heatmap_plot_save_path)
 
-    info("Data generation completed")
+    info(
+        "Data generation completed",
+        extra={
+            "data_distribution_mode": data_distribution_mode,
+            "dataset_raw_save_path": dataset_path,
+            "rows_num": len(df),
+            "columns_num": len(df.columns),
+            "unique_requests_num": len(set(requests)),
+            "plot_save_path": [
+                zipf_log_log_plot_save_path,
+                daily_profile_plot_save_path,
+                key_usage_heatmap_plot_save_path,
+            ],
+            "context": "Data generation",
+        },
+    )
 
 
 if __name__ == "__main__":

@@ -37,8 +37,8 @@ def save_model_metrics(
         debug(
             "Model metrics saving started",
             extra={
-                "num_metrics": len(metrics),
-                "avg_loss": avg_loss,
+                "metrics_num": len(metrics),
+                "loss_avg": avg_loss,
                 "save_path": path,
                 "context": "Model metrics saving",
             },
@@ -72,7 +72,7 @@ def save_model_metrics(
         debug(
             "Model metrics saving completed",
             extra={
-                "num_metrics_saved": len(metrics_to_save),
+                "metrics_saved_num": len(metrics_to_save),
                 "metrics_keys": list(metrics_to_save.keys()),
                 "save_path": path,
                 "context": "Model metrics saving",
@@ -84,8 +84,8 @@ def save_model_metrics(
             msg,
             extra={
                 "exception": str(e),
-                "num_metrics": len(metrics) if metrics else 0,
-                "avg_loss": avg_loss,
+                "metrics_num": len(metrics) if metrics else 0,
+                "loss_avg": avg_loss,
                 "save_path": path,
                 "context": "Model metrics saving",
             },

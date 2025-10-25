@@ -52,7 +52,7 @@ def initialize_data_loader(
             "batch_size": batch_size,
             "shuffle": shuffle,
             "dataset_class": dataset_class.__name__,
-            "num_samples_in_dataset": len(dataset),
+            "samples_in_dataset_num": len(dataset),
             "context": "Data loader initialization",
         },
     )

@@ -53,7 +53,7 @@ def generate_requests_helper(
             "Requests generation helper started",
             extra={
                 "keys_range": [min_key, max_key],
-                "num_keys": len(keys_range),
+                "keys_num": len(keys_range),
                 "alpha_range": alpha_range,
                 "time_step_duration": time_step_duration,
                 "context": "Requests generation helper",
@@ -79,8 +79,8 @@ def generate_requests_helper(
         debug(
             "Requests generation helper completed",
             extra={
-                "total_requests_generated": len(requests),
-                "total_timestamps_generated": len(timestamps_seconds),
+                "requests_generated_num": len(requests),
+                "timestamps_generated_num": len(timestamps_seconds),
                 "context": "Requests generation helper",
             },
         )

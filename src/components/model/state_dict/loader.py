@@ -53,7 +53,7 @@ def load_model_state_dict(
             extra={
                 "path": path,
                 "model_type": type(model).__name__,
-                "num_parameters": len(list(model.state_dict().keys())),
+                "params_num": len(list(model.state_dict().keys())),
                 "device": str(device),
                 "context": "Model state dictionary loading",
             },

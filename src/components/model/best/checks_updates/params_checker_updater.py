@@ -40,9 +40,9 @@ def check_update_best_model_params(
         debug(
             "Best model parameters checking/updating started",
             extra={
-                "current_avg_loss": curr_avg_loss,
-                "best_avg_loss": best_avg_loss,
-                "current_model_params": curr_model_params,
+                "loss_avg_current": curr_avg_loss,
+                "loss_avg_best": best_avg_loss,
+                "model_params_current": curr_model_params,
                 "context": "Best model parameters checking/updating",
             },
         )
@@ -57,9 +57,9 @@ def check_update_best_model_params(
         debug(
             "Best model parameters checking/updating completed",
             extra={
-                "current_avg_loss": curr_avg_loss,
-                "best_avg_loss": best_avg_loss,
-                "best_model_updated": curr_avg_loss
+                "loss_avg_current": curr_avg_loss,
+                "loss_avg_best": best_avg_loss,
+                "model_best_updated": curr_avg_loss
                 < (
                     best_avg_loss
                     if best_avg_loss is not None
@@ -76,8 +76,8 @@ def check_update_best_model_params(
             msg,
             extra={
                 "exception": str(e),
-                "current_avg_loss": curr_avg_loss,
-                "best_avg_loss": best_avg_loss,
+                "loss_avg_current": curr_avg_loss,
+                "loss_avg_best": best_avg_loss,
                 "context": "Best model parameters checking/updating",
             },
         )

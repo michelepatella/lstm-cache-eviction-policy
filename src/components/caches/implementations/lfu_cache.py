@@ -25,6 +25,7 @@ from components.caches.implementations.utils.cache_cleaner import clear_cache
 from components.caches.implementations.utils.cache_size_calculator import (
     calculate_cache_size,
 )
+from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
 
 
@@ -67,7 +68,7 @@ class LFUCache(Cache):
         self._freq = defaultdict()
         self.callback = callback
 
-        info(
+        debug(
             "Cache initialization executed",
             extra={
                 "maxsize": self.maxsize,

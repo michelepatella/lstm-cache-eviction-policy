@@ -77,10 +77,10 @@ def generate_pattern_requests(
         debug(
             "Pattern request generation started",
             extra={
-                "num_requests": num_requests,
-                "initial_timestamp": initial_timestamp,
-                "initial_current_day": initial_current_day,
-                "initial_current_seconds_in_day": initial_current_seconds_in_day,
+                "requests_num": num_requests,
+                "timestamp_initial": initial_timestamp,
+                "current_day_initial": initial_current_day,
+                "current_seconds_in_day_initial": initial_current_seconds_in_day,
                 "keys_range_len": len(keys_range),
                 "zipf_probs_sum": (
                     float(np.sum(zipf_probs))
@@ -114,8 +114,8 @@ def generate_pattern_requests(
         debug(
             "Pattern request generation completed",
             extra={
-                "total_requests_generated": len(requests),
-                "total_timestamps_generated": len(timestamps_seconds),
+                "requests_generated_num": len(requests),
+                "timestamps_generated_num": len(timestamps_seconds),
                 "context": "Pattern request generation",
             },
         )
@@ -135,12 +135,12 @@ def generate_pattern_requests(
                     if zipf_probs is not None
                     else None
                 ),
-                "num_requests": (
+                "requests_num": (
                     num_requests if "num_requests" in locals() else None
                 ),
-                "initial_timestamp": initial_timestamp,
-                "initial_current_day": initial_current_day,
-                "initial_current_seconds_in_day": initial_current_seconds_in_day,
+                "timestamp_initial": initial_timestamp,
+                "current_day_initial": initial_current_day,
+                "current_seconds_in_day_initial": initial_current_seconds_in_day,
                 "context": "Pattern request generation",
             },
         )

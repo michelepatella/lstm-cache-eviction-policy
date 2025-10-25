@@ -85,7 +85,7 @@ def evict_least_frequent_item(
                     if hasattr(data_freq, "__len__") and data_freq
                     else 0
                 ),
-                "num_evicted_candidates": (
+                "evicted_candidates_num": (
                     len(evicted_candidates)
                     if "evicted_candidates" in locals()
                     else 0

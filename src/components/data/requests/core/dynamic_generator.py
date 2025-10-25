@@ -58,7 +58,7 @@ def generate_dynamic_requests(
                 "alpha_min": alpha_min,
                 "alpha_max": alpha_max,
                 "steps": steps,
-                "num_requests": num_requests,
+                "requests_num": num_requests,
                 "time_step_duration": time_step_duration,
                 "alpha_range": alpha_range,
                 "context": "Dynamic requests generation",
@@ -74,8 +74,8 @@ def generate_dynamic_requests(
         info(
             "Dynamic requests generation completed",
             extra={
-                "num_requests_generated": len(requests),
-                "num_timestamps_generated": len(timestamps_hours),
+                "requests_generated_num": len(requests),
+                "timestamps_generated_num": len(timestamps_hours),
                 "context": "Dynamic requests generation",
             },
         )
@@ -90,7 +90,7 @@ def generate_dynamic_requests(
                 "alpha_min": alpha_min,
                 "alpha_max": alpha_max,
                 "steps": steps,
-                "num_requests": num_requests,
+                "requests_num": num_requests,
                 "context": "Dynamic requests generation",
             },
         )

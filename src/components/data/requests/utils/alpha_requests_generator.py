@@ -43,7 +43,7 @@ def generate_requests_for_alpha(
         extra={
             "alpha": alpha,
             "keys_range": [int(keys_range[0]), int(keys_range[-1])],
-            "num_keys": len(keys_range),
+            "keys_num": len(keys_range),
             "time_step_duration": time_step_duration,
             "context": "Requests generation for alpha",
         },
@@ -61,8 +61,8 @@ def generate_requests_for_alpha(
         "Request generation for alpha completed",
         extra={
             "alpha": alpha,
-            "num_requests_generated": len(requests),
-            "num_timestamps_generated": len(timestamps_seconds),
+            "requests_generated_num": len(requests),
+            "timestamps_generated_num": len(timestamps_seconds),
             "context": "Requests generation for alpha",
         },
     )

@@ -78,8 +78,8 @@ def plot_zipf_loglog(requests: List[int], save_path: str) -> None:
             "Zipf log-log plotted and saved",
             extra={
                 "save_path": save_path,
-                "num_requests": len(requests),
-                "num_keys": len(key_counts),
+                "requests_num": len(requests),
+                "keys_num": len(key_counts),
                 "ranks_range": (1, len(ranks)),
                 "frequencies_range": (
                     int(key_frequencies.min()),
@@ -95,7 +95,7 @@ def plot_zipf_loglog(requests: List[int], save_path: str) -> None:
             extra={
                 "exception": str(e),
                 "save_path": save_path,
-                "num_requests": (
+                "requests_num": (
                     len(requests) if isinstance(requests, list) else None
                 ),
                 "context": "Zipf log-log",

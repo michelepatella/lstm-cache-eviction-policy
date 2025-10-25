@@ -29,7 +29,7 @@ def save_simulations_metrics(results: List[Dict], path: str) -> None:
         debug(
             "Simulations metrics saving started",
             extra={
-                "num_results": (
+                "results_num": (
                     len(results) if isinstance(results, list) else None
                 ),
                 "save_path": path,
@@ -53,7 +53,7 @@ def save_simulations_metrics(results: List[Dict], path: str) -> None:
         debug(
             "Simulations metrics saving completed",
             extra={
-                "num_results_saved": len(results_to_save),
+                "results_saved_num": len(results_to_save),
                 "save_path": path,
                 "context": "Simulations metrics saving",
             },
@@ -64,7 +64,7 @@ def save_simulations_metrics(results: List[Dict], path: str) -> None:
             msg,
             extra={
                 "exception": str(e),
-                "num_results": (
+                "results_num": (
                     len(results) if isinstance(results, list) else None
                 ),
                 "save_path": path,

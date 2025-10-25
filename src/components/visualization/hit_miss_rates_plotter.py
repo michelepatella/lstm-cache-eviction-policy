@@ -125,8 +125,8 @@ def plot_hit_miss_rate(
             "Hit/miss rates plotted and saved",
             extra={
                 "save_path": path,
-                "num_subplots": len(PLOT_HIT_MISS_RATES_SUBPLOTS),
-                "num_results": len(results),
+                "subplots_num": len(PLOT_HIT_MISS_RATES_SUBPLOTS),
+                "results_num": len(results),
                 "policies": [
                     r[SIMULATIONS_METRICS_POLICY_NAME] for r in results
                 ],
@@ -140,8 +140,8 @@ def plot_hit_miss_rate(
             extra={
                 "exception": str(e),
                 "save_path": path,
-                "num_subplots": len(PLOT_HIT_MISS_RATES_SUBPLOTS),
-                "num_results": (
+                "subplots_num": len(PLOT_HIT_MISS_RATES_SUBPLOTS),
+                "results_num": (
                     len(results) if isinstance(results, list) else None
                 ),
                 "policies": (

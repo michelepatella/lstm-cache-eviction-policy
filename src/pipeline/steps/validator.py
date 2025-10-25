@@ -18,7 +18,9 @@ from src.const import (
     DAGS_HUB_MLFLOW_ENABLED,
     DATASET_TRAINING_SPLIT_TYPE,
     LOGS_VALIDATION_PHASE,
-    MLFLOW_NESTED_ENABLED, DAGS_HUB_REPO_OWNER_ENV_VAR_NAME, DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
+    MLFLOW_NESTED_ENABLED,
+    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
+    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
 )
 
 
@@ -57,11 +59,18 @@ def validate_model() -> None:
         # Setup
         config = prepare_config()
 
-        info("Validation started")
-
         # Prepare configuration
         validation_batch_size = config.validation.general.batch_size
         validation_shuffle = config.validation.general.shuffle
+
+        info(
+            "Validation started",
+            extra={
+                "batch_size": validation_batch_size,
+                "shuffle": validation_shuffle,
+                "context": "Validation",
+            },
+        )
 
         # Load the training set
         training_set, _ = initialize_data_loader(
@@ -92,7 +101,15 @@ def validate_model() -> None:
         )
         mlflow.log_artifact(CONFIG_FILE_PATH)
 
-    info("Validation completed")
+    info(
+        "Validation completed",
+        extra={
+            "training_samples_num": len(training_set),
+            "loss_avg_best": best_avg_loss,
+            "config_save_path": CONFIG_FILE_PATH,
+            "context": "Validation",
+        },
+    )
 
 
 if __name__ == "__main__":

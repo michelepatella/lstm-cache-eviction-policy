@@ -43,8 +43,8 @@ def extract_sliding_window_dataset_rows(
             debug(
                 "Sliding window extraction returned fewer rows than requested",
                 extra={
-                    "requested_window_size": window_size,
-                    "extracted_rows": len(window),
+                    "window_size_requested": window_size,
+                    "rows_extracted": len(window),
                     "idx": idx,
                     "context": "Sliding window extraction",
                 },
@@ -59,8 +59,8 @@ def extract_sliding_window_dataset_rows(
             extra={
                 "exception": str(e),
                 "idx": idx,
-                "requested_window_size": window_size,
-                "available_rows": len(df) if hasattr(df, "__len__") else None,
+                "window_size_requested": window_size,
+                "rows_available": len(df) if hasattr(df, "__len__") else None,
                 "context": "Sliding window extraction",
             },
         )

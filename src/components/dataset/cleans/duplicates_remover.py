@@ -31,7 +31,7 @@ def remove_dataset_duplicates(
         debug(
             "Dataset duplicates removal started",
             extra={
-                "num_rows_before": (
+                "rows_before_num": (
                     len(df) if isinstance(df, pd.DataFrame) else None
                 ),
                 "subset_columns": subset,
@@ -45,8 +45,8 @@ def remove_dataset_duplicates(
         debug(
             "Dataset duplicates removal completed",
             extra={
-                "num_rows_after": len(new_df),
-                "num_duplicates_removed": len(df) - len(new_df),
+                "rows_after_num": len(new_df),
+                "duplicates_removed_num": len(df) - len(new_df),
                 "subset_columns": subset,
                 "context": "Dataset duplicates removal",
             },
@@ -60,7 +60,7 @@ def remove_dataset_duplicates(
             extra={
                 "exception": str(e),
                 "subset_columns": subset,
-                "num_rows": len(df) if isinstance(df, pd.DataFrame) else None,
+                "rows_num": len(df) if isinstance(df, pd.DataFrame) else None,
                 "context": "Dataset duplicates removal",
             },
         )

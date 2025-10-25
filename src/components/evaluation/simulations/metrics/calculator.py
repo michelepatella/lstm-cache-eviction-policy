@@ -68,7 +68,7 @@ def calculate_simulation_metrics(
                 "miss_counter_name": miss_counter_name,
                 "hit_count": counters.get(hit_counter_name),
                 "miss_count": counters.get(miss_counter_name),
-                "num_cache_latencies": len(cache_latencies),
+                "cache_latencies_num": len(cache_latencies),
                 "mistake_window": mistake_window,
                 "context": "Simulation metrics calculation",
             },
@@ -100,8 +100,8 @@ def calculate_simulation_metrics(
         info(
             "Average cache latency calculated",
             extra={
-                "avg_cache_latency": avg_cache_latency,
-                "num_latencies": len(cache_latencies),
+                "cache_latency_avg": avg_cache_latency,
+                "latencies_num": len(cache_latencies),
                 "context": "Simulation metrics calculation",
             },
         )
@@ -112,10 +112,10 @@ def calculate_simulation_metrics(
                 "hit_rate": hit_rate,
                 "miss_rate": miss_rate,
                 "eviction_mistake_rate": eviction_mistake_rate,
-                "avg_cache_latency": avg_cache_latency,
-                "total_cache_accesses": total_cache_accesses,
-                "num_evicted_items": len(evicted_items),
-                "num_access_events": len(access_events_dict),
+                "cache_latency_avg": avg_cache_latency,
+                "cache_accesses_num": total_cache_accesses,
+                "evicted_items_num": len(evicted_items),
+                "access_events_num": len(access_events_dict),
                 "context": "Simulation metrics calculation",
             },
         )
@@ -135,7 +135,7 @@ def calculate_simulation_metrics(
                 "hit_counter_name": hit_counter_name,
                 "miss_counter_name": miss_counter_name,
                 "counters_keys": list(counters.keys()),
-                "num_cache_latencies": len(cache_latencies),
+                "cache_latencies_num": len(cache_latencies),
                 "mistake_window": mistake_window,
                 "context": "Simulation metrics calculation",
             },

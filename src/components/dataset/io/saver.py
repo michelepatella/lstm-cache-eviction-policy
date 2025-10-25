@@ -32,8 +32,8 @@ def save_dataset(
             extra={
                 "path": path,
                 "save_index": index,
-                "num_rows": len(df) if hasattr(df, "__len__") else None,
-                "num_columns": (
+                "rows_num": len(df) if hasattr(df, "__len__") else None,
+                "column_num": (
                     len(df.columns) if hasattr(df, "columns") else None
                 ),
                 "context": "Dataset saving",
@@ -50,8 +50,8 @@ def save_dataset(
             extra={
                 "path": path,
                 "save_index": index,
-                "num_rows": len(df) if hasattr(df, "__len__") else None,
-                "num_columns": (
+                "rows_num": len(df) if hasattr(df, "__len__") else None,
+                "columns_num": (
                     len(df.columns) if hasattr(df, "columns") else None
                 ),
                 "context": "Dataset saving",
@@ -65,8 +65,8 @@ def save_dataset(
                 "exception": str(e),
                 "path": path,
                 "save_index": index,
-                "num_rows": len(df) if hasattr(df, "__len__") else None,
-                "num_columns": (
+                "rows_num": len(df) if hasattr(df, "__len__") else None,
+                "columns_num": (
                     len(df.columns) if hasattr(df, "columns") else None
                 ),
                 "context": "Dataset saving",

@@ -48,8 +48,8 @@ def calculate_class_report(
         info(
             "Classification report calculated",
             extra={
-                "num_targets": len(targets),
-                "num_predictions": len(predictions),
+                "targets_num": len(targets),
+                "predictions_num": len(predictions),
                 "output_dict": output_dict,
                 "zero_division": zero_division,
                 "class_report": class_report,
@@ -64,8 +64,8 @@ def calculate_class_report(
             msg,
             extra={
                 "exception": str(e),
-                "num_targets": len(targets) if targets else 0,
-                "num_predictions": len(predictions) if predictions else 0,
+                "targets_num": len(targets) if targets else 0,
+                "predictions_num": len(predictions) if predictions else 0,
                 "output_dict": output_dict,
                 "zero_division": zero_division,
                 "context": "Classification report calculation",

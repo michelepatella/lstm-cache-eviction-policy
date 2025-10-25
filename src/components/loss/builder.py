@@ -38,10 +38,10 @@ def build_loss(
         debug(
             "Loss building started",
             extra={
-                "num_targets": (
+                "targets_num": (
                     len(targets) if hasattr(targets, "__len__") else None
                 ),
-                "num_classes": num_classes,
+                "classes_num": num_classes,
                 "device": str(device),
                 "context": "Loss building",
             },
@@ -61,10 +61,10 @@ def build_loss(
         debug(
             "Loss building completed",
             extra={
-                "num_targets": (
+                "targets_num": (
                     len(targets) if hasattr(targets, "__len__") else None
                 ),
-                "num_classes": num_classes,
+                "classes_num": num_classes,
                 "class_weight_shape": tuple(class_weight_tensor.shape),
                 "device": str(device),
                 "context": "Loss building",
@@ -78,10 +78,10 @@ def build_loss(
             msg,
             extra={
                 "exception": str(e),
-                "num_targets": (
+                "targets_num": (
                     len(targets) if hasattr(targets, "__len__") else None
                 ),
-                "num_classes": num_classes,
+                "classes_num": num_classes,
                 "targets_dtype": str(getattr(targets, "dtype", None)),
                 "targets_shape": tuple(getattr(targets, "shape", ())),
                 "device": str(device),

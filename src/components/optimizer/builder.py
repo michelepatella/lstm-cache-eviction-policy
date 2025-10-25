@@ -50,7 +50,7 @@ def build_optimizer(
                 "optimizer_type": optimizer_type,
                 "optimizer_kwargs": optimizer_kwargs,
                 "model_class": type(model).__name__,
-                "num_model_parameters": sum(
+                "model_params_num": sum(
                     p.numel() for p in model.parameters()
                 ),
                 "context": "Optimizer building",
@@ -70,7 +70,7 @@ def build_optimizer(
                 "optimizer_type": optimizer_type,
                 "optimizer_class": type(optimizer).__name__,
                 "optimizer_kwargs": optimizer_kwargs,
-                "num_model_parameters": sum(
+                "model_params_num": sum(
                     p.numel() for p in model.parameters()
                 ),
                 "context": "Optimizer building",
@@ -87,7 +87,7 @@ def build_optimizer(
                 "optimizer_type": optimizer_type,
                 "optimizer_kwargs": optimizer_kwargs,
                 "model_class": type(model).__name__,
-                "num_model_parameters": sum(
+                "model_params_num": sum(
                     p.numel() for p in model.parameters()
                 ),
                 "context": "Optimizer building",

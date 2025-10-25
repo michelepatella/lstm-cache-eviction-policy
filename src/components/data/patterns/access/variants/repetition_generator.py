@@ -67,7 +67,7 @@ def generate_repetition_pattern(
                 "keys_range_len": (
                     len(keys_range) if keys_range is not None else 0
                 ),
-                "num_keys": num_keys,
+                "keys_num": num_keys,
                 "context": "Repetition pattern generation",
             },
         )

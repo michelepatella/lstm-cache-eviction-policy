@@ -56,10 +56,10 @@ def calculate_top_k_accuracy(
         info(
             "Top-k accuracy calculated",
             extra={
-                "num_targets": len(targets),
-                "num_outputs": len(outputs),
+                "targets_num": len(targets),
+                "outputs_num": len(outputs),
                 "top_k": top_k,
-                "correct_predictions": correct_predictions,
+                "predictions_correct": correct_predictions,
                 "top_k_accuracy": top_k_accuracy,
                 "context": "Top-k accuracy calculation",
             },
@@ -72,8 +72,8 @@ def calculate_top_k_accuracy(
             msg,
             extra={
                 "exception": str(e),
-                "num_targets": len(targets) if targets else 0,
-                "num_outputs": len(outputs) if outputs else 0,
+                "targets_num": len(targets) if targets else 0,
+                "outputs_num": len(outputs) if outputs else 0,
                 "top_k": top_k,
                 "context": "Top-k accuracy calculation",
             },

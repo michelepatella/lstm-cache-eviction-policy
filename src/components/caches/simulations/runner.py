@@ -144,9 +144,9 @@ def run_cache_simulation(
             extra={
                 "policy": policy,
                 "cache_type": type(cache).__name__ if cache else None,
-                "total_requests": len(testing_set),
-                "total_hits": counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME],
-                "total_misses": counters[
+                "requests_num": len(testing_set),
+                "hits_num": counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME],
+                "misses_num": counters[
                     SIMULATIONS_METRICS_MISS_COUNTER_NAME
                 ],
                 "context": f"{policy} cache simulation",

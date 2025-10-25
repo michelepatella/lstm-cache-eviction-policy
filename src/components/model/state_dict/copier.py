@@ -37,7 +37,7 @@ def copy_model_state_dict(model: torch.nn.Module) -> Dict[str, torch.Tensor]:
             extra={
                 "exception": str(e),
                 "model_type": type(model).__name__,
-                "num_parameters": len(list(model.state_dict().keys())),
+                "params_num": len(list(model.state_dict().keys())),
                 "context": "Model state dictionary copying",
             },
         )

@@ -33,7 +33,7 @@ def build_dataset(
             "Dataset building started",
             extra={
                 "columns_provided": list(columns.keys()),
-                "num_columns": len(columns),
+                "columns_num": len(columns),
                 "context": "Dataset building",
             },
         )
@@ -45,8 +45,8 @@ def build_dataset(
         debug(
             "Dataset building completed",
             extra={
-                "num_rows": len(df),
-                "num_columns": len(df.columns),
+                "rows_num": len(df),
+                "columns_num": len(df.columns),
                 "column_names": df.columns.tolist(),
                 "context": "Dataset building",
             },
@@ -62,7 +62,7 @@ def build_dataset(
                 "columns_provided": (
                     list(columns.keys()) if isinstance(columns, dict) else None
                 ),
-                "num_columns": (
+                "columns_num": (
                     len(columns) if isinstance(columns, dict) else None
                 ),
                 "context": "Dataset building",

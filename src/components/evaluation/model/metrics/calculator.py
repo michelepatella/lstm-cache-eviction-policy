@@ -48,9 +48,9 @@ def calculate_model_metrics(
     debug(
         "Model metrics calculation started",
         extra={
-            "num_targets": len(targets),
-            "num_predictions": len(predictions),
-            "num_outputs": len(outputs),
+            "targets_num": len(targets),
+            "predictions_num": len(predictions),
+            "outputs_num": len(outputs),
             "top_k": top_k,
             "context": "Model metrics calculation",
         },
@@ -76,9 +76,9 @@ def calculate_model_metrics(
         "Model metrics calculation completed",
         extra={
             "metrics": metrics,
-            "num_targets": len(targets),
-            "num_predictions": len(predictions),
-            "num_outputs": len(outputs),
+            "targets_num": len(targets),
+            "predictions_num": len(predictions),
+            "outputs_num": len(outputs),
             "top_k": top_k,
             "context": "Model metrics calculation",
         },

@@ -61,7 +61,7 @@ def combine_nested_dicts(nested_dict: Dict[str, Any]) -> List[Dict[str, Any]]:
                     if isinstance(nested_dict, dict)
                     else None
                 ),
-                "num_keys": (
+                "keys_num": (
                     len(nested_dict) if isinstance(nested_dict, dict) else None
                 ),
                 "context": "Nested dictionary combinations generation",

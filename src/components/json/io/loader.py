@@ -51,7 +51,7 @@ def load_json(
             "JSON loading completed",
             extra={
                 "path": path,
-                "num_keys": (
+                "keys_num": (
                     len(json_data) if isinstance(json_data, dict) else None
                 ),
                 "wrap_enabled": wrap,

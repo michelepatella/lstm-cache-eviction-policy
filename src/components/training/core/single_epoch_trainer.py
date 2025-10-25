@@ -102,8 +102,8 @@ def train_single_epoch(
             "Single epoch training completed",
             extra={
                 "epoch": epoch,
-                "final_loss": loss.item() if "loss" in locals() else None,
-                "total_batches": len(training_loader),
+                "loss_final": loss.item() if "loss" in locals() else None,
+                "batches_num": len(training_loader),
                 "context": "Single epoch training",
             },
         )

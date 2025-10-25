@@ -48,8 +48,8 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
         debug(
             "Dataset features building started",
             extra={
-                "num_rows": len(df) if hasattr(df, "__len__") else None,
-                "existing_columns": (
+                "rows_num": len(df) if hasattr(df, "__len__") else None,
+                "columns_existing": (
                     df.columns.tolist() if hasattr(df, "columns") else None
                 ),
                 "time_column": DATASET_TIMESTAMP_COLUMN_NAME,
@@ -78,7 +78,7 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
         debug(
             "Dataset features building completed",
             extra={
-                "num_rows": len(df),
+                "rows_num": len(df),
                 "columns_after_processing": df.columns.tolist(),
                 "context": "Dataset features building",
             },
@@ -91,11 +91,11 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
             msg,
             extra={
                 "exception": str(e),
-                "existing_columns": (
+                "columns_existing": (
                     df.columns.tolist() if hasattr(df, "columns") else None
                 ),
-                "expected_time_column": DATASET_TIMESTAMP_COLUMN_NAME,
-                "expected_target_column": DATASET_REQUEST_COLUMN_NAME,
+                "time_column_expected": DATASET_TIMESTAMP_COLUMN_NAME,
+                "target_column_expected": DATASET_REQUEST_COLUMN_NAME,
                 "context": "Dataset features building",
             },
         )

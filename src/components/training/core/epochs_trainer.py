@@ -70,7 +70,7 @@ def train_epochs(
         info(
             "Epochs training started",
             extra={
-                "num_epochs": num_epochs,
+                "epochs_num": num_epochs,
                 "training_loader_len": len(training_loader),
                 "validation_loader_len": len(validation_loader),
                 "optimizer": str(optimizer),
@@ -138,8 +138,8 @@ def train_epochs(
         info(
             "Epochs training completed",
             extra={
-                "best_avg_loss": best_avg_loss,
-                "total_epochs_run": epoch,
+                "loss_avg_best": best_avg_loss,
+                "epochs_run_num": epoch,
                 "early_stop_triggered": es.early_stop,
                 "context": "Epochs training",
             },
@@ -152,7 +152,7 @@ def train_epochs(
             msg,
             extra={
                 "exception": str(e),
-                "num_epochs": num_epochs,
+                "epochs_num": num_epochs,
                 "training_loader_len": len(training_loader),
                 "validation_loader_len": len(validation_loader),
                 "optimizer": str(optimizer),

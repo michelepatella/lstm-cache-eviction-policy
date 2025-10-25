@@ -32,7 +32,7 @@ def drop_dataset_column(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
             extra={
                 "exception": str(e),
                 "column_requested": column_name,
-                "available_columns": (
+                "columns_available": (
                     df.columns.tolist() if hasattr(df, "columns") else None
                 ),
                 "context": "Column removal from dataset",

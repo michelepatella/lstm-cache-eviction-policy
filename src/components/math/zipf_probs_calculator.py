@@ -40,7 +40,7 @@ def calculate_zipf_probs(items: np.ndarray, alpha: float) -> np.ndarray:
                     str(items.dtype) if hasattr(items, "dtype") else None
                 ),
                 "alpha": alpha,
-                "num_items": len(items) if hasattr(items, "__len__") else None,
+                "items_num": len(items) if hasattr(items, "__len__") else None,
                 "context": "Zipf probability calculation",
             },
         )
@@ -54,10 +54,10 @@ def calculate_zipf_probs(items: np.ndarray, alpha: float) -> np.ndarray:
             "Zipf probability calculation completed",
             extra={
                 "alpha": alpha,
-                "sum_probs": np.sum(zipf_probs_norm),
-                "max_prob": np.max(zipf_probs_norm),
-                "min_prob": np.min(zipf_probs_norm),
-                "num_items": len(zipf_probs_norm),
+                "probs_sum": np.sum(zipf_probs_norm),
+                "prob_max": np.max(zipf_probs_norm),
+                "prob_min": np.min(zipf_probs_norm),
+                "items_num": len(zipf_probs_norm),
                 "context": "Zipf probability calculation",
             },
         )

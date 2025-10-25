@@ -72,10 +72,10 @@ def calculate_eviction_mistake_rate(
             "Eviction mistake rate calculated",
             extra={
                 "eviction_mistake_rate": eviction_mistake_rate,
-                "total_eviction_events": tot_eviction_events,
-                "total_eviction_mistakes": tot_eviction_mistakes,
-                "num_evicted_keys": len(evicted_items),
-                "num_keys_with_accesses": sum(
+                "eviction_events_num": tot_eviction_events,
+                "eviction_mistakes_num": tot_eviction_mistakes,
+                "evicted_keys_num": len(evicted_items),
+                "keys_with_accesses_num": sum(
                     1 for key in evicted_items if access_events_dict.get(key)
                 ),
                 "mistake_window": mistake_window,
@@ -90,12 +90,12 @@ def calculate_eviction_mistake_rate(
             msg,
             extra={
                 "exception": str(e),
-                "num_evicted_keys": (
+                "evicted_keys_num": (
                     len(evicted_items)
                     if isinstance(evicted_items, dict)
                     else None
                 ),
-                "num_access_keys": (
+                "access_keys_num": (
                     len(access_events_dict)
                     if isinstance(access_events_dict, dict)
                     else None

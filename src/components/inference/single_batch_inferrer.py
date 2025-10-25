@@ -91,7 +91,7 @@ def infer_single_batch(
                 "exception": str(e),
                 "model_name": model.__class__.__name__,
                 "device": str(device),
-                "num_features": num_features,
+                "features_num": num_features,
                 "batch_type": str(type(batch)),
                 "batch_length": (
                     len(batch) if hasattr(batch, "__len__") else None

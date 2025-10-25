@@ -28,7 +28,9 @@ from src.const import (
     DATASET_TRAINING_SPLIT_TYPE,
     LOGS_TRAINING_PHASE,
     MLFLOW_NESTED_ENABLED,
-    MLFLOW_PYTORCH_SAVE_MODEL_PATH, DAGS_HUB_REPO_OWNER_ENV_VAR_NAME, DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
+    MLFLOW_PYTORCH_SAVE_MODEL_PATH,
+    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
+    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
 )
 
 
@@ -67,8 +69,6 @@ def train_model() -> None:
         # Setup
         config = prepare_config()
 
-        info("Training started")
-
         # Prepare configuration
         data_distribution_mode = config.data.mode
         training_batch_size = config.training.general.batch_size
@@ -81,6 +81,22 @@ def train_model() -> None:
         optimizer_type = config.training.optimizer.type
         learning_rate = config.training.optimizer.params.learning_rate
         weight_decay = config.training.optimizer.params.weight_decay
+
+        info(
+            "Training started",
+            extra={
+                "data_distribution_mode": data_distribution_mode,
+                "training_batch_size": training_batch_size,
+                "training_shuffle": training_shuffle,
+                "validation_batch_size": validation_batch_size,
+                "validation_shuffle": validation_shuffle,
+                "epochs": training_num_epochs,
+                "optimizer": optimizer_type,
+                "learning_rate": learning_rate,
+                "weight_decay": weight_decay,
+                "context": "Training",
+            },
+        )
 
         # Get the model path
         model_path = get_model_abs_path(data_distribution_mode)
@@ -162,7 +178,16 @@ def train_model() -> None:
                 artifact_path=MLFLOW_PYTORCH_SAVE_MODEL_PATH,
             )
 
-    info("Training completed")
+    info(
+        "Training completed",
+        extra={
+            "training_samples_num": len(training_set),
+            "validation_samples_num": len(validation_set),
+            "loss_best_avg": best_avg_loss,
+            "model_save_path": model_path,
+            "context": "Training",
+        },
+    )
 
 
 if __name__ == "__main__":

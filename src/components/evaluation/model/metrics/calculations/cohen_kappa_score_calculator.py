@@ -35,8 +35,8 @@ def calculate_cohen_kappa_score(
         info(
             "Cohen's kappa score calculated",
             extra={
-                "num_targets": len(targets),
-                "num_predictions": len(predictions),
+                "targets_num": len(targets),
+                "predictions_num": len(predictions),
                 "cohen_kappa_score": kappa,
                 "context": "Cohen's kappa calculation",
             },
@@ -49,8 +49,8 @@ def calculate_cohen_kappa_score(
             msg,
             extra={
                 "exception": str(e),
-                "num_targets": len(targets) if targets else 0,
-                "num_predictions": len(predictions) if predictions else 0,
+                "targets_num": len(targets) if targets else 0,
+                "predictions_num": len(predictions) if predictions else 0,
                 "context": "Cohen's kappa calculation",
             },
         )

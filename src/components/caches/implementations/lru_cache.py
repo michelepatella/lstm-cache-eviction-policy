@@ -25,6 +25,7 @@ from components.caches.implementations.utils.cache_cleaner import clear_cache
 from components.caches.implementations.utils.cache_size_calculator import (
     calculate_cache_size,
 )
+from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 
@@ -66,7 +67,7 @@ class LRUCache(Cache):
         self._data = OrderedDict()
         self.callback = callback
 
-        info(
+        debug(
             "Cache initialization executed",
             extra={
                 "maxsize": self.maxsize,

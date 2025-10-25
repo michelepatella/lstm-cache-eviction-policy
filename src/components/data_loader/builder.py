@@ -37,7 +37,7 @@ def build_data_loader(
             "Data loader building started",
             extra={
                 "dataset_type": type(dataset).__name__,
-                "num_samples": (
+                "samples_num": (
                     len(dataset) if hasattr(dataset, "__len__") else None
                 ),
                 "batch_size": batch_size,
@@ -57,12 +57,12 @@ def build_data_loader(
             "Data loader building completed",
             extra={
                 "dataset_type": type(dataset).__name__,
-                "num_samples": (
+                "samples_num": (
                     len(dataset) if hasattr(dataset, "__len__") else None
                 ),
                 "batch_size": batch_size,
                 "shuffle": shuffle,
-                "num_batches_estimated": len(data_loader),
+                "batches_estimated_num": len(data_loader),
                 "context": "Data loader building",
             },
         )

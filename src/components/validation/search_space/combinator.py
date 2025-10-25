@@ -63,7 +63,7 @@ def get_parameters_combination(
         debug(
             "Parameter combinations generation completed",
             extra={
-                "total_param_combinations": len(param_combinations),
+                "param_combinations_num": len(param_combinations),
                 "sections_processed": list(search_space.keys()),
                 "context": "Parameter combinations generation",
             },

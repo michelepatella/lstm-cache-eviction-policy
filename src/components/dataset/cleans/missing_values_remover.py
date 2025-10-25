@@ -40,10 +40,10 @@ def remove_dataset_missing_values(
         debug(
             "Dataset missing values removal started",
             extra={
-                "num_rows_before": (
+                "rows_before_num": (
                     len(df) if isinstance(df, pd.DataFrame) else None
                 ),
-                "num_columns_before": (
+                "columns_before_num": (
                     len(df.columns) if isinstance(df, pd.DataFrame) else None
                 ),
                 "dropna_axis": dropna_axis,
@@ -61,12 +61,12 @@ def remove_dataset_missing_values(
         debug(
             "Dataset missing values removal completed",
             extra={
-                "num_rows_after": len(new_df),
-                "num_columns_after": len(new_df.columns),
-                "num_removed_rows": (
+                "rows_after_num": len(new_df),
+                "columns_after_num": len(new_df.columns),
+                "rows_removed_num": (
                     len(df) - len(new_df) if dropna_axis == 0 else None
                 ),
-                "num_removed_columns": (
+                "columns_removed_num": (
                     len(df.columns) - len(new_df.columns)
                     if dropna_axis == 1
                     else None
@@ -86,8 +86,8 @@ def remove_dataset_missing_values(
                 "exception": str(e),
                 "dropna_axis": dropna_axis,
                 "dropna_how": dropna_how,
-                "num_rows": len(df) if isinstance(df, pd.DataFrame) else None,
-                "num_columns": (
+                "rows_num": len(df) if isinstance(df, pd.DataFrame) else None,
+                "columns_num": (
                     len(df.columns) if isinstance(df, pd.DataFrame) else None
                 ),
                 "context": "Dataset missing values removal",
