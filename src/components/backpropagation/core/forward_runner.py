@@ -1,20 +1,16 @@
-from typing import Optional, Tuple, Union
+from typing import Optional, Tuple
 
 import torch
 
 from components.device.mover import (
     move_to_device,
 )
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.loss.calculator import calculate_loss
 
 
 def compute_forward(
-    batch: Union[
-        Tuple[torch.Tensor, torch.Tensor, torch.Tensor],
-        Tuple[torch.Tensor, torch.Tensor],
-    ],
+    batch: Tuple[torch.Tensor, torch.Tensor, torch.Tensor],
     model: torch.nn.Module,
     device: torch.device,
     criterion: Optional[torch.nn.Module] = None,
@@ -28,11 +24,7 @@ def compute_forward(
     training or evaluation.
 
     Args:
-        batch (Union[
-            Tuple[torch.Tensor, torch.Tensor, torch.Tensor],
-            Tuple[torch.Tensor, torch.Tensor]
-        ]): Model batch, either a tuple including the target or inputs
-            ready for model.
+        batch (Tuple[torch.Tensor, torch.Tensor, torch.Tensor]): Model batch.
         model (torch.nn.Module): The PyTorch model to compute forward pass for.
         device (torch.device): Device on which to perform computations.
         criterion (Optional[torch.nn.Module]): Loss function.
@@ -53,27 +45,40 @@ def compute_forward(
     try:
         # Unpack batch
         first_input, second_input, target = batch
-        debug(f"First input shape: {first_input.shape}")
-        debug(f"Second input shape: {second_input.shape}")
-        debug(f"Target shape: {target.shape}")
 
         # Move batch to device
         first_input = move_to_device(first_input, device)
         second_input = move_to_device(second_input, device)
         target = move_to_device(target, device)
-        debug(f"Batch moved to device: {device}")
 
         # Compute forward pass
         outputs = model(first_input, second_input)
-        debug(f"Model outputs shape: {outputs.shape}")
 
         # Calculate loss
         loss = calculate_loss(outputs, target, criterion)
 
-        debug("Forward pass completed")
-
         return loss, outputs
-    except (ValueError, TypeError) as e:
-        msg = "Failed to compute forward"
-        error("%s: %s", msg, e)
+    except (ValueError, TypeError, RuntimeError) as e:
+        msg = "Forward pass failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "batch_len": len(batch) if batch is not None else None,
+                "batch_types": (
+                    [type(x).__name__ for x in batch]
+                    if batch is not None
+                    else None
+                ),
+                "batch_shapes": (
+                    [tuple(x.shape) for x in batch]
+                    if batch is not None
+                    else None
+                ),
+                "model": type(model).__name__ if model else None,
+                "device": str(device),
+                "criterion": type(criterion).__name__ if criterion else None,
+                "context": "Model forward pass",
+            },
+        )
         raise RuntimeError(msg) from e

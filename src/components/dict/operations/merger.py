@@ -32,24 +32,60 @@ def merge_dicts(
         if original_dict is None:
             original_dict = {}
 
+        debug(
+            "Dictionaries merging started",
+            extra={
+                "original_dict_keys": list(original_dict.keys()),
+                "updated_dict_keys": list(updated_dict.keys()),
+                "context": "Dictionaries merging",
+            },
+        )
+
         # Merge dictionaries recursively
         for key, value in updated_dict.items():
             if isinstance(value, dict) and isinstance(
                 original_dict.get(key), dict
             ):
-                debug(f"Merging nested dictionary for key '{key}'")
+                debug(
+                    "Merging nested dictionary for key",
+                    extra={
+                        "nested_key": key,
+                        "context": "Dictionaries merging",
+                    },
+                )
                 # If the value is still a dictionary,
                 # apply merge recursively
                 original_dict[key] = merge_dicts(original_dict[key], value)
             else:
                 # Set the final value
                 original_dict[key] = value
-                debug(f"Merged key '{key}' in dictionaries to value '{value}'")
+                debug(
+                    "Key to value merged",
+                    extra={
+                        "key": key,
+                        "value": value,
+                        "context": "Dictionaries merging",
+                    },
+                )
 
-        debug("Dictionaries merged")
+        debug(
+            "Dictionaries merging completed",
+            extra={
+                "merged_keys": list(original_dict.keys()),
+                "context": "Dictionaries merging",
+            },
+        )
 
         return original_dict
     except TypeError as e:
-        msg = "Failed to merge dictionaries"
-        error("%s: %s", msg, e)
+        msg = "Dictionaries merging failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "original_dict_type": type(original_dict).__name__,
+                "updated_dict_type": type(updated_dict).__name__,
+                "context": "Dictionaries merging",
+            },
+        )
         raise RuntimeError(msg) from e

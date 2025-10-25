@@ -1,5 +1,13 @@
 import contextvars
 import logging
+import os
+
+from dotenv import load_dotenv
+
+from components.logs.handlers.elastic_handler import ElasticHandler
+
+import structlog
+from elasticsearch import Elasticsearch
 
 from components.const import (
     LOGS_DEBUG_FILE_PATH,
@@ -11,74 +19,86 @@ from components.const import (
     LOGS_FORMAT,
     LOGS_INFO_FILE_PATH,
     LOGS_PHASE_NAME,
+    LOGS_LOGGER_NAME,
+    LOGS_ELASTIC_ENDPOINT_ENV_VAR_NAME,
+    LOGS_ELASTIC_TOKEN_ENV_VAR_NAME,
 )
-from components.logs.file_handlers.builder import build_logs_file_handler
+from components.logs.handlers.file_handler_builder import (
+    build_logs_file_handler,
+)
+
+# Load environment variables
+load_dotenv()
 
 # Contextual variable for logging messages
 logs_phase = contextvars.ContextVar(
     LOGS_PHASE_NAME, default=LOGS_DEFAULT_PHASE
 )
 
+# Configure Elasticsearch
+es = Elasticsearch(
+    hosts=[os.environ.get(LOGS_ELASTIC_ENDPOINT_ENV_VAR_NAME)],
+    api_key=os.environ.get(LOGS_ELASTIC_TOKEN_ENV_VAR_NAME),
+)
+
 
 def initialize_logs(
-    debug_path: str = LOGS_DEBUG_FILE_PATH,
-    info_path: str = LOGS_INFO_FILE_PATH,
-    error_path: str = LOGS_ERROR_FILE_PATH,
-    base_level: int = LOGS_FILE_BASE_LEVEL,
-    max_bytes: int = LOGS_FILE_MAX_BYTES,
-    backup_count: int = LOGS_FILE_BACKUP_COUNT,
-    logs_format: str = LOGS_FORMAT,
-) -> None:
+    debug_path=LOGS_DEBUG_FILE_PATH,
+    info_path=LOGS_INFO_FILE_PATH,
+    error_path=LOGS_ERROR_FILE_PATH,
+    base_level=LOGS_FILE_BASE_LEVEL,
+    max_bytes=LOGS_FILE_MAX_BYTES,
+    backup_count=LOGS_FILE_BACKUP_COUNT,
+    logs_format=LOGS_FORMAT,
+    logger_name: str = LOGS_LOGGER_NAME,
+):
     """
-    Set up global logging configuration.
+    Initialize logging configuration for the pipeline.
 
-    This function configures logging to:
-        - Write debug, info, and error messages to separate rotating files.
-        - Use a consistent log format for all messages.
+    This function sets up file handlers for debug, info, and error levels,
+    attaches an ElasticSearch handler, and configures structlog for structured logging.
+    It ensures that logs are saved to files, sent to Elasticsearch, and formatted in JSON.
 
     Args:
-        debug_path (str): Path for debug log file.
-        info_path (str): Path for info log file.
-        error_path (str): Path for error log file.
-        base_level (int): Base logging level for the root logger.
-        max_bytes (int): Maximum file size in bytes before rotation.
-        backup_count (int): Number of backup files to keep.
-        logs_format (str): Log message format.
+        debug_path (str): Path for the debug-level log file.
+        info_path (str): Path for the info-level log file.
+        error_path (str): Path for the error-level log file.
+        base_level (int): Base logging level for the logger.
+        max_bytes (int): Maximum size in bytes for each log file before rotation.
+        backup_count (int): Number of backup files to keep during rotation.
+        logs_format (str): Format string for log messages.
+        logger_name (str): Name of the logger to configure.
 
     Returns:
         None
     """
-    # Create file handlers for debug,
-    # info, and error logs
+    # For each logging level, build
+    # its own file handler
     debug_file_handler = build_logs_file_handler(
-        debug_path,
-        logging.DEBUG,
-        max_bytes,
-        backup_count,
-        logs_format,
+        debug_path, logging.DEBUG, max_bytes, backup_count, logs_format
     )
     info_file_handler = build_logs_file_handler(
-        info_path,
-        logging.INFO,
-        max_bytes,
-        backup_count,
-        logs_format,
+        info_path, logging.INFO, max_bytes, backup_count, logs_format
     )
     error_file_handler = build_logs_file_handler(
-        error_path,
-        logging.ERROR,
-        max_bytes,
-        backup_count,
-        logs_format,
+        error_path, logging.ERROR, max_bytes, backup_count, logs_format
     )
 
-    # Configure the root logger
-    # with all handlers
-    logging.basicConfig(
-        level=base_level,
-        handlers=[
-            debug_file_handler,
-            info_file_handler,
-            error_file_handler,
-        ],
+    # Retrieve logger and configure it
+    logger = logging.getLogger(logger_name)
+    logger.setLevel(base_level)
+
+    # Add handlers to logger
+    logger.addHandler(debug_file_handler)
+    logger.addHandler(info_file_handler)
+    logger.addHandler(error_file_handler)
+    logger.addHandler(ElasticHandler())
+
+    # To ensure structured logs
+    structlog.configure(
+        processors=[
+            structlog.processors.TimeStamper(),
+            structlog.processors.add_log_level,
+            structlog.processors.JSONRenderer(),
+        ]
     )

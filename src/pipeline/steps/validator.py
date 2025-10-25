@@ -1,9 +1,12 @@
+import os
+
 import dagshub
+from dotenv import load_dotenv
 
 from components.data_loader.initializer import initialize_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.dict.operations.merger import merge_dicts
-from components.logs.initializer import initialize_logs, logs_phase
+from components.logs.initializer import logs_phase
 from components.logs.levels.info_logger import info
 from components.validation.grid_search.runner import (
     compute_grid_search,
@@ -13,12 +16,16 @@ from pipeline.config.configurator import prepare_config
 from pipeline.const import CONFIG_FILE_PATH
 from src.const import (
     DAGS_HUB_MLFLOW_ENABLED,
-    DAGS_HUB_REPO_NAME,
-    DAGS_HUB_REPO_OWNER,
     DATASET_TRAINING_SPLIT_TYPE,
     LOGS_VALIDATION_PHASE,
-    MLFLOW_NESTED_ENABLED,
+    MLFLOW_NESTED_ENABLED, DAGS_HUB_REPO_OWNER_ENV_VAR_NAME, DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
 )
+
+
+# Load env variables
+load_dotenv()
+dabs_hub_repo_owner = os.getenv(DAGS_HUB_REPO_OWNER_ENV_VAR_NAME)
+dags_hub_repo_name = os.getenv(DAGS_HUB_REPO_NAME_ENV_VAR_NAME)
 
 
 def validate_model() -> None:
@@ -36,8 +43,8 @@ def validate_model() -> None:
     logs_phase.set(LOGS_VALIDATION_PHASE)
 
     dagshub.init(
-        repo_owner=DAGS_HUB_REPO_OWNER,
-        repo_name=DAGS_HUB_REPO_NAME,
+        repo_owner=dabs_hub_repo_owner,
+        repo_name=dags_hub_repo_name,
         mlflow=DAGS_HUB_MLFLOW_ENABLED,
     )
 
@@ -49,7 +56,6 @@ def validate_model() -> None:
 
         # Setup
         config = prepare_config()
-        initialize_logs()
 
         info("Validation started")
 

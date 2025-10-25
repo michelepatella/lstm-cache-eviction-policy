@@ -44,7 +44,7 @@ class AccessLogsDataset(Dataset):
         columns (List[str]): List of column names in the dataset.
         features (List[str]): List of feature column names.
         target (str): Target column name (usually the last column).
-        seq_len (int): Sequence length used for LSTM sequences.
+        seq_len (int): Sequence length used for model sequences.
     """
 
     def _split_dataset(
@@ -65,8 +65,6 @@ class AccessLogsDataset(Dataset):
         Returns:
             None
         """
-        debug(f"Dataset splitting type: {dataset_type}")
-
         # Calculate dataset split index
         # based on split percentage
         dataset_split_idx = calculate_dataset_split_index(
@@ -109,7 +107,16 @@ class AccessLogsDataset(Dataset):
         # Set sequence length
         self.seq_len = config.model.sequence.length
 
-        debug("Dataset fields set")
+        debug(
+            "Dataset fields setting executed",
+            extra={
+                "total_columns": len(self.columns),
+                "feature_columns": self.features,
+                "target_column": self.target,
+                "sequence_length": self.seq_len,
+                "context": "AccessLogsDataset",
+            },
+        )
 
     def __init__(
         self: "AccessLogsDataset", dataset_type: str, config: Config
@@ -154,7 +161,18 @@ class AccessLogsDataset(Dataset):
         # Shift target by -1
         shift_dataset_column(self.data, self.target, -1)
 
-        debug("AccessLogsDataset initialized")
+        debug(
+            "AccessLogsDataset initialization executed",
+            extra={
+                "dataset_type": dataset_type,
+                "num_rows": len(self.data),
+                "num_columns": len(self.data.columns),
+                "feature_columns": self.features,
+                "target_column": self.target,
+                "sequence_length": self.seq_len,
+                "context": "AccessLogsDataset",
+            },
+        )
 
     def __len__(self: "AccessLogsDataset") -> int:
         """
@@ -203,8 +221,6 @@ class AccessLogsDataset(Dataset):
                 * Not enough data to extract sequence (custom RuntimeError).
         """
         try:
-            debug(f"Index of item to be retrieved: {idx}")
-
             # Extract data sequence
             seq_data = extract_sliding_window_dataset_rows(
                 self.data, idx + self.seq_len - 1, self.seq_len
@@ -214,7 +230,15 @@ class AccessLogsDataset(Dataset):
             # enough sequence data
             if seq_data is None:
                 msg = "Not enough data to extract sequence"
-                error("%s", msg)
+                error(
+                    msg,
+                    extra={
+                        "index_requested": idx,
+                        "sequence_length": self.seq_len,
+                        "available_rows": len(self.data),
+                        "context": "AccessLogsDataset",
+                    },
+                )
                 raise RuntimeError(msg)
 
             # Convert features to float tensor and keys
@@ -231,18 +255,22 @@ class AccessLogsDataset(Dataset):
             y_key = torch.tensor(
                 int(target_row[self.target]), dtype=torch.long
             )
-
-            debug(f"Feature tensor shape: {x_features.shape}")
-            debug(f"Key tensor shape: {x_keys.shape}")
-            debug(f"Target key: {y_key.item()}")
         except (
             IndexError,
             KeyError,
             TypeError,
             ValueError,
         ) as e:
-            msg = "Failed to retrieve dataset item"
-            error("%s: %s", msg, e)
+            msg = "Retrieving dataset item failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "index_requested": idx,
+                    "sequence_length": self.seq_len,
+                    "context": "AccessLogsDataset",
+                },
+            )
             raise RuntimeError(msg) from e
 
         return x_features, x_keys, y_key
@@ -275,11 +303,6 @@ class AccessLogsDataset(Dataset):
                 * Sequence length or column indices are incorrect (IndexError).
         """
         try:
-            debug(
-                f"Dataframe shape to be instantiated"
-                f" as AccessLogsDataset: {df.shape}"
-            )
-
             # Create a new dataset instance
             instance = cls.__new__(cls)
 
@@ -289,10 +312,20 @@ class AccessLogsDataset(Dataset):
             # Set dataset fields
             instance._set_fields(df, config)
 
-            debug("AccessLogsDataset instantiated from dataframe")
-
             return instance
         except (AttributeError, TypeError, IndexError) as e:
-            msg = "Failed to instantiate AccessLogsDataset from dataframe"
-            error("%s: %s", msg, e)
+            msg = "AccessLogsDataset instantiation from dataframe failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "dataframe_columns": (
+                        df.columns.tolist() if hasattr(df, "columns") else None
+                    ),
+                    "dataframe_length": (
+                        len(df) if hasattr(df, "__len__") else None
+                    ),
+                    "context": "AccessLogsDataset",
+                },
+            )
             raise RuntimeError(msg) from e

@@ -1,7 +1,6 @@
 import numpy as np
 
 from components.const import TIME_HOURS_IN_DAY
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -34,21 +33,22 @@ def calculate_periodic_component(
             * Invalid numeric values causing math computation errors (ValueError).
     """
     try:
-        debug(f"Scale for calculating periodic component: {scale}")
-        debug(f"Amplitude for calculating periodic component: {amplitude}")
-
         # Calculate the periodic component
         periodic_component = scale + amplitude * np.cos(
             2 * np.pi * (current_hour_in_day / TIME_HOURS_IN_DAY)
         )
 
-        debug(
-            f"Periodic component: {periodic_component}, "
-            f"calculated for hour in day: {current_hour_in_day}"
-        )
-
         return periodic_component
     except (TypeError, ValueError) as e:
-        msg = "Failed to calculate periodic component"
-        error("%s: %s", msg, e)
+        msg = "Periodic component calculation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "scale": scale,
+                "amplitude": amplitude,
+                "current_hour_in_day": current_hour_in_day,
+                "context": "Periodic component calculation",
+            },
+        )
         raise RuntimeError(msg) from e

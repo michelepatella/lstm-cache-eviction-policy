@@ -45,6 +45,16 @@ def initialize_data_loader(
         shuffle,
     )
 
-    debug("Data loader initialization completed")
+    debug(
+        "Data loader initialization executed",
+        extra={
+            "data_loader_type": data_loader_type,
+            "batch_size": batch_size,
+            "shuffle": shuffle,
+            "dataset_class": dataset_class.__name__,
+            "num_samples_in_dataset": len(dataset),
+            "context": "Data loader initialization",
+        },
+    )
 
     return dataset, data_loader

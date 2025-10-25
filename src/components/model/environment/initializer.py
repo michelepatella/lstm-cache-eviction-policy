@@ -68,6 +68,17 @@ def initialize_model_environment(
     # Move model to device
     model = move_to_device(model, device)
 
-    debug("Model components initialization completed")
+    debug(
+        "Model environment initialization executed",
+        extra={
+            "model_type": type(model).__name__,
+            "device": str(device),
+            "criterion_defined": criterion is not None,
+            "num_keys": num_keys,
+            "num_features": num_features,
+            "embedding_dim": embedding_dim,
+            "context": "Model environment initialization",
+        },
+    )
 
     return device, criterion, model

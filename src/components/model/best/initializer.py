@@ -60,6 +60,15 @@ def initialize_best_model(
     # Load the trained model
     model = load_model_state_dict(model_path, model, device)
 
-    debug("Best model initialized")
+    debug(
+        "Best model initialization executed",
+        extra={
+            "model_type": type(model).__name__,
+            "device": str(device),
+            "num_targets": len(targets) if targets is not None else None,
+            "model_path": model_path,
+            "context": "Best model initialization",
+        },
+    )
 
     return device, criterion, model

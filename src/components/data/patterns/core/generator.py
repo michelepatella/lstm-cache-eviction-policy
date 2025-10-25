@@ -68,13 +68,29 @@ def generate_pattern_requests(
             if time_step_duration is not None
             else config.data.requests
         )
-        debug(f"Number of requests to be generated: {num_requests}")
 
         # Define a seed to make the
         # generation process deterministic
         seed = config.data.seed
         np.random.seed(seed)
-        debug(f"Seed for requests generation: {seed}")
+
+        debug(
+            "Pattern request generation started",
+            extra={
+                "num_requests": num_requests,
+                "initial_timestamp": initial_timestamp,
+                "initial_current_day": initial_current_day,
+                "initial_current_seconds_in_day": initial_current_seconds_in_day,
+                "keys_range_len": len(keys_range),
+                "zipf_probs_sum": (
+                    float(np.sum(zipf_probs))
+                    if zipf_probs is not None
+                    else None
+                ),
+                "seed": seed,
+                "context": "Pattern request generation",
+            },
+        )
 
         # For each request to be generated
         for _ in range(num_requests):
@@ -95,10 +111,37 @@ def generate_pattern_requests(
             requests.append(request)
             timestamps_seconds.append(absolute_seconds)
 
-        debug("Pattern requests generated")
+        debug(
+            "Pattern request generation completed",
+            extra={
+                "total_requests_generated": len(requests),
+                "total_timestamps_generated": len(timestamps_seconds),
+                "context": "Pattern request generation",
+            },
+        )
 
         return requests, timestamps_seconds
     except (IndexError, ValueError, TypeError) as e:
-        msg = "Failed to generate pattern requests"
-        error("%s: %s", msg, e)
+        msg = "Pattern request generation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "keys_range_len": (
+                    len(keys_range) if keys_range is not None else 0
+                ),
+                "zipf_probs_sum": (
+                    float(np.sum(zipf_probs))
+                    if zipf_probs is not None
+                    else None
+                ),
+                "num_requests": (
+                    num_requests if "num_requests" in locals() else None
+                ),
+                "initial_timestamp": initial_timestamp,
+                "initial_current_day": initial_current_day,
+                "initial_current_seconds_in_day": initial_current_seconds_in_day,
+                "context": "Pattern request generation",
+            },
+        )
         raise RuntimeError(msg) from e

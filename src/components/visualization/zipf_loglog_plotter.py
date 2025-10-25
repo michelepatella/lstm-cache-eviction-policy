@@ -15,7 +15,6 @@ from components.const import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def plot_zipf_loglog(requests: List[int], save_path: str) -> None:
@@ -40,16 +39,12 @@ def plot_zipf_loglog(requests: List[int], save_path: str) -> None:
             * Invalid values in requests or internal array creation (ValueError).
     """
     try:
-        debug(f"Number of requests for Zipf log-log plot: {len(requests)}")
-
         # Count how many keys are
         # involved in generated requests
         key_counts = Counter(requests)
-        debug(f"Number of keys for Zipf log-log plot: {key_counts}")
 
         # Get key access frequencies
         key_frequencies = np.array(sorted(key_counts.values(), reverse=True))
-        debug(f"Key frequencies for Zipf log-log plot: {key_frequencies}")
 
         # Define ranks ranging from
         # the first place to the last one
@@ -79,8 +74,31 @@ def plot_zipf_loglog(requests: List[int], save_path: str) -> None:
         plt.show()
         plt.close()
 
-        info(f"Zipf log-log plotted and saved to: {save_path}")
+        debug(
+            "Zipf log-log plotted and saved",
+            extra={
+                "save_path": save_path,
+                "num_requests": len(requests),
+                "num_keys": len(key_counts),
+                "ranks_range": (1, len(ranks)),
+                "frequencies_range": (
+                    int(key_frequencies.min()),
+                    int(key_frequencies.max()),
+                ),
+                "context": "Zipf log-log",
+            },
+        )
     except (ValueError, TypeError) as e:
-        msg = "Failed to plot Zipf log-log"
-        error("%s: %s", msg, e)
+        msg = "Plotting Zipf log-log failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "save_path": save_path,
+                "num_requests": (
+                    len(requests) if isinstance(requests, list) else None
+                ),
+                "context": "Zipf log-log",
+            },
+        )
         raise RuntimeError(msg) from e

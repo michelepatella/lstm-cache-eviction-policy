@@ -35,9 +35,17 @@ def build_loss(
               invalid tensor or shape (RuntimeError, TypeError).
     """
     try:
-        debug(f"Number of targets for building loss: {len(targets)}")
-        debug(f"Number of classes for building loss: {num_classes}")
-        debug(f"Device for loss: {device}")
+        debug(
+            "Loss building started",
+            extra={
+                "num_targets": (
+                    len(targets) if hasattr(targets, "__len__") else None
+                ),
+                "num_classes": num_classes,
+                "device": str(device),
+                "context": "Loss building",
+            },
+        )
 
         # Compute class weight
         class_weight = calculate_class_weight(targets, num_classes)
@@ -50,10 +58,34 @@ def build_loss(
         # Build criterion with computed weight
         criterion = nn.CrossEntropyLoss(weight=class_weight_tensor)
 
-        debug("Loss built")
+        debug(
+            "Loss building completed",
+            extra={
+                "num_targets": (
+                    len(targets) if hasattr(targets, "__len__") else None
+                ),
+                "num_classes": num_classes,
+                "class_weight_shape": tuple(class_weight_tensor.shape),
+                "device": str(device),
+                "context": "Loss building",
+            },
+        )
 
         return criterion
     except (RuntimeError, TypeError) as e:
-        msg = "Failed to build loss"
-        error("%s: %s", msg, e)
+        msg = "Loss building failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "num_targets": (
+                    len(targets) if hasattr(targets, "__len__") else None
+                ),
+                "num_classes": num_classes,
+                "targets_dtype": str(getattr(targets, "dtype", None)),
+                "targets_shape": tuple(getattr(targets, "shape", ())),
+                "device": str(device),
+                "context": "Loss building",
+            },
+        )
         raise RuntimeError(msg) from e

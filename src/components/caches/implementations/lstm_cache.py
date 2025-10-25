@@ -17,7 +17,6 @@ from components.const import (
 from components.dataset.rows.extractions.lasts_extractor import (
     extract_last_rows_from_dataset,
 )
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
 from pipeline.config.pydantic.config import Config
 
@@ -55,7 +54,13 @@ class LSTMCache(BaseCache):
         # Cache class initialization
         super().__init__(cache_class, metrics_logger, config)
 
-        info("LSTM cache initialized")
+        info(
+            "Cache initialization executed",
+            extra={
+                "maxsize": self.maxsize,
+                "context": "LSTM cache",
+            },
+        )
 
     def evict_key(self: "LSTMCache", key: Any) -> None:
         """
@@ -76,8 +81,6 @@ class LSTMCache(BaseCache):
         # expiration time
         self.store.pop(key, None)
         self.expiry.pop(key, None)
-
-        debug(f"LSTM cache evicted key: {key}")
 
     def _put_key(self: "LSTMCache", key: Any, current_time: float) -> None:
         """
@@ -101,8 +104,6 @@ class LSTMCache(BaseCache):
 
         # Track put event
         self.metrics_logger.log_put(key, current_time, self.ttl)
-
-        debug(f"LSTM cache inserted key: {key}, at time {current_time}")
 
     def put(
         self: "LSTMCache",

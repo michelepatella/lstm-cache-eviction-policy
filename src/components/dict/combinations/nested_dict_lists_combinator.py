@@ -2,7 +2,6 @@ import copy
 import itertools
 from typing import Any, Dict, List
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -46,12 +45,15 @@ def combine_nested_dict_lists(
                     merged[k] = copy.deepcopy(v)
             combined_dicts.append(merged)
 
-        debug(
-            f"Nested dictionary lists combined ({len(combined_dicts)} combinations)"
-        )
-
         return combined_dicts
     except (TypeError, ValueError) as e:
-        msg = "Failed to combine nested dictionary lists"
-        error("%s: %s", msg, e)
+        msg = "Combining nested dictionary lists failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "dict_lists_length": [len(lst) for lst in dict_lists],
+                "context": "Nested dictionary lists combination",
+            },
+        )
         raise RuntimeError(msg) from e

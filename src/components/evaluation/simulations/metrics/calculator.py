@@ -61,6 +61,19 @@ def calculate_simulation_metrics(
             * Invalid data types in counters or latencies (TypeError).
     """
     try:
+        debug(
+            "Simulation metrics calculation started",
+            extra={
+                "hit_counter_name": hit_counter_name,
+                "miss_counter_name": miss_counter_name,
+                "hit_count": counters.get(hit_counter_name),
+                "miss_count": counters.get(miss_counter_name),
+                "num_cache_latencies": len(cache_latencies),
+                "mistake_window": mistake_window,
+                "context": "Simulation metrics calculation",
+            },
+        )
+
         # Get total cache accesses
         total_cache_accesses = (
             counters[hit_counter_name] + counters[miss_counter_name]
@@ -84,9 +97,28 @@ def calculate_simulation_metrics(
 
         # Calculate average cache latency
         avg_cache_latency = calculate_average(cache_latencies)
-        info(f"Average cache latency: {avg_cache_latency}")
+        info(
+            "Average cache latency calculated",
+            extra={
+                "avg_cache_latency": avg_cache_latency,
+                "num_latencies": len(cache_latencies),
+                "context": "Simulation metrics calculation",
+            },
+        )
 
-        debug("Cache simulation metrics calculated")
+        debug(
+            "Simulation metrics calculation completed",
+            extra={
+                "hit_rate": hit_rate,
+                "miss_rate": miss_rate,
+                "eviction_mistake_rate": eviction_mistake_rate,
+                "avg_cache_latency": avg_cache_latency,
+                "total_cache_accesses": total_cache_accesses,
+                "num_evicted_items": len(evicted_items),
+                "num_access_events": len(access_events_dict),
+                "context": "Simulation metrics calculation",
+            },
+        )
 
         return (
             hit_rate,
@@ -95,6 +127,17 @@ def calculate_simulation_metrics(
             avg_cache_latency,
         )
     except (KeyError, AttributeError, TypeError) as e:
-        msg = "Failed to calculate simulation metrics"
-        error("%s: %s", msg, e)
+        msg = "Simulation metrics calculation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "hit_counter_name": hit_counter_name,
+                "miss_counter_name": miss_counter_name,
+                "counters_keys": list(counters.keys()),
+                "num_cache_latencies": len(cache_latencies),
+                "mistake_window": mistake_window,
+                "context": "Simulation metrics calculation",
+            },
+        )
         raise RuntimeError(msg) from e

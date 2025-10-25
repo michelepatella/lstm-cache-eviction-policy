@@ -18,7 +18,6 @@ from components.data.patterns.access.variants.repetition_generator import (
 from components.data.patterns.access.variants.toggle_generator import (
     generate_toggle_pattern,
 )
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from pipeline.config.pydantic.config import Config
 
@@ -61,20 +60,11 @@ def generate_access_pattern(
         current_hour_in_day = (
             current_abs_seconds % TIME_SECONDS_IN_DAY
         ) / TIME_SECONDS_IN_HOUR
-        debug(
-            f"Current hour in day for access "
-            f"pattern generation: {current_hour_in_day}"
-        )
 
         # Prepare general configuration
         first_key = int(keys_range[0])
         num_keys = len(keys_range)
         requests_count = len(requests)
-        debug(
-            f"Requests generated so far: {requests_count}, "
-            f"for {num_keys} keys, ranging from {first_key}"
-            f" to {first_key+num_keys}"
-        )
 
         behavior_config = config.data.pattern.access.behavior
 
@@ -190,10 +180,25 @@ def generate_access_pattern(
                 zipf_probs,
             )
 
-        debug("Requests access pattern generated")
-
         return requested_key
     except (IndexError, TypeError, AttributeError, ValueError) as e:
-        msg = "Failed to generate access pattern"
-        error("%s: %s", msg, e)
+        msg = "Access pattern generation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "zipf_probs_len": (
+                    len(zipf_probs) if zipf_probs is not None else None
+                ),
+                "keys_range_len": (
+                    len(keys_range) if keys_range is not None else None
+                ),
+                "current_abs_seconds": current_abs_seconds,
+                "requests_count": (
+                    len(requests) if requests is not None else None
+                ),
+                "first_request": requests[0] if requests else None,
+                "context": "Access pattern generation",
+            },
+        )
         raise RuntimeError(msg) from e

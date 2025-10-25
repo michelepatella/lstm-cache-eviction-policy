@@ -1,5 +1,8 @@
 import dagshub
 import numpy as np
+import os
+
+from dotenv import load_dotenv
 
 from components.caches.implementations.fifo_cache import FIFOCache
 from components.caches.implementations.lfu_cache import LFUCache
@@ -21,7 +24,7 @@ from components.evaluation.simulations.metrics.calculator import (
 from components.evaluation.simulations.metrics.io.saver import (
     save_simulations_metrics,
 )
-from components.logs.initializer import initialize_logs, logs_phase
+from components.logs.initializer import logs_phase
 from components.logs.levels.info_logger import info
 from components.visualization.hit_miss_rates_plotter import (
     plot_hit_miss_rate,
@@ -45,15 +48,18 @@ from pipeline.const import (
 from src.const import (
     CACHE_LSTM_NAME,
     DAGS_HUB_MLFLOW_ENABLED,
-    DAGS_HUB_REPO_NAME,
-    DAGS_HUB_REPO_OWNER,
     DATA_DISTRIBUTION_STATIC_MODE,
     MLFLOW_NESTED_ENABLED,
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
     SIMULATIONS_METRICS_POLICY_NAME,
-    SIMULATIONS_METRICS_TIMELINE_NAME,
+    SIMULATIONS_METRICS_TIMELINE_NAME, DAGS_HUB_REPO_NAME_ENV_VAR_NAME, DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
 )
+
+# Load env variables
+load_dotenv()
+dabs_hub_repo_owner = os.getenv(DAGS_HUB_REPO_OWNER_ENV_VAR_NAME)
+dags_hub_repo_name = os.getenv(DAGS_HUB_REPO_NAME_ENV_VAR_NAME)
 
 
 def run_simulations() -> None:
@@ -72,19 +78,19 @@ def run_simulations() -> None:
     logs_phase.set(LOGS_SIMULATIONS_PHASE)
 
     dagshub.init(
-        repo_owner=DAGS_HUB_REPO_OWNER,
-        repo_name=DAGS_HUB_REPO_NAME,
+        repo_owner=dabs_hub_repo_owner,
+        repo_name=dags_hub_repo_name,
         mlflow=DAGS_HUB_MLFLOW_ENABLED,
     )
 
     import mlflow
+
     with mlflow.start_run(
         run_name=LOGS_SIMULATIONS_PHASE, nested=MLFLOW_NESTED_ENABLED
     ):
 
         # Setup
         config = prepare_config()
-        initialize_logs()
 
         info("Simulations started")
 

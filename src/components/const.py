@@ -11,10 +11,46 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 # ----------------------------
 # Logs
 # ----------------------------
+LOGS_LOGGER_NAME = "logger"
+
 LOGS_PHASE_NAME = "phase"
 LOGS_DEFAULT_PHASE = "unknown"
 
-LOGS_FORMAT = "[%(phase)s] %(levelname)s: %(message)s"
+LOGS_FORMAT = (
+    "%(asctime)s %(levelname)s %(name)s %(message)s %(LOGS_PHASE_NAME)s"
+)
+
+LOGS_STANDARD_ATTRS = {
+    "name",
+    "msg",
+    "args",
+    "levelname",
+    "levelno",
+    "pathname",
+    "filename",
+    "module",
+    "exc_info",
+    "exc_text",
+    "stack_info",
+    "lineno",
+    "funcName",
+    "created",
+    "msecs",
+    "relativeCreated",
+    "thread",
+    "threadName",
+    "processName",
+    "process",
+}
+
+LOGS_ELASTIC_ENDPOINT_ENV_VAR_NAME = "ELASTIC_ENDPOINT"
+LOGS_ELASTIC_TOKEN_ENV_VAR_NAME = "ELASTIC_TOKEN"
+LOGS_ELASTIC_INDEX_NAME_ENV_VAR_NAME = "ELASTIC_INDEX"
+
+LOGS_ELASTIC_TIMESTAMP_FIELD_NAME = "timestamp"
+LOGS_ELASTIC_LEVEL_FIELD_NAME = "level"
+LOGS_ELASTIC_LOGGER_FIELD_NAME = "logger"
+LOGS_ELASTIC_MESSAGE_FIELD_NAME = "message"
 
 LOGS_INFO_FILE_PATH = PROJECT_ROOT / "logs" / "info" / "info.log"
 LOGS_DEBUG_FILE_PATH = PROJECT_ROOT / "logs" / "debug" / "debug.log"

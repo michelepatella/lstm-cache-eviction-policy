@@ -37,21 +37,31 @@ def extract_sliding_window_dataset_rows(
         # Extract sliding window from dataset
         window = df.iloc[start_idx:end_idx]
 
-        debug(
-            f"Sliding window with start: {start_idx}, "
-            f"end: {end_idx}, size: {len(window)}"
-        )
-
         # Check whether the extracted window
         # size is less than requested
         if len(window) < window_size:
-            debug("Sliding window size less than window size")
+            debug(
+                "Sliding window extraction returned fewer rows than requested",
+                extra={
+                    "requested_window_size": window_size,
+                    "extracted_rows": len(window),
+                    "idx": idx,
+                    "context": "Sliding window extraction",
+                },
+            )
             return None
-
-        debug("Sliding window extracted from dataset")
 
         return window
     except (TypeError, ValueError) as e:
-        msg = "Failed to extract dataset sliding window"
-        error("%s: %s", msg, e)
+        msg = "Dataset sliding window extraction failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "idx": idx,
+                "requested_window_size": window_size,
+                "available_rows": len(df) if hasattr(df, "__len__") else None,
+                "context": "Sliding window extraction",
+            },
+        )
         raise RuntimeError(msg) from e

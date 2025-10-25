@@ -19,11 +19,11 @@ class ModelParamsConfig(BaseModel):
     Attributes:
         hidden_size (int): Hidden layer size (> 0).
         num_layers (int): Number of LSTM layers (> 0).
-        bias (bool): Whether LSTM layers use bias.
+        bias (bool): Whether model layers use bias.
         batch_first (bool): If True, input/output tensors are of shape
                             (batch, seq, feature).
         dropout (float): Dropout probability (in [0, 1)).
-        bidirectional (bool): Whether LSTM layers are bidirectional.
+        bidirectional (bool): Whether model layers are bidirectional.
         proj_size (int): Output projection size (>= 0).
     """
 
@@ -66,7 +66,7 @@ class ModelConfig(BaseModel):
 
     Attributes:
         general (GeneralModelConfig): General model configuration.
-        params (ModelParamsConfig): LSTM layer configuration.
+        params (ModelParamsConfig): Model layer configuration.
         sequence (SequenceConfig): Sequence and embedding configuration.
     """
 

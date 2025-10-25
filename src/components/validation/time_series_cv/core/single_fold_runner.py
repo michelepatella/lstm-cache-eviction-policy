@@ -11,8 +11,6 @@ from components.dataset.splits.training_validation_splitter import (
     split_training_validation_sets,
 )
 from components.logs.initializer import logs_phase
-from components.logs.levels.debug_logger import debug
-from components.logs.levels.info_logger import info
 from components.model.environment.initializer import (
     initialize_model_environment,
 )
@@ -49,9 +47,6 @@ def compute_single_time_series_cv_fold(
     Returns:
         float: Average loss for the current fold.
     """
-    debug(f"Fold {fold_idx}, training index: {train_idx}")
-    debug(f"Fold {fold_idx}, validation index: {val_idx}")
-
     # Prepare configuration
     training_batch_size = config.training.general.batch_size
     training_shuffle = config.training.general.shuffle
@@ -105,11 +100,6 @@ def compute_single_time_series_cv_fold(
         device,
         logs_phase.get(),
         config,
-    )
-
-    info(
-        f"Single time series CV fold computation completed"
-        f" (average loss: {avg_loss})"
     )
 
     return avg_loss

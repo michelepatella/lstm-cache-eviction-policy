@@ -20,8 +20,11 @@ def get_model_abs_path(data_distribution_mode: str) -> str:
         str: Model absolute path.
     """
     debug(
-        f"Data distribution mode to determine "
-        f"model absolute path: {data_distribution_mode}"
+        "Model absolute path retrieval started",
+        extra={
+            "data_distribution_mode": data_distribution_mode,
+            "context": "Model absolute path retrieval",
+        },
     )
 
     # Define model path according to
@@ -31,6 +34,13 @@ def get_model_abs_path(data_distribution_mode: str) -> str:
     else:
         model_abs_path = MODEL_TRAINED_DYNAMIC_FILE_PATH
 
-    debug(f"Model absolute path: {model_abs_path}")
+    debug(
+        "Model absolute path retrieval completed",
+        extra={
+            "data_distribution_mode": data_distribution_mode,
+            "model_abs_path": model_abs_path,
+            "context": "Model absolute path retrieval",
+        },
+    )
 
     return model_abs_path

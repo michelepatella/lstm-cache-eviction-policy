@@ -60,8 +60,6 @@ class BaseCache(ABC):
             # Prepare configuration
             cache_dimension = config.simulations.cache.dimension
             ttl = config.simulations.cache.ttl
-            debug(f"Base cache dimension: {cache_dimension}")
-            debug(f"Base cache TTL: {ttl}")
 
             # Initialize cache and fields
             self.cache = (
@@ -80,10 +78,36 @@ class BaseCache(ABC):
             self.scores = {}
             self._last_put_time = None
 
-            debug("BaseCache initialized")
+            debug(
+                "BaseCache initialization executed",
+                extra={"context": "BaseCache"},
+            )
         except (TypeError, AttributeError, ValueError) as e:
-            msg = "Failed to initialize base cache"
-            error("%s: %s", msg, e)
+            msg = "Cache initialization failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "expiry_initialized": isinstance(
+                        getattr(self, "expiry", None), dict
+                    ),
+                    "ttl": getattr(config.simulations.cache, "ttl", None),
+                    "cache_class": (
+                        str(cache_class) if cache_class is not None else None
+                    ),
+                    "cache_dimension": getattr(
+                        config.simulations.cache, "dimension", None
+                    ),
+                    "store_initialized": isinstance(
+                        getattr(self, "store", None), dict
+                    ),
+                    "scores_initialized": isinstance(
+                        getattr(self, "scores", None), dict
+                    ),
+                    "metrics_logger_type": type(metrics_logger).__name__,
+                    "context": "BaseCache",
+                },
+            )
             raise RuntimeError(msg) from e
 
     def _is_expired(self: "BaseCache", key: Any, current_time: float) -> bool:
@@ -111,17 +135,29 @@ class BaseCache(ABC):
         try:
             # Check whether the key has expired,
             # provided it is stored in the cache
-            expired = key in self.expiry and self.expiry[key] < current_time
-
-            debug(
-                f"Expired base cache check completed: {expired},"
-                f"(key={key}, time={current_time})"
-            )
-
-            return expired
+            return key in self.expiry and self.expiry[key] < current_time
         except (TypeError, KeyError, ValueError) as e:
-            msg = "Failed to check key expired base cache"
-            error("%s: %s", msg, e)
+            msg = "Cache item expiration check failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "key": key,
+                    "key_type": type(key).__name__,
+                    "current_time": current_time,
+                    "expiry_type": (
+                        type(self.expiry).__name__
+                        if hasattr(self, "expiry")
+                        else None
+                    ),
+                    "expiry_len": (
+                        len(self.expiry)
+                        if hasattr(self, "expiry") and self.expiry
+                        else 0
+                    ),
+                    "context": "BaseCache",
+                },
+            )
             raise RuntimeError(msg) from e
 
     def _remove_expired_keys(self: "BaseCache", current_time: float) -> None:
@@ -148,10 +184,6 @@ class BaseCache(ABC):
             expired_keys = [
                 k for k in self.expiry if self._is_expired(k, current_time)
             ]
-            debug(
-                f"Expired keys to be removed from base cache: {expired_keys}, "
-                f"at time: {current_time}"
-            )
 
             # Remove all the expired keys
             for k in expired_keys:
@@ -168,13 +200,51 @@ class BaseCache(ABC):
                 if self.scores is not None:
                     self.scores.pop(k, None)
 
-                debug(f"Key removed from base cache: {k}")
-
                 # Trace eviction
                 self.metrics_logger.log_eviction(k, current_time)
         except (TypeError, AttributeError) as e:
-            msg = "Failed to remove expired keys from base cache"
-            error("%s: %s", msg, e)
+            msg = "Cache expired key removal failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "current_time": current_time,
+                    "num_expired_keys": (
+                        len(expired_keys) if "expired_keys" in locals() else 0
+                    ),
+                    "expiry_type": (
+                        type(self.expiry).__name__
+                        if hasattr(self, "expiry")
+                        else None
+                    ),
+                    "expiry_len": (
+                        len(self.expiry)
+                        if hasattr(self, "expiry") and self.expiry
+                        else 0
+                    ),
+                    "scores_type": (
+                        type(self.scores).__name__
+                        if hasattr(self, "scores")
+                        else None
+                    ),
+                    "scores_len": (
+                        len(self.scores)
+                        if hasattr(self.scores) and self.scores
+                        else 0
+                    ),
+                    "store_type": (
+                        type(self.store).__name__
+                        if hasattr(self, "store")
+                        else None
+                    ),
+                    "store_size": (
+                        len(self.store)
+                        if hasattr(self, "store") and self.store
+                        else 0
+                    ),
+                    "context": "BaseCache",
+                },
+            )
             raise RuntimeError(msg) from e
 
     def contains(self: "BaseCache", key: Any, current_time: float) -> bool:
@@ -200,8 +270,6 @@ class BaseCache(ABC):
                 * The metrics logger failing to log the get event (AttributeError, TypeError).
         """
         try:
-            debug(f"Key to check existence in BaseCache for: {key}")
-
             # Trace the get event
             self.metrics_logger.log_get(key, current_time)
 
@@ -215,14 +283,39 @@ class BaseCache(ABC):
                 key in self.store and not self._is_expired(key, current_time)
             )
 
-            debug(
-                f"Check key existence in base cache completed: {in_cache} (key={key})"
-            )
-
             return in_cache
         except (TypeError, AttributeError) as e:
-            msg = "Failed to check key existence in base cache"
-            error("%s: %s", msg, e)
+            msg = "Cache item existence check failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "key": key,
+                    "key_type": type(key).__name__,
+                    "current_time": current_time,
+                    "store_type": (
+                        type(self.store).__name__
+                        if hasattr(self, "store")
+                        else None
+                    ),
+                    "store_size": (
+                        len(self.store)
+                        if hasattr(self, "store") and self.store
+                        else 0
+                    ),
+                    "cache_type": (
+                        type(self.cache).__name__
+                        if hasattr(self, "cache") and self.cache
+                        else None
+                    ),
+                    "cache_size": (
+                        len(self.cache)
+                        if hasattr(self, "cache") and self.cache
+                        else 0
+                    ),
+                    "context": "BaseCache",
+                },
+            )
             raise RuntimeError(msg) from e
 
     def _on_evict(self: "BaseCache", key: Any) -> None:
@@ -255,11 +348,28 @@ class BaseCache(ABC):
 
             # Trace eviction event
             self.metrics_logger.log_eviction(key, self._last_put_time)
-
-            debug(f"Key evicted from base cache: {key}")
         except (TypeError, AttributeError, ValueError) as e:
-            msg = "Failed to evict key from base cache"
-            error("%s: %s", msg, e)
+            msg = "Cache item eviction failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "key": key,
+                    "key_type": type(key).__name__,
+                    "expiry_type": (
+                        type(self.expiry).__name__
+                        if hasattr(self, "expiry")
+                        else None
+                    ),
+                    "expiry_len": (
+                        len(self.expiry)
+                        if hasattr(self, "expiry") and self.expiry
+                        else 0
+                    ),
+                    "last_put_time": self._last_put_time,
+                    "context": "BaseCache",
+                },
+            )
             raise RuntimeError(msg) from e
 
     @abstractmethod

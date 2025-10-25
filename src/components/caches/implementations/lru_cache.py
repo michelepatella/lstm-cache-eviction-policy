@@ -25,7 +25,6 @@ from components.caches.implementations.utils.cache_cleaner import clear_cache
 from components.caches.implementations.utils.cache_size_calculator import (
     calculate_cache_size,
 )
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 
@@ -67,7 +66,13 @@ class LRUCache(Cache):
         self._data = OrderedDict()
         self.callback = callback
 
-        info(f"LRU cache initialized (maxsize={self.maxsize})")
+        info(
+            "Cache initialization executed",
+            extra={
+                "maxsize": self.maxsize,
+                "context": "LRU cache",
+            },
+        )
 
     def __getitem__(self: "LRUCache", key: Any) -> Any:
         """
@@ -92,20 +97,35 @@ class LRUCache(Cache):
                 * The key is not hashable or the cache does not support
                   item assignment (TypeError).
         """
-        debug(f"Key to get item from LRU cache for: {key}")
-
         # Retrieve item
         item = get_item_from_cache(self._data, key)
-
-        debug(f"LRU cache item get: {item} (key={key})")
 
         try:
             # Reinsert key item to
             # mark it as recently used
             self._data[key] = item
         except (KeyError, TypeError, AttributeError) as e:
-            msg = "Failed to reinsert key into LRU cache"
-            error("%s: %s", msg, e)
+            msg = "Reinserting key into LRU cache failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "key": key,
+                    "item_type": type(item).__name__,
+                    "item_repr_len": (
+                        len(repr(item)) if item is not None else 0
+                    ),
+                    "cache_type": type(self._data).__name__,
+                    "cache_size": (
+                        len(self._data)
+                        if hasattr(self._data, "__len__")
+                        else None
+                    ),
+                    "cache_name": getattr(self, "name", None),
+                    "cache_capacity": getattr(self, "capacity", None),
+                    "context": "LRU cache",
+                },
+            )
             raise RuntimeError(msg) from e
 
         return item
@@ -125,9 +145,7 @@ class LRUCache(Cache):
             None
         """
         # Evict the oldest item from cache
-        oldest_key, oldest_item = evict_oldest_item(self._data, self.callback)
-
-        debug(f"LRU cache item evicted: {oldest_item} (key={oldest_key})")
+        evict_oldest_item(self._data, self.callback)
 
     def __setitem__(self: "LRUCache", key: Any, item: Any) -> None:
         """
@@ -145,8 +163,6 @@ class LRUCache(Cache):
         Returns:
             None
         """
-        debug(f"Key and item to insert into LRU cache: {key}, {item}")
-
         # Insert item into cache
         insert_item_into_cache(
             self._data,
@@ -158,8 +174,6 @@ class LRUCache(Cache):
                 self._data.pop(k) if k in self._data else None
             ),
         )
-
-        debug(f"LRU cache item inserted: {item} (key={key})")
 
     def __delitem__(self: "LRUCache", key: Any) -> None:
         """
@@ -174,12 +188,8 @@ class LRUCache(Cache):
         Returns:
             None
         """
-        debug(f"Key to delete from LRU cache: {key}")
-
         # Delete item from cache
         delete_item_from_cache(self._data, key)
-
-        debug(f"LRU cache key deleted: {key}")
 
     def __contains__(self: "LRUCache", key: Any) -> bool:
         """
@@ -195,8 +205,6 @@ class LRUCache(Cache):
         Returns:
             bool: True if key exists in the LRU cache, False otherwise.
         """
-        debug(f"Key existence check into LRU cache: {key}")
-
         return check_item_into_cache(self._data, key)
 
     def pop(self: "LRUCache", key: Any) -> Optional[Any]:
@@ -214,12 +222,8 @@ class LRUCache(Cache):
             Optional[Any]: Item associated with the key removed
                           (None if its key is not found in the LRU cache).
         """
-        debug(f"Key to pop from LRU cache: {key}")
-
         # Remove item from cache
-        item = pop_item_from_cache(self._data, key)
-
-        debug(f"LRU cache item popped: {item} (key={key})")
+        return pop_item_from_cache(self._data, key)
 
     def __len__(self: "LRUCache") -> int:
         """
@@ -236,11 +240,7 @@ class LRUCache(Cache):
             int: Number of cached items.
         """
         # Calculate cache size
-        cache_size = calculate_cache_size(self._data)
-
-        debug(f"LRU cache size calculated: {cache_size}")
-
-        return cache_size
+        return calculate_cache_size(self._data)
 
     def clear(self: "LRUCache") -> None:
         """
@@ -257,5 +257,3 @@ class LRUCache(Cache):
         """
         # Clear cache
         clear_cache(self._data)
-
-        debug("LRU cache cleared")

@@ -30,8 +30,14 @@ def set_dict_value(
             * Non-iterable keys (AttributeError).
     """
     try:
-        debug(f"Keys to set in dictionary value for: {keys}")
-        debug(f"Value to set in dictionary: {value}")
+        debug(
+            "Dictionary value setting started",
+            extra={
+                "keys_to_set": keys,
+                "value_to_set": value,
+                "context": "Dictionary value setting",
+            },
+        )
 
         # Iterate over all the keys except
         # the last one to go down the nested levels
@@ -52,8 +58,23 @@ def set_dict_value(
         # position
         current_dict[keys[-1]] = value
 
-        debug(f"Value set in dictionary ({keys} -> {value})")
+        debug(
+            "Dictionary value setting completed",
+            extra={
+                "final_keys": keys,
+                "final_value": value,
+                "context": "Dictionary value setting",
+            },
+        )
     except (TypeError, AttributeError) as e:
-        msg = "Failed to set value in dictionary"
-        error("%s: %s", msg, e)
+        msg = "Dictionary value setting failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "keys_attempted": keys,
+                "value_attempted": value,
+                "context": "Dictionary value setting",
+            },
+        )
         raise RuntimeError(msg) from e

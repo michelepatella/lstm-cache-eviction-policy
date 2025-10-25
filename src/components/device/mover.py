@@ -2,7 +2,6 @@ from typing import Union
 
 import torch
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -32,10 +31,16 @@ def move_to_device(
         # Move object to device
         obj = obj.to(device)
 
-        debug(f"{obj} moved to {device}")
-
         return obj
     except (TypeError, RuntimeError) as e:
-        msg = "Failed to move object to specified device"
-        error("%s: %s", msg, e)
+        msg = "Object to device moving failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "object_type": type(obj).__name__,
+                "device": str(device),
+                "context": "Object to device moving",
+            },
+        )
         raise RuntimeError(msg) from e

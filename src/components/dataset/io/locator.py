@@ -35,8 +35,12 @@ def get_dataset_abs_path(
     """
     try:
         debug(
-            f"Data distribution mode for "
-            f"loading dataset: {data_distribution_mode}"
+            "Dataset absolute path retrieval started",
+            extra={
+                "dataset_type": dataset_type,
+                "data_distribution_mode": data_distribution_mode,
+                "context": "Dataset absolute path retrieval",
+            },
         )
 
         # Determine dataset path based on
@@ -58,10 +62,26 @@ def get_dataset_abs_path(
                 # For preprocessed dataset
                 dataset_abs_path = DATASET_DYNAMIC_PROCESSED_FILE_PATH
 
-        debug(f"Dataset absolute path: {dataset_abs_path}")
+        debug(
+            "Dataset absolute path retrieval completed",
+            extra={
+                "dataset_type": dataset_type,
+                "data_distribution_mode": data_distribution_mode,
+                "dataset_abs_path": dataset_abs_path,
+                "context": "Dataset absolute path retrieval",
+            },
+        )
 
         return dataset_abs_path
     except AttributeError as e:
-        msg = "Failed to retrieve dataset absolute path"
-        error("%s: %s", msg, e)
+        msg = "Dataset absolute path retrieval failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "dataset_type": dataset_type,
+                "data_distribution_mode": data_distribution_mode,
+                "context": "Dataset absolute path retrieval",
+            },
+        )
         raise RuntimeError(msg) from e

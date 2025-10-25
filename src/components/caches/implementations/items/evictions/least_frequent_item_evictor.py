@@ -68,6 +68,35 @@ def evict_least_frequent_item(
         AttributeError,
         TypeError,
     ) as e:
-        msg = "Failed to evict the least frequent item"
-        error("%s: %s", msg, e)
+        msg = "Least frequent item eviction failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "data_type": type(data).__name__ if data is not None else None,
+                "data_size": (
+                    len(data) if hasattr(data, "__len__") and data else 0
+                ),
+                "data_freq_type": (
+                    type(data_freq).__name__ if data_freq is not None else None
+                ),
+                "data_freq_len": (
+                    len(data_freq)
+                    if hasattr(data_freq, "__len__") and data_freq
+                    else 0
+                ),
+                "num_evicted_candidates": (
+                    len(evicted_candidates)
+                    if "evicted_candidates" in locals()
+                    else 0
+                ),
+                "key_to_evict_type": (
+                    type(key_to_evict).__name__
+                    if "key_to_evict" in locals()
+                    else None
+                ),
+                "callback_present": callback is not None,
+                "context": "Least frequent item eviction",
+            },
+        )
         raise RuntimeError(msg) from e

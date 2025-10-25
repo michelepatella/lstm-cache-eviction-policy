@@ -54,12 +54,16 @@ def train_single_epoch(
     """
     try:
         debug(
-            f"Single epoch training configuration:\n"
-            f"- Current epoch number: {epoch}\n"
-            f"- Training loader size: {len(training_loader)}\n"
-            f"- Optimizer: {optimizer}\n"
-            f"- Criterion: {criterion}\n"
-            f"- Device: {device}"
+            "Single epoch training started",
+            extra={
+                "epoch": epoch,
+                "training_loader_len": len(training_loader),
+                "optimizer": str(optimizer),
+                "criterion": str(criterion),
+                "device": str(device),
+                "model_class": type(model).__name__,
+                "context": "Single epoch training",
+            },
         )
 
         # To display the one-epoch progress
@@ -94,8 +98,30 @@ def train_single_epoch(
             # the current loss
             training_loader_tqdm.set_postfix(loss=loss.item())
 
-        debug("Training single epoch completed")
+        debug(
+            "Single epoch training completed",
+            extra={
+                "epoch": epoch,
+                "final_loss": loss.item() if "loss" in locals() else None,
+                "total_batches": len(training_loader),
+                "context": "Single epoch training",
+            },
+        )
     except (TypeError, AttributeError) as e:
-        msg = "Failed to perform training single epoch"
-        error("%s: %s", msg, e)
+        msg = "Single epoch training failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "epoch": epoch,
+                "training_loader_len": (
+                    len(training_loader) if training_loader else None
+                ),
+                "optimizer": str(optimizer),
+                "criterion": str(criterion),
+                "device": str(device),
+                "model_class": type(model).__name__,
+                "context": "Single epoch training",
+            },
+        )
         raise RuntimeError(msg) from e

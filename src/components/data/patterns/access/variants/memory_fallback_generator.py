@@ -2,7 +2,6 @@ from typing import List
 
 import numpy as np
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -44,10 +43,6 @@ def generate_memory_fallback_pattern(
             * Using invalid arguments or data types (TypeError).
     """
     try:
-        debug(
-            f"Memory interval for memory/fallback pattern: {memory_interval}"
-        )
-
         # Based on the memory interval
         if (requests_count % memory_interval == 0) and (
             requests_count > memory_offset
@@ -55,20 +50,29 @@ def generate_memory_fallback_pattern(
             # Requested key as the one requested
             # memory offset steps back in the history
             requested_key = requests[-memory_offset]
-            debug(
-                f"Requested key selected looking "
-                f"at {memory_offset} steps back in the history"
-            )
         else:
             # Determine the requested key randomly,
             # according to Zipfian key probabilities
             requested_key = np.random.choice(keys_range, p=zipf_probs)
-            debug("Requested key selected by fallback pattern")
-
-        debug(f"(Memory/fallback pattern) Key requested: {requested_key}")
 
         return requested_key
     except (IndexError, TypeError, ValueError) as e:
-        msg = "Failed to generate memory/fallback pattern"
-        error("%s: %s", msg, e)
+        msg = "Memory/fallback pattern generation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "memory_interval": memory_interval,
+                "memory_offset": memory_offset,
+                "requests_count": requests_count,
+                "requests_len": len(requests) if requests else 0,
+                "keys_range_len": (
+                    len(keys_range) if keys_range is not None else 0
+                ),
+                "zipf_probs_shape": (
+                    zipf_probs.shape if zipf_probs is not None else None
+                ),
+                "context": "Memory/fallback pattern generation",
+            },
+        )
         raise RuntimeError(msg) from e

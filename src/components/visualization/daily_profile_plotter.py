@@ -13,7 +13,6 @@ from components.const import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from src.const import (
     DATA_GENERATION_FINAL_HOUR,
     DATA_GENERATION_INITIAL_HOUR,
@@ -50,7 +49,6 @@ def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
             )
             + 1
         )
-        debug(f"Number of bins for daily profile plot: {num_bins}")
 
         # Define the bins ranging from predefined
         # min hour to max hour
@@ -59,7 +57,6 @@ def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
             DATA_GENERATION_FINAL_HOUR,
             num_bins + 1,
         )
-        debug(f"Bins for daily profile histogram: {bins}")
 
         # Define the histogram and get the
         # count of bins, each one of them
@@ -67,7 +64,6 @@ def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
         # number of requests occurred in that
         # hour of day
         bins_counts, _ = np.histogram(timestamps_hours, bins=bins)
-        debug(f"Counts per daily profile histogram bin: {bins_counts}")
 
         # Prepare, show, and save the plot
         plt.figure(figsize=(PLOT_SIZE, PLOT_SIZE))
@@ -101,8 +97,38 @@ def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
         plt.show()
         plt.close()
 
-        info(f"Daily profile plotted and saved to: {save_path}")
+        debug(
+            "Daily profile plotted and saved",
+            extra={
+                "save_path": save_path,
+                "num_timestamps": len(timestamps_hours),
+                "num_bins": num_bins,
+                "bin_size": PLOT_DAILY_PROFILE_BIN_SIZE,
+                "x_range": (
+                    DATA_GENERATION_INITIAL_HOUR,
+                    DATA_GENERATION_FINAL_HOUR,
+                ),
+                "context": "Daily profile plot",
+            },
+        )
     except (ZeroDivisionError, ValueError, TypeError) as e:
-        msg = "Failed to plot daily profile"
-        error("%s: %s", msg, e)
+        msg = "Plotting daily profile failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "save_path": save_path,
+                "num_timestamps": (
+                    len(timestamps_hours)
+                    if isinstance(timestamps_hours, np.ndarray)
+                    else None
+                ),
+                "bin_size": PLOT_DAILY_PROFILE_BIN_SIZE,
+                "x_range": (
+                    DATA_GENERATION_INITIAL_HOUR,
+                    DATA_GENERATION_FINAL_HOUR,
+                ),
+                "context": "Daily profile plot",
+            },
+        )
         raise RuntimeError(msg) from e

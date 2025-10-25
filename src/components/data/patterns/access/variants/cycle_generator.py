@@ -1,6 +1,5 @@
 import numpy as np
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -36,30 +35,17 @@ def generate_cycle_pattern(
             * Accessing an invalid index in the cycle subset (IndexError).
     """
     try:
-        debug(
-            f"Cycle base to determine cycle length in cycle pattern: {cycle_base}"
-        )
-        debug(
-            f"Cycle divisor to determine cycle"
-            f" length in cycle pattern: {cycle_divisor}"
-        )
-        debug(
-            f"Cycle mod to determine cycle length in cycle pattern: {cycle_mod}"
-        )
-
         # Calculate the cycle length dynamically,
         # based on number of requests generated so far
         # (cycle base ensures minimum cycle length)
         cycle_length = (
             cycle_base + (requests_count // cycle_divisor) % cycle_mod
         )
-        debug(f"Cycle length for cycle pattern: {cycle_length}")
 
         # Select a subset of keys of
         # cycle length size, starting from
         # the head of the keys list
         cycle = keys_range[:cycle_length]
-        debug(f"Candidate keys selected for cycle pattern: {cycle}")
 
         # Determine the requested key
         # within the subset of key just
@@ -67,10 +53,22 @@ def generate_cycle_pattern(
         # requests generated so far as well as
         # the cycle length
         requested_key = int(cycle[requests_count % cycle_length])
-        debug(f"(Cycle pattern) Key requested: {requested_key}")
 
         return requested_key
     except (IndexError, TypeError, ValueError) as e:
-        msg = "Failed to generate cycle pattern"
-        error("%s: %s", msg, e)
+        msg = "Cycle pattern generation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "cycle_base": cycle_base,
+                "cycle_divisor": cycle_divisor,
+                "cycle_mod": cycle_mod,
+                "requests_count": requests_count,
+                "keys_range_len": (
+                    len(keys_range) if keys_range is not None else None
+                ),
+                "context": "Cycle pattern generation",
+            },
+        )
         raise RuntimeError(msg) from e

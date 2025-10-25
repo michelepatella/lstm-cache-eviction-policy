@@ -3,7 +3,6 @@ from typing import Dict, List
 from components.json.io.saver import save_json
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from src.const import SIMULATIONS_METRICS_TIMELINE_NAME
 
 
@@ -27,6 +26,17 @@ def save_simulations_metrics(results: List[Dict], path: str) -> None:
             * File cannot be written due to OS errors (OSError).
     """
     try:
+        debug(
+            "Simulations metrics saving started",
+            extra={
+                "num_results": (
+                    len(results) if isinstance(results, list) else None
+                ),
+                "save_path": path,
+                "context": "Simulations metrics saving",
+            },
+        )
+
         # Filter metrics to be saved
         results_to_save = [
             {
@@ -40,8 +50,25 @@ def save_simulations_metrics(results: List[Dict], path: str) -> None:
         # Save metrics to JSON file
         save_json(results_to_save, path)
 
-        info(f"Simulations results saved to: {path}")
+        debug(
+            "Simulations metrics saving completed",
+            extra={
+                "num_results_saved": len(results_to_save),
+                "save_path": path,
+                "context": "Simulations metrics saving",
+            },
+        )
     except (TypeError, OSError) as e:
-        msg = "Failed to save simulation metrics"
-        error("%s: %s", msg, e)
+        msg = "Simulations metrics saving failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "num_results": (
+                    len(results) if isinstance(results, list) else None
+                ),
+                "save_path": path,
+                "context": "Simulations metrics saving",
+            },
+        )
         raise RuntimeError(msg) from e

@@ -33,14 +33,31 @@ def load_json(
               (json.JSONDecodeError).
     """
     try:
-        debug(f"Path to load JSON from: {path}")
+        debug(
+            "JSON loading started",
+            extra={
+                "path": path,
+                "wrap_enabled": wrap,
+                "context": "JSON loading",
+            },
+        )
 
         # Load JSON data from file at
         # specified path
         with open(path, "r") as f:
             json_data = json.load(f)
 
-        debug(f"JSON loaded from: {path}")
+        debug(
+            "JSON loading completed",
+            extra={
+                "path": path,
+                "num_keys": (
+                    len(json_data) if isinstance(json_data, dict) else None
+                ),
+                "wrap_enabled": wrap,
+                "context": "JSON loading",
+            },
+        )
 
         # Check whether to wrap JSON
         # data into a Box object, allowing
@@ -50,6 +67,14 @@ def load_json(
         else:
             return json_data
     except (OSError, json.JSONDecodeError) as e:
-        msg = "Failed to load JSON"
-        error("%s: %s", msg, e)
+        msg = "JSON loading failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "path": path,
+                "wrap_enabled": wrap,
+                "context": "JSON loading",
+            },
+        )
         raise RuntimeError(msg) from e

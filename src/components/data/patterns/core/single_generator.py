@@ -9,7 +9,6 @@ from components.data.patterns.access.generator import (
 from components.data.patterns.temporal.generator import (
     generate_temporal_pattern,
 )
-from components.logs.levels.debug_logger import debug
 from components.time.cyclics.updater import (
     update_cyclic_time,
 )
@@ -46,11 +45,6 @@ def generate_single_pattern_request(
             - current_seconds_in_day: Updated seconds elapsed in the current day.
             - current_day: Updated day count in the simulation.
     """
-    debug(
-        f"Generating single request for day {current_day}, "
-        f"seconds {current_seconds_in_day}"
-    )
-
     # Generate delta time (gap between consecutive requests)
     delta_t = generate_temporal_pattern(current_seconds_in_day, config)
 
@@ -74,10 +68,6 @@ def generate_single_pattern_request(
         absolute_seconds,
         requests,
         config,
-    )
-    debug(
-        f"Generated request {request} at "
-        f"absolute seconds {absolute_seconds}"
     )
 
     return request, absolute_seconds, current_seconds_in_day, current_day

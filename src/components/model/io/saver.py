@@ -2,7 +2,6 @@ import torch
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def save_model(model: torch.nn.Module, path: str) -> None:
@@ -26,14 +25,36 @@ def save_model(model: torch.nn.Module, path: str) -> None:
             * General runtime failure during saving (RuntimeError).
     """
     try:
-        debug(f"Path to save the model at: {path}")
+        debug(
+            "Model saving started",
+            extra={
+                "path": path,
+                "model_type": type(model).__name__,
+                "context": "Model saving",
+            },
+        )
 
         # Save model state dictionary
         # at specified path
         torch.save(model.state_dict(), path)
 
-        info(f"Model saved to: {path}")
+        debug(
+            "Model saving completed",
+            extra={
+                "path": path,
+                "model_type": type(model).__name__,
+                "context": "Model saving",
+            },
+        )
     except (FileNotFoundError, PermissionError, TypeError, RuntimeError) as e:
-        msg = "Failed to save model"
-        error("%s: %s", msg, e)
+        msg = "Model saving failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "path": path,
+                "model_type": type(model).__name__,
+                "context": "Model saving",
+            },
+        )
         raise RuntimeError(msg) from e

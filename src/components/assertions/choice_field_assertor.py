@@ -7,7 +7,7 @@ from components.logs.levels.error_logger import error
 def assert_choice_field(
     field_value: Any,
     allowed_field_values: List[Any],
-    context: str,
+    field_context: str,
 ) -> None:
     """
     Check whether a choice field is valid or not.
@@ -18,7 +18,7 @@ def assert_choice_field(
     Args:
         field_value (Any): Value of the choice field.
         allowed_field_values (List[Any]): List of allowed values.
-        context (str): Context for error messages.
+        field_context (str): Context for error messages.
 
     Returns:
         None
@@ -27,24 +27,63 @@ def assert_choice_field(
         ValueError: If the choice field is not valid.
         TypeError: If allowed field values data structure is not a list.
     """
-    debug(f"Field value to be validated: {field_value}:")
-    debug(f"Allowed field values: {allowed_field_values}:")
+    debug(
+        "Choice field validation started",
+        extra={
+            "field_value": field_value,
+            "allowed_field_values": allowed_field_values,
+            "field_context": field_context,
+            "context": "Choice field assertion",
+        },
+    )
 
     # Check whether allowed field values
     # is not a list
     if not isinstance(allowed_field_values, list):
-        msg = f"Allowed field values the must be a list ({context})"
-        error("%s", msg)
+        msg = "Allowed field values must be a list"
+        error(
+            msg,
+            extra={
+                "field_value": field_value,
+                "field_value_type": type(field_value).__name__,
+                "allowed_field_values": allowed_field_values,
+                "allowed_field_values_type": type(
+                    allowed_field_values
+                ).__name__,
+                "field_context": field_context,
+                "status": "Invalid",
+                "context": "Choice field assertion",
+            },
+        )
         raise TypeError(msg)
 
     # Check whether the field has not
     # allowed value
     if field_value not in allowed_field_values:
-        msg = (
-            f"{context} must be one of the following"
-            f" values: {allowed_field_values}"
+        msg = "Invalid field value"
+        error(
+            msg,
+            extra={
+                "field_value": field_value,
+                "field_value_type": type(field_value).__name__,
+                "allowed_field_values": allowed_field_values,
+                "allowed_field_values_type": type(
+                    allowed_field_values
+                ).__name__,
+                "field_context": field_context,
+                "status": "Invalid",
+                "context": "Choice field assertion",
+            },
         )
-        error("%s", msg)
         raise ValueError(msg)
 
-    debug(f"{context}: {field_value}, validated")
+    debug(
+        "Choice field validation completed",
+        extra={
+            "field_value": field_value,
+            "allowed_field_values": allowed_field_values,
+            "field_context": field_context,
+            "status": "Valid",
+            "context": "Choice field assertion",
+        },
+    )

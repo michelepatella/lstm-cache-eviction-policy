@@ -64,14 +64,16 @@ class EarlyStopping:
         self.early_stop = EARLY_STOPPING_DISABLED
 
         debug(
-            "EarlyStopping initial settings:\n"
-            + f"Patience: {self.patience}\n"
-            + f"Delta: {self.delta}\n"
-            + f"Best average loss: {self.best_avg_loss}\n"
-            + f"Counter: {self.counter}\n"
-            + f"Early stopping: {self.early_stop}"
+            "EarlyStopping initialization executed",
+            extra={
+                "patience": self.patience,
+                "delta": self.delta,
+                "best_avg_loss": self.best_avg_loss,
+                "counter": self.counter,
+                "early_stop_flag": self.early_stop,
+                "context": "EarlyStopping",
+            },
         )
-        debug("EarlyStopping initialized")
 
     def __call__(self: "EarlyStopping", avg_loss: float) -> None:
         """
@@ -97,23 +99,12 @@ class EarlyStopping:
                   due to invalid types (TypeError).
         """
         try:
-            debug(
-                f"Current best average loss for early stopping check: {self.best_avg_loss}"
-            )
-            debug(f"Average loss for current early stopping check: {avg_loss}")
-            debug(f"Counter before early stopping check: {self.counter}")
-
             # Check for improvement beyond delta tolerance
             if avg_loss < self.best_avg_loss - self.delta:
                 # Improvement detected: update the best
                 # average loss and reset counter
                 self.best_avg_loss = avg_loss
                 self.counter = 0
-
-                debug(
-                    f"Early stopping check completed (New best average "
-                    f"loss: {self.best_avg_loss}, counter set to: {self.counter})"
-                )
             else:
                 # No significant improvement:
                 # increment counter
@@ -123,16 +114,31 @@ class EarlyStopping:
                 if self.counter >= self.patience:
                     self.early_stop = EARLY_STOPPING_ENABLED
 
-                    debug(
-                        f"Early stopping check completed (early stopping triggered, "
-                        f"counter ({self.counter}) >= patience({self.patience}))"
-                    )
-                else:
-                    debug(
-                        f"Early stopping check completed (early stopping not triggered,"
-                        f"counter ({self.counter}) < patience({self.patience}))"
-                    )
+            debug(
+                "EarlyStopping state updated",
+                extra={
+                    "avg_loss": avg_loss,
+                    "best_avg_loss": self.best_avg_loss,
+                    "delta": self.delta,
+                    "counter": self.counter,
+                    "patience": self.patience,
+                    "early_stop_flag": self.early_stop,
+                    "context": "EarlyStopping",
+                },
+            )
         except TypeError as e:
-            msg = "Failed to check early stopping"
-            error("%s: %s", msg, e)
+            msg = "Early stopping check failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "avg_loss": avg_loss,
+                    "best_avg_loss": getattr(self, "best_avg_loss", None),
+                    "delta": getattr(self, "delta", None),
+                    "counter": getattr(self, "counter", None),
+                    "patience": getattr(self, "patience", None),
+                    "early_stop_flag": getattr(self, "early_stop", None),
+                    "context": "EarlyStopping",
+                },
+            )
             raise RuntimeError(msg) from e

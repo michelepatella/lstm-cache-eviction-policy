@@ -5,7 +5,6 @@ from components.const import (
     MODEL_MC_DROPOUT_MODE,
     MODEL_TRAINING_MODE,
 )
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -55,7 +54,6 @@ def set_model_mode(
             # Set MC Dropout flag to the model
             if mc_dropout_flag_name is not None:
                 setattr(model, mc_dropout_flag_name, mc_dropout_flag_value)
-                debug(f"MC Dropout flag set to model")
 
         # Training mode
         elif mode == MODEL_TRAINING_MODE:
@@ -66,9 +64,17 @@ def set_model_mode(
         else:
             # Set model to evaluation mode
             model.eval()
-
-        debug(f"Model mode set: {mode}")
     except (AttributeError, ValueError, TypeError) as e:
-        msg = "Failed to set model mode"
-        error("%s: %s", msg, e)
+        msg = "Model mode setting failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "mode": mode,
+                "mc_dropout_flag_name": mc_dropout_flag_name,
+                "mc_dropout_flag_value": mc_dropout_flag_value,
+                "model_type": type(model).__name__,
+                "context": "Model mode setting",
+            },
+        )
         raise RuntimeError(msg) from e

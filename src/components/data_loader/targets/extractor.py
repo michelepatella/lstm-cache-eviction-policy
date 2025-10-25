@@ -28,6 +28,14 @@ def extract_targets_from_data_loader(data_loader: DataLoader) -> torch.Tensor:
               have incompatible shapes or types (RuntimeError, TypeError).
     """
     try:
+        debug(
+            "Targets extraction from data loader started",
+            extra={
+                "num_batches": len(data_loader),
+                "context": "Targets extraction from data loader",
+            },
+        )
+
         # Extract and collect all targets
         # from data loader
         all_targets = []
@@ -40,12 +48,25 @@ def extract_targets_from_data_loader(data_loader: DataLoader) -> torch.Tensor:
         # Concatenate extracted targets
         # as a unique tensor
         concatenated_targets = torch.cat(all_targets)
-        debug(f"Concatenated targets shape: {concatenated_targets.shape}")
 
-        debug("Target extraction from data loader completed")
+        debug(
+            "Targets extraction from data loader completed",
+            extra={
+                "total_targets_extracted": concatenated_targets.size(0),
+                "targets_shape": list(concatenated_targets.shape),
+                "context": "Targets extraction from data loader",
+            },
+        )
 
         return concatenated_targets
     except (TypeError, IndexError, RuntimeError) as e:
-        msg = "Failed to extract targets from data loader"
-        error("%s: %s", msg, e)
+        msg = "Targets extraction from data loader failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "num_batches": len(data_loader),
+                "context": "Targets extraction from data loader",
+            },
+        )
         raise RuntimeError(msg) from e

@@ -3,7 +3,6 @@ from typing import Tuple
 import numpy as np
 
 from components.const import TIME_HOURS_IN_DAY
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -33,34 +32,27 @@ def encode_time_trigonometrically(
               (TypeError).
     """
     try:
-        debug(
-            f"(Timestamps to encode before normalization) min:"
-            f" {min(timestamps)}, max: {max(timestamps)}"
-        )
-
         # Normalize time so that to be in cycle
         time_in_cycle = (timestamps % cycle_length) / cycle_length
-        debug(
-            f"(Timestamps to encode after normalization) min:"
-            f" {min(timestamps)}, max: {max(timestamps)}"
-        )
 
         # Compute angles (in radians) of
         # timestamps in cycle
         angles = time_in_cycle * 2 * np.pi
-        debug(
-            f"Cyclic timestamp angles (radians) min: {angles.min()},"
-            f" max: {angles.max()}"
-        )
 
         # Get sin and cos components from angles
         sin_time = np.sin(angles)
         cos_time = np.cos(angles)
 
-        debug("Time encoded trigonometrically")
-
         return sin_time, cos_time
     except TypeError as e:
-        msg = "Failed to encode time trigonometrically"
-        error("%s: %s", msg, e)
+        msg = "Time trigonometric encoding failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "timestamps_shape": getattr(timestamps, "shape", None),
+                "cycle_length": cycle_length,
+                "context": "Time trigonometric encoding",
+            },
+        )
         raise RuntimeError(msg) from e

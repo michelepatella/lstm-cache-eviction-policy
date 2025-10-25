@@ -2,7 +2,6 @@ import torch
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def load_model_state_dict(
@@ -31,7 +30,15 @@ def load_model_state_dict(
               shape mismatch, missing keys, or type issues (RuntimeError, TypeError).
     """
     try:
-        debug(f"Path to load model state dictionary from: {path}")
+        debug(
+            "Model state dictionary loading started",
+            extra={
+                "path": path,
+                "model_type": type(model).__name__,
+                "device": str(device),
+                "context": "Model state dictionary loading",
+            },
+        )
 
         # Load model state dictionary from specified
         # path, mapping to passed device
@@ -41,10 +48,28 @@ def load_model_state_dict(
         # to provided model
         model.load_state_dict(model_state_dict)
 
-        info(f"Model state dictionary loaded from: {path}")
+        debug(
+            "Model state dictionary loading completed",
+            extra={
+                "path": path,
+                "model_type": type(model).__name__,
+                "num_parameters": len(list(model.state_dict().keys())),
+                "device": str(device),
+                "context": "Model state dictionary loading",
+            },
+        )
 
         return model
     except (OSError, RuntimeError, TypeError) as e:
-        msg = "Failed to load model state dictionary"
-        error("%s: %s", msg, e)
+        msg = "Model state dictionary loading failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "path": path,
+                "model_type": type(model).__name__,
+                "device": str(device),
+                "context": "Model state dictionary loading",
+            },
+        )
         raise RuntimeError(msg) from e

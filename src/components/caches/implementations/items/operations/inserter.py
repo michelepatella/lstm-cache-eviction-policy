@@ -51,6 +51,23 @@ def insert_item_into_cache(
         if post_insert_callback:
             post_insert_callback(key)
     except (TypeError, AttributeError) as e:
-        msg = "Failed to insert item into cache"
-        error("%s: %s", msg, e)
+        msg = "Item insertion into cache failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "key_type": type(key).__name__,
+                "item_type": type(item).__name__,
+                "data_type": type(data).__name__ if data is not None else None,
+                "data_size": (
+                    len(data) if hasattr(data, "__len__") and data else 0
+                ),
+                "cache_maxsize": cache_maxsize,
+                "eviction_callback_present": eviction_callback is not None,
+                "pre_insert_callback_present": pre_insert_callback is not None,
+                "post_insert_callback_present": post_insert_callback
+                is not None,
+                "context": "Item insertion into cache",
+            },
+        )
         raise RuntimeError(msg) from e

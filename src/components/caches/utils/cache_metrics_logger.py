@@ -40,7 +40,10 @@ class CacheMetricsLogger:
         self.access_events = defaultdict(list)
         self.evicted_keys = defaultdict(list)
 
-        debug("CacheMetricsLogger initialized")
+        debug(
+            "CacheMetricsLogger initialization executed",
+            extra={"context": "CacheMetricsLogger"},
+        )
 
     def log_put(
         self: "CacheMetricsLogger", key: Any, time: float, ttl: float
@@ -69,10 +72,25 @@ class CacheMetricsLogger:
         try:
             # Trace put event
             self.put_events.setdefault(key, []).append((time, ttl))
-            debug(f"Key insertion traced for key: {key}")
         except (AttributeError, TypeError) as e:
-            msg = "Failed to trace key insertion"
-            error("%s: %s", msg, e)
+            msg = "Tracing item insertion failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "key": key,
+                    "time": time,
+                    "ttl": ttl,
+                    "put_events_initialized": hasattr(self, "put_events"),
+                    "current_put_events_count": (
+                        len(self.put_events)
+                        if hasattr(self, "put_events")
+                        else None
+                    ),
+                    "cache_class": type(self).__name__,
+                    "context": "CacheMetricsLogger",
+                },
+            )
             raise RuntimeError(msg) from e
 
     def log_get(self: "CacheMetricsLogger", key: Any, time: float) -> None:
@@ -101,10 +119,26 @@ class CacheMetricsLogger:
         try:
             # Trace get event
             self.access_events[key].append(time)
-            debug(f"Key access traced for key: {key}")
         except (AttributeError, TypeError, KeyError) as e:
-            msg = "Failed to trace key access"
-            error("%s: %s", msg, e)
+            msg = "Tracing item access failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "key": key,
+                    "time": time,
+                    "access_events_initialized": hasattr(
+                        self, "access_events"
+                    ),
+                    "current_access_events_count": (
+                        len(self.access_events)
+                        if hasattr(self, "access_events")
+                        else None
+                    ),
+                    "cache_class": type(self).__name__,
+                    "context": "CacheMetricsLogger",
+                },
+            )
             raise RuntimeError(msg) from e
 
     def log_eviction(
@@ -136,8 +170,22 @@ class CacheMetricsLogger:
         try:
             # Trace get event
             self.evicted_keys[key].append(time)
-            debug(f"Key eviction traced for key: {key}")
         except (AttributeError, TypeError, KeyError) as e:
-            msg = "Failed to trace key eviction"
-            error("%s: %s", msg, e)
+            msg = "Tracing item eviction failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "key": key,
+                    "time": time,
+                    "evicted_keys_initialized": hasattr(self, "evicted_keys"),
+                    "current_evicted_keys_count": (
+                        len(self.evicted_keys)
+                        if hasattr(self, "evicted_keys")
+                        else None
+                    ),
+                    "cache_class": type(self).__name__,
+                    "context": "CacheMetricsLogger",
+                },
+            )
             raise RuntimeError(msg) from e

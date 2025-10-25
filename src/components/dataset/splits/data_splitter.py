@@ -29,18 +29,42 @@ def split_dataset_data(
             * Invalid index type or value (TypeError, IndexError)
             * Provided object is not a DataFrame (AttributeError)
     """
-    debug(f"Split index to split dataset data: {split_idx}")
-    debug(f"Take first for splitting dataset data: {take_first}")
-
     try:
+        debug(
+            "Dataset splitting started",
+            extra={
+                "split_index": split_idx,
+                "take_first_part": take_first,
+                "dataset_length": len(df) if hasattr(df, "__len__") else None,
+                "context": "Dataset splitting",
+            },
+        )
+
         # Split data taking the first
         # or second part of it
         split_data = df[:split_idx] if take_first else df[split_idx:]
 
-        debug("Dataset data split")
+        debug(
+            "Dataset splitting completed",
+            extra={
+                "resulting_length": (
+                    len(split_data) if hasattr(split_data, "__len__") else None
+                ),
+                "context": "Dataset splitting",
+            },
+        )
 
         return split_data
     except (TypeError, IndexError, AttributeError) as e:
-        msg = "Failed to split dataset data"
-        error("%s: %s", msg, e)
+        msg = "Dataset data splitting failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "split_index": split_idx,
+                "take_first_part": take_first,
+                "dataset_length": len(df) if hasattr(df, "__len__") else None,
+                "context": "Dataset splitting",
+            },
+        )
         raise RuntimeError(msg) from e

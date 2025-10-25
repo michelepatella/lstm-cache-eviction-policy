@@ -1,6 +1,5 @@
 import pandas as pd
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -29,17 +28,22 @@ def reorder_dataset_columns(
         # from the target one as features
         features = [col for col in df.columns if col != target_column]
 
-        debug(f"Dataset feature column(s): {features}")
-        debug(f"Dataset target column: {target_column}")
-
         # Insert the feature columns before
         # the target one
         new_df = df[features + [target_column]]
 
-        debug(f"Reordered dataset columns: {new_df.columns}")
-
         return new_df
     except KeyError as e:
-        msg = "Failed to reorder dataset columns"
-        error("%s: %s", msg, e)
+        msg = "Dataset columns reordering failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "target_column": target_column,
+                "available_columns": (
+                    df.columns.tolist() if hasattr(df, "columns") else None
+                ),
+                "context": "Dataset columns reordering",
+            },
+        )
         raise RuntimeError(msg) from e

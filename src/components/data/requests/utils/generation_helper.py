@@ -50,10 +50,15 @@ def generate_requests_helper(
         keys_range = np.arange(min_key, max_key + 1)
 
         debug(
-            f"Requests generation for keys range: [{min_key},"
-            f" {max_key}] (total: {len(keys_range)} keys)"
+            "Requests generation helper started",
+            extra={
+                "keys_range": [min_key, max_key],
+                "num_keys": len(keys_range),
+                "alpha_range": alpha_range,
+                "time_step_duration": time_step_duration,
+                "context": "Requests generation helper",
+            },
         )
-        debug(f"Time step duration for data generation: {time_step_duration}")
 
         # Iterate over alpha values
         # (static: one alpha, dynamic: multiple)
@@ -71,11 +76,28 @@ def generate_requests_helper(
             requests.extend(current_requests)
             timestamps_seconds.extend(current_timestamps_seconds)
 
+        debug(
+            "Requests generation helper completed",
+            extra={
+                "total_requests_generated": len(requests),
+                "total_timestamps_generated": len(timestamps_seconds),
+                "context": "Requests generation helper",
+            },
+        )
+
         # Convert timestamps from seconds to hours
         timestamps_hours = convert_seconds_to_hours_cyclic(timestamps_seconds)
 
         return requests, timestamps_hours
     except (ValueError, TypeError) as e:
-        msg = "Failed to generate requests by helper"
-        error("%s: %s", msg, e)
+        msg = "Requests generation by helper failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "alpha_range": alpha_range,
+                "time_step_duration": time_step_duration,
+                "context": "Requests generation helper",
+            },
+        )
         raise RuntimeError(msg) from e

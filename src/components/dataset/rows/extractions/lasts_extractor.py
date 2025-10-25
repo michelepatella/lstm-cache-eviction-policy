@@ -49,11 +49,6 @@ def extract_last_rows_from_dataset(
             * Row tuples cannot be decoded from features (ValueError)
     """
     try:
-        debug(
-            f"Extracting last rows from dataset at index: "
-            f"{current_idx}, with sequence length: {seq_len}"
-        )
-
         # Extract a sliding window from dataset
         # of sequence length size
         window_df = extract_sliding_window_dataset_rows(
@@ -63,7 +58,15 @@ def extract_last_rows_from_dataset(
         # Check whether the extracted window is None
         if not window_df:
             debug(
-                "Not enough data to extract last rows requested from dataset"
+                "Insufficient data to extract last rows",
+                extra={
+                    "current_idx": current_idx,
+                    "seq_len": seq_len,
+                    "available_rows": (
+                        len(df.data) if hasattr(df, "data") else None
+                    ),
+                    "context": "Dataset last rows extraction",
+                },
             )
             return None
 
@@ -83,10 +86,19 @@ def extract_last_rows_from_dataset(
                 (current_time / time_conversion_factor, y_key.item())
             )
 
-        debug(f"Last rows extracted from dataset: {last_rows}")
-
         return last_rows
     except AttributeError as e:
-        msg = "Failed to extract last rows from dataset"
-        error("%s: %s", msg, e)
+        msg = "Dataset last rows extraction failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "current_idx": current_idx,
+                "seq_len": seq_len,
+                "available_rows": (
+                    len(df.data) if hasattr(df, "data") else None
+                ),
+                "context": "Dataset last rows extraction",
+            },
+        )
         raise RuntimeError(msg) from e

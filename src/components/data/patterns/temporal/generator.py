@@ -7,7 +7,6 @@ from components.data.patterns.temporal.variants.burst_setter import (
 from components.data.patterns.temporal.variants.periodic_calculator import (
     calculate_periodic_component,
 )
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from pipeline.config.pydantic.config import Config
 
@@ -42,18 +41,9 @@ def generate_temporal_pattern(
             * Random number generation for delta time fails (ValueError, TypeError).
     """
     try:
-        debug(
-            f"Current seconds in day: {current_seconds_in_day}"
-            f" for temporal pattern generation"
-        )
-
         # Move from current seconds to
         # current hour in day
         current_hour_in_day = current_seconds_in_day / TIME_SECONDS_IN_HOUR
-        debug(
-            f"Current hour in day: {current_hour_in_day} "
-            f"for temporal pattern generation"
-        )
 
         periodic_pattern_config = config.data.pattern.temporal.periodic
         # Get scale and amplitude for
@@ -90,9 +80,6 @@ def generate_temporal_pattern(
         # burst as minimum value for the
         # frequency scale to be calculated next
         min_freq_scale = min(burst_high, burst_low)
-        debug(
-            f"Minimum for frequency scale of temporal pattern: {min_freq_scale}"
-        )
 
         # Combine periodic component and bursty
         # scale to get the frequency scale (i.e., mean
@@ -101,20 +88,44 @@ def generate_temporal_pattern(
             min_freq_scale,
             periodic_component * bursty_scale,
         )
-        debug(f"Frequency scale for temporal pattern: {freq_scale}")
 
         # Draw the next inter-request time from an
         # exponential distribution with mean equals
         # frequency scale
         delta_t = np.random.exponential(scale=freq_scale)
 
-        debug(
-            f"Delta time: {delta_t}, calculated for"
-            f" current hour in day: {current_hour_in_day}"
-        )
-
         return delta_t
     except (ValueError, TypeError, AttributeError) as e:
-        msg = "Failed to generate temporal pattern"
-        error("%s: %s", msg, e)
+        msg = "Temporal pattern generation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "current_seconds_in_day": current_seconds_in_day,
+                "current_hour_in_day": (
+                    current_seconds_in_day / TIME_SECONDS_IN_HOUR
+                    if isinstance(current_seconds_in_day, (int, float))
+                    else None
+                ),
+                "periodic_scale": (
+                    periodic_pattern_config.scale
+                    if hasattr(config.data.pattern.temporal, "periodic")
+                    else None
+                ),
+                "periodic_amplitude": (
+                    periodic_pattern_config.amplitude
+                    if hasattr(config.data.pattern.temporal, "periodic")
+                    else None
+                ),
+                "burst_high": getattr(burstiness_pattern_config, "high", None),
+                "burst_low": getattr(burstiness_pattern_config, "low", None),
+                "burst_start_hour": getattr(
+                    burstiness_pattern_config.hours, "start", None
+                ),
+                "burst_end_hour": getattr(
+                    burstiness_pattern_config.hours, "end", None
+                ),
+                "context": "Temporal pattern generation",
+            },
+        )
         raise RuntimeError(msg) from e

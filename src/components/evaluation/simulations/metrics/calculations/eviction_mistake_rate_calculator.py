@@ -1,6 +1,5 @@
 from typing import Dict, List
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.math.percentage_calculator import calculate_percentage
@@ -37,8 +36,6 @@ def calculate_eviction_mistake_rate(
             * Attributes of inputs are missing (AttributeError).
     """
     try:
-        debug(f"Eviction mistake rate window: {mistake_window}")
-
         # Initialize counter
         tot_eviction_mistakes = 0
         tot_eviction_events = 0
@@ -66,21 +63,45 @@ def calculate_eviction_mistake_rate(
                     # Increase the eviction mistakes by one
                     tot_eviction_mistakes += 1
 
-                    debug(
-                        f"Eviction mistake detected for key: {key}, "
-                        f"eviction time: {eviction_time}, "
-                        f"future access(es): {future_accesses}"
-                    )
-
         # Calculate eviction mistake rate
         eviction_mistake_rate = calculate_percentage(
             tot_eviction_mistakes, tot_eviction_events
         )
 
-        info(f"Eviction mistake rate: {eviction_mistake_rate}")
+        info(
+            "Eviction mistake rate calculated",
+            extra={
+                "eviction_mistake_rate": eviction_mistake_rate,
+                "total_eviction_events": tot_eviction_events,
+                "total_eviction_mistakes": tot_eviction_mistakes,
+                "num_evicted_keys": len(evicted_items),
+                "num_keys_with_accesses": sum(
+                    1 for key in evicted_items if access_events_dict.get(key)
+                ),
+                "mistake_window": mistake_window,
+                "context": "Eviction mistake rate calculation",
+            },
+        )
 
         return eviction_mistake_rate
     except (AttributeError, TypeError, ValueError) as e:
-        msg = "Failed to calculate eviction mistake rate"
-        error("%s: %s", msg, e)
+        msg = "Eviction mistake rate calculation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "num_evicted_keys": (
+                    len(evicted_items)
+                    if isinstance(evicted_items, dict)
+                    else None
+                ),
+                "num_access_keys": (
+                    len(access_events_dict)
+                    if isinstance(access_events_dict, dict)
+                    else None
+                ),
+                "mistake_window": mistake_window,
+                "context": "Eviction mistake rate calculation",
+            },
+        )
         raise RuntimeError(msg) from e

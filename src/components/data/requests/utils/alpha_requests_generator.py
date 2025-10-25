@@ -35,10 +35,19 @@ def generate_requests_for_alpha(
             - requests: List of generated requests (key indices).
             - timestamps_seconds: Corresponding timestamps of the requests in seconds.
     """
-    debug(f"Alpha to generate requests for: {alpha}")
-
     # Calculate Zipfian probabilities
     zipf_probs = calculate_zipf_probs(keys_range, alpha)
+
+    debug(
+        "Request generation for alpha started",
+        extra={
+            "alpha": alpha,
+            "keys_range": [int(keys_range[0]), int(keys_range[-1])],
+            "num_keys": len(keys_range),
+            "time_step_duration": time_step_duration,
+            "context": "Requests generation for alpha",
+        },
+    )
 
     # Generate requests and timestamps
     requests, timestamps_seconds = generate_pattern_requests(
@@ -48,6 +57,14 @@ def generate_requests_for_alpha(
         time_step_duration=time_step_duration,
     )
 
-    debug(f"{len(requests)} requests generated for alpha: {alpha}")
+    debug(
+        "Request generation for alpha completed",
+        extra={
+            "alpha": alpha,
+            "num_requests_generated": len(requests),
+            "num_timestamps_generated": len(timestamps_seconds),
+            "context": "Requests generation for alpha",
+        },
+    )
 
     return requests, timestamps_seconds

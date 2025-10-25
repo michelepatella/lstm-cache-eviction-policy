@@ -69,15 +69,27 @@ def update_hit_miss_timeline(
             }
         )
 
-        debug(
-            f"Timeline updated for request index {idx}:\n"
-            f"hits: {counters[hit_counter_name]}\n"
-            f"misses: {counters[miss_counter_name]}\n"
-            f"instant hit rate: {instant_hit_rate}"
-        )
-
         return timeline
     except (KeyError, TypeError, AttributeError) as e:
-        msg = "Failed to update hit and miss timeline"
-        error("%s: %s", msg, e)
+        msg = "Tit/miss timeline updating failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "request_idx": idx,
+                "timeline_type": (
+                    type(timeline).__name__ if timeline is not None else None
+                ),
+                "timeline_len": (
+                    len(timeline)
+                    if hasattr(timeline, "__len__") and timeline
+                    else 0
+                ),
+                "counters_type": (
+                    type(counters).__name__ if counters is not None else None
+                ),
+                "counters_keys": list(counters.keys()) if counters else None,
+                "context": "Hit/miss timeline updating",
+            },
+        )
         raise RuntimeError(msg) from e

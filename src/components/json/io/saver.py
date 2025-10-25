@@ -33,15 +33,50 @@ def save_json(
               or other I/O errors (OSError).
     """
     try:
-        debug(f"Path to save JSON to: {path}")
+        debug(
+            "JSON saving started",
+            extra={
+                "path": path,
+                "json_indent": json_indent,
+                "data_type": type(data_dict).__name__,
+                "num_items": (
+                    len(data_dict)
+                    if isinstance(data_dict, (dict, list))
+                    else None
+                ),
+                "context": "JSON saving",
+            },
+        )
 
         # Save data dictionary as JSON file
         # to the specified path
         with open(path, "w") as f:
             json.dump(data_dict, f, indent=json_indent)
 
-        debug(f"JSON saved to: {path}")
+        debug(
+            "JSON saving completed",
+            extra={
+                "path": path,
+                "json_indent": json_indent,
+                "data_type": type(data_dict).__name__,
+                "num_items": (
+                    len(data_dict)
+                    if isinstance(data_dict, (dict, list))
+                    else None
+                ),
+                "context": "JSON saving",
+            },
+        )
     except (TypeError, OSError) as e:
-        msg = "Failed to save JSON"
-        error("%s: %s", msg, e)
+        msg = "JSON saving failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "path": path,
+                "json_indent": json_indent,
+                "data_type": type(data_dict).__name__,
+                "context": "JSON saving",
+            },
+        )
         raise RuntimeError(msg) from e

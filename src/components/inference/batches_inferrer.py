@@ -50,6 +50,21 @@ def infer_batches(
               incorrect types (TypeError).
     """
     try:
+        debug(
+            "Batches inference started",
+            extra={
+                "model_name": model.__class__.__name__,
+                "device": str(device),
+                "num_features": num_features,
+                "num_batches": (
+                    len(data_loader)
+                    if hasattr(data_loader, "__len__")
+                    else None
+                ),
+                "context": "Batches inference",
+            },
+        )
+
         total_loss = 0.0
         all_predictions = []
         all_targets = []
@@ -78,9 +93,17 @@ def infer_batches(
                 all_outputs.extend(outputs)
                 all_variances.extend(variances)
 
-                debug(f"Batch {batch_idx} inferred")
-
-        debug("Batches inference completed")
+        debug(
+            "Batches inference completed",
+            extra={
+                "total_loss": total_loss,
+                "num_predictions": len(all_predictions),
+                "num_targets": len(all_targets),
+                "num_outputs": len(all_outputs),
+                "num_variances": len(all_variances),
+                "context": "Batches inference",
+            },
+        )
 
         return (
             total_loss,
@@ -90,6 +113,15 @@ def infer_batches(
             all_variances,
         )
     except TypeError as e:
-        msg = "Failed to infer batches"
-        error("%s: %s", msg, e)
+        msg = "Batches inference failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "model_name": model.__class__.__name__,
+                "device": str(device),
+                "num_features": num_features,
+                "context": "Batches inference",
+            },
+        )
         raise RuntimeError(e) from e

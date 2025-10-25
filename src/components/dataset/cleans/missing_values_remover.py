@@ -37,16 +37,60 @@ def remove_dataset_missing_values(
             * Invalid axis or how argument for pandas dropna (TypeError, ValueError).
     """
     try:
+        debug(
+            "Dataset missing values removal started",
+            extra={
+                "num_rows_before": (
+                    len(df) if isinstance(df, pd.DataFrame) else None
+                ),
+                "num_columns_before": (
+                    len(df.columns) if isinstance(df, pd.DataFrame) else None
+                ),
+                "dropna_axis": dropna_axis,
+                "dropna_how": dropna_how,
+                "context": "Dataset missing values removal",
+            },
+        )
+
         # Remove rows with missing values
         new_df = df.dropna(
             axis=dropna_axis,
             how=dropna_how,
         )
 
-        debug("Dataset missing values removal completed")
+        debug(
+            "Dataset missing values removal completed",
+            extra={
+                "num_rows_after": len(new_df),
+                "num_columns_after": len(new_df.columns),
+                "num_removed_rows": (
+                    len(df) - len(new_df) if dropna_axis == 0 else None
+                ),
+                "num_removed_columns": (
+                    len(df.columns) - len(new_df.columns)
+                    if dropna_axis == 1
+                    else None
+                ),
+                "dropna_axis": dropna_axis,
+                "dropna_how": dropna_how,
+                "context": "Dataset missing values removal",
+            },
+        )
 
         return new_df
     except (AttributeError, TypeError, ValueError) as e:
-        msg = "Failed to remove missing values from dataset"
-        error("%s: %s", msg, e)
+        msg = "Dataset missing values removal failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "dropna_axis": dropna_axis,
+                "dropna_how": dropna_how,
+                "num_rows": len(df) if isinstance(df, pd.DataFrame) else None,
+                "num_columns": (
+                    len(df.columns) if isinstance(df, pd.DataFrame) else None
+                ),
+                "context": "Dataset missing values removal",
+            },
+        )
         raise RuntimeError(msg) from e

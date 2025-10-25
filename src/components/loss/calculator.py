@@ -2,7 +2,6 @@ from typing import Optional
 
 import torch
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -31,10 +30,6 @@ def calculate_loss(
               shapes (TypeError, RuntimeError).
     """
     try:
-        debug(f"Number of outputs for loss calculation: {len(outputs)}")
-        debug(f"Number of targets for loss calculation: {len(targets)}")
-        debug(f"Criterion for loss calculation: {criterion}")
-
         # Check whether criterion is not provided
         if criterion is None:
             # Loss is not calculated (None)
@@ -44,10 +39,29 @@ def calculate_loss(
             # provided criterion
             loss = criterion(outputs, targets)
 
-        debug(f"Loss calculated: {loss}")
-
         return loss
     except TypeError as e:
-        msg = "Failed to calculate loss"
-        error("%s: %s", msg, e)
+        msg = "Loss calculation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "outputs_type": type(outputs).__name__,
+                "outputs_shape": (
+                    tuple(outputs.shape)
+                    if isinstance(outputs, torch.Tensor)
+                    else None
+                ),
+                "targets_type": type(targets).__name__,
+                "targets_shape": (
+                    tuple(targets.shape)
+                    if isinstance(targets, torch.Tensor)
+                    else None
+                ),
+                "criterion_type": (
+                    type(criterion).__name__ if criterion is not None else None
+                ),
+                "context": "Loss calculation",
+            },
+        )
         raise RuntimeError(msg) from e

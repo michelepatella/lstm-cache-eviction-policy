@@ -7,7 +7,6 @@ from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.dataset.splits.index.calculator import (
     calculate_dataset_split_index,
 )
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -51,7 +50,6 @@ def split_training_validation_sets(
         if training_idx is None or validation_idx is None:
             # Calculate total training set size
             total_training_size = len(training_set)
-            debug(f"Total training set size: {total_training_size}")
 
             # Calculate training and validation sizes
             training_size = calculate_dataset_split_index(
@@ -60,19 +58,11 @@ def split_training_validation_sets(
             validation_size = calculate_dataset_split_index(
                 total_training_size, validation_split
             )
-            debug(
-                f"Calculated training size: {training_size},"
-                f" validation size: {validation_size}"
-            )
 
             # Generate training and validation indices
             training_idx = list(range(training_size))
             validation_idx = list(
                 range(training_size, training_size + validation_size)
-            )
-            debug(
-                f"Calculated training index: {training_idx},"
-                f" validation index: {validation_idx}"
             )
 
         # Create Subset objects both for
@@ -80,10 +70,22 @@ def split_training_validation_sets(
         final_training_set = Subset(training_set, training_idx)
         final_validation_set = Subset(training_set, validation_idx)
 
-        debug("Training and validation sets split")
-
         return final_training_set, final_validation_set
     except (TypeError, ValueError, AttributeError, IndexError, NameError) as e:
-        msg = "Failed to split training and validation sets"
-        error("%s: %s", msg, e)
+        msg = "Training and validation set splitting failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "validation_split": validation_split,
+                "training_idx_provided": training_idx is not None,
+                "validation_idx_provided": validation_idx is not None,
+                "dataset_length": (
+                    len(training_set)
+                    if hasattr(training_set, "__len__")
+                    else None
+                ),
+                "context": "Training and validation set splitting",
+            },
+        )
         raise RuntimeError(msg) from e

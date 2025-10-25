@@ -5,7 +5,6 @@ from components.caches.implementations.items.operations.inserter import (
     insert_item_into_cache,
 )
 from components.caches.implementations.utils.base_cache import BaseCache
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -38,13 +37,46 @@ class RandomCache(BaseCache):
             self.store.pop(evict_key, None)
             self.expiry.pop(evict_key, None)
 
-            debug(f"Random cache full, evicted key: {evict_key}")
-
             # Trace event
             self.metrics_logger.log_eviction(evict_key, current_time)
         except (IndexError, AttributeError, TypeError) as e:
-            msg = "Failed to evict random key from cache"
-            error("%s: %s", msg, e)
+            msg = "Evicting item from cache failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "evict_key": (
+                        evict_key if "evict_key" in locals() else None
+                    ),
+                    "evict_key_type": (
+                        type(evict_key).__name__
+                        if "evict_key" in locals()
+                        else None
+                    ),
+                    "current_time": current_time,
+                    "expiry_type": (
+                        type(self.expiry).__name__
+                        if hasattr(self, "expiry")
+                        else None
+                    ),
+                    "expiry_len": (
+                        len(self.expiry)
+                        if hasattr(self, "expiry") and self.expiry
+                        else 0
+                    ),
+                    "store_type": (
+                        type(self.store).__name__
+                        if hasattr(self, "store")
+                        else None
+                    ),
+                    "store_size": (
+                        len(self.store)
+                        if hasattr(self, "store") and self.store
+                        else 0
+                    ),
+                    "context": "Random cache",
+                },
+            )
             raise RuntimeError(msg) from e
 
     def put(self: "RandomCache", key: Any, current_time: float) -> None:
@@ -70,11 +102,6 @@ class RandomCache(BaseCache):
                   (AttributeError, TypeError).
         """
         try:
-            debug(
-                f"Key to put into random cache: {key}, "
-                f"at time: {current_time}"
-            )
-
             # Remove expired keys before insertion
             self._remove_expired_keys(current_time)
 
@@ -93,12 +120,34 @@ class RandomCache(BaseCache):
 
             # Trace put event in metrics logger
             self.metrics_logger.log_put(key, current_time, self.ttl)
-
-            debug(
-                f"Random cache key inserted/updated: {key}, "
-                f"expiration time: {self.expiry[key]}"
-            )
         except (AttributeError, TypeError, KeyError, ValueError) as e:
-            msg = "Failed to put key into random cache"
-            error("%s: %s", msg, e)
+            msg = "Cache item insertion failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "key": key,
+                    "key_type": type(key).__name__,
+                    "current_time": current_time,
+                    "ttl": getattr(self, "ttl", None),
+                    "expiry_type": (
+                        type(self.expiry).__name__
+                        if hasattr(self, "expiry")
+                        else None
+                    ),
+                    "expiry_len": (
+                        len(self.expiry)
+                        if hasattr(self.expiry, "__len__")
+                        else None
+                    ),
+                    "cache_type": type(self.store).__name__,
+                    "cache_size": (
+                        len(self.store)
+                        if hasattr(self.store, "__len__")
+                        else None
+                    ),
+                    "cache_maxsize": getattr(self, "maxsize", None),
+                    "context": "Random cache",
+                },
+            )
             raise RuntimeError(msg) from e

@@ -3,7 +3,6 @@ from typing import Dict
 
 import torch
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -30,10 +29,16 @@ def copy_model_state_dict(model: torch.nn.Module) -> Dict[str, torch.Tensor]:
         # Copy model state dictionary
         model_state_dict = copy.deepcopy(model.state_dict())
 
-        debug("Model state dictionary copied")
-
         return model_state_dict
     except TypeError as e:
-        msg = "Failed to copy model state dictionary"
-        error("%s: %s", msg, e)
+        msg = "Model state dictionary copying failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "model_type": type(model).__name__,
+                "num_parameters": len(list(model.state_dict().keys())),
+                "context": "Model state dictionary copying",
+            },
+        )
         raise RuntimeError(msg) from e

@@ -27,6 +27,17 @@ def get_item_from_cache(data: Any, key: Any) -> Any:
         # Get item by key
         return data[key]
     except (KeyError, AttributeError, TypeError) as e:
-        msg = f"Failed to get item from cache"
-        error("%s: %s", msg, e)
+        msg = "Item retrieval from cache failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "key_type": type(key).__name__,
+                "data_type": type(data).__name__ if data is not None else None,
+                "data_size": (
+                    len(data) if hasattr(data, "__len__") and data else 0
+                ),
+                "context": "Item retrieval from cache",
+            },
+        )
         raise RuntimeError(msg) from e

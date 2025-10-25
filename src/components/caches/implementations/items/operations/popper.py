@@ -40,6 +40,26 @@ def pop_item_from_cache(
 
         return item
     except (AttributeError, TypeError) as e:
-        msg = "Failed to pop item from cache"
-        error("%s: %s", msg, e)
+        msg = "Item popping from cache failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "key_type": type(key).__name__,
+                "data_type": type(data).__name__ if data is not None else None,
+                "data_size": (
+                    len(data) if hasattr(data, "__len__") and data else 0
+                ),
+                "freq_data_type": (
+                    type(freq_data).__name__ if freq_data is not None else None
+                ),
+                "freq_data_len": (
+                    len(freq_data)
+                    if hasattr(freq_data, "__len__") and freq_data
+                    else 0
+                ),
+                "freq_data_present": freq_data is not None,
+                "context": "Item popping from cache",
+            },
+        )
         raise RuntimeError(msg) from e

@@ -24,6 +24,4 @@ def prepare_config() -> Config:
     # Validate and parse YAML configuration file
     config = Config(**config_file)
 
-    debug("Configuration loaded and validated")
-
     return config

@@ -7,7 +7,6 @@ from components.const import (
     DATASET_COS_TIME_COLUMN_NAME,
     DATASET_SIN_TIME_COLUMN_NAME,
 )
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from src.const import (
     DATASET_REQUEST_COLUMN_NAME,
@@ -65,13 +64,17 @@ def extract_tuple_from_dataset_row(
             dtype=target_dtype,
         )
 
-        debug(
-            f"Feature(s): {features}, and target: {target} "
-            f"extracted from dataset row"
-        )
-
         return features, target
     except (KeyError, TypeError, ValueError) as e:
-        msg = "Failed to extract tuple from dataset row"
-        error("%s: %s", msg, e)
+        msg = "Dataset row tuple extraction failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "row_index": getattr(row, "name", None),
+                "feature_columns_requested": feature_columns,
+                "target_column_requested": target_column,
+                "context": "Dataset row tuple extraction",
+            },
+        )
         raise RuntimeError(msg) from e

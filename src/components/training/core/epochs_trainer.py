@@ -8,7 +8,6 @@ from tqdm import tqdm
 
 from components.const import TRAINING_EPOCHS_DESC
 from components.evaluation.model.evaluator import evaluate_model
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.model.best.checks_updates.checker_updater import (
@@ -68,15 +67,17 @@ def train_epochs(
               invalid types (TypeError).
     """
     try:
-        debug(
-            f"General configuration:\n"
-            f"- Current phase: {current_phase}\n"
-            f"- Number of epochs: {num_epochs}\n"
-            f"- Training loader size: {len(training_loader)}\n"
-            f"- Validation loader size: {len(validation_loader)}\n"
-            f"- Optimizer: {optimizer}\n"
-            f"- Criterion: {criterion}\n"
-            f"- Device: {device}"
+        info(
+            "Epochs training started",
+            extra={
+                "num_epochs": num_epochs,
+                "training_loader_len": len(training_loader),
+                "validation_loader_len": len(validation_loader),
+                "optimizer": str(optimizer),
+                "criterion": str(criterion),
+                "device": str(device),
+                "context": "Epochs training",
+            },
         )
 
         # Prepare configuration
@@ -112,7 +113,6 @@ def train_epochs(
             avg_loss, *_ = evaluate_model(
                 model, validation_loader, criterion, device, num_features
             )
-            debug(f"Validation average loss: {avg_loss}")
 
             # Check for an update in average loss
             best_avg_loss, new_model_weights = check_update_best_model(
@@ -136,12 +136,29 @@ def train_epochs(
         model.load_state_dict(best_model_weights)
 
         info(
-            f"Training completed (best average loss: {best_avg_loss}, "
-            f"total epochs: {epoch})"
+            "Epochs training completed",
+            extra={
+                "best_avg_loss": best_avg_loss,
+                "total_epochs_run": epoch,
+                "early_stop_triggered": es.early_stop,
+                "context": "Epochs training",
+            },
         )
 
         return best_avg_loss, model
     except TypeError as e:
-        msg = "Failed to perform training epochs"
-        error("%s: %s", msg, e)
+        msg = "Epochs training failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "num_epochs": num_epochs,
+                "training_loader_len": len(training_loader),
+                "validation_loader_len": len(validation_loader),
+                "optimizer": str(optimizer),
+                "criterion": str(criterion),
+                "device": str(device),
+                "context": "Epochs training",
+            },
+        )
         raise RuntimeError(msg) from e

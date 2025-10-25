@@ -10,7 +10,6 @@ from components.const import (
     MODEL_EVALUATION_MODE,
     MODEL_MC_DROPOUT_MODE,
 )
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.model.mode.setter import set_model_mode
 
@@ -90,18 +89,10 @@ def compute_mc_dropout_forward(
                 # Save the current model outputs
                 all_outputs.append(outputs.unsqueeze(0))
 
-                debug(
-                    f"MC sample {i + 1}/{num_mc_dropout_samples} "
-                    f"completed, outputs shape: {outputs.shape}"
-                )
-
         # Concatenate outputs as a tensor
         all_outputs_tensor = torch.cat(all_outputs, dim=0)
-        debug(f"Outputs tensor shape: {all_outputs_tensor.shape}")
-
         # Calculate outputs mean
         outputs_mean = all_outputs_tensor.mean(dim=0)
-        debug(f"Outputs mean shape: {outputs_mean.shape}")
 
         # Calculate outputs variance provided that
         # the number of MC dropout sample is greater
@@ -111,12 +102,32 @@ def compute_mc_dropout_forward(
             outputs_var = all_outputs_tensor.var(
                 dim=0, unbiased=mc_dropout_unbiased_variance
             )
-            debug(f"Outputs variance shape: {outputs_var.shape}")
-
-        debug("MC forward pass(es) completed")
 
         return outputs_mean, outputs_var
     except (TypeError, AttributeError, RuntimeError) as e:
-        msg = "Failed to compute MC Dropout forward"
-        error("%s: %s", msg, e)
+        msg = "MC Dropout forward failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "batch_len": len(batch) if batch is not None else None,
+                "batch_types": (
+                    [type(x).__name__ for x in batch]
+                    if batch is not None
+                    else None
+                ),
+                "batch_shapes": (
+                    [tuple(x.shape) for x in batch]
+                    if batch is not None
+                    else None
+                ),
+                "model": type(model).__name__ if model else None,
+                "device": str(device),
+                "num_features": num_features,
+                "num_mc_dropout_samples": num_mc_dropout_samples,
+                "mc_dropout_flag": mc_dropout_flag,
+                "mc_dropout_unbiased_variance": mc_dropout_unbiased_variance,
+                "context": "MC Dropout forward pass",
+            },
+        )
         raise RuntimeError(msg) from e

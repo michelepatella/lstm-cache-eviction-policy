@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -31,10 +30,23 @@ def set_dataset_column(
         # Set column to dataset
         df[column_name] = column_values
 
-        debug(f"Column set to dataset: '{column_name}'")
-
         return df
     except (ValueError, TypeError, AttributeError) as e:
-        msg = f"Failed to set column '{column_name}' in dataset"
-        error("%s: %s", msg, e)
+        msg = "Dataset column setting failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "column_name": column_name,
+                "column_values_length": (
+                    len(column_values)
+                    if hasattr(column_values, "__len__")
+                    else None
+                ),
+                "existing_columns": (
+                    df.columns.tolist() if hasattr(df, "columns") else None
+                ),
+                "context": "Dataset column setting",
+            },
+        )
         raise RuntimeError(msg) from e

@@ -25,19 +25,43 @@ def load_yaml(path: str) -> Dict[str, Any]:
             * YAML parsing fails due to invalid format (YAMLError).
     """
     try:
-        debug(f"Path to load YAML file from: {path}")
+        debug(
+            "YAML file loading started",
+            extra={
+                "path": path,
+                "context": "YAML file loading",
+            },
+        )
 
         # Load the YAML file from its path
         with open(path, "r") as f:
             yaml_file = yaml.safe_load(f)
 
-        debug(f"YAML file loaded from: {path}")
+        debug(
+            "YAML file loading completed",
+            extra={
+                "path": path,
+                "keys_loaded": (
+                    list(yaml_file.keys())
+                    if isinstance(yaml_file, dict)
+                    else None
+                ),
+                "context": "YAML file loading",
+            },
+        )
 
         return yaml_file
     except (
         OSError,
         YAMLError,
     ) as e:
-        msg = "Failed to load YAML file"
-        error("%s: %s", msg, e)
+        msg = "Loading YAML file failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "path": path,
+                "context": "YAML file loading",
+            },
+        )
         raise RuntimeError(msg) from e

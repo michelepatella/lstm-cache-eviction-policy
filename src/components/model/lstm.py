@@ -68,7 +68,6 @@ class LSTM(torch.nn.Module):
                 # Check whether the required parameter
                 # has been directly passed to the model
                 if param in params and params[param] is not None:
-                    debug(f"Model parameter '{param}' passed: {params[param]}")
 
                     # Set the specified parameter value
                     setattr(self, param, params[param])
@@ -76,18 +75,21 @@ class LSTM(torch.nn.Module):
                     # Otherwise, retrieve parameter value from
                     # configuration
                     config_value = getattr(model_params, param)
-                    debug(
-                        f"Model parameter '{param}' not passed,"
-                        f" using configuration value: {config_value}"
-                    )
 
                     # Set the value specified by configuration
                     setattr(self, param, config_value)
-
-            debug("Model parameters set")
         except (AttributeError, TypeError, ValueError) as e:
-            msg = "Failed to set model parameters"
-            error("%s: %s", msg, e)
+            msg = "Model parameters setting failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "model_type": type(self).__name__,
+                    "param_names_attempted": param_names,
+                    "params_passed": params,
+                    "context": "LSTM model",
+                },
+            )
             raise RuntimeError(msg) from e
 
     def _set_fields(
@@ -122,25 +124,31 @@ class LSTM(torch.nn.Module):
 
         # Disable MC Dropout by default
         self.mc_dropout = MC_DROPOUT_DISABLED
-        debug(f"MC Dropout set to default: {self.mc_dropout}")
 
         # Set number of keys
         self.num_keys = max_key - min_key + 1
-        debug(f"Number of keys for model: {self.num_keys}")
 
         # Set model input size
         self.input_size = num_features + embedding_dim
-        debug(f"Input size for model: {self.input_size}")
 
         # Set number of features
         self.num_features = num_features
-        debug(f"Number of features for model: {self.num_features}")
 
         # Set embedding with specified dimension
         self.embedding_dim = embedding_dim
-        debug(f"Embedding dimension for model: {self.embedding_dim}")
 
-        debug("Model fields set")
+        debug(
+            "Model fields setting executed",
+            extra={
+                "model_type": type(self).__name__,
+                "num_keys": self.num_keys,
+                "input_size": self.input_size,
+                "num_features": self.num_features,
+                "embedding_dim": self.embedding_dim,
+                "mc_dropout_enabled": self.mc_dropout,
+                "context": "LSTM model",
+            },
+        )
 
     def _set_layers(self: "LSTM") -> None:
         """
@@ -169,23 +177,37 @@ class LSTM(torch.nn.Module):
         try:
             # Instantiate embedding layer
             self.embedding = nn.Embedding(self.num_keys, self.embedding_dim)
-            debug(f"Embedding layer instantiated (dim={self.embedding_dim})")
 
             # Instantiate dropout layer
             self.mc_dropout_layer = nn.Dropout(p=self.dropout)
-            debug(f"Dropout layer instantiated (p={self.dropout})")
 
             # Instantiate fully connected layer
             self.fc = nn.Linear(self.hidden_size, self.num_keys)
-            debug(
-                f"Fully connected layer instantiated "
-                f"(in_features={self.hidden_size}, out_features={self.num_keys})"
-            )
 
-            debug("Model layers set")
+            debug(
+                "Model layers setting executed",
+                extra={
+                    "model_type": type(self).__name__,
+                    "embedding_shape": (self.num_keys, self.embedding_dim),
+                    "dropout_probability": self.dropout,
+                    "fc_in_features": self.hidden_size,
+                    "fc_out_features": self.num_keys,
+                    "context": "LSTM model",
+                },
+            )
         except (TypeError, ValueError, AttributeError) as e:
-            msg = "Failed to set model layers"
-            error("%s: %s", msg, e)
+            msg = "Model layers setting failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "model_type": type(self).__name__,
+                    "num_keys": getattr(self, "num_keys", None),
+                    "embedding_dim": getattr(self, "embedding_dim", None),
+                    "hidden_size": getattr(self, "hidden_size", None),
+                    "context": "LSTM model",
+                },
+            )
             raise RuntimeError(msg) from e
 
     def __init__(
@@ -234,22 +256,29 @@ class LSTM(torch.nn.Module):
             bidirectional=self.bidirectional,
             proj_size=self.proj_size,
         )
-        debug(
-            "LSTM model settings:\n"
-            + f"input_size={self.input_size}\n"
-            + f"hidden_size={self.hidden_size}\n"
-            + f"num_layers={self.num_layers}\n"
-            + f"bias={self.bias}\n"
-            + f"batch_first={self.batch_first}\n"
-            + f"dropout={self.dropout}\n"
-            + f"bidirectional={self.bidirectional}\n"
-            + f"proj_size={self.proj_size}"
-        )
 
         # Set all model layers
         self._set_layers()
 
-        debug("Model initialized")
+        debug(
+            "LSTM model initialization executed",
+            extra={
+                "model_type": type(self).__name__,
+                "input_size": self.input_size,
+                "hidden_size": self.hidden_size,
+                "num_layers": self.num_layers,
+                "bias": self.bias,
+                "batch_first": self.batch_first,
+                "dropout": self.dropout,
+                "bidirectional": self.bidirectional,
+                "proj_size": self.proj_size,
+                "num_keys": getattr(self, "num_keys", None),
+                "embedding_dim": getattr(self, "embedding_dim", None),
+                "num_features": getattr(self, "num_features", None),
+                "mc_dropout_enabled": getattr(self, "mc_dropout", None),
+                "context": "LSTM model",
+            },
+        )
 
     def _build_model_input(
         self: "LSTM", x_features: torch.Tensor, x_keys: torch.Tensor
@@ -269,14 +298,8 @@ class LSTM(torch.nn.Module):
             torch.Tensor: Concatenated input tensor ready for model.
         """
         try:
-            debug(
-                f"Features shape: {x_features.shape}, "
-                f"keys shape: {x_keys.shape}"
-            )
-
             # Get the device of embedding layer
             device = self.embedding.weight.device
-            debug(f"Embedding layer device: {device}")
 
             # Ensure keys are on the same device
             # as the embedding layer
@@ -285,18 +308,25 @@ class LSTM(torch.nn.Module):
 
             # Perform embedding
             embedded_keys = self.embedding(x_keys)
-            debug(f"Embedded keys shape: {embedded_keys.shape}")
 
             # Concatenate features with embedded keys
             x = torch.cat((x_features, embedded_keys), dim=-1)
-            debug(f"Model input shape: {x.shape}")
-
-            debug("Model input retrieved")
 
             return x
         except (AttributeError, TypeError, RuntimeError) as e:
-            msg = "Failed to build model input"
-            error("%s: %s", msg, e)
+            msg = "Model input building failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "x_features_shape": getattr(x_features, "shape", None),
+                    "x_keys_shape": getattr(x_keys, "shape", None),
+                    "embedding_device": getattr(
+                        self.embedding.weight, "device", None
+                    ),
+                    "context": "LSTM model",
+                },
+            )
             raise RuntimeError(msg) from e
 
     def forward(
@@ -317,32 +347,32 @@ class LSTM(torch.nn.Module):
             torch.Tensor: Logits computed by the model.
         """
         try:
-            debug(
-                f"Forward pass with features"
-                f" shape: {x_features.shape}, "
-                f"keys shape: {x_keys.shape}"
-            )
-
             # Build model input for current batch
             x = self._build_model_input(x_features, x_keys)
 
             # Pass the input through the model
             output, _ = self.lstm(x)
-            debug(f"Model output shape: {output.shape}")
 
             # Apply MC dropout if enabled
             if self.mc_dropout:
                 output = self.mc_dropout_layer(output)
-                debug(f"(After MC dropout) Model output shape: {output.shape}")
 
             # Compute logits from last step
             logits = self.fc(output[:, -1, :])
-            debug(f"Logits shape: {logits.shape}")
-
-            debug("Model forward pass completed")
 
             return logits
         except (IndexError, RuntimeError) as e:
-            msg = "Failed to compute model forward pass"
-            error("%s: %s", msg, e)
+            msg = "Model forward pass failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "x_features_shape": getattr(x_features, "shape", None),
+                    "x_keys_shape": getattr(x_keys, "shape", None),
+                    "mc_dropout_enabled": getattr(self, "mc_dropout", None),
+                    "lstm_input_size": getattr(self.lstm, "input_size", None),
+                    "fc_output_size": getattr(self.fc, "out_features", None),
+                    "context": "LSTM model",
+                },
+            )
             raise RuntimeError(msg) from e

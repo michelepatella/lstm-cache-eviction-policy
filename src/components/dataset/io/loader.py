@@ -2,7 +2,6 @@ import pandas as pd
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def load_dataset(path: str) -> pd.DataFrame:
@@ -26,14 +25,28 @@ def load_dataset(path: str) -> pd.DataFrame:
             * Parsing errors while reading the dataset (pd.errors.ParserError).
     """
     try:
-        debug(f"Path to load dataset from: {path}")
+        debug(
+            "Dataset loading started",
+            extra={
+                "dataset_path": path,
+                "context": "Dataset loading",
+            },
+        )
 
         # Load dataset from
         # retrieved path
         df = pd.read_csv(path)
-        debug(f"Shape of dataset loaded: {df.shape}")
 
-        info(f"Dataset loaded from: {path}")
+        debug(
+            "Dataset loading completed",
+            extra={
+                "dataset_path": path,
+                "num_rows": len(df),
+                "num_columns": len(df.columns),
+                "columns": df.columns.tolist(),
+                "context": "Dataset loading",
+            },
+        )
 
         return df
     except (
@@ -41,6 +54,13 @@ def load_dataset(path: str) -> pd.DataFrame:
         pd.errors.EmptyDataError,
         pd.errors.ParserError,
     ) as e:
-        msg = "Failed to load dataset"
-        error("%s: %s", msg, e)
+        msg = "Dataset loading failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "dataset_path": path,
+                "context": "Dataset loading",
+            },
+        )
         raise RuntimeError(msg) from e

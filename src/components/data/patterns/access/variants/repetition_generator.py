@@ -2,7 +2,6 @@ from typing import List
 
 import numpy as np
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -44,30 +43,32 @@ def generate_repetition_pattern(
             * Using invalid arguments or data types (TypeError).
     """
     try:
-        debug(
-            f"Repetition interval for repetition pattern: {repetition_interval}"
-        )
-        debug(f"Repetition offset for repetition pattern: {repetition_offset}")
-
         # Based on a repetition interval
         if requests_count % repetition_interval == 0:
             # Regular access to a key
             requested_key = requests[-repetition_offset]
-            debug("Regular repetition pattern access")
         else:
             slice_length = max(1, (num_keys // repetition_offset))
             # Random access to a key taken from
             # a subset of initial keys
             requested_key = np.random.choice(keys_range[:slice_length])
-            debug(
-                f"Random repetition pattern access "
-                f"among the first {slice_length} keys"
-            )
-
-        debug(f"(Repetition pattern) Key requested: {requested_key}")
 
         return requested_key
     except (IndexError, TypeError, ValueError) as e:
-        msg = "Failed to generate repetition pattern"
-        error("%s: %s", msg, e)
+        msg = "Repetition pattern generation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "repetition_interval": repetition_interval,
+                "repetition_offset": repetition_offset,
+                "requests_count": requests_count,
+                "requests_len": len(requests) if requests else 0,
+                "keys_range_len": (
+                    len(keys_range) if keys_range is not None else 0
+                ),
+                "num_keys": num_keys,
+                "context": "Repetition pattern generation",
+            },
+        )
         raise RuntimeError(msg) from e

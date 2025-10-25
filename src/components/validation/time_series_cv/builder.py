@@ -23,15 +23,35 @@ def build_time_series_split(num_folds: int) -> TimeSeriesSplit:
             * Number of folds has incorrect type (TypeError).
     """
     try:
-        debug(f"Number of folds for TimeSeriesSplit: {num_folds}")
+        debug(
+            "TimeSeriesSplit building started",
+            extra={
+                "num_folds_requested": num_folds,
+                "context": "TimeSeriesSplit building",
+            },
+        )
 
         # Instantiate the TimeSeriesSplit object
         tss = TimeSeriesSplit(n_splits=num_folds)
 
-        debug(f"TimeSeriesSplit built")
+        debug(
+            "TimeSeriesSplit building completed",
+            extra={
+                "num_folds_actual": tss.n_splits,
+                "tss_object_type": type(tss).__name__,
+                "context": "TimeSeriesSplit building",
+            },
+        )
 
         return tss
     except (ValueError, TypeError) as e:
-        msg = "Failed to build TimeSeriesSplit"
-        error("%s: %s", msg, e)
+        msg = "TimeSeriesSplit building failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "num_folds_requested": num_folds,
+                "context": "TimeSeriesSplit building",
+            },
+        )
         raise RuntimeError(msg) from e

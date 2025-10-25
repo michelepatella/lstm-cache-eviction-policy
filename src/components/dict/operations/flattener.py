@@ -33,7 +33,17 @@ def flatten_dict(
               (AttributeError).
     """
     try:
-        debug(f"Level to flatten dictionary at: {parent_key}")
+        debug(
+            "Dictionary flattering started",
+            extra={
+                "parent_key": parent_key,
+                "nested_dict_type": type(nested_dict).__name__,
+                "num_keys_at_level": (
+                    len(nested_dict) if isinstance(nested_dict, dict) else None
+                ),
+                "context": "Dictionary flattening",
+            },
+        )
 
         items = []
         for key, value in nested_dict.items():
@@ -44,12 +54,34 @@ def flatten_dict(
             else:
                 # Save flattened item
                 items.append((new_key, value))
-                debug(f"Added flattened key: {new_key} -> value: {value}")
+                debug(
+                    "Flattened key added",
+                    extra={
+                        "flattened_key": new_key,
+                        "value": value,
+                        "context": "Dictionary flattening",
+                    },
+                )
 
-        debug(f"Dictionary flattened at level {parent_key}: {items}")
+        debug(
+            "Dictionary flattering completed",
+            extra={
+                "parent_key": parent_key,
+                "num_flattened_items": len(items),
+                "context": "Dictionary flattening",
+            },
+        )
 
         return items
     except (TypeError, RecursionError, AttributeError) as e:
-        msg = "Failed to flatten dictionary"
-        error("%s: %s", msg, e)
+        msg = "Dictionary flattering failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "parent_key": parent_key,
+                "nested_dict_type": type(nested_dict).__name__,
+                "context": "Dictionary flattening",
+            },
+        )
         raise RuntimeError(msg) from e

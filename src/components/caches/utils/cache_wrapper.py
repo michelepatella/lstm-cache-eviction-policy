@@ -1,7 +1,6 @@
 from typing import Any
 
 from components.caches.implementations.utils.base_cache import BaseCache
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -60,12 +59,30 @@ class CacheWrapper(BaseCache):
 
             # Log cache operation in metrics logger
             self.metrics_logger.log_put(key, current_time, self.ttl)
-
-            debug(
-                f"Key inserted into cache wrapper: {key}, "
-                f"expiration time: {self.expiry[key]}"
-            )
         except (AttributeError, TypeError) as e:
-            msg = "Failed to insert key into cache wrapper"
-            error("%s: %s", msg, e)
+            msg = "Item insertion into cache wrapper failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "key": key,
+                    "current_time": current_time,
+                    "ttl": getattr(self, "ttl", None),
+                    "cache_keys_count": (
+                        len(self.cache)
+                        if hasattr(self, "cache") and self.cache
+                        else None
+                    ),
+                    "expiry_keys_count": (
+                        len(self.expiry)
+                        if hasattr(self, "expiry") and self.expiry
+                        else None
+                    ),
+                    "metrics_logger_initialized": hasattr(
+                        self, "metrics_logger"
+                    ),
+                    "cache_wrapper_class": type(self).__name__,
+                    "context": "CacheWrapper",
+                },
+            )
             raise RuntimeError(msg) from e

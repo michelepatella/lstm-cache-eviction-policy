@@ -2,7 +2,6 @@ from typing import Union
 
 import pandas as pd
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -30,14 +29,21 @@ def shift_dataset_column(
               (TypeError, AttributeError).
     """
     try:
-        debug(f"Dataset column to shift: {column_name}")
-        debug(f"Shift to apply to dataset column: {shift}")
-
         # Cast to int and apply shift to column
         df[column_name] = df[column_name] + shift
-
-        debug("Dataset column shifted")
     except (TypeError, AttributeError, KeyError) as e:
-        msg = "Failed to shift dataset column"
-        error("%s: %s", msg, e)
+        msg = "Dataset column shifting failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "column_name": column_name,
+                "shift_value": shift,
+                "existing_columns": (
+                    df.columns.tolist() if hasattr(df, "columns") else None
+                ),
+                "num_rows": len(df) if hasattr(df, "__len__") else None,
+                "context": "Dataset column shifting",
+            },
+        )
         raise RuntimeError(msg) from e

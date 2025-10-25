@@ -29,10 +29,13 @@ def build_dataset(
             * Mismatched lengths of column values (ValueError).
     """
     try:
-        debug(f"Columns number of dataset to be built: {len(columns)}")
         debug(
-            f"Amount of data for dataframe to be"
-            f" built: {sum(len(v) for v in columns.values())}"
+            "Dataset building started",
+            extra={
+                "columns_provided": list(columns.keys()),
+                "num_columns": len(columns),
+                "context": "Dataset building",
+            },
         )
 
         # Create dataframe for the
@@ -40,11 +43,29 @@ def build_dataset(
         df = pd.DataFrame(columns)
 
         debug(
-            f"Dataset built with {len(df)} rows and {len(df.columns)} columns"
+            "Dataset building completed",
+            extra={
+                "num_rows": len(df),
+                "num_columns": len(df.columns),
+                "column_names": df.columns.tolist(),
+                "context": "Dataset building",
+            },
         )
 
         return df
     except (ValueError, TypeError) as e:
-        msg = "Failed to create dataset"
-        error("%s: %s", msg, e)
+        msg = "Dataset building failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "columns_provided": (
+                    list(columns.keys()) if isinstance(columns, dict) else None
+                ),
+                "num_columns": (
+                    len(columns) if isinstance(columns, dict) else None
+                ),
+                "context": "Dataset building",
+            },
+        )
         raise RuntimeError(msg) from e

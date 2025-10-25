@@ -38,8 +38,13 @@ def get_parameters_combination(
     try:
         # Prepare configuration
         search_space = config.validation.search_space.model_dump()
+
         debug(
-            f"Search space to generate parameters combinations from: {search_space}"
+            "Parameter combinations generation started",
+            extra={
+                "search_space": search_space,
+                "context": "Parameter combinations generation",
+            },
         )
 
         # Generate combinations per search
@@ -55,10 +60,24 @@ def get_parameters_combination(
             section_combination_dicts
         )
 
-        debug(f"{len(param_combinations)} parameter combinations generated")
+        debug(
+            "Parameter combinations generation completed",
+            extra={
+                "total_param_combinations": len(param_combinations),
+                "sections_processed": list(search_space.keys()),
+                "context": "Parameter combinations generation",
+            },
+        )
 
         return param_combinations
     except AttributeError as e:
-        msg = "Failed to generate parameter combinations"
-        error("%s: %s", msg, e)
+        msg = "Parameter combinations generation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "search_space": search_space if not None else None,
+                "context": "Parameter combinations generation",
+            },
+        )
         raise RuntimeError(msg) from e

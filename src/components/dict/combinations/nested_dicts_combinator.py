@@ -3,7 +3,6 @@ from typing import Any, Dict, List
 
 from components.dict.operations.flattener import flatten_dict
 from components.dict.operations.value_setter import set_dict_value
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -50,13 +49,22 @@ def combine_nested_dicts(nested_dict: Dict[str, Any]) -> List[Dict[str, Any]]:
                 set_dict_value(combo, key_path, value)
             combination_dicts.append(combo)
 
-        debug(
-            f"Nested dictionary combinations generated "
-            f"({len(combination_dicts)} combinations)"
-        )
-
         return combination_dicts
     except (TypeError, ValueError) as e:
-        msg = "Failed to generate combinations from nested dictionary"
-        error("%s: %s", msg, e)
+        msg = "Nested dictionary combinations generation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "nested_dict_keys": (
+                    list(nested_dict.keys())
+                    if isinstance(nested_dict, dict)
+                    else None
+                ),
+                "num_keys": (
+                    len(nested_dict) if isinstance(nested_dict, dict) else None
+                ),
+                "context": "Nested dictionary combinations generation",
+            },
+        )
         raise RuntimeError(msg) from e

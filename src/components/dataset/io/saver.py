@@ -3,7 +3,6 @@ import pandas as pd
 from components.const import DATASET_INDEX_DISABLED
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def save_dataset(
@@ -28,15 +27,49 @@ def save_dataset(
             * File cannot be written due to I/O error (OSError).
     """
     try:
-        debug(f"Path to save dataset to: {path}")
+        debug(
+            "Dataset saving started",
+            extra={
+                "path": path,
+                "save_index": index,
+                "num_rows": len(df) if hasattr(df, "__len__") else None,
+                "num_columns": (
+                    len(df.columns) if hasattr(df, "columns") else None
+                ),
+                "context": "Dataset saving",
+            },
+        )
 
         # Convert Pandas dataframe
         # to CSV file, and save it to
         # given path
         df.to_csv(path, index=index)
 
-        info(f"Dataset saved at: {path}")
+        debug(
+            "Dataset saving completed",
+            extra={
+                "path": path,
+                "save_index": index,
+                "num_rows": len(df) if hasattr(df, "__len__") else None,
+                "num_columns": (
+                    len(df.columns) if hasattr(df, "columns") else None
+                ),
+                "context": "Dataset saving",
+            },
+        )
     except OSError as e:
-        msg = "Failed to save dataset"
-        error("%s: %s", msg, e)
+        msg = "Dataset saving failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "path": path,
+                "save_index": index,
+                "num_rows": len(df) if hasattr(df, "__len__") else None,
+                "num_columns": (
+                    len(df.columns) if hasattr(df, "columns") else None
+                ),
+                "context": "Dataset saving",
+            },
+        )
         raise RuntimeError(msg) from e

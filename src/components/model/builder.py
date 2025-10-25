@@ -1,6 +1,5 @@
 from typing import Dict, Optional, Union
 
-from components.logs.levels.debug_logger import debug
 from components.model.lstm import LSTM
 from pipeline.config.pydantic.config import Config
 from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
@@ -36,7 +35,5 @@ def build_model(
     model = LSTM(
         model_params, min_key, max_key, embedding_dim, num_features, config
     )
-
-    debug("Model built")
 
     return model

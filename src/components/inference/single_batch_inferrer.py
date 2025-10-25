@@ -6,7 +6,6 @@ from components.backpropagation.mc_dropout.forward_runner import (
     compute_mc_dropout_forward,
 )
 from components.device.mover import move_to_device
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.loss.calculator import calculate_loss
 
@@ -83,10 +82,21 @@ def infer_single_batch(
             [t.cpu() for t in outputs_var] if outputs_var is not None else []
         )
 
-        debug("Single batch inference completed")
-
         return loss, predictions, targets, outputs, variances
     except (TypeError, IndexError, AttributeError, RuntimeError) as e:
-        msg = "Failed to infer single batch"
-        error("%s: %s", msg, e)
+        msg = "Single batch inference failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "model_name": model.__class__.__name__,
+                "device": str(device),
+                "num_features": num_features,
+                "batch_type": str(type(batch)),
+                "batch_length": (
+                    len(batch) if hasattr(batch, "__len__") else None
+                ),
+                "context": "Single batch inference",
+            },
+        )
         raise RuntimeError(msg) from e

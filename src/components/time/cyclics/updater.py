@@ -1,6 +1,5 @@
 from typing import Tuple
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -34,13 +33,6 @@ def update_cyclic_time(
               operations fail (TypeError).
     """
     try:
-        debug(
-            f"Current time in cycle: {current_time_in_cycle}, "
-            f"cycle count: {cycle_count} to be updated"
-        )
-        debug(f"Cycle period: {period}")
-        debug(f"Delta time to apply: {delta_t}")
-
         # Update time and cycle count if the new time
         # (given by adding delta to the current one) exceeds
         # the provided period
@@ -52,13 +44,18 @@ def update_cyclic_time(
             # Still in the current cycle
             current_time_in_cycle += delta_t
 
-        debug(
-            f"Time updated (current time in cycle: {current_time_in_cycle}, "
-            f"cycle count: {cycle_count})"
-        )
-
         return current_time_in_cycle, cycle_count
     except TypeError as e:
-        msg = "Failed to update cyclic time"
-        error("%s: %s", msg, e)
+        msg = "Cyclic time updating failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "current_time_in_cycle": current_time_in_cycle,
+                "cycle_count": cycle_count,
+                "period": period,
+                "delta_t": delta_t,
+                "context": "Cyclic time updating",
+            },
+        )
         raise RuntimeError(msg) from e

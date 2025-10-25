@@ -32,6 +32,22 @@ def clear_cache(
         if data_freq is not None:
             data_freq.clear()
     except (AttributeError, TypeError) as e:
-        msg = "Failed to clear cache"
-        error("%s: %s", msg, e)
+        msg = "Cache cleaning failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "data_type": type(data).__name__,
+                "data_size": len(data) if hasattr(data, "__len__") else None,
+                "data_freq_type": (
+                    type(data_freq).__name__ if data_freq else None
+                ),
+                "data_freq_len": (
+                    len(data_freq)
+                    if data_freq and hasattr(data_freq, "__len__")
+                    else None
+                ),
+                "context": "Cache cleaning",
+            },
+        )
         raise RuntimeError(msg) from e

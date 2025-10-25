@@ -16,9 +16,9 @@ MLFLOW_PYTORCH_SAVE_MODEL_PATH = "model"
 # ----------------------------
 # Dagshub
 # ----------------------------
-DAGS_HUB_REPO_OWNER = "anonymous_dev"
-DAGS_HUB_REPO_NAME = "lstm-cache-eviction-policy"
 DAGS_HUB_MLFLOW_ENABLED = True
+DAGS_HUB_REPO_NAME_ENV_VAR_NAME = "DAGS_HUB_REPO_NAME"
+DAGS_HUB_REPO_OWNER_ENV_VAR_NAME = "DAGS_HUB_REPO_OWNER"
 
 
 # ----------------------------

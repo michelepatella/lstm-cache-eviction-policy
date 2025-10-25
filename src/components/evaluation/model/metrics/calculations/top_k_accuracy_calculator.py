@@ -2,7 +2,6 @@ from typing import List
 
 import torch
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.math.percentage_calculator import calculate_percentage
@@ -34,9 +33,6 @@ def calculate_top_k_accuracy(
             * Division by zero if no targets are provided (ZeroDivisionError).
     """
     try:
-        debug(f"Targets length: {len(targets)}")
-        debug(f"Outputs length: {len(outputs)}")
-
         # Stack outputs in a single 2D tensor
         outputs_tensor = torch.stack(outputs, dim=0)
 
@@ -44,7 +40,6 @@ def calculate_top_k_accuracy(
         top_k_predictions = (
             torch.topk(outputs_tensor, k=top_k, dim=1).indices.cpu().numpy()
         )
-        debug(f"Top-{top_k} predictions shape: {top_k_predictions.shape}")
 
         # Count correct predictions
         correct_predictions = sum(
@@ -58,10 +53,29 @@ def calculate_top_k_accuracy(
             correct_predictions, len(targets)
         )
 
-        info(f"Top-{top_k} accuracy: {top_k_accuracy}")
+        info(
+            "Top-k accuracy calculated",
+            extra={
+                "num_targets": len(targets),
+                "num_outputs": len(outputs),
+                "top_k": top_k,
+                "correct_predictions": correct_predictions,
+                "top_k_accuracy": top_k_accuracy,
+                "context": "Top-k accuracy calculation",
+            },
+        )
 
         return top_k_accuracy
     except (RuntimeError, IndexError, TypeError, ZeroDivisionError) as e:
-        msg = "Failed to compute top-k accuracy"
-        error("%s: %s", msg, e)
+        msg = "Top-k accuracy calculation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "num_targets": len(targets) if targets else 0,
+                "num_outputs": len(outputs) if outputs else 0,
+                "top_k": top_k,
+                "context": "Top-k accuracy calculation",
+            },
+        )
         raise RuntimeError(msg) from e

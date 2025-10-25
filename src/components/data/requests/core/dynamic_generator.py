@@ -5,7 +5,6 @@ import numpy as np
 from components.data.requests.utils.generation_helper import (
     generate_requests_helper,
 )
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from pipeline.config.pydantic.config import Config
@@ -38,8 +37,6 @@ def generate_dynamic_requests(
             * Converting alpha values to list due to invalid sequence (TypeError).
     """
     try:
-        info("Dynamic requests generation started")
-
         # Prepare configuration
         zipf_config = config.data.pattern.access.zipf
         alpha_min = zipf_config.alpha.min
@@ -47,19 +44,26 @@ def generate_dynamic_requests(
         steps = zipf_config.steps
         num_requests = config.data.requests
 
-        debug(
-            f"Dynamic alpha values generation from"
-            f" {alpha_min} to {alpha_max}, in {steps} steps"
-        )
-
         # Generate evenly spaced alpha
         # values for dynamic time steps
         alpha_range = np.linspace(alpha_min, alpha_max, steps).tolist()
-        debug(f"Alpha values generated for dynamic requests: {alpha_range}")
 
         # Calculate time step duration for
         # requests generation
         time_step_duration = num_requests // len(alpha_range)
+
+        info(
+            "Dynamic requests generation started",
+            extra={
+                "alpha_min": alpha_min,
+                "alpha_max": alpha_max,
+                "steps": steps,
+                "num_requests": num_requests,
+                "time_step_duration": time_step_duration,
+                "alpha_range": alpha_range,
+                "context": "Dynamic requests generation",
+            },
+        )
 
         # Use common helper to generate
         # requests based on dynamic alpha range
@@ -68,12 +72,26 @@ def generate_dynamic_requests(
         )
 
         info(
-            f"Dynamic requests generated ({len(requests)} requests, "
-            f"{len(timestamps_hours)} timestamps in hours)"
+            "Dynamic requests generation completed",
+            extra={
+                "num_requests_generated": len(requests),
+                "num_timestamps_generated": len(timestamps_hours),
+                "context": "Dynamic requests generation",
+            },
         )
 
         return requests, timestamps_hours
     except (ValueError, TypeError) as e:
-        msg = "Failed to generate dynamic requests"
-        error("%s: %s", msg, e)
+        msg = "Dynamic requests generation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "alpha_min": alpha_min,
+                "alpha_max": alpha_max,
+                "steps": steps,
+                "num_requests": num_requests,
+                "context": "Dynamic requests generation",
+            },
+        )
         raise RuntimeError(msg) from e

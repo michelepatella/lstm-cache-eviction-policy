@@ -45,6 +45,19 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
             * Dataset or column values not suitable for processing (TypeError).
     """
     try:
+        debug(
+            "Dataset features building started",
+            extra={
+                "num_rows": len(df) if hasattr(df, "__len__") else None,
+                "existing_columns": (
+                    df.columns.tolist() if hasattr(df, "columns") else None
+                ),
+                "time_column": DATASET_TIMESTAMP_COLUMN_NAME,
+                "target_column": DATASET_REQUEST_COLUMN_NAME,
+                "context": "Dataset features building",
+            },
+        )
+
         # Retrieve time column and convert it to
         # numpy array
         time_column_array = df[DATASET_TIMESTAMP_COLUMN_NAME].to_numpy()
@@ -62,10 +75,28 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
         # Reorder columns so that target is last
         df = reorder_dataset_columns(df, DATASET_REQUEST_COLUMN_NAME)
 
-        debug("Dataset features built")
+        debug(
+            "Dataset features building completed",
+            extra={
+                "num_rows": len(df),
+                "columns_after_processing": df.columns.tolist(),
+                "context": "Dataset features building",
+            },
+        )
 
         return df
     except (KeyError, TypeError) as e:
-        msg = "Failed to build dataset features"
-        error("%s: %s", msg, e)
+        msg = "Dataset features building failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "existing_columns": (
+                    df.columns.tolist() if hasattr(df, "columns") else None
+                ),
+                "expected_time_column": DATASET_TIMESTAMP_COLUMN_NAME,
+                "expected_target_column": DATASET_REQUEST_COLUMN_NAME,
+                "context": "Dataset features building",
+            },
+        )
         raise RuntimeError(msg) from e

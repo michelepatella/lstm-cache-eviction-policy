@@ -1,6 +1,5 @@
 from typing import Any, Dict
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from src.const import (
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
@@ -46,18 +45,23 @@ def check_update_hit_miss(
         if cache.contains(key, current_time):
             # Increase hit counter by one
             counters[hit_counter_name] += 1
-
-            debug(f"Cache HIT — key: {key}, time: {current_time}")
-
             return True
 
         # Increase miss counter by one
         counters[miss_counter_name] += 1
-
-        debug(f"Cache MISS — key: {key}, time: {current_time}")
-
         return False
     except (AttributeError, TypeError, KeyError) as e:
-        msg = "Failed to check and update cache hit and miss counters"
-        error("%s: %s", msg, e)
+        msg = "Hit/miss checking and updating failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "cache_type": type(cache).__name__,
+                "cache_has_contains": hasattr(cache, "contains"),
+                "key_type": type(key).__name__,
+                "current_time": current_time,
+                "counters_keys": list(counters.keys()) if counters else None,
+                "context": "Hit/miss checking and updating",
+            },
+        )
         raise RuntimeError(msg) from e

@@ -18,7 +18,6 @@ from components.const import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from src.const import (
     DATA_GENERATION_FINAL_HOUR,
     DATA_GENERATION_INITIAL_HOUR,
@@ -56,26 +55,21 @@ def plot_key_usage_heatmap(
             * NumPy operations fail due to invalid parameters (ValueError).
     """
     try:
-        debug(f"Number of requests for key usage heatmap: {len(requests)}")
-
         # Calculate number of hours to
         # show in the heatmap
         num_hours = (
             DATA_GENERATION_FINAL_HOUR - DATA_GENERATION_INITIAL_HOUR + 1
         )
-        debug(f"Number of hours for key usage heatmap: {num_hours}")
 
         # Calculate number of keys involved
         # in the heatmap
         num_keys = max_key - min_key + 1
-        debug(f"Number of keys for key usage heatmap: {num_keys}")
 
         # Initialize heatmap
         heatmap = np.zeros(
             (num_hours, num_keys),
             dtype=int,
         )
-        debug(f"Key usage heatmap shape (hours x keys): {heatmap.shape}")
 
         # Fill heatmap
         for (
@@ -88,12 +82,6 @@ def plot_key_usage_heatmap(
 
             # Get the index of the requested key
             requested_key_idx = current_request - min_key
-
-            debug(
-                f"Current request: {current_request}, "
-                f"hour: {current_timestamp_hour_int}, "
-                f"index in heatmap: {requested_key_idx}"
-            )
 
             # Check whether the current timestamp is
             # within the predefined range time and
@@ -155,8 +143,36 @@ def plot_key_usage_heatmap(
         plt.show()
         plt.close()
 
-        info(f"Key usage heatmap plotted and saved to: {save_path}")
+        debug(
+            "Key usage heatmap plotted and saved",
+            extra={
+                "save_path": save_path,
+                "num_hours": num_hours,
+                "num_keys": num_keys,
+                "num_requests": len(requests),
+                "num_timestamps": len(timestamps_hours),
+                "heatmap_shape": heatmap.shape,
+                "context": "Key usage heatmap",
+            },
+        )
     except (TypeError, ValueError) as e:
-        msg = "Failed to plot key usage heatmap"
-        error("%s: %s", msg, e)
+        msg = "Plotting key usage heatmap failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "save_path": save_path,
+                "min_key": min_key,
+                "max_key": max_key,
+                "num_requests": (
+                    len(requests) if isinstance(requests, list) else None
+                ),
+                "num_timestamps": (
+                    len(timestamps_hours)
+                    if isinstance(timestamps_hours, np.ndarray)
+                    else None
+                ),
+                "context": "Key usage heatmap",
+            },
+        )
         raise RuntimeError(msg) from e

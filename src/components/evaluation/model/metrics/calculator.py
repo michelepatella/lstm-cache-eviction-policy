@@ -45,10 +45,16 @@ def calculate_model_metrics(
                                       recall, f1-score, top-k accuracy, and Cohen's kappa
                                       score.
     """
-    debug(f"Targets length: {len(targets)}")
-    debug(f"Predictions length: {len(predictions)}")
-    debug(f"Outputs length: {len(outputs)}")
-    debug(f"Top-k: {top_k}")
+    debug(
+        "Model metrics calculation started",
+        extra={
+            "num_targets": len(targets),
+            "num_predictions": len(predictions),
+            "num_outputs": len(outputs),
+            "top_k": top_k,
+            "context": "Model metrics calculation",
+        },
+    )
 
     # Generate a class report
     class_report = calculate_class_report(targets, predictions)
@@ -66,6 +72,16 @@ def calculate_model_metrics(
         MODEL_METRICS_COHEN_KAPPA_SCORE_NAME: cohen_kappa_score,
     }
 
-    debug("Model metrics calculated")
+    debug(
+        "Model metrics calculation completed",
+        extra={
+            "metrics": metrics,
+            "num_targets": len(targets),
+            "num_predictions": len(predictions),
+            "num_outputs": len(outputs),
+            "top_k": top_k,
+            "context": "Model metrics calculation",
+        },
+    )
 
     return metrics

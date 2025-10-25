@@ -23,15 +23,19 @@ def drop_dataset_column(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
             * Column does not exist in the dataset (KeyError).
     """
     try:
-        debug(f"Column to be dropped from dataset: '{column_name}'")
-
         # Drop column from dataset
-        new_df = df.drop(columns=[column_name])
-
-        debug(f"Column '{column_name}' dropped from dataset")
-
-        return new_df
+        return df.drop(columns=[column_name])
     except KeyError as e:
-        msg = "Failed to remove column from dataset"
-        error("%s: %s", msg, e)
+        msg = "Column removal from dataset failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "column_requested": column_name,
+                "available_columns": (
+                    df.columns.tolist() if hasattr(df, "columns") else None
+                ),
+                "context": "Column removal from dataset",
+            },
+        )
         raise RuntimeError(msg) from e

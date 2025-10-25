@@ -2,7 +2,6 @@ from typing import List
 
 import numpy as np
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -49,13 +48,19 @@ def generate_distortion_pattern(
               inputs (ValueError, TypeError).
     """
     try:
-        debug(f"Interval for distortion pattern: {distortion_interval}")
-
         # Check whether requests list
         # is empty
         if not requests:
             msg = "Requests list is empty, cannot generate distortion pattern"
-            error("%s", msg)
+            error(
+                msg,
+                extra={
+                    "requests_count": requests_count,
+                    "keys_range_len": keys_range_size,
+                    "first_key": first_key,
+                    "context": "Distortion pattern generation",
+                },
+            )
             raise ValueError(msg)
 
         # Based on a distortion interval
@@ -71,11 +76,6 @@ def generate_distortion_pattern(
                 )
                 % keys_range_size
             ) + first_key
-            debug(
-                f"Regular distorted key access with"
-                f" history: {distortion_history}, and "
-                f"correction: {distortion_correction}"
-            )
         else:
             # Make a noisy key request by
             # taking the last accessed key and
@@ -84,15 +84,24 @@ def generate_distortion_pattern(
             requested_key = (
                 (requests[-1] - first_key + noise) % keys_range_size
             ) + first_key
-            debug(
-                f"Noisy distorted key access with "
-                f"noise: {noise} (within: {noise_min}, {noise_max})"
-            )
-
-        debug(f"(Distortion pattern) Key requested: {requested_key}")
 
         return requested_key
     except (IndexError, TypeError, ValueError) as e:
-        msg = "Failed to generate distortion pattern"
-        error("%s: %s", msg, e)
+        msg = "Distortion pattern generation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "distortion_interval": distortion_interval,
+                "distortion_history": distortion_history,
+                "distortion_correction": distortion_correction,
+                "requests_count": requests_count,
+                "requests_len": len(requests) if requests else 0,
+                "keys_range_len": keys_range_size,
+                "first_key": first_key,
+                "noise_min": noise_min,
+                "noise_max": noise_max,
+                "context": "Distortion pattern generation",
+            },
+        )
         raise RuntimeError(msg) from e

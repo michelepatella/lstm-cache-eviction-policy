@@ -1,6 +1,5 @@
 from typing import Union
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -24,8 +23,6 @@ def calculate_percentage(
         RuntimeError: If the value and/or total are not valid inputs.
     """
     try:
-        debug(f"Value: {value}, and total: {total} to calculate percentage")
-
         # If total is not zero calculate
         # percentage, otherwise set
         # percentage to zero
@@ -34,10 +31,18 @@ def calculate_percentage(
         else:
             percentage = value / total * 100
 
-        debug(f"Percentage calculated: {percentage}%")
-
         return percentage
     except (TypeError, ZeroDivisionError) as e:
-        msg = "Failed to calculate percentage"
-        error("%s: %s", msg, e)
+        msg = "Percentage calculation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "value": value,
+                "value_type": type(value).__name__,
+                "total": total,
+                "total_type": type(total).__name__,
+                "context": "Percentage calculation",
+            },
+        )
         raise RuntimeError(msg) from e

@@ -20,7 +20,6 @@ from components.const import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from src.const import (
     SIMULATIONS_METRICS_POLICY_NAME,
     SIMULATIONS_METRICS_TIMELINE_NAME,
@@ -55,10 +54,6 @@ def plot_hit_miss_rate(
             * Subplot axes indexing fails (IndexError).
     """
     try:
-        debug(
-            f"Number of policies to plot hit and miss rates for: {len(results)}"
-        )
-
         # Setup for the whole plot
         fig, axes = plt.subplots(
             nrows=PLOT_HIT_MISS_RATES_NUM_ROWS,
@@ -126,8 +121,35 @@ def plot_hit_miss_rate(
         plt.show()
         plt.close(fig)
 
-        info(f"Hit and miss rates plotted and saved to: {path}")
+        debug(
+            "Hit/miss rates plotted and saved",
+            extra={
+                "save_path": path,
+                "num_subplots": len(PLOT_HIT_MISS_RATES_SUBPLOTS),
+                "num_results": len(results),
+                "policies": [
+                    r[SIMULATIONS_METRICS_POLICY_NAME] for r in results
+                ],
+                "context": "Hit/miss rates plot",
+            },
+        )
     except (TypeError, KeyError, ValueError, AttributeError, IndexError) as e:
-        msg = "Failed to plot hit and miss rates"
-        error("%s: %s", msg, e)
+        msg = "Plotting hit/miss rates failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "save_path": path,
+                "num_subplots": len(PLOT_HIT_MISS_RATES_SUBPLOTS),
+                "num_results": (
+                    len(results) if isinstance(results, list) else None
+                ),
+                "policies": (
+                    [r.get(SIMULATIONS_METRICS_POLICY_NAME) for r in results]
+                    if isinstance(results, list)
+                    else None
+                ),
+                "context": "Hit/miss rates plot",
+            },
+        )
         raise RuntimeError(msg) from e

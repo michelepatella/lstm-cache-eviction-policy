@@ -24,22 +24,32 @@ def calculate_effective_dataset_rows(df: pd.DataFrame, seq_len: int) -> int:
             * Dataset is not a DataFrame (AttributeError).
     """
     try:
-        debug(
-            f"Sequence length to calculate effective dataset length: {seq_len}"
-        )
-
         # Calculate dataset length
         dataset_length = len(df) - seq_len
-        debug(f"Calculated dataset length: {dataset_length}")
 
         # Check whether dataset length is negative
         if dataset_length < 0:
             msg = "Calculated effective dataset length is negative"
-            error("%s", msg)
+            error(
+                msg,
+                extra={
+                    "num_rows": len(df) if hasattr(df, "__len__") else None,
+                    "seq_len": seq_len,
+                    "context": "Effective dataset length calculation",
+                },
+            )
             raise RuntimeError(msg)
 
         return dataset_length
     except (TypeError, AttributeError, ValueError) as e:
-        msg = "Failed to calculate effective dataset length"
-        error("%s: %s", msg, e)
+        msg = "Effective dataset length calculation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "num_rows": len(df) if hasattr(df, "__len__") else None,
+                "seq_len": seq_len,
+                "context": "Effective dataset length calculation",
+            },
+        )
         raise RuntimeError(msg) from e

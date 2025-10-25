@@ -1,6 +1,5 @@
 from typing import List, Optional, Union
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -21,18 +20,22 @@ def calculate_average(values: List[Union[int, float]]) -> Optional[float]:
             * List contains non-numeric values (TypeError).
     """
     try:
-        debug(f"Number of values to average: {len(values)}")
-
         # Calculate average of values if there
         # is at least one element in the list
         avg_value = None
         if len(values) != 0:
             avg_value = sum(values) / len(values)
 
-        debug(f"Average value calculated: {avg_value}")
-
         return avg_value
     except TypeError as e:
-        msg = "Failed to calculate average"
-        error("%s: %s", msg, e)
+        msg = "Average calculation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "values_type": type(values).__name__,
+                "values_len": len(values) if values is not None else 0,
+                "context": "Average calculation",
+            },
+        )
         raise RuntimeError(msg) from e

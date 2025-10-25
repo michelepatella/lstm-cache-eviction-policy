@@ -62,6 +62,18 @@ def evaluate_model(
             - all_variances: List of tensors containing variances from MC dropout
                              (if applicable), otherwise empty.
     """
+    debug(
+        "Model evaluation started",
+        extra={
+            "device": str(device),
+            "num_features": num_features,
+            "top_k": top_k,
+            "compute_metrics": compute_metrics,
+            "model_type": type(model).__name__,
+            "context": "Model evaluation",
+        },
+    )
+
     # Perform inference
     (
         total_loss,
@@ -73,7 +85,17 @@ def evaluate_model(
 
     # Calculate average loss
     avg_loss = calculate_average([total_loss / len(data_loader)])
-    info(f"Average loss: {avg_loss}")
+
+    info(
+        "Average loss computed",
+        extra={
+            "avg_loss": avg_loss,
+            "num_batches": len(data_loader),
+            "num_outputs": len(all_outputs),
+            "num_targets": len(all_targets),
+            "context": "Model evaluation",
+        },
+    )
 
     # Compute metrics if requested
     metrics = None
@@ -90,6 +112,17 @@ def evaluate_model(
         if model_results_save_path is not None:
             save_model_metrics(metrics, avg_loss, model_results_save_path)
 
-    debug("Model evaluation completed")
+    debug(
+        "Model evaluation completed",
+        extra={
+            "avg_loss": avg_loss,
+            "metrics_computed": metrics is not None,
+            "num_batches": len(data_loader),
+            "num_outputs": len(all_outputs),
+            "num_targets": len(all_targets),
+            "num_variances": len(all_variances),
+            "context": "Model evaluation",
+        },
+    )
 
     return avg_loss, metrics, all_outputs, all_targets, all_variances

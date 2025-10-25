@@ -1,6 +1,5 @@
 from typing import List
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -46,10 +45,6 @@ def generate_toggle_pattern(
             * Using invalid arguments or data types (TypeError).
     """
     try:
-        debug(
-            f"Toggle interval to determine the toggle state: {toggle_interval}"
-        )
-
         # Check whether first and second toggle
         # base requests are greater than the total
         # number of requests
@@ -57,26 +52,31 @@ def generate_toggle_pattern(
             toggle_second_base_request > len(requests)
         ):
             msg = (
-                f"Toggle first and second base request"
-                f" ({toggle_first_base_request, toggle_second_base_request})"
-                f" must be less than or equal to the number"
-                f" of requests ({len(requests)})."
+                f"Toggle first and second base request "
+                f"({toggle_first_base_request}, {toggle_second_base_request}) "
+                f"must be <= number of requests ({len(requests)})."
+            )
+            error(
+                msg,
+                extra={
+                    "exception": msg,
+                    "toggle_interval": toggle_interval,
+                    "toggle_forward": toggle_forward,
+                    "toggle_backward": toggle_backward,
+                    "toggle_first_base_request": toggle_first_base_request,
+                    "toggle_second_base_request": toggle_second_base_request,
+                    "requests_count": requests_count,
+                    "requests_len": len(requests),
+                    "first_key": first_key,
+                    "keys_range_len": keys_range_size,
+                    "context": "Toggle pattern generation",
+                },
             )
             error("%s", msg)
             raise ValueError(msg)
 
         # Get the toggle state (binary)
         toggle = (requests_count // toggle_interval) % 2
-
-        debug(f"Toggle state: {toggle}")
-        debug(
-            f"Toggle forward offset: {toggle_forward},"
-            f" backward offset: {toggle_backward}"
-        )
-        debug(
-            f"Toggle base requests: {toggle_first_base_request}"
-            f" (forward), {toggle_second_base_request} (backward)"
-        )
 
         # Determine the requested key
         # based on the toggle state
@@ -92,7 +92,6 @@ def generate_toggle_pattern(
                 )
                 % keys_range_size
             ) + first_key
-            debug("Forward toggle state access")
         else:
             # Requested key as the one requested
             # second base request steps before, adding
@@ -105,12 +104,24 @@ def generate_toggle_pattern(
                 )
                 % keys_range_size
             ) + first_key
-            debug("Backward toggle state access")
-
-        debug(f"(Toggle pattern) Key requested: {requested_key}")
 
         return requested_key
     except (ValueError, IndexError, TypeError) as e:
-        msg = "Failed to generate toggle pattern"
-        error("%s: %s", msg, e)
+        msg = "Toggle pattern generation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "toggle_interval": toggle_interval,
+                "toggle_forward": toggle_forward,
+                "toggle_backward": toggle_backward,
+                "toggle_first_base_request": toggle_first_base_request,
+                "toggle_second_base_request": toggle_second_base_request,
+                "requests_count": requests_count,
+                "requests_len": len(requests) if requests else 0,
+                "first_key": first_key,
+                "keys_range_len": keys_range_size,
+                "context": "Toggle pattern generation",
+            },
+        )
         raise RuntimeError(msg) from e

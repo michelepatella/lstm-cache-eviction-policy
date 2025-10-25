@@ -7,7 +7,7 @@ from components.logs.levels.error_logger import error
 def assert_min_less_than_max(
     min_val: Union[int, float],
     max_val: Union[int, float],
-    context: str,
+    values_context: str,
 ) -> None:
     """
     Check whether a maximum value is greater than or equal to
@@ -19,7 +19,7 @@ def assert_min_less_than_max(
     Args:
         min_val (Union[int, float]): The maximum value.
         max_val (Union[int, float]): The minimum value.
-        context (str): Context for error messages.
+        values_context (str): Context for error messages.
 
     Returns:
         None
@@ -32,18 +32,56 @@ def assert_min_less_than_max(
     """
     try:
         debug(
-            f"Min/Max values to be validated: {min_val}, {max_val} from {context}"
+            "Min/max validation started",
+            extra={
+                "min_val": min_val,
+                "max_val": max_val,
+                "values_context": values_context,
+                "context": "Min/max assertion",
+            },
         )
 
         # Check whether the minimum value is greater
         # than or equal to the maximum one
         if max_val <= min_val:
-            msg = f"{max_val} must be greater than {min_val} ({context})"
-            error("%s", msg)
+            msg = "Invalid min/max values"
+            error(
+                msg,
+                extra={
+                    "min_val": min_val,
+                    "max_val": max_val,
+                    "min_val_type": type(min_val).__name__,
+                    "max_val_type": type(max_val).__name__,
+                    "values_context": values_context,
+                    "status": "Invalid",
+                    "context": "Min/max assertion",
+                },
+            )
             raise ValueError(msg)
 
-        debug(f"{min_val} and {max_val} validated for {context}")
+        debug(
+            "Min/max validation completed",
+            extra={
+                "min_val": min_val,
+                "max_val": max_val,
+                "values_context": values_context,
+                "status": "Valid",
+                "context": "Min/max assertion",
+            },
+        )
     except TypeError as e:
-        msg = "Failed to validate minimum and maximum values"
-        error("%s: %s", msg, e)
+        msg = "Min/max validation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "min_val": min_val,
+                "max_val": max_val,
+                "min_val_type": type(min_val).__name__,
+                "max_val_type": type(max_val).__name__,
+                "values_context": values_context,
+                "status": "Invalid",
+                "context": "Min/max assertion",
+            },
+        )
         raise RuntimeError(msg) from e

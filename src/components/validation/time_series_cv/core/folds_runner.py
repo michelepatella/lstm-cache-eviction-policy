@@ -1,7 +1,6 @@
 from typing import Dict, List, Tuple, Union
 
 from components.dataset.access_logs_dataset import AccessLogsDataset
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.math.avg_calculator import calculate_average
@@ -50,14 +49,23 @@ def compute_time_series_cv_folds(
         # Get the number of training set samples
         num_samples = len(training_set)
 
-        debug(f"Training set size for time series CV: {num_samples}")
-        debug(f"Number of folds for time series CV: {cv_num_folds}")
-
         # Build TimeSeriesSplit object
         tss = build_time_series_split(cv_num_folds)
 
         # Compute all fold indices
         fold_indices = list(tss.split(range(num_samples)))
+
+        info(
+            "Time Series CV started",
+            extra={
+                "cv_num_folds": cv_num_folds,
+                "num_samples": num_samples,
+                "num_fold_indices": len(fold_indices),
+                "params": params,
+                "training_set_type": type(training_set).__name__,
+                "context": "Time Series CV",
+            },
+        )
 
         # Iterate over all folds
         fold_losses = []
@@ -76,12 +84,27 @@ def compute_time_series_cv_folds(
         final_avg_loss = calculate_average(fold_losses)
 
         info(
-            f"Time series cross-validation completed ("
-            f"average loss: {final_avg_loss})"
+            "Time Series CV completed",
+            extra={
+                "final_avg_loss": final_avg_loss,
+                "fold_losses": fold_losses,
+                "num_folds_completed": len(fold_indices),
+                "params": params,
+                "context": "Time Series CV",
+            },
         )
 
         return final_avg_loss, fold_losses
     except TypeError as e:
-        msg = "Failed to compute time series cross-validation"
-        error("%s: %s", msg, e)
+        msg = "Time Series CV failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "cv_num_folds": cv_num_folds,
+                "training_set_type": type(training_set).__name__,
+                "params": params,
+                "context": "Time Series CV",
+            },
+        )
         raise RuntimeError(msg) from e

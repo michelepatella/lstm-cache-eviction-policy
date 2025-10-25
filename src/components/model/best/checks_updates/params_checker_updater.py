@@ -2,7 +2,6 @@ from typing import Dict, Optional, Tuple, Union
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 def check_update_best_model_params(
@@ -38,10 +37,15 @@ def check_update_best_model_params(
               invalid types (TypeError).
     """
     try:
-        debug(f"Current average loss: {curr_avg_loss}")
-        debug(f"Best average loss: {best_avg_loss}")
-        debug(f"Current model parameters: {curr_model_params}")
-        debug(f"Best model parameters: {best_model_params}")
+        debug(
+            "Best model parameters checking/updating started",
+            extra={
+                "current_avg_loss": curr_avg_loss,
+                "best_avg_loss": best_avg_loss,
+                "current_model_params": curr_model_params,
+                "context": "Best model parameters checking/updating",
+            },
+        )
 
         # Update the best model parameters if
         # improvement in loss is found (or best average loss
@@ -50,18 +54,31 @@ def check_update_best_model_params(
             best_avg_loss = curr_avg_loss
             best_model_params = curr_model_params
 
-            info(
-                f"Best model parameters check and update completed "
-                f"(New best model parameters: {best_model_params}, "
-                f"new best average loss: {best_avg_loss})"
-            )
-        else:
-            info(
-                "Best model parameters check and update completed (No improvement)"
-            )
+        debug(
+            "Best model parameters checking/updating completed",
+            extra={
+                "current_avg_loss": curr_avg_loss,
+                "best_avg_loss": best_avg_loss,
+                "best_model_updated": curr_avg_loss
+                < (
+                    best_avg_loss
+                    if best_avg_loss is not None
+                    else float("inf")
+                ),
+                "context": "Best model parameters checking/updating",
+            },
+        )
 
         return best_avg_loss, best_model_params
     except TypeError as e:
-        msg = "Failed to check and update best model parameters"
-        error("%s: %s", msg, e)
+        msg = "Best model parameters checking/updating failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "current_avg_loss": curr_avg_loss,
+                "best_avg_loss": best_avg_loss,
+                "context": "Best model parameters checking/updating",
+            },
+        )
         raise RuntimeError(msg) from e

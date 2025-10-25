@@ -64,7 +64,8 @@ stages:
       - src/components/dataset/builder.py
       - src/components/dataset/io/locator.py
       - src/components/dataset/io/saver.py
-      - src/components/logs/file_handlers/builder.py
+      - src/components/logs/handlers/file_handler_builder.py
+      - src/components/logs/handlers/elastic_handler.py
       - src/components/logs/initializer.py
       - src/components/logs/levels/debug_logger.py
       - src/components/logs/levels/error_logger.py
@@ -114,7 +115,8 @@ stages:
       - src/components/dataset/io/loader.py
       - src/components/dataset/io/locator.py
       - src/components/dataset/io/saver.py
-      - src/components/logs/file_handlers/builder.py
+      - src/components/logs/handlers/file_handler_builder.py
+      - src/components/logs/handlers/elastic_handler.py
       - src/components/logs/initializer.py
       - src/components/logs/levels/debug_logger.py
       - src/components/logs/levels/error_logger.py
@@ -203,7 +205,8 @@ stages:
       - src/components/inference/batches_inferrer.py
       - src/components/inference/single_batch_inferrer.py
       - src/components/json/io/saver.py
-      - src/components/logs/file_handlers/builder.py
+      - src/components/logs/handlers/file_handler_builder.py
+      - src/components/logs/handlers/elastic_handler.py
       - src/components/logs/initializer.py
       - src/components/logs/levels/debug_logger.py
       - src/components/logs/levels/error_logger.py
@@ -306,7 +309,8 @@ stages:
       - src/components/inference/batches_inferrer.py
       - src/components/inference/single_batch_inferrer.py
       - src/components/json/io/saver.py
-      - src/components/logs/file_handlers/builder.py
+      - src/components/logs/handlers/file_handler_builder.py
+      - src/components/logs/handlers/elastic_handler.py
       - src/components/logs/initializer.py
       - src/components/logs/levels/debug_logger.py
       - src/components/logs/levels/error_logger.py
@@ -393,7 +397,8 @@ stages:
       - src/components/inference/batches_inferrer.py
       - src/components/inference/single_batch_inferrer.py
       - src/components/json/io/saver.py
-      - src/components/logs/file_handlers/builder.py
+      - src/components/logs/handlers/file_handler_builder.py
+      - src/components/logs/handlers/elastic_handler.py
       - src/components/logs/initializer.py
       - src/components/logs/levels/debug_logger.py
       - src/components/logs/levels/error_logger.py
@@ -485,7 +490,8 @@ stages:
       - src/components/evaluation/simulations/metrics/calculator.py
       - src/components/evaluation/simulations/metrics/io/saver.py
       - src/components/json/io/saver.py
-      - src/components/logs/file_handlers/builder.py
+      - src/components/logs/handlers/file_handler_builder.py
+      - src/components/logs/handlers/elastic_handler.py
       - src/components/logs/initializer.py
       - src/components/logs/levels/debug_logger.py
       - src/components/logs/levels/error_logger.py

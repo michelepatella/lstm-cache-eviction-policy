@@ -33,8 +33,18 @@ def build_data_loader(
             * Batch size or shuffle parameters are invalid (TypeError, ValueError).
     """
     try:
-        debug(f"Batch size for the data loader to be built: {batch_size}")
-        debug(f"Shuffle for the data loader to be built: {shuffle}")
+        debug(
+            "Data loader building started",
+            extra={
+                "dataset_type": type(dataset).__name__,
+                "num_samples": (
+                    len(dataset) if hasattr(dataset, "__len__") else None
+                ),
+                "batch_size": batch_size,
+                "shuffle": shuffle,
+                "context": "Data loader building",
+            },
+        )
 
         # Instantiate the data loader
         data_loader = DataLoader(
@@ -43,10 +53,31 @@ def build_data_loader(
             shuffle=shuffle,
         )
 
-        debug("Data loader built")
+        debug(
+            "Data loader building completed",
+            extra={
+                "dataset_type": type(dataset).__name__,
+                "num_samples": (
+                    len(dataset) if hasattr(dataset, "__len__") else None
+                ),
+                "batch_size": batch_size,
+                "shuffle": shuffle,
+                "num_batches_estimated": len(data_loader),
+                "context": "Data loader building",
+            },
+        )
 
         return data_loader
     except (TypeError, ValueError) as e:
-        msg = "Failed to build data loader"
-        error("%s: %s", msg, e)
+        msg = "Data loader building failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "dataset_type": type(dataset).__name__,
+                "batch_size": batch_size,
+                "shuffle": shuffle,
+                "context": "Data loader building",
+            },
+        )
         raise RuntimeError(msg) from e

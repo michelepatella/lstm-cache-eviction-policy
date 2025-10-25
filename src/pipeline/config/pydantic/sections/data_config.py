@@ -62,7 +62,7 @@ class KeysConfig(BaseModel):
         assert_min_less_than_max(
             self.min,
             self.max,
-            context="data.keys",
+            values_context="data.keys",
         )
 
         return self
@@ -183,7 +183,7 @@ class NoiseConfig(BaseModel):
         assert_min_less_than_max(
             self.min,
             self.max,
-            context="data.pattern.access.behavior.distortion.noise",
+            values_context="data.pattern.access.behavior.distortion.noise",
         )
 
         return self
@@ -332,7 +332,7 @@ class BurstinessConfig(BaseModel):
         assert_min_less_than_max(
             self.high,
             self.low,
-            context="data.pattern.temporal.burstiness",
+            values_context="data.pattern.temporal.burstiness",
         )
 
         return self

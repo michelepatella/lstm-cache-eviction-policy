@@ -1,17 +1,21 @@
 import logging
-from typing import Any
+from typing import Optional, Dict, Any
 
-from components.const import LOGS_DEFAULT_PHASE, LOGS_PHASE_NAME
+from components.const import (
+    LOGS_DEFAULT_PHASE,
+    LOGS_PHASE_NAME,
+    LOGS_LOGGER_NAME,
+)
 from components.logs.initializer import logs_phase
 
 
 def log(
     level: int,
     msg: str,
-    *args: Any,
     log_phase_name: str = LOGS_PHASE_NAME,
     log_phase: str = LOGS_DEFAULT_PHASE,
-    **kwargs: Any
+    extra: Optional[Dict[str, Any]] = None,
+    logger_name: str = LOGS_LOGGER_NAME,
 ):
     """
     Log a message.
@@ -22,10 +26,10 @@ def log(
     Args:
         level (int): The log level.
         msg (str): The message to log.
-        args (Any): Positional arguments for the message.
         log_phase_name (str): The name of the log phase.
         log_phase (str): Current log phase.
-        kwargs (Any): Keyword arguments for the logging function.
+        extra (Optional[Dict[str, Any]]): Optional additional context.
+        logger_name (str): The name of the logger to use.
 
     Returns:
         None
@@ -35,11 +39,14 @@ def log(
     if log_phase is None:
         log_phase = logs_phase.get()
 
+    # Prepare extra section as dictionary
+    extra_dict = {log_phase_name: log_phase}
+    extra_dict.update(extra)
+
     # Log message using provided level
-    logging.log(
+    logger = logging.getLogger(logger_name)
+    logger.log(
         level,
         msg,
-        *args,
-        extra={log_phase_name: log_phase},
-        **kwargs,
+        extra=extra_dict,
     )

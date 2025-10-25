@@ -1,4 +1,7 @@
+import os
+
 import dagshub
+from dotenv import load_dotenv
 
 from components.dataset.cleans.duplicates_remover import (
     remove_dataset_duplicates,
@@ -12,7 +15,7 @@ from components.dataset.features.builder import (
 from components.dataset.io.loader import load_dataset
 from components.dataset.io.locator import get_dataset_abs_path
 from components.dataset.io.saver import save_dataset
-from components.logs.initializer import initialize_logs, logs_phase
+from components.logs.initializer import logs_phase
 from components.logs.levels.info_logger import info
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
@@ -21,12 +24,16 @@ from pipeline.const import (
 )
 from src.const import (
     DAGS_HUB_MLFLOW_ENABLED,
-    DAGS_HUB_REPO_NAME,
-    DAGS_HUB_REPO_OWNER,
     DATASET_RAW_TYPE,
     DATASET_TIMESTAMP_COLUMN_NAME,
-    MLFLOW_NESTED_ENABLED,
+    MLFLOW_NESTED_ENABLED, DAGS_HUB_REPO_OWNER_ENV_VAR_NAME, DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
 )
+
+
+# Load env variables
+load_dotenv()
+dabs_hub_repo_owner = os.getenv(DAGS_HUB_REPO_OWNER_ENV_VAR_NAME)
+dags_hub_repo_name = os.getenv(DAGS_HUB_REPO_NAME_ENV_VAR_NAME)
 
 
 def preprocess_data() -> None:
@@ -45,8 +52,8 @@ def preprocess_data() -> None:
     logs_phase.set(LOGS_DATA_PREPROCESSING_PHASE)
 
     dagshub.init(
-        repo_owner=DAGS_HUB_REPO_OWNER,
-        repo_name=DAGS_HUB_REPO_NAME,
+        repo_owner=dabs_hub_repo_owner,
+        repo_name=dags_hub_repo_name,
         mlflow=DAGS_HUB_MLFLOW_ENABLED,
     )
 
@@ -58,7 +65,6 @@ def preprocess_data() -> None:
 
         # Setup
         config = prepare_config()
-        initialize_logs()
 
         info("Data preprocessing started")
 

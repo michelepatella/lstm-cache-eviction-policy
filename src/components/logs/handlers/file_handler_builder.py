@@ -1,5 +1,6 @@
-import logging
 from logging.handlers import RotatingFileHandler
+
+from pythonjsonlogger import json
 
 from components.const import (
     LOGS_FILE_BACKUP_COUNT,
@@ -44,6 +45,7 @@ def build_logs_file_handler(
     file_handler.setLevel(level)
 
     # Apply formatter
-    file_handler.setFormatter(logging.Formatter(file_format))
+    formatter = json.JsonFormatter(file_format)
+    file_handler.setFormatter(formatter)
 
     return file_handler

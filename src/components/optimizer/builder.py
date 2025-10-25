@@ -44,8 +44,18 @@ def build_optimizer(
               (TypeError, ValueError).
     """
     try:
-        debug(f"Optimizer type to be built: {optimizer_type}")
-        debug(f"Optimizer parameters: {optimizer_kwargs}")
+        debug(
+            "Optimizer building started",
+            extra={
+                "optimizer_type": optimizer_type,
+                "optimizer_kwargs": optimizer_kwargs,
+                "model_class": type(model).__name__,
+                "num_model_parameters": sum(
+                    p.numel() for p in model.parameters()
+                ),
+                "context": "Optimizer building",
+            },
+        )
 
         # Retrieve requested optimizer
         # instance from mapping
@@ -54,10 +64,33 @@ def build_optimizer(
         # Instantiate optimizer
         optimizer = optimizer_cls(model.parameters(), **optimizer_kwargs)
 
-        debug(f"Optimizer built: {optimizer_type}")
+        debug(
+            "Optimizer building completed",
+            extra={
+                "optimizer_type": optimizer_type,
+                "optimizer_class": type(optimizer).__name__,
+                "optimizer_kwargs": optimizer_kwargs,
+                "num_model_parameters": sum(
+                    p.numel() for p in model.parameters()
+                ),
+                "context": "Optimizer building",
+            },
+        )
 
         return optimizer
     except (TypeError, ValueError) as e:
-        msg = "Failed to build optimizer"
-        error("%s: %s", msg, e)
+        msg = "Optimizer building failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "optimizer_type": optimizer_type,
+                "optimizer_kwargs": optimizer_kwargs,
+                "model_class": type(model).__name__,
+                "num_model_parameters": sum(
+                    p.numel() for p in model.parameters()
+                ),
+                "context": "Optimizer building",
+            },
+        )
         raise RuntimeError(msg) from e

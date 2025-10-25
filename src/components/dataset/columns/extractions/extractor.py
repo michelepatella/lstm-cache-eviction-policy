@@ -2,7 +2,6 @@ from typing import List
 
 import pandas as pd
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -26,12 +25,16 @@ def extract_dataset_columns(df: pd.DataFrame) -> List[str]:
     """
     try:
         # Extract column names
-        columns = df.columns.tolist()
-
-        debug(f"{columns} columns extracted from dataset")
-
-        return columns
+        return df.columns.tolist()
     except (AttributeError, TypeError) as e:
-        msg = "Failed to extract columns from dataset"
-        error("%s: %s", msg, e)
+        msg = "Dataset columns extraction from dataset failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "df_type": type(df).__name__,
+                "has_columns_attr": hasattr(df, "columns"),
+                "context": "Dataset columns extraction from dataset",
+            },
+        )
         raise RuntimeError(msg) from e

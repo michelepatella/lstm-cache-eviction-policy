@@ -1,4 +1,3 @@
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -34,9 +33,6 @@ def set_bursty_scale(
               (TypeError, ValueError).
     """
     try:
-        debug(f"Burst band of day: {burst_start_hour} - {burst_end_hour}")
-        debug(f"Burst high/low: {burst_high}, {burst_low}")
-
         # Set bursty scale to burst high or low,
         # depending on the current hour in day
         # (if it is within the bursty band of the day)
@@ -45,13 +41,19 @@ def set_bursty_scale(
         else:
             bursty_scale = burst_low
 
-        debug(
-            f"Bursty scale: {bursty_scale}, set for"
-            f" current hour in day: {current_hour_in_day}"
-        )
-
         return bursty_scale
     except (TypeError, ValueError) as e:
-        msg = "Failed to set bursty scale"
-        error("%s: %s", msg, e)
+        msg = "Bursty scale setting failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "burst_high": burst_high,
+                "burst_low": burst_low,
+                "burst_start_hour": burst_start_hour,
+                "burst_end_hour": burst_end_hour,
+                "current_hour_in_day": current_hour_in_day,
+                "context": "Bursty scale setting",
+            },
+        )
         raise RuntimeError(msg) from e

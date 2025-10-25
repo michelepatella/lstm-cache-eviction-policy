@@ -4,7 +4,6 @@ import torch
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from components.model.state_dict.copier import (
     copy_model_state_dict,
 )
@@ -36,26 +35,46 @@ def check_update_best_model(
               invalid types (TypeError).
     """
     try:
-        debug(f"Current average loss: {curr_avg_loss}")
-        debug(f"Best average loss: {best_avg_loss}")
+        debug(
+            "Best model checking/updating started",
+            extra={
+                "current_avg_loss": curr_avg_loss,
+                "best_avg_loss": best_avg_loss,
+                "model_type": type(model).__name__,
+                "context": "Best model checking/updating",
+            },
+        )
 
         # Check for an average loss improvement
+        best_model_weights = None
         if curr_avg_loss < best_avg_loss:
             # Update both best average loss
             # and model weights
             best_avg_loss = curr_avg_loss
             best_model_weights = copy_model_state_dict(model)
 
-            info(
-                f"Model check and update completed (New best average loss: {best_avg_loss})"
-            )
+        debug(
+            "Best model checking/updating completed",
+            extra={
+                "current_avg_loss": curr_avg_loss,
+                "best_avg_loss": best_avg_loss,
+                "best_model_updated": best_model_weights is not None,
+                "model_type": type(model).__name__,
+                "context": "Best model checking/updating",
+            },
+        )
 
-            return best_avg_loss, best_model_weights
-
-        info("Model check and update completed (No improvement)")
-
-        return best_avg_loss, None
+        return best_avg_loss, best_model_weights
     except TypeError as e:
-        msg = "Failed to check and update the best model"
-        error("%s: %s", msg, e)
+        msg = "Best model checking/updating failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "current_avg_loss": curr_avg_loss,
+                "best_avg_loss": best_avg_loss,
+                "model_type": type(model).__name__,
+                "context": "Best model checking/updating",
+            },
+        )
         raise RuntimeError(msg) from e

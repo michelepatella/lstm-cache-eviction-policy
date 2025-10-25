@@ -58,13 +58,21 @@ def compute_grid_search(
               error or invalid iterable (RuntimeError or TypeError).
     """
     try:
-        debug(f"Training set size for grid search: {len(training_set)}")
-
         # Prepare configuration
         cv_num_folds = config.validation.cross_validation.folds
 
         # Get all parameter combinations
         params_combinations = get_parameters_combination(config)
+
+        info(
+            "Grid search started",
+            extra={
+                "training_set_len": len(training_set),
+                "total_param_combinations": len(params_combinations),
+                "cv_num_folds": cv_num_folds,
+                "context": "Grid search",
+            },
+        )
 
         # Initialize best tracking variables
         best_params = {}
@@ -76,8 +84,6 @@ def compute_grid_search(
             desc=GRID_SEARCH_DESC,
         ) as pbar:
             for idx, params in enumerate(params_combinations, start=1):
-                debug(f"Evaluating parameters combination: {params}")
-
                 with mlflow.start_run(
                     run_name=f"{LOGS_VALIDATION_PHASE} ({idx}/{len(params_combinations)})",
                     nested=MLFLOW_NESTED_ENABLED,
@@ -110,8 +116,13 @@ def compute_grid_search(
                 pbar.update(1)
 
         info(
-            f"Grid search completed (best parameters: \n{best_params}\n"
-            f"average loss: {best_avg_loss})"
+            "Grid search completed",
+            extra={
+                "best_params": best_params,
+                "best_avg_loss": best_avg_loss,
+                "total_param_combinations": len(params_combinations),
+                "context": "Grid search",
+            },
         )
 
         return best_params, best_avg_loss
@@ -122,6 +133,26 @@ def compute_grid_search(
         FloatingPointError,
         RuntimeError,
     ) as e:
-        msg = "Failed to compute grid search"
-        error("%s: %s", msg, e)
+        msg = "Grid search failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "training_set_len": (
+                    len(training_set) if training_set else None
+                ),
+                "num_folds": getattr(
+                    config.validation.cross_validation, "folds", None
+                ),
+                "total_param_combinations": (
+                    len(params_combinations)
+                    if "params_combinations" in locals()
+                    else None
+                ),
+                "current_best_avg_loss": (
+                    best_avg_loss if "best_avg_loss" in locals() else None
+                ),
+                "context": "Grid search",
+            },
+        )
         raise RuntimeError(msg) from e

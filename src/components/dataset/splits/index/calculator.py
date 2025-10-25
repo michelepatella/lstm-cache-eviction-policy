@@ -1,4 +1,3 @@
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
@@ -22,15 +21,17 @@ def calculate_dataset_split_index(dataset_len: int, split_perc: float) -> int:
             * Invalid numeric value (ValueError).
     """
     try:
-        debug(f"Dataset length to calculate split index for: {dataset_len}")
-        debug(f"Dataset splitting percentage: {split_perc}")
-
         # Calculate split index
-        split_idx = int(dataset_len * split_perc)
-        debug(f"Split index calculated: {split_idx}")
-
-        return split_idx
+        return int(dataset_len * split_perc)
     except (TypeError, ValueError) as e:
-        msg = "Failed to calculate dataset split index"
-        error("%s: %s", msg, e)
+        msg = "Dataset split index calculation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "dataset_length": dataset_len,
+                "split_percentage": split_perc,
+                "context": "Dataset split index calculation",
+            },
+        )
         raise RuntimeError(msg) from e

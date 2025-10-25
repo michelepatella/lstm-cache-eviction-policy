@@ -40,6 +40,27 @@ def evict_oldest_item(
 
         return oldest_key, oldest_item
     except (KeyError, AttributeError, TypeError) as e:
-        msg = "Failed to evict the oldest item"
-        error("%s: %s", msg, e)
+        msg = "Oldest item eviction failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "data_type": type(data).__name__ if data is not None else None,
+                "data_size": (
+                    len(data) if hasattr(data, "__len__") and data else 0
+                ),
+                "oldest_key_type": (
+                    type(oldest_key).__name__
+                    if "oldest_key" in locals()
+                    else None
+                ),
+                "oldest_item_type": (
+                    type(oldest_item).__name__
+                    if "oldest_item" in locals()
+                    else None
+                ),
+                "callback_present": callback is not None,
+                "context": "Oldest item eviction",
+            },
+        )
         raise RuntimeError(msg) from e

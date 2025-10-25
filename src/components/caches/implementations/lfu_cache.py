@@ -25,7 +25,6 @@ from components.caches.implementations.utils.cache_cleaner import clear_cache
 from components.caches.implementations.utils.cache_size_calculator import (
     calculate_cache_size,
 )
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
 
 
@@ -68,7 +67,13 @@ class LFUCache(Cache):
         self._freq = defaultdict()
         self.callback = callback
 
-        info(f"LFU cache initialized (maxsize={self.maxsize})")
+        info(
+            "Cache initialization executed",
+            extra={
+                "maxsize": self.maxsize,
+                "context": "LFU cache",
+            },
+        )
 
     def __getitem__(self: "LFUCache", key: Any) -> Any:
         """
@@ -84,14 +89,8 @@ class LFUCache(Cache):
         Returns:
             Any: Retrieved key item.
         """
-        debug(f"Key to get item from LFU cache for: {key}")
-
         # Retrieve item
-        item = get_item_from_cache(self._data, key)
-
-        debug(f"LFU cache item get: {item} (key={key})")
-
-        return item
+        return get_item_from_cache(self._data, key)
 
     def _evict_least_frequent(self: "LFUCache") -> None:
         """
@@ -108,11 +107,7 @@ class LFUCache(Cache):
             None
         """
         # Evict the least frequent item from cache
-        key_to_evict, min_freq = evict_least_frequent_item(
-            self._data, self._freq, self.callback
-        )
-
-        debug(f"LFU cache key evicted: {key_to_evict} (frequency={min_freq})")
+        evict_least_frequent_item(self._data, self._freq, self.callback)
 
     def __setitem__(self: "LFUCache", key: Any, item: Any) -> None:
         """
@@ -130,8 +125,6 @@ class LFUCache(Cache):
         Returns:
             None
         """
-        debug(f"Key and item to insert into LFU cache: {key}, {item}")
-
         # Insert item into cache
         insert_item_into_cache(
             self._data,
@@ -143,8 +136,6 @@ class LFUCache(Cache):
                 k, self._freq.get(k, 0) + 1
             ),
         )
-
-        debug(f"LFU cache item inserted: {item} (key={key})")
 
     def __delitem__(self: "LFUCache", key: Any) -> None:
         """
@@ -160,12 +151,8 @@ class LFUCache(Cache):
         Returns:
             None
         """
-        debug(f"Key to delete from LFU cache: {key}")
-
         # Delete both item from cache and its frequency
         delete_item_from_cache(self._data, key, self._freq)
-
-        debug(f"LFU cache key (and its frequency) deleted: {key}")
 
     def __contains__(self: "LFUCache", key: Any) -> bool:
         """
@@ -181,8 +168,6 @@ class LFUCache(Cache):
         Returns:
             bool: True if key exists in the LFU cache, False otherwise.
         """
-        debug(f"Key existence check into LFU cache: {key}")
-
         return check_item_into_cache(self._data, key)
 
     def pop(self: "LFUCache", key: Any) -> Optional[Any]:
@@ -200,12 +185,8 @@ class LFUCache(Cache):
             Optional[Any]: Item associated with the key removed
                            (None if its key is not found in the LFU cache).
         """
-        debug(f"Key to pop from LFU cache: {key}")
-
         # Remove item from cache
-        item = pop_item_from_cache(self._data, key, self._freq)
-
-        debug(f"LFU cache item (and its frequency) popped: {item} (key={key})")
+        return pop_item_from_cache(self._data, key, self._freq)
 
     def __len__(self: "LFUCache") -> int:
         """
@@ -221,11 +202,7 @@ class LFUCache(Cache):
             int: Number of cached items.
         """
         # Calculate cache size
-        cache_size = calculate_cache_size(self._data)
-
-        debug(f"LFU cache size calculated: {cache_size}")
-
-        return cache_size
+        return calculate_cache_size(self._data)
 
     def clear(self: "LFUCache") -> None:
         """
@@ -242,5 +219,3 @@ class LFUCache(Cache):
         """
         # Clear cache
         clear_cache(self._data, self._freq)
-
-        debug("LFU cache cleared")

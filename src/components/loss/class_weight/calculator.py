@@ -37,15 +37,26 @@ def calculate_class_weight(
               (IndexError).
     """
     try:
+        debug(
+            "Class weight calculation started",
+            extra={
+                "num_classes": num_classes,
+                "weight_type": weight_type,
+                "targets_type": type(targets).__name__,
+                "targets_shape": (
+                    tuple(targets.shape)
+                    if isinstance(targets, torch.Tensor)
+                    else None
+                ),
+                "context": "Class weight calculation",
+            },
+        )
+
         # Convert targets to NumPy array
         targets_array = targets.cpu().numpy()
-        debug(
-            f"Targets array shape for class weight calculation: {targets_array.shape}"
-        )
 
         # Identify present classes in targets
         present_classes = np.unique(targets_array)
-        debug(f"Present classes in targets: {present_classes}")
 
         # Compute class weight for present classes
         weights = compute_class_weight(
@@ -53,17 +64,38 @@ def calculate_class_weight(
             classes=present_classes,
             y=targets_array,
         )
-        debug(f"Weights for present classes: {weights}")
 
         # Set weight for appearing classes
         class_weight = np.ones(num_classes, dtype=np.float32)
         for cls, weight in zip(present_classes, weights):
             class_weight[cls] = weight
 
-        debug(f"Class weight calculated: {class_weight}")
+        debug(
+            "Class weight calculation completed",
+            extra={
+                "present_classes": present_classes.tolist(),
+                "weights_computed": weights.tolist(),
+                "final_class_weight": class_weight.tolist(),
+                "context": "Class weight calculation",
+            },
+        )
 
         return class_weight
     except (TypeError, AttributeError, IndexError, ValueError) as e:
-        msg = "Failed to calculate class weight"
-        error("%s: %s", msg, e)
+        msg = "Class weight calculation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "num_classes": num_classes,
+                "weight_type": weight_type,
+                "targets_type": type(targets).__name__,
+                "targets_shape": (
+                    tuple(targets.shape)
+                    if isinstance(targets, torch.Tensor)
+                    else None
+                ),
+                "context": "Class weight calculation",
+            },
+        )
         raise RuntimeError(msg) from e

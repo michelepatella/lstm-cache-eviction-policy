@@ -25,7 +25,6 @@ from components.caches.implementations.utils.cache_cleaner import clear_cache
 from components.caches.implementations.utils.cache_size_calculator import (
     calculate_cache_size,
 )
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
 
 
@@ -66,7 +65,13 @@ class FIFOCache(Cache):
         self._data = OrderedDict()
         self.callback = callback
 
-        info(f"FIFO cache initialized (maxsize={self.maxsize})")
+        info(
+            "Cache initialization executed",
+            extra={
+                "maxsize": self.maxsize,
+                "context": "FIFO cache",
+            },
+        )
 
     def __getitem__(self: "FIFOCache", key: Any) -> Any:
         """
@@ -81,14 +86,8 @@ class FIFOCache(Cache):
         Returns:
             Any: Retrieved key item.
         """
-        debug(f"Key to get item from FIFO cache for: {key}")
-
         # Retrieve item
-        item = get_item_from_cache(self._data, key)
-
-        debug(f"FIFO cache item get: {item} (key={key})")
-
-        return item
+        return get_item_from_cache(self._data, key)
 
     def _evict_oldest_item(self: "FIFOCache") -> None:
         """
@@ -104,9 +103,7 @@ class FIFOCache(Cache):
             None
         """
         # Evict the oldest item from cache
-        oldest_key, oldest_item = evict_oldest_item(self._data, self.callback)
-
-        debug(f"FIFO cache item evicted: {oldest_item} (key={oldest_key})")
+        evict_oldest_item(self._data, self.callback)
 
     def __setitem__(self: "FIFOCache", key: Any, item: Any) -> None:
         """
@@ -124,14 +121,10 @@ class FIFOCache(Cache):
         Returns:
             None
         """
-        debug(f"Key and item to insert into FIFO cache: {key}, {item}")
-
         # Insert item into cache
         insert_item_into_cache(
             self._data, key, item, self.maxsize, self._evict_oldest_item
         )
-
-        debug(f"FIFO cache item inserted: {item} (key={key})")
 
     def __delitem__(self: "FIFOCache", key: Any) -> None:
         """
@@ -147,12 +140,8 @@ class FIFOCache(Cache):
         Returns:
             None
         """
-        debug(f"Key to delete from FIFO cache: {key}")
-
         # Delete item from cache
         delete_item_from_cache(self._data, key)
-
-        debug(f"FIFO cache key deleted: {key}")
 
     def __contains__(self: "FIFOCache", key: Any) -> bool:
         """
@@ -168,8 +157,6 @@ class FIFOCache(Cache):
         Returns:
             bool: True if key exists in the FIFO cache, False otherwise.
         """
-        debug(f"Key existence check into FIFO cache: {key}")
-
         return check_item_into_cache(self._data, key)
 
     def pop(self: "FIFOCache", key: Any) -> Optional[Any]:
@@ -188,12 +175,8 @@ class FIFOCache(Cache):
             Optional[Any]: Item associated with the key removed
                           (None if its key is not found into FIFO cache).
         """
-        debug(f"Key to pop from FIFO cache: {key}")
-
         # Remove item from cache
-        item = pop_item_from_cache(self._data, key)
-
-        debug(f"FIFO cache item popped: {item} (key={key})")
+        return pop_item_from_cache(self._data, key)
 
     def __len__(self: "FIFOCache") -> int:
         """
@@ -209,11 +192,7 @@ class FIFOCache(Cache):
             int: Number of cached items.
         """
         # Calculate cache size
-        cache_size = calculate_cache_size(self._data)
-
-        debug(f"FIFO cache size calculated: {cache_size}")
-
-        return cache_size
+        return calculate_cache_size(self._data)
 
     def clear(self: "FIFOCache") -> None:
         """
@@ -230,5 +209,3 @@ class FIFOCache(Cache):
         """
         # Clear cache
         clear_cache(self._data)
-
-        debug("FIFO cache cleared")

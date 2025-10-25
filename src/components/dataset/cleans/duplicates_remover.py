@@ -28,13 +28,40 @@ def remove_dataset_duplicates(
             * Specified subset columns are invalid (KeyError, TypeError).
     """
     try:
+        debug(
+            "Dataset duplicates removal started",
+            extra={
+                "num_rows_before": (
+                    len(df) if isinstance(df, pd.DataFrame) else None
+                ),
+                "subset_columns": subset,
+                "context": "Dataset duplicates removal",
+            },
+        )
+
         # Remove duplicates from dataset
         new_df = df.drop_duplicates(subset=subset)
 
-        debug("Dataset duplicates removal completed")
+        debug(
+            "Dataset duplicates removal completed",
+            extra={
+                "num_rows_after": len(new_df),
+                "num_duplicates_removed": len(df) - len(new_df),
+                "subset_columns": subset,
+                "context": "Dataset duplicates removal",
+            },
+        )
 
         return new_df
     except (AttributeError, KeyError, TypeError) as e:
-        msg = "Failed to remove duplicates from dataset"
-        error("%s: %s", msg, e)
+        msg = "Dataset duplicates removal failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "subset_columns": subset,
+                "num_rows": len(df) if isinstance(df, pd.DataFrame) else None,
+                "context": "Dataset duplicates removal",
+            },
+        )
         raise RuntimeError(msg) from e

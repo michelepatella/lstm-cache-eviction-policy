@@ -31,34 +31,50 @@ def calculate_zipf_probs(items: np.ndarray, alpha: float) -> np.ndarray:
     """
     try:
         debug(
-            f"Number of items for Zipf probabilities calculation: {len(items)}"
+            "Zipf probability calculation started",
+            extra={
+                "items_shape": (
+                    items.shape if hasattr(items, "shape") else None
+                ),
+                "items_dtype": (
+                    str(items.dtype) if hasattr(items, "dtype") else None
+                ),
+                "alpha": alpha,
+                "num_items": len(items) if hasattr(items, "__len__") else None,
+                "context": "Zipf probability calculation",
+            },
         )
-        debug(f"Zipf parameter for probabilities calculation: {alpha}")
-
         # Calculate the probability of the items
         # according to the Zipf's distribution formula
         zipf_probs = 1.0 / np.power(items, alpha)
-        debug(
-            f"(Before normalization) Zipf probabilities "
-            f"range: [{np.min(zipf_probs)}, {np.max(zipf_probs)}]"
-        )
-
         # Normalize probabilities to make sum to 1
         zipf_probs_norm = zipf_probs / np.sum(zipf_probs)
-        debug(
-            f"(After normalization) Zipf probabilities"
-            f" range: [{np.min(zipf_probs_norm)},"
-            f" {np.max(zipf_probs_norm)}]"
-        )
-        debug(
-            f"Sum of Zipf items probabilities"
-            f" after normalization: {np.sum(zipf_probs_norm)}"
-        )
 
-        debug("Zipf probabilities calculated")
+        debug(
+            "Zipf probability calculation completed",
+            extra={
+                "alpha": alpha,
+                "sum_probs": np.sum(zipf_probs_norm),
+                "max_prob": np.max(zipf_probs_norm),
+                "min_prob": np.min(zipf_probs_norm),
+                "num_items": len(zipf_probs_norm),
+                "context": "Zipf probability calculation",
+            },
+        )
 
         return zipf_probs_norm
     except (TypeError, ZeroDivisionError, ValueError) as e:
-        msg = "Failed to calculate Zipf probabilities"
-        error("%s: %s", msg, e)
+        msg = "Zipf probability calculation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "items_type": type(items).__name__,
+                "items_shape": (
+                    items.shape if hasattr(items, "shape") else None
+                ),
+                "alpha": alpha,
+                "context": "Zipf probability calculation",
+            },
+        )
         raise RuntimeError(msg) from e

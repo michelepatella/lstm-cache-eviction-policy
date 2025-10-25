@@ -28,6 +28,13 @@ def calculate_cache_size(data: Any) -> int:
 
         return cache_size
     except (AttributeError, TypeError) as e:
-        msg = "Failed to calculate cache size"
-        error("%s: %s", msg, e)
+        msg = "Cache size calculatation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "data_type": type(data).__name__ if data is not None else None,
+                "context": "Cache size calculation",
+            },
+        )
         raise RuntimeError(msg) from e

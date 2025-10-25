@@ -45,10 +45,30 @@ def calculate_class_report(
             zero_division=zero_division,
         )
 
-        info(f"Classification report: {class_report}")
+        info(
+            "Classification report calculated",
+            extra={
+                "num_targets": len(targets),
+                "num_predictions": len(predictions),
+                "output_dict": output_dict,
+                "zero_division": zero_division,
+                "class_report": class_report,
+                "context": "Classification report calculation",
+            },
+        )
 
         return class_report
     except (ValueError, TypeError) as e:
-        msg = "Failed to compute classification report"
-        error("%s: %s", msg, e)
+        msg = "Classification report calculation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "num_targets": len(targets) if targets else 0,
+                "num_predictions": len(predictions) if predictions else 0,
+                "output_dict": output_dict,
+                "zero_division": zero_division,
+                "context": "Classification report calculation",
+            },
+        )
         raise RuntimeError(msg) from e

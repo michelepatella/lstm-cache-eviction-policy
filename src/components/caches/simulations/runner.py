@@ -12,7 +12,6 @@ from components.caches.simulations.hit_miss.timeline_updater import (
 from components.const import TIME_MICROSECONDS_IN_SECOND
 from components.data_loader.initializer import initialize_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.time.transforms.trig_decoder import (
@@ -62,7 +61,14 @@ def run_cache_simulation(
           missing or malformed elements (ValueError, TypeError, AttributeError).
     """
     try:
-        info(f"{policy} simulation started")
+        info(
+            "Cache simulation started",
+            extra={
+                "policy": policy,
+                "cache_type": type(cache).__name__ if cache else None,
+                "context": f"{policy} cache simulation",
+            },
+        )
 
         # Prepare configuration
         testing_batch_size = config.testing.general.batch_size
@@ -105,8 +111,6 @@ def run_cache_simulation(
             # Decode key
             key = target.item()
 
-            debug(f"Row {idx} (key={key}, current_time={current_time})")
-
             # Start timer to keep track of cache latency
             start_time = time.perf_counter()
 
@@ -135,10 +139,34 @@ def run_cache_simulation(
             # Update number of hits and misses
             timeline = update_hit_miss_timeline(idx, counters, timeline)
 
-        info(f"{policy} simulation completed")
+        info(
+            "Cache simulation completed",
+            extra={
+                "policy": policy,
+                "cache_type": type(cache).__name__ if cache else None,
+                "total_requests": len(testing_set),
+                "total_hits": counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME],
+                "total_misses": counters[
+                    SIMULATIONS_METRICS_MISS_COUNTER_NAME
+                ],
+                "context": f"{policy} cache simulation",
+            },
+        )
 
         return counters, timeline, cache_latencies
     except (TypeError, IndexError, ValueError, AttributeError) as e:
-        msg = "Failed to simulate cache policy"
-        error("%s: %s", msg, e)
+        msg = "Cache simulation failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "policy": policy,
+                "counters": (
+                    {k: v for k, v in counters.items()} if counters else None
+                ),
+                "timeline_len": len(timeline) if timeline else 0,
+                "cache_type": type(cache).__name__ if cache else None,
+                "context": f"{policy} cache simulation",
+            },
+        )
         raise RuntimeError(msg) from e

@@ -1,8 +1,10 @@
+import os
 from collections import Counter
 
 import dagshub
 import numpy as np
 import pandas as pd
+from dotenv import load_dotenv
 
 from components.const import TIME_HOURS_IN_DAY
 from components.data.requests.core.dynamic_generator import (
@@ -37,14 +39,18 @@ from pipeline.const import (
 )
 from src.const import (
     DAGS_HUB_MLFLOW_ENABLED,
-    DAGS_HUB_REPO_NAME,
-    DAGS_HUB_REPO_OWNER,
     DATA_DISTRIBUTION_STATIC_MODE,
     DATASET_RAW_TYPE,
     DATASET_REQUEST_COLUMN_NAME,
     DATASET_TIMESTAMP_COLUMN_NAME,
-    MLFLOW_NESTED_ENABLED,
+    MLFLOW_NESTED_ENABLED, DAGS_HUB_REPO_OWNER_ENV_VAR_NAME, DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
 )
+
+
+# Load env variables
+load_dotenv()
+dabs_hub_repo_owner = os.getenv(DAGS_HUB_REPO_OWNER_ENV_VAR_NAME)
+dags_hub_repo_name = os.getenv(DAGS_HUB_REPO_NAME_ENV_VAR_NAME)
 
 
 def generate_data() -> None:
@@ -65,12 +71,13 @@ def generate_data() -> None:
     logs_phase.set(LOGS_DATA_GENERATION_PHASE)
 
     dagshub.init(
-        repo_owner=DAGS_HUB_REPO_OWNER,
-        repo_name=DAGS_HUB_REPO_NAME,
+        repo_owner=dabs_hub_repo_owner,
+        repo_name=dags_hub_repo_name,
         mlflow=DAGS_HUB_MLFLOW_ENABLED,
     )
 
     import mlflow
+
     with mlflow.start_run(
         run_name=LOGS_DATA_GENERATION_PHASE, nested=MLFLOW_NESTED_ENABLED
     ):

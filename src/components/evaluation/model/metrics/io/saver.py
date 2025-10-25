@@ -9,7 +9,7 @@ from components.const import (
 )
 from components.json.io.saver import save_json
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
+from components.logs.levels.debug_logger import debug
 
 
 def save_model_metrics(
@@ -34,6 +34,16 @@ def save_model_metrics(
             * Invalid metric types (TypeError).
     """
     try:
+        debug(
+            "Model metrics saving started",
+            extra={
+                "num_metrics": len(metrics),
+                "avg_loss": avg_loss,
+                "save_path": path,
+                "context": "Model metrics saving",
+            },
+        )
+
         # Filter metrics for saving
         metrics_to_save = {
             k: (
@@ -59,8 +69,25 @@ def save_model_metrics(
         # Save metrics as JSON file
         save_json(metrics_to_save, path)
 
-        info(f"Model metrics saved to: {path}")
+        debug(
+            "Model metrics saving completed",
+            extra={
+                "num_metrics_saved": len(metrics_to_save),
+                "metrics_keys": list(metrics_to_save.keys()),
+                "save_path": path,
+                "context": "Model metrics saving",
+            },
+        )
     except TypeError as e:
-        msg = "Failed to save model metrics"
-        error("%s: %s", msg, e)
+        msg = "Model metrics saving failed"
+        error(
+            msg,
+            extra={
+                "exception": str(e),
+                "num_metrics": len(metrics) if metrics else 0,
+                "avg_loss": avg_loss,
+                "save_path": path,
+                "context": "Model metrics saving",
+            },
+        )
         raise RuntimeError(msg) from e
