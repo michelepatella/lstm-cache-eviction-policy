@@ -1,5 +1,3 @@
-from typing import Dict, List
-
 from sklearn.metrics import classification_report
 
 from components.const import (
@@ -11,25 +9,24 @@ from components.logs.levels.info_logger import info
 
 
 def calculate_class_report(
-    targets: List[int],
-    predictions: List[int],
+    targets: list[int],
+    predictions: list[int],
     output_dict: bool = MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT_ENABLED,
     zero_division: int = MODEL_METRICS_CLASS_REPORT_ZERO_DIVISION,
-) -> Dict[str, float]:
-    """
-    Calculate a classification report.
+) -> dict[str, float]:
+    """Calculate a classification report.
 
     This function computes the classification report given the
     true targets and predicted labels.
 
     Args:
-        targets (List[int]): True class labels.
-        predictions (List[int]): Predicted class labels.
+        targets (list[int]): True class labels.
+        predictions (list[int]): Predicted class labels.
         output_dict (bool): If True, return results as a dictionary.
         zero_division (int): Value to use when a zero division occurs.
 
     Returns:
-        Dict[str, float]: Classification metrics per class.
+        dict[str, float]: Classification metrics per class.
 
     Raises:
         RuntimeError: If classification report calculation fails due to:

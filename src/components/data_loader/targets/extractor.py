@@ -6,8 +6,7 @@ from components.logs.levels.error_logger import error
 
 
 def extract_targets_from_data_loader(data_loader: DataLoader) -> torch.Tensor:
-    """
-    Extract all target tensors from a data loader.
+    """Extract all target tensors from a data loader.
 
     This function iterates through a data loader and extracts all target
     tensors. The collected targets are then concatenated into a single tensor.
@@ -22,10 +21,12 @@ def extract_targets_from_data_loader(data_loader: DataLoader) -> torch.Tensor:
 
     Raises:
         RuntimeError: If target extraction from data loader fails:
-            * Accessing the target element fails because the batch is not a tuple/list
-              of tensors or is empty (TypeError, IndexError).
-            * Concatenating all extracted targets fails because the collected tensors
-              have incompatible shapes or types (RuntimeError, TypeError).
+            * Accessing the target element fails because the batch
+              is not a tuple/list of tensors or is empty
+              (TypeError, IndexError).
+            * Concatenating all extracted targets fails because the
+              collected tensors have incompatible shapes or types
+              (RuntimeError, TypeError).
     """
     try:
         debug(

@@ -1,5 +1,3 @@
-from typing import Dict, Optional, Tuple
-
 import torch
 
 from components.logs.levels.debug_logger import debug
@@ -10,10 +8,11 @@ from components.model.state_dict.copier import (
 
 
 def check_update_best_model(
-    curr_avg_loss: float, best_avg_loss: float, model: torch.nn.Module
-) -> Tuple[float, Optional[Dict[str, torch.Tensor]]]:
-    """
-    Update the best model weights if the current average loss improves.
+    curr_avg_loss: float,
+    best_avg_loss: float,
+    model: torch.nn.Module,
+) -> tuple[float, dict[str, torch.Tensor] | None]:
+    """Update the best model weights if the current average loss improves.
 
     This function checks if the provided average loss is lower than
     the current best average loss. If it is, the model's state dictionary
@@ -25,14 +24,15 @@ def check_update_best_model(
         model (torch.nn.Module): PyTorch model to copy if improvement is found.
 
     Returns:
-        Tuple[float, Optional[Dict[str, torch.Tensor]]]:
+        tuple[float, dict[str, torch.Tensor] | None]:
             - best_avg_loss: Best average loss (updated or not).
-            - best_model_weights: Best model weights. None if no improvement is found.
+            - best_model_weights: Best model weights. None if no
+                                  improvement is found.
 
     Raises:
         RuntimeError: If checking and updating the best model fails:
-            * Comparison between average loss and best average loss fails due to
-              invalid types (TypeError).
+            * Comparison between average loss and best average loss
+              fails due to invalid types (TypeError).
     """
     try:
         debug(

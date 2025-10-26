@@ -1,5 +1,3 @@
-from typing import List
-
 from components.logs.levels.error_logger import error
 
 
@@ -9,13 +7,12 @@ def generate_toggle_pattern(
     toggle_backward: int,
     toggle_first_base_request: int,
     toggle_second_base_request: int,
-    requests: List[int],
+    requests: list[int],
     requests_count: int,
     first_key: int,
     keys_range_size: int,
 ) -> int:
-    """
-    Determine the next key to be accessed according to toggle pattern.
+    """Determine the next key to be accessed according to toggle pattern.
 
     This function determines which is the next key to be accessed according
     to toggle pattern. This pattern simulates two kinds of key access patterns,
@@ -28,9 +25,9 @@ def generate_toggle_pattern(
         toggle_backward (int): Offset to apply in the backward toggle state.
         toggle_first_base_request (int): Steps back to pick the key for forward
                                          state.
-        toggle_second_base_request (int): Steps back to pick the key for backward
-                                          state.
-        requests (List[int]): List of keys requested so far.
+        toggle_second_base_request (int): Steps back to pick the key for
+                                          backward state.
+        requests (list[int]): List of keys requested so far.
         requests_count (int): Number of requests generated so far.
         first_key (int): Minimum key in the range.
         keys_range_size (int): Total number of available keys.

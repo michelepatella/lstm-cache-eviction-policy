@@ -1,5 +1,3 @@
-from typing import List
-
 import numpy as np
 
 from components.const import TIME_SECONDS_IN_DAY, TIME_SECONDS_IN_HOUR
@@ -26,11 +24,10 @@ def generate_access_pattern(
     zipf_probs: np.ndarray,
     keys_range: np.ndarray,
     current_abs_seconds: float,
-    requests: List[int],
+    requests: list[int],
     config: Config,
 ) -> int:
-    """
-    Generate access pattern based on day band.
+    """Generate access pattern based on day band.
 
     This function determines which is the next key to be accessed according
     to multiple access patterns (repetition, toggle, cycle, distortion, memory,
@@ -40,7 +37,7 @@ def generate_access_pattern(
         zipf_probs (np.ndarray): List of Zipfian probabilities for keys.
         keys_range (np.ndarray): List of all available keys.
         current_abs_seconds (float): Current absolute time in seconds.
-        requests (List[int]): List of keys requested so far.
+        requests (list[int]): List of keys requested so far.
         config (Config): Configuration object.
 
     Returns:

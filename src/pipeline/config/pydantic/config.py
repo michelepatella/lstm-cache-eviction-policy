@@ -15,8 +15,7 @@ from pipeline.config.pydantic.sections.validation_config import (
 
 
 class Config(BaseModel):
-    """
-    Represents the full configuration of the system.
+    """Represents the full configuration of the system.
 
     This class aggregates all configuration sections used across the system,
     providing structured access to hardware, data, dataset, model, validation,

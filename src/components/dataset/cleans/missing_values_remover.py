@@ -15,8 +15,7 @@ def remove_dataset_missing_values(
     dropna_axis: int = MISSING_VALUES_REMOVAL_DROPNA_AXIS,
     dropna_how: Literal["any", "all"] = MISSING_VALUES_REMOVAL_DROPNA_HOW,
 ) -> pd.DataFrame:
-    """
-    Remove missing values from dataset.
+    """Remove missing values from dataset.
 
     This function removes rows with missing values from dataset,
     returning a new clean dataset.
@@ -25,8 +24,9 @@ def remove_dataset_missing_values(
         df (pd.DataFrame): Dataset to remove missing values from.
         dropna_axis (int): Axis along which to remove missing values
                            (0 for rows, 1 for columns).
-        dropna_how (Literal["any", "all"]): Determines if a row/column is removed
-                                            when any or all values are missing.
+        dropna_how (Literal["any", "all"]): Determines if a row/column
+                                            is removed when any or all
+                                            values are missing.
 
     Returns:
         pd.DataFrame: Dataset without missing values.
@@ -34,7 +34,8 @@ def remove_dataset_missing_values(
     Raises:
         RuntimeError: If removing missing values fails:
             * Dataset does not have expected attributes (AttributeError).
-            * Invalid axis or how argument for pandas dropna (TypeError, ValueError).
+            * Invalid axis or how argument for pandas dropna
+              (TypeError, ValueError).
     """
     try:
         debug(

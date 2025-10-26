@@ -5,8 +5,7 @@ from components.logs.levels.error_logger import error
 
 
 class CacheWrapper(BaseCache):
-    """
-    Generic cache wrapper that extends BaseCache.
+    """Generic cache wrapper that extends BaseCache.
 
     This class provides a standard cache insertion mechanism
     with TTL (Time-To-Live) management and metrics logging.
@@ -14,21 +13,24 @@ class CacheWrapper(BaseCache):
     Attributes:
         cache (Any): Underlying cache instance used for storage.
         expiry (Dict[int, float]): Stores expiration times for each cached key.
-        metrics_logger (CacheMetricsLogger): Logger for cache events (put, get, eviction).
+        metrics_logger (CacheMetricsLogger): Logger for cache events
+                                             (put, get, eviction).
         maxsize (int): Maximum number of items the cache can hold.
         ttl (float): Time-to-Live for cache entries.
-        store (Dict[int, Any]): Storage for cache items if cache object is None.
-        scores (Optional[Dict[int, float]]): Dictionary to store scores associated with
-                                             keys.
-        _last_put_time (Optional[float]): Timestamp of the last insertion operation.
+        store (Dict[int, Any]): Storage for cache items if cache object
+                                is None.
+        scores (Optional[Dict[int, float]]): Dictionary to store scores
+                                             associated with keys.
+        _last_put_time (Optional[float]): Timestamp of the last insertion
+                                          operation.
     """
 
     def put(self: "CacheWrapper", key: Any, current_time: float) -> None:
-        """
-        Insert a key into the cache.
+        """Insert a key into the cache.
 
         This function inserts a key into the cache, removes expired entries,
-        updates the expiration time, and logs the operation in the metrics logger.
+        updates the expiration time, and logs the operation in the metrics
+        logger.
 
         Args:
             self ("CacheWrapper"): Current class instance.
@@ -40,7 +42,8 @@ class CacheWrapper(BaseCache):
 
         Raises:
             RuntimeError: If key insertion into cache wrapper fails:
-                * The cache or supporting structures are not initialized (AttributeError).
+                * The cache or supporting structures are not initialized
+                 (AttributeError).
                 * The provided key is not hashable (TypeError).
         """
         try:
@@ -79,7 +82,8 @@ class CacheWrapper(BaseCache):
                         else None
                     ),
                     "metrics_logger_initialized": hasattr(
-                        self, "metrics_logger"
+                        self,
+                        "metrics_logger",
                     ),
                     "cache_wrapper_class": type(self).__name__,
                     "context": "CacheWrapper",

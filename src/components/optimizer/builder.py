@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 import torch
 
@@ -12,7 +12,7 @@ from src.const import (
 
 # Map each optimizer type to
 # its PyTorch instance
-OPTIMIZER_MAP: Dict[str, type[torch.optim.Optimizer]] = {
+OPTIMIZER_MAP: dict[str, type[torch.optim.Optimizer]] = {
     OPTIMIZER_ADAM_NAME: torch.optim.Adam,
     OPTIMIZER_ADAMW_NAME: torch.optim.AdamW,
     OPTIMIZER_SGD_NAME: torch.optim.SGD,
@@ -24,14 +24,14 @@ def build_optimizer(
     optimizer_type: str,
     **optimizer_kwargs: Any,
 ) -> torch.optim.Optimizer:
-    """
-    Build an optimizer for the given model.
+    """Build an optimizer for the given model.
 
     This function creates an optimizer for the provided model,
     based on the requested type, with parameters received as arguments.
 
     Args:
-        model (torch.nn.Module): PyTorch model for which to create the optimizer.
+        model (torch.nn.Module): PyTorch model for which to create
+                                 the optimizer.
         optimizer_type (str): Optimizer type to be instantiated.
         **optimizer_kwargs (Any): Parameters for the optimizer.
 
@@ -50,9 +50,7 @@ def build_optimizer(
                 "optimizer_type": optimizer_type,
                 "optimizer_kwargs": optimizer_kwargs,
                 "model_class": type(model).__name__,
-                "model_params_num": sum(
-                    p.numel() for p in model.parameters()
-                ),
+                "model_params_num": sum(p.numel() for p in model.parameters()),
                 "context": "Optimizer building",
             },
         )
@@ -70,9 +68,7 @@ def build_optimizer(
                 "optimizer_type": optimizer_type,
                 "optimizer_class": type(optimizer).__name__,
                 "optimizer_kwargs": optimizer_kwargs,
-                "model_params_num": sum(
-                    p.numel() for p in model.parameters()
-                ),
+                "model_params_num": sum(p.numel() for p in model.parameters()),
                 "context": "Optimizer building",
             },
         )
@@ -87,9 +83,7 @@ def build_optimizer(
                 "optimizer_type": optimizer_type,
                 "optimizer_kwargs": optimizer_kwargs,
                 "model_class": type(model).__name__,
-                "model_params_num": sum(
-                    p.numel() for p in model.parameters()
-                ),
+                "model_params_num": sum(p.numel() for p in model.parameters()),
                 "context": "Optimizer building",
             },
         )

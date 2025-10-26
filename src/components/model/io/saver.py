@@ -5,8 +5,7 @@ from components.logs.levels.error_logger import error
 
 
 def save_model(model: torch.nn.Module, path: str) -> None:
-    """
-    Save a PyTorch model.
+    """Save a PyTorch model.
 
     This function saves a PyTorch model to the specified path.
 

@@ -1,10 +1,10 @@
 import logging
-from typing import Optional, Dict, Any
+from typing import Any
 
 from components.const import (
     LOGS_DEFAULT_PHASE,
-    LOGS_PHASE_NAME,
     LOGS_LOGGER_NAME,
+    LOGS_PHASE_NAME,
 )
 from components.logs.initializer import logs_phase
 
@@ -14,11 +14,10 @@ def log(
     msg: str,
     log_phase_name: str = LOGS_PHASE_NAME,
     log_phase: str = LOGS_DEFAULT_PHASE,
-    extra: Optional[Dict[str, Any]] = None,
+    extra: dict[str, Any] | None = None,
     logger_name: str = LOGS_LOGGER_NAME,
 ):
-    """
-    Log a message.
+    """Log a message.
 
     This function logs a level-provided contextual message, using log phase
     as context.
@@ -28,7 +27,7 @@ def log(
         msg (str): The message to log.
         log_phase_name (str): The name of the log phase.
         log_phase (str): Current log phase.
-        extra (Optional[Dict[str, Any]]): Optional additional context.
+        extra (dict[str, Any] | None): Optional additional context.
         logger_name (str): The name of the logger to use.
 
     Returns:

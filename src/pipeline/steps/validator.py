@@ -16,13 +16,12 @@ from pipeline.config.configurator import prepare_config
 from pipeline.const import CONFIG_FILE_PATH
 from src.const import (
     DAGS_HUB_MLFLOW_ENABLED,
+    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
+    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
     DATASET_TRAINING_SPLIT_TYPE,
     LOGS_VALIDATION_PHASE,
     MLFLOW_NESTED_ENABLED,
-    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
-    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
 )
-
 
 # Load env variables
 load_dotenv()
@@ -31,8 +30,7 @@ dags_hub_repo_name = os.getenv(DAGS_HUB_REPO_NAME_ENV_VAR_NAME)
 
 
 def validate_model() -> None:
-    """
-    Validate model to find the best hyperparameters.
+    """Validate model to find the best hyperparameters.
 
     This function validates the model, by orchestrating hyperparameter
     tuning (via time series cross-validation with grid search), and saving
@@ -53,9 +51,9 @@ def validate_model() -> None:
     import mlflow
 
     with mlflow.start_run(
-        run_name=LOGS_VALIDATION_PHASE, nested=MLFLOW_NESTED_ENABLED
+        run_name=LOGS_VALIDATION_PHASE,
+        nested=MLFLOW_NESTED_ENABLED,
     ):
-
         # Setup
         config = prepare_config()
 
@@ -97,7 +95,7 @@ def validate_model() -> None:
             {
                 "training_samples_num": len(training_set),
                 "loss_best_avg": best_avg_loss,
-            }
+            },
         )
         mlflow.log_artifact(CONFIG_FILE_PATH)
 

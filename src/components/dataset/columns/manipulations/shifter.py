@@ -1,15 +1,14 @@
-from typing import Union
-
 import pandas as pd
 
 from components.logs.levels.error_logger import error
 
 
 def shift_dataset_column(
-    df: pd.DataFrame, column_name: str, shift: Union[int, float]
+    df: pd.DataFrame,
+    column_name: str,
+    shift: float,
 ) -> None:
-    """
-    Shift the values of a dataset column.
+    """Shift the values of a dataset column.
 
     This function applies the given shift and updates the
     dataset in-place.
@@ -17,7 +16,7 @@ def shift_dataset_column(
     Args:
         df (pd.DataFrame): Dataset containing the column to shift.
         column_name (str): Name of the column to shift.
-        shift (Union[int, float]): Value to add/subtract from column values.
+        shift (float): Value to add/subtract from column values.
 
     Returns:
         None

@@ -1,5 +1,3 @@
-from typing import List
-
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -27,12 +25,11 @@ from src.const import (
 def plot_key_usage_heatmap(
     min_key: int,
     max_key: int,
-    requests: List[int],
+    requests: list[int],
     timestamps_hours: np.ndarray,
     save_path: str,
 ) -> None:
-    """
-    Plot key usage heatmap over hours of the day.
+    """Plot key usage heatmap over hours of the day.
 
     This function generates a heatmap showing the frequency of
     accesses for each key across the hours of the day.
@@ -40,7 +37,7 @@ def plot_key_usage_heatmap(
     Args:
         min_key (int): The lowest key.
         max_key (int): The greatest key.
-        requests (List[int]): List of key accesses.
+        requests (list[int]): List of key accesses.
         timestamps_hours (np.ndarray): Array of request timestamps in hours.
         save_path (str): Path to save the figure.
 
@@ -133,7 +130,9 @@ def plot_key_usage_heatmap(
         plt.xticks(
             ticks=np.arange(0, num_keys, PLOT_KEY_USAGE_HEATMAP_STEP),
             labels=np.arange(
-                min_key, max_key + 1, PLOT_KEY_USAGE_HEATMAP_STEP
+                min_key,
+                max_key + 1,
+                PLOT_KEY_USAGE_HEATMAP_STEP,
             ),
             rotation=PLOT_KEY_USAGE_HEATMAP_ROTATION,
             fontsize=PLOT_LABEL_FONT_SIZE,

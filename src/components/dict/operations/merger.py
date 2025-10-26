@@ -1,26 +1,25 @@
-from typing import Any, Dict, Union
+from typing import Any
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
 def merge_dicts(
-    original_dict: Union[Dict[str, Any], None],
-    updated_dict: Dict[str, Any],
-) -> Dict[str, Any]:
-    """
-    Recursively merge two dictionaries.
+    original_dict: dict[str, Any] | None,
+    updated_dict: dict[str, Any],
+) -> dict[str, Any]:
+    """Recursively merge two dictionaries.
 
     This function, given two dictionaries, merges updated values of
     the updated dictionary into the original one, returning the
     resulting dictionary.
 
     Args:
-        original_dict (Union[Dict[str, Any], None]): Original dictionary.
-        updated_dict (dict): Dictionary containing updates to apply.
+        original_dict (dict[str, Any] | None): Original dictionary.
+        updated_dict (dict[str, Any]): Dictionary containing updates to apply.
 
     Returns:
-        Dict[str, Any]: Merged dictionary.
+        dict[str, Any]: Merged dictionary.
 
     Raises:
         RuntimeError: If merging dictionaries fails:
@@ -44,7 +43,8 @@ def merge_dicts(
         # Merge dictionaries recursively
         for key, value in updated_dict.items():
             if isinstance(value, dict) and isinstance(
-                original_dict.get(key), dict
+                original_dict.get(key),
+                dict,
             ):
                 debug(
                     "Merging nested dictionary for key",

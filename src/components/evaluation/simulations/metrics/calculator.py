@@ -1,5 +1,3 @@
-from typing import Dict, List, Tuple
-
 from components.caches.utils.cache_metrics_logger import (
     CacheMetricsLogger,
 )
@@ -20,15 +18,14 @@ from src.const import (
 
 
 def calculate_simulation_metrics(
-    counters: Dict[str, int],
-    cache_latencies: List[float],
+    counters: dict[str, int],
+    cache_latencies: list[float],
     mistake_window: int,
     metrics_logger: CacheMetricsLogger,
     hit_counter_name: str = SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     miss_counter_name: str = SIMULATIONS_METRICS_MISS_COUNTER_NAME,
-) -> Tuple[float, float, float, float]:
-    """
-    Calculate cache simulations metrics.
+) -> tuple[float, float, float, float]:
+    """Calculate cache simulations metrics.
 
     This function calculates the main performance metrics for a cache
     simulation, including hit rate, miss rate, eviction mistake rate,
@@ -36,9 +33,9 @@ def calculate_simulation_metrics(
     cache latency records, as well as a metrics logger for eviction tracking.
 
     Args:
-        counters (Dict[str, int]): Dictionary containing counts of cache
+        counters (dict[str, int]): Dictionary containing counts of cache
                                    hits and misses.
-        cache_latencies (List[float]): List of cache access latencies
+        cache_latencies (list[float]): List of cache access latencies
                                        recorded during simulation.
         mistake_window (int): Mistake window for mistake rate calculation.
         metrics_logger (CacheMetricsLogger): Object logging cache events.
@@ -48,15 +45,17 @@ def calculate_simulation_metrics(
                                  dictionary.
 
     Returns:
-        Tuple[float, float, float, float]:
+        tuple[float, float, float, float]:
             - hit_rate: Cache hit rate as a percentage.
             - miss_rate: Cache miss rate as a percentage.
-            - eviction_mistake_rate: Rate of eviction mistakes over the given window.
+            - eviction_mistake_rate: Rate of eviction mistakes over
+                                     the given window.
             - avg_cache_latency: Average latency of cache accesses.
 
     Raises:
         RuntimeError: If simulation metrics calculation fails:
-            * Hit and miss counters not found in counters dictionary (KeyError).
+            * Hit and miss counters not found in counters dictionary
+              (KeyError).
             * Metrics logger missing required attributes (AttributeError).
             * Invalid data types in counters or latencies (TypeError).
     """
@@ -92,7 +91,9 @@ def calculate_simulation_metrics(
 
         # Calculate eviction mistake rate
         eviction_mistake_rate = calculate_eviction_mistake_rate(
-            evicted_items, access_events_dict, mistake_window
+            evicted_items,
+            access_events_dict,
+            mistake_window,
         )
 
         # Calculate average cache latency

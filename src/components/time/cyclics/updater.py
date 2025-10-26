@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from components.logs.levels.error_logger import error
 
 
@@ -8,9 +6,8 @@ def update_cyclic_time(
     cycle_count: int,
     period: float,
     delta_t: float,
-) -> Tuple[float, int]:
-    """
-    Update time in a cyclic period according to a delta.
+) -> tuple[float, int]:
+    """Update time in a cyclic period according to a delta.
 
     This function updates the current time within a cycle and increments
     the cycle count if the updated time exceeds the period.
@@ -22,10 +19,11 @@ def update_cyclic_time(
         delta_t (float): Time increment to apply.
 
     Returns:
-        Tuple[float, int]:
-            - current_time_in_cycle: Updated time within the current cycle after
-                                     applying delta time.
-            - cycle_count: Updated cycle count after overflow beyond the period.
+        tuple[float, int]:
+            - current_time_in_cycle: Updated time within the current
+                                     cycle after applying delta time.
+            - cycle_count: Updated cycle count after overflow beyond
+                           the period.
 
     Raises:
         RuntimeError: If updating the cyclic time fails:

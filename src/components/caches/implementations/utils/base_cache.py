@@ -10,8 +10,7 @@ from pipeline.config.pydantic.config import Config
 
 
 class BaseCache(ABC):
-    """
-    Abstract base class for all cache implementations.
+    """Abstract base class for all cache implementations.
 
     Provides common functionalities such as:
     - TTL (Time-To-Live) management
@@ -35,8 +34,7 @@ class BaseCache(ABC):
         metrics_logger: CacheMetricsLogger,
         config: Config,
     ) -> None:
-        """
-        Initialize the BaseCache.
+        """Initialize the BaseCache.
 
         This function sets up the cache, metrics logger, TTL, maximum size,
         and auxiliary data structures.
@@ -89,20 +87,25 @@ class BaseCache(ABC):
                 extra={
                     "exception": str(e),
                     "expiry_initialized": isinstance(
-                        getattr(self, "expiry", None), dict
+                        getattr(self, "expiry", None),
+                        dict,
                     ),
                     "ttl": getattr(config.simulations.cache, "ttl", None),
                     "cache_class": (
                         str(cache_class) if cache_class is not None else None
                     ),
                     "cache_dimension": getattr(
-                        config.simulations.cache, "dimension", None
+                        config.simulations.cache,
+                        "dimension",
+                        None,
                     ),
                     "store_initialized": isinstance(
-                        getattr(self, "store", None), dict
+                        getattr(self, "store", None),
+                        dict,
                     ),
                     "scores_initialized": isinstance(
-                        getattr(self, "scores", None), dict
+                        getattr(self, "scores", None),
+                        dict,
                     ),
                     "metrics_logger_type": type(metrics_logger).__name__,
                     "context": "BaseCache",
@@ -111,8 +114,7 @@ class BaseCache(ABC):
             raise RuntimeError(msg) from e
 
     def _is_expired(self: "BaseCache", key: Any, current_time: float) -> bool:
-        """
-        Check if a key has expired based on its TTL.
+        """Check if a key has expired based on its TTL.
 
         This function, given a key and the current time, checks whether a
         key has expired, based on the TTL. The function returns True if the key
@@ -129,8 +131,10 @@ class BaseCache(ABC):
         Raises:
             RuntimeError: If checking expiration fails:
                 * The key is not hashable (TypeError).
-                * The key is not present in the expiry dictionary (KeyError).
-                * The values involved are not comparable or invalid (ValueError).
+                * The key is not present in the expiry dictionary
+                  (KeyError).
+                * The values involved are not comparable or invalid
+                  (ValueError).
         """
         try:
             # Check whether the key has expired,
@@ -161,8 +165,7 @@ class BaseCache(ABC):
             raise RuntimeError(msg) from e
 
     def _remove_expired_keys(self: "BaseCache", current_time: float) -> None:
-        """
-        Remove all expired keys from the cache.
+        """Remove all expired keys from the cache.
 
         This function, given the current time, removes all the expired keys
         from the cache, based on TTL.
@@ -176,8 +179,10 @@ class BaseCache(ABC):
 
         Raises:
             RuntimeError: If removing expired keys fails:
-                * Cache object not supporting pop operation (TypeError, AttributeError).
-                * Metrics logger failing to log an eviction (AttributeError, TypeError).
+                * Cache object not supporting pop operation
+                  (TypeError, AttributeError).
+                * Metrics logger failing to log an eviction
+                  (AttributeError, TypeError).
         """
         try:
             # Identify expired keys
@@ -248,12 +253,11 @@ class BaseCache(ABC):
             raise RuntimeError(msg) from e
 
     def contains(self: "BaseCache", key: Any, current_time: float) -> bool:
-        """
-        Check if a key exists in the cache and is not expired.
+        """Check if a key exists in the cache and is not expired.
 
-        This function, given a key and the current time, checks whether a key
-        exists in the cache and is not expired, returning True if both condition
-        are verified, False otherwise.
+        This function, given a key and the current time, checks
+        whether a key exists in the cache and is not expired, returning
+        True if both condition are verified, False otherwise.
 
         Args:
             self (BaseCache): Current class instance.
@@ -267,7 +271,8 @@ class BaseCache(ABC):
             RuntimeError: If the key existence check fails:
                 * The cache or store not being initialized (AttributeError).
                 * Membership check failing (TypeError).
-                * The metrics logger failing to log the get event (AttributeError, TypeError).
+                * The metrics logger failing to log the get event
+                  (AttributeError, TypeError).
         """
         try:
             # Trace the get event
@@ -319,8 +324,7 @@ class BaseCache(ABC):
             raise RuntimeError(msg) from e
 
     def _on_evict(self: "BaseCache", key: Any) -> None:
-        """
-        Callback triggered when a key is evicted from BaseCache.
+        """Callback triggered when a key is evicted from BaseCache.
 
         This function represents a callback triggered when a key is evicted
         from BaseCache. The callback removes expiration time for the evicted
@@ -374,8 +378,7 @@ class BaseCache(ABC):
 
     @abstractmethod
     def put(self: "BaseCache", *args: Any, **kwargs: Any) -> None:
-        """
-        Insert a key into the cache.
+        """Insert a key into the cache.
 
         This function represents an abstract method managing key items
         insertion in the cache. Each cache eviction strategy must implement
@@ -383,13 +386,16 @@ class BaseCache(ABC):
 
         Args:
             self ("BaseCache"): Current class instance.
-            *args (Any): Positional arguments required by the specific cache strategy.
-            **kwargs (Any): Keyword arguments required by the specific cache strategy.
+            *args (Any): Positional arguments required by the specific
+                         cache strategy.
+            **kwargs (Any): Keyword arguments required by the specific
+                            cache strategy.
 
         Returns:
             None
 
         Raises:
-            NotImplementedError: If the method is not implemented by the subclass.
+            NotImplementedError: If the method is not implemented
+                                 by the subclass.
         """
-        raise NotImplementedError()
+        raise NotImplementedError

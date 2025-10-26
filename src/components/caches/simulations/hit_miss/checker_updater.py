@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 from components.logs.levels.error_logger import error
 from src.const import (
@@ -11,12 +11,11 @@ def check_update_hit_miss(
     cache: Any,
     key: Any,
     current_time: float,
-    counters: Dict[str, int],
+    counters: dict[str, int],
     hit_counter_name: str = SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     miss_counter_name: str = SIMULATIONS_METRICS_MISS_COUNTER_NAME,
 ) -> bool:
-    """
-    Check key presence in the cache and update hit and miss counters.
+    """Check key presence in the cache and update hit and miss counters.
 
     This function checks whether a given key exists in the cache
     and is still valid based on its expiration time. It updates
@@ -26,7 +25,8 @@ def check_update_hit_miss(
         cache (Any): Cache object implementing a contains method.
         key (Any): Key to look up in the cache.
         current_time (float): Current timestamp for validation.
-        counters (Dict[str, int]): Dictionary containing cache hit/miss counters.
+        counters (dict[str, int]): Dictionary containing cache
+                                   hit/miss counters.
         hit_counter_name (str): Name of cache hit counter.
         miss_counter_name (str): Name of cache miss counter.
 

@@ -1,14 +1,16 @@
 from collections import defaultdict
-from typing import Any, Callable, Optional, Tuple
+from collections.abc import Callable
+from typing import Any
 
 from components.logs.levels.error_logger import error
 
 
 def evict_least_frequent_item(
-    data: Any, data_freq: defaultdict, callback: Optional[Callable]
-) -> Tuple[Any, int]:
-    """
-    Evict the least frequently used item from a cache.
+    data: Any,
+    data_freq: defaultdict,
+    callback: Callable | None,
+) -> tuple[Any, int]:
+    """Evict the least frequently used item from a cache.
 
     This function identifies and removes the least frequently used key
     from the given cache data and its associated frequency dictionary.
@@ -20,11 +22,11 @@ def evict_least_frequent_item(
         data (Any): Cache data structure.
         data_freq (defaultdict): Dictionary tracking access frequencies
                                  of cached items.
-        callback (Optional[Callable]): Callback function invoked with the
-                                       evicted key.
+        callback (callback: Callable | None): Callback function invoked with the
+                                              evicted key.
 
     Returns:
-        Tuple[Any, int]:
+        tuple[Any, int]:
             - key_to_evict: The evicted key.
             - min_freq: Frequency value of evicted key before eviction.
 

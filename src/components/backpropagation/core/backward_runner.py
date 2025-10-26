@@ -5,8 +5,7 @@ from components.logs.levels.error_logger import error
 
 
 def compute_backward(loss: torch.Tensor, optimizer: Optimizer) -> None:
-    """
-    Perform a backward pass and update model parameters.
+    """Perform a backward pass and update model parameters.
 
     This function computes gradients via backpropagation from the
     provided loss and updates the model parameters using the given optimizer.
@@ -46,7 +45,9 @@ def compute_backward(loss: torch.Tensor, optimizer: Optimizer) -> None:
                 "loss_requires_grad": getattr(loss, "requires_grad", None),
                 "optimizer_type": type(optimizer).__name__,
                 "optimizer_param_groups": getattr(
-                    optimizer, "param_groups", None
+                    optimizer,
+                    "param_groups",
+                    None,
                 ),
                 "context": "Model backward pass",
             },

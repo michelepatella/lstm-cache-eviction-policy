@@ -1,5 +1,3 @@
-from typing import List, Tuple
-
 import numpy as np
 
 from components.data.requests.utils.generation_helper import (
@@ -11,9 +9,8 @@ from pipeline.config.pydantic.config import Config
 
 def generate_static_requests(
     config: Config,
-) -> Tuple[List[int], np.ndarray]:
-    """
-    Generate static requests and corresponding timestamps in hours.
+) -> tuple[list[int], np.ndarray]:
+    """Generate static requests and corresponding timestamps in hours.
 
     This function generates static requests and corresponding timestamps
     in hours. Static requests use a fixed Zipfian parameter, meaning
@@ -23,7 +20,7 @@ def generate_static_requests(
         config (Config): Configuration object.
 
     Returns:
-        Tuple[List[int], np.ndarray]:
+        tuple[list[int], np.ndarray]:
             - requests: List of generated keys requested.
             - timestamps_hours: Corresponding timestamps of requests in hours.
     """
@@ -40,7 +37,8 @@ def generate_static_requests(
     # Use common helper to generate
     # requests based on a fixed alpha value
     requests, timestamps_hours = generate_requests_helper(
-        [alpha_fixed], config
+        [alpha_fixed],
+        config,
     )
 
     info(

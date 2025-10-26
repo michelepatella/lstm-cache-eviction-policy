@@ -4,8 +4,7 @@ from components.logs.levels.error_logger import error
 
 
 def get_item_from_cache(data: Any, key: Any) -> Any:
-    """
-    Retrieve an item from the cache data.
+    """Retrieve an item from the cache data.
 
     This function retrieves the item associated with the provided key
     from the given cache data.

@@ -24,13 +24,12 @@ from pipeline.const import (
 )
 from src.const import (
     DAGS_HUB_MLFLOW_ENABLED,
+    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
+    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
     DATASET_RAW_TYPE,
     DATASET_TIMESTAMP_COLUMN_NAME,
     MLFLOW_NESTED_ENABLED,
-    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
-    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
 )
-
 
 # Load env variables
 load_dotenv()
@@ -39,8 +38,7 @@ dags_hub_repo_name = os.getenv(DAGS_HUB_REPO_NAME_ENV_VAR_NAME)
 
 
 def preprocess_data() -> None:
-    """
-    Preprocess generated data.
+    """Preprocess generated data.
 
     This function preprocesses generated data by orchestrating missing values,
     duplicated values and invalid values removal. Finally, it orchestrates
@@ -62,9 +60,9 @@ def preprocess_data() -> None:
     import mlflow
 
     with mlflow.start_run(
-        run_name=LOGS_DATA_PREPROCESSING_PHASE, nested=MLFLOW_NESTED_ENABLED
+        run_name=LOGS_DATA_PREPROCESSING_PHASE,
+        nested=MLFLOW_NESTED_ENABLED,
     ):
-
         # Setup
         config = prepare_config()
 
@@ -81,7 +79,8 @@ def preprocess_data() -> None:
 
         # Retrieve path to load dataset from
         dataset_raw_path = get_dataset_abs_path(
-            DATASET_RAW_TYPE, data_distribution_mode
+            DATASET_RAW_TYPE,
+            data_distribution_mode,
         )
 
         # Load the dataset
@@ -92,7 +91,8 @@ def preprocess_data() -> None:
 
         # Remove duplicates
         duplicates_removed_df = remove_dataset_duplicates(
-            missing_values_removed_df, [DATASET_TIMESTAMP_COLUMN_NAME]
+            missing_values_removed_df,
+            [DATASET_TIMESTAMP_COLUMN_NAME],
         )
 
         # Build new features
@@ -100,7 +100,8 @@ def preprocess_data() -> None:
 
         # Retrieve path to save dataset from
         dataset_processed_path = get_dataset_abs_path(
-            DATASET_PROCESSED_TYPE, data_distribution_mode
+            DATASET_PROCESSED_TYPE,
+            data_distribution_mode,
         )
 
         # Save preprocessed dataset
@@ -119,7 +120,7 @@ def preprocess_data() -> None:
                 "removals_tot": len(initial_df) - len(final_df),
                 "removals_ratio": (len(initial_df) - len(final_df))
                 / len(initial_df),
-            }
+            },
         )
         mlflow.log_artifact(dataset_processed_path)
 

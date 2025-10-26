@@ -12,8 +12,7 @@ def calculate_class_weight(
     num_classes: int,
     weight_type: str = CRITERION_CLASS_WEIGHT_TYPE,
 ) -> np.ndarray:
-    """
-    Compute balanced class weight for targets.
+    """Compute balanced class weight for targets.
 
     This function calculates class weight ensuring that classes
     which appear less frequently are assigned higher weights,
@@ -30,11 +29,12 @@ def calculate_class_weight(
     Raises:
         RuntimeError: If class weight calculation fails:
             * Converting targets to NumPy array fails because targets is not a
-              valid Tensor or has incompatible type (TypeError, AttributeError).
-            * Computing unique classes or class weights fails due to invalid array or
-              invalid inputs (ValueError, TypeError).
-            * Assigning computed weights to full class weight array fails due to index issues
-              (IndexError).
+              valid Tensor or has incompatible type
+              (TypeError, AttributeError).
+            * Computing unique classes or class weights fails due to invalid
+              array or invalid inputs (ValueError, TypeError).
+            * Assigning computed weights to full class weight array fails due
+              to index issues (IndexError).
     """
     try:
         debug(

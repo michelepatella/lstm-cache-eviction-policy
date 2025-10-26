@@ -7,8 +7,7 @@ from src.const import DATA_DISTRIBUTION_STATIC_MODE
 
 
 def get_model_abs_path(data_distribution_mode: str) -> str:
-    """
-    Retrieve the model absolute path.
+    """Retrieve the model absolute path.
 
     This function retrieves the model absolute path
     dynamically, based on data distribution mode.

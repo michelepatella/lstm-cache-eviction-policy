@@ -1,20 +1,20 @@
-from typing import Union
-
 from components.logs.levels.error_logger import error
 
 
 def calculate_percentage(
-    value: Union[int, float], total: Union[int, float]
+    value: float,
+    total: float,
 ) -> float:
-    """
-    Calculate the percentage of a value.
+    """Calculate the percentage of a value.
 
     This function, given a total, calculates the percentage of
     a provided value.
 
     Args:
-        value (Union[int, float]): Value for which to calculate the percentage.
-        total (Union[int, float]): The total used for calculating the percentage.
+        value (float): Value for which to calculate
+                       the percentage.
+        total (float): The total used for calculating
+                       the percentage.
 
     Returns:
         float: Percentage of the value.

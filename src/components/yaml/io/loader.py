@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 import yaml
 from yaml import YAMLError
@@ -7,9 +7,8 @@ from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
-def load_yaml(path: str) -> Dict[str, Any]:
-    """
-    Load a YAML file from path.
+def load_yaml(path: str) -> dict[str, Any]:
+    """Load a YAML file from path.
 
     This function reads a YAML file from the specified path.
 
@@ -17,7 +16,7 @@ def load_yaml(path: str) -> Dict[str, Any]:
         path (str): Path to load YAML file from.
 
     Returns:
-        Dict[str, Any]: YAML file loaded.
+        dict[str, Any]: YAML file loaded.
 
     Raises:
         RuntimeError: If YAML file loading fails:
@@ -34,7 +33,7 @@ def load_yaml(path: str) -> Dict[str, Any]:
         )
 
         # Load the YAML file from its path
-        with open(path, "r") as f:
+        with open(path) as f:
             yaml_file = yaml.safe_load(f)
 
         debug(

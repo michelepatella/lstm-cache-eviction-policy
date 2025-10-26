@@ -1,5 +1,6 @@
 from collections import defaultdict
-from typing import Any, Callable, Optional
+from collections.abc import Callable
+from typing import Any
 
 from cachetools import Cache
 
@@ -26,12 +27,10 @@ from components.caches.implementations.utils.cache_size_calculator import (
     calculate_cache_size,
 )
 from components.logs.levels.debug_logger import debug
-from components.logs.levels.info_logger import info
 
 
 class LFUCache(Cache):
-    """
-    LFU (Least Frequently Used) cache implementation.
+    """LFU (Least Frequently Used) cache implementation.
 
     Evicts the least frequently used item when the maximum size is reached.
 
@@ -42,10 +41,11 @@ class LFUCache(Cache):
     """
 
     def __init__(
-        self: "LFUCache", maxsize: int, callback: Optional[Callable] = None
+        self: "LFUCache",
+        maxsize: int,
+        callback: Callable | None = None,
     ) -> None:
-        """
-        Initialize the LFU cache.
+        """Initialize the LFU cache.
 
         This function initializes the LFU cache by setting up the data
         structures to collect data during simulations, and the optional
@@ -54,8 +54,8 @@ class LFUCache(Cache):
         Args:
             self ("LFUCache"): Current class instance.
             maxsize (int): Maximum size of the cache.
-            callback (Optional[Callable]): Callback function invoked with the
-                                           evicted key.
+            callback (Callable | None): Callback function invoked with the
+                                        evicted key.
 
         Returns:
             None
@@ -77,8 +77,7 @@ class LFUCache(Cache):
         )
 
     def __getitem__(self: "LFUCache", key: Any) -> Any:
-        """
-        Retrieve a key item from the LFU cache.
+        """Retrieve a key item from the LFU cache.
 
         This function, given a key, retrieves its item from the LFU
         cache and increments its access frequency.
@@ -94,8 +93,7 @@ class LFUCache(Cache):
         return get_item_from_cache(self._data, key)
 
     def _evict_least_frequent(self: "LFUCache") -> None:
-        """
-        Evict the least frequently used key.
+        """Evict the least frequently used key.
 
         This function identifies the least frequently used key into the cache
         to be evicted. The tiebreak strategy implemented by the function
@@ -111,8 +109,7 @@ class LFUCache(Cache):
         evict_least_frequent_item(self._data, self._freq, self.callback)
 
     def __setitem__(self: "LFUCache", key: Any, item: Any) -> None:
-        """
-        Insert or update a key item in the LFU cache.
+        """Insert or update a key item in the LFU cache.
 
         This function, given a key and its item, updates or inserts the
         provided item for the key in the LFU cache (depending on whether
@@ -134,13 +131,13 @@ class LFUCache(Cache):
             self.maxsize,
             self._evict_least_frequent,
             post_insert_callback=lambda k: self._freq.__setitem__(
-                k, self._freq.get(k, 0) + 1
+                k,
+                self._freq.get(k, 0) + 1,
             ),
         )
 
     def __delitem__(self: "LFUCache", key: Any) -> None:
-        """
-        Delete a key and its item from the LFU cache.
+        """Delete a key and its item from the LFU cache.
 
         This function, given a key, deletes it from the LFU cache along
         with its access frequency.
@@ -156,8 +153,7 @@ class LFUCache(Cache):
         delete_item_from_cache(self._data, key, self._freq)
 
     def __contains__(self: "LFUCache", key: Any) -> bool:
-        """
-        Check if a key exists in the LFU cache.
+        """Check if a key exists in the LFU cache.
 
         This function, given a key, returns True if it exists in the LFU
         cache, False otherwise.
@@ -171,9 +167,8 @@ class LFUCache(Cache):
         """
         return check_item_into_cache(self._data, key)
 
-    def pop(self: "LFUCache", key: Any) -> Optional[Any]:
-        """
-        Remove a key from the LFU cache and return its item.
+    def pop(self: "LFUCache", key: Any) -> Any | None:
+        """Remove a key from the LFU cache and return its item.
 
         This function, given a key, removes it from the LFU cache and
         returns its item. If the key is not found, it returns None.
@@ -183,15 +178,14 @@ class LFUCache(Cache):
             key (Any): Key to remove.
 
         Returns:
-            Optional[Any]: Item associated with the key removed
-                           (None if its key is not found in the LFU cache).
+            Any | None: Item associated with the key removed
+                        (None if its key is not found in the LFU cache).
         """
         # Remove item from cache
         return pop_item_from_cache(self._data, key, self._freq)
 
     def __len__(self: "LFUCache") -> int:
-        """
-        Get the number of items currently in the LFU cache.
+        """Get the number of items currently in the LFU cache.
 
         This function returns the number of items currently stored in
         the LFU cache.
@@ -206,8 +200,7 @@ class LFUCache(Cache):
         return calculate_cache_size(self._data)
 
     def clear(self: "LFUCache") -> None:
-        """
-        Clear all items from the LFU cache.
+        """Clear all items from the LFU cache.
 
         This function clears the LFU cache by
         removing all stored items and their frequencies.

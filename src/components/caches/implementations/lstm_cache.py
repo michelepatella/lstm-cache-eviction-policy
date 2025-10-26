@@ -17,13 +17,12 @@ from components.const import (
 from components.dataset.rows.extractions.lasts_extractor import (
     extract_last_rows_from_dataset,
 )
-from components.logs.levels.info_logger import info
+from components.logs.levels.debug_logger import debug
 from pipeline.config.pydantic.config import Config
 
 
 class LSTMCache(BaseCache):
-    """
-    LSTM-based cache implementation.
+    """LSTM-based cache implementation.
 
     Evicts keys from the cache based on an LSTM
     eviction policy when the cache is full.
@@ -35,8 +34,7 @@ class LSTMCache(BaseCache):
         metrics_logger: CacheMetricsLogger,
         config: Config,
     ) -> None:
-        """
-        Initialize the LSTM cache.
+        """Initialize the LSTM cache.
 
         This function initializes the LSTM cache by
         calling the BaseCache constructor.
@@ -63,8 +61,7 @@ class LSTMCache(BaseCache):
         )
 
     def evict_key(self: "LSTMCache", key: Any) -> None:
-        """
-        Evict a key from the cache.
+        """Evict a key from the cache.
 
         This function evicts a provided key
         from the LSTM cache, along with its
@@ -83,8 +80,7 @@ class LSTMCache(BaseCache):
         self.expiry.pop(key, None)
 
     def _put_key(self: "LSTMCache", key: Any, current_time: float) -> None:
-        """
-        Put a key in the cache.
+        """Put a key in the cache.
 
         This function puts a key into the LSTM cache
         along with its expiration time.
@@ -113,8 +109,7 @@ class LSTMCache(BaseCache):
         testing_set: DataLoader,
         config: Config,
     ) -> None:
-        """
-        Insert a key in the LSTM cache.
+        """Insert a key in the LSTM cache.
 
         This function puts a key into the LSTM cache
         along with its expiration time. If the cache is full,
@@ -145,7 +140,9 @@ class LSTMCache(BaseCache):
             # Extract last accesses of
             # sequence length
             last_accesses = extract_last_rows_from_dataset(
-                current_idx, seq_len, testing_set
+                current_idx,
+                seq_len,
+                testing_set,
             )
 
             # Check whether last accesses
@@ -160,7 +157,7 @@ class LSTMCache(BaseCache):
                     EVICTION_POLICY_API_ENDPOINT,
                     json={
                         EVICTION_POLICY_API_KEYS_IN_CACHE_PARAM_NAME: list(
-                            self.store.keys()
+                            self.store.keys(),
                         ),
                         EVICTION_POLICY_API_LAST_ACCESSES_PARAM_NAME: last_accesses,
                         EVICTION_POLICY_API_USER_KWARGS_PARAM_NAME: {},

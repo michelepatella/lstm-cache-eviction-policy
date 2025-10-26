@@ -4,8 +4,7 @@ from components.logs.levels.error_logger import error
 
 
 def check_item_into_cache(data: Any, key: Any) -> bool:
-    """
-    Check if a key exists in a cache.
+    """Check if a key exists in a cache.
 
     This function, given a key, returns True if it exists in the
     provided cache data, False otherwise.

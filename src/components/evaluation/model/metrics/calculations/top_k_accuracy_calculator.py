@@ -1,5 +1,3 @@
-from typing import List
-
 import torch
 
 from components.logs.levels.error_logger import error
@@ -8,19 +6,18 @@ from components.math.percentage_calculator import calculate_percentage
 
 
 def calculate_top_k_accuracy(
-    targets: List[int],
-    outputs: List[torch.Tensor],
+    targets: list[int],
+    outputs: list[torch.Tensor],
     top_k: int,
 ) -> float:
-    """
-    Compute top-k accuracy for a multi-class classification task.
+    """Compute top-k accuracy for a multi-class classification task.
 
     This function calculates the proportion of samples for which
     the true label is among the top-K predicted labels.
 
     Args:
-        targets (List[int]): Ground truth class labels.
-        outputs (List[torch.Tensor]): Model outputs.
+        targets (list[int]): Ground truth class labels.
+        outputs (list[torch.Tensor]): Model outputs.
         top_k (int): Number of top predictions to consider for accuracy.
 
     Returns:
@@ -50,7 +47,8 @@ def calculate_top_k_accuracy(
 
         # Compute top-k accuracy
         top_k_accuracy = calculate_percentage(
-            correct_predictions, len(targets)
+            correct_predictions,
+            len(targets),
         )
 
         info(

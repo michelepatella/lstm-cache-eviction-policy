@@ -1,5 +1,3 @@
-from typing import Optional, Tuple
-
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
@@ -23,24 +21,25 @@ def initialize_best_model(
     model_params: ModelParamsConfig,
     data_distribution_mode: str,
     config: Config,
-    data_loader: Optional[DataLoader],
-) -> Tuple[torch.device, nn.Module, nn.Module]:
-    """
-    Prepare a trained PyTorch model.
+    data_loader: DataLoader | None,
+) -> tuple[torch.device, nn.Module, nn.Module]:
+    """Prepare a trained PyTorch model.
 
-    This function extracts the target labels, sets up the PyTorch model environment,
-    and loads pre-trained weights referring to the best PyTorch model.
+    This function extracts the target labels, sets up the PyTorch
+    model environment, and loads pre-trained weights referring to
+    the best PyTorch model.
 
     Args:
         model_params (ModelParamsConfig): Model hyperparameters.
-        data_distribution_mode (str): Data distribution mode to determine the path
+        data_distribution_mode (str): Data distribution mode to
+                                      determine the path
                                       of the trained model.
         config (Config): Configuration object.
-        data_loader (Optional[DataLoader]): DataLoader containing the dataset to be
-                                            used (if any).
+        data_loader (DataLoader | None): DataLoader containing the dataset
+                                         to be used (if any).
 
     Returns:
-        Tuple[torch.device, nn.Module, nn.Module]:
+        tuple[torch.device, nn.Module, nn.Module]:
             - device: The device on which the model is loaded.
             - criterion: Loss function initialized with class weights.
             - model: Pre-trained model ready for inference.
@@ -54,7 +53,9 @@ def initialize_best_model(
 
     # Setup for model environment
     device, criterion, model = initialize_model_environment(
-        model_params, config, targets
+        model_params,
+        config,
+        targets,
     )
 
     # Load the trained model

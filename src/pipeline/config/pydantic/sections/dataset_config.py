@@ -2,8 +2,7 @@ from pydantic import BaseModel, confloat
 
 
 class SplitConfig(BaseModel):
-    """
-    Configuration for dataset split.
+    """Configuration for dataset split.
 
     Attributes:
         training (float): Fraction of the dataset used for training (in [0,1]).
@@ -15,8 +14,7 @@ class SplitConfig(BaseModel):
 
 
 class DatasetConfig(BaseModel):
-    """
-    Dataset configuration.
+    """Dataset configuration.
 
     Attributes:
         split (SplitConfig): Dataset split configuration.

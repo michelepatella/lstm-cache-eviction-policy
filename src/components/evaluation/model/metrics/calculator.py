@@ -1,5 +1,3 @@
-from typing import Dict, List, Union
-
 import torch
 
 from components.const import (
@@ -17,33 +15,32 @@ from components.evaluation.model.metrics.calculations.top_k_accuracy_calculator 
     calculate_top_k_accuracy,
 )
 from components.logs.levels.debug_logger import debug
-from components.logs.levels.info_logger import info
 
 
 def calculate_model_metrics(
-    targets: List[int],
-    predictions: List[int],
-    outputs: List[torch.Tensor],
+    targets: list[int],
+    predictions: list[int],
+    outputs: list[torch.Tensor],
     top_k: int,
-) -> Dict[str, Union[int, float]]:
-    """
-    Calculate evaluation metrics for a model.
+) -> dict[str, int | float]:
+    """Calculate evaluation metrics for a model.
 
-    This function calculates multiple evaluation metrics for a model, including:
+    This function calculates multiple evaluation metrics for
+    a model, including:
         - Class-wise precision, recall, f1-score (class report).
         - Top-k accuracy.
         - Cohen’s kappa score.
 
     Args:
-        targets (List[int]): Ground truth class labels.
-        predictions (List[int]): Predicted class labels.
-        outputs (List[torch.Tensor]): Model outputs.
+        targets (list[int]): Ground truth class labels.
+        predictions (list[int]): Predicted class labels.
+        outputs (list[torch.Tensor]): Model outputs.
         top_k (int): Top-k to be considered for accuracy calculation.
 
     Returns:
-        Dict[str, Union[int, float]]: Dictionary containing class report with precision,
-                                      recall, f1-score, top-k accuracy, and Cohen's kappa
-                                      score.
+        dict[str, int | float]: Dictionary containing class report with
+                                precision, recall, f1-score, top-k
+                                accuracy, and Cohen's kappa score.
     """
     debug(
         "Model metrics calculation started",

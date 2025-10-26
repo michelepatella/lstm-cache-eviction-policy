@@ -16,8 +16,7 @@ def build_logs_file_handler(
     backup_count: int = LOGS_FILE_BACKUP_COUNT,
     file_format: str = LOGS_FORMAT,
 ) -> RotatingFileHandler:
-    """
-    Set up a rotating file handler for logging to a file.
+    """Set up a rotating file handler for logging to a file.
 
     This function creates and configures a rotating file handler
     with the standard formatter and specified logs level. It is

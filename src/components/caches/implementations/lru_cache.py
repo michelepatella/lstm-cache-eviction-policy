@@ -1,5 +1,6 @@
 from collections import OrderedDict
-from typing import Any, Callable, Optional
+from collections.abc import Callable
+from typing import Any
 
 from cachetools import Cache
 
@@ -27,12 +28,10 @@ from components.caches.implementations.utils.cache_size_calculator import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 
 
 class LRUCache(Cache):
-    """
-    LRU (Least Recently Used) cache implementation.
+    """LRU (Least Recently Used) cache implementation.
 
     Evicts the least recently used item when the maximum size is reached.
 
@@ -43,10 +42,11 @@ class LRUCache(Cache):
     """
 
     def __init__(
-        self: "LRUCache", maxsize: int, callback: Optional[Callable] = None
+        self: "LRUCache",
+        maxsize: int,
+        callback: Callable | None = None,
     ) -> None:
-        """
-        Initialize the LRU cache.
+        """Initialize the LRU cache.
 
         This function initializes the LRU cache by setting up the data
         structure to collect data during simulations, and the optional
@@ -55,7 +55,8 @@ class LRUCache(Cache):
         Args:
             self ("LRUCache"): Current class instance.
             maxsize (int): Maximum size of the cache.
-            callback (Callable): Callback function invoked with the evicted key.
+            callback (Callable | None): Callback function invoked with
+                                        the evicted key.
 
         Returns:
             None
@@ -76,8 +77,7 @@ class LRUCache(Cache):
         )
 
     def __getitem__(self: "LRUCache", key: Any) -> Any:
-        """
-        Retrieve a key item from the LRU cache.
+        """Retrieve a key item from the LRU cache.
 
         This function, given a key, retrieves its item from the LRU
         cache and moves it to the end of the internal ordered dictionary to
@@ -132,8 +132,7 @@ class LRUCache(Cache):
         return item
 
     def _evict_oldest_item(self: "LRUCache") -> None:
-        """
-        Evict the oldest item from the LRU cache.
+        """Evict the oldest item from the LRU cache.
 
         This function removes the least recently used key from the cache
         along with its item. If a callback is provided, it is invoked
@@ -149,8 +148,7 @@ class LRUCache(Cache):
         evict_oldest_item(self._data, self.callback)
 
     def __setitem__(self: "LRUCache", key: Any, item: Any) -> None:
-        """
-        Insert or update a key item in the LRU cache.
+        """Insert or update a key item in the LRU cache.
 
         This function, given a key and its item, updates or inserts
         the provided item for the key in the LRU cache (depending on
@@ -177,8 +175,7 @@ class LRUCache(Cache):
         )
 
     def __delitem__(self: "LRUCache", key: Any) -> None:
-        """
-        Delete a key and its item from the LRU cache.
+        """Delete a key and its item from the LRU cache.
 
         This function, given a key, deletes it from the LRU cache.
 
@@ -193,8 +190,7 @@ class LRUCache(Cache):
         delete_item_from_cache(self._data, key)
 
     def __contains__(self: "LRUCache", key: Any) -> bool:
-        """
-        Check if a key exists in the LRU cache.
+        """Check if a key exists in the LRU cache.
 
         This function, given a key, returns True if
         it exists in the LRU cache, False otherwise.
@@ -208,9 +204,8 @@ class LRUCache(Cache):
         """
         return check_item_into_cache(self._data, key)
 
-    def pop(self: "LRUCache", key: Any) -> Optional[Any]:
-        """
-        Remove a key from the LRU cache and return its item.
+    def pop(self: "LRUCache", key: Any) -> Any | None:
+        """Remove a key from the LRU cache and return its item.
 
         This function, given a key, removes it from the LRU cache
         and returns its item. If the key is not found, it returns None instead.
@@ -220,15 +215,14 @@ class LRUCache(Cache):
             key (Any): Key to remove.
 
         Returns:
-            Optional[Any]: Item associated with the key removed
-                          (None if its key is not found in the LRU cache).
+            Any | None: Item associated with the key removed
+                        (None if its key is not found in the LRU cache).
         """
         # Remove item from cache
         return pop_item_from_cache(self._data, key)
 
     def __len__(self: "LRUCache") -> int:
-        """
-        Get the number of items currently
+        """Get the number of items currently
         in the LRU cache.
 
         This function returns the number of items
@@ -244,8 +238,7 @@ class LRUCache(Cache):
         return calculate_cache_size(self._data)
 
     def clear(self: "LRUCache") -> None:
-        """
-        Clear all items from the LRU cache.
+        """Clear all items from the LRU cache.
 
         This function clears the LRU cache by
         removing all the items stored.

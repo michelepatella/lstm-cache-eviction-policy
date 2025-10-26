@@ -1,5 +1,3 @@
-from typing import Dict, Union
-
 import numpy as np
 
 from components.data_loader.builder import build_data_loader
@@ -20,15 +18,13 @@ from pipeline.config.pydantic.config import Config
 
 
 def compute_single_time_series_cv_fold(
-    fold_idx: int,
     train_idx: np.ndarray,
     val_idx: np.ndarray,
     training_set: AccessLogsDataset,
-    params: Dict[str, Union[int, float, bool]],
+    params: dict[str, int | float | bool],
     config: Config,
 ) -> float:
-    """
-    Execute a single fold of time series cross-validation.
+    """Execute a single fold of time series cross-validation.
 
     This function handles all steps for time series cross-validation on
     one fold: dataset splitting, DataLoader creation, model environment
@@ -36,11 +32,10 @@ def compute_single_time_series_cv_fold(
     average loss.
 
     Args:
-        fold_idx (int): Index of the current fold.
         train_idx (np.ndarray): Indices for training samples in this fold.
         val_idx (np.ndarray): Indices for validation samples in this fold.
         training_set (AccessLogsDataset): Full training set.
-        params (Dict[str, Union[int, float, bool]]): Parameters configuration
+        params (dict[str, int | float | bool]): Parameters configuration
                                                      for the current fold.
         config (Config): Configuration object.
 
@@ -59,7 +54,9 @@ def compute_single_time_series_cv_fold(
 
     # Split training set into training and validation sets
     training_set, validation_set = split_training_validation_sets(
-        training_set, training_idx=train_idx, validation_idx=val_idx
+        training_set,
+        training_idx=train_idx,
+        validation_idx=val_idx,
     )
 
     # Build DataLoaders for both sets
@@ -86,7 +83,10 @@ def compute_single_time_series_cv_fold(
 
     # Build optimizer
     optimizer = build_optimizer(
-        model, optimizer_type, lr=learning_rate, weight_decay=weight_decay
+        model,
+        optimizer_type,
+        lr=learning_rate,
+        weight_decay=weight_decay,
     )
 
     # Train model

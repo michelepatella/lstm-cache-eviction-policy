@@ -1,24 +1,21 @@
-from typing import Union
-
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
 def assert_min_less_than_max(
-    min_val: Union[int, float],
-    max_val: Union[int, float],
+    min_val: float,
+    max_val: float,
     values_context: str,
 ) -> None:
-    """
-    Check whether a maximum value is greater than or equal to
+    """Check whether a maximum value is greater than or equal to
     a minimum one or not.
 
     This function, given the minimum and the maximum values, checks
     whether the first is less than or equal to the second one.
 
     Args:
-        min_val (Union[int, float]): The maximum value.
-        max_val (Union[int, float]): The minimum value.
+        min_val (float): The maximum value.
+        max_val (float): The minimum value.
         values_context (str): Context for error messages.
 
     Returns:

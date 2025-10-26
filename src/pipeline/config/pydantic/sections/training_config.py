@@ -7,8 +7,7 @@ from src.const import OPTIMIZER_NAMES
 
 
 class TrainingGeneralConfig(BaseModel):
-    """
-    General training configuration.
+    """General training configuration.
 
     Attributes:
         epochs (int): Number of training epochs (> 0).
@@ -22,8 +21,7 @@ class TrainingGeneralConfig(BaseModel):
 
 
 class OptimizerParamsConfig(BaseModel):
-    """
-    Configuration for the training optimizer.
+    """Configuration for the training optimizer.
 
     Attributes:
         learning_rate (float): Learning rate (> 0).
@@ -37,8 +35,7 @@ class OptimizerParamsConfig(BaseModel):
 
 
 class OptimizerConfig(BaseModel):
-    """
-    Optimizer configuration for training.
+    """Optimizer configuration for training.
 
     Attributes:
         type (str): Optimizer type.
@@ -52,8 +49,7 @@ class OptimizerConfig(BaseModel):
     def check_data_distribution_mode(
         self: "OptimizerConfig",
     ) -> "OptimizerConfig":
-        """
-        Check whether optimizer is valid or not.
+        """Check whether optimizer is valid or not.
 
         This function validates the training optimizer specified.
 
@@ -73,8 +69,7 @@ class OptimizerConfig(BaseModel):
 
 
 class EarlyStoppingTrainingConfig(BaseModel):
-    """
-    Early stopping configuration for training.
+    """Early stopping configuration for training.
 
     Attributes:
         patience (int): Number of epochs with no improvement to
@@ -87,8 +82,7 @@ class EarlyStoppingTrainingConfig(BaseModel):
 
 
 class TrainingConfig(BaseModel):
-    """
-    Training configuration.
+    """Training configuration.
 
     Attributes:
         general (TrainingGeneralConfig): General training configuration.

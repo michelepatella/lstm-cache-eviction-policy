@@ -1,5 +1,3 @@
-from typing import Optional, Tuple, Union
-
 import torch
 
 from components.backpropagation.core.forward_runner import compute_forward
@@ -16,30 +14,26 @@ from components.model.mode.setter import set_model_mode
 
 def compute_mc_dropout_forward(
     model: torch.nn.Module,
-    batch: Union[
-        Tuple[torch.Tensor, torch.Tensor, torch.Tensor],
-        Tuple[torch.Tensor, torch.Tensor],
-    ],
+    batch: tuple[torch.Tensor, torch.Tensor, torch.Tensor]
+    | tuple[torch.Tensor, torch.Tensor],
     device: torch.device,
     num_features: int,
     num_mc_dropout_samples: int = MC_DROPOUT_NUM_SAMPLES_DEFAULT,
     mc_dropout_flag: str = MC_DROPOUT_FLAG_NAME,
     mc_dropout_unbiased_variance=MC_DROPOUT_UNBIASED_VARIANCE_DISABLED,
-) -> Tuple[torch.Tensor, Optional[torch.Tensor]]:
-    """
-    Perform forward pass with optional Monte Carlo (MC) Dropout.
+) -> tuple[torch.Tensor, torch.Tensor | None]:
+    """Perform forward pass with optional Monte Carlo (MC) Dropout.
 
     This function executes forward pass through the model.
-    If the given number of Monte Carlo Dropout samples is greater than default
-    value, MC Dropout is enabled and multiple stochastic passes are performed to
-    estimate predictive uncertainty.
+    If the given number of Monte Carlo Dropout samples is greater than
+    default value, MC Dropout is enabled and multiple stochastic passes
+    are performed to estimate predictive uncertainty.
 
     Args:
         model (torch.nn.Module): The PyTorch model to compute forward pass for.
-        batch (Union[
-            Tuple[torch.Tensor, torch.Tensor, torch.Tensor],
-            Tuple[torch.Tensor, torch.Tensor],
-        ]): Model batch, either a tuple including the target or inputs
+        batch (tuple[torch.Tensor, torch.Tensor, torch.Tensor]
+        | tuple[torch.Tensor, torch.Tensor]):
+            Model batch, either a tuple including the target or inputs
             ready for model.
         device (torch.device): Device on which to run the forward passes.
         num_features (int): Number of features to use.
@@ -49,21 +43,22 @@ def compute_mc_dropout_forward(
                                              variance using unbiased estimator.
 
     Returns:
-        Tuple[torch.Tensor, Optional[torch.Tensor]]:
+        tuple[torch.Tensor, torch.Tensor | None]:
             - outputs_mean: Mean of outputs across one or more MC dropout samples.
             - outputs_var: Variance of outputs across MC dropout samples
-                           (None if the number of MC Dropout samples is set to default).
+                           (None if the number of MC Dropout samples is set to
+                           default).
 
     Raises:
     RuntimeError: If MC Dropout forward pass fails:
-        * Forward computation of the model fails due to incompatible inputs or invalid
-          tensor shapes (RuntimeError, TypeError).
-        * Saving the MC dropout outputs fails because outputs are not valid tensors or
-          cannot be unsqueezed (RuntimeError, AttributeError).
-        * Concatenation of all MC dropout outputs fails due to mismatched tensor shapes
-          or invalid tensor list (RuntimeError, TypeError).
-        * Computation of outputs variance fails because the outputs tensor is invalid or
-          unsupported operation occurs (RuntimeError, TypeError).
+        * Forward computation of the model fails due to incompatible inputs
+          or invalid tensor shapes (RuntimeError, TypeError).
+        * Saving the MC dropout outputs fails because outputs are not valid
+          tensors or cannot be unsqueezed (RuntimeError, AttributeError).
+        * Concatenation of all MC dropout outputs fails due to mismatched
+          tensor shapes  or invalid tensor list (RuntimeError, TypeError).
+        * Computation of outputs variance fails because the outputs tensor
+          is invalid or unsupported operation occurs (RuntimeError, TypeError).
     """
     try:
         # Set model mode depending on the
@@ -78,7 +73,7 @@ def compute_mc_dropout_forward(
         all_outputs = []
         with torch.no_grad():
             # For each MC dropout sample provided
-            for i in range(num_mc_dropout_samples):
+            for _i in range(num_mc_dropout_samples):
                 # Compute forward pass and get the
                 # model outputs
                 if isinstance(batch, tuple) and len(batch) == num_features + 1:
@@ -100,7 +95,8 @@ def compute_mc_dropout_forward(
         outputs_var = None
         if num_mc_dropout_samples > MC_DROPOUT_NUM_SAMPLES_DEFAULT:
             outputs_var = all_outputs_tensor.var(
-                dim=0, unbiased=mc_dropout_unbiased_variance
+                dim=0,
+                unbiased=mc_dropout_unbiased_variance,
             )
 
         return outputs_mean, outputs_var

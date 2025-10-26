@@ -6,10 +6,11 @@ from components.logs.levels.error_logger import error
 
 
 def save_dataset(
-    df: pd.DataFrame, path: str, index: bool = DATASET_INDEX_DISABLED
+    df: pd.DataFrame,
+    path: str,
+    index: bool = DATASET_INDEX_DISABLED,
 ) -> None:
-    """
-    Save Pandas dataframe.
+    """Save Pandas dataframe.
 
     This function saves Pandas dataframe
     to CSV dataset at specified path.

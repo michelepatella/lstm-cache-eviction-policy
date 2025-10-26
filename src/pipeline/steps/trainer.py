@@ -25,14 +25,13 @@ from components.training.core.epochs_trainer import train_epochs
 from pipeline.config.configurator import prepare_config
 from src.const import (
     DAGS_HUB_MLFLOW_ENABLED,
+    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
+    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
     DATASET_TRAINING_SPLIT_TYPE,
     LOGS_TRAINING_PHASE,
     MLFLOW_NESTED_ENABLED,
     MLFLOW_PYTORCH_SAVE_MODEL_PATH,
-    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
-    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
 )
-
 
 # Load env variables
 load_dotenv()
@@ -41,8 +40,7 @@ dags_hub_repo_name = os.getenv(DAGS_HUB_REPO_NAME_ENV_VAR_NAME)
 
 
 def train_model() -> None:
-    """
-    Train the model.
+    """Train the model.
 
     This function trains the model, by orchestrating model and
     training setup, as well as training itself. The best model found
@@ -63,9 +61,9 @@ def train_model() -> None:
     import mlflow
 
     with mlflow.start_run(
-        run_name=LOGS_TRAINING_PHASE, nested=MLFLOW_NESTED_ENABLED
+        run_name=LOGS_TRAINING_PHASE,
+        nested=MLFLOW_NESTED_ENABLED,
     ):
-
         # Setup
         config = prepare_config()
 
@@ -114,7 +112,8 @@ def train_model() -> None:
         # Split training set into training
         # and validation sets
         training_set, validation_set = split_training_validation_sets(
-            training_set, validation_split
+            training_set,
+            validation_split,
         )
 
         # Create a loader both for
@@ -135,12 +134,17 @@ def train_model() -> None:
 
         # Model setup for training
         device, criterion, model = initialize_model_environment(
-            model_params, config, targets
+            model_params,
+            config,
+            targets,
         )
 
         # Build optimizer
         optimizer = build_optimizer(
-            model, optimizer_type, lr=learning_rate, weight_decay=weight_decay
+            model,
+            optimizer_type,
+            lr=learning_rate,
+            weight_decay=weight_decay,
         )
 
         # Train the model
@@ -166,9 +170,11 @@ def train_model() -> None:
                 "training_samples_num": len(training_set),
                 "validation_samples_num": len(validation_set),
                 "loss_best_avg": best_avg_loss,
-            }
+            },
         )
-        with tempfile.TemporaryDirectory() as MLFLOW_PYTORCH_SAVE_MODEL_TEMP_PATH:
+        with (
+            tempfile.TemporaryDirectory() as MLFLOW_PYTORCH_SAVE_MODEL_TEMP_PATH
+        ):
             mlflow.pytorch.save_model(
                 pytorch_model=model,
                 path=MLFLOW_PYTORCH_SAVE_MODEL_TEMP_PATH,

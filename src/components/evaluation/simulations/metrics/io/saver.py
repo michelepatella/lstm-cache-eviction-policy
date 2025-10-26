@@ -1,20 +1,17 @@
-from typing import Dict, List
-
 from components.json.io.saver import save_json
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from src.const import SIMULATIONS_METRICS_TIMELINE_NAME
 
 
-def save_simulations_metrics(results: List[Dict], path: str) -> None:
-    """
-    Save cache simulations metrics to a JSON file.
+def save_simulations_metrics(results: list[dict], path: str) -> None:
+    """Save cache simulations metrics to a JSON file.
 
     This function keeps only the simulations metrics
     to be saved, then stores the results as JSON.
 
     Args:
-        results (List[Dict]): List of metrics dictionaries per policy.
+        results (list[dict]): List of metrics dictionaries per policy.
         path (str): Path to save the JSON file.
 
     Returns:

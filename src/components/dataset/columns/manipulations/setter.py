@@ -5,10 +5,11 @@ from components.logs.levels.error_logger import error
 
 
 def set_dataset_column(
-    df: pd.DataFrame, column_name: str, column_values: np.ndarray
+    df: pd.DataFrame,
+    column_name: str,
+    column_values: np.ndarray,
 ) -> pd.DataFrame:
-    """
-    Set a column to the dataset.
+    """Set a column to the dataset.
 
     This function, given a dataframe and a column name along with
     its values, set it to the provided dataset.
@@ -24,7 +25,8 @@ def set_dataset_column(
     Raises:
         RuntimeError: If setting the column fails:
             * Column values length mismatch with dataset (ValueError).
-            * Invalid dataframe or column values type (TypeError, AttributeError).
+            * Invalid dataframe or column values type
+              (TypeError, AttributeError).
     """
     try:
         # Set column to dataset

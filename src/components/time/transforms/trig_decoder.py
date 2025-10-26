@@ -10,8 +10,7 @@ def decode_time_trigonometrically(
     cycle_length: float = TIME_HOURS_IN_DAY,
     cycle_unit_scale: float = TIME_SECONDS_IN_HOUR,
 ) -> float:
-    """
-    Decode time from its trigonometric encoding.
+    """Decode time from its trigonometric encoding.
 
     This function converts sin and cos time, representing the trigonometric
     encoding of time, back to time representation according to provided cycle

@@ -1,5 +1,3 @@
-from typing import List
-
 from pydantic import BaseModel, confloat, conint, model_validator
 
 from components.assertions.choice_field_assertor import assert_choice_field
@@ -12,8 +10,7 @@ from eviction_policy_api.const import (
 
 
 class APIKwargs(BaseModel):
-    """
-    Kwargs for the API.
+    """Kwargs for the API.
 
     This class encapsulates all the API kwargs, checking
     their validity.
@@ -43,7 +40,7 @@ class APIKwargs(BaseModel):
     confidence_level: confloat(gt=0.0, le=1.0)
     time_step_increment: confloat(gt=0, le=MAX_TIME_STEP_INCREMENT)
     num_evictions: conint(gt=0)
-    exclude_keys: List[int]
+    exclude_keys: list[int]
     prob_weight: confloat(gt=0.0, le=1.0)
     conf_weight: confloat(gt=0.0, le=1.0)
     tiebreak_strategy: str
@@ -54,8 +51,7 @@ class APIKwargs(BaseModel):
     def check_tiebreak_strategy(
         self: "APIKwargs",
     ) -> "APIKwargs":
-        """
-        Check whether tiebreak strategy is valid.
+        """Check whether tiebreak strategy is valid.
 
         This function validates the tiebreak strategy
         field of the API kwargs, ensuring its value

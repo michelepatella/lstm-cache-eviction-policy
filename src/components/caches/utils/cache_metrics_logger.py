@@ -6,8 +6,7 @@ from components.logs.levels.error_logger import error
 
 
 class CacheMetricsLogger:
-    """
-    Logger class for tracing cache metrics.
+    """Logger class for tracing cache metrics.
 
     This class tracks cache events, including:
         - Keys inserted into the cache (put events)
@@ -15,15 +14,16 @@ class CacheMetricsLogger:
         - Keys evicted from the cache
 
     Attributes:
-        put_events (Dict[int, List[Tuple[float, float]]]): Records key insertions
-                                                           with timestamp and TTL.
-        access_events (defaultdict(list)): Records access timestamps for each key.
-        evicted_keys (defaultdict(list)): Records eviction timestamps for each key.
+        put_events (Dict[int, List[Tuple[float, float]]]):
+            Records key insertions with timestamp and TTL.
+        access_events (defaultdict(list)): Records access timestamps
+                                           for each key.
+        evicted_keys (defaultdict(list)): Records eviction timestamps
+                                          for each key.
     """
 
     def __init__(self: "CacheMetricsLogger") -> None:
-        """
-        Initialize the CacheMetricsLogger class.
+        """Initialize the CacheMetricsLogger class.
 
         This function sets up the data structures to store
         cache events and logs initialization start and success.
@@ -46,10 +46,12 @@ class CacheMetricsLogger:
         )
 
     def log_put(
-        self: "CacheMetricsLogger", key: Any, time: float, ttl: float
+        self: "CacheMetricsLogger",
+        key: Any,
+        time: float,
+        ttl: float,
     ) -> None:
-        """
-        Trace a key insertion into the cache.
+        """Trace a key insertion into the cache.
 
         This function keep tracks of a key insertion into the cache,
         by storing the key and its expiration time.
@@ -65,9 +67,10 @@ class CacheMetricsLogger:
 
         Raises:
             RuntimeError: If tracing the put event fails:
-                * The internal put events dictionary is not initialized (AttributeError).
-                * The provided key is not hashable and cannot be used as a dictionary
-                  key (TypeError).
+                * The internal put events dictionary is not initialized
+                  (AttributeError).
+                * The provided key is not hashable and cannot be used as
+                  a dictionary key (TypeError).
         """
         try:
             # Trace put event
@@ -94,8 +97,7 @@ class CacheMetricsLogger:
             raise RuntimeError(msg) from e
 
     def log_get(self: "CacheMetricsLogger", key: Any, time: float) -> None:
-        """
-        Trace key access from the cache.
+        """Trace key access from the cache.
 
         This function keep tracks of key access from the cache, by storing
         the key and the current time.
@@ -114,7 +116,8 @@ class CacheMetricsLogger:
                   (AttributeError).
                 * The provided key is not hashable and cannot be used as a
                   dictionary key (TypeError).
-                * The key does not exist in access events dictionary (KeyError).
+                * The key does not exist in access events dictionary
+                  (KeyError).
         """
         try:
             # Trace get event
@@ -128,7 +131,8 @@ class CacheMetricsLogger:
                     "key": key,
                     "time": time,
                     "access_events_initialized": hasattr(
-                        self, "access_events"
+                        self,
+                        "access_events",
                     ),
                     "current_access_events_count": (
                         len(self.access_events)
@@ -142,10 +146,11 @@ class CacheMetricsLogger:
             raise RuntimeError(msg) from e
 
     def log_eviction(
-        self: "CacheMetricsLogger", key: Any, time: float
+        self: "CacheMetricsLogger",
+        key: Any,
+        time: float,
     ) -> None:
-        """
-        Trace a key eviction from the cache.
+        """Trace a key eviction from the cache.
 
         This function keep tracks of key eviction
         from the cache, by storing the key and the

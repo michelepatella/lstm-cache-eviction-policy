@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import Any
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -6,18 +6,17 @@ from components.logs.levels.error_logger import error
 
 def assert_choice_field(
     field_value: Any,
-    allowed_field_values: List[Any],
+    allowed_field_values: list[Any],
     field_context: str,
 ) -> None:
-    """
-    Check whether a choice field is valid or not.
+    """Check whether a choice field is valid or not.
 
     This function validates the choice field, ensuring its value it's
     a valid one, according to a list of allowed values.
 
     Args:
         field_value (Any): Value of the choice field.
-        allowed_field_values (List[Any]): List of allowed values.
+        allowed_field_values (list[Any]): List of allowed values.
         field_context (str): Context for error messages.
 
     Returns:
@@ -48,7 +47,7 @@ def assert_choice_field(
                 "field_value_type": type(field_value).__name__,
                 "allowed_field_values": allowed_field_values,
                 "allowed_field_values_type": type(
-                    allowed_field_values
+                    allowed_field_values,
                 ).__name__,
                 "field_context": field_context,
                 "status": "Invalid",
@@ -68,7 +67,7 @@ def assert_choice_field(
                 "field_value_type": type(field_value).__name__,
                 "allowed_field_values": allowed_field_values,
                 "allowed_field_values_type": type(
-                    allowed_field_values
+                    allowed_field_values,
                 ).__name__,
                 "field_context": field_context,
                 "status": "Invalid",

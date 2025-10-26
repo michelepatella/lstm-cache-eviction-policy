@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from torch.utils.data import DataLoader
 
 from components.data_loader.builder import build_data_loader
@@ -14,9 +12,8 @@ def initialize_data_loader(
     shuffle: bool,
     dataset_class: type[AccessLogsDataset],
     config: Config,
-) -> Tuple[AccessLogsDataset, DataLoader]:
-    """
-    Set up a data loader.
+) -> tuple[AccessLogsDataset, DataLoader]:
+    """Set up a data loader.
 
     This function setups a data loader of a specific type (e.g., training),
     by instantiating the dataset class and creating a data loader from that
@@ -30,7 +27,7 @@ def initialize_data_loader(
         config (Config): Configuration object.
 
     Returns:
-        Tuple[AccessLogsDataset, DataLoader]:
+        tuple[AccessLogsDataset, DataLoader]:
             - dataset: Instantiated dataset object of the specified class.
             - data_loader: DataLoader created from the dataset instance.
     """

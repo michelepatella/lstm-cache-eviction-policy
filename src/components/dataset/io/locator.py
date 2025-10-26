@@ -10,10 +10,10 @@ from src.const import DATA_DISTRIBUTION_STATIC_MODE, DATASET_RAW_TYPE
 
 
 def get_dataset_abs_path(
-    dataset_type: str, data_distribution_mode: str
+    dataset_type: str,
+    data_distribution_mode: str,
 ) -> str:
-    """
-    Retrieve the dataset absolute path.
+    """Retrieve the dataset absolute path.
 
     This function retrieves the dataset absolute path dynamically,
     based on data distribution mode.
@@ -31,7 +31,8 @@ def get_dataset_abs_path(
 
     Raises:
         RuntimeError: If retrieving the dataset path fails:
-            * Misconfigured directory or wrong filename constants (AttributeError).
+            * Misconfigured directory or wrong filename constants
+             (AttributeError).
     """
     try:
         debug(
@@ -53,14 +54,13 @@ def get_dataset_abs_path(
             else:
                 # For preprocessed dataset
                 dataset_abs_path = DATASET_STATIC_PROCESSED_FILE_PATH
+        # For dynamic data distribution mode
+        elif dataset_type == DATASET_RAW_TYPE:
+            # For raw dataset
+            dataset_abs_path = DATASET_DYNAMIC_RAW_FILE_PATH
         else:
-            # For dynamic data distribution mode
-            if dataset_type == DATASET_RAW_TYPE:
-                # For raw dataset
-                dataset_abs_path = DATASET_DYNAMIC_RAW_FILE_PATH
-            else:
-                # For preprocessed dataset
-                dataset_abs_path = DATASET_DYNAMIC_PROCESSED_FILE_PATH
+            # For preprocessed dataset
+            dataset_abs_path = DATASET_DYNAMIC_PROCESSED_FILE_PATH
 
         debug(
             "Dataset absolute path retrieval completed",

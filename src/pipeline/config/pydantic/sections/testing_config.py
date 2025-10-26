@@ -2,8 +2,7 @@ from pydantic import BaseModel, conint
 
 
 class GeneralTestingConfig(BaseModel):
-    """
-    General configuration for testing.
+    """General configuration for testing.
 
     Attributes:
         batch_size (int): Number of samples per batch (> 0).
@@ -15,8 +14,7 @@ class GeneralTestingConfig(BaseModel):
 
 
 class MetricsConfig(BaseModel):
-    """
-    Metrics configuration for testing.
+    """Metrics configuration for testing.
 
     Attributes:
         top_k (int): Number of top predictions to consider for evaluation (> 0).
@@ -26,8 +24,7 @@ class MetricsConfig(BaseModel):
 
 
 class TestingConfig(BaseModel):
-    """
-    Testing configuration.
+    """Testing configuration.
 
     Attributes:
         general (GeneralTestingConfig): General testing configuration.

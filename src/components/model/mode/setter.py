@@ -14,8 +14,7 @@ def set_model_mode(
     mc_dropout_flag_name: str = None,
     mc_dropout_flag_value: bool = MC_DROPOUT_ENABLED,
 ) -> None:
-    """
-    Set the mode of a PyTorch model.
+    """Set the mode of a PyTorch model.
 
     This function, given a model and a mode, set the model in that mode.
     Optionally, enables MC dropout by setting a provided flag to the model.
@@ -34,8 +33,8 @@ def set_model_mode(
 
     Raises:
         RuntimeError: If setting the model mode fails:
-            * Attribute assignment to the model fails due to invalid attribute name
-              or type (AttributeError, TypeError).
+            * Attribute assignment to the model fails due to invalid
+              attribute name or type (AttributeError, TypeError).
             * Invalid mode value causes failure (ValueError).
     """
     try:

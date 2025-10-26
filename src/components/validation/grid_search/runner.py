@@ -1,12 +1,9 @@
-from typing import Dict, Tuple, Union
-
 import mlflow
 import numpy as np
 from tqdm import tqdm
 
 from components.const import GRID_SEARCH_DESC
 from components.dataset.access_logs_dataset import AccessLogsDataset
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.model.best.checks_updates.params_checker_updater import (
@@ -23,10 +20,10 @@ from src.const import LOGS_VALIDATION_PHASE, MLFLOW_NESTED_ENABLED
 
 
 def compute_grid_search(
-    training_set: AccessLogsDataset, config: Config
-) -> Tuple[Dict[str, Union[int, float, bool]], float]:
-    """
-    Perform grid search to find the best parameters.
+    training_set: AccessLogsDataset,
+    config: Config,
+) -> tuple[dict[str, int | float | bool], float]:
+    """Perform grid search to find the best parameters.
 
     This function iterates over all parameter combinations, evaluates
     each combination using time-series cross-validation, and selects
@@ -38,7 +35,7 @@ def compute_grid_search(
         config (Config): Configuration object.
 
     Returns:
-        Tuple[Dict[str, Union[int, float, bool]], float]:
+        tuple[dict[str, int | float | bool], float]:
             - best_params: Dictionary containing the best parameters found.
             - best_avg_loss: Average loss of the best parameters.
 
@@ -90,14 +87,20 @@ def compute_grid_search(
                 ):
                     # Perform time series CV
                     avg_loss, fold_losses = compute_time_series_cv_folds(
-                        cv_num_folds, training_set, params, config
+                        cv_num_folds,
+                        training_set,
+                        params,
+                        config,
                     )
 
                     # Check and update the best parameters
                     # if improvement found
                     best_avg_loss, best_params = (
                         check_update_best_model_params(
-                            avg_loss, best_avg_loss, params, best_params
+                            avg_loss,
+                            best_avg_loss,
+                            params,
+                            best_params,
                         )
                     )
 
@@ -109,7 +112,7 @@ def compute_grid_search(
                             "loss_std": np.std(fold_losses),
                             "loss_min": np.min(fold_losses),
                             "loss_max": np.max(fold_losses),
-                        }
+                        },
                     )
 
                 # To update the progress bar
@@ -142,7 +145,9 @@ def compute_grid_search(
                     len(training_set) if training_set else None
                 ),
                 "folds_num": getattr(
-                    config.validation.cross_validation, "folds", None
+                    config.validation.cross_validation,
+                    "folds",
+                    None,
                 ),
                 "param_combinations_num": (
                     len(params_combinations)

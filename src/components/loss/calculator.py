@@ -1,5 +1,3 @@
-from typing import Optional
-
 import torch
 
 from components.logs.levels.error_logger import error
@@ -9,9 +7,8 @@ def calculate_loss(
     outputs: torch.Tensor,
     targets: torch.Tensor,
     criterion: torch.nn.Module,
-) -> Optional[torch.Tensor]:
-    """
-    Calculate the loss for outputs and targets.
+) -> torch.Tensor | None:
+    """Calculate the loss for outputs and targets.
 
     This function calculates the loss between model outputs
     and targets using the provided criterion.
@@ -22,7 +19,7 @@ def calculate_loss(
         criterion (torch.nn.Module): Criterion to use for loss calculation.
 
     Returns:
-        Optional[torch.Tensor]: Calculated loss (None if something went wrong).
+        torch.Tensor | None: Calculated loss (None if something went wrong).
 
     Raises:
         RuntimeError: If loss calculation fails:

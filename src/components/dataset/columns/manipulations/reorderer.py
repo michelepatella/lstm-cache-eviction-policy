@@ -4,10 +4,10 @@ from components.logs.levels.error_logger import error
 
 
 def reorder_dataset_columns(
-    df: pd.DataFrame, target_column: str
+    df: pd.DataFrame,
+    target_column: str,
 ) -> pd.DataFrame:
-    """
-    Reorder the dataset columns.
+    """Reorder the dataset columns.
 
     This function reorders the DataFrame columns so that the
     provided target column is the last one.
@@ -19,7 +19,7 @@ def reorder_dataset_columns(
     Returns:
         pd.DataFrame: DataFrame with target column as last column.
 
-     Raises:
+    Raises:
         RuntimeError: If reordering columns fails:
             * Target column does not exist in the dataset (KeyError).
     """

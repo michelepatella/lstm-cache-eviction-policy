@@ -10,16 +10,17 @@ def generate_cycle_pattern(
     requests_count: int,
     keys_range: np.ndarray,
 ) -> int:
-    """
-    Determine the next key to be accessed according to cycle pattern.
+    """Determine the next key to be accessed according to cycle pattern.
 
     This function determines which is the next key to be accessed according
     to cycle pattern. This pattern simulates cyclic accesses to a subset of
-    keys dynamically built, depending on the number of requests already generated.
+    keys dynamically built, depending on the number of requests already
+    generated.
 
     Args:
         cycle_base (int): Minimum number of keys in the cycle.
-        cycle_divisor (int): Divisor controlling how quickly the cycle length increases.
+        cycle_divisor (int): Divisor controlling how quickly the cycle length
+                             increases.
         cycle_mod (int): Modulo that limits the growth of the cycle length.
         requests_count (int): Number of requests generated so far.
         keys_range (np.ndarray): List of available keys.

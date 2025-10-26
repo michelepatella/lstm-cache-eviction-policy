@@ -1,5 +1,3 @@
-from typing import Dict, List
-
 from box import Box
 
 from eviction_policy_api.const import (
@@ -19,9 +17,8 @@ from eviction_policy_api.const import (
 
 def get_default_kwargs(
     api_config: Box,
-) -> Dict[str, int | float | List[int] | str | bool]:
-    """
-    Retrieve the default API kwarg values.
+) -> dict[str, int | float | list[int] | str | bool]:
+    """Retrieve the default API kwarg values.
 
     This function extracts all the default API kwarg values
     from the configuration object, returning them.
@@ -30,10 +27,11 @@ def get_default_kwargs(
         api_config (Box): API configuration object.
 
     Returns:
-        Dict[str, int | float | List[int] | str | bool]: Dictionary
-            mapping each API kwarg name to its default value.
+        dict[str, int | float | list[int] | str | bool]:
+            Dictionary mapping each API kwarg name
+            to its default value.
     """
-    default_kwargs: Dict[str, int | float | List[int] | str | bool] = {
+    default_kwargs: dict[str, int | float | list[int] | str | bool] = {
         ROLLOUT_HORIZON_API_KWARG_NAME: api_config.kwargs.rollout_horizon,
         MC_DROPOUT_SAMPLES_API_KWARG_NAME: api_config.kwargs.mc_dropout_samples,
         CONFIDENCE_LEVEL_API_KWARG_NAME: api_config.kwargs.confidence_level,

@@ -1,28 +1,28 @@
-from typing import Any, Optional
+from typing import Any
 
 from components.logs.levels.error_logger import error
 
 
 def clear_cache(
     data: Any,
-    data_freq: Optional[Any] = None,
+    data_freq: Any | None = None,
 ) -> None:
-    """
-    Clear cache data.
+    """Clear cache data.
 
     This function clears all items from the main cache data. If provided,
     it also clears the item frequency dictionary.
 
     Args:
         data (Any): Cache data structure to clear.
-        data_freq (Optional[Any]): Frequency dictionary to clear.
+        data_freq (Any | None): Frequency dictionary to clear.
 
     Returns:
         None
 
     Raises:
         RuntimeError: If clearing cache fails:
-            * The data structure is uninitialized or invalid (AttributeError, TypeError).
+            * The data structure is uninitialized or invalid
+              (AttributeError, TypeError).
     """
     try:
         # Clear cache

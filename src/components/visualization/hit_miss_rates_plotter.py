@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any
 
 import matplotlib.pyplot as plt
 
@@ -27,11 +27,10 @@ from src.const import (
 
 
 def plot_hit_miss_rate(
-    results: List[Dict[str, Any]],
+    results: list[dict[str, Any]],
     path: str,
 ) -> None:
-    """
-    Plot the evolution of hit and miss rates over time for multiple
+    """Plot the evolution of hit and miss rates over time for multiple
     cache eviction policies.
 
     This function generates two subplots: one for hit rate and one for
@@ -39,7 +38,7 @@ def plot_hit_miss_rate(
     rates over time across different cache policies.
 
     Args:
-        results (List[Dict[str, Any]]): List of simulations results.
+        results (list[dict[str, Any]]): List of simulations results.
         path (str): Path where to save the figure.
 
     Returns:
@@ -86,7 +85,7 @@ def plot_hit_miss_rate(
                     subplot[PLOT_HIT_MISS_RATES_SUBPLOTS_TRANSFORM_NAME](
                         point[
                             SIMULATIONS_METRICS_TIMELINE_INSTANT_HIT_RATE_NAME
-                        ]
+                        ],
                     )
                     for point in timeline
                 ]

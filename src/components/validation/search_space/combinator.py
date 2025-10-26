@@ -1,5 +1,3 @@
-from typing import Dict, List, Union
-
 from components.dict.combinations.nested_dict_lists_combinator import (
     combine_nested_dict_lists,
 )
@@ -13,9 +11,8 @@ from pipeline.config.pydantic.config import Config
 
 def get_parameters_combination(
     config: Config,
-) -> List[Dict[str, Union[int, float, bool]]]:
-    """
-    Generate all possible parameter combinations from the search space.
+) -> list[dict[str, int | float | bool]]:
+    """Generate all possible parameter combinations from the search space.
 
     This function flattens each section of the search space, generates
     all possible combinations of parameters, reconstructs the nested
@@ -26,9 +23,9 @@ def get_parameters_combination(
         config (Config): Configuration object.
 
     Returns:
-        List[Dict[str, Union[int, float, bool]]]: List of nested dictionaries
-                                                  representing all parameter
-                                                  combinations.
+        list[dict[str, int | float | bool]]: List of nested dictionaries
+                                             representing all parameter
+                                             combinations.
 
     Raises:
         RuntimeError: If parameter combinations generation fails:
@@ -57,7 +54,7 @@ def get_parameters_combination(
         # Combine all sections to get all the
         # final parameter combinations
         param_combinations = combine_nested_dict_lists(
-            section_combination_dicts
+            section_combination_dicts,
         )
 
         debug(

@@ -7,8 +7,7 @@ from pipeline.const import HW_DEVICE_NAMES
 
 
 class HardwareConfig(BaseModel):
-    """
-    Hardware configuration.
+    """Hardware configuration.
 
     Attributes:
         device (str): Hardware device type to be used.
@@ -18,8 +17,7 @@ class HardwareConfig(BaseModel):
 
     @model_validator(mode="after")
     def check_device(self: "HardwareConfig") -> "HardwareConfig":
-        """
-        Check whether device is valid or not.
+        """Check whether device is valid or not.
 
         This function validates the device specified.
 

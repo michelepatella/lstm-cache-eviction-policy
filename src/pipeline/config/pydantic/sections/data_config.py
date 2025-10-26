@@ -14,8 +14,7 @@ from src.const import (
 
 
 class HoursConfig(BaseModel):
-    """
-    Configuration for a range of hours within the day.
+    """Configuration for a range of hours within the day.
 
     Attributes:
         start (int): Start hour (between DATA_GENERATION_INITIAL_HOUR
@@ -25,16 +24,14 @@ class HoursConfig(BaseModel):
     """
 
     start: conint(
-        ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR
+        ge=DATA_GENERATION_INITIAL_HOUR,
+        le=DATA_GENERATION_FINAL_HOUR,
     )  # type: ignore[valid-type]
-    end: conint(
-        ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR
-    )  # type: ignore[valid-type]
+    end: conint(ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR)  # type: ignore[valid-type]
 
 
 class KeysConfig(BaseModel):
-    """
-    Configuration for key ranges.
+    """Configuration for key ranges.
 
     Attributes:
         min (int): Minimum key (> 0).
@@ -48,8 +45,7 @@ class KeysConfig(BaseModel):
     def check_min_max_keys(
         self: "KeysConfig",
     ) -> "KeysConfig":
-        """
-        Check whether the least key is greater than or equal to the
+        """Check whether the least key is greater than or equal to the
         greatest key or not.
 
         Args:
@@ -69,8 +65,7 @@ class KeysConfig(BaseModel):
 
 
 class ZipfAlphaConfig(BaseModel):
-    """
-    Configuration for alpha parameters of Zipf distribution.
+    """Configuration for alpha parameters of Zipf distribution.
 
     Attributes:
         fixed (float): Fixed alpha value (> 0).
@@ -84,8 +79,7 @@ class ZipfAlphaConfig(BaseModel):
 
 
 class ZipfConfig(BaseModel):
-    """
-    Configuration for Zipf distribution.
+    """Configuration for Zipf distribution.
 
     Attributes:
         alpha (ZipfAlphaConfig): Alpha configuration.
@@ -97,8 +91,7 @@ class ZipfConfig(BaseModel):
 
 
 class RepetitionConfig(BaseModel):
-    """
-    Configuration for repetition behavior in access patterns.
+    """Configuration for repetition behavior in access patterns.
 
     Attributes:
         interval (int): Interval between repetitions (> 0).
@@ -112,8 +105,7 @@ class RepetitionConfig(BaseModel):
 
 
 class ToggleOffsetsConfig(BaseModel):
-    """
-    Offset configuration for toggle behavior.
+    """Offset configuration for toggle behavior.
 
     Attributes:
         forward (int): Forward offset.
@@ -125,8 +117,7 @@ class ToggleOffsetsConfig(BaseModel):
 
 
 class ToggleBaseRequestsConfig(BaseModel):
-    """
-    Base requests configuration for toggle behavior.
+    """Base requests configuration for toggle behavior.
 
     Attributes:
         first (int): First base request (> 0).
@@ -138,8 +129,7 @@ class ToggleBaseRequestsConfig(BaseModel):
 
 
 class ToggleConfig(BaseModel):
-    """
-    Configuration for toggle behavior.
+    """Configuration for toggle behavior.
 
     Attributes:
         interval (int): Toggle interval (> 0).
@@ -155,8 +145,7 @@ class ToggleConfig(BaseModel):
 
 
 class NoiseConfig(BaseModel):
-    """
-    Noise distortion configuration for access behavior.
+    """Noise distortion configuration for access behavior.
 
     Attributes:
         min (int): Minimum noise value.
@@ -170,8 +159,7 @@ class NoiseConfig(BaseModel):
     def check_min_max_noises(
         self: "NoiseConfig",
     ) -> "NoiseConfig":
-        """
-        Check whether the least noise value is greater than or equal to
+        """Check whether the least noise value is greater than or equal to
         the greatest one or not.
 
         Args:
@@ -190,8 +178,7 @@ class NoiseConfig(BaseModel):
 
 
 class DistortionOffsetsConfig(BaseModel):
-    """
-    Offsets configuration for distortion behavior.
+    """Offsets configuration for distortion behavior.
 
     Attributes:
         history (int): Past history.
@@ -203,8 +190,7 @@ class DistortionOffsetsConfig(BaseModel):
 
 
 class DistortionConfig(BaseModel):
-    """
-    Distortion configuration for access behavior.
+    """Distortion configuration for access behavior.
 
     Attributes:
         interval (int): Interval at which distortion is applied (> 0).
@@ -220,8 +206,7 @@ class DistortionConfig(BaseModel):
 
 
 class MemoryConfig(BaseModel):
-    """
-    Memory behavior configuration.
+    """Memory behavior configuration.
 
     Attributes:
         interval (int): Interval at which memory is applied (> 0).
@@ -233,8 +218,7 @@ class MemoryConfig(BaseModel):
 
 
 class CycleConfig(BaseModel):
-    """
-    Cyclical behavior configuration.
+    """Cyclical behavior configuration.
 
     Attributes:
         base (int): Base value for cycle (> 0).
@@ -250,8 +234,7 @@ class CycleConfig(BaseModel):
 
 
 class BehaviorConfig(BaseModel):
-    """
-    Aggregated access behavior configuration.
+    """Aggregated access behavior configuration.
 
     Attributes:
         repetition (RepetitionConfig): Repetition configuration.
@@ -269,8 +252,7 @@ class BehaviorConfig(BaseModel):
 
 
 class AccessConfig(BaseModel):
-    """
-    Configuration for access patterns.
+    """Configuration for access patterns.
 
     Attributes:
         zipf (ZipfConfig): Zipf distribution configuration.
@@ -282,8 +264,7 @@ class AccessConfig(BaseModel):
 
 
 class BurstinessHoursConfig(BaseModel):
-    """
-    Hour range configuration for burstiness.
+    """Hour range configuration for burstiness.
 
     Attributes:
         start (int): Start hour of burstiness range (between
@@ -293,16 +274,14 @@ class BurstinessHoursConfig(BaseModel):
     """
 
     start: conint(
-        ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR
+        ge=DATA_GENERATION_INITIAL_HOUR,
+        le=DATA_GENERATION_FINAL_HOUR,
     )  # type: ignore[valid-type]
-    end: conint(
-        ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR
-    )  # type: ignore[valid-type]
+    end: conint(ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR)  # type: ignore[valid-type]
 
 
 class BurstinessConfig(BaseModel):
-    """
-    Burstiness configuration for temporal patterns.
+    """Burstiness configuration for temporal patterns.
 
     Attributes:
         high (float): High burstiness value (> 0).
@@ -318,8 +297,7 @@ class BurstinessConfig(BaseModel):
     def check_high_low_bursts(
         self: "BurstinessConfig",
     ) -> "BurstinessConfig":
-        """
-        Check whether the highest burst value is greater than or equal to the
+        """Check whether the highest burst value is greater than or equal to the
         lowest one or not.
 
         Args:
@@ -339,8 +317,7 @@ class BurstinessConfig(BaseModel):
 
 
 class PeriodicConfig(BaseModel):
-    """
-    Periodic access pattern configuration.
+    """Periodic access pattern configuration.
 
     Attributes:
         scale (int): Period scale (> 0).
@@ -352,8 +329,7 @@ class PeriodicConfig(BaseModel):
 
 
 class TemporalConfig(BaseModel):
-    """
-    Temporal behavior configuration.
+    """Temporal behavior configuration.
 
     Attributes:
         burstiness (BurstinessConfig): Burstiness configuration.
@@ -365,8 +341,7 @@ class TemporalConfig(BaseModel):
 
 
 class PatternConfig(BaseModel):
-    """
-    Pattern configuration.
+    """Pattern configuration.
 
     Attributes:
         access (AccessConfig): Access pattern configuration.
@@ -378,8 +353,7 @@ class PatternConfig(BaseModel):
 
 
 class DataConfig(BaseModel):
-    """
-    Data configuration.
+    """Data configuration.
 
     Attributes:
         seed (int): Random seed for generation (>= 0).
@@ -399,8 +373,7 @@ class DataConfig(BaseModel):
     def check_data_distribution_mode(
         self: "DataConfig",
     ) -> "DataConfig":
-        """
-        Check whether data distribution mode is valid or not.
+        """Check whether data distribution mode is valid or not.
 
         This function validates the data distribution mode.
 

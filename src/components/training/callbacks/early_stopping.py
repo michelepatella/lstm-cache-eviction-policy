@@ -6,8 +6,7 @@ from components.logs.levels.error_logger import error
 
 
 class EarlyStopping:
-    """
-    Early stopping callback for model training and validation.
+    """Early stopping callback for model training and validation.
 
     This class implements early stopping callback which monitors
     the average loss during training and validation. If no significant
@@ -27,8 +26,7 @@ class EarlyStopping:
     """
 
     def __init__(self: "EarlyStopping", patience: int, delta: float) -> None:
-        """
-        Initialize EarlyStopping.
+        """Initialize EarlyStopping.
 
         This function initializes EarlyStopping, setting patience and delta,
         as well as initializing the best average loss, counter, and early
@@ -76,8 +74,7 @@ class EarlyStopping:
         )
 
     def __call__(self: "EarlyStopping", avg_loss: float) -> None:
-        """
-        Update early stopping status based on the current average loss.
+        """Update early stopping status based on the current average loss.
 
         This function checks if the current average loss is an improvement
         over the best observed loss, considering a delta tolerance. It

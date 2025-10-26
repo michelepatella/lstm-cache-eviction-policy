@@ -7,7 +7,7 @@ from components.logs.levels.debug_logger import debug
 def calculate_confidence_interval(all_outputs, all_variances, config_settings):
     # calculate the z-score
     z_score = norm.ppf(
-        1 - (1 - config_settings.inference.confidence_intervals.level) / 2
+        1 - (1 - config_settings.inference.confidence_intervals.level) / 2,
     )
 
     # calculate the standard deviation

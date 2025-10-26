@@ -1,7 +1,5 @@
-from typing import Dict, List, Optional, Union
-
 import torch
-import torch.nn as nn
+from torch import nn
 
 from components.const import MC_DROPOUT_DISABLED, MODEL_PARAM_NAMES
 from components.device.mover import move_to_device
@@ -12,8 +10,7 @@ from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
 
 
 class LSTM(torch.nn.Module):
-    """
-    Long Short Term Memory (LSTM) model.
+    """Long Short Term Memory (LSTM) model.
 
     This class implements an LSTM model to predict the probability
     of accessing a key next.
@@ -32,28 +29,28 @@ class LSTM(torch.nn.Module):
 
     def _set_params(
         self: "LSTM",
-        params: Union[ModelParamsConfig, Dict[str, Union[int, float, bool]]],
-        config: Optional[Config],
-        param_names: List[str] = MODEL_PARAM_NAMES,
+        params: ModelParamsConfig | dict[str, int | float | bool],
+        config: Config | None,
+        param_names: list[str] = MODEL_PARAM_NAMES,
     ) -> None:
-        """
-        Set model parameters.
+        """Set model parameters.
 
         This function sets model parameters by using values provided directly,
         or falling back to configuration values if not provided.
 
         Args:
             self ("LSTM"): Current model instance.
-            params (Union[ModelParamsConfig, Dict[str, Union[int, float, bool]]]):
-                Model parameters to be set.
-            config (Optional[Config]): Configuration object.
-            param_names (List[str]): List of parameter names to set.
+            params (ModelParamsConfig |
+            dict[str, int | float | bool]): Model parameters to be set.
+            config (Config | None): Configuration object.
+            param_names (list[str]): List of parameter names to set.
 
         Raises:
             RuntimeError: If setting model parameters fails:
                 * Accessing parameter values in the configuration fails due to
                   missing attributes (AttributeError).
-                * Setting a model attribute fails due to invalid type (TypeError).
+                * Setting a model attribute fails due to invalid type
+                  (TypeError).
                 * A provided or configuration value is invalid (ValueError).
         """
         try:
@@ -68,7 +65,6 @@ class LSTM(torch.nn.Module):
                 # Check whether the required parameter
                 # has been directly passed to the model
                 if param in params and params[param] is not None:
-
                     # Set the specified parameter value
                     setattr(self, param, params[param])
                 else:
@@ -94,22 +90,21 @@ class LSTM(torch.nn.Module):
 
     def _set_fields(
         self: "LSTM",
-        params: Union[ModelParamsConfig, Dict[str, Union[int, float, bool]]],
+        params: ModelParamsConfig | dict[str, int | float | bool],
         min_key: int,
         max_key: int,
         embedding_dim: int,
         num_features: int,
         config: Config,
     ) -> None:
-        """
-        Set model fields.
+        """Set model fields.
 
         This function sets model fields.
 
         Args:
             self ("LSTM"): Current class instance.
-            params (Union[ModelParamsConfig, Dict[str, Union[int, float, bool]]]):
-                Model parameters.
+            params (ModelParamsConfig |
+            dict[str, int | float | bool]): Model parameters.
             min_key (int): Maximum key.
             max_key (int): Minimum key.
             embedding_dim (int): Embedding dimension for keys.
@@ -151,8 +146,7 @@ class LSTM(torch.nn.Module):
         )
 
     def _set_layers(self: "LSTM") -> None:
-        """
-        Instantiate all the layers of the model.
+        """Instantiate all the layers of the model.
 
         This function creates and assigns the following layers to the model:
             - Embedding layer
@@ -212,37 +206,41 @@ class LSTM(torch.nn.Module):
 
     def __init__(
         self: "LSTM",
-        params: Union[ModelParamsConfig, Dict[str, Union[int, float, bool]]],
+        params: ModelParamsConfig | dict[str, int | float | bool],
         min_key: int,
         max_key: int,
         embedding_dim: int,
         num_features: int,
-        config: Optional[Config],
+        config: Config | None,
     ) -> None:
-        """
-        Initialize the model.
+        """Initialize the model.
 
         This function initializes the model, specifically:
         sets all fields, instantiates the class, as well as all its layers.
 
         Args:
             self ("LSTM"): Current class instance.
-            params (Union[ModelParamsConfig, Dict[str, Union[int, float, bool]]]):
-                Model parameters.
+            params (ModelParamsConfig |
+            dict[str, int | float | bool]): Model parameters.
             min_key (int): Maximum key.
             max_key (int): Minimum key.
             embedding_dim (int): Embedding dimension for keys.
             num_features (int): Number of features for the model.
-            config (Optional[Config]): Configuration object.
+            config (Config | None): Configuration object.
 
         Returns:
             None
         """
-        super(LSTM, self).__init__()
+        super().__init__()
 
         # Set model fields
         self._set_fields(
-            params, min_key, max_key, embedding_dim, num_features, config
+            params,
+            min_key,
+            max_key,
+            embedding_dim,
+            num_features,
+            config,
         )
 
         # Instantiate the LSTM model
@@ -281,10 +279,11 @@ class LSTM(torch.nn.Module):
         )
 
     def _build_model_input(
-        self: "LSTM", x_features: torch.Tensor, x_keys: torch.Tensor
+        self: "LSTM",
+        x_features: torch.Tensor,
+        x_keys: torch.Tensor,
     ) -> torch.Tensor:
-        """
-        Build and return the model input.
+        """Build and return the model input.
 
         This function builds and returns the model input by concatenating
         features with embedded keys.
@@ -322,7 +321,9 @@ class LSTM(torch.nn.Module):
                     "x_features_shape": getattr(x_features, "shape", None),
                     "x_keys_shape": getattr(x_keys, "shape", None),
                     "embedding_device": getattr(
-                        self.embedding.weight, "device", None
+                        self.embedding.weight,
+                        "device",
+                        None,
                     ),
                     "context": "LSTM model",
                 },
@@ -330,17 +331,19 @@ class LSTM(torch.nn.Module):
             raise RuntimeError(msg) from e
 
     def forward(
-        self: "LSTM", x_features: torch.Tensor, x_keys: torch.Tensor
+        self: "LSTM",
+        x_features: torch.Tensor,
+        x_keys: torch.Tensor,
     ) -> torch.Tensor:
-        """
-        Perform a forward pass through the model.
+        """Perform a forward pass through the model.
 
         This function builds the model input by concatenating features
         with embedded keys, passes it through the model, optionally
         applies MC dropout, and finally computes logits using a linear layer.
 
         Args:
-            x_features (torch.Tensor): Input features tensor for the current batch.
+            x_features (torch.Tensor): Input features tensor for
+                                       the current batch.
             x_keys (torch.Tensor): Input keys tensor for the current batch.
 
         Returns:

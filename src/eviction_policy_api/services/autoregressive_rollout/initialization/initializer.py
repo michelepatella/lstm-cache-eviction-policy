@@ -1,5 +1,3 @@
-from typing import Dict, Tuple
-
 import torch
 
 from components.device.mover import (
@@ -18,15 +16,14 @@ from components.model.state_dict.loader import (
 
 def initialize_autoregressive_rollout(
     model_path: str,
-    model_params: Dict[str, int | float | bool],
+    model_params: dict[str, int | float | bool],
     device_type: str,
     min_key: int,
     max_key: int,
     num_features: int,
     embedding_dim: int,
-) -> Tuple[torch.nn.Module, torch.device]:
-    """
-    Initialize the autoregressive rollout service.
+) -> tuple[torch.nn.Module, torch.device]:
+    """Initialize the autoregressive rollout service.
 
     This function performs all steps required to prepare
     for autoregressive rollout:
@@ -37,7 +34,7 @@ def initialize_autoregressive_rollout(
 
     Args:
         model_path (str): Path to the saved model weights.
-        model_params (Dict[str, int | float | bool]): Model hyperparameters.
+        model_params (dict[str, int | float | bool]): Model hyperparameters.
         device_type (str): Device type to use.
         min_key (int): Minimum key.
         max_key (int): Maximum key.
@@ -45,7 +42,7 @@ def initialize_autoregressive_rollout(
         embedding_dim (int): Dimension of embedding layer.
 
     Returns:
-        Tuple[torch.nn.Module, torch.device]:
+        tuple[torch.nn.Module, torch.device]:
             - model: The initialized model ready for autoregressive rollout.
             - device: The computation device on which the model resides.
     """

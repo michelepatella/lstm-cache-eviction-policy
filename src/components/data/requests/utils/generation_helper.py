@@ -1,5 +1,3 @@
-from typing import List, Optional, Tuple
-
 import numpy as np
 
 from components.data.requests.utils.alpha_requests_generator import (
@@ -14,27 +12,28 @@ from pipeline.config.pydantic.config import Config
 
 
 def generate_requests_helper(
-    alpha_range: List[float],
+    alpha_range: list[float],
     config: Config,
-    time_step_duration: Optional[int] = None,
-) -> Tuple[List[int], np.ndarray]:
-    """
-    Generate requests according to static or dynamic Zipfian distributions.
+    time_step_duration: int | None = None,
+) -> tuple[list[int], np.ndarray]:
+    """Generate requests according to static or dynamic Zipfian distributions.
 
     This helper function handles both static and dynamic request generation:
     - static: alpha range is None, uses fixed alpha
     - dynamic: alpha range is provided, splits total requests in time steps
 
     Args:
-        alpha_range (Optional[List[float]]): List of alpha parameters.
+        alpha_range (list[float]): List of alpha parameters.
         config (Config): Configuration object.
-        time_step_duration (Optional[int]): Duration of each time step (None for
-                                            static requests generation).
+        time_step_duration (int | None): Duration of each time step
+                                            (None for static requests
+                                            generation).
 
     Returns:
-        Tuple[List[int], np.ndarray]:
+        tuple[list[int], np.ndarray]:
             - requests: List of generated keys requested.
-            - timestamps_hours: Corresponding timestamps of the requests in hours.
+            - timestamps_hours: Corresponding timestamps of the requests
+                                in hours.
 
     Raises:
         RuntimeError: If generating requests fails:
@@ -68,7 +67,10 @@ def generate_requests_helper(
             # Generate requests for current alpha
             current_requests, current_timestamps_seconds = (
                 generate_requests_for_alpha(
-                    alpha, keys_range, config, time_step_duration
+                    alpha,
+                    keys_range,
+                    config,
+                    time_step_duration,
                 )
             )
 

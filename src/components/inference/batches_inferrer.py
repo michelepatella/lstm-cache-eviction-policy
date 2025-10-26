@@ -1,5 +1,3 @@
-from typing import List, Tuple
-
 import torch
 from torch.utils.data import DataLoader
 
@@ -14,11 +12,14 @@ def infer_batches(
     criterion: torch.nn.Module,
     device: torch.device,
     num_features: int,
-) -> Tuple[
-    float, List[int], List[int], List[torch.Tensor], List[torch.Tensor]
+) -> tuple[
+    float,
+    list[int],
+    list[int],
+    list[torch.Tensor],
+    list[torch.Tensor],
 ]:
-    """
-    Perform inference on a data loader over several batches.
+    """Perform inference on a data loader over several batches.
 
     This function iterates over the data loader, infer all batches,
     and accumulates batch losses, predictions, targets, outputs,
@@ -32,16 +33,21 @@ def infer_batches(
         num_features (int): Number of features for the model.
 
     Returns:
-        Tuple[
-            float, List[int], List[int], List[torch.Tensor], List[torch.Tensor]
-        ]:
+    tuple[
+        float,
+        list[int],
+        list[int],
+        list[torch.Tensor],
+        list[torch.Tensor],
+    ]:
             - total_loss: Float representing the sum of batch losses across
                           the data loader.
             - all_predictions: List of predicted class indices for each sample.
-            - all_targets: List of ground truth labels corresponding to each sample.
+            - all_targets: List of ground truth labels corresponding to
+                           each sample.
             - all_outputs: List of tensors containing model outputs per batch.
-            - all_variances: List of tensors containing variances from MC dropout
-                             per batch (if applicable).
+            - all_variances: List of tensors containing variances from MC
+                             dropout per batch (if applicable).
 
     Raises:
         RuntimeError: If batches inference fails:
@@ -74,7 +80,7 @@ def infer_batches(
         with torch.no_grad():
             # Iterate over all the batches of the
             # data loader
-            for batch_idx, batch in enumerate(data_loader):
+            for _batch_idx, batch in enumerate(data_loader):
                 # Infer the current batch
                 (
                     loss,
@@ -83,7 +89,11 @@ def infer_batches(
                     outputs,
                     variances,
                 ) = infer_single_batch(
-                    batch, model, criterion, device, num_features
+                    batch,
+                    model,
+                    criterion,
+                    device,
+                    num_features,
                 )
 
                 # Keep track of results

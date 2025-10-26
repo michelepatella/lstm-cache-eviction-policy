@@ -1,8 +1,10 @@
 import math
-from typing import Dict, List, Tuple
 
 import torch
 from fastapi import FastAPI
+from pipeline.utils.model.backpropagation.mc.mc_forward_runner import (
+    mc_forward_passes,
+)
 
 from components.device.mover import (
     move_to_device,
@@ -12,18 +14,15 @@ from eviction_policy_api.const import AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT
 from eviction_policy_api.services.autoregressive_rollout.initialization.initializer import (
     initialize_autoregressive_rollout,
 )
-from pipeline.utils.model.backpropagation.mc.mc_forward_runner import (
-    mc_forward_passes,
-)
 
 app = FastAPI()
 
 
 @app.post(AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT)
 def autoregressive_rollout_service(
-    last_accesses: List[Tuple[float, int]],
+    last_accesses: list[tuple[float, int]],
     model_path: str,
-    model_params: Dict[str, int | float | bool],
+    model_params: dict[str, int | float | bool],
     device_type: str,
     min_key: int,
     max_key: int,
@@ -56,7 +55,8 @@ def autoregressive_rollout_service(
             x_keys_seq.append(key)
 
         x_features_seq = torch.tensor(
-            x_features_seq, dtype=torch.float
+            x_features_seq,
+            dtype=torch.float,
         ).unsqueeze(0)
         move_to_device(x_features_seq, device)
 
@@ -91,10 +91,12 @@ def autoregressive_rollout_service(
 
             last_time = (last_time + delta_t) % (2 * math.pi)
             new_feature = torch.tensor(
-                [[math.sin(last_time), math.cos(last_time)]], device=device
+                [[math.sin(last_time), math.cos(last_time)]],
+                device=device,
             ).unsqueeze(0)
             x_features_seq = torch.cat(
-                [x_features_seq[:, 1:, :], new_feature], dim=1
+                [x_features_seq[:, 1:, :], new_feature],
+                dim=1,
             )
 
         debug("Autoregressive rollout completed.")

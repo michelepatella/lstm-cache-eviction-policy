@@ -5,8 +5,7 @@ from components.logs.levels.error_logger import error
 
 
 def load_dataset(path: str) -> pd.DataFrame:
-    """
-    Load a dataset.
+    """Load a dataset.
 
     This function loads an existing dataset
     from a provided path and returns it as a

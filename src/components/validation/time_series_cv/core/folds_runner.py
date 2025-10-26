@@ -1,5 +1,3 @@
-from typing import Dict, List, Tuple, Union
-
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
@@ -16,11 +14,10 @@ from pipeline.config.pydantic.config import Config
 def compute_time_series_cv_folds(
     cv_num_folds: int,
     training_set: AccessLogsDataset,
-    params: Dict[str, Union[int, float, bool]],
+    params: dict[str, int | float | bool],
     config: Config,
-) -> Tuple[float, List[float]]:
-    """
-    Compute Time Series Cross-Validation (CV).
+) -> tuple[float, list[float]]:
+    """Compute Time Series Cross-Validation (CV).
 
     This function splits the training set using time series cross-validation,
     trains a model for each fold, and calculates the average loss across folds.
@@ -28,12 +25,12 @@ def compute_time_series_cv_folds(
     Args:
         cv_num_folds (int): Number of folds for time series CV.
         training_set (AccessLogsDataset): Dataset to perform CV on.
-        params (Dict[str, Union[int, float, bool]]): Parameter configuration
-                                                     for model and training.
+        params (dict[str, int | float | bool]): Parameter configuration
+                                                for model and training.
         config (Config): Configuration object.
 
     Returns:
-        Tuple[float, List[float]]:
+        tuple[float, list[float]]:
             - final_avg_loss: Final average loss over all fold losses.
             - fold_losses: List of all fold losses.
 
@@ -73,7 +70,12 @@ def compute_time_series_cv_folds(
             # Compute single fold and get
             # its average loss
             avg_loss = compute_single_time_series_cv_fold(
-                fold_idx, train_idx, val_idx, training_set, params, config
+                fold_idx,
+                train_idx,
+                val_idx,
+                training_set,
+                params,
+                config,
             )
 
             # Record current fold average loss

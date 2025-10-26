@@ -1,36 +1,36 @@
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
 def flatten_dict(
-    nested_dict: Dict[str, Any],
-    parent_key: Tuple[str, ...] = (),
-) -> List[Tuple[Tuple[str, ...], Any]]:
-    """
-    Recursively flatten a nested dictionary.
+    nested_dict: dict[str, Any],
+    parent_key: tuple[str, ...] = (),
+) -> list[tuple[tuple[str, ...], Any]]:
+    """Recursively flatten a nested dictionary.
 
     This function converts a nested dictionary into a flat list of tuples,
     where each tuple contains a key path (as a tuple of keys) and the
     corresponding value.
 
     Args:
-        nested_dict (Dict[str, Any]): Dictionary to flatten.
-        parent_key (Tuple[str, ...]): Accumulated key path from previous
+        nested_dict (dict[str, Any]): Dictionary to flatten.
+        parent_key (tuple[str, ...]): Accumulated key path from previous
                                       recursion levels.
 
     Returns:
-        List[Tuple[Tuple[str, ...], Any]]: List of tuples containing the
-                                           full key path and its associated value.
+        list[tuple[tuple[str, ...], Any]]: List of tuples containing the
+                                           full key path and its associated
+                                           value.
 
     Raises:
         RuntimeError: If flattening the dictionary fails:
             * Input is not a dictionary (TypeError).
-            * Maximum recursion depth exceeded due to overly nested dictionaries
-              (RecursionError).
-            * Nested dictionary contains invalid structure that prevents iteration
-              (AttributeError).
+            * Maximum recursion depth exceeded due to overly nested
+              dictionaries (RecursionError).
+            * Nested dictionary contains invalid structure that
+              prevents iteration (AttributeError).
     """
     try:
         debug(

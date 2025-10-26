@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 import yaml
 
@@ -6,15 +6,14 @@ from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
-def save_yaml(data_dict: Dict[str, Any], path: str) -> None:
-    """
-    Save a data dictionary as a YAML file.
+def save_yaml(data_dict: dict[str, Any], path: str) -> None:
+    """Save a data dictionary as a YAML file.
 
     This function saves the provided data dictionary
     as a YAML file at the specified path.
 
     Args:
-        data_dict (Dict[str, Any]): Data dictionary to save as YAML.
+        data_dict (dict[str, Any]): Data dictionary to save as YAML.
         path (str): Path to save YAML file at.
 
     Returns:

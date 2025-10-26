@@ -1,5 +1,3 @@
-from typing import Tuple
-
 import numpy as np
 
 from components.const import TIME_HOURS_IN_DAY
@@ -9,9 +7,8 @@ from components.logs.levels.error_logger import error
 def encode_time_trigonometrically(
     timestamps: np.ndarray,
     cycle_length: float = TIME_HOURS_IN_DAY,
-) -> Tuple[np.ndarray, np.ndarray]:
-    """
-    Encode a list of timestamps trigonometrically.
+) -> tuple[np.ndarray, np.ndarray]:
+    """Encode a list of timestamps trigonometrically.
 
     This function encodes a list of timestamps trigonometrically through
     their sine and cosine representations.
@@ -21,9 +18,12 @@ def encode_time_trigonometrically(
         cycle_length (float): Length of the repeating cycle.
 
     Returns:
-        Tuple[np.ndarray, np.ndarray]:
-            - cos_time: Numpy array of cosine values representing cyclical time.
-            - sin_time: Numpy array of sine values representing cyclical time.
+        tuple[np.ndarray, np.ndarray]:
+            - cos_time: Numpy array of cosine values representing
+                        cyclical time.
+            - sin_time: Numpy array of sine values representing
+                        cyclical time.
+
     Raises:
         RuntimeError: If encoding time trigonometrically fails:
             * Input timestamps are not numeric or not iterable (TypeError).

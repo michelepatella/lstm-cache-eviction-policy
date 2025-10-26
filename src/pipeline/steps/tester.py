@@ -21,13 +21,12 @@ from pipeline.const import (
 )
 from src.const import (
     DAGS_HUB_MLFLOW_ENABLED,
+    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
+    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
     DATA_DISTRIBUTION_STATIC_MODE,
     DATASET_TESTING_SPLIT_TYPE,
     MLFLOW_NESTED_ENABLED,
-    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
-    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
 )
-
 
 # Load env variables
 load_dotenv()
@@ -36,8 +35,7 @@ dags_hub_repo_name = os.getenv(DAGS_HUB_REPO_NAME_ENV_VAR_NAME)
 
 
 def test_model() -> None:
-    """
-    Test the trained model.
+    """Test the trained model.
 
     This function tests the trained model on the testing set. Results are
     shown via report and plots providing model performance insights.
@@ -57,9 +55,9 @@ def test_model() -> None:
     import mlflow
 
     with mlflow.start_run(
-        run_name=LOGS_TESTING_PHASE, nested=MLFLOW_NESTED_ENABLED
+        run_name=LOGS_TESTING_PHASE,
+        nested=MLFLOW_NESTED_ENABLED,
     ):
-
         # Setup
         config = prepare_config()
 
@@ -94,7 +92,10 @@ def test_model() -> None:
 
         # Trained model setup for testing
         device, criterion, model = initialize_best_model(
-            model_params, data_distribution_mode, config, testing_loader
+            model_params,
+            data_distribution_mode,
+            config,
+            testing_loader,
         )
 
         # Prepare file name where to save model results
@@ -139,7 +140,7 @@ def test_model() -> None:
                 "weighted_support": metrics.class_report.weighted_avg.support,
                 "top_k_accuracy": metrics.top_k_accuracy,
                 "cohen_kappa_score": metrics.cohen_kappa_score,
-            }
+            },
         )
         mlflow.log_artifact(model_results_save_path)
 

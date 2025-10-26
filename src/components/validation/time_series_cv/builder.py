@@ -5,8 +5,7 @@ from components.logs.levels.error_logger import error
 
 
 def build_time_series_split(num_folds: int) -> TimeSeriesSplit:
-    """
-    Build a TimeSeriesSplit object.
+    """Build a TimeSeriesSplit object.
 
     This function creates and returns a TimeSeriesSplit object
     configured with the specified number of folds.

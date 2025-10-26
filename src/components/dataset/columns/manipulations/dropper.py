@@ -1,12 +1,10 @@
 import pandas as pd
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
 def drop_dataset_column(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
-    """
-    Drop a column from the dataset.
+    """Drop a column from the dataset.
 
     This function, given a DataFrame and a column name, removes the
     column from the dataset.

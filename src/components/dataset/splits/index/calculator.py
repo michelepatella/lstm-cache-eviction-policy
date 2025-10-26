@@ -2,8 +2,7 @@ from components.logs.levels.error_logger import error
 
 
 def calculate_dataset_split_index(dataset_len: int, split_perc: float) -> int:
-    """
-    Calculate split index for a dataset.
+    """Calculate split index for a dataset.
 
     This function calculates the split index for a given dataset,
     according to the provided percentage.

@@ -1,15 +1,14 @@
 import copy
 import itertools
-from typing import Any, Dict, List
+from typing import Any
 
 from components.logs.levels.error_logger import error
 
 
 def combine_nested_dict_lists(
-    dict_lists: List[List[Dict[str, Any]]],
-) -> List[Dict[str, Any]]:
-    """
-    Combine multiple lists of nested dictionaries into all possible
+    dict_lists: list[list[dict[str, Any]]],
+) -> list[dict[str, Any]]:
+    """Combine multiple lists of nested dictionaries into all possible
     full combinations.
 
     Each list contains dictionaries representing a set of options.
@@ -17,19 +16,20 @@ def combine_nested_dict_lists(
     one dictionary from each list into a single dictionary per combination.
 
     Args:
-        dict_lists (List[List[Dict[str, Any]]]): List of lists of nested dictionaries.
+        dict_lists (list[list[dict[str, Any]]]): List of lists of nested
+                                                 dictionaries.
 
     Returns:
-        List[Dict[str, Any]]: List of merged nested dictionaries for all possible
-                              combinations.
+        list[dict[str, Any]]: List of merged nested dictionaries for
+                              all possible combinations.
 
     Raises:
         RuntimeError: If combination of nested dictionary lists fails:
             * Input is not a list of lists of dictionaries (TypeError).
             * Deep copying or merging dictionaries fails due to unsupported
               types (TypeError).
-            * Cartesian product computation fails due to invalid input structure
-              (ValueError).
+            * Cartesian product computation fails due to invalid input
+              structure (ValueError).
     """
     try:
         # Compute Cartesian product across all dictionary lists

@@ -1,5 +1,3 @@
-from typing import Tuple
-
 import pandas as pd
 import torch
 
@@ -15,16 +13,15 @@ from src.const import (
 
 def extract_tuple_from_dataset_row(
     row: pd.Series,
-    feature_columns: Tuple[str] = (
+    feature_columns: tuple[str] = (
         DATASET_COS_TIME_COLUMN_NAME,
         DATASET_SIN_TIME_COLUMN_NAME,
     ),
     target_column: str = DATASET_REQUEST_COLUMN_NAME,
     feature_dtype: torch.dtype = torch.float,
     target_dtype: torch.dtype = torch.long,
-) -> Tuple[torch.Tensor, torch.Tensor]:
-    """
-    Extract a tuple from a dataset row.
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """Extract a tuple from a dataset row.
 
     This function extracts specified feature(s) and target
     from a dataset row, returning the resulting tuple of
@@ -32,13 +29,14 @@ def extract_tuple_from_dataset_row(
 
     Args:
         row (pd.Series): A dataset row.
-        feature_columns (Tuple[str]): Names of the feature column(s) to extract.
+        feature_columns (tuple[str]): Names of the feature column(s)
+                                      to extract.
         target_column (str): Name of the target column to extract.
         feature_dtype (torch.dtype): Type for the feature tensor.
         target_dtype (torch.dtype): Type for the target tensor.
 
     Returns:
-        Tuple[torch.Tensor, torch.Tensor]:
+        tuple[torch.Tensor, torch.Tensor]:
             - features: Tensor containing the extracted feature value(s) from
                         the dataset row.
             - target: Tensor containing the extracted target value from the

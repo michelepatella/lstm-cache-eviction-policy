@@ -1,5 +1,3 @@
-from typing import List, Optional, Tuple
-
 from torch.utils.data import DataLoader
 
 from components.const import (
@@ -23,9 +21,8 @@ def extract_last_rows_from_dataset(
     seq_len: int,
     df: DataLoader,
     time_conversion_factor: float = TIME_SECONDS_IN_HOUR,
-) -> Optional[List[Tuple[float, int]]]:
-    """
-    Extract the last rows from a dataset.
+) -> list[tuple[float, int]] | None:
+    """Extract the last rows from a dataset.
 
     This function extracts the last rows from a dataset, returning
     them as a list of tuples (hour, key).
@@ -38,12 +35,14 @@ def extract_last_rows_from_dataset(
                                         desired unit.
 
     Returns:
-        Optional[List[Tuple[float, int]]]: Each tuple is (hour, key), None if no
-                                           enough data is available.
+        list[tuple[float, int]] | None: Each tuple is (hour, key),
+                                        None if no enough data is
+                                        available.
 
     Raises:
         RuntimeError: If last rows extraction from dataset fails:
-            * Invalid arguments or data types (AttributeError, TypeError, ValueError)
+            * Invalid arguments or data types
+              (AttributeError, TypeError, ValueError)
             * DataLoader does not contain attribute data (AttributeError)
             * Dataset rows cannot be iterated (TypeError)
             * Row tuples cannot be decoded from features (ValueError)
@@ -52,7 +51,9 @@ def extract_last_rows_from_dataset(
         # Extract a sliding window from dataset
         # of sequence length size
         window_df = extract_sliding_window_dataset_rows(
-            df.data, current_idx, seq_len
+            df.data,
+            current_idx,
+            seq_len,
         )
 
         # Check whether the extracted window is None
@@ -83,7 +84,7 @@ def extract_last_rows_from_dataset(
 
             # Store the current row as a couple (hour, key)
             last_rows.append(
-                (current_time / time_conversion_factor, y_key.item())
+                (current_time / time_conversion_factor, y_key.item()),
             )
 
         return last_rows

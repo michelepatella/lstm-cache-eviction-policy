@@ -1,5 +1,3 @@
-from typing import Tuple, Type
-
 import pandas as pd
 import torch
 from torch.utils.data import Dataset
@@ -32,8 +30,7 @@ from src.const import DATASET_TRAINING_SPLIT_TYPE
 
 
 class AccessLogsDataset(Dataset):
-    """
-    Dataset class for access logs, compatible with PyTorch.
+    """Dataset class for access logs, compatible with PyTorch.
 
     This class manages sequential access logs for a PyTorch models.
     It handles loading, preprocessing, splitting, and provides sequences
@@ -48,10 +45,11 @@ class AccessLogsDataset(Dataset):
     """
 
     def _split_dataset(
-        self: "AccessLogsDataset", dataset_type: str, split_perc: float
+        self: "AccessLogsDataset",
+        dataset_type: str,
+        split_perc: float,
     ) -> None:
-        """
-        Split the dataset based on the requested dataset type.
+        """Split the dataset based on the requested dataset type.
 
         This function splits the dataset into either training
         or testing portions according to the train percentage
@@ -68,7 +66,8 @@ class AccessLogsDataset(Dataset):
         # Calculate dataset split index
         # based on split percentage
         dataset_split_idx = calculate_dataset_split_index(
-            len(self.data), split_perc
+            len(self.data),
+            split_perc,
         )
 
         # Split dataset data according
@@ -80,10 +79,11 @@ class AccessLogsDataset(Dataset):
         )
 
     def _set_fields(
-        self: "AccessLogsDataset", data: "pd.DataFrame", config: Config
+        self: "AccessLogsDataset",
+        data: "pd.DataFrame",
+        config: Config,
     ) -> None:
-        """
-        Set the feature, target, and sequence length fields of the dataset.
+        """Set the feature, target, and sequence length fields of the dataset.
 
         This function sets the dataset columns, identifies feature columns
         and target colum, and retrieves the sequence length.
@@ -119,10 +119,11 @@ class AccessLogsDataset(Dataset):
         )
 
     def __init__(
-        self: "AccessLogsDataset", dataset_type: str, config: Config
+        self: "AccessLogsDataset",
+        dataset_type: str,
+        config: Config,
     ) -> None:
-        """
-        Initialize the AccessLogsDataset class.
+        """Initialize the AccessLogsDataset class.
 
         This function initializes the AccessLogsDataset class,
         for a given dataset type, by loading dataset, preparing
@@ -143,7 +144,8 @@ class AccessLogsDataset(Dataset):
 
         # Retrieve path to load dataset from
         dataset_path = get_dataset_abs_path(
-            dataset_type, data_distribution_mode
+            dataset_type,
+            data_distribution_mode,
         )
 
         # Load the dataset
@@ -175,8 +177,7 @@ class AccessLogsDataset(Dataset):
         )
 
     def __len__(self: "AccessLogsDataset") -> int:
-        """
-        Return the effective length of the access logs dataset.
+        """Return the effective length of the access logs dataset.
 
         This method calculates the number of sequences
         available in the dataset based on the sequence length.
@@ -191,10 +192,10 @@ class AccessLogsDataset(Dataset):
         return calculate_effective_dataset_rows(self.data, self.seq_len)
 
     def __getitem__(
-        self: "AccessLogsDataset", idx: int
-    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-        """
-        Retrieve a sequence of features and the next target key.
+        self: "AccessLogsDataset",
+        idx: int,
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        """Retrieve a sequence of features and the next target key.
 
         This method extracts a feature sequence of length
         equal to those of sequence and the corresponding
@@ -223,7 +224,9 @@ class AccessLogsDataset(Dataset):
         try:
             # Extract data sequence
             seq_data = extract_sliding_window_dataset_rows(
-                self.data, idx + self.seq_len - 1, self.seq_len
+                self.data,
+                idx + self.seq_len - 1,
+                self.seq_len,
             )
 
             # Check whether there is not
@@ -244,16 +247,19 @@ class AccessLogsDataset(Dataset):
             # Convert features to float tensor and keys
             # to long tensor
             x_features = torch.tensor(
-                seq_data[self.features].values.astype(float), dtype=torch.float
+                seq_data[self.features].values.astype(float),
+                dtype=torch.float,
             )
             x_keys = torch.tensor(
-                seq_data[self.target].values.astype(int), dtype=torch.long
+                seq_data[self.target].values.astype(int),
+                dtype=torch.long,
             )
 
             # Get the next target key
             target_row = self.data.iloc[idx + self.seq_len]
             y_key = torch.tensor(
-                int(target_row[self.target]), dtype=torch.long
+                int(target_row[self.target]),
+                dtype=torch.long,
             )
         except (
             IndexError,
@@ -277,10 +283,11 @@ class AccessLogsDataset(Dataset):
 
     @classmethod
     def from_dataframe(
-        cls: "Type[AccessLogsDataset]", df: "pd.DataFrame", config: Config
+        cls: "type[AccessLogsDataset]",
+        df: "pd.DataFrame",
+        config: Config,
     ) -> "AccessLogsDataset":
-        """
-        Instantiate AccessLogsDataset from an existing dataframe.
+        """Instantiate AccessLogsDataset from an existing dataframe.
 
         This method creates an instance of AccessLogsDataset using a
         preloaded dataframe, copying its content and setting the

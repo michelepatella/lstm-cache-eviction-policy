@@ -1,5 +1,4 @@
 import json
-from typing import Dict, List, Union
 
 from components.const import JSON_INDENT
 from components.logs.levels.debug_logger import debug
@@ -7,18 +6,17 @@ from components.logs.levels.error_logger import error
 
 
 def save_json(
-    data_dict: Union[Dict, List[Dict]],
+    data_dict: dict | list[dict],
     path: str,
     json_indent: int = JSON_INDENT,
 ) -> None:
-    """
-    Save a data dictionary as a JSON file.
+    """Save a data dictionary as a JSON file.
 
     This function saves a data dictionary as a
     JSON file at the specified path.
 
     Args:
-        data_dict (Union[Dict, List[Dict]]): Data to save.
+        data_dict (dict | list[dict]): Data to save.
         path (str): File path where the JSON will be saved.
         json_indent (int): Indent for the JSON file.
 

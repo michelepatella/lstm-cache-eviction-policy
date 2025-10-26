@@ -1,5 +1,4 @@
 from collections import Counter
-from typing import List
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -17,16 +16,15 @@ from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
-def plot_zipf_loglog(requests: List[int], save_path: str) -> None:
-    """
-    Plot Zipfian distribution via log-log.
+def plot_zipf_loglog(requests: list[int], save_path: str) -> None:
+    """Plot Zipfian distribution via log-log.
 
     This function plots Zipfian distribution of key accesses via log-log.
     The generated plot should highlight much more key accesses to the first
     keys than those to later ones.
 
     Args:
-        requests (List[int]): List of key accesses.
+        requests (list[int]): List of key accesses.
         save_path (str): Path to save the figure.
 
     Returns:

@@ -5,10 +5,11 @@ from components.logs.levels.error_logger import error
 
 
 def load_model_state_dict(
-    path: str, model: torch.nn.Module, device: torch.device
+    path: str,
+    model: torch.nn.Module,
+    device: torch.device,
 ) -> torch.nn.Module:
-    """
-    Load the state dictionary into the given PyTorch model.
+    """Load the state dictionary into the given PyTorch model.
 
     This function loads pre-trained weights from the specified path
     into the provided PyTorch model, mapping them to the requested device.
@@ -25,9 +26,11 @@ def load_model_state_dict(
     Raises:
         RuntimeError: If loading the model state dictionary fails:
             * Loading the state dictionary from file fails due to file issues,
-              invalid path, or incompatible data (OSError, RuntimeError, TypeError).
+              invalid path, or incompatible data (OSError, RuntimeError,
+              TypeError).
             * Applying the loaded state dictionary to the model fails due to
-              shape mismatch, missing keys, or type issues (RuntimeError, TypeError).
+              shape mismatch, missing keys, or type issues (RuntimeError,
+              TypeError).
     """
     try:
         debug(

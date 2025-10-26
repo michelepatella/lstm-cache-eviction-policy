@@ -1,8 +1,9 @@
-[tool.isort]
-profile = "black"
-
-[tool.black]
+[tool.ruff]
 line-length = 79
 
-[tool.flake8]
-max-line-length = 79
+[tool.ruff.lint]
+select = ["ALL"]
+extend-select = ["D"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"

@@ -1,5 +1,3 @@
-from typing import List
-
 import numpy as np
 
 from components.logs.levels.error_logger import error
@@ -9,12 +7,11 @@ def generate_repetition_pattern(
     repetition_interval: int,
     repetition_offset: int,
     requests_count: int,
-    requests: List[int],
+    requests: list[int],
     keys_range: np.ndarray,
     num_keys: int,
 ) -> int:
-    """
-    Determine the next key to be accessed according to repetition pattern.
+    """Determine the next key to be accessed according to repetition pattern.
 
     This function determines which is the next key to be accessed according
     to repetition pattern. This pattern simulates some keys are accessed
@@ -27,7 +24,7 @@ def generate_repetition_pattern(
         repetition_offset (int): Integer determining how many steps back
                                  in requests to pick the next key.
         requests_count (int): Number of requests generated so far.
-        requests (List[int]): List of requests generated so far.
+        requests (list[int]): List of requests generated so far.
         keys_range (np.array): List of keys.
         num_keys (int): Total number of keys.
 

@@ -5,8 +5,7 @@ from components.logs.levels.error_logger import error
 
 
 def select_device(device_type: str) -> torch.device:
-    """
-    Select and return the requested computation device.
+    """Select and return the requested computation device.
 
     This function selects and returns a computation device, according
     to device type requested.

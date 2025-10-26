@@ -1,5 +1,3 @@
-from typing import List
-
 import numpy as np
 
 from components.logs.levels.error_logger import error
@@ -8,13 +6,13 @@ from components.logs.levels.error_logger import error
 def generate_memory_fallback_pattern(
     memory_interval: int,
     memory_offset: int,
-    requests: List[int],
+    requests: list[int],
     requests_count: int,
     keys_range: np.ndarray,
     zipf_probs: np.ndarray,
 ) -> int:
-    """
-    Determine the next key to be accessed according to the memory/fallback pattern.
+    """Determine the next key to be accessed according to the memory/fallback
+       pattern.
 
     This function simulates accesses based on a memory interval, or zipfian
     accesses. If the current request index matches the memory  interval and
@@ -23,9 +21,10 @@ def generate_memory_fallback_pattern(
     Zipfian probabilities.
 
     Args:
-        memory_interval (int): Number of requests between memory-based accesses.
+        memory_interval (int): Number of requests between memory-based
+                               accesses.
         memory_offset (int): Steps back in request history to pick the key.
-        requests (List[int]): List of keys requested so far.
+        requests (list[int]): List of keys requested so far.
         requests_count (int): Number of requests generated so far.
         keys_range (np.ndarray): List of available keys.
         zipf_probs (np.ndarray): List of normalized Zipfian probabilities

@@ -1,14 +1,13 @@
-from typing import Tuple
-
 from components.logs.levels.info_logger import info
 from components.math.percentage_calculator import calculate_percentage
 
 
 def calculate_hit_miss_rate(
-    num_hits: int, num_misses: int, total_cache_accesses: int
-) -> Tuple[float, float]:
-    """
-    Calculate hit and miss rates.
+    num_hits: int,
+    num_misses: int,
+    total_cache_accesses: int,
+) -> tuple[float, float]:
+    """Calculate hit and miss rates.
 
     This function calculates the hit and miss rates,
     provided their counters along with total cache accesses.
@@ -19,7 +18,7 @@ def calculate_hit_miss_rate(
         total_cache_accesses (int): The total number of cache accesses.
 
     Returns:
-        Tuple[float, float]: The hit and miss rates calculated.
+        tuple[float, float]: The hit and miss rates calculated.
     """
     # Calculate hit and miss rates
     hit_rate = calculate_percentage(num_hits, total_cache_accesses)

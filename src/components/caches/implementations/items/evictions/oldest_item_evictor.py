@@ -1,13 +1,14 @@
-from typing import Any, Callable, Optional, Tuple
+from collections.abc import Callable
+from typing import Any
 
 from components.logs.levels.error_logger import error
 
 
 def evict_oldest_item(
-    data: Any, callback: Optional[Callable]
-) -> Tuple[Any, Any]:
-    """
-    Evict the oldest item from a cache.
+    data: Any,
+    callback: Callable | None,
+) -> tuple[Any, Any]:
+    """Evict the oldest item from a cache.
 
     This function removes the oldest key and its associated item from
     the given cache data. If a callback is provided, it is invoked with
@@ -15,11 +16,11 @@ def evict_oldest_item(
 
     Args:
         data (Any): Cache data.
-        callback (Optional[Callable]): Callback function invoked with the
-                                       evicted key.
+        callback (Callable | None): Callback function invoked with the
+                                    evicted key.
 
     Returns:
-        Tuple[Any, Any]:
+        tuple[Any, Any]:
             - oldest_key: The key of the evicted item.
             - oldest_item: The value of the evicted item.
 

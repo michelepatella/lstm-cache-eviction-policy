@@ -1,11 +1,8 @@
-from typing import List
-
 from pydantic import BaseModel, confloat, conint
 
 
 class GeneralValidationConfig(BaseModel):
-    """
-    General validation configuration.
+    """General validation configuration.
 
     Attributes:
         batch_size (int): Batch size for validation (> 0).
@@ -17,8 +14,7 @@ class GeneralValidationConfig(BaseModel):
 
 
 class CrossValidationConfig(BaseModel):
-    """
-    Cross-validation configuration.
+    """Cross-validation configuration.
 
     Attributes:
         folds (int): Number of folds for cross-validation (> 1).
@@ -30,8 +26,7 @@ class CrossValidationConfig(BaseModel):
 
 
 class EarlyStoppingValidationConfig(BaseModel):
-    """
-    Early stopping configuration for validation.
+    """Early stopping configuration for validation.
 
     Attributes:
         patience (int): Number of epochs with no improvement to wait
@@ -44,8 +39,7 @@ class EarlyStoppingValidationConfig(BaseModel):
 
 
 class ModelSearchSpaceConfig(BaseModel):
-    """
-    Model search space configuration for hyperparameter optimization.
+    """Model search space configuration for hyperparameter optimization.
 
     Attributes:
         hidden_size (List[int]): Allowed range of hidden layer sizes (> 0).
@@ -53,25 +47,23 @@ class ModelSearchSpaceConfig(BaseModel):
         dropout (List[float]): Allowed range of dropout values (in [0, 1)).
     """
 
-    hidden_size: List[conint(gt=0)]  # type: ignore[valid-type]
-    num_layers: List[conint(gt=0)]  # type: ignore[valid-type]
-    dropout: List[confloat(ge=0, lt=1)]  # type: ignore[valid-type]
+    hidden_size: list[conint(gt=0)]  # type: ignore[valid-type]
+    num_layers: list[conint(gt=0)]  # type: ignore[valid-type]
+    dropout: list[confloat(ge=0, lt=1)]  # type: ignore[valid-type]
 
 
 class TrainingSearchSpaceOptimizerConfig(BaseModel):
-    """
-    Optimizer search space configuration for hyperparameter tuning.
+    """Optimizer search space configuration for hyperparameter tuning.
 
     Attributes:
         learning_rate (List[float]): Allowed learning rate values (> 0).
     """
 
-    learning_rate: List[confloat(gt=0)]  # type: ignore[valid-type]
+    learning_rate: list[confloat(gt=0)]  # type: ignore[valid-type]
 
 
 class TrainingSearchSpaceConfig(BaseModel):
-    """
-    Training search space configuration.
+    """Training search space configuration.
 
     Attributes:
         optimizer (TrainingSearchSpaceOptimizerConfig): Optimizer search space
@@ -82,8 +74,7 @@ class TrainingSearchSpaceConfig(BaseModel):
 
 
 class SearchSpaceConfig(BaseModel):
-    """
-    Search space configuration.
+    """Search space configuration.
 
     Attributes:
         model (ModelSearchSpaceConfig): Model hyperparameter search space
@@ -97,8 +88,7 @@ class SearchSpaceConfig(BaseModel):
 
 
 class ValidationConfig(BaseModel):
-    """
-    Validation configuration.
+    """Validation configuration.
 
     Attributes:
         general (GeneralValidationConfig): General validation configuration.

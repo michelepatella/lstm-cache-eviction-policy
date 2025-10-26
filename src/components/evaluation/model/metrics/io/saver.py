@@ -1,5 +1,3 @@
-from typing import Dict, Union
-
 from components.const import (
     MODEL_METRICS_ACCURACY_NAME,
     MODEL_METRICS_AVG_LOSS_NAME,
@@ -8,21 +6,22 @@ from components.const import (
     MODEL_METRICS_WEIGHTED_AVG_NAME,
 )
 from components.json.io.saver import save_json
-from components.logs.levels.error_logger import error
 from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
 
 
 def save_model_metrics(
-    metrics: Dict[str, Union[int, float]], avg_loss: float, path: str
+    metrics: dict[str, int | float],
+    avg_loss: float,
+    path: str,
 ) -> None:
-    """
-    Save model metrics to a JSON file.
+    """Save model metrics to a JSON file.
 
     This function filters the classification report to keep only
     desired metrics to be saved to a JSON file.
 
     Args:
-        metrics (Dict[str, Union[int, float]]): Dictionary of computed metrics.
+        metrics (dict[str, int | float]): Dictionary of computed metrics.
         avg_loss (float): Average loss to include in the metrics.
         path (str): Path where the metrics JSON file should be saved.
 

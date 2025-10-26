@@ -1,5 +1,3 @@
-from typing import List, Tuple
-
 import numpy as np
 
 from components.const import (
@@ -23,9 +21,8 @@ def generate_pattern_requests(
     initial_timestamp: float = DATA_GENERATION_INITIAL_TIMESTAMP,
     initial_current_day: int = DATA_GENERATION_INITIAL_CURRENT_DAY,
     initial_current_seconds_in_day: int = DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY,
-) -> Tuple[List[int], List[float]]:
-    """
-    Generate requests according to specific access and temporal patterns.
+) -> tuple[list[int], list[float]]:
+    """Generate requests according to specific access and temporal patterns.
 
     This function generates requests along with their corresponding timestamps
     in seconds (i.e., absolute time of the requests), according to specific
@@ -34,7 +31,8 @@ def generate_pattern_requests(
 
     Args:
         keys_range (np.ndarray): List of keys to generate requests for.
-        zipf_probs (np.ndarray): List of Zipfian probabilities of the given keys.
+        zipf_probs (np.ndarray): List of Zipfian probabilities of the
+                                 given keys.
         config (Config): Configuration object.
         time_step_duration (int): Time step to generate requests for.
         initial_timestamp (float): Initial timestamp in seconds.
@@ -43,9 +41,10 @@ def generate_pattern_requests(
                                               the current day.
 
     Returns:
-        Tuple[List[int], List[float]]:
+        tuple[list[int], list[float]]:
             - requests: List of generated requests (key indices).
-            - timestamps_seconds: Corresponding timestamps of the requests in seconds.
+            - timestamps_seconds: Corresponding timestamps of the
+                                  requests in seconds.
 
     Raises:
         RuntimeError: If generating pattern requests fails:

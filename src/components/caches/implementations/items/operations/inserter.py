@@ -1,4 +1,5 @@
-from typing import Any, Callable, Optional
+from collections.abc import Callable
+from typing import Any
 
 from components.logs.levels.error_logger import error
 
@@ -9,23 +10,26 @@ def insert_item_into_cache(
     item: Any,
     cache_maxsize: float,
     eviction_callback: Callable,
-    pre_insert_callback: Optional[Callable] = None,
-    post_insert_callback: Optional[Callable] = None,
+    pre_insert_callback: Callable | None = None,
+    post_insert_callback: Callable | None = None,
 ) -> None:
-    """
-    Insert or update an item into a cache structure with eviction support.
+    """Insert or update an item into a cache structure with eviction support.
 
-    This function handles insertion logic for multiple cache strategies, performing
-    eviction if the cache is full, applying optional pre- and post-insert callbacks.
+    This function handles insertion logic for multiple cache strategies,
+    performing eviction if the cache is full, applying optional pre-
+    and post-insert callbacks.
 
     Args:
         data (Any): Cache data.
         key (Any): Key to insert or update.
         item (Any): Value associated with the key.
         cache_maxsize (float): Maximum cache size.
-        eviction_callback (Callable): Callback to evict one item from the cache.
-        pre_insert_callback (Optional[Callable]): Action to perform before the insertion.
-        post_insert_callback (Optional[Callable]): Action to perform after the insertion.
+        eviction_callback (Callable): Callback to evict one item from
+                                      the cache.
+        pre_insert_callback (Callable | None): Action to perform before
+                                                  the insertion.
+        post_insert_callback (Callable | None): Action to perform after
+                                                the insertion.
 
     Returns:
         None

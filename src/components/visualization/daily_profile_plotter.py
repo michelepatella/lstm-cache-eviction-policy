@@ -20,8 +20,7 @@ from src.const import (
 
 
 def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
-    """
-    Plot daily profile of requests.
+    """Plot daily profile of requests.
 
     This function plots the daily profile of requests, given timestamps
     in hours when they occurred.
@@ -45,7 +44,7 @@ def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
         num_bins = (
             int(
                 (DATA_GENERATION_FINAL_HOUR - DATA_GENERATION_INITIAL_HOUR)
-                / PLOT_DAILY_PROFILE_BIN_SIZE
+                / PLOT_DAILY_PROFILE_BIN_SIZE,
             )
             + 1
         )

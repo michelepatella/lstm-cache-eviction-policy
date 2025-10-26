@@ -1,5 +1,3 @@
-from typing import Optional, Tuple
-
 import numpy as np
 from torch.utils.data import Subset
 
@@ -12,12 +10,11 @@ from components.logs.levels.error_logger import error
 
 def split_training_validation_sets(
     training_set: AccessLogsDataset,
-    validation_split: Optional[float] = None,
-    training_idx: Optional[np.ndarray] = None,
-    validation_idx: Optional[np.ndarray] = None,
-) -> Tuple[Subset, Subset]:
-    """
-    Split the dataset into training and validation sets.
+    validation_split: float | None = None,
+    training_idx: np.ndarray | None = None,
+    validation_idx: np.ndarray | None = None,
+) -> tuple[Subset, Subset]:
+    """Split the dataset into training and validation sets.
 
     This function either uses provided indices or calculates them based on
     the validation percentage, and returns PyTorch Subsets for training
@@ -25,16 +22,17 @@ def split_training_validation_sets(
 
     Args:
         training_set (AccessLogsDataset): The dataset to split.
-        validation_split (Optional[float]): Validation percentage to split dataset.
-        training_idx (Optional[np.ndarray]): Training set index.
-        validation_idx (Optional[np.ndarray]): Validation set index.
+        validation_split (float | None): Validation percentage to
+                                         split dataset.
+        training_idx (np.ndarray | None): Training set index.
+        validation_idx (np.ndarray | None): Validation set index.
 
     Returns:
-        Tuple[Subset, Subset]:
-            - final_training_set: PyTorch Subset containing the training portion of
-                                  the dataset.
-            - final_validation_set: PyTorch Subset containing the validation portion
-                                    of the dataset.
+        tuple[Subset, Subset]:
+            - final_training_set: PyTorch Subset containing the training
+                                  portion of the dataset.
+            - final_validation_set: PyTorch Subset containing the validation
+                                    portion of the dataset.
 
     Raises:
         RuntimeError: If training/validation set split fails:
@@ -53,16 +51,18 @@ def split_training_validation_sets(
 
             # Calculate training and validation sizes
             training_size = calculate_dataset_split_index(
-                total_training_size, 1 - validation_split
+                total_training_size,
+                1 - validation_split,
             )
             validation_size = calculate_dataset_split_index(
-                total_training_size, validation_split
+                total_training_size,
+                validation_split,
             )
 
             # Generate training and validation indices
             training_idx = list(range(training_size))
             validation_idx = list(
-                range(training_size, training_size + validation_size)
+                range(training_size, training_size + validation_size),
             )
 
         # Create Subset objects both for

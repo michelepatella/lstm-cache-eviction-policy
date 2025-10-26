@@ -8,8 +8,7 @@ def set_bursty_scale(
     burst_end_hour: int,
     current_hour_in_day: float,
 ) -> float:
-    """
-    Set bursty scale for the current hour in day.
+    """Set bursty scale for the current hour in day.
 
     This function sets the bursty scale — for the current hour in day —
     equal to burst high/low, depending on the current hour in day

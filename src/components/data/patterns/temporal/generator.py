@@ -12,10 +12,10 @@ from pipeline.config.pydantic.config import Config
 
 
 def generate_temporal_pattern(
-    current_seconds_in_day: float, config: Config
+    current_seconds_in_day: float,
+    config: Config,
 ) -> float:
-    """
-    Generate temporal pattern for current seconds in day.
+    """Generate temporal pattern for current seconds in day.
 
     This function generates a delta time for the current seconds
     in day (i.e., gap between two consecutive requests), drawing a
@@ -38,7 +38,8 @@ def generate_temporal_pattern(
               (TypeError, ValueError).
             * Invalid configuration values for periodic or burst components
               (AttributeError, TypeError, ValueError).
-            * Random number generation for delta time fails (ValueError, TypeError).
+            * Random number generation for delta time fails
+              (ValueError, TypeError).
     """
     try:
         # Move from current seconds to
@@ -120,10 +121,14 @@ def generate_temporal_pattern(
                 "burst_high": getattr(burstiness_pattern_config, "high", None),
                 "burst_low": getattr(burstiness_pattern_config, "low", None),
                 "burst_start_hour": getattr(
-                    burstiness_pattern_config.hours, "start", None
+                    burstiness_pattern_config.hours,
+                    "start",
+                    None,
                 ),
                 "burst_end_hour": getattr(
-                    burstiness_pattern_config.hours, "end", None
+                    burstiness_pattern_config.hours,
+                    "end",
+                    None,
                 ),
                 "context": "Temporal pattern generation",
             },

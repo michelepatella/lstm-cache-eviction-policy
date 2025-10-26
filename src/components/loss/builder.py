@@ -8,10 +8,11 @@ from components.loss.class_weight.calculator import calculate_class_weight
 
 
 def build_loss(
-    targets: torch.Tensor, num_classes: int, device: torch.device
+    targets: torch.Tensor,
+    num_classes: int,
+    device: torch.device,
 ) -> nn.CrossEntropyLoss:
-    """
-    Build a PyTorch criterion.
+    """Build a PyTorch criterion.
 
     This function computes class weight based on the target labels,
     moves the weight to the specified device, and returns a

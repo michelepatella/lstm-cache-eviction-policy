@@ -1,5 +1,3 @@
-from typing import Optional, Tuple
-
 import torch
 
 from components.device.mover import (
@@ -10,13 +8,12 @@ from components.loss.calculator import calculate_loss
 
 
 def compute_forward(
-    batch: Tuple[torch.Tensor, torch.Tensor, torch.Tensor],
+    batch: tuple[torch.Tensor, torch.Tensor, torch.Tensor],
     model: torch.nn.Module,
     device: torch.device,
-    criterion: Optional[torch.nn.Module] = None,
-) -> Tuple[Optional[torch.Tensor], torch.Tensor]:
-    """
-    Compute a forward pass through the model.
+    criterion: torch.nn.Module | None = None,
+) -> tuple[torch.Tensor | None, torch.Tensor]:
+    """Compute a forward pass through the model.
 
     This function handles moving batch to the specified device, executing the
     model's forward pass, and optionally computing the loss using the provided
@@ -24,13 +21,13 @@ def compute_forward(
     training or evaluation.
 
     Args:
-        batch (Tuple[torch.Tensor, torch.Tensor, torch.Tensor]): Model batch.
+        batch (tuple[torch.Tensor, torch.Tensor, torch.Tensor]): Model batch.
         model (torch.nn.Module): The PyTorch model to compute forward pass for.
         device (torch.device): Device on which to perform computations.
-        criterion (Optional[torch.nn.Module]): Loss function.
+        criterion (torch.nn.Module | None): Loss function.
 
     Returns:
-        Tuple[Optional[torch.Tensor], torch.Tensor]:
+        tuple[torch.Tensor | None, torch.Tensor]:
             - loss: Computed loss using the criterion
               (None if criterion is not provided).
             - outputs: Model outputs from the forward pass.

@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional, Tuple, Union
-
 import torch
 from torch import Tensor
 from torch.utils.data import DataLoader
@@ -24,15 +22,14 @@ def evaluate_model(
     top_k: int = None,
     model_results_save_path: str = None,
     compute_metrics: bool = MODEL_COMPUTE_METRICS_DISABLED,
-) -> Tuple[
+) -> tuple[
     float,
-    Optional[Dict[str, Union[int, float]]],
-    List[Tensor],
-    List[int],
-    List[Tensor],
+    dict[str, int | float] | None,
+    list[Tensor],
+    list[int],
+    list[Tensor],
 ]:
-    """
-    Evaluate a model on a given data loader.
+    """Evaluate a model on a given data loader.
 
     This function performs inference over the provided data loader using
     the given model, computes the average loss, and optionally calculates
@@ -47,20 +44,28 @@ def evaluate_model(
         num_features (int): Number of features for the model.
         top_k (int): Top-k for accuracy computation.
         model_results_save_path (str): Path to save metrics.
-        compute_metrics (bool): Whether to compute evaluation metrics in addition to loss.
+        compute_metrics (bool): Whether to compute evaluation metrics
+                                in addition to loss.
 
     Returns:
-        Tuple[
-            float, Optional[Dict[str, Union[int, float]]], List[Tensor],
-            List[int], List[Tensor]
+        tuple[
+            float,
+            dict[str, int | float] | None,
+            list[Tensor],
+            list[int],
+            list[Tensor],
         ]:
-            - avg_loss: Float representing the average loss over the data loader.
-            - metrics: Optional dictionary of evaluation metrics (classification report,
-                       top-k accuracy, Cohen’s kappa), or None if not computed.
-            - all_outputs: List of tensors containing the model outputs per batch.
-            - all_targets: List of ground truth labels corresponding to the inputs.
-            - all_variances: List of tensors containing variances from MC dropout
-                             (if applicable), otherwise empty.
+            - avg_loss: Float representing the average loss over the data
+                        loader.
+            - metrics: Optional dictionary of evaluation metrics
+                       (classification report, top-k accuracy, Cohen’s
+                       kappa), or None if not computed.
+            - all_outputs: List of tensors containing the model outputs
+                           per batch.
+            - all_targets: List of ground truth labels corresponding to
+                           the inputs.
+            - all_variances: List of tensors containing variances from MC
+                             dropout (if applicable), otherwise empty.
     """
     debug(
         "Model evaluation started",

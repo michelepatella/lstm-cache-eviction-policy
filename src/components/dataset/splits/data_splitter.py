@@ -7,10 +7,11 @@ from components.logs.levels.error_logger import error
 
 
 def split_dataset_data(
-    df: pd.DataFrame, split_idx: int, take_first: bool
+    df: pd.DataFrame,
+    split_idx: int,
+    take_first: bool,
 ) -> Any:
-    """
-    Split data at a given index.
+    """Split data at a given index.
 
     This function splits provided data based on the received index,
     taking the first or the second part of the data as specified.

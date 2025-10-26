@@ -1,17 +1,14 @@
-from typing import Dict, List
-
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.math.percentage_calculator import calculate_percentage
 
 
 def calculate_eviction_mistake_rate(
-    evicted_items: Dict[int, List[float]],
-    access_events_dict: Dict[int, List[float]],
+    evicted_items: dict[int, list[float]],
+    access_events_dict: dict[int, list[float]],
     mistake_window: int,
 ) -> float:
-    """
-    Calculate the eviction mistake rate.
+    """Calculate the eviction mistake rate.
 
     This function calculates the eviction mistake rate based on provided
     evicted keys and their access events. An eviction mistake occurs
@@ -19,10 +16,10 @@ def calculate_eviction_mistake_rate(
     temporal window.
 
     Args:
-        evicted_items (Dict[int, List[float]]): Dictionary mapping keys
+        evicted_items (dict[int, list[float]]): Dictionary mapping keys
                                                 to their eviction times.
-        access_events_dict (Dict[int, List[float]]): Dictionary mapping keys to their
-                                                     access timestamps.
+        access_events_dict (dict[int, list[float]]):
+            Dictionary mapping keys to their access timestamps.
         mistake_window (int): Temporal window to consider accesses as mistakes.
 
     Returns:
@@ -65,7 +62,8 @@ def calculate_eviction_mistake_rate(
 
         # Calculate eviction mistake rate
         eviction_mistake_rate = calculate_percentage(
-            tot_eviction_mistakes, tot_eviction_events
+            tot_eviction_mistakes,
+            tot_eviction_events,
         )
 
         info(

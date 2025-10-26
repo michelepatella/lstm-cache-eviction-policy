@@ -1,5 +1,3 @@
-from typing import List
-
 from sklearn.metrics import cohen_kappa_score
 
 from components.logs.levels.error_logger import error
@@ -7,18 +5,18 @@ from components.logs.levels.info_logger import info
 
 
 def calculate_cohen_kappa_score(
-    targets: List[int], predictions: List[int]
+    targets: list[int],
+    predictions: list[int],
 ) -> float:
-    """
-    Calculate Cohen's kappa score.
+    """Calculate Cohen's kappa score.
 
     This function computes the Cohen's kappa score between the
     provided true labels and predicted ones, which measures
     the agreement between two raters while correcting for chance.
 
     Args:
-        targets (List[int]): Ground truth labels.
-        predictions (List[int]): Predicted labels.
+        targets (list[int]): Ground truth labels.
+        predictions (list[int]): Predicted labels.
 
     Returns:
         float: Cohen's kappa score.

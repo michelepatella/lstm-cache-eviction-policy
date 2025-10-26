@@ -1,13 +1,10 @@
-from components.logs.levels.debug_logger import debug
-from components.logs.levels.info_logger import info
 from components.yaml.io.loader import load_yaml
 from pipeline.config.pydantic.config import Config
 from pipeline.const import CONFIG_FILE_PATH
 
 
 def prepare_config() -> Config:
-    """
-    Prepare configuration required to run the entire pipeline.
+    """Prepare configuration required to run the entire pipeline.
 
     This function prepares the pipeline's configuration by orchestrating
     loading and validation of YAML configuration file. If the whole YAML

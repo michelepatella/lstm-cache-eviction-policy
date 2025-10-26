@@ -1,19 +1,16 @@
-from typing import List, Optional, Union
-
 from components.logs.levels.error_logger import error
 
 
-def calculate_average(values: List[Union[int, float]]) -> Optional[float]:
-    """
-    Calculate the average of a list of numeric values.
+def calculate_average(values: list[int | float]) -> float | None:
+    """Calculate the average of a list of numeric values.
 
     This function computes the average of a list of numeric values.
 
     Args:
-        values (List[Union[int, float]]): List of numeric values to average.
+        values (list[int | float]): List of numeric values to average.
 
     Returns:
-        Optional[float]: Average value (None if no values are provided).
+        float | None: Average value (None if no values are provided).
 
     Raises:
         RuntimeError: If average calculation fails:

@@ -1,13 +1,10 @@
-from typing import List
-
 import pandas as pd
 
 from components.logs.levels.error_logger import error
 
 
-def extract_dataset_columns(df: pd.DataFrame) -> List[str]:
-    """
-    Extract columns from a dataset.
+def extract_dataset_columns(df: pd.DataFrame) -> list[str]:
+    """Extract columns from a dataset.
 
     This function extracts and returns a list of column names
     belonging to the provided dataset.
@@ -16,7 +13,7 @@ def extract_dataset_columns(df: pd.DataFrame) -> List[str]:
         df (pd.DataFrame): Dataset to extract columns from.
 
     Returns:
-        List[str]: List of column names extracted.
+        list[str]: List of column names extracted.
 
     Raises:
         RuntimeError: If extracting columns fails:

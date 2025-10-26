@@ -1,5 +1,3 @@
-from typing import Dict, List, Tuple
-
 import requests
 from box import Box
 from fastapi import FastAPI
@@ -27,9 +25,9 @@ api_config = load_json(API_CONFIG_FILE_PATH)
 
 @app.post(API_GATEWAY_ENDPOINT)
 def evict_key(
-    keys_in_cache: List[int],
-    last_accesses: List[Tuple[float, int]],
-    user_kwargs: Dict[str, int | float | List[int] | str | bool],
+    keys_in_cache: list[int],
+    last_accesses: list[tuple[float, int]],
+    user_kwargs: dict[str, int | float | list[int] | str | bool],
 ):
     # Retrieve default kwargs from
     # API configuration

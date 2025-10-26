@@ -1,5 +1,3 @@
-from typing import Dict, Optional, Tuple, Union
-
 import torch
 
 from components.device.mover import (
@@ -18,12 +16,11 @@ from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
 
 
 def initialize_model_environment(
-    model_params: Union[ModelParamsConfig, Dict[str, Union[int, float, bool]]],
+    model_params: ModelParamsConfig | dict[str, int | float | bool],
     config: Config,
-    targets: Optional[torch.Tensor],
-) -> Tuple[torch.device, Optional[torch.nn.Module], torch.nn.Module]:
-    """
-    Set up the model environment.
+    targets: torch.Tensor | None,
+) -> tuple[torch.device, torch.nn.Module | None, torch.nn.Module]:
+    """Set up the model environment.
 
     This function performs all steps required to prepare
     model environment:
@@ -32,16 +29,17 @@ def initialize_model_environment(
         - Instantiates the PyTorch model and moves it to the device
 
     Args:
-        model_params (Union[ModelParamsConfig, Dict[str, Union[int, float, bool]]]):
-            Model parameters.
+        model_params (ModelParamsConfig |
+        dict[str, int | float | bool]): Model parameters.
         config (Config): Configuration object.
-        targets (Optional[torch.Tensor]): Target labels for computing class weights.
+        targets (torch.Tensor | None): Target labels for computing
+                                       class weights.
 
     Returns:
-        Tuple[torch.device, Optional[torch.nn.Module], torch.nn.Module]:
+        tuple[torch.device, torch.nn.Module | None, torch.nn.Module]:
             - device: The device used for computations.
-            - criterion: Loss function initialized with class weights (None if no targets
-              provided).
+            - criterion: Loss function initialized with class weights
+                         (None if no targets provided).
             - model: PyTorch model.
     """
     device_type = config.hardware.device
@@ -62,7 +60,12 @@ def initialize_model_environment(
 
     # Instantiate model
     model = build_model(
-        model_params, min_key, max_key, embedding_dim, num_features, config
+        model_params,
+        min_key,
+        max_key,
+        embedding_dim,
+        num_features,
+        config,
     )
 
     # Move model to device

@@ -1,34 +1,36 @@
 import itertools
-from typing import Any, Dict, List
+from typing import Any
 
 from components.dict.operations.flattener import flatten_dict
 from components.dict.operations.value_setter import set_dict_value
 from components.logs.levels.error_logger import error
 
 
-def combine_nested_dicts(nested_dict: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """
-    Generate all possible combinations from a nested dictionary.
+def combine_nested_dicts(nested_dict: dict[str, Any]) -> list[dict[str, Any]]:
+    """Generate all possible combinations from a nested dictionary.
 
     This function computes the Cartesian product of all possible leaf values
-    in the dictionary and reconstructs nested dictionaries for each combination.
+    in the dictionary and reconstructs nested dictionaries for each
+    combination.
 
     Args:
-        nested_dict (Dict[str, Any]): Nested dictionary with leaf values that are
-                                      either single values or lists of options.
+        nested_dict (dict[str, Any]): Nested dictionary with leaf values
+                                      that are either single values or
+                                      lists of options.
 
     Returns:
-        List[Dict[str, Any]]: List of nested dictionaries representing all possible
-                              combinations of values.
+        list[dict[str, Any]]: List of nested dictionaries representing
+                              all possible combinations of values.
 
     Raises:
-        RuntimeError: If generating combinations from the nested dictionary fails:
+        RuntimeError: If generating combinations from the nested
+                      dictionary fails:
             * Input is not a dictionary (TypeError).
             * Leaf values cannot be iterated or copied properly (TypeError).
-            * Cartesian product computation fails due to invalid input structure
-              (ValueError).
-            * Setting values in nested dictionaries fails due to incorrect key paths
-              or incompatible types (TypeError).
+            * Cartesian product computation fails due to invalid input
+              structure (ValueError).
+            * Setting values in nested dictionaries fails due to incorrect
+              key paths or incompatible types (TypeError).
     """
     try:
         # Flatten the dictionary to get key paths and values

@@ -23,8 +23,7 @@ from src.const import (
 
 
 def build_features(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Build dataset features with time
+    """Build dataset features with time
     encoding and target reordering.
 
     This function applies trigonometric encoding to the

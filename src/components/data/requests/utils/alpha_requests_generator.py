@@ -1,5 +1,3 @@
-from typing import List, Optional, Tuple
-
 import numpy as np
 
 from components.data.patterns.core.generator import (
@@ -16,10 +14,9 @@ def generate_requests_for_alpha(
     alpha: float,
     keys_range: np.ndarray,
     config: Config,
-    time_step_duration: Optional[int] = None,
-) -> Tuple[List[int], List[float]]:
-    """
-    Generate requests for a single alpha value.
+    time_step_duration: int | None = None,
+) -> tuple[list[int], list[float]]:
+    """Generate requests for a single alpha value.
 
     This function generates requests along with their
     timestamps for a single alpha value.
@@ -28,12 +25,13 @@ def generate_requests_for_alpha(
         alpha (float): Alpha parameter for Zipfian distribution.
         keys_range (np.ndarray): List of available keys.
         config (Config): Configuration object.
-        time_step_duration (Optional[int]): Time step duration for generation.
+        time_step_duration (int | None): Time step duration for generation.
 
     Returns:
-        Tuple[List[int], List[float]]:
+        tuple[list[int], list[float]]:
             - requests: List of generated requests (key indices).
-            - timestamps_seconds: Corresponding timestamps of the requests in seconds.
+            - timestamps_seconds: Corresponding timestamps of the
+                                  requests in seconds.
     """
     # Calculate Zipfian probabilities
     zipf_probs = calculate_zipf_probs(keys_range, alpha)

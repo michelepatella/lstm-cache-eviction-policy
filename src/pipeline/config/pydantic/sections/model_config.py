@@ -2,8 +2,7 @@ from pydantic import BaseModel, confloat, conint
 
 
 class GeneralModelConfig(BaseModel):
-    """
-    General configuration for the model.
+    """General configuration for the model.
 
     Attributes:
         features (int): Number of input features for the model (> 0).
@@ -13,8 +12,7 @@ class GeneralModelConfig(BaseModel):
 
 
 class ModelParamsConfig(BaseModel):
-    """
-    Model parameters' configuration.
+    """Model parameters' configuration.
 
     Attributes:
         hidden_size (int): Hidden layer size (> 0).
@@ -37,8 +35,7 @@ class ModelParamsConfig(BaseModel):
 
 
 class EmbeddingConfig(BaseModel):
-    """
-    Embedding configuration for sequence input.
+    """Embedding configuration for sequence input.
 
     Attributes:
         dimension (int): Dimension of the embedding vector (> 0).
@@ -48,8 +45,7 @@ class EmbeddingConfig(BaseModel):
 
 
 class SequenceConfig(BaseModel):
-    """
-    Sequence configuration for the model.
+    """Sequence configuration for the model.
 
     Attributes:
         length (int): Length of the input sequences (> 0).
@@ -61,8 +57,7 @@ class SequenceConfig(BaseModel):
 
 
 class ModelConfig(BaseModel):
-    """
-    Model configuration.
+    """Model configuration.
 
     Attributes:
         general (GeneralModelConfig): General model configuration.

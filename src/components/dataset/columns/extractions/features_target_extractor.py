@@ -1,24 +1,21 @@
-from typing import List, Tuple
-
 from components.logs.levels.error_logger import error
 
 
 def extract_features_target_from_dataset_columns(
-    columns: List[str],
-) -> Tuple[List[str], str]:
-    """
-    Extract features and target from dataset columns.
+    columns: list[str],
+) -> tuple[list[str], str]:
+    """Extract features and target from dataset columns.
 
     This function extracts both features and target from provided dataset
     columns, assuming the last column is the target while all the other ones
     are features.
 
     Args:
-        columns (List[str]): List of dataset columns to extract features
+        columns (list[str]): List of dataset columns to extract features
                              and target for.
 
     Returns:
-        Tuple[List[str], str]: List of features and target extracted.
+        tuple[list[str], str]: List of features and target extracted.
 
     Raises:
         RuntimeError: If extracting features or target fails:

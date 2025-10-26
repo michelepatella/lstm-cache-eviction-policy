@@ -1,5 +1,3 @@
-from typing import List, Optional, Tuple
-
 import torch
 
 from components.backpropagation.mc_dropout.forward_runner import (
@@ -11,53 +9,60 @@ from components.loss.calculator import calculate_loss
 
 
 def infer_single_batch(
-    batch: Tuple[torch.Tensor, torch.Tensor, torch.Tensor],
+    batch: tuple[torch.Tensor, torch.Tensor, torch.Tensor],
     model: torch.nn.Module,
     criterion: torch.nn.Module,
     device: torch.device,
     num_features: int,
-) -> Tuple[
+) -> tuple[
     float,
-    List[int],
-    List[int],
-    List[torch.Tensor],
-    Optional[List[torch.Tensor]],
+    list[int],
+    list[int],
+    list[torch.Tensor],
+    list[torch.Tensor] | None,
 ]:
-    """
-    Perform inference on a single batch.
+    """Perform inference on a single batch.
 
-    This function processes one batch of data, moves tensors to the specified device,
-    performs MC Dropout forward through the model, computes the batch loss,
-    and extracts predictions, targets, outputs, and optionally variances.
+    This function processes one batch of data, moves tensors to
+    the specified device, performs MC Dropout forward through the
+    model, computes the batch loss, and extracts predictions,
+    targets, outputs, and optionally variances.
 
     Args:
-        batch (Tuple[torch.Tensor, torch.Tensor, torch.Tensor]): The batch to process.
+        batch (tuple[torch.Tensor, torch.Tensor, torch.Tensor]):
+            The batch to process.
         model (torch.nn.Module): PyTorch model to perform inference with.
         criterion (torch.nn.Module): Loss function for computing batch loss.
         device (torch.device): Device to run computations on.
         num_features (int): Number of features for the model.
 
-        Returns:
-            Tuple[
-                float, List[int], List[int], List[torch.Tensor], Optional[List[torch.Tensor]]
-            ]:
-                - loss: Float representing the computed loss for the batch.
-                - predictions: List of predicted class indices for each sample in the batch.
-                - targets_list: List of ground truth labels corresponding to each sample
-                                in the batch.
-                - outputs_list: List of tensors containing model outputs for each sample in
-                                the batch.
-                - variances: List of tensors containing MC Dropout variances for each sample
-                             (None if not computed).
+    Returns:
+        tuple[
+            float,
+            list[int],
+            list[int],
+            list[torch.Tensor],
+            list[torch.Tensor] | None,
+        ]:
+            - loss: Float representing the computed loss for the batch.
+            - predictions: List of predicted class indices for each
+                           sample in the batch.
+            - targets_list: List of ground truth labels corresponding to
+                            each sample in the batch.
+            - outputs_list: List of tensors containing model outputs for
+                            each sample in the batch.
+            - variances: List of tensors containing MC Dropout variances
+                         for each sample (None if not computed).
 
     Raises:
         RuntimeError: If single batch inference fails:
             * Extracting the target fails because the batch is not a tuple/list
               of tensors or is empty (TypeError, IndexError).
-            * Computing loss fails because outputs or target tensors are incompatible
-              with the criterion (RuntimeError).
+            * Computing loss fails because outputs or target tensors are
+              incompatible with the criterion (RuntimeError).
             * Preparing return data fails due to invalid tensor shapes, types,
-              or operations (RuntimeError, TypeError, AttributeError, IndexError).
+              or operations (RuntimeError, TypeError, AttributeError,
+              IndexError).
     """
     try:
         # Move entire batch to device
@@ -65,7 +70,10 @@ def infer_single_batch(
 
         # Perform MC Dropout forward
         outputs_mean, outputs_var = compute_mc_dropout_forward(
-            model, batch, device, num_features
+            model,
+            batch,
+            device,
+            num_features,
         )
 
         # Extract target from batch

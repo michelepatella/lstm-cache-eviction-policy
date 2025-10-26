@@ -2,8 +2,7 @@ from pydantic import BaseModel, conint
 
 
 class MistakeRateConfig(BaseModel):
-    """
-    Configuration for mistake rate calculation.
+    """Configuration for mistake rate calculation.
 
     Attributes:
         window (int): Sliding window size used to compute the mistake rate (> 0).
@@ -13,8 +12,7 @@ class MistakeRateConfig(BaseModel):
 
 
 class MetricsConfig(BaseModel):
-    """
-    Metrics configuration for the simulations.
+    """Metrics configuration for the simulations.
 
     Attributes:
         mistake_rate (MistakeRateConfig): Configuration for mistake rate metric.
@@ -24,8 +22,7 @@ class MetricsConfig(BaseModel):
 
 
 class CacheConfig(BaseModel):
-    """
-    Cache configuration for the simulations.
+    """Cache configuration for the simulations.
 
     Attributes:
         dimension (int): Number of cache slots (> 0).
@@ -37,8 +34,7 @@ class CacheConfig(BaseModel):
 
 
 class SimulationsConfig(BaseModel):
-    """
-    Simulations configuration.
+    """Simulations configuration.
 
     Attributes:
         cache (CacheConfig): Cache configuration.

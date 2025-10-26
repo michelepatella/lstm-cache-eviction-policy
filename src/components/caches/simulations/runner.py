@@ -1,5 +1,5 @@
 import time
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 from tqdm import tqdm
 
@@ -30,9 +30,8 @@ def run_cache_simulation(
     cache: Any,
     policy: str,
     config: Config,
-) -> Tuple[Dict[str, int], List[Dict[str, float]], List[float]]:
-    """
-    Run a full cache simulation for a given cache eviction policy.
+) -> tuple[dict[str, int], list[dict[str, float]], list[float]]:
+    """Run a full cache simulation for a given cache eviction policy.
 
     This function runs a cache simulation over the testing dataset, managing
     requests one by one according to the provided eviction policy (either
@@ -45,10 +44,10 @@ def run_cache_simulation(
         config (Config): Configuration object.
 
     Returns:
-        Tuple[Dict[str, int], List[Dict[str, float]], List[float]]:
+        tuple[dict[str, int], list[dict[str, float]], list[float]]:
             - counters: Dictionary containing hit and miss counts.
-            - timeline: List of dictionaries showing the evolution of hits and misses
-                        over time.
+            - timeline: List of dictionaries showing the evolution of hits
+                        and misses over time.
             - cache_latencies: List of cache access latencies in microseconds.
 
     Raises:
@@ -58,7 +57,8 @@ def run_cache_simulation(
         * Unpacking the dataset row fails due to unexpected row format or
           type (ValueError, TypeError).
         * Extracting features or target from the dataset row fails due to
-          missing or malformed elements (ValueError, TypeError, AttributeError).
+          missing or malformed elements (ValueError, TypeError,
+          AttributeError).
     """
     try:
         info(
@@ -146,9 +146,7 @@ def run_cache_simulation(
                 "cache_type": type(cache).__name__ if cache else None,
                 "requests_num": len(testing_set),
                 "hits_num": counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME],
-                "misses_num": counters[
-                    SIMULATIONS_METRICS_MISS_COUNTER_NAME
-                ],
+                "misses_num": counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME],
                 "context": f"{policy} cache simulation",
             },
         )

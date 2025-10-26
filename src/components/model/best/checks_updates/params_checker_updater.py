@@ -1,17 +1,14 @@
-from typing import Dict, Optional, Tuple, Union
-
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
 def check_update_best_model_params(
     curr_avg_loss: float,
-    best_avg_loss: Optional[float],
-    curr_model_params: Dict[str, Union[int, float, bool]],
-    best_model_params: Dict[str, Union[int, float, bool]],
-) -> Tuple[float, Dict[str, Union[int, float, bool]]]:
-    """
-    Check and update the best model parameters based on the average loss.
+    best_avg_loss: float | None,
+    curr_model_params: dict[str, int | float | bool],
+    best_model_params: dict[str, int | float | bool],
+) -> tuple[float, dict[str, int | float | bool]]:
+    """Check and update the best model parameters based on the average loss.
 
     This function compares the current average loss with the best one found
     so far. If the new loss improves upon the previous best, both the best
@@ -19,17 +16,18 @@ def check_update_best_model_params(
 
     Args:
         curr_avg_loss (float): Average loss of the current iteration.
-        best_avg_loss (Optional[float]): Best average loss found so far (None if not
-                                         set yet).
-        curr_model_params (Dict[str, Union[int, float, bool]]): Current model parameters.
-        best_model_params (Dict[str, Union[int, float, bool]]): Best model parameters
-                                                                found so far.
+        best_avg_loss (float | None): Best average loss found so far
+                                      (None if not set yet).
+        curr_model_params (dict[str, int | float | bool]):
+            Current model parameters.
+        best_model_params (dict[str, int | float | bool]):
+            Best model parameters found so far.
 
     Returns:
-        Tuple[float, Dict[str, Union[int, float, bool]]]:
+        tuple[float, dict[str, int | float | bool]]:
             - best_avg_loss: Best average loss (updated or not).
-            - best_params: The model parameters corresponding to the best average loss
-                           (updated or not).
+            - best_params: The model parameters corresponding to the
+                           best average loss (updated or not).
 
     Raises:
         RuntimeError: If checking and updating the best model parameters fails:

@@ -1,24 +1,25 @@
-from typing import Any, Dict, Sequence
+from collections.abc import Sequence
+from typing import Any
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
 def set_dict_value(
-    data_dict: Dict[str, Any],
+    data_dict: dict[str, Any],
     keys: Sequence[str],
     value: Any,
 ) -> None:
-    """
-    Set a value in a (nested) dictionary given a sequence of keys.
+    """Set a value in a (nested) dictionary given a sequence of keys.
 
     This function traverses a (nested) dictionary according to the
     provided sequence of one or more keys, setting the value at the
     last key.
 
     Args:
-        data_dict (Dict[str, Any]): Dictionary to update.
-        keys (Sequence[str]): Sequence of one or more keys leading to the value.
+        data_dict (dict[str, Any]): Dictionary to update.
+        keys (Sequence[str]): Sequence of one or more keys leading
+                              to the value.
         value (Any): Value to set.
 
     Returns:
@@ -42,17 +43,18 @@ def set_dict_value(
         # Iterate over all the keys except
         # the last one to go down the nested levels
         current_dict = data_dict
-        for keys in keys[:-1]:
+        for key in keys[:-1]:
             # If the current key is not in the
             # current dictionary or this latter is not
             # a dictionary, make it one
-            if keys not in current_dict or not isinstance(
-                current_dict[keys], data_dict
+            if key not in current_dict or not isinstance(
+                current_dict[key],
+                data_dict,
             ):
-                current_dict[keys] = {}
+                current_dict[key] = {}
 
             # Go down a level more
-            current_dict = current_dict[keys]
+            current_dict = current_dict[key]
 
         # Set the desired value in the last
         # position

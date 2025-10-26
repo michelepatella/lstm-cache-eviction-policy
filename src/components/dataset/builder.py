@@ -1,4 +1,4 @@
-from typing import Dict, Sequence, Union
+from collections.abc import Sequence
 
 import numpy as np
 import pandas as pd
@@ -8,17 +8,16 @@ from components.logs.levels.error_logger import error
 
 
 def build_dataset(
-    columns: Dict[str, Union[Sequence, np.ndarray]],
+    columns: dict[str, Sequence | np.ndarray],
 ) -> pd.DataFrame:
-    """
-    Create dataset for the given columns.
+    """Create dataset for the given columns.
 
     This function creates a Pandas dataframe
     from the given columns.
 
     Args:
-        columns (Dict[str, Union[Sequence, np.ndarray]]): Columns to create
-                                                          dataset for.
+        columns (dict[str, Sequence | np.ndarray]): Columns to create
+                                                    dataset for.
 
     Returns:
         pd.DataFrame: Pandas dataframe built from the given columns.

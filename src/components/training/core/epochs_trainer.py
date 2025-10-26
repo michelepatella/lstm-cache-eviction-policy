@@ -1,5 +1,3 @@
-from typing import Tuple
-
 import numpy as np
 import torch
 from torch.optim import Optimizer
@@ -19,7 +17,7 @@ from components.model.state_dict.copier import (
 from components.training.callbacks.early_stopping import EarlyStopping
 from components.training.core.single_epoch_trainer import train_single_epoch
 from pipeline.config.pydantic.config import Config
-from src.const import LOGS_TRAINING_PHASE, LOGS_VALIDATION_PHASE
+from src.const import LOGS_VALIDATION_PHASE
 
 
 def train_epochs(
@@ -32,9 +30,8 @@ def train_epochs(
     device: torch.device,
     current_phase: str,
     config: Config,
-) -> Tuple[float, torch.nn.Module]:
-    """
-    Train a model for a given number of epochs.
+) -> tuple[float, torch.nn.Module]:
+    """Train a model for a given number of epochs.
 
     This function trains a given model for a specified number of epochs.
     The model is trained on the received training loader while validated
@@ -55,7 +52,7 @@ def train_epochs(
         config (Config): Configuration object.
 
     Returns:
-        Tuple[float, torch.nn.Module]:
+        tuple[float, torch.nn.Module]:
             - best_avg_loss: The best average loss achieved.
             - model: The trained model with the best weights applied.
 
@@ -105,18 +102,29 @@ def train_epochs(
         for epoch in tqdm(range(1, num_epochs + 1), desc=TRAINING_EPOCHS_DESC):
             # Train one epoch
             train_single_epoch(
-                model, training_loader, optimizer, criterion, device, epoch
+                model,
+                training_loader,
+                optimizer,
+                criterion,
+                device,
+                epoch,
             )
 
             # Evaluate the model to get the
             # average loss after the current epoch
             avg_loss, *_ = evaluate_model(
-                model, validation_loader, criterion, device, num_features
+                model,
+                validation_loader,
+                criterion,
+                device,
+                num_features,
             )
 
             # Check for an update in average loss
             best_avg_loss, new_model_weights = check_update_best_model(
-                avg_loss, best_avg_loss, model
+                avg_loss,
+                best_avg_loss,
+                model,
             )
 
             # Update best model weights (if any)

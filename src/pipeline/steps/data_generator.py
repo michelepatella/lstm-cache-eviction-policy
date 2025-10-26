@@ -39,15 +39,14 @@ from pipeline.const import (
 )
 from src.const import (
     DAGS_HUB_MLFLOW_ENABLED,
+    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
+    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
     DATA_DISTRIBUTION_STATIC_MODE,
     DATASET_RAW_TYPE,
     DATASET_REQUEST_COLUMN_NAME,
     DATASET_TIMESTAMP_COLUMN_NAME,
     MLFLOW_NESTED_ENABLED,
-    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
-    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
 )
-
 
 # Load env variables
 load_dotenv()
@@ -56,8 +55,7 @@ dags_hub_repo_name = os.getenv(DAGS_HUB_REPO_NAME_ENV_VAR_NAME)
 
 
 def generate_data() -> None:
-    """
-    Generate data according to a specified data distribution mode.
+    """Generate data according to a specified data distribution mode.
 
     This function generates data according to a specified data distribution mode,
     by orchestrating the generation of both access and temporal data patterns of
@@ -81,9 +79,9 @@ def generate_data() -> None:
     import mlflow
 
     with mlflow.start_run(
-        run_name=LOGS_DATA_GENERATION_PHASE, nested=MLFLOW_NESTED_ENABLED
+        run_name=LOGS_DATA_GENERATION_PHASE,
+        nested=MLFLOW_NESTED_ENABLED,
     ):
-
         # Setup
         config = prepare_config()
         initialize_logs()
@@ -134,13 +132,14 @@ def generate_data() -> None:
                     : len(requests)
                 ],
                 DATASET_REQUEST_COLUMN_NAME: requests,
-            }
+            },
         )
 
         # Retrieve path where
         # to save dataset
         dataset_path = get_dataset_abs_path(
-            DATASET_RAW_TYPE, data_distribution_mode
+            DATASET_RAW_TYPE,
+            data_distribution_mode,
         )
 
         # Save just created dataset
@@ -175,21 +174,21 @@ def generate_data() -> None:
                 "timestamps_mean": float(np.mean(timestamps_hours)),
                 "timestamps_std": float(np.std(timestamps_hours)),
                 "timestamps_diff_mean": float(
-                    np.mean(np.diff(timestamps_hours))
+                    np.mean(np.diff(timestamps_hours)),
                 ),
                 "timestamps_diff_std": float(
-                    np.std(np.diff(timestamps_hours))
+                    np.std(np.diff(timestamps_hours)),
                 ),
                 "timestamps_diff_min": float(
-                    np.min(np.diff(timestamps_hours))
+                    np.min(np.diff(timestamps_hours)),
                 ),
                 "timestamps_diff_max": float(
-                    np.max(np.diff(timestamps_hours))
+                    np.max(np.diff(timestamps_hours)),
                 ),
                 "tot_hours": max(timestamps_hours) - min(timestamps_hours),
                 "tot_days": (max(timestamps_hours) - min(timestamps_hours))
                 / TIME_HOURS_IN_DAY,
-            }
+            },
         )
         mlflow.log_artifact(dataset_path)
         mlflow.log_artifact(zipf_log_log_plot_save_path)

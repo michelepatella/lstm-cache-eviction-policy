@@ -21,8 +21,7 @@ def train_single_epoch(
     device: torch.device,
     epoch: int,
 ) -> None:
-    """
-    Train the model for a single epoch.
+    """Train the model for a single epoch.
 
     This function performs one full pass over the training set.
     For each batch in the training set this function performs both

@@ -1,14 +1,12 @@
 import copy
-from typing import Dict
 
 import torch
 
 from components.logs.levels.error_logger import error
 
 
-def copy_model_state_dict(model: torch.nn.Module) -> Dict[str, torch.Tensor]:
-    """
-    Copy state dictionary of a PyTorch model.
+def copy_model_state_dict(model: torch.nn.Module) -> dict[str, torch.Tensor]:
+    """Copy state dictionary of a PyTorch model.
 
     This function creates a copy of the given model's state dictionary.
     It ensures that changes to the copied dictionary do not affect the
@@ -18,7 +16,7 @@ def copy_model_state_dict(model: torch.nn.Module) -> Dict[str, torch.Tensor]:
         model (torch.nn.Module): PyTorch model.
 
     Returns:
-        Dict[str, torch.Tensor]: Copy of the model's state dictionary.
+        dict[str, torch.Tensor]: Copy of the model's state dictionary.
 
     Raises:
         RuntimeError: If copying the model state dictionary fails:

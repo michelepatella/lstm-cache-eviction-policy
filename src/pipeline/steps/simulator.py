@@ -1,13 +1,12 @@
-import dagshub
-import numpy as np
 import os
 
+import dagshub
+import numpy as np
 from dotenv import load_dotenv
 
 from components.caches.implementations.fifo_cache import FIFOCache
 from components.caches.implementations.lfu_cache import LFUCache
 from components.caches.implementations.lru_cache import LRUCache
-from components.caches.implementations.lstm_cache import LSTMCache
 from components.caches.implementations.random_cache import RandomCache
 from components.caches.simulations.runner import (
     run_cache_simulation,
@@ -46,16 +45,15 @@ from pipeline.const import (
     SIMULATIONS_METRICS_MISS_RATE_NAME,
 )
 from src.const import (
-    CACHE_LSTM_NAME,
     DAGS_HUB_MLFLOW_ENABLED,
+    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
+    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
     DATA_DISTRIBUTION_STATIC_MODE,
     MLFLOW_NESTED_ENABLED,
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
     SIMULATIONS_METRICS_POLICY_NAME,
     SIMULATIONS_METRICS_TIMELINE_NAME,
-    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
-    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
 )
 
 # Load env variables
@@ -65,8 +63,7 @@ dags_hub_repo_name = os.getenv(DAGS_HUB_REPO_NAME_ENV_VAR_NAME)
 
 
 def run_simulations() -> None:
-    """
-    Run cache simulations for multiple cache eviction policies.
+    """Run cache simulations for multiple cache eviction policies.
 
     This function executes a complete cache simulations workflow
     across different cache eviction strategies. For each policy,
@@ -88,9 +85,9 @@ def run_simulations() -> None:
     import mlflow
 
     with mlflow.start_run(
-        run_name=LOGS_SIMULATIONS_PHASE, nested=MLFLOW_NESTED_ENABLED
+        run_name=LOGS_SIMULATIONS_PHASE,
+        nested=MLFLOW_NESTED_ENABLED,
     ):
-
         # Setup
         config = prepare_config()
 
@@ -206,7 +203,7 @@ def run_simulations() -> None:
                         "latency_max": max(cache_latencies),
                         "latency_avg": avg_cache_latency,
                         "latency_std": np.std(cache_latencies),
-                    }
+                    },
                 )
 
         # Determine results and plot file path according

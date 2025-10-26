@@ -5,8 +5,7 @@ from components.logs.levels.error_logger import error
 
 
 def calculate_zipf_probs(items: np.ndarray, alpha: float) -> np.ndarray:
-    """
-    Calculate Zipf probabilities for the items.
+    """Calculate Zipf probabilities for the items.
 
     This function calculates the Zipf probabilities for all the
     given items, using alpha as Zipf parameter. The resulting

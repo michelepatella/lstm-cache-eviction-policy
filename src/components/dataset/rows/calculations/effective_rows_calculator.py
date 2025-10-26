@@ -1,12 +1,10 @@
 import pandas as pd
 
-from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
 def calculate_effective_dataset_rows(df: pd.DataFrame, seq_len: int) -> int:
-    """
-    Calculate effective dataset rows.
+    """Calculate effective dataset rows.
 
     This function calculates and returns the effective dataset
     rows, with respect to the sequence length provided.

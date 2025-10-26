@@ -4,8 +4,7 @@ from components.logs.levels.error_logger import error
 
 
 def calculate_cache_size(data: Any) -> int:
-    """
-    Get the number of items currently in a cache.
+    """Get the number of items currently in a cache.
 
     This function returns the number of items currently stored in
     the provided cache data structure.
@@ -18,7 +17,8 @@ def calculate_cache_size(data: Any) -> int:
 
     Raises:
         RuntimeError: If accessing the cache size fails:
-            * The cache data structure is uninitialized or invalid (AttributeError).
+            * The cache data structure is uninitialized or invalid
+             (AttributeError).
             * The cache data structure does not support the method
               to calculate its size (TypeError).
     """

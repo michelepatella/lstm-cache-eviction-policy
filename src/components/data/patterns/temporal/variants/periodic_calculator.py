@@ -9,8 +9,7 @@ def calculate_periodic_component(
     amplitude: int,
     current_hour_in_day: float,
 ) -> float:
-    """
-    Calculate the periodic component given periodic scale and
+    """Calculate the periodic component given periodic scale and
     amplitude, as well as current hour in day.
 
     This function calculates a periodic component for current hour
@@ -30,12 +29,13 @@ def calculate_periodic_component(
         RuntimeError: If calculating the periodic component fails:
             * Invalid numeric types for scale, amplitude, or current hour
               (TypeError).
-            * Invalid numeric values causing math computation errors (ValueError).
+            * Invalid numeric values causing math computation errors
+              (ValueError).
     """
     try:
         # Calculate the periodic component
         periodic_component = scale + amplitude * np.cos(
-            2 * np.pi * (current_hour_in_day / TIME_HOURS_IN_DAY)
+            2 * np.pi * (current_hour_in_day / TIME_HOURS_IN_DAY),
         )
 
         return periodic_component

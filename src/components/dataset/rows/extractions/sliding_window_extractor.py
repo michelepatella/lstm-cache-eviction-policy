@@ -1,5 +1,3 @@
-from typing import Optional
-
 import pandas as pd
 
 from components.logs.levels.debug_logger import debug
@@ -7,10 +5,11 @@ from components.logs.levels.error_logger import error
 
 
 def extract_sliding_window_dataset_rows(
-    df: pd.DataFrame, idx: int, window_size: int
-) -> Optional[pd.DataFrame]:
-    """
-    Extract a sliding window of rows from a dataset.
+    df: pd.DataFrame,
+    idx: int,
+    window_size: int,
+) -> pd.DataFrame | None:
+    """Extract a sliding window of rows from a dataset.
 
     This function extracts a sliding window of rows from a
     provided dataset, given a specific window size.
@@ -21,7 +20,8 @@ def extract_sliding_window_dataset_rows(
         window_size (int): Number of rows to extract.
 
     Returns:
-        Optional[pd.DataFrame]: The extracted window, or None if not enough rows.
+        pd.DataFrame | None: The extracted window, or None if
+                             not enough rows.
 
     Raises:
         RuntimeError: If sliding window extraction from dataset fails:
