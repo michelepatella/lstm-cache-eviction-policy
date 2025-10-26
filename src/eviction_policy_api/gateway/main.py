@@ -6,8 +6,8 @@ from components.json.io.loader import load_json
 from eviction_policy_api.const import (
     API_CONFIG_FILE_PATH,
     API_GATEWAY_ENDPOINT,
-    AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT,
-    AUTOREGRESSIVE_ROLLOUT_SERVICE_PARAMS,
+    PREDICTOR_SERVICE_ENDPOINT,
+    PREDICTOR_SERVICE_PARAMS,
 )
 from eviction_policy_api.gateway.kwargs.builder import (
     build_api_kwargs,
@@ -37,7 +37,7 @@ def evict_key(
     api_kwargs = build_api_kwargs(default_kwargs, user_kwargs)
 
     # Prepare params for autoregressive rollout service
-    autoregressive_rollout_params = Box(AUTOREGRESSIVE_ROLLOUT_SERVICE_PARAMS)
+    autoregressive_rollout_params = Box(PREDICTOR_SERVICE_PARAMS)
     autoregressive_rollout_params.last_accesses = last_accesses
     autoregressive_rollout_params.model_path = api_config.model.path
     autoregressive_rollout_params.model_params = api_config.model.params
@@ -58,7 +58,7 @@ def evict_key(
 
     # Call autoregressive rollout service
     autoregressive_rollout_response = requests.post(
-        AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT,
+        PREDICTOR_SERVICE_ENDPOINT,
         json=autoregressive_rollout_params.to_dict(),
     )
     autoregressive_rollout_response.raise_for_status()

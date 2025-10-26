@@ -4,14 +4,12 @@ from pathlib import Path
 # Project
 # ----------------------------
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-API_DIRECTORY = PROJECT_ROOT / "eviction_policy_api"
 
 
 # ----------------------------
 # Configuration
 # ----------------------------
-API_CONFIG_FILE_NAME = "meta_config.json"
-API_CONFIG_FILE_PATH = PROJECT_ROOT / API_CONFIG_FILE_NAME
+API_CONFIG_FILE_PATH = PROJECT_ROOT / "meta_config.json"
 
 
 # ----------------------------
@@ -64,11 +62,11 @@ API_GATEWAY_ENDPOINT = "/evict"
 
 
 # ----------------------------
-# Autoregressive Rollout
+# Predictor service
 # ----------------------------
-AUTOREGRESSIVE_ROLLOUT_SERVICE_ENDPOINT = "/autoregressive_rollout"
+PREDICTOR_SERVICE_ENDPOINT = "/predictor"
 
-AUTOREGRESSIVE_ROLLOUT_SERVICE_PARAMS = {
+PREDICTOR_SERVICE_PARAMS = {
     "last_accesses": None,
     "model_path": None,
     "model_params": None,
@@ -81,3 +79,6 @@ AUTOREGRESSIVE_ROLLOUT_SERVICE_PARAMS = {
     "mc_dropout_samples": None,
     "time_step_increment": None,
 }
+
+PREDICTOR_SERVICE_RETURN_OUTPUTS_NAME = "outputs"
+PREDICTOR_SERVICE_RETURN_VARIANCES_NAME = "variances"
