@@ -31,7 +31,7 @@ deps_update:
 
 
 # -------------------------------
-# DVC / VC
+# DVC
 # -------------------------------
 
 # View tracked file by DVC
@@ -56,7 +56,7 @@ dvc_pipeline_run:
 	dvc push
 	git push
 
-# Run a specific pipeline stage
+# Run a specific DVC pipeline stage
 dvc_pipeline_stage_run:
 	dvc repro $(STAGE_NAME)
 	git add $(VC_COMMIT_DVC_TARGET_DIRECTORY_PATTERNS) .gitignore
@@ -74,7 +74,7 @@ dvc_pipeline_run_force:
 	dvc push
 	git push
 
-# Run a specific pipeline stage (Force)
+# Run a specific DVC pipeline stage (Force)
 dvc_pipeline_stage_run_force:
 	dvc repro $(STAGE_NAME) --force
 	git add $(VC_COMMIT_DVC_TARGET_DIRECTORY_PATTERNS) .gitignore
