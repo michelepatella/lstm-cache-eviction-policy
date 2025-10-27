@@ -1,3 +1,4 @@
+import json
 from typing import Any
 
 from components.logs.levels.debug_logger import debug
@@ -63,7 +64,9 @@ def merge_dicts(
                     "Key to value merged",
                     extra={
                         "key": key,
-                        "value": value,
+                        "value": json.dumps(value, default=str)
+                        if isinstance(value, (dict, list))
+                        else value,
                         "context": "Dictionaries merging",
                     },
                 )

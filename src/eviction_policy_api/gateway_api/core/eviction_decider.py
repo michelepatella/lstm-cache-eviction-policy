@@ -65,7 +65,8 @@ def decide_eviction(
         # up the last ones
         num_evictions = min(api_kwargs.num_evictions, len(candidate_keys))
         sorted_candidate_keys = sorted(
-            candidate_keys, key=lambda k: candidate_keys[k],
+            candidate_keys,
+            key=lambda k: candidate_keys[k],
         )
         keys_to_evict = sorted_candidate_keys[:num_evictions]
 

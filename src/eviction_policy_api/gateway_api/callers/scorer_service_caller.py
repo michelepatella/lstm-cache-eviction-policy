@@ -74,7 +74,8 @@ def call_scorer_service(
 
         # Call scorer service and box the response
         response = requests.post(
-            SCORER_SERVICE_ENDPOINT, json=params.to_dict(),
+            SCORER_SERVICE_ENDPOINT,
+            json=params.to_dict(),
         )
         response.raise_for_status()
         data = Box(response.json())

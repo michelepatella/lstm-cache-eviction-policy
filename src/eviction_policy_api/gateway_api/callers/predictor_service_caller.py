@@ -99,7 +99,8 @@ def call_predictor_service(
 
         # Call predictor service and box the response
         response = requests.post(
-            PREDICTOR_SERVICE_ENDPOINT, json=params.to_dict(),
+            PREDICTOR_SERVICE_ENDPOINT,
+            json=params.to_dict(),
         )
         response.raise_for_status()
         data = Box(response.json())
