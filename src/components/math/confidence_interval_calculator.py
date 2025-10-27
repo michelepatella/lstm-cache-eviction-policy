@@ -21,6 +21,11 @@ def calculate_confidence_interval(
                                         to each output.
         confidence_level (float): Confidence level.
 
+    Returns:
+        tuple[torch.Tensor, torch.Tensor]:
+        - lower_ci: Lower boundary of the confidence interval.
+        - upper_ci: Upper boundary of the confidence interval.
+
     Raises:
         RuntimeError: If calculation of confidence intervals fails:
             * If outputs or variances are not valid lists of torch.Tensor

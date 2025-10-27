@@ -184,7 +184,7 @@ def generate_access_pattern(
             msg,
             extra={
                 "exception": str(e),
-                "zipf_probs_len": (
+                "zipf_probs_num": (
                     len(zipf_probs) if zipf_probs is not None else None
                 ),
                 "keys_range_len": (

@@ -1,6 +1,8 @@
 from fastapi import HTTPException, status
 
-from eviction_policy_api.gateway.kwargs.classes.APIKwargs import APIKwargs
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
+from eviction_policy_api.kwargs.APIKwargs import APIKwargs
 
 
 def build_api_kwargs(
@@ -24,14 +26,25 @@ def build_api_kwargs(
         APIKwargs: Instance containing the final API kwargs.
 
     Raises:
-        HTTPException: If an error occurs during kwargs building, e.g.:
-            * If default kwargs are missing or malformed.
+        HTTPException: If kwargs building fails:
+            * If default kwargs are missing or malformed (KeyError).
             * If merging with user kwargs fails due to
-              invalid value.
+              invalid value (ValueError).
             * If merging with user kwargs fails due to type
-              or structure issues.
+              or structure issues (TypeError).
     """
     try:
+        debug(
+            "API kwargs building started",
+            extra={
+                "api_kwargs_default": list(default_kwargs.keys()),
+                "api_kwargs_user": list(user_kwargs.keys())
+                if user_kwargs
+                else None,
+                "context": "API kwargs building",
+            },
+        )
+
         # If the user provided kwargs, merge
         # them with default ones, checking their
         # validity before
@@ -45,19 +58,28 @@ def build_api_kwargs(
         # Instantiate API kwargs object
         api_kwargs = APIKwargs(**merged_kwargs)
 
+        debug(
+            "API kwargs building completed",
+            extra={
+                "api_kwargs_final": list(merged_kwargs.keys()),
+                "context": "API kwargs building",
+            },
+        )
+
         return api_kwargs
-    except TypeError as e:
+    except (TypeError, ValueError, KeyError) as e:
+        error(
+            "API kwargs building failed",
+            extra={
+                "exception": str(e),
+                "api_kwargs_default": list(default_kwargs.keys()),
+                "api_kwargs_user": list(user_kwargs.keys())
+                if user_kwargs
+                else None,
+                "context": "API kwargs building",
+            },
+        )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Invalid type or structure in API kwargs",
-        ) from e
-    except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Invalid value in API kwargs",
-        ) from e
-    except KeyError as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Missing expected key in API kwargs",
+            detail=str(e),
         ) from e

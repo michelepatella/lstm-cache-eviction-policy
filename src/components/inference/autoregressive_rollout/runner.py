@@ -118,10 +118,10 @@ def compute_autoregressive_rollout(
 
             # Save outputs and variances
             all_outputs.append(
-                outputs_mean.squeeze(dim=TENSOR_OUTPUTS_BATCH_DIM)
+                outputs_mean.squeeze(dim=TENSOR_OUTPUTS_BATCH_DIM),
             )
             all_variances.append(
-                outputs_variance.squeeze(dim=TENSOR_OUTPUTS_BATCH_DIM)
+                outputs_variance.squeeze(dim=TENSOR_OUTPUTS_BATCH_DIM),
             )
 
             # Update the sequence of keys by appending
@@ -133,16 +133,18 @@ def compute_autoregressive_rollout(
             # a time step increment simulating passing of time,
             # resulting in new features for the next rollout step
             new_sin_time, new_cos_time = encode_time_trigonometrically(
-                np.array([last_time + time_step_increment])
+                np.array([last_time + time_step_increment]),
             )
             new_features = torch.tensor(
-                [[new_sin_time[0], new_cos_time[0]]], device=device
+                [[new_sin_time[0], new_cos_time[0]]],
+                device=device,
             ).unsqueeze(0)
 
             # Update the sequence of features by appending
             # the new features
             features_seq = torch.cat(
-                [features_seq[:, 1:, :], new_features], dim=TENSOR_TEMPORAL_DIM
+                [features_seq[:, 1:, :], new_features],
+                dim=TENSOR_TEMPORAL_DIM,
             )
 
         debug(

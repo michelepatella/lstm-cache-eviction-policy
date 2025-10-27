@@ -64,7 +64,7 @@ def generate_memory_fallback_pattern(
                 "memory_interval": memory_interval,
                 "memory_offset": memory_offset,
                 "requests_count": requests_count,
-                "requests_len": len(requests) if requests else 0,
+                "requests_num": len(requests) if requests else 0,
                 "keys_range_len": (
                     len(keys_range) if keys_range is not None else 0
                 ),

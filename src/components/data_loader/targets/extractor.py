@@ -7,7 +7,8 @@ from components.logs.levels.error_logger import error
 
 
 def extract_targets_from_data_loader(
-    data_loader: DataLoader, target_idx: int = DATASET_TARGET_COLUMN_IDX
+    data_loader: DataLoader,
+    target_idx: int = DATASET_TARGET_COLUMN_IDX,
 ) -> torch.Tensor:
     """Extract all target tensors from a data loader.
 

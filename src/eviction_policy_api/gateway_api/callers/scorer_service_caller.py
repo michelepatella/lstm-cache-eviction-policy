@@ -1,0 +1,106 @@
+import numpy as np
+import requests
+import torch
+from box import Box
+from fastapi import HTTPException, status
+
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
+from eviction_policy_api.const import (
+    SCORER_SERVICE_ENDPOINT,
+    SCORER_SERVICE_PARAMS,
+    SCORER_SERVICE_RETURN_CONF_MATRIX_NAME,
+    SCORER_SERVICE_RETURN_KEY_SCORES_NAME,
+    SCORER_SERVICE_RETURN_PROB_MATRIX_NAME,
+    SCORER_SERVICE_OUTPUTS_PARAM_NAME,
+    SCORER_SERVICE_VARIANCES_PARAM_NAME,
+    SCORER_SERVICE_CONFIDENCE_LEVEL_PARAM_NAME,
+    SCORER_SERVICE_PROB_WEIGHT_PARAM_NAME,
+    SCORER_SERVICE_CONF_WEIGHT_PARAM_NAME,
+)
+from eviction_policy_api.kwargs.APIKwargs import APIKwargs
+
+
+def call_scorer_service(
+    outputs: list[torch.Tensor], variances: list[torch.Tensor], api_kwargs: APIKwargs,
+) -> tuple[dict[int, float], np.ndarray, np.ndarray]:
+    """
+    Call scorer service.
+
+    This function sends predicted outputs and variances
+    to the scorer service, which calculates key scores
+    based on probabilities and prediction confidence. It
+    returns the key scores along with probability and
+    confidence matrices.
+
+    Args:
+        outputs (list[torch.Tensor]): Predicted outputs from the
+                                      predictor service.
+        variances (list[torch.Tensor]): Corresponding variances for
+                                        predicted outputs.
+        api_kwargs (APIKwargs): API kwargs.
+
+    Returns:
+        tuple[dict[int, float], np.ndarray, np.ndarray]:
+            - key_scores: Mapping from key index to normalized score.
+            - prob_matrix: Probability matrix used for scoring.
+            - conf_matrix: Confidence matrix used for scoring.
+
+    Raises:
+        HTTPException: If scorer service call fails:
+            * Network or connection issues (requests.RequestException).
+            * Response parsing fails (ValueError, KeyError).
+            * Returned data does not contain expected fields (KeyError).
+    """
+    try:
+        # Prepare parameters for scorer service
+        params = Box(SCORER_SERVICE_PARAMS)
+        params[SCORER_SERVICE_OUTPUTS_PARAM_NAME] = outputs
+        params[SCORER_SERVICE_VARIANCES_PARAM_NAME] = variances
+        params[SCORER_SERVICE_CONFIDENCE_LEVEL_PARAM_NAME] = api_kwargs.confidence_level
+        params[SCORER_SERVICE_PROB_WEIGHT_PARAM_NAME] = api_kwargs.prob_weight
+        params[SCORER_SERVICE_CONF_WEIGHT_PARAM_NAME] = api_kwargs.conf_weight
+
+        debug(
+            "Scorer service call started",
+            extra={
+                "params": params.to_dict(),
+                "context": "Scorer service",
+            },
+        )
+
+        # Call scorer service and box the response
+        response = requests.post(SCORER_SERVICE_ENDPOINT, json=params.to_dict())
+        response.raise_for_status()
+        data = Box(response.json())
+
+        # Extract service responses
+        key_scores = data.get(SCORER_SERVICE_RETURN_KEY_SCORES_NAME)
+        prob_matrix = data.get(SCORER_SERVICE_RETURN_PROB_MATRIX_NAME)
+        conf_matrix = data.get(SCORER_SERVICE_RETURN_CONF_MATRIX_NAME)
+
+        debug(
+            "Scorer service call completed",
+            extra={
+                "key_scores_num": len(key_scores) if key_scores else 0,
+                "prob_matrix_shape": prob_matrix.shape if prob_matrix is not None else None,
+                "conf_matrix_shape": conf_matrix.shape if conf_matrix is not None else None,
+                "context": "Scorer service",
+            },
+        )
+
+        return key_scores, prob_matrix, conf_matrix
+    except (requests.RequestException, ValueError, KeyError) as e:
+        error(
+            "Scorer service call failed",
+            extra={
+                "exception": str(e),
+                "outputs_num": len(outputs),
+                "variances_num": len(variances),
+                "context": "Scorer service",
+            },
+        )
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(e),
+        ) from e

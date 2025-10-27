@@ -87,7 +87,8 @@ def compute_mc_dropout_forward(
 
         # Concatenate outputs as a tensor
         all_outputs_tensor = torch.cat(
-            all_outputs, dim=TENSOR_OUTPUTS_BATCH_DIM
+            all_outputs,
+            dim=TENSOR_OUTPUTS_BATCH_DIM,
         )
         # Calculate outputs mean
         outputs_mean = all_outputs_tensor.mean(dim=TENSOR_OUTPUTS_BATCH_DIM)

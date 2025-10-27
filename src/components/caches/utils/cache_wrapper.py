@@ -19,8 +19,6 @@ class CacheWrapper(BaseCache):
         ttl (float): Time-to-Live for cache entries.
         store (Dict[int, Any]): Storage for cache items if cache object
                                 is None.
-        scores (Optional[Dict[int, float]]): Dictionary to store scores
-                                             associated with keys.
         _last_put_time (Optional[float]): Timestamp of the last insertion
                                           operation.
     """

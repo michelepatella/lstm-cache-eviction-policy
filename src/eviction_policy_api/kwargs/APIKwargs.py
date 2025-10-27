@@ -1,11 +1,12 @@
+from fastapi import HTTPException, status
 from pydantic import BaseModel, confloat, conint, model_validator
 
 from components.assertions.choice_field_assertor import assert_choice_field
+from components.logs.levels.error_logger import error
 from eviction_policy_api.const import (
     MAX_MC_DROPOUT_SAMPLES,
     MAX_ROLLOUT_HORIZON,
     MAX_TIME_STEP_INCREMENT,
-    TIEBREAK_STRATEGIES,
 )
 
 
@@ -25,11 +26,9 @@ class APIKwargs(BaseModel):
         time_step_increment (float): Time step increment in hours for feature
                                      progression (in (0, MAX_TIME_STEP_INCREMENT]).
         num_evictions (int): Number of keys to evict in the current step (> 0).
-        exclude_keys (List[int]): List of keys that should not be evicted.
+        excluded_keys (List[int]): List of keys that should not be evicted.
         prob_weight (float): Weight applied to probability in key scoring (in (0.0, 1.0]).
         conf_weight (float): Weight applied to confidence in key scoring (in (0.0, 1.0]).
-        tiebreak_strategy (str): Strategy to resolve ties when multiple
-                                 keys have equal scores.
         return_all_scores (bool): If True, API returns the score for every key.
         return_prob_conf (bool): If True, API returns the probability and confidence
                                  matrices used to calculate scores.
@@ -40,33 +39,8 @@ class APIKwargs(BaseModel):
     confidence_level: confloat(gt=0.0, le=1.0)
     time_step_increment: confloat(gt=0, le=MAX_TIME_STEP_INCREMENT)
     num_evictions: conint(gt=0)
-    exclude_keys: list[int]
+    excluded_keys: list[int]
     prob_weight: confloat(gt=0.0, le=1.0)
     conf_weight: confloat(gt=0.0, le=1.0)
-    tiebreak_strategy: str
     return_all_scores: bool
     return_prob_conf: bool
-
-    @model_validator(mode="after")
-    def check_tiebreak_strategy(
-        self: "APIKwargs",
-    ) -> "APIKwargs":
-        """Check whether tiebreak strategy is valid.
-
-        This function validates the tiebreak strategy
-        field of the API kwargs, ensuring its value
-        is among the allowed strategies.
-
-        Args:
-            self ("APIKwargs"): Current model instance.
-
-        Returns:
-            "APIKwargs": Validated model instance.
-        """
-        assert_choice_field(
-            self.tiebreak_strategy,
-            TIEBREAK_STRATEGIES,
-            "APIKwargs.tiebreak_strategy",
-        )
-
-        return self

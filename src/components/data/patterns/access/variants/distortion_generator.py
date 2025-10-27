@@ -95,7 +95,7 @@ def generate_distortion_pattern(
                 "distortion_history": distortion_history,
                 "distortion_correction": distortion_correction,
                 "requests_count": requests_count,
-                "requests_len": len(requests) if requests else 0,
+                "requests_num": len(requests) if requests else 0,
                 "keys_range_len": keys_range_size,
                 "first_key": first_key,
                 "noise_min": noise_min,

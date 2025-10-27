@@ -24,7 +24,6 @@ class BaseCache(ABC):
         metrics_logger (CacheMetricsLogger): Logger for cache events.
         store (dict): Dictionary storing cache keys and values.
         expiry (dict): Dictionary storing expiration time per key.
-        scores (dict): Dictionary storing scores for keys.
         _last_put_time (Optional[float]): Timestamp of the last put operation.
     """
 
@@ -73,7 +72,6 @@ class BaseCache(ABC):
             self.metrics_logger = metrics_logger
             self.store = {}
             self.expiry = {}
-            self.scores = {}
             self._last_put_time = None
 
             debug(
@@ -101,10 +99,6 @@ class BaseCache(ABC):
                     ),
                     "store_initialized": isinstance(
                         getattr(self, "store", None),
-                        dict,
-                    ),
-                    "scores_initialized": isinstance(
-                        getattr(self, "scores", None),
                         dict,
                     ),
                     "metrics_logger_type": type(metrics_logger).__name__,
@@ -201,10 +195,6 @@ class BaseCache(ABC):
                 # Remove TTL
                 self.expiry.pop(k, None)
 
-                # Remove score (if any)
-                if self.scores is not None:
-                    self.scores.pop(k, None)
-
                 # Trace eviction
                 self.metrics_logger.log_eviction(k, current_time)
         except (TypeError, AttributeError) as e:
@@ -225,16 +215,6 @@ class BaseCache(ABC):
                     "expiry_len": (
                         len(self.expiry)
                         if hasattr(self, "expiry") and self.expiry
-                        else 0
-                    ),
-                    "scores_type": (
-                        type(self.scores).__name__
-                        if hasattr(self, "scores")
-                        else None
-                    ),
-                    "scores_len": (
-                        len(self.scores)
-                        if hasattr(self.scores) and self.scores
                         else 0
                     ),
                     "store_type": (

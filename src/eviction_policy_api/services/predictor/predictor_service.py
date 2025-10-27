@@ -78,7 +78,7 @@ def predictor_service(
         info(
             "Predictor service started",
             extra={
-                "last_accesses_len": len(last_accesses),
+                "last_accesses_num": len(last_accesses),
                 "model_path": model_path,
                 "model_params": model_params,
                 "device_type": device_type,
@@ -131,8 +131,8 @@ def predictor_service(
         info(
             "Predictor service completed",
             extra={
-                "outputs_len": len(all_outputs),
-                "variances_len": len(all_variances),
+                "outputs_num": len(all_outputs),
+                "variances_num": len(all_variances),
                 "context": "Predictor service",
             },
         )
@@ -150,7 +150,7 @@ def predictor_service(
             "Predictor service failed",
             extra={
                 "exception": str(e),
-                "last_accesses_len": len(last_accesses),
+                "last_accesses_num": len(last_accesses),
                 "model_path": model_path,
                 "model_params": model_params,
                 "device_type": device_type,

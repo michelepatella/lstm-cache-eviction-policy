@@ -314,7 +314,8 @@ class LSTM(torch.nn.Module):
 
             # Concatenate features with embedded keys
             x = torch.cat(
-                (x_features, embedded_keys), dim=DATASET_TARGET_COLUMN_IDX
+                (x_features, embedded_keys),
+                dim=DATASET_TARGET_COLUMN_IDX,
             )
 
             return x

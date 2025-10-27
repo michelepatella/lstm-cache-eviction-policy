@@ -31,7 +31,7 @@ def calculate_average(values: list[int | float]) -> float | None:
             extra={
                 "exception": str(e),
                 "values_type": type(values).__name__,
-                "values_len": len(values) if values is not None else 0,
+                "values_num": len(values) if values is not None else 0,
                 "context": "Average calculation",
             },
         )

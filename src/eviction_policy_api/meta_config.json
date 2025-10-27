@@ -29,7 +29,6 @@
     "exclude_keys": [],
     "prob_weight": 0.5,
     "conf_weight": 0.5,
-    "tiebreak_strategy": "random",
     "return_all_scores": false,
     "return_prob_conf": false
   }
