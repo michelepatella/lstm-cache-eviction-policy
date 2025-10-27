@@ -37,7 +37,7 @@ def get_model_abs_path(data_distribution_mode: str) -> str:
         "Model absolute path retrieval completed",
         extra={
             "data_distribution_mode": data_distribution_mode,
-            "model_abs_path": model_abs_path,
+            "model_abs_path": str(model_abs_path),
             "context": "Model absolute path retrieval",
         },
     )

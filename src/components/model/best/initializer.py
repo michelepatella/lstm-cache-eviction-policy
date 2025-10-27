@@ -67,7 +67,7 @@ def initialize_best_model(
             "model_type": type(model).__name__,
             "device": str(device),
             "targets_num": len(targets) if targets is not None else None,
-            "model_path": model_path,
+            "model_path": str(model_path),
             "context": "Best model initialization",
         },
     )

@@ -2,6 +2,7 @@ import os
 import tempfile
 
 import dagshub
+import numpy as np
 from dotenv import load_dotenv
 
 from components.data_loader.builder import build_data_loader
@@ -169,7 +170,7 @@ def train_model() -> None:
             {
                 "training_samples_num": len(training_set),
                 "validation_samples_num": len(validation_set),
-                "loss_best_avg": best_avg_loss,
+                "loss_best_avg": None if np.isinf(best_avg_loss) or np.isnan(best_avg_loss) else float(best_avg_loss),
             },
         )
         with (
@@ -189,8 +190,8 @@ def train_model() -> None:
         extra={
             "training_samples_num": len(training_set),
             "validation_samples_num": len(validation_set),
-            "loss_best_avg": best_avg_loss,
-            "model_save_path": model_path,
+            "loss_best_avg": None if np.isinf(best_avg_loss) or np.isnan(best_avg_loss) else float(best_avg_loss),
+            "model_save_path": str(model_path),
             "context": "Training",
         },
     )

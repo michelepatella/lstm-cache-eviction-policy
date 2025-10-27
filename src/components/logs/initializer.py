@@ -1,16 +1,11 @@
 import contextvars
 import logging
-import os
 
 import structlog
-from dotenv import load_dotenv
-from elasticsearch import Elasticsearch
 
 from components.const import (
     LOGS_DEBUG_FILE_PATH,
     LOGS_DEFAULT_PHASE,
-    LOGS_ELASTIC_ENDPOINT_ENV_VAR_NAME,
-    LOGS_ELASTIC_TOKEN_ENV_VAR_NAME,
     LOGS_ERROR_FILE_PATH,
     LOGS_FILE_BACKUP_COUNT,
     LOGS_FILE_BASE_LEVEL,
@@ -25,19 +20,11 @@ from components.logs.handlers.file_handler_builder import (
     build_logs_file_handler,
 )
 
-# Load environment variables
-load_dotenv()
 
 # Contextual variable for logging messages
 logs_phase = contextvars.ContextVar(
     LOGS_PHASE_NAME,
     default=LOGS_DEFAULT_PHASE,
-)
-
-# Configure Elasticsearch
-es = Elasticsearch(
-    hosts=[os.environ.get(LOGS_ELASTIC_ENDPOINT_ENV_VAR_NAME)],
-    api_key=os.environ.get(LOGS_ELASTIC_TOKEN_ENV_VAR_NAME),
 )
 
 

@@ -31,7 +31,7 @@ def save_dataset(
         debug(
             "Dataset saving started",
             extra={
-                "path": path,
+                "path": str(path),
                 "save_index": index,
                 "rows_num": len(df) if hasattr(df, "__len__") else None,
                 "column_num": (
@@ -49,7 +49,7 @@ def save_dataset(
         debug(
             "Dataset saving completed",
             extra={
-                "path": path,
+                "path": str(path),
                 "save_index": index,
                 "rows_num": len(df) if hasattr(df, "__len__") else None,
                 "columns_num": (
@@ -64,7 +64,7 @@ def save_dataset(
             msg,
             extra={
                 "exception": str(e),
-                "path": path,
+                "path": str(path),
                 "save_index": index,
                 "rows_num": len(df) if hasattr(df, "__len__") else None,
                 "columns_num": (

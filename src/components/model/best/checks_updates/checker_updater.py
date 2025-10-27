@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 
 from components.logs.levels.debug_logger import debug
@@ -38,8 +39,9 @@ def check_update_best_model(
         debug(
             "Best model checking/updating started",
             extra={
-                "loss_avg_current": curr_avg_loss,
-                "loss_avg_best": best_avg_loss,
+                "loss_avg_current": None if np.isinf(curr_avg_loss) or np.isnan(curr_avg_loss) else float(
+                    curr_avg_loss),
+                "loss_avg_best": None if np.isinf(best_avg_loss) or np.isnan(best_avg_loss) else float(best_avg_loss),
                 "model_type": type(model).__name__,
                 "context": "Best model checking/updating",
             },
@@ -56,8 +58,8 @@ def check_update_best_model(
         debug(
             "Best model checking/updating completed",
             extra={
-                "loss_avg_current": curr_avg_loss,
-                "loss_avg_best": best_avg_loss,
+                "loss_avg_current": None if np.isinf(curr_avg_loss) or np.isnan(curr_avg_loss) else float(curr_avg_loss),
+                "loss_avg_best": None if np.isinf(best_avg_loss) or np.isnan(best_avg_loss) else float(best_avg_loss),
                 "model_best_updated": best_model_weights is not None,
                 "model_type": type(model).__name__,
                 "context": "Best model checking/updating",
@@ -71,8 +73,8 @@ def check_update_best_model(
             msg,
             extra={
                 "exception": str(e),
-                "loss_avg_current": curr_avg_loss,
-                "loss_avg_best": best_avg_loss,
+                "loss_avg_current": None if np.isinf(curr_avg_loss) or np.isnan(curr_avg_loss) else float(curr_avg_loss),
+                "loss_avg_best": None if np.isinf(best_avg_loss) or np.isnan(best_avg_loss) else float(best_avg_loss),
                 "model_type": type(model).__name__,
                 "context": "Best model checking/updating",
             },

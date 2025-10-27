@@ -1,3 +1,5 @@
+import numpy as np
+
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
@@ -70,7 +72,6 @@ def compute_time_series_cv_folds(
             # Compute single fold and get
             # its average loss
             avg_loss = compute_single_time_series_cv_fold(
-                fold_idx,
                 train_idx,
                 val_idx,
                 training_set,
@@ -88,7 +89,7 @@ def compute_time_series_cv_folds(
         info(
             "Time Series CV completed",
             extra={
-                "loss_avg_final": final_avg_loss,
+                "loss_avg_final": None if np.isinf(final_avg_loss) or np.isnan(final_avg_loss) else float(final_avg_loss),
                 "fold_losses": fold_losses,
                 "folds_completed_num": len(fold_indices),
                 "params": params,

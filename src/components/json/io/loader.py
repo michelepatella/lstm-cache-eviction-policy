@@ -37,7 +37,7 @@ def load_json(
         debug(
             "JSON loading started",
             extra={
-                "path": path,
+                "path": str(path),
                 "wrap_enabled": wrap,
                 "context": "JSON loading",
             },
@@ -51,7 +51,7 @@ def load_json(
         debug(
             "JSON loading completed",
             extra={
-                "path": path,
+                "path": str(path),
                 "keys_num": (
                     len(json_data) if isinstance(json_data, dict) else None
                 ),
@@ -72,7 +72,7 @@ def load_json(
             msg,
             extra={
                 "exception": str(e),
-                "path": path,
+                "path": str(path),
                 "wrap_enabled": wrap,
                 "context": "JSON loading",
             },

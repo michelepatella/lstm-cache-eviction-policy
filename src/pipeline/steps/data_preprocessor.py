@@ -128,8 +128,8 @@ def preprocess_data() -> None:
         "Data preprocessing completed",
         extra={
             "data_distribution_mode": data_distribution_mode,
-            "dataset_raw_save_path": dataset_raw_path,
-            "dataset_processed_save_path": dataset_processed_path,
+            "dataset_raw_save_path": str(dataset_raw_path),
+            "dataset_processed_save_path": str(dataset_processed_path),
             "rows_final_num": len(final_df),
             "columns_final_num": len(final_df.columns),
             "context": "Data preprocessing",

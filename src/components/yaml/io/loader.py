@@ -27,7 +27,7 @@ def load_yaml(path: str) -> dict[str, Any]:
         debug(
             "YAML file loading started",
             extra={
-                "path": path,
+                "path": str(path),
                 "context": "YAML file loading",
             },
         )
@@ -39,7 +39,7 @@ def load_yaml(path: str) -> dict[str, Any]:
         debug(
             "YAML file loading completed",
             extra={
-                "path": path,
+                "path": str(path),
                 "keys_loaded": (
                     list(yaml_file.keys())
                     if isinstance(yaml_file, dict)
@@ -59,7 +59,7 @@ def load_yaml(path: str) -> dict[str, Any]:
             msg,
             extra={
                 "exception": str(e),
-                "path": path,
+                "path": str(path),
                 "context": "YAML file loading",
             },
         )

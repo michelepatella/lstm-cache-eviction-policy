@@ -29,7 +29,7 @@ def save_simulations_metrics(results: list[dict], path: str) -> None:
                 "results_num": (
                     len(results) if isinstance(results, list) else None
                 ),
-                "save_path": path,
+                "save_path": str(path),
                 "context": "Simulations metrics saving",
             },
         )
@@ -51,7 +51,7 @@ def save_simulations_metrics(results: list[dict], path: str) -> None:
             "Simulations metrics saving completed",
             extra={
                 "results_saved_num": len(results_to_save),
-                "save_path": path,
+                "save_path": str(path),
                 "context": "Simulations metrics saving",
             },
         )
@@ -64,7 +64,7 @@ def save_simulations_metrics(results: list[dict], path: str) -> None:
                 "results_num": (
                     len(results) if isinstance(results, list) else None
                 ),
-                "save_path": path,
+                "save_path": str(path),
                 "context": "Simulations metrics saving",
             },
         )

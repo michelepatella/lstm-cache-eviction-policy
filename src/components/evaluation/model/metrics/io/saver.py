@@ -1,3 +1,5 @@
+import numpy as np
+
 from components.const import (
     MODEL_METRICS_ACCURACY_NAME,
     MODEL_METRICS_AVG_LOSS_NAME,
@@ -37,8 +39,8 @@ def save_model_metrics(
             "Model metrics saving started",
             extra={
                 "metrics_num": len(metrics),
-                "loss_avg": avg_loss,
-                "save_path": path,
+                "loss_avg": None if np.isinf(avg_loss) or np.isnan(avg_loss) else float(avg_loss),
+                "save_path": str(path),
                 "context": "Model metrics saving",
             },
         )
@@ -73,7 +75,7 @@ def save_model_metrics(
             extra={
                 "metrics_saved_num": len(metrics_to_save),
                 "metrics_keys": list(metrics_to_save.keys()),
-                "save_path": path,
+                "save_path": str(path),
                 "context": "Model metrics saving",
             },
         )
@@ -84,8 +86,8 @@ def save_model_metrics(
             extra={
                 "exception": str(e),
                 "metrics_num": len(metrics) if metrics else 0,
-                "loss_avg": avg_loss,
-                "save_path": path,
+                "loss_avg": None if np.isinf(avg_loss) or np.isnan(avg_loss) else float(avg_loss),
+                "save_path": str(path),
                 "context": "Model metrics saving",
             },
         )

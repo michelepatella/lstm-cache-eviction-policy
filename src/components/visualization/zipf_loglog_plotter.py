@@ -75,7 +75,7 @@ def plot_zipf_loglog(requests: list[int], save_path: str) -> None:
         debug(
             "Zipf log-log plotted and saved",
             extra={
-                "save_path": save_path,
+                "save_path": str(save_path),
                 "requests_num": len(requests),
                 "keys_num": len(key_counts),
                 "ranks_range": (1, len(ranks)),
@@ -92,7 +92,7 @@ def plot_zipf_loglog(requests: list[int], save_path: str) -> None:
             msg,
             extra={
                 "exception": str(e),
-                "save_path": save_path,
+                "save_path": str(save_path),
                 "requests_num": (
                     len(requests) if isinstance(requests, list) else None
                 ),

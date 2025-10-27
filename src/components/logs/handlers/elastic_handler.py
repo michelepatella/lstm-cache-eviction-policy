@@ -2,16 +2,26 @@ import logging
 import os
 from datetime import datetime, timezone
 
+from dotenv import load_dotenv
+from elasticsearch import Elasticsearch
+
 from components.const import (
     LOGS_ELASTIC_INDEX_NAME_ENV_VAR_NAME,
     LOGS_ELASTIC_LEVEL_FIELD_NAME,
     LOGS_ELASTIC_LOGGER_FIELD_NAME,
     LOGS_ELASTIC_MESSAGE_FIELD_NAME,
     LOGS_ELASTIC_TIMESTAMP_FIELD_NAME,
-    LOGS_STANDARD_ATTRS,
+    LOGS_STANDARD_ATTRS, LOGS_ELASTIC_ENDPOINT_ENV_VAR_NAME, LOGS_ELASTIC_TOKEN_ENV_VAR_NAME,
 )
-from components.logs.initializer import es
 
+# Load environment variables
+load_dotenv()
+
+# Configure Elasticsearch
+es = Elasticsearch(
+    hosts=[os.environ.get(LOGS_ELASTIC_ENDPOINT_ENV_VAR_NAME)],
+    api_key=os.environ.get(LOGS_ELASTIC_TOKEN_ENV_VAR_NAME),
+)
 
 class ElasticHandler(logging.Handler):
     """Logging handler that sends logs to Elasticsearch.

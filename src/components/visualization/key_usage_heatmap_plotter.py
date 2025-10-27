@@ -145,7 +145,7 @@ def plot_key_usage_heatmap(
         debug(
             "Key usage heatmap plotted and saved",
             extra={
-                "save_path": save_path,
+                "save_path": str(save_path),
                 "hours_num": num_hours,
                 "keys_num": num_keys,
                 "requests_num": len(requests),
@@ -160,7 +160,7 @@ def plot_key_usage_heatmap(
             msg,
             extra={
                 "exception": str(e),
-                "save_path": save_path,
+                "save_path": str(save_path),
                 "key_min": min_key,
                 "key_max": max_key,
                 "requests_num": (

@@ -1,6 +1,7 @@
 import os
 
 import dagshub
+import numpy as np
 from box import Box
 from dotenv import load_dotenv
 
@@ -128,7 +129,7 @@ def test_model() -> None:
         mlflow.log_metrics(
             {
                 "testing_samples_num": len(testing_set),
-                "loss_avg": avg_loss,
+                "loss_avg": None if np.isinf(avg_loss) or np.isnan(avg_loss) else float(avg_loss),
                 "accuracy": metrics.class_report.accuracy,
                 "macro_precision": metrics.class_report.macro_avg.precision,
                 "macro_recall": metrics.class_report.macro_avg.recall,
@@ -148,10 +149,10 @@ def test_model() -> None:
         "Testing completed",
         extra={
             "testing_samples_num": len(testing_set),
-            "loss_avg": avg_loss,
+            "loss_avg": None if np.isinf(avg_loss) or np.isnan(avg_loss) else float(avg_loss),
             "accuracy": metrics.class_report.accuracy,
             "top_k_accuracy": metrics.top_k_accuracy,
-            "model_results_save_path": model_results_save_path,
+            "model_results_save_path": str(model_results_save_path),
             "context": "Testing",
         },
     )

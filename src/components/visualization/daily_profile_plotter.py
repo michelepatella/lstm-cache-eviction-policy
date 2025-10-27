@@ -99,7 +99,7 @@ def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
         debug(
             "Daily profile plotted and saved",
             extra={
-                "save_path": save_path,
+                "save_path": str(save_path),
                 "timestamps_num": len(timestamps_hours),
                 "bins_num": num_bins,
                 "bins_size": PLOT_DAILY_PROFILE_BIN_SIZE,
@@ -116,7 +116,7 @@ def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
             msg,
             extra={
                 "exception": str(e),
-                "save_path": save_path,
+                "save_path": str(save_path),
                 "timestamps_num": (
                     len(timestamps_hours)
                     if isinstance(timestamps_hours, np.ndarray)

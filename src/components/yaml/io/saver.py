@@ -28,7 +28,7 @@ def save_yaml(data_dict: dict[str, Any], path: str) -> None:
         debug(
             "YAML saving started",
             extra={
-                "path": path,
+                "path": str(path),
                 "keys_num": (
                     len(data_dict) if isinstance(data_dict, dict) else None
                 ),
@@ -44,7 +44,7 @@ def save_yaml(data_dict: dict[str, Any], path: str) -> None:
         debug(
             "YAML saving completed",
             extra={
-                "path": path,
+                "path": str(path),
                 "keys_num": (
                     len(data_dict) if isinstance(data_dict, dict) else None
                 ),
@@ -57,7 +57,7 @@ def save_yaml(data_dict: dict[str, Any], path: str) -> None:
             msg,
             extra={
                 "exception": str(e),
-                "path": path,
+                "path": str(path),
                 "keys_num": (
                     len(data_dict) if isinstance(data_dict, dict) else None
                 ),

@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from components.caches.implementations.fifo_cache import FIFOCache
 from components.caches.implementations.lfu_cache import LFUCache
 from components.caches.implementations.lru_cache import LRUCache
+from components.caches.implementations.lstm_cache import LSTMCache
 from components.caches.implementations.random_cache import RandomCache
 from components.caches.simulations.runner import (
     run_cache_simulation,
@@ -53,7 +54,7 @@ from src.const import (
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
     SIMULATIONS_METRICS_POLICY_NAME,
-    SIMULATIONS_METRICS_TIMELINE_NAME,
+    SIMULATIONS_METRICS_TIMELINE_NAME, CACHE_LSTM_NAME,
 )
 
 # Load env variables
@@ -117,11 +118,11 @@ def run_simulations() -> None:
                 CacheMetricsLogger(),
                 config,
             ),
-            # CACHE_LSTM_NAME: LSTMCache(
-            #    None,
-            #    CacheMetricsLogger(),
-            #    config,
-            # ),
+            CACHE_LSTM_NAME: LSTMCache(
+                None,
+                CacheMetricsLogger(),
+                config,
+            ),
         }
 
         info(
@@ -258,7 +259,7 @@ def run_simulations() -> None:
                 }
                 for r in results
             ],
-            "results_save_path": results_file_path,
+            "results_save_path": str(results_file_path),
             "plot_save_paths": plot_save_path,
             "context": "Simulations",
         },

@@ -36,7 +36,7 @@ def load_model_state_dict(
         debug(
             "Model state dictionary loading started",
             extra={
-                "path": path,
+                "path": str(path),
                 "model_type": type(model).__name__,
                 "device": str(device),
                 "context": "Model state dictionary loading",
@@ -54,7 +54,7 @@ def load_model_state_dict(
         debug(
             "Model state dictionary loading completed",
             extra={
-                "path": path,
+                "path": str(path),
                 "model_type": type(model).__name__,
                 "params_num": len(list(model.state_dict().keys())),
                 "device": str(device),
@@ -69,7 +69,7 @@ def load_model_state_dict(
             msg,
             extra={
                 "exception": str(e),
-                "path": path,
+                "path": str(path),
                 "model_type": type(model).__name__,
                 "device": str(device),
                 "context": "Model state dictionary loading",

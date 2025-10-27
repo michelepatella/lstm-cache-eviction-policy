@@ -67,7 +67,7 @@ def get_dataset_abs_path(
             extra={
                 "dataset_type": dataset_type,
                 "data_distribution_mode": data_distribution_mode,
-                "dataset_abs_path": dataset_abs_path,
+                "dataset_abs_path": str(dataset_abs_path),
                 "context": "Dataset absolute path retrieval",
             },
         )

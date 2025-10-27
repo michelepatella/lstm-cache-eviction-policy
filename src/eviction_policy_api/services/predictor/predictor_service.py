@@ -79,7 +79,7 @@ def predictor_service(
             "Predictor service started",
             extra={
                 "last_accesses_num": len(last_accesses),
-                "model_path": model_path,
+                "model_path": str(model_path),
                 "model_params": model_params,
                 "device_type": device_type,
                 "key_min": min_key,
@@ -151,7 +151,7 @@ def predictor_service(
             extra={
                 "exception": str(e),
                 "last_accesses_num": len(last_accesses),
-                "model_path": model_path,
+                "model_path": str(model_path),
                 "model_params": model_params,
                 "device_type": device_type,
                 "key_min": min_key,

@@ -27,7 +27,7 @@ def save_model(model: torch.nn.Module, path: str) -> None:
         debug(
             "Model saving started",
             extra={
-                "path": path,
+                "path": str(path),
                 "model_type": type(model).__name__,
                 "context": "Model saving",
             },
@@ -40,7 +40,7 @@ def save_model(model: torch.nn.Module, path: str) -> None:
         debug(
             "Model saving completed",
             extra={
-                "path": path,
+                "path": str(path),
                 "model_type": type(model).__name__,
                 "context": "Model saving",
             },
@@ -51,7 +51,7 @@ def save_model(model: torch.nn.Module, path: str) -> None:
             msg,
             extra={
                 "exception": str(e),
-                "path": path,
+                "path": str(path),
                 "model_type": type(model).__name__,
                 "context": "Model saving",
             },

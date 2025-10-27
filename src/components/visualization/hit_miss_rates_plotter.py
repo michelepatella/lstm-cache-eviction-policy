@@ -123,7 +123,7 @@ def plot_hit_miss_rate(
         debug(
             "Hit/miss rates plotted and saved",
             extra={
-                "save_path": path,
+                "save_path": str(path),
                 "subplots_num": len(PLOT_HIT_MISS_RATES_SUBPLOTS),
                 "results_num": len(results),
                 "policies": [
@@ -138,7 +138,7 @@ def plot_hit_miss_rate(
             msg,
             extra={
                 "exception": str(e),
-                "save_path": path,
+                "save_path": str(path),
                 "subplots_num": len(PLOT_HIT_MISS_RATES_SUBPLOTS),
                 "results_num": (
                     len(results) if isinstance(results, list) else None

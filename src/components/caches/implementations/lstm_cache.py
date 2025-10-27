@@ -2,6 +2,7 @@ import random
 from typing import Any
 
 import requests
+from box import Box
 from torch.utils.data import DataLoader
 
 from components.caches.implementations.utils.base_cache import BaseCache
@@ -164,9 +165,10 @@ class LSTMCache(BaseCache):
                     },
                 )
                 response.raise_for_status()
+                data = Box(response.json())
 
                 # Extract the key from API response
-                key_to_evict = ...
+                key_to_evict = data.keys_to_evict
 
             # Evict key
             self.evict_key(key_to_evict)

@@ -33,9 +33,8 @@ def log(
     Returns:
         None
     """
-    # Retrieve current log phase from
-    # contextual variable if None is passed
-    if log_phase is None:
+    # Retrieve current log phase
+    if not log_phase or log_phase == LOGS_DEFAULT_PHASE:
         log_phase = logs_phase.get()
 
     # Prepare extra section as dictionary

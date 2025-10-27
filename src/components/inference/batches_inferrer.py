@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 from torch.utils.data import DataLoader
 
@@ -106,7 +107,7 @@ def infer_batches(
         debug(
             "Batches inference completed",
             extra={
-                "loss_tot": total_loss,
+                "loss_tot": None if np.isinf(total_loss) or np.isnan(total_loss) else float(total_loss),
                 "predictions_num": len(all_predictions),
                 "targets_num": len(all_targets),
                 "outputs_num": len(all_outputs),

@@ -199,14 +199,14 @@ def generate_data() -> None:
         "Data generation completed",
         extra={
             "data_distribution_mode": data_distribution_mode,
-            "dataset_raw_save_path": dataset_path,
+            "dataset_raw_save_path": str(dataset_path),
             "rows_num": len(df),
             "columns_num": len(df.columns),
             "unique_requests_num": len(set(requests)),
             "plot_save_path": [
-                zipf_log_log_plot_save_path,
-                daily_profile_plot_save_path,
-                key_usage_heatmap_plot_save_path,
+                str(zipf_log_log_plot_save_path),
+                str(daily_profile_plot_save_path),
+                str(key_usage_heatmap_plot_save_path),
             ],
             "context": "Data generation",
         },

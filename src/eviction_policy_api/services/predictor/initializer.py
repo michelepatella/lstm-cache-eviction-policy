@@ -60,7 +60,7 @@ def initialize_predictor_service(
         debug(
             "Predictor service initialization started",
             extra={
-                "model_path": model_path,
+                "model_path": str(model_path),
                 "device_type": device_type,
                 "key_min": min_key,
                 "key_max": max_key,
@@ -92,7 +92,7 @@ def initialize_predictor_service(
         debug(
             "Predictor service initialization completed",
             extra={
-                "model_path": model_path,
+                "model_path": str(model_path),
                 "device_type": device_type,
                 "key_min": min_key,
                 "key_max": max_key,
@@ -109,7 +109,7 @@ def initialize_predictor_service(
             "Predictor service initialization failed",
             extra={
                 "exception": str(e),
-                "model_path": model_path,
+                "model_path": str(model_path),
                 "device_type": device_type,
                 "key_min": min_key,
                 "key_max": max_key,

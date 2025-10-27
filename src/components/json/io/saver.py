@@ -34,7 +34,7 @@ def save_json(
         debug(
             "JSON saving started",
             extra={
-                "path": path,
+                "path": str(path),
                 "json_indent": json_indent,
                 "data_type": type(data_dict).__name__,
                 "items_num": (
@@ -54,7 +54,7 @@ def save_json(
         debug(
             "JSON saving completed",
             extra={
-                "path": path,
+                "path": str(path),
                 "json_indent": json_indent,
                 "data_type": type(data_dict).__name__,
                 "items_num": (
@@ -71,7 +71,7 @@ def save_json(
             msg,
             extra={
                 "exception": str(e),
-                "path": path,
+                "path": str(path),
                 "json_indent": json_indent,
                 "data_type": type(data_dict).__name__,
                 "context": "JSON saving",

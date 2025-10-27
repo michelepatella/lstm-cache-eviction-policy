@@ -27,7 +27,7 @@ def load_dataset(path: str) -> pd.DataFrame:
         debug(
             "Dataset loading started",
             extra={
-                "dataset_path": path,
+                "dataset_path": str(path),
                 "context": "Dataset loading",
             },
         )
@@ -39,7 +39,7 @@ def load_dataset(path: str) -> pd.DataFrame:
         debug(
             "Dataset loading completed",
             extra={
-                "dataset_path": path,
+                "dataset_path": str(path),
                 "rows_num": len(df),
                 "columns_num": len(df.columns),
                 "columns": df.columns.tolist(),
@@ -58,7 +58,7 @@ def load_dataset(path: str) -> pd.DataFrame:
             msg,
             extra={
                 "exception": str(e),
-                "dataset_path": path,
+                "dataset_path": str(path),
                 "context": "Dataset loading",
             },
         )
