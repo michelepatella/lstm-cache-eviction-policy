@@ -54,6 +54,9 @@ LOGS_ELASTIC_MESSAGE_FIELD_NAME = "message"
 
 LOGS_ELASTIC_BULK_SIZE = 1000
 
+LOGS_ELASTIC_ACTIONS_INDEX_NAME = "_index"
+LOGS_ELASTIC_ACTIONS_SOURCE_NAME = "_source"
+
 LOGS_INFO_FILE_PATH = PROJECT_ROOT / "logs" / "info" / "info.log"
 LOGS_DEBUG_FILE_PATH = PROJECT_ROOT / "logs" / "debug" / "debug.log"
 LOGS_ERROR_FILE_PATH = PROJECT_ROOT / "logs" / "error" / "error.log"
