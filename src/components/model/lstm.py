@@ -1,7 +1,11 @@
 import torch
 from torch import nn
 
-from components.const import MC_DROPOUT_DISABLED, MODEL_PARAM_NAMES
+from components.const import (
+    DATASET_TARGET_COLUMN_IDX,
+    MC_DROPOUT_DISABLED,
+    MODEL_PARAM_NAMES,
+)
 from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -309,7 +313,9 @@ class LSTM(torch.nn.Module):
             embedded_keys = self.embedding(x_keys)
 
             # Concatenate features with embedded keys
-            x = torch.cat((x_features, embedded_keys), dim=-1)
+            x = torch.cat(
+                (x_features, embedded_keys), dim=DATASET_TARGET_COLUMN_IDX
+            )
 
             return x
         except (AttributeError, TypeError, RuntimeError) as e:

@@ -1,6 +1,7 @@
 import numpy as np
 from torch.nn.functional import softmax
 
+from components.const import TENSOR_OUTPUTS_BATCH_DIM
 from components.logs.levels.debug_logger import debug
 from eviction_policy_api.key_score_calculator import (
     calculate_key_scores,
@@ -19,7 +20,9 @@ def find_key_candidates(all_outputs, upper_ci, lower_ci):
     # fill the matrices
     for t in range(num_steps):
         # take the probabilities at time step t
-        probs = softmax(all_outputs[t], dim=0).cpu().numpy()
+        probs = (
+            softmax(all_outputs[t], dim=TENSOR_OUTPUTS_BATCH_DIM).cpu().numpy()
+        )
         prob_matrix[t] = probs
 
         # calculate the confidence at time step t

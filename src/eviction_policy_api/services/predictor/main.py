@@ -2,11 +2,16 @@ import numpy as np
 from fastapi import FastAPI, HTTPException, status
 
 from components.dataset.features.seq_builder import build_feature_seq
-from components.inference.autoregressive_rollout.runner import compute_autoregressive_rollout
+from components.inference.autoregressive_rollout.runner import (
+    compute_autoregressive_rollout,
+)
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
-from eviction_policy_api.const import PREDICTOR_SERVICE_ENDPOINT, PREDICTOR_SERVICE_RETURN_OUTPUTS_NAME, \
-    PREDICTOR_SERVICE_RETURN_VARIANCES_NAME
+from eviction_policy_api.const import (
+    PREDICTOR_SERVICE_ENDPOINT,
+    PREDICTOR_SERVICE_RETURN_OUTPUTS_NAME,
+    PREDICTOR_SERVICE_RETURN_VARIANCES_NAME,
+)
 from eviction_policy_api.services.predictor.initializer import (
     initialize_predictor_service,
 )
@@ -16,7 +21,7 @@ app = FastAPI()
 
 @app.post(PREDICTOR_SERVICE_ENDPOINT)
 def predictor_service(
-    last_accesses: list[tuple[int, float]],
+    last_accesses: list[tuple[float, int]],
     model_path: str,
     model_params: dict[str, int | float | bool],
     device_type: str,
@@ -28,8 +33,7 @@ def predictor_service(
     mc_dropout_samples: int,
     time_step_increment: float,
 ) -> dict[str, list[list[float]]]:
-    """
-    Predictor microservice for autoregressive rollout.
+    """Predictor microservice for autoregressive rollout.
 
     This endpoint coordinates the autoregressive rollout service.
     It starts by initializing the predictor model on the specified
@@ -38,7 +42,7 @@ def predictor_service(
     associated variances coming from autoregressive rollout.
 
     Args:
-        last_accesses (list[tuple[int, float]]): List of tuples containing
+        last_accesses (list[tuple[float, int]]): List of tuples containing
                                                  the last accessed keys
                                                  and their corresponding
                                                  timestamps (in hours).
@@ -108,7 +112,7 @@ def predictor_service(
         features_seq, keys_seq = build_feature_seq(
             timestamps,
             keys,
-            device
+            device,
         )
 
         # Run autoregressive rollout and get both
@@ -121,7 +125,7 @@ def predictor_service(
             num_features,
             rollout_horizon,
             mc_dropout_samples,
-            time_step_increment
+            time_step_increment,
         )
 
         info(
@@ -134,8 +138,12 @@ def predictor_service(
         )
 
         return {
-            PREDICTOR_SERVICE_RETURN_OUTPUTS_NAME: [o.tolist() for o in all_outputs],
-            PREDICTOR_SERVICE_RETURN_VARIANCES_NAME: [v.tolist() for v in all_variances],
+            PREDICTOR_SERVICE_RETURN_OUTPUTS_NAME: [
+                o.tolist() for o in all_outputs
+            ],
+            PREDICTOR_SERVICE_RETURN_VARIANCES_NAME: [
+                v.tolist() for v in all_variances
+            ],
         }
     except (TypeError, ValueError, KeyError, RuntimeError) as e:
         error(
