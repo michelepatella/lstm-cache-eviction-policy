@@ -61,7 +61,6 @@ def build_data_loader(
                 ),
                 "batch_size": batch_size,
                 "shuffle": shuffle,
-                "batches_estimated_num": len(data_loader),
                 "context": "Data loader building",
             },
         )
