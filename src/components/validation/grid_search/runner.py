@@ -108,7 +108,9 @@ def compute_grid_search(
                     mlflow.log_params(params)
                     mlflow.log_metrics(
                         {
-                            "loss_avg": None if np.isinf(avg_loss) or np.isnan(avg_loss) else float(avg_loss),
+                            "loss_avg": None
+                            if np.isinf(avg_loss) or np.isnan(avg_loss)
+                            else float(avg_loss),
                             "loss_std": np.std(fold_losses),
                             "loss_min": np.min(fold_losses),
                             "loss_max": np.max(fold_losses),
@@ -122,7 +124,9 @@ def compute_grid_search(
             "Grid search completed",
             extra={
                 "params_best": best_params,
-                "loss_avg_best": None if np.isinf(best_avg_loss) or np.isnan(best_avg_loss) else float(best_avg_loss),
+                "loss_avg_best": None
+                if np.isinf(best_avg_loss) or np.isnan(best_avg_loss)
+                else float(best_avg_loss),
                 "param_combinations_num": len(params_combinations),
                 "context": "Grid search",
             },
@@ -155,7 +159,11 @@ def compute_grid_search(
                     else None
                 ),
                 "loss_avg_best_current": (
-                    None if (not "best_avg_loss" in locals() or np.isinf(best_avg_loss))
+                    None
+                    if (
+                        "best_avg_loss" not in locals()
+                        or np.isinf(best_avg_loss)
+                    )
                     else float(best_avg_loss)
                 ),
                 "context": "Grid search",

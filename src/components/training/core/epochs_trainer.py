@@ -146,7 +146,9 @@ def train_epochs(
         info(
             "Epochs training completed",
             extra={
-                "loss_avg_best": None if np.isinf(best_avg_loss) or np.isnan(best_avg_loss) else float(best_avg_loss),
+                "loss_avg_best": None
+                if np.isinf(best_avg_loss) or np.isnan(best_avg_loss)
+                else float(best_avg_loss),
                 "epochs_run_num": epoch,
                 "early_stop_triggered": es.early_stop,
                 "context": "Epochs training",

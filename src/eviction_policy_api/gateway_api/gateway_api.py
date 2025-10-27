@@ -9,8 +9,8 @@ from eviction_policy_api.const import (
     API_CONFIG_FILE_PATH,
     GATEWAY_API_ENDPOINT,
     GATEWAY_API_RETURN_CONF_MATRIX_NAME,
-    GATEWAY_API_RETURN_KEYS_TO_EVICT_NAME,
     GATEWAY_API_RETURN_KEY_SCORES_NAME,
+    GATEWAY_API_RETURN_KEYS_TO_EVICT_NAME,
     GATEWAY_API_RETURN_PROB_MATRIX_NAME,
 )
 from eviction_policy_api.gateway_api.callers.predictor_service_caller import (
@@ -19,14 +19,14 @@ from eviction_policy_api.gateway_api.callers.predictor_service_caller import (
 from eviction_policy_api.gateway_api.callers.scorer_service_caller import (
     call_scorer_service,
 )
+from eviction_policy_api.gateway_api.core.eviction_decider import (
+    decide_eviction,
+)
 from eviction_policy_api.kwargs.builder import (
     build_api_kwargs,
 )
 from eviction_policy_api.kwargs.default.getter import (
     get_default_kwargs,
-)
-from eviction_policy_api.gateway_api.core.eviction_decider import (
-    decide_eviction,
 )
 
 app = FastAPI()
@@ -41,8 +41,7 @@ def gateway_api(
     last_accesses: list[tuple[float, int]],
     user_kwargs: dict[str, int | float | list[int] | str | bool],
 ) -> dict[str, Any]:
-    """
-    Gateway API endpoint for eviction decision.
+    """Gateway API endpoint for eviction decision.
 
     This endpoint receives the current cache state, last access
     information, and optional user-defined kwargs. It orchestrates
@@ -72,7 +71,9 @@ def gateway_api(
             extra={
                 "keys_in_cache_num": len(keys_in_cache),
                 "last_accesses_num": len(last_accesses),
-                "api_kwargs_user": list(user_kwargs.keys()) if user_kwargs else None,
+                "api_kwargs_user": list(user_kwargs.keys())
+                if user_kwargs
+                else None,
                 "context": "Gateway API",
             },
         )
@@ -88,14 +89,18 @@ def gateway_api(
         # Invoke predictor service to run autoregressive rollout
         # and get outputs and corresponding variances
         outputs, variances = call_predictor_service(
-            last_accesses, api_kwargs, api_config,
+            last_accesses,
+            api_kwargs,
+            api_config,
         )
 
         # Invoke scorer service to calculate key scores
         # based on the probability of being used as well as
         # predictions confidence
         key_scores, prob_matrix, conf_matrix = call_scorer_service(
-            outputs, variances, api_kwargs,
+            outputs,
+            variances,
+            api_kwargs,
         )
 
         # Decide which keys to be evicted
@@ -123,9 +128,15 @@ def gateway_api(
             "Gateway API failed",
             extra={
                 "exception": str(e),
-                "keys_in_cache_num": len(keys_in_cache) if keys_in_cache else 0,
-                "last_accesses_num": len(last_accesses) if last_accesses else 0,
-                "api_kwargs_user": list(user_kwargs.keys()) if user_kwargs else None,
+                "keys_in_cache_num": len(keys_in_cache)
+                if keys_in_cache
+                else 0,
+                "last_accesses_num": len(last_accesses)
+                if last_accesses
+                else 0,
+                "api_kwargs_user": list(user_kwargs.keys())
+                if user_kwargs
+                else None,
                 "context": "Gateway API",
             },
         )

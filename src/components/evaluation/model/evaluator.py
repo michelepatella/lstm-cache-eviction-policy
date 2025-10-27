@@ -95,7 +95,9 @@ def evaluate_model(
     info(
         "Average loss computed",
         extra={
-            "loss_avg": None if np.isinf(avg_loss) or np.isnan(avg_loss) else float(avg_loss),
+            "loss_avg": None
+            if np.isinf(avg_loss) or np.isnan(avg_loss)
+            else float(avg_loss),
             "batches_num": len(data_loader),
             "outputs_num": len(all_outputs),
             "targets_num": len(all_targets),
@@ -121,7 +123,9 @@ def evaluate_model(
     debug(
         "Model evaluation completed",
         extra={
-            "loss_avg": None if np.isinf(avg_loss) or np.isnan(avg_loss) else float(avg_loss),
+            "loss_avg": None
+            if np.isinf(avg_loss) or np.isnan(avg_loss)
+            else float(avg_loss),
             "metrics_computed": metrics is not None,
             "batches_num": len(data_loader),
             "outputs_num": len(all_outputs),

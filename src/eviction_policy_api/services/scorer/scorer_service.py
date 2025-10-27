@@ -13,7 +13,9 @@ from eviction_policy_api.const import (
     SCORER_SERVICE_RETURN_KEY_SCORES_NAME,
     SCORER_SERVICE_RETURN_PROB_MATRIX_NAME,
 )
-from eviction_policy_api.services.scorer.scores.calculator import calculate_key_scores
+from eviction_policy_api.services.scorer.scores.calculator import (
+    calculate_key_scores,
+)
 
 app = FastAPI()
 

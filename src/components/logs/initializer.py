@@ -20,7 +20,6 @@ from components.logs.handlers.file_handler_builder import (
     build_logs_file_handler,
 )
 
-
 # Contextual variable for logging messages
 logs_phase = contextvars.ContextVar(
     LOGS_PHASE_NAME,

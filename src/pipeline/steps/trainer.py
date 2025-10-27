@@ -170,7 +170,9 @@ def train_model() -> None:
             {
                 "training_samples_num": len(training_set),
                 "validation_samples_num": len(validation_set),
-                "loss_best_avg": None if np.isinf(best_avg_loss) or np.isnan(best_avg_loss) else float(best_avg_loss),
+                "loss_best_avg": None
+                if np.isinf(best_avg_loss) or np.isnan(best_avg_loss)
+                else float(best_avg_loss),
             },
         )
         with (
@@ -190,7 +192,9 @@ def train_model() -> None:
         extra={
             "training_samples_num": len(training_set),
             "validation_samples_num": len(validation_set),
-            "loss_best_avg": None if np.isinf(best_avg_loss) or np.isnan(best_avg_loss) else float(best_avg_loss),
+            "loss_best_avg": None
+            if np.isinf(best_avg_loss) or np.isnan(best_avg_loss)
+            else float(best_avg_loss),
             "model_save_path": str(model_path),
             "context": "Training",
         },

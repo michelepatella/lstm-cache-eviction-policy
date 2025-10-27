@@ -89,7 +89,9 @@ def compute_time_series_cv_folds(
         info(
             "Time Series CV completed",
             extra={
-                "loss_avg_final": None if np.isinf(final_avg_loss) or np.isnan(final_avg_loss) else float(final_avg_loss),
+                "loss_avg_final": None
+                if np.isinf(final_avg_loss) or np.isnan(final_avg_loss)
+                else float(final_avg_loss),
                 "fold_losses": fold_losses,
                 "folds_completed_num": len(fold_indices),
                 "params": params,

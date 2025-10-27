@@ -6,12 +6,15 @@ from dotenv import load_dotenv
 from elasticsearch import Elasticsearch
 
 from components.const import (
+    LOGS_ELASTIC_BULK_SIZE,
+    LOGS_ELASTIC_ENDPOINT_ENV_VAR_NAME,
     LOGS_ELASTIC_INDEX_NAME_ENV_VAR_NAME,
     LOGS_ELASTIC_LEVEL_FIELD_NAME,
     LOGS_ELASTIC_LOGGER_FIELD_NAME,
     LOGS_ELASTIC_MESSAGE_FIELD_NAME,
     LOGS_ELASTIC_TIMESTAMP_FIELD_NAME,
-    LOGS_STANDARD_ATTRS, LOGS_ELASTIC_ENDPOINT_ENV_VAR_NAME, LOGS_ELASTIC_TOKEN_ENV_VAR_NAME, LOGS_ELASTIC_BULK_SIZE,
+    LOGS_ELASTIC_TOKEN_ENV_VAR_NAME,
+    LOGS_STANDARD_ATTRS,
 )
 
 # Load environment variables
@@ -22,6 +25,7 @@ es = Elasticsearch(
     hosts=[os.environ.get(LOGS_ELASTIC_ENDPOINT_ENV_VAR_NAME)],
     api_key=os.environ.get(LOGS_ELASTIC_TOKEN_ENV_VAR_NAME),
 )
+
 
 class ElasticHandler(logging.Handler):
     """Logging handler that sends logs to Elasticsearch.
@@ -38,8 +42,7 @@ class ElasticHandler(logging.Handler):
     """
 
     def __init__(self: "ElasticHandler") -> None:
-        """
-        Initializes the ElasticHandler instance.
+        """Initializes the ElasticHandler instance.
 
         This function creates an ElasticHandler instance,
         initializing an internal buffer to accumulate logs
@@ -88,6 +91,6 @@ class ElasticHandler(logging.Handler):
             for d in self.buffer:
                 es.index(
                     index=os.environ.get(LOGS_ELASTIC_INDEX_NAME_ENV_VAR_NAME),
-                    document=d
+                    document=d,
                 )
             self.buffer.clear()

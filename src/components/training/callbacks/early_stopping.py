@@ -66,7 +66,9 @@ class EarlyStopping:
             extra={
                 "patience": self.patience,
                 "delta": self.delta,
-                "loss_avg_best": None if np.isinf(self.best_avg_loss) else float(self.best_avg_loss),
+                "loss_avg_best": None
+                if np.isinf(self.best_avg_loss)
+                else float(self.best_avg_loss),
                 "counter": self.counter,
                 "early_stop_flag": self.early_stop,
                 "context": "EarlyStopping",
@@ -114,7 +116,9 @@ class EarlyStopping:
             debug(
                 "EarlyStopping state updated",
                 extra={
-                    "loss_avg": None if np.isinf(avg_loss) or np.isnan(avg_loss) else float(avg_loss),
+                    "loss_avg": None
+                    if np.isinf(avg_loss) or np.isnan(avg_loss)
+                    else float(avg_loss),
                     "loss_avg_best": self.best_avg_loss,
                     "delta": self.delta,
                     "counter": self.counter,
@@ -129,7 +133,9 @@ class EarlyStopping:
                 msg,
                 extra={
                     "exception": str(e),
-                    "loss_avg": None if np.isinf(avg_loss) or np.isnan(avg_loss) else float(avg_loss),
+                    "loss_avg": None
+                    if np.isinf(avg_loss) or np.isnan(avg_loss)
+                    else float(avg_loss),
                     "loss_avg_best": getattr(self, "best_avg_loss", None),
                     "delta": getattr(self, "delta", None),
                     "counter": getattr(self, "counter", None),

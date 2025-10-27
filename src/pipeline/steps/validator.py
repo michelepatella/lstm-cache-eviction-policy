@@ -95,7 +95,9 @@ def validate_model() -> None:
         mlflow.log_metrics(
             {
                 "training_samples_num": len(training_set),
-                "loss_best_avg": None if np.isinf(best_avg_loss) or np.isnan(best_avg_loss) else float(best_avg_loss),
+                "loss_best_avg": None
+                if np.isinf(best_avg_loss) or np.isnan(best_avg_loss)
+                else float(best_avg_loss),
             },
         )
         mlflow.log_artifact(CONFIG_FILE_PATH)
@@ -104,7 +106,9 @@ def validate_model() -> None:
         "Validation completed",
         extra={
             "training_samples_num": len(training_set),
-            "loss_avg_best": None if np.isinf(best_avg_loss) or np.isnan(best_avg_loss) else float(best_avg_loss),
+            "loss_avg_best": None
+            if np.isinf(best_avg_loss) or np.isnan(best_avg_loss)
+            else float(best_avg_loss),
             "config_save_path": str(CONFIG_FILE_PATH),
             "context": "Validation",
         },

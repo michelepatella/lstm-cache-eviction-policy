@@ -6,10 +6,11 @@ from eviction_policy_api.kwargs.APIKwargs import APIKwargs
 
 
 def decide_eviction(
-    keys_in_cache: list[int], key_scores: dict[int, float], api_kwargs: APIKwargs,
+    keys_in_cache: list[int],
+    key_scores: dict[int, float],
+    api_kwargs: APIKwargs,
 ) -> list[int]:
-    """
-    Decide which keys to evict from cache.
+    """Decide which keys to evict from cache.
 
     This function determines which keys should be evicted
     from the cache based on their associated scores. Lower
@@ -63,7 +64,9 @@ def decide_eviction(
         # reading scores in descending order and picking
         # up the last ones
         num_evictions = min(api_kwargs.num_evictions, len(candidate_keys))
-        sorted_candidate_keys = sorted(candidate_keys, key=lambda k: candidate_keys[k])
+        sorted_candidate_keys = sorted(
+            candidate_keys, key=lambda k: candidate_keys[k],
+        )
         keys_to_evict = sorted_candidate_keys[:num_evictions]
 
         debug(
@@ -81,7 +84,9 @@ def decide_eviction(
             "Eviction decision failed",
             extra={
                 "exception": str(e),
-                "keys_in_cache_num": len(keys_in_cache) if keys_in_cache else 0,
+                "keys_in_cache_num": len(keys_in_cache)
+                if keys_in_cache
+                else 0,
                 "key_scores_num": len(key_scores) if key_scores else 0,
                 "context": "Eviction decision",
             },

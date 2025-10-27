@@ -39,7 +39,9 @@ def save_model_metrics(
             "Model metrics saving started",
             extra={
                 "metrics_num": len(metrics),
-                "loss_avg": None if np.isinf(avg_loss) or np.isnan(avg_loss) else float(avg_loss),
+                "loss_avg": None
+                if np.isinf(avg_loss) or np.isnan(avg_loss)
+                else float(avg_loss),
                 "save_path": str(path),
                 "context": "Model metrics saving",
             },
@@ -86,7 +88,9 @@ def save_model_metrics(
             extra={
                 "exception": str(e),
                 "metrics_num": len(metrics) if metrics else 0,
-                "loss_avg": None if np.isinf(avg_loss) or np.isnan(avg_loss) else float(avg_loss),
+                "loss_avg": None
+                if np.isinf(avg_loss) or np.isnan(avg_loss)
+                else float(avg_loss),
                 "save_path": str(path),
                 "context": "Model metrics saving",
             },

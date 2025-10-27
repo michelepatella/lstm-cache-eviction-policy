@@ -1,8 +1,5 @@
-from fastapi import HTTPException, status
-from pydantic import BaseModel, confloat, conint, model_validator
+from pydantic import BaseModel, confloat, conint
 
-from components.assertions.choice_field_assertor import assert_choice_field
-from components.logs.levels.error_logger import error
 from eviction_policy_api.const import (
     MAX_MC_DROPOUT_SAMPLES,
     MAX_ROLLOUT_HORIZON,
