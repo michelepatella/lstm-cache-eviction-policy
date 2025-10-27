@@ -52,6 +52,8 @@ LOGS_ELASTIC_LEVEL_FIELD_NAME = "level"
 LOGS_ELASTIC_LOGGER_FIELD_NAME = "logger"
 LOGS_ELASTIC_MESSAGE_FIELD_NAME = "message"
 
+LOGS_ELASTIC_BULK_SIZE = 1000
+
 LOGS_INFO_FILE_PATH = PROJECT_ROOT / "logs" / "info" / "info.log"
 LOGS_DEBUG_FILE_PATH = PROJECT_ROOT / "logs" / "debug" / "debug.log"
 LOGS_ERROR_FILE_PATH = PROJECT_ROOT / "logs" / "error" / "error.log"

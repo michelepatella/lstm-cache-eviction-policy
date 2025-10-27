@@ -11,7 +11,7 @@ from components.const import (
     LOGS_ELASTIC_LOGGER_FIELD_NAME,
     LOGS_ELASTIC_MESSAGE_FIELD_NAME,
     LOGS_ELASTIC_TIMESTAMP_FIELD_NAME,
-    LOGS_STANDARD_ATTRS, LOGS_ELASTIC_ENDPOINT_ENV_VAR_NAME, LOGS_ELASTIC_TOKEN_ENV_VAR_NAME,
+    LOGS_STANDARD_ATTRS, LOGS_ELASTIC_ENDPOINT_ENV_VAR_NAME, LOGS_ELASTIC_TOKEN_ENV_VAR_NAME, LOGS_ELASTIC_BULK_SIZE,
 )
 
 # Load environment variables
@@ -28,7 +28,28 @@ class ElasticHandler(logging.Handler):
 
     This handler takes standard log records and indexes them into
     an Elasticsearch index.
+
+    Attributes:
+         buffer (list): Internal list used to temporarily store log
+                        documents before sending them to Elasticsearch.
+                        When the number of logs in the buffer reaches
+                        the bulk size, all documents are indexed
+                        and the buffer is cleared.
     """
+
+    def __init__(self: "ElasticHandler") -> None:
+        """
+        Initializes the ElasticHandler instance.
+
+        This function creates an ElasticHandler instance,
+        initializing an internal buffer to accumulate logs
+        before being sent to Elasticsearch.
+
+        Args:
+            self ("ElasticHandler"): Current class instance.
+        """
+        super().__init__()
+        self.buffer = []
 
     def emit(self: "ElasticHandler", record: logging.LogRecord) -> None:
         """Emit a log record to Elasticsearch.
@@ -57,8 +78,16 @@ class ElasticHandler(logging.Handler):
             },
         }
 
-        # Send doc to Elasticsearch at predefined index
-        es.index(
-            index=os.environ.get(LOGS_ELASTIC_INDEX_NAME_ENV_VAR_NAME),
-            document=doc,
-        )
+        # Append document to buffer
+        self.buffer.append(doc)
+
+        # Each bulk size requests send
+        # all the documents in the buffer
+        # to Elasticsearch
+        if len(self.buffer) >= LOGS_ELASTIC_BULK_SIZE:
+            for d in self.buffer:
+                es.index(
+                    index=os.environ.get(LOGS_ELASTIC_INDEX_NAME_ENV_VAR_NAME),
+                    document=d
+                )
+            self.buffer.clear()
