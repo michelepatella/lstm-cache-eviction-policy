@@ -1,11 +1,14 @@
 import torch
 from torch.utils.data import DataLoader
 
+from components.const import DATASET_TARGET_COLUMN_IDX
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
-def extract_targets_from_data_loader(data_loader: DataLoader) -> torch.Tensor:
+def extract_targets_from_data_loader(
+    data_loader: DataLoader, target_idx: int = DATASET_TARGET_COLUMN_IDX
+) -> torch.Tensor:
     """Extract all target tensors from a data loader.
 
     This function iterates through a data loader and extracts all target
@@ -15,6 +18,7 @@ def extract_targets_from_data_loader(data_loader: DataLoader) -> torch.Tensor:
     Args:
         data_loader (DataLoader): DataLoader instance from which to extract
                                   targets.
+        target_idx (int): The index of the target to extract from batch.
 
     Returns:
         torch.Tensor: Concatenated tensor of all extracted targets.
@@ -41,9 +45,8 @@ def extract_targets_from_data_loader(data_loader: DataLoader) -> torch.Tensor:
         # from data loader
         all_targets = []
         for batch in data_loader:
-            # Assumption: batch is a tuple/list of
-            # tensors, with the target as the last element
-            target = batch[-1]
+            # Extract target from batch
+            target = batch[target_idx]
             all_targets.append(target)
 
         # Concatenate extracted targets

@@ -7,6 +7,7 @@ from components.const import (
     MC_DROPOUT_UNBIASED_VARIANCE_DISABLED,
     MODEL_EVALUATION_MODE,
     MODEL_MC_DROPOUT_MODE,
+    TENSOR_OUTPUTS_BATCH_DIM,
 )
 from components.logs.levels.error_logger import error
 from components.model.mode.setter import set_model_mode
@@ -45,9 +46,9 @@ def compute_mc_dropout_forward(
     Returns:
         tuple[torch.Tensor, torch.Tensor | None]:
             - outputs_mean: Mean of outputs across one or more MC dropout samples.
-            - outputs_var: Variance of outputs across MC dropout samples
-                           (None if the number of MC Dropout samples is set to
-                           default).
+            - outputs_variance: Variance of outputs across MC dropout samples
+                                (None if the number of MC Dropout samples is set to
+                                default).
 
     Raises:
     RuntimeError: If MC Dropout forward pass fails:
@@ -85,21 +86,23 @@ def compute_mc_dropout_forward(
                 all_outputs.append(outputs.unsqueeze(0))
 
         # Concatenate outputs as a tensor
-        all_outputs_tensor = torch.cat(all_outputs, dim=0)
+        all_outputs_tensor = torch.cat(
+            all_outputs, dim=TENSOR_OUTPUTS_BATCH_DIM
+        )
         # Calculate outputs mean
-        outputs_mean = all_outputs_tensor.mean(dim=0)
+        outputs_mean = all_outputs_tensor.mean(dim=TENSOR_OUTPUTS_BATCH_DIM)
 
         # Calculate outputs variance provided that
         # the number of MC dropout sample is greater
         # than the default value
-        outputs_var = None
+        outputs_variance = None
         if num_mc_dropout_samples > MC_DROPOUT_NUM_SAMPLES_DEFAULT:
-            outputs_var = all_outputs_tensor.var(
-                dim=0,
+            outputs_variance = all_outputs_tensor.var(
+                dim=TENSOR_OUTPUTS_BATCH_DIM,
                 unbiased=mc_dropout_unbiased_variance,
             )
 
-        return outputs_mean, outputs_var
+        return outputs_mean, outputs_variance
     except (TypeError, AttributeError, RuntimeError) as e:
         msg = "MC Dropout forward failed"
         error(

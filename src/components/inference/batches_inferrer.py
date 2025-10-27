@@ -59,7 +59,7 @@ def infer_batches(
         debug(
             "Batches inference started",
             extra={
-                "model_name": model.__class__.__name__,
+                "model": type(model).__name__,
                 "device": str(device),
                 "features_num": num_features,
                 "batches_num": (
@@ -128,7 +128,7 @@ def infer_batches(
             msg,
             extra={
                 "exception": str(e),
-                "model_name": model.__class__.__name__,
+                "model": type(model).__name__,
                 "device": str(device),
                 "features_num": num_features,
                 "context": "Batches inference",

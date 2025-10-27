@@ -1,8 +1,10 @@
+from components.const import DATASET_TARGET_COLUMN_IDX
 from components.logs.levels.error_logger import error
 
 
 def extract_features_target_from_dataset_columns(
     columns: list[str],
+    target_column_idx: int = DATASET_TARGET_COLUMN_IDX,
 ) -> tuple[list[str], str]:
     """Extract features and target from dataset columns.
 
@@ -13,6 +15,8 @@ def extract_features_target_from_dataset_columns(
     Args:
         columns (list[str]): List of dataset columns to extract features
                              and target for.
+        target_column_idx (int): The index of the target column in the
+                                 dataset.
 
     Returns:
         tuple[list[str], str]: List of features and target extracted.
@@ -23,8 +27,8 @@ def extract_features_target_from_dataset_columns(
     """
     try:
         # Extract features and target
-        features = columns[:-1]
-        target = columns[-1]
+        features = columns[:target_column_idx]
+        target = columns[target_column_idx]
 
         return features, target
     except IndexError as e:
@@ -35,6 +39,7 @@ def extract_features_target_from_dataset_columns(
                 "exception": str(e),
                 "columns_provided": columns,
                 "num_columns": len(columns) if columns else 0,
+                "target_column_idx": target_column_idx,
                 "context": "Features and target extraction from dataset columns",
             },
         )

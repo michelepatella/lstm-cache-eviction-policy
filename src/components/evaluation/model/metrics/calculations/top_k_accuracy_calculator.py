@@ -1,5 +1,6 @@
 import torch
 
+from components.const import TENSOR_CLASS_DIM, TENSOR_OUTPUTS_BATCH_DIM
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.math.percentage_calculator import calculate_percentage
@@ -31,11 +32,13 @@ def calculate_top_k_accuracy(
     """
     try:
         # Stack outputs in a single 2D tensor
-        outputs_tensor = torch.stack(outputs, dim=0)
+        outputs_tensor = torch.stack(outputs, dim=TENSOR_OUTPUTS_BATCH_DIM)
 
         # Extract top-k predictions along the class dimension
         top_k_predictions = (
-            torch.topk(outputs_tensor, k=top_k, dim=1).indices.cpu().numpy()
+            torch.topk(outputs_tensor, k=top_k, dim=TENSOR_CLASS_DIM)
+            .indices.cpu()
+            .numpy()
         )
 
         # Count correct predictions

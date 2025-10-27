@@ -3,6 +3,7 @@ import torch
 from components.backpropagation.mc_dropout.forward_runner import (
     compute_mc_dropout_forward,
 )
+from components.const import DATASET_TARGET_COLUMN_IDX, TENSOR_CLASS_DIM
 from components.device.mover import move_to_device
 from components.logs.levels.error_logger import error
 from components.loss.calculator import calculate_loss
@@ -14,6 +15,7 @@ def infer_single_batch(
     criterion: torch.nn.Module,
     device: torch.device,
     num_features: int,
+    target_idx: int = DATASET_TARGET_COLUMN_IDX,
 ) -> tuple[
     float,
     list[int],
@@ -35,6 +37,7 @@ def infer_single_batch(
         criterion (torch.nn.Module): Loss function for computing batch loss.
         device (torch.device): Device to run computations on.
         num_features (int): Number of features for the model.
+        target_idx (int): Index of the target to extract from batch.
 
     Returns:
         tuple[
@@ -77,13 +80,18 @@ def infer_single_batch(
         )
 
         # Extract target from batch
-        target = batch[-1]
+        target = batch[target_idx]
 
         # Compute batch loss
         loss = calculate_loss(outputs_mean, target, criterion).item()
 
         # Prepare data to be returned
-        predictions = torch.argmax(outputs_mean, dim=1).cpu().numpy().tolist()
+        predictions = (
+            torch.argmax(outputs_mean, dim=TENSOR_CLASS_DIM)
+            .cpu()
+            .numpy()
+            .tolist()
+        )
         targets = target.cpu().numpy().tolist()
         outputs = [t.cpu() for t in outputs_mean]
         variances = (
@@ -97,7 +105,7 @@ def infer_single_batch(
             msg,
             extra={
                 "exception": str(e),
-                "model_name": model.__class__.__name__,
+                "model": type(model).__name__,
                 "device": str(device),
                 "features_num": num_features,
                 "batch_type": str(type(batch)),

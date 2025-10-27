@@ -80,7 +80,7 @@ def initialize_predictor_service(
             max_key,
             embedding_dim,
             num_features,
-            None
+            None,
         )
 
         # Move model to device
