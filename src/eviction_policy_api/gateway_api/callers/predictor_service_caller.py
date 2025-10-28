@@ -69,10 +69,10 @@ def call_predictor_service(
         )
         params[PREDICTOR_SERVICE_MIN_KEY_PARAM_NAME] = api_config.model[
             "keys"
-        ]["min"]  # To avoid conflicts with Box library
+        ]["min"]  # To avoid conflicts with Box library methods
         params[PREDICTOR_SERVICE_MAX_KEY_PARAM_NAME] = api_config.model[
             "keys"
-        ]["max"]  # To avoid conflicts with Box library
+        ]["max"]  # To avoid conflicts with Box library methods
         params[PREDICTOR_SERVICE_NUM_FEATURES_PARAM_NAME] = (
             api_config.model.num_features
         )

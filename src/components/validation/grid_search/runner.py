@@ -9,9 +9,6 @@ from components.logs.levels.info_logger import info
 from components.model.best.checks_updates.params_checker_updater import (
     check_update_best_model_params,
 )
-from components.validation.search_space.combinator import (
-    get_parameters_combination,
-)
 from components.validation.time_series_cv.core.folds_runner import (
     compute_time_series_cv_folds,
 )
@@ -21,6 +18,7 @@ from src.const import LOGS_VALIDATION_PHASE, MLFLOW_NESTED_ENABLED
 
 def compute_grid_search(
     training_set: AccessLogsDataset,
+    params_combinations: list[dict[str, int | float | bool]],
     config: Config,
 ) -> tuple[dict[str, int | float | bool], float]:
     """Perform grid search to find the best parameters.
@@ -32,6 +30,8 @@ def compute_grid_search(
     Args:
         training_set (AccessLogsDataset): Training dataset to be used in CV
                                           evaluation.
+        params_combinations (list[dict[str, int | float | bool]]):
+            Parameter combinations to be evaluated.
         config (Config): Configuration object.
 
     Returns:
@@ -57,9 +57,6 @@ def compute_grid_search(
     try:
         # Prepare configuration
         cv_num_folds = config.validation.cross_validation.folds
-
-        # Get all parameter combinations
-        params_combinations = get_parameters_combination(config)
 
         info(
             "Grid search started",
