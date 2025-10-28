@@ -1,9 +1,7 @@
 schema: '2.0'
 stages:
   data_generation:
-    cmd: "PYTHONPATH=src python -m pipeline.steps.data_generator &&  PYTHONPATH=src
-      python -c \"from components.logs.handlers.elastic_handler import active_handlers;
-      [h.flush_buffer() for h in active_handlers]\"\n"
+    cmd: PYTHONPATH=src python -m pipeline.steps.data_generator
     deps:
     - path: src/components/assertions/choice_field_assertor.py
       hash: md5
@@ -197,8 +195,8 @@ stages:
       size: 3111
     - path: src/pipeline/steps/data_generator.py
       hash: md5
-      md5: b2a5b4ce5be6aacdac8325b3afb588cb
-      size: 7711
+      md5: 8684653ce30c066566e196bff3f04d42
+      size: 7859
     params:
       src/pipeline/config/config.yaml:
         data.keys.max: 20
@@ -259,9 +257,7 @@ stages:
       md5: b2a38c998be27bda75316a1a9f05b169
       size: 121409
   data_preprocessing:
-    cmd: "PYTHONPATH=src python -m pipeline.steps.data_preprocessor &&  PYTHONPATH=src
-      python -c \"from components.logs.handlers.elastic_handler import active_handlers;
-      [h.flush_buffer() for h in active_handlers]\"\n"
+    cmd: PYTHONPATH=src python -m pipeline.steps.data_preprocessor
     deps:
     - path: data/raw/static/static_raw_dataset.csv
       hash: md5
@@ -401,8 +397,8 @@ stages:
       size: 3111
     - path: src/pipeline/steps/data_preprocessor.py
       hash: md5
-      md5: 8d3d6d030f62e52bb5f1e52826de0672
-      size: 4273
+      md5: 99609e5a8e004059500a84008d256b77
+      size: 4420
     params:
       src/pipeline/config/config.yaml:
         data.mode: static
@@ -412,9 +408,7 @@ stages:
       md5: b7764f905821b4b0453d46b946560087
       size: 4430
   validation:
-    cmd: "PYTHONPATH=src python -m pipeline.steps.validator && PYTHONPATH=src python
-      -c \"from components.logs.handlers.elastic_handler import active_handlers; [h.flush_buffer()
-      for h in active_handlers]\"\n"
+    cmd: PYTHONPATH=src python -m pipeline.steps.validator
     deps:
     - path: data/processed/static/static_processed_dataset.csv
       hash: md5
@@ -739,8 +733,8 @@ stages:
       size: 3111
     - path: src/pipeline/steps/validator.py
       hash: md5
-      md5: 557d8da08bfeab337c6ada4b0bd3667d
-      size: 3600
+      md5: b86a457b190ee732a43a3157510a4eb4
+      size: 3747
     params:
       src/pipeline/config/config.yaml:
         data.keys.max: 20
@@ -789,9 +783,7 @@ stages:
               - 0.001
               - 0.0005
   training:
-    cmd: "PYTHONPATH=src python -m pipeline.steps.trainer && PYTHONPATH=src python
-      -c \"from components.logs.handlers.elastic_handler import active_handlers; [h.flush_buffer()
-      for h in active_handlers]\"\n"
+    cmd: PYTHONPATH=src python -m pipeline.steps.trainer
     deps:
     - path: data/processed/static/static_processed_dataset.csv
       hash: md5
@@ -1076,8 +1068,8 @@ stages:
       size: 3111
     - path: src/pipeline/steps/trainer.py
       hash: md5
-      md5: bcec29754fbde9383ac7dc36bb7d0178
-      size: 6539
+      md5: b6101158c8bce8119facc432a2762747
+      size: 6686
     params:
       src/pipeline/config/config.yaml:
         data.keys.max: 20
@@ -1112,12 +1104,10 @@ stages:
     outs:
     - path: models/static/trained_static_model.pt
       hash: md5
-      md5: 0b5194aa0be99411de95c57970689c04
+      md5: afbc4d68a81bbf0c3a9bdcc2cb5cb8fd
       size: 872442
   testing:
-    cmd: "PYTHONPATH=src python -m pipeline.steps.tester && PYTHONPATH=src python
-      -c \"from components.logs.handlers.elastic_handler import active_handlers; [h.flush_buffer()
-      for h in active_handlers]\"\n"
+    cmd: PYTHONPATH=src python -m pipeline.steps.tester
     deps:
     - path: data/processed/static/static_processed_dataset.csv
       hash: md5
@@ -1125,7 +1115,7 @@ stages:
       size: 4430
     - path: models/static/trained_static_model.pt
       hash: md5
-      md5: 0b5194aa0be99411de95c57970689c04
+      md5: afbc4d68a81bbf0c3a9bdcc2cb5cb8fd
       size: 872442
     - path: src/components/assertions/choice_field_assertor.py
       hash: md5
@@ -1378,8 +1368,8 @@ stages:
       size: 3111
     - path: src/pipeline/steps/tester.py
       hash: md5
-      md5: 49c79cadffd73c47b293b82dd7e3c09a
-      size: 5351
+      md5: 65fa3a78a33bc4748dc781fae935c5c8
+      size: 5498
     params:
       src/pipeline/config/config.yaml:
         data.keys.max: 20
@@ -1404,12 +1394,10 @@ stages:
     outs:
     - path: reports/results/static/static_model_results.json
       hash: md5
-      md5: fcf084bab49c52c05071534c83c552c2
-      size: 501
+      md5: c0665a72c9d3ccddb3df4caebc6f51ae
+      size: 488
   simulations:
-    cmd: "PYTHONPATH=src python -m pipeline.steps.simulator && PYTHONPATH=src python
-      -c \"from components.logs.handlers.elastic_handler import active_handlers; [h.flush_buffer()
-      for h in active_handlers]\"\n"
+    cmd: PYTHONPATH=src python -m pipeline.steps.simulator
     deps:
     - path: data/processed/static/static_processed_dataset.csv
       hash: md5
@@ -1687,8 +1675,8 @@ stages:
       size: 3111
     - path: src/pipeline/steps/simulator.py
       hash: md5
-      md5: b98a03ba497b73e47ea6e787053f077e
-      size: 9487
+      md5: 36a4ee998430abb2f6fece88abe448f0
+      size: 9634
     params:
       src/pipeline/config/config.yaml:
         data.mode: static
@@ -1706,5 +1694,5 @@ stages:
       size: 191088
     - path: reports/results/static/static_simulations_results.json
       hash: md5
-      md5: 029fb6c59ccacb85b70e5f166d82c588
-      size: 1139
+      md5: 3506ed12171a1d3bee10612e809faf94
+      size: 1141
