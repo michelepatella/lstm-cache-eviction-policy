@@ -1,6 +1,6 @@
 data:
   keys:
-    max: 20
+    max: 500
     min: 1
   mode: static
   pattern:
@@ -60,16 +60,14 @@ data:
       periodic:
         amplitude: 50
         scale: 90
-  requests: 110
+  requests: 100000
   seed: 42
 dataset:
   split:
     training: 0.7
     validation: 0.2
-dropout: 0.3
 hardware:
   device: mps
-hidden_size: 256
 model:
   general:
     features: 2
@@ -85,12 +83,9 @@ model:
     embedding:
       dimension: 32
     length: 25
-num_layers: 2
-optimizer:
-  r: 0.0005
 simulations:
   cache:
-    dimension: 5
+    dimension: 100
     ttl: 300
   metrics:
     mistake_rate:
