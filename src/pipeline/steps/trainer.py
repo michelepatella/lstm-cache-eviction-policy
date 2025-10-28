@@ -1,3 +1,4 @@
+import logging
 import os
 import tempfile
 
@@ -14,7 +15,8 @@ from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.dataset.splits.training_validation_splitter import (
     split_training_validation_sets,
 )
-from components.logs.initializer import logs_phase
+from components.logs.handlers.elastic_handler import ElasticHandler
+from components.logs.initializer import logs_phase, initialize_logs
 from components.logs.levels.info_logger import info
 from components.model.environment.initializer import (
     initialize_model_environment,
@@ -67,6 +69,7 @@ def train_model() -> None:
     ):
         # Setup
         config = prepare_config()
+        initialize_logs()
 
         # Prepare configuration
         data_distribution_mode = config.data.mode
@@ -203,3 +206,8 @@ def train_model() -> None:
 
 if __name__ == "__main__":
     train_model()
+
+    # Force logs flush
+    for handler in logging.getLogger().handlers:
+        if isinstance(handler, ElasticHandler):
+            handler.flush_buffer()
