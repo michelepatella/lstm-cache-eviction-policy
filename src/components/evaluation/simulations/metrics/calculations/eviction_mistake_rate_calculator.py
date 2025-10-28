@@ -53,7 +53,7 @@ def calculate_eviction_mistake_rate(
                     for t in access_times
                     if eviction_time < t <= eviction_time + mistake_window
                 ]
-
+                print(eviction_time)
                 # If there is at least one future
                 # access lying within the mistake window
                 if future_accesses:

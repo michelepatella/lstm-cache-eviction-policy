@@ -264,7 +264,7 @@ def run_simulations() -> None:
                 for r in results
             ],
             "results_save_path": str(results_file_path),
-            "plot_save_paths": plot_save_path,
+            "plot_save_paths": str(plot_save_path),
             "context": "Simulations",
         },
     )
