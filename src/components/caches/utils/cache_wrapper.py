@@ -9,20 +9,7 @@ class CacheWrapper(BaseCache):
 
     This class provides a standard cache insertion mechanism
     with TTL (Time-To-Live) management and metrics logging.
-
-    Attributes:
-        cache (Any): Underlying cache instance used for storage.
-        expiry (Dict[int, float]): Stores expiration times for each cached key.
-        metrics_logger (CacheMetricsLogger): Logger for cache events
-                                             (put, get, eviction).
-        maxsize (int): Maximum number of items the cache can hold.
-        ttl (float): Time-to-Live for cache entries.
-        store (Dict[int, Any]): Storage for cache items if cache object
-                                is None.
-        _last_put_time (Optional[float]): Timestamp of the last insertion
-                                          operation.
     """
-
     def put(self: "CacheWrapper", key: Any, current_time: float) -> None:
         """Insert a key into the cache.
 

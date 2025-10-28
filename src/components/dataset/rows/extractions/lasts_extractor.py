@@ -57,7 +57,7 @@ def extract_last_rows_from_dataset(
         )
 
         # Check whether the extracted window is None
-        if window_df is not None:
+        if window_df is None:
             debug(
                 "Insufficient data to extract last rows",
                 extra={

@@ -13,10 +13,10 @@ from src.const import (
 
 def extract_tuple_from_dataset_row(
     row: pd.Series,
-    feature_columns: tuple[str] = (
+    feature_columns: list[str] = [
         DATASET_COS_TIME_COLUMN_NAME,
         DATASET_SIN_TIME_COLUMN_NAME,
-    ),
+    ],
     target_column: str = DATASET_REQUEST_COLUMN_NAME,
     feature_dtype: torch.dtype = torch.float,
     target_dtype: torch.dtype = torch.long,

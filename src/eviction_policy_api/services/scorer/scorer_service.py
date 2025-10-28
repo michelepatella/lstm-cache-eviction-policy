@@ -1,5 +1,3 @@
-import numpy as np
-import torch
 from fastapi import FastAPI, HTTPException, status
 
 from components.logs.levels.debug_logger import debug
@@ -20,14 +18,14 @@ from eviction_policy_api.services.scorer.scores.calculator import (
 app = FastAPI()
 
 
-@app.post(SCORER_SERVICE_ENDPOINT)
+@app.post(SCORER_SERVICE_ENDPOINT, response_model=None)
 def scorer_service(
-    outputs: list[torch.Tensor],
-    variances: list[torch.Tensor],
+    outputs: list[list[float]],
+    variances: list[list[float]],
     confidence_level: float,
     prob_weight: float,
     conf_weight: float,
-) -> dict[str, dict[int, float] | np.ndarray]:
+) -> dict[str, dict[int, float] | list[float]]:
     """Compute key scores based on model outputs
     and their confidence intervals.
 
@@ -38,16 +36,16 @@ def scorer_service(
     being used and the confidence of the prediction.
 
     Args:
-        outputs (list[torch.Tensor]): List of model outputs per predicted
+        outputs (list[list[float]],): List of model outputs per predicted
                                       step.
-        variances (list[torch.Tensor]): List of variances corresponding to
+        variances (list[list[float]]): List of variances corresponding to
                                         each output.
         confidence_level (float): Confidence level to compute intervals.
         prob_weight (float): Weight of probability contribution to the score.
         conf_weight (float): Weight of confidence contribution to the score.
 
     Returns:
-        dict[str, dict[int, float] | np.ndarray]:
+        dict[str, dict[int, float] | list[float]]:
             - key_scores: Normalized key scores.
             - prob_matrix: Probability matrix used for key scores calculation.
             - conf_matrix: Confidence matrix used for key scores calculation.
@@ -102,8 +100,8 @@ def scorer_service(
 
         return {
             SCORER_SERVICE_RETURN_KEY_SCORES_NAME: key_scores,
-            SCORER_SERVICE_RETURN_PROB_MATRIX_NAME: prob_matrix,
-            SCORER_SERVICE_RETURN_CONF_MATRIX_NAME: conf_matrix,
+            SCORER_SERVICE_RETURN_PROB_MATRIX_NAME: prob_matrix.tolist(),
+            SCORER_SERVICE_RETURN_CONF_MATRIX_NAME: conf_matrix.tolist(),
         }
     except RuntimeError as e:
         error(

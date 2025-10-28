@@ -3,7 +3,7 @@
     "device_type": "mps"
   },
   "model": {
-    "path": "path/model.pt",
+    "path": "../../models/static/trained_static_model.pt",
     "params": {
       "hidden_size": 128,
       "num_layers": 2,
@@ -26,7 +26,7 @@
     "confidence_level": 0.95,
     "time_step_increment": 0.2,
     "num_evictions": 1,
-    "exclude_keys": [],
+    "excluded_keys": [],
     "prob_weight": 0.5,
     "conf_weight": 0.5,
     "return_all_scores": false,

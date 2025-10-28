@@ -1,6 +1,6 @@
 data:
   keys:
-    max: 500
+    max: 200
     min: 1
   mode: static
   pattern:
@@ -86,7 +86,7 @@ model:
 simulations:
   cache:
     dimension: 50
-    ttl: 300
+    ttl: 100000000
   metrics:
     mistake_rate:
       window: 200
