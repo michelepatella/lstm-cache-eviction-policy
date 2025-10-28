@@ -15,7 +15,9 @@ from components.logs.levels.info_logger import info
 from components.validation.grid_search.runner import (
     compute_grid_search,
 )
-from components.validation.search_space.combinator import get_parameters_combination
+from components.validation.search_space.combinator import (
+    get_parameters_combination,
+)
 from components.yaml.io.saver import save_yaml
 from pipeline.config.configurator import prepare_config
 from pipeline.const import CONFIG_FILE_PATH
@@ -89,7 +91,9 @@ def validate_model() -> None:
         params_combinations = get_parameters_combination(config)
 
         # Compute grid search for best parameters
-        best_params_dict, best_avg_loss = compute_grid_search(training_set, params_combinations, config)
+        best_params_dict, best_avg_loss = compute_grid_search(
+            training_set, params_combinations, config,
+        )
         best_params_dict = Box(best_params_dict)
 
         # Prepare the best parameters to be saved
@@ -97,7 +101,9 @@ def validate_model() -> None:
         best_params.model.params.hidden_size = best_params_dict.hidden_size
         best_params.model.params.num_layers = best_params_dict.num_layers
         best_params.model.params.dropout = best_params_dict.dropout
-        best_params.training.optimizer.params.learning_rate = best_params_dict.optimizer.learning_rate
+        best_params.training.optimizer.params.learning_rate = (
+            best_params_dict.optimizer.learning_rate
+        )
 
         # Merge original dictionary with the best
         # parameters dictionary

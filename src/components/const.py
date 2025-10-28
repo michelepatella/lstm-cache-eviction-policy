@@ -16,9 +16,7 @@ LOGS_LOGGER_NAME = "logger"
 LOGS_PHASE_NAME = "phase"
 LOGS_DEFAULT_PHASE = "unknown"
 
-LOGS_FORMAT = (
-    "%(asctime)s %(levelname)s %(name)s %(message)s %(LOGS_PHASE_NAME)s"
-)
+LOGS_DEFAULT_LEVEL = logging.DEBUG
 
 LOGS_STANDARD_ATTRS = {
     "name",
@@ -55,14 +53,6 @@ LOGS_ELASTIC_BULK_SIZE = 1000
 
 LOGS_ELASTIC_ACTIONS_INDEX_NAME = "_index"
 LOGS_ELASTIC_ACTIONS_SOURCE_NAME = "_source"
-
-LOGS_INFO_FILE_PATH = PROJECT_ROOT / "logs" / "info" / "info.log"
-LOGS_DEBUG_FILE_PATH = PROJECT_ROOT / "logs" / "debug" / "debug.log"
-LOGS_ERROR_FILE_PATH = PROJECT_ROOT / "logs" / "error" / "error.log"
-
-LOGS_FILE_BASE_LEVEL = logging.DEBUG
-LOGS_FILE_MAX_BYTES = 10_000_000
-LOGS_FILE_BACKUP_COUNT = 1000
 
 
 # ----------------------------

@@ -242,7 +242,8 @@ def run_simulations() -> None:
         # Experiment tracking
         mlflow.log_params(prepare_config().model_dump())
         mlflow.log_param(
-            "api_kwargs", cache_eviction_policies[CACHE_LSTM_NAME]._api_kwargs,
+            "api_kwargs",
+            cache_eviction_policies[CACHE_LSTM_NAME]._api_kwargs,
         )
         mlflow.log_artifact(results_file_path)
         mlflow.log_artifact(plot_save_path)
