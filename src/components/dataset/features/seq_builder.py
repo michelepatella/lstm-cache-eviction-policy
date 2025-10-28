@@ -55,12 +55,12 @@ def build_feature_seq(
         # Build times sequence and move to device
         times_seq = torch.tensor(
             np.stack([sin_time, cos_time], axis=1),
-            dtype=torch.float,
+            dtype=torch.float32,
         ).unsqueeze(0)
         times_seq = move_to_device(times_seq, device)
 
         # Build keys sequence and move to device
-        keys_seq = torch.tensor(keys, dtype=torch.long).unsqueeze(0)
+        keys_seq = torch.tensor(keys, dtype=torch.float32).unsqueeze(0)
         keys_seq = move_to_device(keys_seq, device)
 
         debug(

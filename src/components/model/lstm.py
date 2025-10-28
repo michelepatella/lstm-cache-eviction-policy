@@ -310,6 +310,7 @@ class LSTM(torch.nn.Module):
             x_keys = move_to_device(x_keys, device)
 
             # Perform embedding
+            x_keys = x_keys.long()
             embedded_keys = self.embedding(x_keys)
 
             # Concatenate features with embedded keys

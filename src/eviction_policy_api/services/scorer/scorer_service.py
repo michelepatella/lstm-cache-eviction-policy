@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, Body
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -20,11 +20,11 @@ app = FastAPI()
 
 @app.post(SCORER_SERVICE_ENDPOINT, response_model=None)
 def scorer_service(
-    outputs: list[list[float]],
-    variances: list[list[float]],
-    confidence_level: float,
-    prob_weight: float,
-    conf_weight: float,
+    outputs: list[list[float]] = Body(...),
+    variances: list[list[float]] = Body(...),
+    confidence_level: float = Body(...),
+    prob_weight: float = Body(...),
+    conf_weight: float = Body(...),
 ) -> dict[str, dict[int, float] | list[float]]:
     """Compute key scores based on model outputs
     and their confidence intervals.

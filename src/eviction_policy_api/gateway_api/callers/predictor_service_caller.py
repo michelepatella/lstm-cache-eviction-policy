@@ -8,7 +8,6 @@ from components.logs.levels.error_logger import error
 from eviction_policy_api.const import (
     PREDICTOR_SERVICE_DEVICE_TYPE_PARAM_NAME,
     PREDICTOR_SERVICE_EMBEDDING_DIM_PARAM_NAME,
-    PREDICTOR_SERVICE_ENDPOINT,
     PREDICTOR_SERVICE_LAST_ACCESSES_PARAM_NAME,
     PREDICTOR_SERVICE_MAX_KEY_PARAM_NAME,
     PREDICTOR_SERVICE_MC_DROPOUT_SAMPLES_PARAM_NAME,
@@ -20,7 +19,7 @@ from eviction_policy_api.const import (
     PREDICTOR_SERVICE_RETURN_OUTPUTS_NAME,
     PREDICTOR_SERVICE_RETURN_VARIANCES_NAME,
     PREDICTOR_SERVICE_ROLLOUT_HORIZON_PARAM_NAME,
-    PREDICTOR_SERVICE_TIME_STEP_INCREMENT_PARAM_NAME,
+    PREDICTOR_SERVICE_TIME_STEP_INCREMENT_PARAM_NAME, PREDICTOR_SERVICE_URL,
 )
 from eviction_policy_api.kwargs.APIKwargs import APIKwargs
 
@@ -68,10 +67,10 @@ def call_predictor_service(
             api_config.hardware.device_type
         )
         params[PREDICTOR_SERVICE_MIN_KEY_PARAM_NAME] = (
-            api_config.model.keys.min
+            api_config.model["keys"]["min"]
         )
         params[PREDICTOR_SERVICE_MAX_KEY_PARAM_NAME] = (
-            api_config.model.keys.max
+            api_config.model["keys"]["max"]
         )
         params[PREDICTOR_SERVICE_NUM_FEATURES_PARAM_NAME] = (
             api_config.model.num_features
@@ -99,10 +98,9 @@ def call_predictor_service(
 
         # Call predictor service and box the response
         response = requests.post(
-            PREDICTOR_SERVICE_ENDPOINT,
+            PREDICTOR_SERVICE_URL,
             json=params.to_dict(),
         )
-        response.raise_for_status()
         data = Box(response.json())
 
         # Extract service responses

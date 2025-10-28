@@ -3,7 +3,7 @@
     "device_type": "mps"
   },
   "model": {
-    "path": "../../models/static/trained_static_model.pt",
+    "path": "/Users/michelepatella/Repositories/conf-aware-ar-lstm-cache-policy/models/static/trained_static_model.pt",
     "params": {
       "hidden_size": 128,
       "num_layers": 2,
@@ -15,7 +15,7 @@
     },
     "keys": {
       "min": 1,
-      "max": 500
+      "max": 200
     },
     "num_features": 2,
     "embedding_dim": 32
@@ -27,8 +27,8 @@
     "time_step_increment": 0.2,
     "num_evictions": 1,
     "excluded_keys": [],
-    "prob_weight": 0.5,
-    "conf_weight": 0.5,
+    "prob_weight": 0.8,
+    "conf_weight": 0.2,
     "return_all_scores": false,
     "return_prob_conf": false
   }

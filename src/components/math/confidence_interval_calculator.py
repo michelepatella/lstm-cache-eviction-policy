@@ -5,8 +5,8 @@ from components.logs.levels.error_logger import error
 
 
 def calculate_confidence_interval(
-    outputs: list[torch.Tensor],
-    variances: list[torch.Tensor],
+    outputs: list[list[float]],
+    variances: list[list[float]],
     confidence_level: float,
 ) -> tuple[torch.Tensor, torch.Tensor]:
     """Calculate confidence interval for a set of outputs.
@@ -40,6 +40,11 @@ def calculate_confidence_interval(
         z_score = norm.ppf(
             1 - (1 - confidence_level) / 2,
         )
+
+        # Convert outputs and variances to
+        # list of tensors
+        outputs = [torch.tensor(o) for o in outputs]
+        variances = [torch.tensor(v) for v in variances]
 
         # Calculate standard deviation
         outputs_std = torch.sqrt(torch.stack(variances))

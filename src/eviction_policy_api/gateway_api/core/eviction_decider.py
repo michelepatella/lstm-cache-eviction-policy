@@ -54,9 +54,9 @@ def decide_eviction(
         # currently in cache and different
         # from excluded ones
         candidate_keys = {
-            k: score
+            int(k): score
             for k, score in key_scores.items()
-            if k in keys_in_cache and k not in excluded_keys
+            if int(k) in keys_in_cache and int(k) not in excluded_keys
         }
 
         # Select a number of keys to be evicted

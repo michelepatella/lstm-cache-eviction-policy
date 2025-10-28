@@ -164,17 +164,17 @@ class LSTMCache(BaseCache):
                         EVICTION_POLICY_API_USER_KWARGS_PARAM_NAME: {},
                     },
                 )
-                response.raise_for_status()
                 data = Box(response.json())
 
-                # Extract the key from API response
-                key_to_evict = data.keys_to_evict
+                # Extract the key(s) from API response
+                key_to_evict = list(data.keys_to_evict)
 
-            # Evict key
-            self.evict_key(key_to_evict)
+            # Evict key(s)
+            for key in key_to_evict:
+                self.evict_key(key)
 
-            # Track eviction event
-            self.metrics_logger.log_eviction(key_to_evict, current_time)
+                # Track eviction event
+                self.metrics_logger.log_eviction(key, current_time)
 
         # Insert the key
         self._put_key(key, current_time)

@@ -1,5 +1,5 @@
 import numpy as np
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, Body
 
 from components.dataset.features.seq_builder import build_feature_seq
 from components.inference.autoregressive_rollout.runner import (
@@ -21,17 +21,17 @@ app = FastAPI()
 
 @app.post(PREDICTOR_SERVICE_ENDPOINT)
 def predictor_service(
-    last_accesses: list[tuple[float, int]],
-    model_path: str,
-    model_params: dict[str, int | float | bool],
-    device_type: str,
-    min_key: int,
-    max_key: int,
-    num_features: int,
-    embedding_dim: int,
-    rollout_horizon: int,
-    mc_dropout_samples: int,
-    time_step_increment: float,
+    last_accesses: list[tuple[float, int]] = Body(...),
+    model_path: str = Body(...),
+    model_params: dict[str, int | float | bool] = Body(...),
+    device_type: str = Body(...),
+    min_key: int = Body(...),
+    max_key: int = Body(...),
+    num_features: int = Body(...),
+    embedding_dim: int = Body(...),
+    rollout_horizon: int = Body(...),
+    mc_dropout_samples: int = Body(...),
+    time_step_increment: float = Body(...),
 ) -> dict[str, list[list[float]]]:
     """Predictor microservice for autoregressive rollout.
 

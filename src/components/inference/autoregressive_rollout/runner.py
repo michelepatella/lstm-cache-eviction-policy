@@ -138,6 +138,7 @@ def compute_autoregressive_rollout(
             new_features = torch.tensor(
                 [[new_sin_time[0], new_cos_time[0]]],
                 device=device,
+                dtype=torch.float32,
             ).unsqueeze(0)
 
             # Update the sequence of features by appending

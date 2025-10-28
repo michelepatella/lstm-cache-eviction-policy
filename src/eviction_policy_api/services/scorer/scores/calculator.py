@@ -10,7 +10,7 @@ from components.logs.levels.error_logger import error
 
 
 def calculate_key_scores(
-    outputs: list[torch.Tensor],
+    outputs: list[list[float]],
     lower_ci: torch.Tensor,
     upper_ci: torch.Tensor,
     prob_weight: float,
@@ -24,7 +24,7 @@ def calculate_key_scores(
     time step and the confidence of the prediction.
 
     Args:
-        outputs (list[torch.Tensor]): List of model outputs per time step.
+        outputs (list[list[float]]): List of model outputs per time step.
         lower_ci (torch.Tensor): Tensor of lower bounds of confidence
                                  intervals per step.
         upper_ci (torch.Tensor): Tensor of upper bounds of confidence
@@ -67,7 +67,7 @@ def calculate_key_scores(
         # at time step j
         prob_matrix = np.stack(
             [
-                softmax(o, dim=TENSOR_OUTPUTS_BATCH_DIM).cpu().numpy()
+                softmax(torch.tensor(o), dim=TENSOR_OUTPUTS_BATCH_DIM).cpu().numpy()
                 for o in outputs
             ],
         )

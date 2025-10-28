@@ -9,14 +9,13 @@ from components.logs.levels.error_logger import error
 from eviction_policy_api.const import (
     SCORER_SERVICE_CONF_WEIGHT_PARAM_NAME,
     SCORER_SERVICE_CONFIDENCE_LEVEL_PARAM_NAME,
-    SCORER_SERVICE_ENDPOINT,
     SCORER_SERVICE_OUTPUTS_PARAM_NAME,
     SCORER_SERVICE_PARAMS,
     SCORER_SERVICE_PROB_WEIGHT_PARAM_NAME,
     SCORER_SERVICE_RETURN_CONF_MATRIX_NAME,
     SCORER_SERVICE_RETURN_KEY_SCORES_NAME,
     SCORER_SERVICE_RETURN_PROB_MATRIX_NAME,
-    SCORER_SERVICE_VARIANCES_PARAM_NAME,
+    SCORER_SERVICE_VARIANCES_PARAM_NAME, SCORER_SERVICE_URL,
 )
 from eviction_policy_api.kwargs.APIKwargs import APIKwargs
 
@@ -74,10 +73,9 @@ def call_scorer_service(
 
         # Call scorer service and box the response
         response = requests.post(
-            SCORER_SERVICE_ENDPOINT,
+            SCORER_SERVICE_URL,
             json=params.to_dict(),
         )
-        response.raise_for_status()
         data = Box(response.json())
 
         # Extract service responses
@@ -89,12 +87,6 @@ def call_scorer_service(
             "Scorer service call completed",
             extra={
                 "key_scores_num": len(key_scores) if key_scores else 0,
-                "prob_matrix_shape": prob_matrix.shape
-                if prob_matrix is not None
-                else None,
-                "conf_matrix_shape": conf_matrix.shape
-                if conf_matrix is not None
-                else None,
                 "context": "Scorer service",
             },
         )

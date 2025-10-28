@@ -86,7 +86,7 @@ model:
 simulations:
   cache:
     dimension: 50
-    ttl: 100000000
+    ttl: 100000
   metrics:
     mistake_rate:
       window: 200
