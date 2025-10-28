@@ -9,7 +9,7 @@ from components.data_loader.initializer import initialize_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.dict.operations.merger import merge_dicts
 from components.logs.handlers.elastic_handler import ElasticHandler
-from components.logs.initializer import logs_phase, initialize_logs
+from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
 from components.validation.grid_search.runner import (
     compute_grid_search,

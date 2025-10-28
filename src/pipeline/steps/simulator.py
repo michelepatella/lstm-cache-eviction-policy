@@ -26,7 +26,7 @@ from components.evaluation.simulations.metrics.io.saver import (
     save_simulations_metrics,
 )
 from components.logs.handlers.elastic_handler import ElasticHandler
-from components.logs.initializer import logs_phase, initialize_logs
+from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
 from components.visualization.hit_miss_rates_plotter import (
     plot_hit_miss_rate,
@@ -241,6 +241,9 @@ def run_simulations() -> None:
 
         # Experiment tracking
         mlflow.log_params(prepare_config().model_dump())
+        mlflow.log_param(
+            "api_kwargs", cache_eviction_policies[CACHE_LSTM_NAME]._api_kwargs,
+        )
         mlflow.log_artifact(results_file_path)
         mlflow.log_artifact(plot_save_path)
 

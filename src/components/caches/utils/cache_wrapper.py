@@ -1,4 +1,3 @@
-from typing import Any
 
 from components.caches.implementations.utils.base_cache import BaseCache
 from components.logs.levels.error_logger import error
@@ -10,7 +9,8 @@ class CacheWrapper(BaseCache):
     This class provides a standard cache insertion mechanism
     with TTL (Time-To-Live) management and metrics logging.
     """
-    def put(self: "CacheWrapper", key: Any, current_time: float) -> None:
+
+    def put(self: "CacheWrapper", key: int, current_time: float) -> None:
         """Insert a key into the cache.
 
         This function inserts a key into the cache, removes expired entries,
@@ -19,7 +19,7 @@ class CacheWrapper(BaseCache):
 
         Args:
             self ("CacheWrapper"): Current class instance.
-            key (Any): Key to insert.
+            key (int): Key to insert.
             current_time (float): Current timestamp.
 
         Returns:

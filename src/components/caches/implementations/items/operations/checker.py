@@ -3,7 +3,7 @@ from typing import Any
 from components.logs.levels.error_logger import error
 
 
-def check_item_into_cache(data: Any, key: Any) -> bool:
+def check_item_into_cache(data: Any, key: int) -> bool:
     """Check if a key exists in a cache.
 
     This function, given a key, returns True if it exists in the
@@ -11,7 +11,7 @@ def check_item_into_cache(data: Any, key: Any) -> bool:
 
     Args:
         data (Any): Cache data.
-        key (Any): Key to check for existence.
+        key (int): Key to check for existence.
 
     Returns:
         bool: True if key exists in the cache, False otherwise.

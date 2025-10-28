@@ -1,5 +1,5 @@
 import numpy as np
-from fastapi import FastAPI, HTTPException, status, Body
+from fastapi import Body, FastAPI, HTTPException, status
 
 from components.dataset.features.seq_builder import build_feature_seq
 from components.inference.autoregressive_rollout.runner import (

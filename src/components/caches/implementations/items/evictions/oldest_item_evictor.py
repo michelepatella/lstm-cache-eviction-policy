@@ -7,7 +7,7 @@ from components.logs.levels.error_logger import error
 def evict_oldest_item(
     data: Any,
     callback: Callable | None,
-) -> tuple[Any, Any]:
+) -> tuple[int, Any]:
     """Evict the oldest item from a cache.
 
     This function removes the oldest key and its associated item from
@@ -20,7 +20,7 @@ def evict_oldest_item(
                                     evicted key.
 
     Returns:
-        tuple[Any, Any]:
+        tuple[int, Any]:
             - oldest_key: The key of the evicted item.
             - oldest_item: The value of the evicted item.
 

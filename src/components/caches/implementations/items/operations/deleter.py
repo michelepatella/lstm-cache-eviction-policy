@@ -7,7 +7,7 @@ from components.logs.levels.error_logger import error
 
 def delete_item_from_cache(
     data: Any,
-    key: Any,
+    key: int,
     freq_data: defaultdict | None = None,
 ) -> None:
     """Delete a key and its associated item from the cache data.
@@ -17,7 +17,7 @@ def delete_item_from_cache(
 
     Args:
         data (Any): Cache data.
-        key (Any): Key to delete.
+        key (int): Key to delete.
         freq_data (defaultdict | None): Optional frequency data structure to
                                         delete the key from.
 

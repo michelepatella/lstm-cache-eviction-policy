@@ -1,5 +1,4 @@
 from collections import defaultdict
-from typing import Any
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -47,7 +46,7 @@ class CacheMetricsLogger:
 
     def log_put(
         self: "CacheMetricsLogger",
-        key: Any,
+        key: int,
         time: float,
         ttl: float,
     ) -> None:
@@ -58,7 +57,7 @@ class CacheMetricsLogger:
 
         Args:
             self ("CacheMetricsLogger"): Current class instance.
-            key (Any): Key inserted into the cache.
+            key (int): Key inserted into the cache.
             time (float): Timestamp of insertion.
             ttl (float): Time-to-Live for the key.
 
@@ -96,7 +95,7 @@ class CacheMetricsLogger:
             )
             raise RuntimeError(msg) from e
 
-    def log_get(self: "CacheMetricsLogger", key: Any, time: float) -> None:
+    def log_get(self: "CacheMetricsLogger", key: int, time: float) -> None:
         """Trace key access from the cache.
 
         This function keep tracks of key access from the cache, by storing
@@ -104,7 +103,7 @@ class CacheMetricsLogger:
 
         Args:
             self ("CacheMetricsLogger"): Current class instance.
-            key (Any): Key accessed from the cache.
+            key (int): Key accessed from the cache.
             time (float): Timestamp of access.
 
         Returns:
@@ -147,7 +146,7 @@ class CacheMetricsLogger:
 
     def log_eviction(
         self: "CacheMetricsLogger",
-        key: Any,
+        key: int,
         time: float,
     ) -> None:
         """Trace a key eviction from the cache.
@@ -158,7 +157,7 @@ class CacheMetricsLogger:
 
         Args:
             self ("CacheMetricsLogger"): Current class instance.
-            key (Any): Key evicted from the cache.
+            key (int): Key evicted from the cache.
             time (float): Timestamp of eviction.
 
         Returns:

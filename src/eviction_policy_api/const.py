@@ -53,6 +53,7 @@ GATEWAY_API_RETURN_KEYS_TO_EVICT_NAME = "keys_to_evict"
 GATEWAY_API_RETURN_KEY_SCORES_NAME = "key_scores"
 GATEWAY_API_RETURN_PROB_MATRIX_NAME = "prob_matrix"
 GATEWAY_API_RETURN_CONF_MATRIX_NAME = "conf_matrix"
+GATEWAY_API_RETURN_KWARGS_NAME = "kwargs"
 
 
 # ----------------------------

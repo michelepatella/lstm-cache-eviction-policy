@@ -107,7 +107,7 @@ class BaseCache(ABC):
             )
             raise RuntimeError(msg) from e
 
-    def _is_expired(self: "BaseCache", key: Any, current_time: float) -> bool:
+    def _is_expired(self: "BaseCache", key: int, current_time: float) -> bool:
         """Check if a key has expired based on its TTL.
 
         This function, given a key and the current time, checks whether a
@@ -116,7 +116,7 @@ class BaseCache(ABC):
 
         Args:
             self (BaseCache): Current class instance.
-            key (Any): Key to check expiration for.
+            key (int): Key to check expiration for.
             current_time (float): Current timestamp.
 
         Returns:
@@ -232,7 +232,7 @@ class BaseCache(ABC):
             )
             raise RuntimeError(msg) from e
 
-    def contains(self: "BaseCache", key: Any, current_time: float) -> bool:
+    def contains(self: "BaseCache", key: int, current_time: float) -> bool:
         """Check if a key exists in the cache and is not expired.
 
         This function, given a key and the current time, checks
@@ -241,7 +241,7 @@ class BaseCache(ABC):
 
         Args:
             self (BaseCache): Current class instance.
-            key (Any): Key to check.
+            key (int): Key to check.
             current_time (float): Current timestamp.
 
         Returns:
@@ -303,7 +303,7 @@ class BaseCache(ABC):
             )
             raise RuntimeError(msg) from e
 
-    def _on_evict(self: "BaseCache", key: Any) -> None:
+    def _on_evict(self: "BaseCache", key: int) -> None:
         """Callback triggered when a key is evicted from BaseCache.
 
         This function represents a callback triggered when a key is evicted
@@ -312,7 +312,7 @@ class BaseCache(ABC):
 
         Args:
             self (BaseCache): Current class instance.
-            key (Any): Key that was evicted.
+            key (int): Key that was evicted.
 
         Returns:
             None

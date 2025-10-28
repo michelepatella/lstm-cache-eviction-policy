@@ -17,7 +17,7 @@ from components.dataset.io.loader import load_dataset
 from components.dataset.io.locator import get_dataset_abs_path
 from components.dataset.io.saver import save_dataset
 from components.logs.handlers.elastic_handler import ElasticHandler
-from components.logs.initializer import logs_phase, initialize_logs
+from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (

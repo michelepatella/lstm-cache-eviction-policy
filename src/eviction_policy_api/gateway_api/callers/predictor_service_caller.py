@@ -19,7 +19,8 @@ from eviction_policy_api.const import (
     PREDICTOR_SERVICE_RETURN_OUTPUTS_NAME,
     PREDICTOR_SERVICE_RETURN_VARIANCES_NAME,
     PREDICTOR_SERVICE_ROLLOUT_HORIZON_PARAM_NAME,
-    PREDICTOR_SERVICE_TIME_STEP_INCREMENT_PARAM_NAME, PREDICTOR_SERVICE_URL,
+    PREDICTOR_SERVICE_TIME_STEP_INCREMENT_PARAM_NAME,
+    PREDICTOR_SERVICE_URL,
 )
 from eviction_policy_api.kwargs.APIKwargs import APIKwargs
 
@@ -66,12 +67,12 @@ def call_predictor_service(
         params[PREDICTOR_SERVICE_DEVICE_TYPE_PARAM_NAME] = (
             api_config.hardware.device_type
         )
-        params[PREDICTOR_SERVICE_MIN_KEY_PARAM_NAME] = (
-            api_config.model["keys"]["min"]
-        )
-        params[PREDICTOR_SERVICE_MAX_KEY_PARAM_NAME] = (
-            api_config.model["keys"]["max"]
-        )
+        params[PREDICTOR_SERVICE_MIN_KEY_PARAM_NAME] = api_config.model[
+            "keys"
+        ]["min"]  # To avoid conflicts with Box library
+        params[PREDICTOR_SERVICE_MAX_KEY_PARAM_NAME] = api_config.model[
+            "keys"
+        ]["max"]  # To avoid conflicts with Box library
         params[PREDICTOR_SERVICE_NUM_FEATURES_PARAM_NAME] = (
             api_config.model.num_features
         )

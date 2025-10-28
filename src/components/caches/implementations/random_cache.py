@@ -1,5 +1,4 @@
 import random
-from typing import Any
 
 from components.caches.implementations.items.operations.inserter import (
     insert_item_into_cache,
@@ -77,7 +76,7 @@ class RandomCache(BaseCache):
             )
             raise RuntimeError(msg) from e
 
-    def put(self: "RandomCache", key: Any, current_time: float) -> None:
+    def put(self: "RandomCache", key: int, current_time: float) -> None:
         """Insert or update a key in the Random cache.
 
         This function inserts a key into the cache, updates its expiration
@@ -86,7 +85,7 @@ class RandomCache(BaseCache):
 
         Args:
             self ("RandomCache"): Current class instance.
-            key (Any): Key to insert or update.
+            key (int): Key to insert or update.
             current_time (float): Current timestamp for TTL management.
 
         Returns:

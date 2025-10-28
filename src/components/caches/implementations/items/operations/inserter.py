@@ -6,7 +6,7 @@ from components.logs.levels.error_logger import error
 
 def insert_item_into_cache(
     data: Any,
-    key: Any,
+    key: int,
     item: Any,
     cache_maxsize: float,
     eviction_callback: Callable,
@@ -21,7 +21,7 @@ def insert_item_into_cache(
 
     Args:
         data (Any): Cache data.
-        key (Any): Key to insert or update.
+        key (int): Key to insert or update.
         item (Any): Value associated with the key.
         cache_maxsize (float): Maximum cache size.
         eviction_callback (Callable): Callback to evict one item from

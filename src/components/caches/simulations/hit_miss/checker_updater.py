@@ -9,7 +9,7 @@ from src.const import (
 
 def check_update_hit_miss(
     cache: Any,
-    key: Any,
+    key: int,
     current_time: float,
     counters: dict[str, int],
     hit_counter_name: str = SIMULATIONS_METRICS_HIT_COUNTER_NAME,
@@ -23,7 +23,7 @@ def check_update_hit_miss(
 
     Args:
         cache (Any): Cache object implementing a contains method.
-        key (Any): Key to look up in the cache.
+        key (int): Key to look up in the cache.
         current_time (float): Current timestamp for validation.
         counters (dict[str, int]): Dictionary containing cache
                                    hit/miss counters.

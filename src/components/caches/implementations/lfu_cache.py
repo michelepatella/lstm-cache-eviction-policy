@@ -76,7 +76,7 @@ class LFUCache(Cache):
             },
         )
 
-    def __getitem__(self: "LFUCache", key: Any) -> Any:
+    def __getitem__(self: "LFUCache", key: int) -> Any:
         """Retrieve a key item from the LFU cache.
 
         This function, given a key, retrieves its item from the LFU
@@ -84,7 +84,7 @@ class LFUCache(Cache):
 
         Args:
             self ("LFUCache"): Current class instance.
-            key (Any): Key to look up in the cache.
+            key (int): Key to look up in the cache.
 
         Returns:
             Any: Retrieved key item.
@@ -108,7 +108,7 @@ class LFUCache(Cache):
         # Evict the least frequent item from cache
         evict_least_frequent_item(self._data, self._freq, self.callback)
 
-    def __setitem__(self: "LFUCache", key: Any, item: Any) -> None:
+    def __setitem__(self: "LFUCache", key: int, item: Any) -> None:
         """Insert or update a key item in the LFU cache.
 
         This function, given a key and its item, updates or inserts the
@@ -117,7 +117,7 @@ class LFUCache(Cache):
 
         Args:
             self ("LFUCache"): Current class instance.
-            key (Any): Key to store in the cache.
+            key (int): Key to store in the cache.
             item (Any): Value associated with the key.
 
         Returns:
@@ -136,7 +136,7 @@ class LFUCache(Cache):
             ),
         )
 
-    def __delitem__(self: "LFUCache", key: Any) -> None:
+    def __delitem__(self: "LFUCache", key: int) -> None:
         """Delete a key and its item from the LFU cache.
 
         This function, given a key, deletes it from the LFU cache along
@@ -144,7 +144,7 @@ class LFUCache(Cache):
 
         Args:
             self ("LFUCache"): Current class instance.
-            key (Any): Key to delete.
+            key (int): Key to delete.
 
         Returns:
             None
@@ -152,7 +152,7 @@ class LFUCache(Cache):
         # Delete both item from cache and its frequency
         delete_item_from_cache(self._data, key, self._freq)
 
-    def __contains__(self: "LFUCache", key: Any) -> bool:
+    def __contains__(self: "LFUCache", key: int) -> bool:
         """Check if a key exists in the LFU cache.
 
         This function, given a key, returns True if it exists in the LFU
@@ -160,14 +160,14 @@ class LFUCache(Cache):
 
         Args:
             self ("LFUCache"): Current class instance.
-            key (Any): Key to check.
+            key (int): Key to check.
 
         Returns:
             bool: True if key exists in the LFU cache, False otherwise.
         """
         return check_item_into_cache(self._data, key)
 
-    def pop(self: "LFUCache", key: Any) -> Any | None:
+    def pop(self: "LFUCache", key: int) -> Any | None:
         """Remove a key from the LFU cache and return its item.
 
         This function, given a key, removes it from the LFU cache and
@@ -175,7 +175,7 @@ class LFUCache(Cache):
 
         Args:
             self ("LFUCache"): Current class instance.
-            key (Any): Key to remove.
+            key (int): Key to remove.
 
         Returns:
             Any | None: Item associated with the key removed

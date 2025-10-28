@@ -1,4 +1,5 @@
 import random
+from http.client import HTTPException
 from typing import Any
 
 import requests
@@ -19,6 +20,7 @@ from components.dataset.rows.extractions.lasts_extractor import (
     extract_last_rows_from_dataset,
 )
 from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
 from pipeline.config.pydantic.config import Config
 
 
@@ -27,6 +29,10 @@ class LSTMCache(BaseCache):
 
     Evicts keys from the cache based on an LSTM
     eviction policy when the cache is full.
+
+    Attributes:
+        _api_kwargs (dict): Keyword arguments used by the eviction
+                            policy API.
     """
 
     def __init__(
@@ -53,6 +59,8 @@ class LSTMCache(BaseCache):
         # Cache class initialization
         super().__init__(cache_class, metrics_logger, config)
 
+        self._api_kwargs = {}
+
         debug(
             "Cache initialization executed",
             extra={
@@ -61,7 +69,7 @@ class LSTMCache(BaseCache):
             },
         )
 
-    def evict_key(self: "LSTMCache", key: Any) -> None:
+    def evict_key(self: "LSTMCache", key: int) -> None:
         """Evict a key from the cache.
 
         This function evicts a provided key
@@ -70,17 +78,40 @@ class LSTMCache(BaseCache):
 
         Args:
             self ("LSTMCache"): Current class instance.
-            key (Any): Key to remove from the cache.
+            key (int): Key to remove from the cache.
 
         Returns:
             None
-        """
-        # Remove key from store and its
-        # expiration time
-        self.store.pop(key, None)
-        self.expiry.pop(key, None)
 
-    def _put_key(self: "LSTMCache", key: Any, current_time: float) -> None:
+        Raises:
+            RuntimeError: If key eviction from LSTM cache fails:
+                * The key is unhashable (TypeError).
+                * Cache store or expiry dict is misconfigured (AttributeError).
+        """
+        try:
+            # Remove key from store and its
+            # expiration time
+            self.store.pop(key, None)
+            self.expiry.pop(key, None)
+        except (TypeError, AttributeError) as e:
+            msg = "Key eviction from LSTM cache failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "key": key,
+                    "store_keys": list(self.store.keys())
+                    if hasattr(self.store, "keys")
+                    else None,
+                    "expiry_keys": list(self.expiry.keys())
+                    if hasattr(self.expiry, "keys")
+                    else None,
+                    "context": "LSTM cache",
+                },
+            )
+            raise RuntimeError(msg) from e
+
+    def _put_key(self: "LSTMCache", key: int, current_time: float) -> None:
         """Put a key in the cache.
 
         This function puts a key into the LSTM cache
@@ -88,23 +119,47 @@ class LSTMCache(BaseCache):
 
         Args:
             self ("LSTMCache"): Current class instance.
-            key (Any): Key to insert in the cache.
+            key (int): Key to insert in the cache.
             current_time (float): Current time.
 
         Returns:
             None
-        """
-        # Insert key in the store along
-        # with its expiration time
-        self.store[key] = key
-        self.expiry[key] = current_time + self.ttl
 
-        # Track put event
-        self.metrics_logger.log_put(key, current_time, self.ttl)
+        Raises:
+            RuntimeError: If key insertion into LSTM cache fails:
+                * The key is unhashable (TypeError).
+                * Cache store or expiry dict is misconfigured (AttributeError).
+        """
+        try:
+            # Insert key in the store along
+            # with its expiration time
+            self.store[key] = key
+            self.expiry[key] = current_time + self.ttl
+
+            # Track put event
+            self.metrics_logger.log_put(key, current_time, self.ttl)
+        except (TypeError, AttributeError) as e:
+            msg = "Key insertion into LSTM cache failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "key": key,
+                    "current_time": current_time,
+                    "store_keys": list(self.store.keys())
+                    if hasattr(self.store, "keys")
+                    else None,
+                    "expiry_keys": list(self.expiry.keys())
+                    if hasattr(self.expiry, "keys")
+                    else None,
+                    "context": "LSTM cache",
+                },
+            )
+            raise RuntimeError(msg) from e
 
     def put(
         self: "LSTMCache",
-        key: Any,
+        key: int,
         current_time: float,
         current_idx: int,
         testing_set: DataLoader,
@@ -119,7 +174,7 @@ class LSTMCache(BaseCache):
 
         Args:
             self ("LSTMCache"): Current class instance.
-            key (Any): Key to insert.
+            key (int): Key to insert.
             current_time (float): Current time.
             current_idx (int): Index of the current request.
             testing_set (DataLoader): Testing dataset for sequence extraction.
@@ -127,54 +182,87 @@ class LSTMCache(BaseCache):
 
         Returns:
             None
+
+        Raises:
+            RuntimeError: If key insertion/eviction fails:
+                * Key is unhashable or cache store/expiry dict
+                  misconfigured (TypeError, AttributeError).
+                * Eviction policy API call fails (HTTPException).
         """
-        # Remove all expired keys
-        # before insertion
-        self._remove_expired_keys(current_time)
+        try:
+            # Remove all expired keys
+            # before insertion
+            self._remove_expired_keys(current_time)
 
-        # Check whether the cache is full
-        if key not in self.store and len(self.store) >= self.maxsize:
-            # Get the sequence length
-            # of the LSTM model
-            seq_len = config.model.sequence.length
+            api_kwargs = None
+            # Check whether the cache is full
+            if key not in self.store and len(self.store) >= self.maxsize:
+                # Get the sequence length
+                # of the LSTM model
+                seq_len = config.model.sequence.length
 
-            # Extract last accesses of
-            # sequence length
-            last_accesses = extract_last_rows_from_dataset(
-                current_idx,
-                seq_len,
-                testing_set,
-            )
-
-            # Check whether last accesses
-            # are not available
-            if last_accesses is None:
-                # Eviction fallback policy: Random
-                key_to_evict = random.choice(list(self.store.keys()))
-            else:
-                # Call LSTM eviction policy API to get
-                # the key to be evicted from the cache
-                response = requests.post(
-                    EVICTION_POLICY_API_ENDPOINT,
-                    json={
-                        EVICTION_POLICY_API_KEYS_IN_CACHE_PARAM_NAME: list(
-                            self.store.keys(),
-                        ),
-                        EVICTION_POLICY_API_LAST_ACCESSES_PARAM_NAME: last_accesses,
-                        EVICTION_POLICY_API_USER_KWARGS_PARAM_NAME: {},
-                    },
+                # Extract last accesses of
+                # sequence length
+                last_accesses = extract_last_rows_from_dataset(
+                    current_idx,
+                    seq_len,
+                    testing_set,
                 )
-                data = Box(response.json())
 
-                # Extract the key(s) from API response
-                key_to_evict = list(data.keys_to_evict)
+                # Check whether last accesses
+                # are not available
+                if last_accesses is None:
+                    # Eviction fallback policy: Random
+                    key_to_evict = random.choice(list(self.store.keys()))
+                else:
+                    # Call eviction policy API to get
+                    # the key to be evicted from the cache
+                    response = requests.post(
+                        EVICTION_POLICY_API_ENDPOINT,
+                        json={
+                            EVICTION_POLICY_API_KEYS_IN_CACHE_PARAM_NAME: list(
+                                self.store.keys(),
+                            ),
+                            EVICTION_POLICY_API_LAST_ACCESSES_PARAM_NAME: last_accesses,
+                            EVICTION_POLICY_API_USER_KWARGS_PARAM_NAME: {},
+                        },
+                    )
+                    data = Box(response.json())
 
-            # Evict key(s)
-            for key in key_to_evict:
-                self.evict_key(key)
+                    # Extract the key(s) from API response
+                    # as well as the kwargs used
+                    key_to_evict = list(data.keys_to_evict)
+                    api_kwargs = dict(data.kwargs)
 
-                # Track eviction event
-                self.metrics_logger.log_eviction(key, current_time)
+                # Evict key(s)
+                for key in key_to_evict:
+                    self.evict_key(key)
 
-        # Insert the key
-        self._put_key(key, current_time)
+                    # Track eviction event
+                    self.metrics_logger.log_eviction(key, current_time)
+
+            # Insert the key
+            self._put_key(key, current_time)
+
+            # Keep track of API kwargs used
+            if api_kwargs is not None:
+                self._api_kwargs = api_kwargs
+
+        except (TypeError, AttributeError, HTTPException) as e:
+            msg = "Key insertion/eviction in/from LSTM cache failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "key": key,
+                    "current_time": current_time,
+                    "store_keys": list(self.store.keys())
+                    if hasattr(self.store, "keys")
+                    else None,
+                    "expiry_keys": list(self.expiry.keys())
+                    if hasattr(self.expiry, "keys")
+                    else None,
+                    "context": "LSTM cache",
+                },
+            )
+            raise RuntimeError(msg) from e

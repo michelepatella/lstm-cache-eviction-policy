@@ -9,7 +9,7 @@ def evict_least_frequent_item(
     data: Any,
     data_freq: defaultdict,
     callback: Callable | None,
-) -> tuple[Any, int]:
+) -> tuple[int, int]:
     """Evict the least frequently used item from a cache.
 
     This function identifies and removes the least frequently used key
@@ -26,7 +26,7 @@ def evict_least_frequent_item(
                                               evicted key.
 
     Returns:
-        tuple[Any, int]:
+        tuple[int, int]:
             - key_to_evict: The evicted key.
             - min_freq: Frequency value of evicted key before eviction.
 

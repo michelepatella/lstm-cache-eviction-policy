@@ -74,14 +74,14 @@ class FIFOCache(Cache):
             },
         )
 
-    def __getitem__(self: "FIFOCache", key: Any) -> Any:
+    def __getitem__(self: "FIFOCache", key: int) -> Any:
         """Retrieve a key item from the FIFO cache.
 
         This function, given a key, retrieves its item from the FIFO cache.
 
         Args:
             self ("FIFOCache"): Current class instance.
-            key (Any): Key to look up in the cache.
+            key (int): Key to look up in the cache.
 
         Returns:
             Any: Retrieved key item.
@@ -104,7 +104,7 @@ class FIFOCache(Cache):
         # Evict the oldest item from cache
         evict_oldest_item(self._data, self.callback)
 
-    def __setitem__(self: "FIFOCache", key: Any, item: Any) -> None:
+    def __setitem__(self: "FIFOCache", key: int, item: Any) -> None:
         """Insert or update a key item in the FIFO cache.
 
         This function, given a key and its item, updates or inserts the
@@ -113,7 +113,7 @@ class FIFOCache(Cache):
 
         Args:
             self ("FIFOCache"): Current class instance.
-            key (Any): Key to store in the cache.
+            key (int): Key to store in the cache.
             item (Any): Value associated with the key.
 
         Returns:
@@ -128,7 +128,7 @@ class FIFOCache(Cache):
             self._evict_oldest_item,
         )
 
-    def __delitem__(self: "FIFOCache", key: Any) -> None:
+    def __delitem__(self: "FIFOCache", key: int) -> None:
         """Delete a key and its item from the FIFO cache.
 
         This function, given a key, deletes it from the FIFO cache
@@ -136,7 +136,7 @@ class FIFOCache(Cache):
 
         Args:
             self ("FIFOCache"): Current class instance.
-            key (Any): Key to delete.
+            key (int): Key to delete.
 
         Returns:
             None
@@ -144,7 +144,7 @@ class FIFOCache(Cache):
         # Delete item from cache
         delete_item_from_cache(self._data, key)
 
-    def __contains__(self: "FIFOCache", key: Any) -> bool:
+    def __contains__(self: "FIFOCache", key: int) -> bool:
         """Check if a key exists in the FIFO cache.
 
         This function, given a key, returns True if it exists in
@@ -152,14 +152,14 @@ class FIFOCache(Cache):
 
         Args:
             self ("FIFOCache"): Current class instance.
-            key (Any): Key to check.
+            key (int): Key to check.
 
         Returns:
             bool: True if key exists in the FIFO cache, False otherwise.
         """
         return check_item_into_cache(self._data, key)
 
-    def pop(self: "FIFOCache", key: Any) -> Any | None:
+    def pop(self: "FIFOCache", key: int) -> Any | None:
         """Remove a key from the FIFO cache and return its item.
 
         This function, given a key, removes it from the FIFO cache,
@@ -168,7 +168,7 @@ class FIFOCache(Cache):
 
         Args:
             self ("FIFOCache"): Current class instance.
-            key (Any): Key to remove.
+            key (int): Key to remove.
 
         Returns:
             Any | None: Item associated with the key removed

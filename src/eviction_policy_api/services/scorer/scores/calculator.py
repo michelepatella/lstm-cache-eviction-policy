@@ -67,7 +67,9 @@ def calculate_key_scores(
         # at time step j
         prob_matrix = np.stack(
             [
-                softmax(torch.tensor(o), dim=TENSOR_OUTPUTS_BATCH_DIM).cpu().numpy()
+                softmax(torch.tensor(o), dim=TENSOR_OUTPUTS_BATCH_DIM)
+                .cpu()
+                .numpy()
                 for o in outputs
             ],
         )

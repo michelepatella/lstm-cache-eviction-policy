@@ -16,7 +16,7 @@ from components.dataset.splits.training_validation_splitter import (
     split_training_validation_sets,
 )
 from components.logs.handlers.elastic_handler import ElasticHandler
-from components.logs.initializer import logs_phase, initialize_logs
+from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
 from components.model.environment.initializer import (
     initialize_model_environment,

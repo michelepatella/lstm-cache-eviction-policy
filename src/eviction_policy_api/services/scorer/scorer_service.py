@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, status, Body
+from fastapi import Body, FastAPI, HTTPException, status
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error

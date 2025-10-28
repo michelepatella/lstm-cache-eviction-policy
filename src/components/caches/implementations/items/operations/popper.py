@@ -7,7 +7,7 @@ from components.logs.levels.error_logger import error
 
 def pop_item_from_cache(
     data: Any,
-    key: Any,
+    key: int,
     freq_data: defaultdict | None = None,
 ) -> Any | None:
     """Remove an item from the cache data.
@@ -18,7 +18,7 @@ def pop_item_from_cache(
 
     Args:
         data (Any): Cache data.
-        key (Any): Key to remove.
+        key (int): Key to remove.
         freq_data (defaultdict | None): Frequency data structure.
 
     Returns:

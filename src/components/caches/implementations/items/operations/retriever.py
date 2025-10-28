@@ -3,7 +3,7 @@ from typing import Any
 from components.logs.levels.error_logger import error
 
 
-def get_item_from_cache(data: Any, key: Any) -> Any:
+def get_item_from_cache(data: Any, key: int) -> Any:
     """Retrieve an item from the cache data.
 
     This function retrieves the item associated with the provided key
@@ -11,7 +11,7 @@ def get_item_from_cache(data: Any, key: Any) -> Any:
 
     Args:
         data (Any): Cache data.
-        key (Any): Key to retrieve from the cache.
+        key (int): Key to retrieve from the cache.
 
     Returns:
         Any: The item associated with the provided key.

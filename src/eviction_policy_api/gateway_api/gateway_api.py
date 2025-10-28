@@ -11,6 +11,7 @@ from eviction_policy_api.const import (
     GATEWAY_API_RETURN_CONF_MATRIX_NAME,
     GATEWAY_API_RETURN_KEY_SCORES_NAME,
     GATEWAY_API_RETURN_KEYS_TO_EVICT_NAME,
+    GATEWAY_API_RETURN_KWARGS_NAME,
     GATEWAY_API_RETURN_PROB_MATRIX_NAME,
 )
 from eviction_policy_api.gateway_api.callers.predictor_service_caller import (
@@ -107,7 +108,10 @@ def gateway_api(
         keys_to_evict = decide_eviction(keys_in_cache, key_scores, api_kwargs)
 
         # Prepare response
-        response: dict = {GATEWAY_API_RETURN_KEYS_TO_EVICT_NAME: keys_to_evict}
+        response: dict = {
+            GATEWAY_API_RETURN_KEYS_TO_EVICT_NAME: keys_to_evict,
+            GATEWAY_API_RETURN_KWARGS_NAME: api_kwargs.__dict__,
+        }
         if api_kwargs.return_all_scores:
             response[GATEWAY_API_RETURN_KEY_SCORES_NAME] = key_scores
         if api_kwargs.return_prob_conf:
