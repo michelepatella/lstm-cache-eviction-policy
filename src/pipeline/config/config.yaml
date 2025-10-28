@@ -85,11 +85,11 @@ model:
     length: 25
 simulations:
   cache:
-    dimension: 100
+    dimension: 50
     ttl: 300
   metrics:
     mistake_rate:
-      window: 100
+      window: 200
 testing:
   general:
     batch_size: 128
