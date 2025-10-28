@@ -1,3 +1,4 @@
+import logging
 import os
 
 import dagshub
@@ -15,7 +16,8 @@ from components.dataset.features.builder import (
 from components.dataset.io.loader import load_dataset
 from components.dataset.io.locator import get_dataset_abs_path
 from components.dataset.io.saver import save_dataset
-from components.logs.initializer import logs_phase
+from components.logs.handlers.elastic_handler import ElasticHandler
+from components.logs.initializer import logs_phase, initialize_logs
 from components.logs.levels.info_logger import info
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
@@ -65,6 +67,7 @@ def preprocess_data() -> None:
     ):
         # Setup
         config = prepare_config()
+        initialize_logs()
 
         # Prepare configuration
         data_distribution_mode = config.data.mode
@@ -139,3 +142,8 @@ def preprocess_data() -> None:
 
 if __name__ == "__main__":
     preprocess_data()
+
+    # Force logs flush
+    for handler in logging.getLogger().handlers:
+        if isinstance(handler, ElasticHandler):
+            handler.flush_buffer()

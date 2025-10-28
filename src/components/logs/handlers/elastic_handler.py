@@ -13,7 +13,6 @@ from components.const import (
     LOGS_ELASTIC_ENDPOINT_ENV_VAR_NAME,
     LOGS_ELASTIC_INDEX_NAME_ENV_VAR_NAME,
     LOGS_ELASTIC_LEVEL_FIELD_NAME,
-    LOGS_ELASTIC_LOGGER_FIELD_NAME,
     LOGS_ELASTIC_MESSAGE_FIELD_NAME,
     LOGS_ELASTIC_TIMESTAMP_FIELD_NAME,
     LOGS_ELASTIC_TOKEN_ENV_VAR_NAME,
@@ -94,7 +93,6 @@ class ElasticHandler(logging.Handler):
                 timezone.utc,
             ).isoformat(),
             LOGS_ELASTIC_LEVEL_FIELD_NAME: record.levelname,
-            LOGS_ELASTIC_LOGGER_FIELD_NAME: record.name,
             LOGS_ELASTIC_MESSAGE_FIELD_NAME: record.getMessage(),
             **{
                 k: v

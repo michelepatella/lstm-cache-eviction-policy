@@ -1,3 +1,4 @@
+import logging
 import os
 from collections import Counter
 
@@ -16,6 +17,7 @@ from components.data.requests.core.static_generator import (
 from components.dataset.builder import build_dataset
 from components.dataset.io.locator import get_dataset_abs_path
 from components.dataset.io.saver import save_dataset
+from components.logs.handlers.elastic_handler import ElasticHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
 from components.visualization.daily_profile_plotter import (
@@ -215,3 +217,8 @@ def generate_data() -> None:
 
 if __name__ == "__main__":
     generate_data()
+
+    # Force logs flush
+    for handler in logging.getLogger().handlers:
+        if isinstance(handler, ElasticHandler):
+            handler.flush_buffer()

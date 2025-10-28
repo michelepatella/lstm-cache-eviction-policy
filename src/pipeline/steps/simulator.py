@@ -1,3 +1,4 @@
+import logging
 import os
 
 import dagshub
@@ -24,7 +25,8 @@ from components.evaluation.simulations.metrics.calculator import (
 from components.evaluation.simulations.metrics.io.saver import (
     save_simulations_metrics,
 )
-from components.logs.initializer import logs_phase
+from components.logs.handlers.elastic_handler import ElasticHandler
+from components.logs.initializer import logs_phase, initialize_logs
 from components.logs.levels.info_logger import info
 from components.visualization.hit_miss_rates_plotter import (
     plot_hit_miss_rate,
@@ -92,6 +94,7 @@ def run_simulations() -> None:
     ):
         # Setup
         config = prepare_config()
+        initialize_logs()
 
         # Prepare configuration
         data_distribution_mode = config.data.mode
@@ -269,3 +272,8 @@ def run_simulations() -> None:
 
 if __name__ == "__main__":
     run_simulations()
+
+    # Force logs flush
+    for handler in logging.getLogger().handlers:
+        if isinstance(handler, ElasticHandler):
+            handler.flush_buffer()

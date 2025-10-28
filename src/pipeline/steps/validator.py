@@ -1,3 +1,4 @@
+import logging
 import os
 
 import dagshub
@@ -7,7 +8,8 @@ from dotenv import load_dotenv
 from components.data_loader.initializer import initialize_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.dict.operations.merger import merge_dicts
-from components.logs.initializer import logs_phase
+from components.logs.handlers.elastic_handler import ElasticHandler
+from components.logs.initializer import logs_phase, initialize_logs
 from components.logs.levels.info_logger import info
 from components.validation.grid_search.runner import (
     compute_grid_search,
@@ -57,6 +59,7 @@ def validate_model() -> None:
     ):
         # Setup
         config = prepare_config()
+        initialize_logs()
 
         # Prepare configuration
         validation_batch_size = config.validation.general.batch_size
@@ -117,3 +120,8 @@ def validate_model() -> None:
 
 if __name__ == "__main__":
     validate_model()
+
+    # Force logs flush
+    for handler in logging.getLogger().handlers:
+        if isinstance(handler, ElasticHandler):
+            handler.flush_buffer()
