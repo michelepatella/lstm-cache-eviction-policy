@@ -69,9 +69,7 @@ def test_model() -> None:
         data_distribution_mode = config.data.mode
         testing_batch_size = config.testing.general.batch_size
         testing_shuffle = config.testing.general.shuffle
-        num_features = config.model.general.features
         top_k = config.testing.metrics.top_k
-        model_params = config.model.params
 
         info(
             "Testing started",
@@ -79,7 +77,6 @@ def test_model() -> None:
                 "data_distribution_mode": data_distribution_mode,
                 "testing_batch_size": testing_batch_size,
                 "testing_shuffle": testing_shuffle,
-                "features_num": num_features,
                 "top_k": top_k,
                 "context": "Testing",
             },
@@ -96,7 +93,6 @@ def test_model() -> None:
 
         # Trained model setup for testing
         device, criterion, model = initialize_best_model(
-            model_params,
             data_distribution_mode,
             config,
             testing_loader,
@@ -120,7 +116,6 @@ def test_model() -> None:
             testing_loader,
             criterion,
             device,
-            num_features,
             top_k,
             model_results_save_path,
             compute_metrics=MODEL_COMPUTE_METRICS_ENABLED,

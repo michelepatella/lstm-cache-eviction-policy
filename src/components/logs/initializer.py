@@ -19,7 +19,8 @@ logs_phase = contextvars.ContextVar(
 
 
 def initialize_logs(
-    logger_name: str = LOGS_LOGGER_NAME, logger_level: int = LOGS_DEFAULT_LEVEL,
+    logger_name: str = LOGS_LOGGER_NAME,
+    logger_level: int = LOGS_DEFAULT_LEVEL,
 ) -> None:
     """Initialize logging configuration for the pipeline.
 

@@ -1,20 +1,19 @@
 import numpy as np
 from fastapi import Body, FastAPI, HTTPException, status
 
-from components.dataset.features.seq_builder import build_feature_seq
-from components.inference.autoregressive_rollout.runner import (
-    compute_autoregressive_rollout,
-)
-from components.logs.levels.error_logger import error
-from components.logs.levels.info_logger import info
 from api.const import (
     PREDICTOR_SERVICE_ENDPOINT,
     PREDICTOR_SERVICE_RETURN_OUTPUTS_NAME,
     PREDICTOR_SERVICE_RETURN_VARIANCES_NAME,
 )
-from api.services.predictor.initializer import (
-    initialize_predictor_service,
+from components.dataset.features.seq_builder import build_feature_seq
+from components.device.selector import select_device
+from components.inference.autoregressive_rollout.runner import (
+    compute_autoregressive_rollout,
 )
+from components.logs.levels.error_logger import error
+from components.logs.levels.info_logger import info
+from components.model.io.loader import load_model
 
 app = FastAPI()
 
@@ -23,12 +22,7 @@ app = FastAPI()
 def predictor_service(
     last_accesses: list[tuple[float, int]] = Body(...),
     model_path: str = Body(...),
-    model_params: dict[str, int | float | bool] = Body(...),
     device_type: str = Body(...),
-    min_key: int = Body(...),
-    max_key: int = Body(...),
-    num_features: int = Body(...),
-    embedding_dim: int = Body(...),
     rollout_horizon: int = Body(...),
     mc_dropout_samples: int = Body(...),
     time_step_increment: float = Body(...),
@@ -47,12 +41,7 @@ def predictor_service(
                                                  and their corresponding
                                                  timestamps (in hours).
         model_path (str): Path to the pretrained model weights.
-        model_params (dict[str, int | float | bool]): Model hyperparameters.
         device_type (str): Device type to run the model on.
-        min_key (int): Minimum key value.
-        max_key (int): Maximum key value.
-        num_features (int): Number of input features for the model.
-        embedding_dim (int): Dimension of embedding layer in the model.
         rollout_horizon (int): Number of steps for autoregressive rollout.
         mc_dropout_samples (int): Number of Monte Carlo dropout forward passes
                                   to estimate uncertainty.
@@ -80,12 +69,7 @@ def predictor_service(
             extra={
                 "last_accesses_num": len(last_accesses),
                 "model_path": str(model_path),
-                "model_params": model_params,
                 "device_type": device_type,
-                "key_min": min_key,
-                "key_max": max_key,
-                "features_num": num_features,
-                "embedding_dim": embedding_dim,
                 "rollout_horizon": rollout_horizon,
                 "mc_dropout_samples": mc_dropout_samples,
                 "time_step_increment": time_step_increment,
@@ -94,15 +78,11 @@ def predictor_service(
         )
 
         # Setup for autoregressive rollout service
-        model, device = initialize_predictor_service(
-            model_path,
-            model_params,
-            device_type,
-            min_key,
-            max_key,
-            num_features,
-            embedding_dim,
-        )
+        # Select computation device
+        device = select_device(device_type)
+
+        # Load pre-trained weights
+        model = load_model(model_path, device)
 
         # Construct features and keys sequences
         # starting from timestamps and keys extracted
@@ -122,7 +102,6 @@ def predictor_service(
             features_seq,
             keys_seq,
             device,
-            num_features,
             rollout_horizon,
             mc_dropout_samples,
             time_step_increment,
@@ -152,12 +131,7 @@ def predictor_service(
                 "exception": str(e),
                 "last_accesses_num": len(last_accesses),
                 "model_path": str(model_path),
-                "model_params": model_params,
                 "device_type": device_type,
-                "key_min": min_key,
-                "key_max": max_key,
-                "features_num": num_features,
-                "embedding_dim": embedding_dim,
                 "rollout_horizon": rollout_horizon,
                 "mc_dropout_samples": mc_dropout_samples,
                 "time_step_increment": time_step_increment,

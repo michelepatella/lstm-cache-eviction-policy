@@ -77,9 +77,9 @@ def compute_single_time_series_cv_fold(
 
     # Initialize model environment
     device, criterion, model = initialize_model_environment(
-        params,
-        config,
         targets,
+        config,
+        model_params=params,
     )
 
     # Build optimizer

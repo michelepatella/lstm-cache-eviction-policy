@@ -16,9 +16,10 @@ from components.model.builder import (
 
 
 def initialize_model_environment(
-    model_params: Any | dict[str, int | float | bool],
-    config: Any,
     targets: torch.Tensor | None,
+    config: Any,
+    model: torch.nn.Module = None,
+    model_params: Any | dict[str, int | float | bool] = None,
 ) -> tuple[torch.device, torch.nn.Module | None, torch.nn.Module]:
     """Set up the model environment.
 
@@ -29,11 +30,12 @@ def initialize_model_environment(
         - Instantiates the PyTorch model and moves it to the device
 
     Args:
+        targets (torch.Tensor | None): Target labels for computing
+                                         class weights.
+        config (Any): Configuration object.
+        model (torch.nn.Module): A PyTorch model to configure environment for.
         model_params (Any | dict[str, int | float | bool]):
             Model parameters.
-        config (Any): Configuration object.
-        targets (torch.Tensor | None): Target labels for computing
-                                       class weights.
 
     Returns:
         tuple[torch.device, torch.nn.Module | None, torch.nn.Module]:
@@ -42,7 +44,7 @@ def initialize_model_environment(
                          (None if no targets provided).
             - model: PyTorch model.
     """
-    device_type = config.hardware.device
+    device_type = config.hardware.device_type
     min_key = config.data.keys.min
     max_key = config.data.keys.max
     num_keys = max_key - min_key + 1
@@ -58,15 +60,16 @@ def initialize_model_environment(
     if targets is not None:
         criterion = build_loss(targets, num_keys, device)
 
-    # Instantiate model
-    model = build_model(
-        model_params,
-        min_key,
-        max_key,
-        embedding_dim,
-        num_features,
-        config,
-    )
+    if model is None:
+        # Instantiate model
+        model = build_model(
+            model_params,
+            min_key,
+            max_key,
+            embedding_dim,
+            num_features,
+            config,
+        )
 
     # Move model to device
     model = move_to_device(model, device)

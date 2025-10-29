@@ -11,14 +11,13 @@ from components.logs.levels.debug_logger import debug
 from components.model.environment.initializer import (
     initialize_model_environment,
 )
-from components.model.io.locator import get_model_abs_path
-from components.model.state_dict.loader import (
-    load_model_state_dict,
+from components.model.io.loader import (
+    load_model,
 )
+from components.model.io.locator import get_model_abs_path
 
 
 def initialize_best_model(
-    model_params: Any,
     data_distribution_mode: str,
     config: Any,
     data_loader: DataLoader | None,
@@ -30,7 +29,6 @@ def initialize_best_model(
     the best PyTorch model.
 
     Args:
-        model_params (Any): Model hyperparameters.
         data_distribution_mode (str): Data distribution mode to
                                       determine the path
                                       of the trained model.
@@ -51,15 +49,15 @@ def initialize_best_model(
     # provided data loader
     targets = extract_targets_from_data_loader(data_loader)
 
+    # Load the trained model
+    model = load_model(model_path)
+
     # Setup for model environment
     device, criterion, model = initialize_model_environment(
-        model_params,
-        config,
         targets,
+        config,
+        model=model,
     )
-
-    # Load the trained model
-    model = load_model_state_dict(model_path, model, device)
 
     debug(
         "Best model initialization executed",

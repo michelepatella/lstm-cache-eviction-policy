@@ -17,13 +17,13 @@ def main():
     # (2) Data preprocessing
     preprocess_data()
 
-    # (3) Model validation
+    # (3) Validation
     validate_model()
 
-    # (4) Model training
+    # (4) Training
     train_model()
 
-    # (5) Model testing
+    # (5) Testing
     test_model()
 
     # (6) Simulations

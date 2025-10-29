@@ -10,16 +10,16 @@ class HardwareConfig(BaseModel):
     """Hardware configuration.
 
     Attributes:
-        device (str): Hardware device type to be used.
+        device_type (str): Hardware device type to be used.
     """
 
-    device: str
+    device_type: str
 
     @model_validator(mode="after")
     def check_device(self: "HardwareConfig") -> "HardwareConfig":
-        """Check whether device is valid or not.
+        """Check whether device type is valid or not.
 
-        This function validates the device specified.
+        This function validates the device type specified.
 
         Args:
             self (HardwareConfig): Current model instance.
@@ -28,9 +28,9 @@ class HardwareConfig(BaseModel):
             "HardwareConfig": Validated model instance.
         """
         assert_choice_field(
-            self.device,
+            self.device_type,
             HW_DEVICE_NAMES,
-            "hardware.device",
+            "hardware.device_type",
         )
 
         return self

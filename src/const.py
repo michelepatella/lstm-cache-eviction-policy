@@ -1,11 +1,3 @@
-from pathlib import Path
-
-# ----------------------------
-# Project
-# ----------------------------
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-
-
 # ----------------------------
 # MLFlow
 # ----------------------------

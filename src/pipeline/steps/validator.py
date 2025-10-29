@@ -92,7 +92,9 @@ def validate_model() -> None:
 
         # Compute grid search for best parameters
         best_params_dict, best_avg_loss = compute_grid_search(
-            training_set, params_combinations, config,
+            training_set,
+            params_combinations,
+            config,
         )
         best_params_dict = Box(best_params_dict)
 

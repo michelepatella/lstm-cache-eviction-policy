@@ -2,6 +2,7 @@ import torch
 
 from components.backpropagation.core.forward_runner import compute_forward
 from components.const import (
+    DATASET_COLUMNS,
     MC_DROPOUT_FLAG_NAME,
     MC_DROPOUT_NUM_SAMPLES_DEFAULT,
     MC_DROPOUT_UNBIASED_VARIANCE_DISABLED,
@@ -18,7 +19,6 @@ def compute_mc_dropout_forward(
     batch: tuple[torch.Tensor, torch.Tensor, torch.Tensor]
     | tuple[torch.Tensor, torch.Tensor],
     device: torch.device,
-    num_features: int,
     num_mc_dropout_samples: int = MC_DROPOUT_NUM_SAMPLES_DEFAULT,
     mc_dropout_flag: str = MC_DROPOUT_FLAG_NAME,
     mc_dropout_unbiased_variance=MC_DROPOUT_UNBIASED_VARIANCE_DISABLED,
@@ -37,7 +37,6 @@ def compute_mc_dropout_forward(
             Model batch, either a tuple including the target or inputs
             ready for model.
         device (torch.device): Device on which to run the forward passes.
-        num_features (int): Number of features to use.
         num_mc_dropout_samples (int): Number of MC Dropout samples to perform.
         mc_dropout_flag (str): Flag to enable MC Dropout on the model.
         mc_dropout_unbiased_variance (bool): Whether to compute MC Dropout
@@ -77,7 +76,7 @@ def compute_mc_dropout_forward(
             for _i in range(num_mc_dropout_samples):
                 # Compute forward pass and get the
                 # model outputs
-                if isinstance(batch, tuple) and len(batch) == num_features + 1:
+                if len(batch) == len(DATASET_COLUMNS):
                     _, outputs = compute_forward(batch, model, device)
                 else:
                     outputs = model(*batch)
@@ -123,7 +122,6 @@ def compute_mc_dropout_forward(
                 ),
                 "model": type(model).__name__ if model else None,
                 "device": str(device),
-                "features_num": num_features,
                 "mc_dropout_samples_num": num_mc_dropout_samples,
                 "mc_dropout_flag": mc_dropout_flag,
                 "mc_dropout_unbiased_variance": mc_dropout_unbiased_variance,

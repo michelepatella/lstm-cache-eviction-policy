@@ -12,7 +12,6 @@ def infer_batches(
     data_loader: DataLoader,
     criterion: torch.nn.Module,
     device: torch.device,
-    num_features: int,
 ) -> tuple[
     float,
     list[int],
@@ -31,7 +30,6 @@ def infer_batches(
         data_loader (DataLoader): DataLoader providing batches of data.
         criterion (torch.nn.Module): Loss function for computing batch loss.
         device (torch.device): Device on which to perform computation.
-        num_features (int): Number of features for the model.
 
     Returns:
     tuple[
@@ -62,7 +60,6 @@ def infer_batches(
             extra={
                 "model": type(model).__name__,
                 "device": str(device),
-                "features_num": num_features,
                 "batches_num": (
                     len(data_loader)
                     if hasattr(data_loader, "__len__")
@@ -94,7 +91,6 @@ def infer_batches(
                     model,
                     criterion,
                     device,
-                    num_features,
                 )
 
                 # Keep track of results
@@ -133,7 +129,6 @@ def infer_batches(
                 "exception": str(e),
                 "model": type(model).__name__,
                 "device": str(device),
-                "features_num": num_features,
                 "context": "Batches inference",
             },
         )

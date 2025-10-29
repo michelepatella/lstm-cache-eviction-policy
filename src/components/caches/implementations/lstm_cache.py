@@ -231,7 +231,7 @@ class LSTMCache(BaseCache):
                     # Extract the key(s) from API response
                     # as well as the kwargs used
                     key_to_evict = list(data.keys_to_evict)
-                    api_kwargs = dict(data.kwargs)
+                    api_kwargs = dict(data.api_kwargs)
 
                 # Evict key(s)
                 for key in key_to_evict:

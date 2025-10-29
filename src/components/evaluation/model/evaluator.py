@@ -19,7 +19,6 @@ def evaluate_model(
     data_loader: DataLoader,
     criterion: torch.nn.Module,
     device: torch.device,
-    num_features: int,
     top_k: int = None,
     model_results_save_path: str = None,
     compute_metrics: bool = MODEL_COMPUTE_METRICS_DISABLED,
@@ -42,7 +41,6 @@ def evaluate_model(
         data_loader (DataLoader): DataLoader containing the evaluation dataset.
         criterion (torch.nn.Module): Loss function used for evaluation.
         device (torch.device): Device on which to perform computations.
-        num_features (int): Number of features for the model.
         top_k (int): Top-k for accuracy computation.
         model_results_save_path (str): Path to save metrics.
         compute_metrics (bool): Whether to compute evaluation metrics
@@ -72,7 +70,6 @@ def evaluate_model(
         "Model evaluation started",
         extra={
             "device": str(device),
-            "features_num": num_features,
             "top_k": top_k,
             "compute_metrics": compute_metrics,
             "model_type": type(model).__name__,
@@ -87,7 +84,7 @@ def evaluate_model(
         all_targets,
         all_outputs,
         all_variances,
-    ) = infer_batches(model, data_loader, criterion, device, num_features)
+    ) = infer_batches(model, data_loader, criterion, device)
 
     # Calculate average loss
     avg_loss = calculate_average([total_loss / len(data_loader)])
