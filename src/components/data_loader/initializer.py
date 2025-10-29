@@ -1,9 +1,10 @@
+from typing import Any
+
 from torch.utils.data import DataLoader
 
 from components.data_loader.builder import build_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.debug_logger import debug
-from pipeline.config.pydantic.config import Config
 
 
 def initialize_data_loader(
@@ -11,7 +12,7 @@ def initialize_data_loader(
     batch_size: int,
     shuffle: bool,
     dataset_class: type[AccessLogsDataset],
-    config: Config,
+    config: Any,
 ) -> tuple[AccessLogsDataset, DataLoader]:
     """Set up a data loader.
 

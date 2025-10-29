@@ -1411,10 +1411,6 @@ stages:
       hash: md5
       md5: 849e7904a1d404826ce8b2c00a2abd94
       size: 2603
-    - path: src/components/caches/implementations/fifo_cache.py
-      hash: md5
-      md5: 5529291c1491e44e21c941a6a11da902
-      size: 6252
     - path: 
         src/components/caches/implementations/items/evictions/least_frequent_item_evictor.py
       hash: md5

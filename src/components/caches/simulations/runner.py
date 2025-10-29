@@ -17,7 +17,6 @@ from components.logs.levels.info_logger import info
 from components.time.transforms.trig_decoder import (
     decode_time_trigonometrically,
 )
-from pipeline.config.pydantic.config import Config
 from src.const import (
     CACHE_LSTM_NAME,
     DATASET_TESTING_SPLIT_TYPE,
@@ -29,7 +28,7 @@ from src.const import (
 def run_cache_simulation(
     cache: Any,
     policy: str,
-    config: Config,
+    config: Any,
 ) -> tuple[dict[str, int], list[dict[str, float]], list[float]]:
     """Run a full cache simulation for a given cache eviction policy.
 
@@ -41,7 +40,7 @@ def run_cache_simulation(
     Args:
         cache (Any): Cache object implementing the eviction policy.
         policy (str): Cache eviction policy name.
-        config (Config): Configuration object.
+        config (Any): Configuration object.
 
     Returns:
         tuple[dict[str, int], list[dict[str, float]], list[float]]:

@@ -6,7 +6,7 @@ from fastapi import HTTPException, status
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from eviction_policy_api.const import (
+from api.const import (
     SCORER_SERVICE_CONF_WEIGHT_PARAM_NAME,
     SCORER_SERVICE_CONFIDENCE_LEVEL_PARAM_NAME,
     SCORER_SERVICE_OUTPUTS_PARAM_NAME,
@@ -18,7 +18,7 @@ from eviction_policy_api.const import (
     SCORER_SERVICE_URL,
     SCORER_SERVICE_VARIANCES_PARAM_NAME,
 )
-from eviction_policy_api.kwargs.APIKwargs import APIKwargs
+from api.kwargs.APIKwargs import APIKwargs
 
 
 def call_scorer_service(

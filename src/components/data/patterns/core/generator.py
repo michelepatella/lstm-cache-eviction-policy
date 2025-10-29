@@ -1,3 +1,5 @@
+from typing import Any
+
 import numpy as np
 
 from components.const import (
@@ -10,13 +12,12 @@ from components.data.patterns.core.single_generator import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from pipeline.config.pydantic.config import Config
 
 
 def generate_pattern_requests(
     keys_range: np.ndarray,
     zipf_probs: np.ndarray,
-    config: Config,
+    config: Any,
     time_step_duration: int = None,
     initial_timestamp: float = DATA_GENERATION_INITIAL_TIMESTAMP,
     initial_current_day: int = DATA_GENERATION_INITIAL_CURRENT_DAY,
@@ -33,7 +34,7 @@ def generate_pattern_requests(
         keys_range (np.ndarray): List of keys to generate requests for.
         zipf_probs (np.ndarray): List of Zipfian probabilities of the
                                  given keys.
-        config (Config): Configuration object.
+        config (Any): Configuration object.
         time_step_duration (int): Time step to generate requests for.
         initial_timestamp (float): Initial timestamp in seconds.
         initial_current_day (int): Initial current day.

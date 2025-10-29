@@ -7,12 +7,12 @@ from components.inference.autoregressive_rollout.runner import (
 )
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
-from eviction_policy_api.const import (
+from api.const import (
     PREDICTOR_SERVICE_ENDPOINT,
     PREDICTOR_SERVICE_RETURN_OUTPUTS_NAME,
     PREDICTOR_SERVICE_RETURN_VARIANCES_NAME,
 )
-from eviction_policy_api.services.predictor.initializer import (
+from api.services.predictor.initializer import (
     initialize_predictor_service,
 )
 

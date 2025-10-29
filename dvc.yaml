@@ -451,7 +451,6 @@ stages:
     deps:
       - src/components/assertions/choice_field_assertor.py
       - src/components/assertions/min_max_assertor.py
-      - src/components/caches/implementations/fifo_cache.py
       - src/components/caches/implementations/lfu_cache.py
       - src/components/caches/implementations/lru_cache.py
       - src/components/caches/implementations/lstm_cache.py

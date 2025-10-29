@@ -1,3 +1,5 @@
+from typing import Any
+
 import numpy as np
 
 from components.dataset.access_logs_dataset import AccessLogsDataset
@@ -10,14 +12,13 @@ from components.validation.time_series_cv.builder import (
 from components.validation.time_series_cv.core.single_fold_runner import (
     compute_single_time_series_cv_fold,
 )
-from pipeline.config.pydantic.config import Config
 
 
 def compute_time_series_cv_folds(
     cv_num_folds: int,
     training_set: AccessLogsDataset,
     params: dict[str, int | float | bool],
-    config: Config,
+    config: Any,
 ) -> tuple[float, list[float]]:
     """Compute Time Series Cross-Validation (CV).
 
@@ -29,7 +30,7 @@ def compute_time_series_cv_folds(
         training_set (AccessLogsDataset): Dataset to perform CV on.
         params (dict[str, int | float | bool]): Parameter configuration
                                                 for model and training.
-        config (Config): Configuration object.
+        config (Any): Configuration object.
 
     Returns:
         tuple[float, list[float]]:

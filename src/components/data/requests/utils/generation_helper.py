@@ -1,3 +1,5 @@
+from typing import Any
+
 import numpy as np
 
 from components.data.requests.utils.alpha_requests_generator import (
@@ -8,12 +10,11 @@ from components.logs.levels.error_logger import error
 from components.time.cyclics.seconds_to_hours_converter import (
     convert_seconds_to_hours_cyclic,
 )
-from pipeline.config.pydantic.config import Config
 
 
 def generate_requests_helper(
     alpha_range: list[float],
-    config: Config,
+    config: Any,
     time_step_duration: int | None = None,
 ) -> tuple[list[int], np.ndarray]:
     """Generate requests according to static or dynamic Zipfian distributions.
@@ -24,7 +25,7 @@ def generate_requests_helper(
 
     Args:
         alpha_range (list[float]): List of alpha parameters.
-        config (Config): Configuration object.
+        config (Any): Configuration object.
         time_step_duration (int | None): Duration of each time step
                                             (None for static requests
                                             generation).

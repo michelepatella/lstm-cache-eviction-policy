@@ -1,3 +1,5 @@
+from typing import Any
+
 import pandas as pd
 import torch
 from torch.utils.data import Dataset
@@ -25,7 +27,6 @@ from components.dataset.splits.index.calculator import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from pipeline.config.pydantic.config import Config
 from src.const import DATASET_TRAINING_SPLIT_TYPE
 
 
@@ -81,7 +82,7 @@ class AccessLogsDataset(Dataset):
     def _set_fields(
         self: "AccessLogsDataset",
         data: "pd.DataFrame",
-        config: Config,
+        config: Any,
     ) -> None:
         """Set the feature, target, and sequence length fields of the dataset.
 
@@ -91,7 +92,7 @@ class AccessLogsDataset(Dataset):
         Args:
             self (AccessLogsDataset): Instance of AccessLogsDataset.
             data (pd.DataFrame): Dataset from which fields are extracted.
-            config (Config): Configuration object.
+            config (Any): Configuration object.
 
         Returns:
             None
@@ -121,7 +122,7 @@ class AccessLogsDataset(Dataset):
     def __init__(
         self: "AccessLogsDataset",
         dataset_type: str,
-        config: Config,
+        config: Any,
     ) -> None:
         """Initialize the AccessLogsDataset class.
 
@@ -133,7 +134,7 @@ class AccessLogsDataset(Dataset):
             self (AccessLogsDataset): AccessLogsDataset class.
             dataset_type (str): The dataset type requested to
                                 be created.
-            config (Config): Configuration object.
+            config (Any): Configuration object.
 
         Returns:
             None
@@ -285,7 +286,7 @@ class AccessLogsDataset(Dataset):
     def from_dataframe(
         cls: "type[AccessLogsDataset]",
         df: "pd.DataFrame",
-        config: Config,
+        config: Any,
     ) -> "AccessLogsDataset":
         """Instantiate AccessLogsDataset from an existing dataframe.
 
@@ -296,7 +297,7 @@ class AccessLogsDataset(Dataset):
         Args:
             cls (AccessLogsDataset): AccessLogsDataset class.
             df (pd.DataFrame): Preloaded dataframe containing dataset.
-            config (Config): Configuration object.
+            config (Any): Configuration object.
 
         Returns:
             AccessLogsDataset: Initialized dataset instance.

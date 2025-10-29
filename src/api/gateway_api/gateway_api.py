@@ -5,7 +5,7 @@ from fastapi import FastAPI, HTTPException, status
 from components.json.io.loader import load_json
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
-from eviction_policy_api.const import (
+from api.const import (
     API_CONFIG_FILE_PATH,
     GATEWAY_API_ENDPOINT,
     GATEWAY_API_RETURN_CONF_MATRIX_NAME,
@@ -14,19 +14,19 @@ from eviction_policy_api.const import (
     GATEWAY_API_RETURN_KWARGS_NAME,
     GATEWAY_API_RETURN_PROB_MATRIX_NAME,
 )
-from eviction_policy_api.gateway_api.callers.predictor_service_caller import (
+from api.gateway_api.callers.predictor_service_caller import (
     call_predictor_service,
 )
-from eviction_policy_api.gateway_api.callers.scorer_service_caller import (
+from api.gateway_api.callers.scorer_service_caller import (
     call_scorer_service,
 )
-from eviction_policy_api.gateway_api.core.eviction_decider import (
+from api.gateway_api.core.eviction_decider import (
     decide_eviction,
 )
-from eviction_policy_api.kwargs.builder import (
+from api.kwargs.builder import (
     build_api_kwargs,
 )
-from eviction_policy_api.kwargs.default.getter import (
+from api.kwargs.default.getter import (
     get_default_kwargs,
 )
 

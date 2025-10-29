@@ -1,3 +1,5 @@
+from typing import Any
+
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
@@ -13,14 +15,12 @@ from components.model.io.locator import get_model_abs_path
 from components.model.state_dict.loader import (
     load_model_state_dict,
 )
-from pipeline.config.pydantic.config import Config
-from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
 
 
 def initialize_best_model(
-    model_params: ModelParamsConfig,
+    model_params: Any,
     data_distribution_mode: str,
-    config: Config,
+    config: Any,
     data_loader: DataLoader | None,
 ) -> tuple[torch.device, nn.Module, nn.Module]:
     """Prepare a trained PyTorch model.
@@ -30,11 +30,11 @@ def initialize_best_model(
     the best PyTorch model.
 
     Args:
-        model_params (ModelParamsConfig): Model hyperparameters.
+        model_params (Any): Model hyperparameters.
         data_distribution_mode (str): Data distribution mode to
                                       determine the path
                                       of the trained model.
-        config (Config): Configuration object.
+        config (Any): Configuration object.
         data_loader (DataLoader | None): DataLoader containing the dataset
                                          to be used (if any).
 

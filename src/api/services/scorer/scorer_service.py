@@ -5,13 +5,13 @@ from components.logs.levels.error_logger import error
 from components.math.confidence_interval_calculator import (
     calculate_confidence_interval,
 )
-from eviction_policy_api.const import (
+from api.const import (
     SCORER_SERVICE_ENDPOINT,
     SCORER_SERVICE_RETURN_CONF_MATRIX_NAME,
     SCORER_SERVICE_RETURN_KEY_SCORES_NAME,
     SCORER_SERVICE_RETURN_PROB_MATRIX_NAME,
 )
-from eviction_policy_api.services.scorer.scores.calculator import (
+from api.services.scorer.scores.calculator import (
     calculate_key_scores,
 )
 

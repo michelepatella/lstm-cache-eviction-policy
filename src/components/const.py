@@ -209,12 +209,12 @@ TENSOR_CLASS_DIM = 1
 
 
 # ----------------------------
-# Eviction Policy API
+# API
 # ----------------------------
-EVICTION_POLICY_API_ENDPOINT = "http://127.0.0.1:8000/evict"
-EVICTION_POLICY_API_KEYS_IN_CACHE_PARAM_NAME = "keys_in_cache"
-EVICTION_POLICY_API_LAST_ACCESSES_PARAM_NAME = "last_accesses"
-EVICTION_POLICY_API_USER_KWARGS_PARAM_NAME = "user_kwargs"
+API_ENDPOINT = "http://127.0.0.1:8000/evict"
+API_KEYS_IN_CACHE_PARAM_NAME = "keys_in_cache"
+API_LAST_ACCESSES_PARAM_NAME = "last_accesses"
+API_USER_KWARGS_PARAM_NAME = "user_kwargs"
 
 
 # ----------------------------

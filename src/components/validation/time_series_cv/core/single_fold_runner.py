@@ -1,3 +1,5 @@
+from typing import Any
+
 import numpy as np
 
 from components.data_loader.builder import build_data_loader
@@ -14,7 +16,6 @@ from components.model.environment.initializer import (
 )
 from components.optimizer.builder import build_optimizer
 from components.training.core.epochs_trainer import train_epochs
-from pipeline.config.pydantic.config import Config
 
 
 def compute_single_time_series_cv_fold(
@@ -22,7 +23,7 @@ def compute_single_time_series_cv_fold(
     val_idx: np.ndarray,
     training_set: AccessLogsDataset,
     params: dict[str, int | float | bool],
-    config: Config,
+    config: Any,
 ) -> float:
     """Execute a single fold of time series cross-validation.
 
@@ -37,7 +38,7 @@ def compute_single_time_series_cv_fold(
         training_set (AccessLogsDataset): Full training set.
         params (dict[str, int | float | bool]): Parameters configuration
                                                      for the current fold.
-        config (Config): Configuration object.
+        config (Any): Configuration object.
 
     Returns:
         float: Average loss for the current fold.

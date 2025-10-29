@@ -1,3 +1,5 @@
+from typing import Any
+
 import numpy as np
 
 from components.const import TIME_SECONDS_IN_DAY, TIME_SECONDS_IN_HOUR
@@ -17,7 +19,6 @@ from components.data.patterns.access.variants.toggle_generator import (
     generate_toggle_pattern,
 )
 from components.logs.levels.error_logger import error
-from pipeline.config.pydantic.config import Config
 
 
 def generate_access_pattern(
@@ -25,7 +26,7 @@ def generate_access_pattern(
     keys_range: np.ndarray,
     current_abs_seconds: float,
     requests: list[int],
-    config: Config,
+    config: Any,
 ) -> int:
     """Generate access pattern based on day band.
 
@@ -38,7 +39,7 @@ def generate_access_pattern(
         keys_range (np.ndarray): List of all available keys.
         current_abs_seconds (float): Current absolute time in seconds.
         requests (list[int]): List of keys requested so far.
-        config (Config): Configuration object.
+        config (Any): Configuration object.
 
     Returns:
         int: Index of the next key to be accessed.

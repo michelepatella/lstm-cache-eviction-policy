@@ -1,3 +1,5 @@
+from typing import Any
+
 import torch
 
 from components.device.mover import (
@@ -11,13 +13,11 @@ from components.loss.builder import build_loss
 from components.model.builder import (
     build_model,
 )
-from pipeline.config.pydantic.config import Config
-from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
 
 
 def initialize_model_environment(
-    model_params: ModelParamsConfig | dict[str, int | float | bool],
-    config: Config,
+    model_params: Any | dict[str, int | float | bool],
+    config: Any,
     targets: torch.Tensor | None,
 ) -> tuple[torch.device, torch.nn.Module | None, torch.nn.Module]:
     """Set up the model environment.
@@ -29,9 +29,9 @@ def initialize_model_environment(
         - Instantiates the PyTorch model and moves it to the device
 
     Args:
-        model_params (ModelParamsConfig |
-        dict[str, int | float | bool]): Model parameters.
-        config (Config): Configuration object.
+        model_params (Any | dict[str, int | float | bool]):
+            Model parameters.
+        config (Any): Configuration object.
         targets (torch.Tensor | None): Target labels for computing
                                        class weights.
 

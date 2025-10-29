@@ -5,7 +5,6 @@ import dagshub
 import numpy as np
 from dotenv import load_dotenv
 
-from components.caches.implementations.fifo_cache import FIFOCache
 from components.caches.implementations.lfu_cache import LFUCache
 from components.caches.implementations.lru_cache import LRUCache
 from components.caches.implementations.lstm_cache import LSTMCache
@@ -33,7 +32,6 @@ from components.visualization.hit_miss_rates_plotter import (
 )
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
-    CACHE_FIFO_NAME,
     CACHE_LFU_NAME,
     CACHE_LRU_NAME,
     CACHE_RANDOM_NAME,
@@ -109,11 +107,6 @@ def run_simulations() -> None:
             ),
             CACHE_LFU_NAME: CacheWrapper(
                 LFUCache,
-                CacheMetricsLogger(),
-                config,
-            ),
-            CACHE_FIFO_NAME: CacheWrapper(
-                FIFOCache,
                 CacheMetricsLogger(),
                 config,
             ),

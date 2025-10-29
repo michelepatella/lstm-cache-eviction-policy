@@ -1,3 +1,5 @@
+from typing import Any
+
 import numpy as np
 import torch
 from torch.optim import Optimizer
@@ -16,7 +18,6 @@ from components.model.state_dict.copier import (
 )
 from components.training.callbacks.early_stopping import EarlyStopping
 from components.training.core.single_epoch_trainer import train_single_epoch
-from pipeline.config.pydantic.config import Config
 from src.const import LOGS_VALIDATION_PHASE
 
 
@@ -29,7 +30,7 @@ def train_epochs(
     criterion: torch.nn.Module,
     device: torch.device,
     current_phase: str,
-    config: Config,
+    config: Any,
 ) -> tuple[float, torch.nn.Module]:
     """Train a model for a given number of epochs.
 
@@ -49,7 +50,7 @@ def train_epochs(
         criterion (torch.nn.Module): Loss function to use.
         device (torch.device): Device to run computations on.
         current_phase (str): Pipeline phase for which to run the training.
-        config (Config): Configuration object.
+        config (Any): Configuration object.
 
     Returns:
         tuple[float, torch.nn.Module]:

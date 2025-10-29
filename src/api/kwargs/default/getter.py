@@ -3,7 +3,7 @@ from fastapi import HTTPException, status
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from eviction_policy_api.const import (
+from api.const import (
     CONF_WEIGHT_API_KWARG_NAME,
     CONFIDENCE_LEVEL_API_KWARG_NAME,
     EXCLUDED_KEYS_API_KWARG_NAME,

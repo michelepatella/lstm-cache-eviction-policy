@@ -5,7 +5,7 @@ from fastapi import HTTPException, status
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from eviction_policy_api.const import (
+from api.const import (
     PREDICTOR_SERVICE_DEVICE_TYPE_PARAM_NAME,
     PREDICTOR_SERVICE_EMBEDDING_DIM_PARAM_NAME,
     PREDICTOR_SERVICE_LAST_ACCESSES_PARAM_NAME,
@@ -22,7 +22,7 @@ from eviction_policy_api.const import (
     PREDICTOR_SERVICE_TIME_STEP_INCREMENT_PARAM_NAME,
     PREDICTOR_SERVICE_URL,
 )
-from eviction_policy_api.kwargs.APIKwargs import APIKwargs
+from api.kwargs.APIKwargs import APIKwargs
 
 
 def call_predictor_service(

@@ -2,7 +2,7 @@ from fastapi import HTTPException, status
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from eviction_policy_api.kwargs.APIKwargs import APIKwargs
+from api.kwargs.APIKwargs import APIKwargs
 
 
 def build_api_kwargs(
