@@ -103,7 +103,7 @@ def scorer_service(
         # For each key, compute a balanced score based on
         # the probability of being used over all predicted
         # time steps and corresponding prediction confidence
-        scores_array = prob_weight * prob_matrix + conf_weight * conf_matrix
+        scores_array = prob_matrix * (prob_weight + conf_weight * conf_matrix)
         key_scores = scores_array.sum(axis=0)
 
         # Normalize key scores forcing values
