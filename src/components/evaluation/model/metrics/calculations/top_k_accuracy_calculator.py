@@ -52,7 +52,7 @@ def calculate_top_k_accuracy(
         top_k_accuracy = calculate_percentage(
             correct_predictions,
             len(targets),
-        )
+        ) / 100
 
         info(
             "Top-k accuracy calculated",

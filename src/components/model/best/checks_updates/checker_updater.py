@@ -1,3 +1,5 @@
+import copy
+
 import numpy as np
 import torch
 
@@ -56,7 +58,7 @@ def check_update_best_model(
             # Update both best average loss
             # and model weights
             best_avg_loss = curr_avg_loss
-            best_model_weights = copy_model_state_dict(model)
+            best_model_weights = copy.deepcopy(model.state_dict())
 
         debug(
             "Best model checking/updating completed",

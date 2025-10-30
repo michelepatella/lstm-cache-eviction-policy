@@ -60,14 +60,14 @@ data:
       periodic:
         amplitude: 50
         scale: 90
-  requests: 100000
+  requests: 10000
   seed: 42
 dataset:
   split:
     training: 0.7
     validation: 0.2
 hardware:
-  device: mps
+  device_type: mps
 model:
   general:
     features: 2
@@ -76,7 +76,7 @@ model:
     bias: false
     bidirectional: false
     dropout: 0.3
-    hidden_size: 128
+    hidden_size: 256
     num_layers: 2
     proj_size: 0
   sequence:
@@ -85,8 +85,8 @@ model:
     length: 25
 simulations:
   cache:
-    dimension: 50
-    ttl: 1500
+    dimension: 25
+    ttl: 3000
   metrics:
     mistake_rate:
       window: 200

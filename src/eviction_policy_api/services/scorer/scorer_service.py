@@ -1,18 +1,20 @@
+import numpy as np
+import torch
 from fastapi import Body, FastAPI, HTTPException, status
+from sklearn.preprocessing import minmax_scale
+from torch import softmax
 
-from components.logs.levels.debug_logger import debug
-from components.logs.levels.error_logger import error
-from components.math.confidence_interval_calculator import (
-    calculate_confidence_interval,
-)
-from eviction_policy_api.const import (
+from api.const import (
     SCORER_SERVICE_ENDPOINT,
     SCORER_SERVICE_RETURN_CONF_MATRIX_NAME,
     SCORER_SERVICE_RETURN_KEY_SCORES_NAME,
     SCORER_SERVICE_RETURN_PROB_MATRIX_NAME,
 )
-from eviction_policy_api.services.scorer.scores.calculator import (
-    calculate_key_scores,
+from components.const import TENSOR_OUTPUTS_BATCH_DIM
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
+from components.math.confidence_interval_calculator import (
+    calculate_confidence_interval,
 )
 
 app = FastAPI()
@@ -53,6 +55,9 @@ def scorer_service(
     Raises:
         HTTPException: If the score service fails:
             * Confidence intervals calculation fails (RuntimeError).
+            * Shape mismatch or invalid type in outputs/confidence intervals
+              (TypeError).
+            * Division by zero or invalid normalization (ValueError).
     """
     try:
         debug(
@@ -76,17 +81,34 @@ def scorer_service(
             confidence_level,
         )
 
-        # For each key, calculate a score based
-        # on the probability of being used
-        # at each predicted future step and
-        # the confidence of that model prediction
-        key_scores, prob_matrix, conf_matrix = calculate_key_scores(
-            outputs,
-            lower_ci,
-            upper_ci,
-            prob_weight,
-            conf_weight,
+        # Build probability and confidence matrices
+        # having keys as rows and time steps as columns
+        # so that each cell (i,j) is filled by the
+        # probability/prediction confidence of key i
+        # at time step j
+        prob_matrix = np.stack(
+            [
+                softmax(torch.tensor(o), dim=TENSOR_OUTPUTS_BATCH_DIM)
+                .cpu()
+                .numpy()
+                for o in outputs
+            ],
         )
+        conf_matrix = 1 / (upper_ci - lower_ci)
+
+        # Normalize confidence matrix forcing
+        # values in [0,1]
+        conf_matrix = minmax_scale(conf_matrix)
+
+        # For each key, compute a balanced score based on
+        # the probability of being used over all predicted
+        # time steps and corresponding prediction confidence
+        scores_array = prob_weight * prob_matrix + conf_weight * conf_matrix
+        key_scores = scores_array.sum(axis=0)
+
+        # Normalize key scores forcing values
+        # in [0,1]
+        key_scores = minmax_scale(key_scores)
 
         debug(
             "Scorer service completed",
@@ -99,11 +121,11 @@ def scorer_service(
         )
 
         return {
-            SCORER_SERVICE_RETURN_KEY_SCORES_NAME: key_scores,
+            SCORER_SERVICE_RETURN_KEY_SCORES_NAME: key_scores.tolist(),
             SCORER_SERVICE_RETURN_PROB_MATRIX_NAME: prob_matrix.tolist(),
             SCORER_SERVICE_RETURN_CONF_MATRIX_NAME: conf_matrix.tolist(),
         }
-    except RuntimeError as e:
+    except (RuntimeError, TypeError, ValueError) as e:
         error(
             "Scorer service failed",
             extra={

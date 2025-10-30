@@ -49,7 +49,6 @@ def calculate_class_report(
                 "predictions_num": len(predictions),
                 "output_dict": output_dict,
                 "zero_division": zero_division,
-                "class_report": class_report,
                 "context": "Classification report calculation",
             },
         )

@@ -25,7 +25,7 @@ def call_scorer_service(
     outputs: list[torch.Tensor],
     variances: list[torch.Tensor],
     api_kwargs: APIKwargs,
-) -> tuple[dict[int, float], np.ndarray, np.ndarray]:
+) -> tuple[list[float], np.ndarray, np.ndarray]:
     """Call scorer service.
 
     This function sends predicted outputs and variances
@@ -42,7 +42,7 @@ def call_scorer_service(
         api_kwargs (APIKwargs): API kwargs.
 
     Returns:
-        tuple[dict[int, float], np.ndarray, np.ndarray]:
+        tuple[list[float], np.ndarray, np.ndarray]:
             - key_scores: Mapping from key index to normalized score.
             - prob_matrix: Probability matrix used for scoring.
             - conf_matrix: Confidence matrix used for scoring.

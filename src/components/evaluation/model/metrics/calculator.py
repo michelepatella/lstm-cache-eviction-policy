@@ -72,7 +72,6 @@ def calculate_model_metrics(
     debug(
         "Model metrics calculation completed",
         extra={
-            "metrics": metrics,
             "targets_num": len(targets),
             "predictions_num": len(predictions),
             "outputs_num": len(outputs),
