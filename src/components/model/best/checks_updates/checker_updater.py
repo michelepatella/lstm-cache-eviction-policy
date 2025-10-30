@@ -2,9 +2,6 @@ import copy
 
 import numpy as np
 import torch
-from components.model.state_dict.copier import (
-    copy_model_state_dict,
-)
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error

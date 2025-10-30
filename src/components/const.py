@@ -167,6 +167,8 @@ MODEL_METRICS_WEIGHTED_AVG_NAME = "weighted avg"
 MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT_ENABLED = True
 MODEL_METRICS_CLASS_REPORT_ZERO_DIVISION = 0
 
+MODEL_LOADING_WEIGHTS_ONLY_DISABLED = False
+
 
 # ----------------------------
 # Early Stopping
@@ -219,7 +221,7 @@ TENSOR_CLASS_DIM = 1
 API_ENDPOINT = "http://127.0.0.1:8000/evict"
 API_KEYS_IN_CACHE_PARAM_NAME = "keys_in_cache"
 API_LAST_ACCESSES_PARAM_NAME = "last_accesses"
-API_USER_KWARGS_PARAM_NAME = "user_kwargs"
+API_USER_KWARGS_PARAM_NAME = "user_api_kwargs"
 
 
 # ----------------------------

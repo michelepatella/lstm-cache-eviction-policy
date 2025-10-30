@@ -19,8 +19,8 @@ def evict_score_based_items(
     Args:
         keys_in_cache (list[int]): List of keys currently in the
                                    cache.
-        key_scores (dict[int, float]): Mapping from keys to their
-                                       scores.
+        key_scores (list[float]): Mapping from keys to their
+                                  scores.
         excluded_keys (list[int]): List of keys to exclude from eviction.
         num_evictions (int): Number of keys to evict.
 

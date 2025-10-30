@@ -3,13 +3,13 @@ from pathlib import Path
 # ----------------------------
 # Project
 # ----------------------------
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 # ----------------------------
 # Configuration
 # ----------------------------
-API_CONFIG_FILE_PATH = PROJECT_ROOT / "api" / "config" / "config.yaml"
+API_CONFIG_FILE_PATH = PROJECT_ROOT / "src" / "api" / "config" / "config.yaml"
 
 
 # ----------------------------
@@ -72,14 +72,14 @@ PREDICTOR_SERVICE_URL = "http://127.0.0.1:8001" + PREDICTOR_SERVICE_ENDPOINT
 
 PREDICTOR_SERVICE_LAST_ACCESSES_PARAM_NAME = "last_accesses"
 PREDICTOR_SERVICE_MODEL_PATH_PARAM_NAME = "model_path"
-PREDICTOR_SERVICE_DEVICE_TYPE_PARAM_NAME = "device"
+PREDICTOR_SERVICE_DEVICE_TYPE_PARAM_NAME = "device_type"
 PREDICTOR_SERVICE_ROLLOUT_HORIZON_PARAM_NAME = "rollout_horizon"
 PREDICTOR_SERVICE_MC_DROPOUT_SAMPLES_PARAM_NAME = "mc_dropout_samples"
 PREDICTOR_SERVICE_TIME_STEP_INCREMENT_PARAM_NAME = "time_step_increment"
 
 PREDICTOR_SERVICE_PARAMS = {
     PREDICTOR_SERVICE_LAST_ACCESSES_PARAM_NAME: None,
-    PREDICTOR_SERVICE_MODEL_PATH_PARAM_NAME: MODEL_FILE_PATH,
+    PREDICTOR_SERVICE_MODEL_PATH_PARAM_NAME: str(MODEL_FILE_PATH),
     PREDICTOR_SERVICE_DEVICE_TYPE_PARAM_NAME: None,
     PREDICTOR_SERVICE_ROLLOUT_HORIZON_PARAM_NAME: None,
     PREDICTOR_SERVICE_MC_DROPOUT_SAMPLES_PARAM_NAME: None,
