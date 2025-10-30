@@ -1,6 +1,6 @@
 data:
   keys:
-    max: 200
+    max: 100
     min: 1
   mode: static
   pattern:
@@ -46,8 +46,8 @@ data:
             forward: 1
       zipf:
         alpha:
-          fixed: 1.5
-          max: 2.0
+          fixed: 1.2
+          max: 1.5
           min: 0.5
         steps: 5
     temporal:
@@ -60,11 +60,11 @@ data:
       periodic:
         amplitude: 50
         scale: 90
-  requests: 100
+  requests: 200000
   seed: 42
 dataset:
   split:
-    training: 0.7
+    training: 0.8
     validation: 0.2
 hardware:
   device_type: mps
@@ -81,12 +81,12 @@ model:
     proj_size: 0
   sequence:
     embedding:
-      dimension: 32
+      dimension: 64
     length: 25
 simulations:
   cache:
-    dimension: 50
-    ttl: 1500
+    dimension: 20
+    ttl: 10000
   metrics:
     mistake_rate:
       window: 200
