@@ -146,7 +146,7 @@ stages:
     cmd: PYTHONPATH=src python -m pipeline.steps.validator
     params:
       - src/pipeline/config/config.yaml:
-        - hardware.device
+        - hardware.device_type
         - data.mode
         - data.keys.min
         - data.keys.max
@@ -223,7 +223,6 @@ stages:
       - src/components/model/environment/initializer.py
       - src/components/model/lstm.py
       - src/components/model/mode/setter.py
-      - src/components/model/state_dict/copier.py
       - src/components/optimizer/builder.py
       - src/components/training/callbacks/early_stopping.py
       - src/components/training/core/epochs_trainer.py
@@ -256,7 +255,7 @@ stages:
     cmd: PYTHONPATH=src python -m pipeline.steps.trainer
     params:
       - src/pipeline/config/config.yaml:
-        - hardware.device
+        - hardware.device_type
         - data.mode
         - data.keys.min
         - data.keys.max
@@ -328,7 +327,6 @@ stages:
       - src/components/model/io/saver.py
       - src/components/model/lstm.py
       - src/components/model/mode/setter.py
-      - src/components/model/state_dict/copier.py
       - src/components/optimizer/builder.py
       - src/components/training/callbacks/early_stopping.py
       - src/components/training/core/epochs_trainer.py
@@ -356,7 +354,7 @@ stages:
     cmd: PYTHONPATH=src python -m pipeline.steps.tester
     params:
       - src/pipeline/config/config.yaml:
-        - hardware.device
+        - hardware.device_type
         - data.mode
         - data.keys.min
         - data.keys.max
@@ -413,10 +411,10 @@ stages:
       - src/components/model/builder.py
       - src/components/model/environment/initializer.py
       - src/components/model/io/locator.py
+      - src/components/model/io/loader.py
+      - src/components/yaml/io/loader.py
       - src/components/model/lstm.py
       - src/components/model/mode/setter.py
-      - src/components/model/state_dict/loader.py
-      - src/components/yaml/io/loader.py
       - src/components/const.py
       - src/const.py
       - src/pipeline/const.py
@@ -451,7 +449,6 @@ stages:
     deps:
       - src/components/assertions/choice_field_assertor.py
       - src/components/assertions/min_max_assertor.py
-      - src/components/caches/implementations/fifo_cache.py
       - src/components/caches/implementations/lfu_cache.py
       - src/components/caches/implementations/lru_cache.py
       - src/components/caches/implementations/lstm_cache.py

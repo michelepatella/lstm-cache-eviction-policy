@@ -1,3 +1,5 @@
+from typing import Any
+
 import numpy as np
 
 from components.data.patterns.core.generator import (
@@ -7,13 +9,12 @@ from components.logs.levels.debug_logger import debug
 from components.math.zipf_probs_calculator import (
     calculate_zipf_probs,
 )
-from pipeline.config.pydantic.config import Config
 
 
 def generate_requests_for_alpha(
     alpha: float,
     keys_range: np.ndarray,
-    config: Config,
+    config: Any,
     time_step_duration: int | None = None,
 ) -> tuple[list[int], list[float]]:
     """Generate requests for a single alpha value.
@@ -24,7 +25,7 @@ def generate_requests_for_alpha(
     Args:
         alpha (float): Alpha parameter for Zipfian distribution.
         keys_range (np.ndarray): List of available keys.
-        config (Config): Configuration object.
+        config (Any): Configuration object.
         time_step_duration (int | None): Time step duration for generation.
 
     Returns:

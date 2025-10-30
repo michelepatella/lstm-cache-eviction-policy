@@ -1,15 +1,15 @@
+from typing import Any
+
 from components.model.lstm import LSTM
-from pipeline.config.pydantic.config import Config
-from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
 
 
 def build_model(
-    model_params: ModelParamsConfig | dict[str, int | float | bool],
+    model_params: Any | dict[str, int | float | bool],
     min_key: int,
     max_key: int,
     embedding_dim: int,
     num_features: int,
-    config: Config | None,
+    config: Any | None,
 ) -> LSTM:
     """Build a PyTorch model.
 
@@ -17,13 +17,13 @@ def build_model(
     and configuration.
 
     Args:
-        model_params (ModelParamsConfig | dict[str, int | float | bool]):
+        model_params (Any | dict[str, int | float | bool]):
             Model parameters.
         min_key (int): Minimum key index used in the model.
         max_key (int): Maximum key index used in the model.
         embedding_dim (int): Dimension of the key embedding for the model.
         num_features (int): Number of input features for the model.
-        config (Config | None): Configuration object.
+        config (Any | None): Configuration object.
 
     Returns:
         LSTM: Instantiated PyTorch model.

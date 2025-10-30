@@ -4,7 +4,7 @@ from components.logs.levels.error_logger import error
 
 def evict_score_based_items(
     keys_in_cache: list[int],
-    key_scores: list[float],
+    key_scores: dict[int, float],
     excluded_keys: list[int],
     num_evictions: int,
 ) -> list[int]:
@@ -19,8 +19,8 @@ def evict_score_based_items(
     Args:
         keys_in_cache (list[int]): List of keys currently in the
                                    cache.
-        key_scores (list[float]): Mapping from keys to their
-                                  scores.
+        key_scores (dict[int, float]): Mapping from keys to their
+                                       scores.
         excluded_keys (list[int]): List of keys to exclude from eviction.
         num_evictions (int): Number of keys to evict.
 
@@ -53,9 +53,9 @@ def evict_score_based_items(
         # currently in cache and different
         # from excluded ones
         candidate_keys = {
-            k: key_scores[k]
-            for k in range(len(key_scores))
-            if k in keys_in_cache and k not in excluded_keys
+            int(k): score
+            for k, score in key_scores.items()
+            if int(k) in keys_in_cache and int(k) not in excluded_keys
         }
 
         # Select a number of keys to be evicted

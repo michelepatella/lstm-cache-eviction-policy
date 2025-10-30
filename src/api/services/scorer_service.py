@@ -1,7 +1,7 @@
 import numpy as np
-import torch
 from fastapi import Body, FastAPI, HTTPException, status
 from sklearn.preprocessing import minmax_scale
+from sympy.printing.pytorch import torch
 from torch import softmax
 
 from api.const import (
@@ -121,7 +121,7 @@ def scorer_service(
         )
 
         return {
-            SCORER_SERVICE_RETURN_KEY_SCORES_NAME: key_scores.tolist(),
+            SCORER_SERVICE_RETURN_KEY_SCORES_NAME: key_scores,
             SCORER_SERVICE_RETURN_PROB_MATRIX_NAME: prob_matrix.tolist(),
             SCORER_SERVICE_RETURN_CONF_MATRIX_NAME: conf_matrix.tolist(),
         }

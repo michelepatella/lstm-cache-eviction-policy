@@ -1,3 +1,5 @@
+from typing import Any
+
 import torch
 
 from components.device.mover import (
@@ -11,14 +13,13 @@ from components.loss.builder import build_loss
 from components.model.builder import (
     build_model,
 )
-from pipeline.config.pydantic.config import Config
-from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
 
 
 def initialize_model_environment(
-    model_params: ModelParamsConfig | dict[str, int | float | bool],
-    config: Config,
     targets: torch.Tensor | None,
+    config: Any,
+    model: torch.nn.Module = None,
+    model_params: Any | dict[str, int | float | bool] = None,
 ) -> tuple[torch.device, torch.nn.Module | None, torch.nn.Module]:
     """Set up the model environment.
 
@@ -29,11 +30,12 @@ def initialize_model_environment(
         - Instantiates the PyTorch model and moves it to the device
 
     Args:
-        model_params (ModelParamsConfig |
-        dict[str, int | float | bool]): Model parameters.
-        config (Config): Configuration object.
         targets (torch.Tensor | None): Target labels for computing
-                                       class weights.
+                                         class weights.
+        config (Any): Configuration object.
+        model (torch.nn.Module): A PyTorch model to configure environment for.
+        model_params (Any | dict[str, int | float | bool]):
+            Model parameters.
 
     Returns:
         tuple[torch.device, torch.nn.Module | None, torch.nn.Module]:
@@ -42,7 +44,7 @@ def initialize_model_environment(
                          (None if no targets provided).
             - model: PyTorch model.
     """
-    device_type = config.hardware.device
+    device_type = config.hardware.device_type
     min_key = config.data.keys.min
     max_key = config.data.keys.max
     num_keys = max_key - min_key + 1
@@ -58,15 +60,16 @@ def initialize_model_environment(
     if targets is not None:
         criterion = build_loss(targets, num_keys, device)
 
-    # Instantiate model
-    model = build_model(
-        model_params,
-        min_key,
-        max_key,
-        embedding_dim,
-        num_features,
-        config,
-    )
+    if model is None:
+        # Instantiate model
+        model = build_model(
+            model_params,
+            min_key,
+            max_key,
+            embedding_dim,
+            num_features,
+            config,
+        )
 
     # Move model to device
     model = move_to_device(model, device)

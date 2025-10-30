@@ -35,7 +35,7 @@ def save_model(model: torch.nn.Module, path: str) -> None:
 
         # Save model state dictionary
         # at specified path
-        torch.save(model.state_dict(), path)
+        torch.save(model, path)
 
         debug(
             "Model saving completed",

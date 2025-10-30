@@ -42,7 +42,6 @@ MODEL_COMPUTE_METRICS_ENABLED = True
 # ----------------------------
 # Cache
 # ----------------------------
-CACHE_FIFO_NAME = "FIFO"
 CACHE_LFU_NAME = "LFU"
 CACHE_LRU_NAME = "LRU"
 CACHE_RANDOM_NAME = "RANDOM"

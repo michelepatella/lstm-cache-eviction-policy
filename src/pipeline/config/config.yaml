@@ -60,7 +60,7 @@ data:
       periodic:
         amplitude: 50
         scale: 90
-  requests: 10000
+  requests: 100
   seed: 42
 dataset:
   split:
@@ -76,7 +76,7 @@ model:
     bias: false
     bidirectional: false
     dropout: 0.3
-    hidden_size: 256
+    hidden_size: 128
     num_layers: 2
     proj_size: 0
   sequence:
@@ -85,8 +85,8 @@ model:
     length: 25
 simulations:
   cache:
-    dimension: 25
-    ttl: 3000
+    dimension: 50
+    ttl: 1500
   metrics:
     mistake_rate:
       window: 200

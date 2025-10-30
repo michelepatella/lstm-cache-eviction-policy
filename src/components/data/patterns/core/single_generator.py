@@ -1,3 +1,5 @@
+from typing import Any
+
 import numpy as np
 
 from components.const import TIME_SECONDS_IN_DAY
@@ -10,7 +12,6 @@ from components.data.patterns.temporal.generator import (
 from components.time.cyclics.updater import (
     update_cyclic_time,
 )
-from pipeline.config.pydantic.config import Config
 
 
 def generate_single_pattern_request(
@@ -19,7 +20,7 @@ def generate_single_pattern_request(
     requests: list[int],
     keys_range: np.ndarray,
     zipf_probs: np.ndarray,
-    config: Config,
+    config: Any,
 ) -> tuple[int, float, float, int]:
     """Generate a single request and update the temporal state.
 
@@ -33,7 +34,7 @@ def generate_single_pattern_request(
         requests (list[int]): List of requests generated so far.
         keys_range (np.ndarray): Array of keys available for requests.
         zipf_probs (np.ndarray): Zipfian probabilities of keys.
-        config (Config): Configuration object.
+        config (Any): Configuration object.
 
     Returns:
         tuple[int, float, float, int]:

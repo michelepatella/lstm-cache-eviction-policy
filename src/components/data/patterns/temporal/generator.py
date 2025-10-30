@@ -1,3 +1,5 @@
+from typing import Any
+
 import numpy as np
 
 from components.const import TIME_SECONDS_IN_HOUR
@@ -8,12 +10,11 @@ from components.data.patterns.temporal.variants.periodic_calculator import (
     calculate_periodic_component,
 )
 from components.logs.levels.error_logger import error
-from pipeline.config.pydantic.config import Config
 
 
 def generate_temporal_pattern(
     current_seconds_in_day: float,
-    config: Config,
+    config: Any,
 ) -> float:
     """Generate temporal pattern for current seconds in day.
 
@@ -27,7 +28,7 @@ def generate_temporal_pattern(
         current_seconds_in_day (float): Current seconds in day for which
                                         temporal pattern (i.e., delta time)
                                         is to be generated.
-        config (Config): Configuration object.
+        config (Any): Configuration object.
 
     Returns:
         float: Delta time for current seconds in day.

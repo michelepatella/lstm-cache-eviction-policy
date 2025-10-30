@@ -1,3 +1,5 @@
+from typing import Any
+
 import numpy as np
 
 from components.data.requests.utils.generation_helper import (
@@ -5,11 +7,10 @@ from components.data.requests.utils.generation_helper import (
 )
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
-from pipeline.config.pydantic.config import Config
 
 
 def generate_dynamic_requests(
-    config: Config,
+    config: Any,
 ) -> tuple[list[int], np.ndarray]:
     """Generate dynamic requests and corresponding timestamps in hours.
 
@@ -20,7 +21,7 @@ def generate_dynamic_requests(
     creating temporal variability in the access distribution.
 
     Args:
-        config (Config): Configuration object.
+        config (Any): Configuration object.
 
     Returns:
         tuple[list[int], np.ndarray]:

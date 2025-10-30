@@ -14,7 +14,6 @@ def infer_single_batch(
     model: torch.nn.Module,
     criterion: torch.nn.Module,
     device: torch.device,
-    num_features: int,
     target_idx: int = DATASET_TARGET_COLUMN_IDX,
 ) -> tuple[
     float,
@@ -36,7 +35,6 @@ def infer_single_batch(
         model (torch.nn.Module): PyTorch model to perform inference with.
         criterion (torch.nn.Module): Loss function for computing batch loss.
         device (torch.device): Device to run computations on.
-        num_features (int): Number of features for the model.
         target_idx (int): Index of the target to extract from batch.
 
     Returns:
@@ -76,7 +74,6 @@ def infer_single_batch(
             model,
             batch,
             device,
-            num_features,
         )
 
         # Extract target from batch
@@ -107,7 +104,6 @@ def infer_single_batch(
                 "exception": str(e),
                 "model": type(model).__name__,
                 "device": str(device),
-                "features_num": num_features,
                 "batch_type": str(type(batch)),
                 "batch_length": (
                     len(batch) if hasattr(batch, "__len__") else None

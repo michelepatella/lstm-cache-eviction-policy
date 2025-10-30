@@ -1,3 +1,5 @@
+from typing import Any
+
 import mlflow
 import numpy as np
 from tqdm import tqdm
@@ -12,14 +14,13 @@ from components.model.best.checks_updates.params_checker_updater import (
 from components.validation.time_series_cv.core.folds_runner import (
     compute_time_series_cv_folds,
 )
-from pipeline.config.pydantic.config import Config
 from src.const import LOGS_VALIDATION_PHASE, MLFLOW_NESTED_ENABLED
 
 
 def compute_grid_search(
     training_set: AccessLogsDataset,
     params_combinations: list[dict[str, int | float | bool]],
-    config: Config,
+    config: Any,
 ) -> tuple[dict[str, int | float | bool], float]:
     """Perform grid search to find the best parameters.
 
@@ -32,7 +33,7 @@ def compute_grid_search(
                                           evaluation.
         params_combinations (list[dict[str, int | float | bool]]):
             Parameter combinations to be evaluated.
-        config (Config): Configuration object.
+        config (Any): Configuration object.
 
     Returns:
         tuple[dict[str, int | float | bool], float]:

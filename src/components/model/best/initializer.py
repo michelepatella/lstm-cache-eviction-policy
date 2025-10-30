@@ -1,3 +1,5 @@
+from typing import Any
+
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
@@ -9,18 +11,15 @@ from components.logs.levels.debug_logger import debug
 from components.model.environment.initializer import (
     initialize_model_environment,
 )
-from components.model.io.locator import get_model_abs_path
-from components.model.state_dict.loader import (
-    load_model_state_dict,
+from components.model.io.loader import (
+    load_model,
 )
-from pipeline.config.pydantic.config import Config
-from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
+from components.model.io.locator import get_model_abs_path
 
 
 def initialize_best_model(
-    model_params: ModelParamsConfig,
     data_distribution_mode: str,
-    config: Config,
+    config: Any,
     data_loader: DataLoader | None,
 ) -> tuple[torch.device, nn.Module, nn.Module]:
     """Prepare a trained PyTorch model.
@@ -30,11 +29,10 @@ def initialize_best_model(
     the best PyTorch model.
 
     Args:
-        model_params (ModelParamsConfig): Model hyperparameters.
         data_distribution_mode (str): Data distribution mode to
                                       determine the path
                                       of the trained model.
-        config (Config): Configuration object.
+        config (Any): Configuration object.
         data_loader (DataLoader | None): DataLoader containing the dataset
                                          to be used (if any).
 
@@ -51,15 +49,15 @@ def initialize_best_model(
     # provided data loader
     targets = extract_targets_from_data_loader(data_loader)
 
+    # Load the trained model
+    model = load_model(model_path)
+
     # Setup for model environment
     device, criterion, model = initialize_model_environment(
-        model_params,
-        config,
         targets,
+        config,
+        model=model,
     )
-
-    # Load the trained model
-    model = load_model_state_dict(model_path, model, device)
 
     debug(
         "Best model initialization executed",

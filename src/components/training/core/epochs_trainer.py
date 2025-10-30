@@ -1,3 +1,6 @@
+import copy
+from typing import Any
+
 import numpy as np
 import torch
 from torch.optim import Optimizer
@@ -11,12 +14,8 @@ from components.logs.levels.info_logger import info
 from components.model.best.checks_updates.checker_updater import (
     check_update_best_model,
 )
-from components.model.state_dict.copier import (
-    copy_model_state_dict,
-)
 from components.training.callbacks.early_stopping import EarlyStopping
 from components.training.core.single_epoch_trainer import train_single_epoch
-from pipeline.config.pydantic.config import Config
 from src.const import LOGS_VALIDATION_PHASE
 
 
@@ -29,7 +28,7 @@ def train_epochs(
     criterion: torch.nn.Module,
     device: torch.device,
     current_phase: str,
-    config: Config,
+    config: Any,
 ) -> tuple[float, torch.nn.Module]:
     """Train a model for a given number of epochs.
 
@@ -49,7 +48,7 @@ def train_epochs(
         criterion (torch.nn.Module): Loss function to use.
         device (torch.device): Device to run computations on.
         current_phase (str): Pipeline phase for which to run the training.
-        config (Config): Configuration object.
+        config (Any): Configuration object.
 
     Returns:
         tuple[float, torch.nn.Module]:
@@ -78,7 +77,6 @@ def train_epochs(
         )
 
         # Prepare configuration
-        num_features = config.model.general.features
         es_patience = (
             config.validation.early_stopping.patience
             if current_phase == LOGS_VALIDATION_PHASE
@@ -94,7 +92,7 @@ def train_epochs(
         es = EarlyStopping(es_patience, es_delta)
 
         # Initialization
-        best_model_weights = copy_model_state_dict(model)
+        best_model_weights = copy.deepcopy(model.state_dict())
         best_avg_loss = np.inf
 
         # Train the model over each epoch
@@ -117,7 +115,6 @@ def train_epochs(
                 validation_loader,
                 criterion,
                 device,
-                num_features,
             )
 
             # Check for an update in average loss

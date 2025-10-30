@@ -1,6 +1,6 @@
 from pydantic import BaseModel, confloat, conint
 
-from eviction_policy_api.const import (
+from api.const import (
     MAX_MC_DROPOUT_SAMPLES,
     MAX_ROLLOUT_HORIZON,
     MAX_TIME_STEP_INCREMENT,

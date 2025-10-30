@@ -3,18 +3,11 @@ import torch
 from box import Box
 from fastapi import HTTPException, status
 
-from components.logs.levels.debug_logger import debug
-from components.logs.levels.error_logger import error
-from eviction_policy_api.const import (
+from api.config.kwargs.APIKwargs import APIKwargs
+from api.const import (
     PREDICTOR_SERVICE_DEVICE_TYPE_PARAM_NAME,
-    PREDICTOR_SERVICE_EMBEDDING_DIM_PARAM_NAME,
     PREDICTOR_SERVICE_LAST_ACCESSES_PARAM_NAME,
-    PREDICTOR_SERVICE_MAX_KEY_PARAM_NAME,
     PREDICTOR_SERVICE_MC_DROPOUT_SAMPLES_PARAM_NAME,
-    PREDICTOR_SERVICE_MIN_KEY_PARAM_NAME,
-    PREDICTOR_SERVICE_MODEL_PARAMS_PARAM_NAME,
-    PREDICTOR_SERVICE_MODEL_PATH_PARAM_NAME,
-    PREDICTOR_SERVICE_NUM_FEATURES_PARAM_NAME,
     PREDICTOR_SERVICE_PARAMS,
     PREDICTOR_SERVICE_RETURN_OUTPUTS_NAME,
     PREDICTOR_SERVICE_RETURN_VARIANCES_NAME,
@@ -22,7 +15,8 @@ from eviction_policy_api.const import (
     PREDICTOR_SERVICE_TIME_STEP_INCREMENT_PARAM_NAME,
     PREDICTOR_SERVICE_URL,
 )
-from eviction_policy_api.kwargs.APIKwargs import APIKwargs
+from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
 
 
 def call_predictor_service(
@@ -60,24 +54,8 @@ def call_predictor_service(
         # Prepare parameters for predictor service
         params = Box(PREDICTOR_SERVICE_PARAMS)
         params[PREDICTOR_SERVICE_LAST_ACCESSES_PARAM_NAME] = last_accesses
-        params[PREDICTOR_SERVICE_MODEL_PATH_PARAM_NAME] = api_config.model.path
-        params[PREDICTOR_SERVICE_MODEL_PARAMS_PARAM_NAME] = (
-            api_config.model.params
-        )
         params[PREDICTOR_SERVICE_DEVICE_TYPE_PARAM_NAME] = (
             api_config.hardware.device_type
-        )
-        params[PREDICTOR_SERVICE_MIN_KEY_PARAM_NAME] = api_config.model[
-            "keys"
-        ]["min"]  # To avoid conflicts with Box library methods
-        params[PREDICTOR_SERVICE_MAX_KEY_PARAM_NAME] = api_config.model[
-            "keys"
-        ]["max"]  # To avoid conflicts with Box library methods
-        params[PREDICTOR_SERVICE_NUM_FEATURES_PARAM_NAME] = (
-            api_config.model.num_features
-        )
-        params[PREDICTOR_SERVICE_EMBEDDING_DIM_PARAM_NAME] = (
-            api_config.model.embedding_dim
         )
         params[PREDICTOR_SERVICE_ROLLOUT_HORIZON_PARAM_NAME] = (
             api_kwargs.rollout_horizon

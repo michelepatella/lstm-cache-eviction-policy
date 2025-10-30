@@ -6,7 +6,6 @@ from components.caches.utils.cache_metrics_logger import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from pipeline.config.pydantic.config import Config
 
 
 class BaseCache(ABC):
@@ -31,7 +30,7 @@ class BaseCache(ABC):
         self: "BaseCache",
         cache_class: Any,
         metrics_logger: CacheMetricsLogger,
-        config: Config,
+        config: Any,
     ) -> None:
         """Initialize the BaseCache.
 
@@ -42,7 +41,7 @@ class BaseCache(ABC):
             self (BaseCache): Current class instance.
             cache_class (Any): Class implementing a cache.
             metrics_logger (CacheMetricsLogger): Object to log cache events.
-            config (Config): Configuration object.
+            config (Any): Configuration object.
 
         Returns:
             None

@@ -1,3 +1,5 @@
+from typing import Any
+
 import torch
 from torch import nn
 
@@ -9,8 +11,6 @@ from components.const import (
 from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from pipeline.config.pydantic.config import Config
-from pipeline.config.pydantic.sections.model_config import ModelParamsConfig
 
 
 class LSTM(torch.nn.Module):
@@ -33,8 +33,8 @@ class LSTM(torch.nn.Module):
 
     def _set_params(
         self: "LSTM",
-        params: ModelParamsConfig | dict[str, int | float | bool],
-        config: Config | None,
+        params: Any | dict[str, int | float | bool],
+        config: Any | None,
         param_names: list[str] = MODEL_PARAM_NAMES,
     ) -> None:
         """Set model parameters.
@@ -44,9 +44,9 @@ class LSTM(torch.nn.Module):
 
         Args:
             self ("LSTM"): Current model instance.
-            params (ModelParamsConfig |
-            dict[str, int | float | bool]): Model parameters to be set.
-            config (Config | None): Configuration object.
+            params (Any | dict[str, int | float | bool]):
+                Model parameters to be set.
+            config (Any | None): Configuration object.
             param_names (list[str]): List of parameter names to set.
 
         Raises:
@@ -94,12 +94,12 @@ class LSTM(torch.nn.Module):
 
     def _set_fields(
         self: "LSTM",
-        params: ModelParamsConfig | dict[str, int | float | bool],
+        params: Any | dict[str, int | float | bool],
         min_key: int,
         max_key: int,
         embedding_dim: int,
         num_features: int,
-        config: Config,
+        config: Any,
     ) -> None:
         """Set model fields.
 
@@ -107,13 +107,13 @@ class LSTM(torch.nn.Module):
 
         Args:
             self ("LSTM"): Current class instance.
-            params (ModelParamsConfig |
-            dict[str, int | float | bool]): Model parameters.
+            params (Any | dict[str, int | float | bool]):
+                Model parameters.
             min_key (int): Maximum key.
             max_key (int): Minimum key.
             embedding_dim (int): Embedding dimension for keys.
             num_features (int): Number of features for the model.
-            config (Config): Configuration object.
+            config (Any): Configuration object.
 
         Returns:
             None
@@ -210,12 +210,12 @@ class LSTM(torch.nn.Module):
 
     def __init__(
         self: "LSTM",
-        params: ModelParamsConfig | dict[str, int | float | bool],
+        params: Any | dict[str, int | float | bool],
         min_key: int,
         max_key: int,
         embedding_dim: int,
         num_features: int,
-        config: Config | None,
+        config: Any | None,
     ) -> None:
         """Initialize the model.
 
@@ -224,13 +224,13 @@ class LSTM(torch.nn.Module):
 
         Args:
             self ("LSTM"): Current class instance.
-            params (ModelParamsConfig |
-            dict[str, int | float | bool]): Model parameters.
+            params (Any | dict[str, int | float | bool]):
+                Model parameters.
             min_key (int): Maximum key.
             max_key (int): Minimum key.
             embedding_dim (int): Embedding dimension for keys.
             num_features (int): Number of features for the model.
-            config (Config | None): Configuration object.
+            config (Any | None): Configuration object.
 
         Returns:
             None

@@ -28,7 +28,6 @@ def compute_autoregressive_rollout(
     features_seq: torch.Tensor,
     keys_seq: torch.Tensor,
     device: torch.device,
-    num_features: int,
     rollout_horizon: int,
     mc_dropout_samples: int,
     time_step_increment: float,
@@ -50,7 +49,6 @@ def compute_autoregressive_rollout(
         features_seq (torch.Tensor): Input features sequence.
         keys_seq (torch.Tensor): Input key sequence.
         device (torch.device): Device for computation.
-        num_features (int): Number of features in the model input.
         rollout_horizon (int): Number of autoregressive steps.
         mc_dropout_samples (int): Number of MC dropout samples.
         time_step_increment (float): Increment per rollout step.
@@ -112,7 +110,6 @@ def compute_autoregressive_rollout(
                 model,
                 batch,
                 device,
-                num_features,
                 mc_dropout_samples,
             )
 

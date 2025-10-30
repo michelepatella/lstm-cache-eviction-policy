@@ -11,17 +11,16 @@ from components.caches.utils.cache_metrics_logger import (
     CacheMetricsLogger,
 )
 from components.const import (
-    EVICTION_POLICY_API_ENDPOINT,
-    EVICTION_POLICY_API_KEYS_IN_CACHE_PARAM_NAME,
-    EVICTION_POLICY_API_LAST_ACCESSES_PARAM_NAME,
-    EVICTION_POLICY_API_USER_KWARGS_PARAM_NAME,
+    API_ENDPOINT,
+    API_KEYS_IN_CACHE_PARAM_NAME,
+    API_LAST_ACCESSES_PARAM_NAME,
+    API_USER_KWARGS_PARAM_NAME,
 )
 from components.dataset.rows.extractions.lasts_extractor import (
     extract_last_rows_from_dataset,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from pipeline.config.pydantic.config import Config
 
 
 class LSTMCache(BaseCache):
@@ -39,7 +38,7 @@ class LSTMCache(BaseCache):
         self: "LSTMCache",
         cache_class: Any,
         metrics_logger: CacheMetricsLogger,
-        config: Config,
+        config: Any,
     ) -> None:
         """Initialize the LSTM cache.
 
@@ -51,7 +50,7 @@ class LSTMCache(BaseCache):
             cache_class (Any): Underlying cache class
                                to store items.
             metrics_logger (CacheMetricsLogger): Logger for cache events.
-            config (Config): Configuration object.
+            config (Any): Configuration object.
 
         Returns:
             None
@@ -163,7 +162,7 @@ class LSTMCache(BaseCache):
         current_time: float,
         current_idx: int,
         testing_set: DataLoader,
-        config: Config,
+        config: Any,
     ) -> None:
         """Insert a key in the LSTM cache.
 
@@ -187,7 +186,7 @@ class LSTMCache(BaseCache):
             RuntimeError: If key insertion/eviction fails:
                 * Key is unhashable or cache store/expiry dict
                   misconfigured (TypeError, AttributeError).
-                * Eviction policy API call fails (HTTPException).
+                * API call fails (HTTPException).
         """
         try:
             # Remove all expired keys
@@ -215,16 +214,16 @@ class LSTMCache(BaseCache):
                     # Eviction fallback policy: Random
                     key_to_evict = random.choice(list(self.store.keys()))
                 else:
-                    # Call eviction policy API to get
+                    # Call API to get
                     # the key to be evicted from the cache
                     response = requests.post(
-                        EVICTION_POLICY_API_ENDPOINT,
+                        API_ENDPOINT,
                         json={
-                            EVICTION_POLICY_API_KEYS_IN_CACHE_PARAM_NAME: list(
+                            API_KEYS_IN_CACHE_PARAM_NAME: list(
                                 self.store.keys(),
                             ),
-                            EVICTION_POLICY_API_LAST_ACCESSES_PARAM_NAME: last_accesses,
-                            EVICTION_POLICY_API_USER_KWARGS_PARAM_NAME: {},
+                            API_LAST_ACCESSES_PARAM_NAME: last_accesses,
+                            API_USER_KWARGS_PARAM_NAME: {},
                         },
                     )
                     data = Box(response.json())
@@ -232,7 +231,7 @@ class LSTMCache(BaseCache):
                     # Extract the key(s) from API response
                     # as well as the kwargs used
                     key_to_evict = list(data.keys_to_evict)
-                    api_kwargs = dict(data.kwargs)
+                    api_kwargs = dict(data.api_kwargs)
 
                 # Evict key(s)
                 for key in key_to_evict:

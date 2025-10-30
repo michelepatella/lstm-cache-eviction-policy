@@ -138,9 +138,9 @@ def train_model() -> None:
 
         # Model setup for training
         device, criterion, model = initialize_model_environment(
-            model_params,
-            config,
             targets,
+            config,
+            model_params=model_params,
         )
 
         # Build optimizer

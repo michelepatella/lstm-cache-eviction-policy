@@ -1,14 +1,15 @@
+from typing import Any
+
 import numpy as np
 
 from components.data.requests.utils.generation_helper import (
     generate_requests_helper,
 )
 from components.logs.levels.info_logger import info
-from pipeline.config.pydantic.config import Config
 
 
 def generate_static_requests(
-    config: Config,
+    config: Any,
 ) -> tuple[list[int], np.ndarray]:
     """Generate static requests and corresponding timestamps in hours.
 
@@ -17,7 +18,7 @@ def generate_static_requests(
     the access distribution over keys does not change over time.
 
     Args:
-        config (Config): Configuration object.
+        config (Any): Configuration object.
 
     Returns:
         tuple[list[int], np.ndarray]:

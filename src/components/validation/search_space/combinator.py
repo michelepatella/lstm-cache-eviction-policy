@@ -1,3 +1,5 @@
+from typing import Any
+
 from components.dict.combinations.nested_dict_lists_combinator import (
     combine_nested_dict_lists,
 )
@@ -6,11 +8,10 @@ from components.dict.combinations.nested_dicts_combinator import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from pipeline.config.pydantic.config import Config
 
 
 def get_parameters_combination(
-    config: Config,
+    config: Any,
 ) -> list[dict[str, int | float | bool]]:
     """Generate all possible parameter combinations from the search space.
 
@@ -20,7 +21,7 @@ def get_parameters_combination(
     fully nested parameter configurations.
 
     Args:
-        config (Config): Configuration object.
+        config (Any): Configuration object.
 
     Returns:
         list[dict[str, int | float | bool]]: List of nested dictionaries
