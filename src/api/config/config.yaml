@@ -11,3 +11,4 @@ default_api_kwargs:
   conf_weight: 0.2
   return_all_scores: false
   return_prob_conf: false
+  return_api_kwargs: true

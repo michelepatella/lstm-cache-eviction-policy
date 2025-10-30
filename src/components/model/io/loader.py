@@ -37,7 +37,8 @@ def load_model(path: str, device: torch.device = None) -> torch.nn.Module:
 
         # Load model
         model = torch.load(
-            path, weights_only=MODEL_LOADING_WEIGHTS_ONLY_DISABLED,
+            path,
+            weights_only=MODEL_LOADING_WEIGHTS_ONLY_DISABLED,
         )
 
         # Move model to device (optional)

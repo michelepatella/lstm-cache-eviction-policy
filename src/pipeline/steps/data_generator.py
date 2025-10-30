@@ -7,7 +7,6 @@ import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
 
-from components.const import TIME_HOURS_IN_DAY
 from components.data.requests.core.dynamic_generator import (
     generate_dynamic_requests,
 )
@@ -31,7 +30,10 @@ from components.visualization.zipf_loglog_plotter import (
 )
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
-    LOGS_DATA_GENERATION_PHASE,
+    DAGS_HUB_ENV_VAR_REPO_NAME,
+    DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
+    DAGS_HUB_MLFLOW_ENABLED,
+    LOGS_PHASE_DATA_GENERATION,
     PLOT_DYNAMIC_DAILY_PROFILE_FILE_PATH,
     PLOT_DYNAMIC_KEY_USAGE_HEATMAP_FILE_PATH,
     PLOT_DYNAMIC_ZIPF_LOG_LOG_FILE_PATH,
@@ -40,20 +42,17 @@ from pipeline.const import (
     PLOT_STATIC_ZIPF_LOG_LOG_FILE_PATH,
 )
 from src.const import (
-    DAGS_HUB_MLFLOW_ENABLED,
-    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
-    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
     DATA_DISTRIBUTION_STATIC_MODE,
+    DATASET_COLUMN_REQUEST_NAME,
+    DATASET_COLUMN_TIMESTAMP_NAME,
     DATASET_RAW_TYPE,
-    DATASET_REQUEST_COLUMN_NAME,
-    DATASET_TIMESTAMP_COLUMN_NAME,
     MLFLOW_NESTED_ENABLED,
 )
 
 # Load env variables
 load_dotenv()
-dabs_hub_repo_owner = os.getenv(DAGS_HUB_REPO_OWNER_ENV_VAR_NAME)
-dags_hub_repo_name = os.getenv(DAGS_HUB_REPO_NAME_ENV_VAR_NAME)
+dabs_hub_repo_owner = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME)
+dags_hub_repo_name = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME)
 
 
 def generate_data() -> None:
@@ -70,7 +69,7 @@ def generate_data() -> None:
         None
     """
     # Set the new pipeline step
-    logs_phase.set(LOGS_DATA_GENERATION_PHASE)
+    logs_phase.set(LOGS_PHASE_DATA_GENERATION)
 
     dagshub.init(
         repo_owner=dabs_hub_repo_owner,
@@ -81,7 +80,7 @@ def generate_data() -> None:
     import mlflow
 
     with mlflow.start_run(
-        run_name=LOGS_DATA_GENERATION_PHASE,
+        run_name=LOGS_PHASE_DATA_GENERATION,
         nested=MLFLOW_NESTED_ENABLED,
     ):
         # Setup
@@ -130,10 +129,10 @@ def generate_data() -> None:
         # a timestamp and the corresponding request
         df = build_dataset(
             {
-                DATASET_TIMESTAMP_COLUMN_NAME: timestamps_hours[
+                DATASET_COLUMN_TIMESTAMP_NAME: timestamps_hours[
                     : len(requests)
                 ],
-                DATASET_REQUEST_COLUMN_NAME: requests,
+                DATASET_COLUMN_REQUEST_NAME: requests,
             },
         )
 
@@ -162,9 +161,9 @@ def generate_data() -> None:
         mlflow.log_params(prepare_config().model_dump())
         mlflow.log_metrics(
             {
-                "dataset_num_rows": len(df),
-                "dataset_num_columns": len(df.columns),
-                "requests_num_unique": len(np.unique(requests)),
+                "dataset_rows_num": len(df),
+                "dataset_columns_num": len(df.columns),
+                "requests_unique_num": len(np.unique(requests)),
                 "requests_max_num": max(Counter(requests)),
                 "requests_min_num": min(Counter(requests)),
                 "requests_mean": float(np.mean(requests)),
@@ -187,9 +186,11 @@ def generate_data() -> None:
                 "timestamps_diff_max": float(
                     np.max(np.diff(timestamps_hours)),
                 ),
-                "tot_hours": max(timestamps_hours) - min(timestamps_hours),
-                "tot_days": (max(timestamps_hours) - min(timestamps_hours))
-                / TIME_HOURS_IN_DAY,
+                "days_num": 1
+                + sum(
+                    timestamps_hours[i] < timestamps_hours[i - 1]
+                    for i in range(1, len(timestamps_hours))
+                ),
             },
         )
         mlflow.log_artifact(dataset_path)

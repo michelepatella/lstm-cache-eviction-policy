@@ -21,22 +21,22 @@ from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
+    DAGS_HUB_ENV_VAR_REPO_NAME,
+    DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
+    DAGS_HUB_MLFLOW_ENABLED,
     DATASET_PROCESSED_TYPE,
-    LOGS_DATA_PREPROCESSING_PHASE,
+    LOGS_PHASE_DATA_PREPROCESSING,
 )
 from src.const import (
-    DAGS_HUB_MLFLOW_ENABLED,
-    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
-    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
+    DATASET_COLUMN_TIMESTAMP_NAME,
     DATASET_RAW_TYPE,
-    DATASET_TIMESTAMP_COLUMN_NAME,
     MLFLOW_NESTED_ENABLED,
 )
 
 # Load env variables
 load_dotenv()
-dabs_hub_repo_owner = os.getenv(DAGS_HUB_REPO_OWNER_ENV_VAR_NAME)
-dags_hub_repo_name = os.getenv(DAGS_HUB_REPO_NAME_ENV_VAR_NAME)
+dabs_hub_repo_owner = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME)
+dags_hub_repo_name = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME)
 
 
 def preprocess_data() -> None:
@@ -51,7 +51,7 @@ def preprocess_data() -> None:
         None
     """
     # Set the new pipeline step
-    logs_phase.set(LOGS_DATA_PREPROCESSING_PHASE)
+    logs_phase.set(LOGS_PHASE_DATA_PREPROCESSING)
 
     dagshub.init(
         repo_owner=dabs_hub_repo_owner,
@@ -62,7 +62,7 @@ def preprocess_data() -> None:
     import mlflow
 
     with mlflow.start_run(
-        run_name=LOGS_DATA_PREPROCESSING_PHASE,
+        run_name=LOGS_PHASE_DATA_PREPROCESSING,
         nested=MLFLOW_NESTED_ENABLED,
     ):
         # Setup
@@ -95,7 +95,7 @@ def preprocess_data() -> None:
         # Remove duplicates
         duplicates_removed_df = remove_dataset_duplicates(
             missing_values_removed_df,
-            [DATASET_TIMESTAMP_COLUMN_NAME],
+            [DATASET_COLUMN_TIMESTAMP_NAME],
         )
 
         # Build new features
@@ -114,13 +114,13 @@ def preprocess_data() -> None:
         mlflow.log_params(prepare_config().model_dump())
         mlflow.log_metrics(
             {
-                "dataset_num_rows": len(final_df),
-                "dataset_num_columns": len(final_df.columns),
+                "dataset_rows_num": len(final_df),
+                "dataset_columns_num": len(final_df.columns),
                 "missing_values_num": len(initial_df)
                 - len(missing_values_removed_df),
                 "duplicates_num": len(missing_values_removed_df)
                 - len(duplicates_removed_df),
-                "removals_tot": len(initial_df) - len(final_df),
+                "removals_num": len(initial_df) - len(final_df),
                 "removals_ratio": (len(initial_df) - len(final_df))
                 / len(initial_df),
             },

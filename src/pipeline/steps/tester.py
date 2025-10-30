@@ -17,15 +17,15 @@ from components.model.best.initializer import (
 )
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
-    LOGS_TESTING_PHASE,
+    DAGS_HUB_ENV_VAR_REPO_NAME,
+    DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
+    DAGS_HUB_MLFLOW_ENABLED,
+    LOGS_PHASE_TESTING,
     MODEL_COMPUTE_METRICS_ENABLED,
     RESULTS_DYNAMIC_MODEL_FILE_PATH,
     RESULTS_STATIC_MODEL_FILE_PATH,
 )
 from src.const import (
-    DAGS_HUB_MLFLOW_ENABLED,
-    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
-    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
     DATA_DISTRIBUTION_STATIC_MODE,
     DATASET_TESTING_SPLIT_TYPE,
     MLFLOW_NESTED_ENABLED,
@@ -33,8 +33,8 @@ from src.const import (
 
 # Load env variables
 load_dotenv()
-dabs_hub_repo_owner = os.getenv(DAGS_HUB_REPO_OWNER_ENV_VAR_NAME)
-dags_hub_repo_name = os.getenv(DAGS_HUB_REPO_NAME_ENV_VAR_NAME)
+dabs_hub_repo_owner = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME)
+dags_hub_repo_name = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME)
 
 
 def test_model() -> None:
@@ -47,7 +47,7 @@ def test_model() -> None:
         None
     """
     # Set the new pipeline step
-    logs_phase.set(LOGS_TESTING_PHASE)
+    logs_phase.set(LOGS_PHASE_TESTING)
 
     dagshub.init(
         repo_owner=dabs_hub_repo_owner,
@@ -58,7 +58,7 @@ def test_model() -> None:
     import mlflow
 
     with mlflow.start_run(
-        run_name=LOGS_TESTING_PHASE,
+        run_name=LOGS_PHASE_TESTING,
         nested=MLFLOW_NESTED_ENABLED,
     ):
         # Setup

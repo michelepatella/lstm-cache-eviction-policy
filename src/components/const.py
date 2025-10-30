@@ -2,96 +2,54 @@ import logging
 from pathlib import Path
 from typing import Literal
 
-# ----------------------------
-# Project
-# ----------------------------
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 # ----------------------------
-# Logs
+# API
 # ----------------------------
-LOGS_LOGGER_NAME = "logger"
+API_ENDPOINT = "http://127.0.0.1:8000/evict"
 
-LOGS_PHASE_NAME = "phase"
-LOGS_DEFAULT_PHASE = "unknown"
-
-LOGS_DEFAULT_LEVEL = logging.DEBUG
-
-LOGS_STANDARD_ATTRS = {
-    "name",
-    "msg",
-    "args",
-    "levelname",
-    "levelno",
-    "pathname",
-    "filename",
-    "module",
-    "exc_info",
-    "exc_text",
-    "stack_info",
-    "lineno",
-    "funcName",
-    "created",
-    "msecs",
-    "relativeCreated",
-    "thread",
-    "threadName",
-    "processName",
-    "process",
-}
-
-LOGS_ELASTIC_ENDPOINT_ENV_VAR_NAME = "ELASTIC_ENDPOINT"
-LOGS_ELASTIC_TOKEN_ENV_VAR_NAME = "ELASTIC_TOKEN"
-LOGS_ELASTIC_INDEX_NAME_ENV_VAR_NAME = "ELASTIC_INDEX"
-
-LOGS_ELASTIC_TIMESTAMP_FIELD_NAME = "timestamp"
-LOGS_ELASTIC_LEVEL_FIELD_NAME = "level"
-LOGS_ELASTIC_MESSAGE_FIELD_NAME = "message"
-
-LOGS_ELASTIC_BULK_SIZE = 1000
-
-LOGS_ELASTIC_ACTIONS_INDEX_NAME = "_index"
-LOGS_ELASTIC_ACTIONS_SOURCE_NAME = "_source"
+API_PARAM_KEYS_IN_CACHE_NAME = "keys_in_cache"
+API_PARAM_LAST_ACCESSES_NAME = "last_accesses"
+API_PARAM_USER_API_KWARGS_NAME = "user_api_kwargs"
 
 
 # ----------------------------
-# JSON
+# Autoregressive Rollout
 # ----------------------------
-JSON_WRAP_BOX_ENABLED = True
-JSON_INDENT = 4
+AUTOREGRESSIVE_ROLLOUT_LAST_TIME_IDX = -1
+AUTOREGRESSIVE_ROLLOUT_LAST_TIME_BATCH_IDX = 0
 
 
 # ----------------------------
-# Time
+# Criterion
 # ----------------------------
-TIME_HOURS_IN_DAY = 24
-TIME_SECONDS_IN_DAY = 86_400
-TIME_SECONDS_IN_HOUR = 3_600
-TIME_MICROSECONDS_IN_SECOND = 1_000_000
+CRITERION_CLASS_WEIGHT_TYPE = "balanced"
 
 
 # ----------------------------
 # Data
 # ----------------------------
-DATA_GENERATION_INITIAL_TIMESTAMP = 0.0
-DATA_GENERATION_INITIAL_CURRENT_DAY = 0
-DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY = 0.0
+DATA_GENERATION_TIMESTAMPS_START = 0.0
+DATA_GENERATION_CURRENT_DAY_START = 0
+DATA_GENERATION_CURRENT_SECONDS_IN_DAY_START = 0.0
 
 
 # ----------------------------
 # Dataset
 # ----------------------------
-DATASET_SIN_TIME_COLUMN_NAME = "sin_time"
-DATASET_COS_TIME_COLUMN_NAME = "cos_time"
+DATASET_COLUMN_SIN_TIME_NAME = "sin_time"
+DATASET_COLUMN_COS_TIME_NAME = "cos_time"
 
-DATASET_SIN_TIME_COLUMN_IDX = 0
-DATASET_COS_TIME_COLUMN_IDX = 1
-DATASET_TARGET_COLUMN_IDX = -1
+DATASET_COLUMN_SIN_TIME_IDX = 0
+DATASET_COLUMN_COS_TIME_IDX = 1
+DATASET_COLUMN_TARGET_IDX = -1
+
 DATASET_COLUMNS = [
-    DATASET_SIN_TIME_COLUMN_NAME,
-    DATASET_COS_TIME_COLUMN_NAME,
-    DATASET_TARGET_COLUMN_IDX,
+    DATASET_COLUMN_SIN_TIME_NAME,
+    DATASET_COLUMN_COS_TIME_NAME,
+    DATASET_COLUMN_TARGET_IDX,
 ]
 
 DATASET_INDEX_DISABLED = False
@@ -119,16 +77,76 @@ DATASET_DYNAMIC_PROCESSED_FILE_PATH = (
 
 
 # ----------------------------
-# Missing Values Removal Dropna
+# Early Stopping
+# ----------------------------
+EARLY_STOPPING_ENABLED = True
+EARLY_STOPPING_DISABLED = False
+
+
+# ----------------------------
+# Grid Search
+# ----------------------------
+GRID_SEARCH_DESC = "Grid Search"
+
+
+# ----------------------------
+# JSON
+# ----------------------------
+JSON_WRAP_BOX_ENABLED = True
+JSON_INDENT = 4
+
+
+# ----------------------------
+# Logs
+# ----------------------------
+LOGS_LOGGER_NAME = "logger"
+
+LOGS_LEVEL_DEFAULT = logging.DEBUG
+
+LOGS_FIELD_STANDARD_NAMES = {
+    "name",
+    "msg",
+    "args",
+    "levelname",
+    "levelno",
+    "pathname",
+    "filename",
+    "module",
+    "exc_info",
+    "exc_text",
+    "stack_info",
+    "lineno",
+    "funcName",
+    "created",
+    "msecs",
+    "relativeCreated",
+    "thread",
+    "threadName",
+    "processName",
+    "process",
+}
+
+LOGS_FIELD_PHASE_NAME = "phase"
+LOGS_FIELD_PHASE_DEFAULT = "unknown"
+LOGS_FIELD_TIMESTAMP_NAME = "timestamp"
+LOGS_FIELD_LEVEL_NAME = "level"
+LOGS_FIELD_MESSAGE_NAME = "message"
+
+LOGS_ENV_VAR_ELASTIC_ENDPOINT_NAME = "ELASTIC_ENDPOINT"
+LOGS_ENV_VAR_ELASTIC_TOKEN_NAME = "ELASTIC_TOKEN"
+LOGS_ENV_VAR_ELASTIC_INDEX_NAME = "ELASTIC_INDEX"
+
+LOGS_BULK_SIZE = 1_000
+
+LOGS_ACTIONS_FIELD_INDEX_NAME = "_index"
+LOGS_ACTIONS_FIELD_SOURCE_NAME = "_source"
+
+
+# ----------------------------
+# Missing Values Removal
 # ----------------------------
 MISSING_VALUES_REMOVAL_DROPNA_AXIS = 0
 MISSING_VALUES_REMOVAL_DROPNA_HOW: Literal["any", "all"] = "any"
-
-
-# ----------------------------
-# Criterion
-# ----------------------------
-CRITERION_CLASS_WEIGHT_TYPE = "balanced"
 
 
 # ----------------------------
@@ -144,8 +162,8 @@ MODEL_PARAM_NAMES = [
     "proj_size",
 ]
 
-MODEL_TRAINING_MODE = "train"
-MODEL_EVALUATION_MODE = "eval"
+MODEL_TRAIN_MODE = "train"
+MODEL_EVAL_MODE = "eval"
 MODEL_MC_DROPOUT_MODE = "mc_dropout"
 
 MODEL_TRAINED_STATIC_FILE_PATH = (
@@ -171,26 +189,6 @@ MODEL_LOADING_WEIGHTS_ONLY_DISABLED = False
 
 
 # ----------------------------
-# Early Stopping
-# ----------------------------
-EARLY_STOPPING_ENABLED = True
-EARLY_STOPPING_DISABLED = False
-
-
-# ----------------------------
-# Grid Search
-# ----------------------------
-GRID_SEARCH_DESC = "Grid Search"
-
-
-# ----------------------------
-# Training
-# ----------------------------
-TRAINING_EPOCHS_DESC = "Training"
-TRAINING_SINGLE_EPOCH_DESC = "Epoch"
-
-
-# ----------------------------
 # Monte Carlo (MC) Dropout
 # ----------------------------
 MC_DROPOUT_DISABLED = False
@@ -198,37 +196,6 @@ MC_DROPOUT_ENABLED = True
 MC_DROPOUT_NUM_SAMPLES_DEFAULT = 1
 MC_DROPOUT_FLAG_NAME = "mc_dropout"
 MC_DROPOUT_UNBIASED_VARIANCE_DISABLED = False
-
-
-# ----------------------------
-# Autoregressive Rollout
-# ----------------------------
-AUTOREGRESSIVE_ROLLOUT_LAST_TIME_IDX = -1
-AUTOREGRESSIVE_ROLLOUT_LAST_TIME_BATCH_IDX = 0
-
-
-# ----------------------------
-# Tensor
-# ----------------------------
-TENSOR_OUTPUTS_BATCH_DIM = 0
-TENSOR_TEMPORAL_DIM = 1
-TENSOR_CLASS_DIM = 1
-
-
-# ----------------------------
-# API
-# ----------------------------
-API_ENDPOINT = "http://127.0.0.1:8000/evict"
-API_KEYS_IN_CACHE_PARAM_NAME = "keys_in_cache"
-API_LAST_ACCESSES_PARAM_NAME = "last_accesses"
-API_USER_KWARGS_PARAM_NAME = "user_api_kwargs"
-
-
-# ----------------------------
-# Simulations Metrics
-# ----------------------------
-SIMULATIONS_METRICS_TIMELINE_INDEX_NAME = "index"
-SIMULATIONS_METRICS_TIMELINE_INSTANT_HIT_RATE_NAME = "instant_hit_rate"
 
 
 # ----------------------------
@@ -286,3 +253,34 @@ PLOT_HIT_MISS_RATES_SUBPLOTS = [
         PLOT_HIT_MISS_RATES_SUBPLOTS_TRANSFORM_NAME: lambda hit: 100 - hit,
     },
 ]
+
+
+# ----------------------------
+# Simulations Metrics
+# ----------------------------
+SIMULATIONS_METRICS_TIMELINE_INDEX_NAME = "index"
+SIMULATIONS_METRICS_TIMELINE_INSTANT_HIT_RATE_NAME = "instant_hit_rate"
+
+
+# ----------------------------
+# Tensor
+# ----------------------------
+TENSOR_OUTPUTS_BATCH_DIM = 0
+TENSOR_TEMPORAL_DIM = 1
+TENSOR_CLASS_DIM = 1
+
+
+# ----------------------------
+# Time
+# ----------------------------
+TIME_HOURS_IN_DAY = 24
+TIME_SECONDS_IN_DAY = 86_400
+TIME_SECONDS_IN_HOUR = 3_600
+TIME_MICROSECONDS_IN_SECOND = 1_000_000
+
+
+# ----------------------------
+# Training
+# ----------------------------
+TRAINING_EPOCHS_DESC = "Training"
+TRAINING_SINGLE_EPOCH_DESC = "Epoch"

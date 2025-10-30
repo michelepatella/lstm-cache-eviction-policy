@@ -7,16 +7,16 @@ from dotenv import load_dotenv
 from elasticsearch import Elasticsearch, helpers
 
 from components.const import (
-    LOGS_ELASTIC_ACTIONS_INDEX_NAME,
-    LOGS_ELASTIC_ACTIONS_SOURCE_NAME,
-    LOGS_ELASTIC_BULK_SIZE,
-    LOGS_ELASTIC_ENDPOINT_ENV_VAR_NAME,
-    LOGS_ELASTIC_INDEX_NAME_ENV_VAR_NAME,
-    LOGS_ELASTIC_LEVEL_FIELD_NAME,
-    LOGS_ELASTIC_MESSAGE_FIELD_NAME,
-    LOGS_ELASTIC_TIMESTAMP_FIELD_NAME,
-    LOGS_ELASTIC_TOKEN_ENV_VAR_NAME,
-    LOGS_STANDARD_ATTRS,
+    LOGS_ACTIONS_FIELD_INDEX_NAME,
+    LOGS_ACTIONS_FIELD_SOURCE_NAME,
+    LOGS_BULK_SIZE,
+    LOGS_ENV_VAR_ELASTIC_ENDPOINT_NAME,
+    LOGS_ENV_VAR_ELASTIC_INDEX_NAME,
+    LOGS_ENV_VAR_ELASTIC_TOKEN_NAME,
+    LOGS_FIELD_LEVEL_NAME,
+    LOGS_FIELD_MESSAGE_NAME,
+    LOGS_FIELD_STANDARD_NAMES,
+    LOGS_FIELD_TIMESTAMP_NAME,
 )
 
 # Load environment variables
@@ -24,8 +24,8 @@ load_dotenv()
 
 # Configure Elasticsearch
 es = Elasticsearch(
-    hosts=[os.environ.get(LOGS_ELASTIC_ENDPOINT_ENV_VAR_NAME)],
-    api_key=os.environ.get(LOGS_ELASTIC_TOKEN_ENV_VAR_NAME),
+    hosts=[os.environ.get(LOGS_ENV_VAR_ELASTIC_ENDPOINT_NAME)],
+    api_key=os.environ.get(LOGS_ENV_VAR_ELASTIC_TOKEN_NAME),
 )
 
 
@@ -63,8 +63,8 @@ class ElasticHandler(logging.Handler):
         """
         super().__init__()
         self.buffer = []
-        self.bulk_size = LOGS_ELASTIC_BULK_SIZE
-        self.index = os.environ.get(LOGS_ELASTIC_INDEX_NAME_ENV_VAR_NAME)
+        self.bulk_size = LOGS_BULK_SIZE
+        self.index = os.environ.get(LOGS_ENV_VAR_ELASTIC_INDEX_NAME)
 
         # Send all remaining logs in the buffer
         # at the end of the program
@@ -89,15 +89,15 @@ class ElasticHandler(logging.Handler):
         """
         # Prepare doc to send to Elasticsearch
         doc = {
-            LOGS_ELASTIC_TIMESTAMP_FIELD_NAME: datetime.now(
+            LOGS_FIELD_TIMESTAMP_NAME: datetime.now(
                 timezone.utc,
             ).isoformat(),
-            LOGS_ELASTIC_LEVEL_FIELD_NAME: record.levelname,
-            LOGS_ELASTIC_MESSAGE_FIELD_NAME: record.getMessage(),
+            LOGS_FIELD_LEVEL_NAME: record.levelname,
+            LOGS_FIELD_MESSAGE_NAME: record.getMessage(),
             **{
                 k: v
                 for k, v in record.__dict__.items()
-                if k not in LOGS_STANDARD_ATTRS
+                if k not in LOGS_FIELD_STANDARD_NAMES
             },
         }
 
@@ -130,8 +130,8 @@ class ElasticHandler(logging.Handler):
         # by reading them from bulk
         actions = [
             {
-                LOGS_ELASTIC_ACTIONS_INDEX_NAME: self.index,
-                LOGS_ELASTIC_ACTIONS_SOURCE_NAME: d,
+                LOGS_ACTIONS_FIELD_INDEX_NAME: self.index,
+                LOGS_ACTIONS_FIELD_SOURCE_NAME: d,
             }
             for d in self.buffer
         ]

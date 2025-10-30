@@ -6,7 +6,7 @@ from components.const import (
     MC_DROPOUT_FLAG_NAME,
     MC_DROPOUT_NUM_SAMPLES_DEFAULT,
     MC_DROPOUT_UNBIASED_VARIANCE_DISABLED,
-    MODEL_EVALUATION_MODE,
+    MODEL_EVAL_MODE,
     MODEL_MC_DROPOUT_MODE,
     TENSOR_OUTPUTS_BATCH_DIM,
 )
@@ -21,7 +21,7 @@ def compute_mc_dropout_forward(
     device: torch.device,
     num_mc_dropout_samples: int = MC_DROPOUT_NUM_SAMPLES_DEFAULT,
     mc_dropout_flag: str = MC_DROPOUT_FLAG_NAME,
-    mc_dropout_unbiased_variance=MC_DROPOUT_UNBIASED_VARIANCE_DISABLED,
+    mc_dropout_unbiased_variance: bool = MC_DROPOUT_UNBIASED_VARIANCE_DISABLED,
 ) -> tuple[torch.Tensor, torch.Tensor | None]:
     """Perform forward pass with optional Monte Carlo (MC) Dropout.
 
@@ -68,7 +68,7 @@ def compute_mc_dropout_forward(
             set_model_mode(model, MODEL_MC_DROPOUT_MODE, mc_dropout_flag)
         else:
             # Evaluation mode
-            set_model_mode(model, MODEL_EVALUATION_MODE)
+            set_model_mode(model, MODEL_EVAL_MODE)
 
         all_outputs = []
         with torch.no_grad():

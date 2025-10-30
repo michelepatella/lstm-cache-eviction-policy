@@ -20,20 +20,22 @@ from components.validation.search_space.combinator import (
 )
 from components.yaml.io.saver import save_yaml
 from pipeline.config.configurator import prepare_config
-from pipeline.const import CONFIG_FILE_PATH
-from src.const import (
+from pipeline.const import (
+    CONFIG_FILE_PATH,
+    DAGS_HUB_ENV_VAR_REPO_NAME,
+    DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
     DAGS_HUB_MLFLOW_ENABLED,
-    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
-    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
+)
+from src.const import (
     DATASET_TRAINING_SPLIT_TYPE,
-    LOGS_VALIDATION_PHASE,
+    LOGS_PHASE_VALIDATION,
     MLFLOW_NESTED_ENABLED,
 )
 
 # Load env variables
 load_dotenv()
-dabs_hub_repo_owner = os.getenv(DAGS_HUB_REPO_OWNER_ENV_VAR_NAME)
-dags_hub_repo_name = os.getenv(DAGS_HUB_REPO_NAME_ENV_VAR_NAME)
+dabs_hub_repo_owner = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME)
+dags_hub_repo_name = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME)
 
 
 def validate_model() -> None:
@@ -47,7 +49,7 @@ def validate_model() -> None:
         None
     """
     # Set the new pipeline step
-    logs_phase.set(LOGS_VALIDATION_PHASE)
+    logs_phase.set(LOGS_PHASE_VALIDATION)
 
     dagshub.init(
         repo_owner=dabs_hub_repo_owner,
@@ -58,7 +60,7 @@ def validate_model() -> None:
     import mlflow
 
     with mlflow.start_run(
-        run_name=LOGS_VALIDATION_PHASE,
+        run_name=LOGS_PHASE_VALIDATION,
         nested=MLFLOW_NESTED_ENABLED,
     ):
         # Setup

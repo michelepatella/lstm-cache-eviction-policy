@@ -12,9 +12,9 @@ from components.caches.utils.cache_metrics_logger import (
 )
 from components.const import (
     API_ENDPOINT,
-    API_KEYS_IN_CACHE_PARAM_NAME,
-    API_LAST_ACCESSES_PARAM_NAME,
-    API_USER_KWARGS_PARAM_NAME,
+    API_PARAM_KEYS_IN_CACHE_NAME,
+    API_PARAM_LAST_ACCESSES_NAME,
+    API_PARAM_USER_API_KWARGS_NAME,
 )
 from components.dataset.rows.extractions.lasts_extractor import (
     extract_last_rows_from_dataset,
@@ -219,11 +219,11 @@ class LSTMCache(BaseCache):
                     response = requests.post(
                         API_ENDPOINT,
                         json={
-                            API_KEYS_IN_CACHE_PARAM_NAME: list(
+                            API_PARAM_KEYS_IN_CACHE_NAME: list(
                                 self.store.keys(),
                             ),
-                            API_LAST_ACCESSES_PARAM_NAME: last_accesses,
-                            API_USER_KWARGS_PARAM_NAME: {},
+                            API_PARAM_LAST_ACCESSES_NAME: last_accesses,
+                            API_PARAM_USER_API_KWARGS_NAME: {},
                         },
                     )
                     data = Box(response.json())

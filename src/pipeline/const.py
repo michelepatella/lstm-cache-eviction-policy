@@ -1,42 +1,6 @@
 from pathlib import Path
 
-# ----------------------------
-# Project
-# ----------------------------
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-
-
-# ----------------------------
-# Config
-# ----------------------------
-CONFIG_FILE_PATH = PROJECT_ROOT / "src" / "pipeline" / "config" / "config.yaml"
-
-
-# ----------------------------
-# Logs
-# ----------------------------
-LOGS_DATA_GENERATION_PHASE = "data generation"
-LOGS_DATA_PREPROCESSING_PHASE = "data preprocessing"
-LOGS_TESTING_PHASE = "testing"
-LOGS_SIMULATIONS_PHASE = "simulations"
-
-
-# ----------------------------
-# HW Device
-# ----------------------------
-HW_DEVICE_NAMES = ["cpu", "cuda", "mps"]
-
-
-# ----------------------------
-# Dataset
-# ----------------------------
-DATASET_PROCESSED_TYPE = "processed"
-
-
-# ----------------------------
-# Model
-# ----------------------------
-MODEL_COMPUTE_METRICS_ENABLED = True
 
 
 # ----------------------------
@@ -48,46 +12,51 @@ CACHE_RANDOM_NAME = "RANDOM"
 
 
 # ----------------------------
-# Simulations Metrics
+# Config
 # ----------------------------
-SIMULATIONS_METRICS_HIT_RATE_NAME = "hit_rate"
-SIMULATIONS_METRICS_MISS_RATE_NAME = "miss_rate"
-SIMULATIONS_METRICS_EVICTION_MISTAKE_RATE_NAME = "eviction_mistake_rate"
-SIMULATIONS_METRICS_AVG_CACHE_LATENCY_NAME = "avg_cache_latency"
+CONFIG_FILE_PATH = PROJECT_ROOT / "src" / "pipeline" / "config" / "config.yaml"
 
 
 # ----------------------------
-# Results
+# Dagshub
 # ----------------------------
-RESULTS_STATIC_MODEL_FILE_PATH = (
-    PROJECT_ROOT
-    / "reports"
-    / "results"
-    / "static"
-    / "static_model_results.json"
-)
-RESULTS_DYNAMIC_MODEL_FILE_PATH = (
-    PROJECT_ROOT
-    / "reports"
-    / "results"
-    / "dynamic"
-    / "dynamic_model_results.json"
-)
+DAGS_HUB_MLFLOW_ENABLED = True
+DAGS_HUB_ENV_VAR_REPO_NAME = "DAGS_HUB_REPO"
+DAGS_HUB_ENV_VAR_REPO_OWNER_NAME = "DAGS_HUB_REPO_OWNER"
 
-RESULTS_STATIC_SIMULATIONS_FILE_PATH = (
-    PROJECT_ROOT
-    / "reports"
-    / "results"
-    / "static"
-    / "static_simulations_results.json"
-)
-RESULTS_DYNAMIC_SIMULATIONS_FILE_PATH = (
-    PROJECT_ROOT
-    / "reports"
-    / "results"
-    / "dynamic"
-    / "dynamic_simulations_results.json"
-)
+
+# ----------------------------
+# Dataset
+# ----------------------------
+DATASET_PROCESSED_TYPE = "processed"
+
+
+# ----------------------------
+# HW Device
+# ----------------------------
+HW_DEVICE_NAMES = ["cpu", "cuda", "mps"]
+
+
+# ----------------------------
+# Logs
+# ----------------------------
+LOGS_PHASE_DATA_GENERATION = "data generation"
+LOGS_PHASE_DATA_PREPROCESSING = "data preprocessing"
+LOGS_PHASE_TRAINING = "training"
+LOGS_PHASE_TESTING = "testing"
+LOGS_PHASE_SIMULATIONS = "simulations"
+
+
+# ----------------------------
+# MLFlow
+# ----------------------------
+MLFLOW_ARTIFACT_PATH = "model"
+
+
+# ----------------------------
+# Model
+# ----------------------------
+MODEL_COMPUTE_METRICS_ENABLED = True
 
 
 # ----------------------------
@@ -126,3 +95,45 @@ PLOT_DYNAMIC_HIT_MISS_RATES_FILE_PATH = (
     / "dynamic"
     / "dynamic_hit_miss_rates.png"
 )
+
+# ----------------------------
+# Results
+# ----------------------------
+RESULTS_STATIC_MODEL_FILE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "results"
+    / "static"
+    / "static_model_results.json"
+)
+RESULTS_DYNAMIC_MODEL_FILE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "results"
+    / "dynamic"
+    / "dynamic_model_results.json"
+)
+
+RESULTS_STATIC_SIMULATIONS_FILE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "results"
+    / "static"
+    / "static_simulations_results.json"
+)
+RESULTS_DYNAMIC_SIMULATIONS_FILE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "results"
+    / "dynamic"
+    / "dynamic_simulations_results.json"
+)
+
+
+# ----------------------------
+# Simulations Metrics
+# ----------------------------
+SIMULATIONS_METRICS_HIT_RATE_NAME = "hit_rate"
+SIMULATIONS_METRICS_MISS_RATE_NAME = "miss_rate"
+SIMULATIONS_METRICS_EVICTION_MISTAKE_RATE_NAME = "eviction_mistake_rate"
+SIMULATIONS_METRICS_AVG_CACHE_LATENCY_NAME = "avg_cache_latency"

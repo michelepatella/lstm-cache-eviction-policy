@@ -26,20 +26,22 @@ from components.model.io.saver import save_model
 from components.optimizer.builder import build_optimizer
 from components.training.core.epochs_trainer import train_epochs
 from pipeline.config.configurator import prepare_config
-from src.const import (
+from pipeline.const import (
+    DAGS_HUB_ENV_VAR_REPO_NAME,
+    DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
     DAGS_HUB_MLFLOW_ENABLED,
-    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
-    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
+    LOGS_PHASE_TRAINING,
+    MLFLOW_ARTIFACT_PATH,
+)
+from src.const import (
     DATASET_TRAINING_SPLIT_TYPE,
-    LOGS_TRAINING_PHASE,
     MLFLOW_NESTED_ENABLED,
-    MLFLOW_PYTORCH_SAVE_MODEL_PATH,
 )
 
 # Load env variables
 load_dotenv()
-dabs_hub_repo_owner = os.getenv(DAGS_HUB_REPO_OWNER_ENV_VAR_NAME)
-dags_hub_repo_name = os.getenv(DAGS_HUB_REPO_NAME_ENV_VAR_NAME)
+dabs_hub_repo_owner = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME)
+dags_hub_repo_name = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME)
 
 
 def train_model() -> None:
@@ -53,7 +55,7 @@ def train_model() -> None:
         None
     """
     # Set the new pipeline step
-    logs_phase.set(LOGS_TRAINING_PHASE)
+    logs_phase.set(LOGS_PHASE_TRAINING)
 
     dagshub.init(
         repo_owner=dabs_hub_repo_owner,
@@ -64,7 +66,7 @@ def train_model() -> None:
     import mlflow
 
     with mlflow.start_run(
-        run_name=LOGS_TRAINING_PHASE,
+        run_name=LOGS_PHASE_TRAINING,
         nested=MLFLOW_NESTED_ENABLED,
     ):
         # Setup
@@ -187,7 +189,7 @@ def train_model() -> None:
             )
             mlflow.log_artifacts(
                 local_dir=MLFLOW_PYTORCH_SAVE_MODEL_TEMP_PATH,
-                artifact_path=MLFLOW_PYTORCH_SAVE_MODEL_PATH,
+                artifact_path=MLFLOW_ARTIFACT_PATH,
             )
 
     info(

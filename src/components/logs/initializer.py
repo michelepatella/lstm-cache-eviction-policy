@@ -4,23 +4,23 @@ import logging
 import structlog
 
 from components.const import (
-    LOGS_DEFAULT_LEVEL,
-    LOGS_DEFAULT_PHASE,
+    LOGS_FIELD_PHASE_DEFAULT,
+    LOGS_FIELD_PHASE_NAME,
+    LOGS_LEVEL_DEFAULT,
     LOGS_LOGGER_NAME,
-    LOGS_PHASE_NAME,
 )
 from components.logs.handlers.elastic_handler import ElasticHandler
 
 # Contextual variable for logging messages
 logs_phase = contextvars.ContextVar(
-    LOGS_PHASE_NAME,
-    default=LOGS_DEFAULT_PHASE,
+    LOGS_FIELD_PHASE_NAME,
+    default=LOGS_FIELD_PHASE_DEFAULT,
 )
 
 
 def initialize_logs(
     logger_name: str = LOGS_LOGGER_NAME,
-    logger_level: int = LOGS_DEFAULT_LEVEL,
+    logger_level: int = LOGS_LEVEL_DEFAULT,
 ) -> None:
     """Initialize logging configuration for the pipeline.
 

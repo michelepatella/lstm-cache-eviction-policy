@@ -6,16 +6,16 @@ from fastapi import HTTPException, status
 
 from api.config.kwargs.APIKwargs import APIKwargs
 from api.const import (
-    SCORER_SERVICE_CONF_WEIGHT_PARAM_NAME,
-    SCORER_SERVICE_CONFIDENCE_LEVEL_PARAM_NAME,
-    SCORER_SERVICE_OUTPUTS_PARAM_NAME,
+    SCORER_SERVICE_PARAM_CONF_WEIGHT_NAME,
+    SCORER_SERVICE_PARAM_CONFIDENCE_LEVEL_NAME,
+    SCORER_SERVICE_PARAM_OUTPUTS_NAME,
+    SCORER_SERVICE_PARAM_PROB_WEIGHT_NAME,
+    SCORER_SERVICE_PARAM_VARIANCES_NAME,
     SCORER_SERVICE_PARAMS,
-    SCORER_SERVICE_PROB_WEIGHT_PARAM_NAME,
     SCORER_SERVICE_RETURN_CONF_MATRIX_NAME,
     SCORER_SERVICE_RETURN_KEY_SCORES_NAME,
     SCORER_SERVICE_RETURN_PROB_MATRIX_NAME,
     SCORER_SERVICE_URL,
-    SCORER_SERVICE_VARIANCES_PARAM_NAME,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -56,13 +56,13 @@ def call_scorer_service(
     try:
         # Prepare parameters for scorer service
         params = Box(SCORER_SERVICE_PARAMS)
-        params[SCORER_SERVICE_OUTPUTS_PARAM_NAME] = outputs
-        params[SCORER_SERVICE_VARIANCES_PARAM_NAME] = variances
-        params[SCORER_SERVICE_CONFIDENCE_LEVEL_PARAM_NAME] = (
+        params[SCORER_SERVICE_PARAM_OUTPUTS_NAME] = outputs
+        params[SCORER_SERVICE_PARAM_VARIANCES_NAME] = variances
+        params[SCORER_SERVICE_PARAM_CONFIDENCE_LEVEL_NAME] = (
             api_kwargs.confidence_level
         )
-        params[SCORER_SERVICE_PROB_WEIGHT_PARAM_NAME] = api_kwargs.prob_weight
-        params[SCORER_SERVICE_CONF_WEIGHT_PARAM_NAME] = api_kwargs.conf_weight
+        params[SCORER_SERVICE_PARAM_PROB_WEIGHT_NAME] = api_kwargs.prob_weight
+        params[SCORER_SERVICE_PARAM_CONF_WEIGHT_NAME] = api_kwargs.conf_weight
 
         debug(
             "Scorer service call started",

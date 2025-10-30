@@ -5,14 +5,14 @@ from fastapi import HTTPException, status
 
 from api.config.kwargs.APIKwargs import APIKwargs
 from api.const import (
-    PREDICTOR_SERVICE_DEVICE_TYPE_PARAM_NAME,
-    PREDICTOR_SERVICE_LAST_ACCESSES_PARAM_NAME,
-    PREDICTOR_SERVICE_MC_DROPOUT_SAMPLES_PARAM_NAME,
+    PREDICTOR_SERVICE_PARAM_DEVICE_TYPE_NAME,
+    PREDICTOR_SERVICE_PARAM_LAST_ACCESSES_NAME,
+    PREDICTOR_SERVICE_PARAM_MC_DROPOUT_SAMPLES_NAME,
+    PREDICTOR_SERVICE_PARAM_ROLLOUT_HORIZON_NAME,
+    PREDICTOR_SERVICE_PARAM_TIME_STEP_INCREMENT_NAME,
     PREDICTOR_SERVICE_PARAMS,
     PREDICTOR_SERVICE_RETURN_OUTPUTS_NAME,
     PREDICTOR_SERVICE_RETURN_VARIANCES_NAME,
-    PREDICTOR_SERVICE_ROLLOUT_HORIZON_PARAM_NAME,
-    PREDICTOR_SERVICE_TIME_STEP_INCREMENT_PARAM_NAME,
     PREDICTOR_SERVICE_URL,
 )
 from components.logs.levels.debug_logger import debug
@@ -53,17 +53,17 @@ def call_predictor_service(
     try:
         # Prepare parameters for predictor service
         params = Box(PREDICTOR_SERVICE_PARAMS)
-        params[PREDICTOR_SERVICE_LAST_ACCESSES_PARAM_NAME] = last_accesses
-        params[PREDICTOR_SERVICE_DEVICE_TYPE_PARAM_NAME] = (
+        params[PREDICTOR_SERVICE_PARAM_LAST_ACCESSES_NAME] = last_accesses
+        params[PREDICTOR_SERVICE_PARAM_DEVICE_TYPE_NAME] = (
             api_config.hardware.device_type
         )
-        params[PREDICTOR_SERVICE_ROLLOUT_HORIZON_PARAM_NAME] = (
+        params[PREDICTOR_SERVICE_PARAM_ROLLOUT_HORIZON_NAME] = (
             api_kwargs.rollout_horizon
         )
-        params[PREDICTOR_SERVICE_MC_DROPOUT_SAMPLES_PARAM_NAME] = (
+        params[PREDICTOR_SERVICE_PARAM_MC_DROPOUT_SAMPLES_NAME] = (
             api_kwargs.mc_dropout_samples
         )
-        params[PREDICTOR_SERVICE_TIME_STEP_INCREMENT_PARAM_NAME] = (
+        params[PREDICTOR_SERVICE_PARAM_TIME_STEP_INCREMENT_NAME] = (
             api_kwargs.time_step_increment
         )
 

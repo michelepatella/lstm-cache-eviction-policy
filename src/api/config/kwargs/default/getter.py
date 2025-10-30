@@ -2,16 +2,17 @@ from box import Box
 from fastapi import HTTPException, status
 
 from api.const import (
-    CONF_WEIGHT_API_KWARG_NAME,
-    CONFIDENCE_LEVEL_API_KWARG_NAME,
-    EXCLUDED_KEYS_API_KWARG_NAME,
-    MC_DROPOUT_SAMPLES_API_KWARG_NAME,
-    NUM_EVICTIONS_API_KWARG_NAME,
-    PROB_WEIGHT_API_KWARG_NAME,
-    RETURN_ALL_SCORES_API_KWARG_NAME,
-    RETURN_PROB_CONF_API_KWARG_NAME,
-    ROLLOUT_HORIZON_API_KWARG_NAME,
-    TIME_STEP_INCREMENT_API_KWARG_NAME,
+    API_KWARGS_CONF_WEIGHT_NAME,
+    API_KWARGS_CONFIDENCE_LEVEL_NAME,
+    API_KWARGS_EXCLUDED_KEYS_NAME,
+    API_KWARGS_MC_DROPOUT_SAMPLES_NAME,
+    API_KWARGS_NUM_EVICTIONS_NAME,
+    API_KWARGS_PROB_WEIGHT_NAME,
+    API_KWARGS_RETURN_ALL_SCORES_NAME,
+    API_KWARGS_RETURN_API_KWARGS_NAME,
+    API_KWARGS_RETURN_PROB_CONF_NAME,
+    API_KWARGS_ROLLOUT_HORIZON_NAME,
+    API_KWARGS_TIME_STEP_INCREMENT_NAME,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -41,16 +42,17 @@ def get_default_api_kwargs(
     """
     try:
         default_api_kwargs: dict[str, int | float | list[int] | str | bool] = {
-            ROLLOUT_HORIZON_API_KWARG_NAME: api_config.default_api_kwargs.rollout_horizon,
-            MC_DROPOUT_SAMPLES_API_KWARG_NAME: api_config.default_api_kwargs.mc_dropout_samples,
-            CONFIDENCE_LEVEL_API_KWARG_NAME: api_config.default_api_kwargs.confidence_level,
-            TIME_STEP_INCREMENT_API_KWARG_NAME: api_config.default_api_kwargs.time_step_increment,
-            NUM_EVICTIONS_API_KWARG_NAME: api_config.default_api_kwargs.num_evictions,
-            EXCLUDED_KEYS_API_KWARG_NAME: api_config.default_api_kwargs.excluded_keys,
-            PROB_WEIGHT_API_KWARG_NAME: api_config.default_api_kwargs.prob_weight,
-            CONF_WEIGHT_API_KWARG_NAME: api_config.default_api_kwargs.conf_weight,
-            RETURN_ALL_SCORES_API_KWARG_NAME: api_config.default_api_kwargs.return_all_scores,
-            RETURN_PROB_CONF_API_KWARG_NAME: api_config.default_api_kwargs.return_prob_conf,
+            API_KWARGS_ROLLOUT_HORIZON_NAME: api_config.default_api_kwargs.rollout_horizon,
+            API_KWARGS_MC_DROPOUT_SAMPLES_NAME: api_config.default_api_kwargs.mc_dropout_samples,
+            API_KWARGS_CONFIDENCE_LEVEL_NAME: api_config.default_api_kwargs.confidence_level,
+            API_KWARGS_TIME_STEP_INCREMENT_NAME: api_config.default_api_kwargs.time_step_increment,
+            API_KWARGS_NUM_EVICTIONS_NAME: api_config.default_api_kwargs.num_evictions,
+            API_KWARGS_EXCLUDED_KEYS_NAME: api_config.default_api_kwargs.excluded_keys,
+            API_KWARGS_PROB_WEIGHT_NAME: api_config.default_api_kwargs.prob_weight,
+            API_KWARGS_CONF_WEIGHT_NAME: api_config.default_api_kwargs.conf_weight,
+            API_KWARGS_RETURN_ALL_SCORES_NAME: api_config.default_api_kwargs.return_all_scores,
+            API_KWARGS_RETURN_PROB_CONF_NAME: api_config.default_api_kwargs.return_prob_conf,
+            API_KWARGS_RETURN_API_KWARGS_NAME: api_config.default_api_kwargs.return_api_kwargs,
         }
 
         debug(

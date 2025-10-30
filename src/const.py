@@ -1,23 +1,7 @@
 # ----------------------------
-# MLFlow
+# Cache
 # ----------------------------
-MLFLOW_NESTED_ENABLED = True
-MLFLOW_PYTORCH_SAVE_MODEL_PATH = "model"
-
-
-# ----------------------------
-# Dagshub
-# ----------------------------
-DAGS_HUB_MLFLOW_ENABLED = True
-DAGS_HUB_REPO_NAME_ENV_VAR_NAME = "DAGS_HUB_REPO_NAME"
-DAGS_HUB_REPO_OWNER_ENV_VAR_NAME = "DAGS_HUB_REPO_OWNER"
-
-
-# ----------------------------
-# Logs
-# ----------------------------
-LOGS_VALIDATION_PHASE = "validation"
-LOGS_TRAINING_PHASE = "training"
+CACHE_LSTM_NAME = "LSTM"
 
 
 # ----------------------------
@@ -30,20 +14,32 @@ DATA_DISTRIBUTION_MODES = [
     DATA_DISTRIBUTION_DYNAMIC_MODE,
 ]
 
-DATA_GENERATION_INITIAL_HOUR = 0
-DATA_GENERATION_FINAL_HOUR = 23
+DATA_GENERATION_HOUR_START = 0
+DATA_GENERATION_HOUR_END = 23
 
 
 # ----------------------------
 # Dataset
 # ----------------------------
-DATASET_TIMESTAMP_COLUMN_NAME = "timestamp"
-DATASET_REQUEST_COLUMN_NAME = "request"
+DATASET_COLUMN_TIMESTAMP_NAME = "timestamp"
+DATASET_COLUMN_REQUEST_NAME = "request"
 
 DATASET_RAW_TYPE = "raw"
 
 DATASET_TRAINING_SPLIT_TYPE = "training"
 DATASET_TESTING_SPLIT_TYPE = "testing"
+
+
+# ----------------------------
+# Logs
+# ----------------------------
+LOGS_PHASE_VALIDATION = "validation"
+
+
+# ----------------------------
+# MLFlow
+# ----------------------------
+MLFLOW_NESTED_ENABLED = True
 
 
 # ----------------------------
@@ -57,12 +53,6 @@ OPTIMIZER_NAMES = [
     OPTIMIZER_ADAMW_NAME,
     OPTIMIZER_SGD_NAME,
 ]
-
-
-# ----------------------------
-# Cache
-# ----------------------------
-CACHE_LSTM_NAME = "LSTM"
 
 
 # ----------------------------

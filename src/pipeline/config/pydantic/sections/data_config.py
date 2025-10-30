@@ -8,8 +8,8 @@ from components.assertions.min_max_assertor import (
 )
 from src.const import (
     DATA_DISTRIBUTION_MODES,
-    DATA_GENERATION_FINAL_HOUR,
-    DATA_GENERATION_INITIAL_HOUR,
+    DATA_GENERATION_HOUR_END,
+    DATA_GENERATION_HOUR_START,
 )
 
 
@@ -24,10 +24,10 @@ class HoursConfig(BaseModel):
     """
 
     start: conint(
-        ge=DATA_GENERATION_INITIAL_HOUR,
-        le=DATA_GENERATION_FINAL_HOUR,
+        ge=DATA_GENERATION_HOUR_START,
+        le=DATA_GENERATION_HOUR_END,
     )  # type: ignore[valid-type]
-    end: conint(ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR)  # type: ignore[valid-type]
+    end: conint(ge=DATA_GENERATION_HOUR_START, le=DATA_GENERATION_HOUR_END)  # type: ignore[valid-type]
 
 
 class KeysConfig(BaseModel):
@@ -274,10 +274,10 @@ class BurstinessHoursConfig(BaseModel):
     """
 
     start: conint(
-        ge=DATA_GENERATION_INITIAL_HOUR,
-        le=DATA_GENERATION_FINAL_HOUR,
+        ge=DATA_GENERATION_HOUR_START,
+        le=DATA_GENERATION_HOUR_END,
     )  # type: ignore[valid-type]
-    end: conint(ge=DATA_GENERATION_INITIAL_HOUR, le=DATA_GENERATION_FINAL_HOUR)  # type: ignore[valid-type]
+    end: conint(ge=DATA_GENERATION_HOUR_START, le=DATA_GENERATION_HOUR_END)  # type: ignore[valid-type]
 
 
 class BurstinessConfig(BaseModel):

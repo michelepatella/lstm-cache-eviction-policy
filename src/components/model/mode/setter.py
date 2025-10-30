@@ -1,9 +1,11 @@
+from typing import Any
+
 import torch
 
 from components.const import (
     MC_DROPOUT_ENABLED,
     MODEL_MC_DROPOUT_MODE,
-    MODEL_TRAINING_MODE,
+    MODEL_TRAIN_MODE,
 )
 from components.logs.levels.error_logger import error
 
@@ -12,7 +14,7 @@ def set_model_mode(
     model: torch.nn.Module,
     mode: str,
     mc_dropout_flag_name: str = None,
-    mc_dropout_flag_value: bool = MC_DROPOUT_ENABLED,
+    mc_dropout_flag_value: Any = MC_DROPOUT_ENABLED,
 ) -> None:
     """Set the mode of a PyTorch model.
 
@@ -24,9 +26,9 @@ def set_model_mode(
         mode (str): Desired mode.
         mc_dropout_flag_name (str): Attribute to set as flag on the model
                                     (only if requested mode is MC Dropout).
-        mc_dropout_flag_value (bool): Value corresponding to the attribute
-                                      to set as flag on the model (only if
-                                      requested mode is MC Dropout).
+        mc_dropout_flag_value (Any): Value corresponding to the attribute
+                                     to set as flag on the model (only if
+                                     requested mode is MC Dropout).
 
     Returns:
         None
@@ -55,7 +57,7 @@ def set_model_mode(
                 setattr(model, mc_dropout_flag_name, mc_dropout_flag_value)
 
         # Training mode
-        elif mode == MODEL_TRAINING_MODE:
+        elif mode == MODEL_TRAIN_MODE:
             # Set model to training mode
             model.train()
 

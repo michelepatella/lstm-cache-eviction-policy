@@ -4,7 +4,7 @@ import torch
 from torch import nn
 
 from components.const import (
-    DATASET_TARGET_COLUMN_IDX,
+    DATASET_COLUMN_TARGET_IDX,
     MC_DROPOUT_DISABLED,
     MODEL_PARAM_NAMES,
 )
@@ -35,7 +35,6 @@ class LSTM(torch.nn.Module):
         self: "LSTM",
         params: Any | dict[str, int | float | bool],
         config: Any | None,
-        param_names: list[str] = MODEL_PARAM_NAMES,
     ) -> None:
         """Set model parameters.
 
@@ -47,7 +46,6 @@ class LSTM(torch.nn.Module):
             params (Any | dict[str, int | float | bool]):
                 Model parameters to be set.
             config (Any | None): Configuration object.
-            param_names (list[str]): List of parameter names to set.
 
         Raises:
             RuntimeError: If setting model parameters fails:
@@ -65,7 +63,7 @@ class LSTM(torch.nn.Module):
                 model_params = config.model.params
 
             # For each required parameter
-            for param in param_names:
+            for param in MODEL_PARAM_NAMES:
                 # Check whether the required parameter
                 # has been directly passed to the model
                 if param in params and params[param] is not None:
@@ -85,7 +83,7 @@ class LSTM(torch.nn.Module):
                 extra={
                     "exception": str(e),
                     "model_type": type(self).__name__,
-                    "param_names_attempted": param_names,
+                    "param_names_attempted": MODEL_PARAM_NAMES,
                     "params_passed": params,
                     "context": "LSTM model",
                 },
@@ -316,7 +314,7 @@ class LSTM(torch.nn.Module):
             # Concatenate features with embedded keys
             x = torch.cat(
                 (x_features, embedded_keys),
-                dim=DATASET_TARGET_COLUMN_IDX,
+                dim=DATASET_COLUMN_TARGET_IDX,
             )
 
             return x

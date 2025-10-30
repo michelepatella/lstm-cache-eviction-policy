@@ -1,14 +1,14 @@
 import torch
 from torch.utils.data import DataLoader
 
-from components.const import DATASET_TARGET_COLUMN_IDX
+from components.const import DATASET_COLUMN_TARGET_IDX
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
 def extract_targets_from_data_loader(
     data_loader: DataLoader,
-    target_idx: int = DATASET_TARGET_COLUMN_IDX,
+    target_idx: int = DATASET_COLUMN_TARGET_IDX,
 ) -> torch.Tensor:
     """Extract all target tensors from a data loader.
 

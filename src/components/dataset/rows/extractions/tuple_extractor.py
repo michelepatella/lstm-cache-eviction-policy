@@ -2,22 +2,22 @@ import pandas as pd
 import torch
 
 from components.const import (
-    DATASET_COS_TIME_COLUMN_NAME,
-    DATASET_SIN_TIME_COLUMN_NAME,
+    DATASET_COLUMN_COS_TIME_NAME,
+    DATASET_COLUMN_SIN_TIME_NAME,
 )
 from components.logs.levels.error_logger import error
 from src.const import (
-    DATASET_REQUEST_COLUMN_NAME,
+    DATASET_COLUMN_REQUEST_NAME,
 )
 
 
 def extract_tuple_from_dataset_row(
     row: pd.Series,
     feature_columns: list[str] = [
-        DATASET_COS_TIME_COLUMN_NAME,
-        DATASET_SIN_TIME_COLUMN_NAME,
+        DATASET_COLUMN_COS_TIME_NAME,
+        DATASET_COLUMN_SIN_TIME_NAME,
     ],
-    target_column: str = DATASET_REQUEST_COLUMN_NAME,
+    target_column: str = DATASET_COLUMN_REQUEST_NAME,
     feature_dtype: torch.dtype = torch.float,
     target_dtype: torch.dtype = torch.long,
 ) -> tuple[torch.Tensor, torch.Tensor]:

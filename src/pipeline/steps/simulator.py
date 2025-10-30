@@ -35,7 +35,10 @@ from pipeline.const import (
     CACHE_LFU_NAME,
     CACHE_LRU_NAME,
     CACHE_RANDOM_NAME,
-    LOGS_SIMULATIONS_PHASE,
+    DAGS_HUB_ENV_VAR_REPO_NAME,
+    DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
+    DAGS_HUB_MLFLOW_ENABLED,
+    LOGS_PHASE_SIMULATIONS,
     PLOT_DYNAMIC_HIT_MISS_RATES_FILE_PATH,
     PLOT_STATIC_HIT_MISS_RATES_FILE_PATH,
     RESULTS_DYNAMIC_SIMULATIONS_FILE_PATH,
@@ -47,9 +50,6 @@ from pipeline.const import (
 )
 from src.const import (
     CACHE_LSTM_NAME,
-    DAGS_HUB_MLFLOW_ENABLED,
-    DAGS_HUB_REPO_NAME_ENV_VAR_NAME,
-    DAGS_HUB_REPO_OWNER_ENV_VAR_NAME,
     DATA_DISTRIBUTION_STATIC_MODE,
     MLFLOW_NESTED_ENABLED,
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
@@ -60,8 +60,8 @@ from src.const import (
 
 # Load env variables
 load_dotenv()
-dabs_hub_repo_owner = os.getenv(DAGS_HUB_REPO_OWNER_ENV_VAR_NAME)
-dags_hub_repo_name = os.getenv(DAGS_HUB_REPO_NAME_ENV_VAR_NAME)
+dabs_hub_repo_owner = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME)
+dags_hub_repo_name = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME)
 
 
 def run_simulations() -> None:
@@ -76,7 +76,7 @@ def run_simulations() -> None:
         None
     """
     # Set the new pipeline step
-    logs_phase.set(LOGS_SIMULATIONS_PHASE)
+    logs_phase.set(LOGS_PHASE_SIMULATIONS)
 
     dagshub.init(
         repo_owner=dabs_hub_repo_owner,
@@ -87,7 +87,7 @@ def run_simulations() -> None:
     import mlflow
 
     with mlflow.start_run(
-        run_name=LOGS_SIMULATIONS_PHASE,
+        run_name=LOGS_PHASE_SIMULATIONS,
         nested=MLFLOW_NESTED_ENABLED,
     ):
         # Setup
@@ -136,7 +136,7 @@ def run_simulations() -> None:
         results = []
         for policy, cache in cache_eviction_policies.items():
             with mlflow.start_run(
-                run_name=f"{LOGS_SIMULATIONS_PHASE} ({policy})",
+                run_name=f"{LOGS_PHASE_SIMULATIONS} ({policy})",
                 nested=MLFLOW_NESTED_ENABLED,
             ):
                 # Simulate a cache policy and
@@ -184,7 +184,7 @@ def run_simulations() -> None:
                 # Experiment tracking
                 mlflow.log_metrics(
                     {
-                        "requests_tot": counters[
+                        "requests_num": counters[
                             SIMULATIONS_METRICS_HIT_COUNTER_NAME
                         ]
                         + counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME],

@@ -14,7 +14,7 @@ from components.model.best.checks_updates.params_checker_updater import (
 from components.validation.time_series_cv.core.folds_runner import (
     compute_time_series_cv_folds,
 )
-from src.const import LOGS_VALIDATION_PHASE, MLFLOW_NESTED_ENABLED
+from src.const import LOGS_PHASE_VALIDATION, MLFLOW_NESTED_ENABLED
 
 
 def compute_grid_search(
@@ -80,7 +80,7 @@ def compute_grid_search(
         ) as pbar:
             for idx, params in enumerate(params_combinations, start=1):
                 with mlflow.start_run(
-                    run_name=f"{LOGS_VALIDATION_PHASE} ({idx}/{len(params_combinations)})",
+                    run_name=f"{LOGS_PHASE_VALIDATION} ({idx}/{len(params_combinations)})",
                     nested=MLFLOW_NESTED_ENABLED,
                 ):
                     # Perform time series CV

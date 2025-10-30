@@ -7,9 +7,9 @@ from components.backpropagation.mc_dropout.forward_runner import (
 from components.const import (
     AUTOREGRESSIVE_ROLLOUT_LAST_TIME_BATCH_IDX,
     AUTOREGRESSIVE_ROLLOUT_LAST_TIME_IDX,
-    DATASET_COS_TIME_COLUMN_IDX,
-    DATASET_SIN_TIME_COLUMN_IDX,
-    DATASET_TARGET_COLUMN_IDX,
+    DATASET_COLUMN_COS_TIME_IDX,
+    DATASET_COLUMN_SIN_TIME_IDX,
+    DATASET_COLUMN_TARGET_IDX,
     TENSOR_OUTPUTS_BATCH_DIM,
     TENSOR_TEMPORAL_DIM,
 )
@@ -31,9 +31,6 @@ def compute_autoregressive_rollout(
     rollout_horizon: int,
     mc_dropout_samples: int,
     time_step_increment: float,
-    sin_time_idx: int = DATASET_SIN_TIME_COLUMN_IDX,
-    cos_time_idx: int = DATASET_COS_TIME_COLUMN_IDX,
-    target_idx: int = DATASET_TARGET_COLUMN_IDX,
 ) -> tuple[list[torch.Tensor], list[torch.Tensor]]:
     """Perform autoregressive rollout.
 
@@ -52,10 +49,6 @@ def compute_autoregressive_rollout(
         rollout_horizon (int): Number of autoregressive steps.
         mc_dropout_samples (int): Number of MC dropout samples.
         time_step_increment (float): Increment per rollout step.
-        sin_time_idx (int): Column index for sin time feature.
-        cos_time_idx (int): Column index for cos time feature.
-        target_idx (int): Column index representing target (key)
-                          in outputs.
 
     Returns:
         tuple[list[torch.Tensor], list[torch.Tensor]]:
@@ -88,12 +81,12 @@ def compute_autoregressive_rollout(
             features_seq[
                 AUTOREGRESSIVE_ROLLOUT_LAST_TIME_BATCH_IDX,
                 AUTOREGRESSIVE_ROLLOUT_LAST_TIME_IDX,
-                sin_time_idx,
+                DATASET_COLUMN_SIN_TIME_IDX,
             ].item(),
             features_seq[
                 AUTOREGRESSIVE_ROLLOUT_LAST_TIME_BATCH_IDX,
                 AUTOREGRESSIVE_ROLLOUT_LAST_TIME_IDX,
-                cos_time_idx,
+                DATASET_COLUMN_COS_TIME_IDX,
             ].item(),
         )
 
@@ -123,8 +116,12 @@ def compute_autoregressive_rollout(
 
             # Update the sequence of keys by appending
             # the predicted one at the current step
-            pred_key = outputs_mean.argmax(dim=target_idx).unsqueeze(1)
-            keys_seq = torch.cat([keys_seq[:, 1:], pred_key], dim=target_idx)
+            pred_key = outputs_mean.argmax(
+                dim=DATASET_COLUMN_TARGET_IDX
+            ).unsqueeze(1)
+            keys_seq = torch.cat(
+                [keys_seq[:, 1:], pred_key], dim=DATASET_COLUMN_TARGET_IDX
+            )
 
             # Calculate new sin and cos time obtained by adding
             # a time step increment simulating passing of time,

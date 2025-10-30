@@ -16,7 +16,7 @@ from components.model.best.checks_updates.checker_updater import (
 )
 from components.training.callbacks.early_stopping import EarlyStopping
 from components.training.core.single_epoch_trainer import train_single_epoch
-from src.const import LOGS_VALIDATION_PHASE
+from src.const import LOGS_PHASE_VALIDATION
 
 
 def train_epochs(
@@ -79,12 +79,12 @@ def train_epochs(
         # Prepare configuration
         es_patience = (
             config.validation.early_stopping.patience
-            if current_phase == LOGS_VALIDATION_PHASE
+            if current_phase == LOGS_PHASE_VALIDATION
             else config.training.early_stopping.patience
         )
         es_delta = (
             config.validation.early_stopping.delta
-            if current_phase == LOGS_VALIDATION_PHASE
+            if current_phase == LOGS_PHASE_VALIDATION
             else config.training.early_stopping.delta
         )
 

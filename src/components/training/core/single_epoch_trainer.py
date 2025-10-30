@@ -7,7 +7,7 @@ from components.backpropagation.core.backward_runner import (
     compute_backward,
 )
 from components.backpropagation.core.forward_runner import compute_forward
-from components.const import MODEL_TRAINING_MODE, TRAINING_SINGLE_EPOCH_DESC
+from components.const import MODEL_TRAIN_MODE, TRAINING_SINGLE_EPOCH_DESC
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.model.mode.setter import set_model_mode
@@ -72,7 +72,7 @@ def train_single_epoch(
         )
 
         # Set the model to training mode
-        set_model_mode(model, MODEL_TRAINING_MODE)
+        set_model_mode(model, MODEL_TRAIN_MODE)
 
         # For each batch in the training loader
         # run backpropagation algorithm

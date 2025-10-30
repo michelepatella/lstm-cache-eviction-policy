@@ -120,8 +120,9 @@ def gateway_api(
         # Prepare response
         response: dict = {
             GATEWAY_API_RETURN_KEYS_TO_EVICT_NAME: keys_to_evict,
-            GATEWAY_API_RETURN_API_KWARGS_NAME: api_kwargs.__dict__,
         }
+        if api_kwargs.return_api_kwargs:
+            response[GATEWAY_API_RETURN_API_KWARGS_NAME] = api_kwargs.__dict__
         if api_kwargs.return_all_scores:
             response[GATEWAY_API_RETURN_KEY_SCORES_NAME] = key_scores
         if api_kwargs.return_prob_conf:

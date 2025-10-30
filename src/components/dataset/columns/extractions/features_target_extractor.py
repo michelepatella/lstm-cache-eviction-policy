@@ -1,10 +1,10 @@
-from components.const import DATASET_TARGET_COLUMN_IDX
+from components.const import DATASET_COLUMN_TARGET_IDX
 from components.logs.levels.error_logger import error
 
 
 def extract_features_target_from_dataset_columns(
     columns: list[str],
-    target_column_idx: int = DATASET_TARGET_COLUMN_IDX,
+    target_column_idx: int = DATASET_COLUMN_TARGET_IDX,
 ) -> tuple[list[str], str]:
     """Extract features and target from dataset columns.
 

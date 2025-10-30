@@ -3,9 +3,9 @@ from typing import Any
 import numpy as np
 
 from components.const import (
-    DATA_GENERATION_INITIAL_CURRENT_DAY,
-    DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY,
-    DATA_GENERATION_INITIAL_TIMESTAMP,
+    DATA_GENERATION_CURRENT_DAY_START,
+    DATA_GENERATION_CURRENT_SECONDS_IN_DAY_START,
+    DATA_GENERATION_TIMESTAMPS_START,
 )
 from components.data.patterns.core.single_generator import (
     generate_single_pattern_request,
@@ -19,9 +19,9 @@ def generate_pattern_requests(
     zipf_probs: np.ndarray,
     config: Any,
     time_step_duration: int = None,
-    initial_timestamp: float = DATA_GENERATION_INITIAL_TIMESTAMP,
-    initial_current_day: int = DATA_GENERATION_INITIAL_CURRENT_DAY,
-    initial_current_seconds_in_day: int = DATA_GENERATION_INITIAL_CURRENT_SECONDS_IN_DAY,
+    timestamps_start: float = DATA_GENERATION_TIMESTAMPS_START,
+    current_day_start: int = DATA_GENERATION_CURRENT_DAY_START,
+    current_seconds_in_day_start: int = DATA_GENERATION_CURRENT_SECONDS_IN_DAY_START,
 ) -> tuple[list[int], list[float]]:
     """Generate requests according to specific access and temporal patterns.
 
@@ -36,9 +36,9 @@ def generate_pattern_requests(
                                  given keys.
         config (Any): Configuration object.
         time_step_duration (int): Time step to generate requests for.
-        initial_timestamp (float): Initial timestamp in seconds.
-        initial_current_day (int): Initial current day.
-        initial_current_seconds_in_day (int): Initial seconds elapsed in
+        timestamps_start (float): Initial timestamp in seconds.
+        current_day_start (int): Initial current day.
+        current_seconds_in_day_start (int): Initial seconds elapsed in
                                               the current day.
 
     Returns:
@@ -57,9 +57,9 @@ def generate_pattern_requests(
     try:
         # Initialize data
         requests = []
-        timestamps_seconds = [initial_timestamp]
-        current_day = initial_current_day
-        current_seconds_in_day = initial_current_seconds_in_day
+        timestamps_seconds = [timestamps_start]
+        current_day = current_day_start
+        current_seconds_in_day = current_seconds_in_day_start
 
         # Get the number of requests
         # to be generated
@@ -78,9 +78,9 @@ def generate_pattern_requests(
             "Pattern request generation started",
             extra={
                 "requests_num": num_requests,
-                "timestamp_initial": initial_timestamp,
-                "current_day_initial": initial_current_day,
-                "current_seconds_in_day_initial": initial_current_seconds_in_day,
+                "timestamps_start": timestamps_start,
+                "current_day_start": current_day_start,
+                "current_seconds_in_day_start": current_seconds_in_day_start,
                 "keys_range_len": len(keys_range),
                 "zipf_probs_sum": (
                     float(np.sum(zipf_probs))
@@ -138,9 +138,9 @@ def generate_pattern_requests(
                 "requests_num": (
                     num_requests if "num_requests" in locals() else None
                 ),
-                "timestamp_initial": initial_timestamp,
-                "current_day_initial": initial_current_day,
-                "current_seconds_in_day_initial": initial_current_seconds_in_day,
+                "timestamps_start": timestamps_start,
+                "current_day_start": current_day_start,
+                "current_seconds_in_day_start": current_seconds_in_day_start,
                 "context": "Pattern request generation",
             },
         )
