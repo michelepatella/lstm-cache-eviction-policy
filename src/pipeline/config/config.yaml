@@ -1,6 +1,6 @@
 data:
   keys:
-    max: 100
+    max: 200
     min: 1
   mode: static
   pattern:
@@ -81,11 +81,11 @@ model:
     proj_size: 0
   sequence:
     embedding:
-      dimension: 64
+      dimension: 32
     length: 25
 simulations:
   cache:
-    dimension: 20
+    dimension: 40
     ttl: 10000
   metrics:
     mistake_rate:

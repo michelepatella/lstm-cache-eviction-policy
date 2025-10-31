@@ -46,6 +46,7 @@ stages:
     deps:
       - src/components/assertions/choice_field_assertor.py
       - src/components/assertions/min_max_assertor.py
+      - src/components/const.py
       - src/components/data/patterns/access/generator.py
       - src/components/data/patterns/access/variants/cycle_generator.py
       - src/components/data/patterns/access/variants/distortion_generator.py
@@ -64,7 +65,6 @@ stages:
       - src/components/dataset/builder.py
       - src/components/dataset/io/locator.py
       - src/components/dataset/io/saver.py
-      - src/components/logs/handlers/file_handler_builder.py
       - src/components/logs/handlers/elastic_handler.py
       - src/components/logs/initializer.py
       - src/components/logs/levels/debug_logger.py
@@ -78,9 +78,7 @@ stages:
       - src/components/visualization/key_usage_heatmap_plotter.py
       - src/components/visualization/zipf_loglog_plotter.py
       - src/components/yaml/io/loader.py
-      - src/components/const.py
       - src/const.py
-      - src/pipeline/const.py
       - src/pipeline/config/configurator.py
       - src/pipeline/config/pydantic/config.py
       - src/pipeline/config/pydantic/sections/data_config.py
@@ -91,6 +89,7 @@ stages:
       - src/pipeline/config/pydantic/sections/testing_config.py
       - src/pipeline/config/pydantic/sections/training_config.py
       - src/pipeline/config/pydantic/sections/validation_config.py
+      - src/pipeline/const.py
       - src/pipeline/steps/data_generator.py
     outs:
       - data/raw/${data.mode}/${data.mode}_raw_dataset.csv
@@ -106,6 +105,7 @@ stages:
     deps:
       - src/components/assertions/choice_field_assertor.py
       - src/components/assertions/min_max_assertor.py
+      - src/components/const.py
       - src/components/dataset/cleans/duplicates_remover.py
       - src/components/dataset/cleans/missing_values_remover.py
       - src/components/dataset/columns/manipulations/dropper.py
@@ -115,7 +115,6 @@ stages:
       - src/components/dataset/io/loader.py
       - src/components/dataset/io/locator.py
       - src/components/dataset/io/saver.py
-      - src/components/logs/handlers/file_handler_builder.py
       - src/components/logs/handlers/elastic_handler.py
       - src/components/logs/initializer.py
       - src/components/logs/levels/debug_logger.py
@@ -124,9 +123,7 @@ stages:
       - src/components/logs/levels/utils/logger.py
       - src/components/time/transforms/trig_encoder.py
       - src/components/yaml/io/loader.py
-      - src/components/const.py
       - src/const.py
-      - src/pipeline/const.py
       - src/pipeline/config/configurator.py
       - src/pipeline/config/pydantic/config.py
       - src/pipeline/config/pydantic/sections/data_config.py
@@ -137,6 +134,7 @@ stages:
       - src/pipeline/config/pydantic/sections/testing_config.py
       - src/pipeline/config/pydantic/sections/training_config.py
       - src/pipeline/config/pydantic/sections/validation_config.py
+      - src/pipeline/const.py
       - src/pipeline/steps/data_preprocessor.py
       - data/raw/${data.mode}/${data.mode}_raw_dataset.csv
     outs:
@@ -175,6 +173,7 @@ stages:
       - src/components/backpropagation/core/backward_runner.py
       - src/components/backpropagation/core/forward_runner.py
       - src/components/backpropagation/mc_dropout/forward_runner.py
+      - src/components/const.py
       - src/components/data_loader/builder.py
       - src/components/data_loader/initializer.py
       - src/components/data_loader/targets/extractor.py
@@ -205,7 +204,6 @@ stages:
       - src/components/inference/batches_inferrer.py
       - src/components/inference/single_batch_inferrer.py
       - src/components/json/io/saver.py
-      - src/components/logs/handlers/file_handler_builder.py
       - src/components/logs/handlers/elastic_handler.py
       - src/components/logs/initializer.py
       - src/components/logs/levels/debug_logger.py
@@ -234,9 +232,7 @@ stages:
       - src/components/validation/time_series_cv/core/single_fold_runner.py
       - src/components/yaml/io/loader.py
       - src/components/yaml/io/saver.py
-      - src/components/const.py
       - src/const.py
-      - src/pipeline/const.py
       - src/pipeline/config/configurator.py
       - src/pipeline/config/pydantic/config.py
       - src/pipeline/config/pydantic/sections/data_config.py
@@ -247,6 +243,7 @@ stages:
       - src/pipeline/config/pydantic/sections/testing_config.py
       - src/pipeline/config/pydantic/sections/training_config.py
       - src/pipeline/config/pydantic/sections/validation_config.py
+      - src/pipeline/const.py
       - src/pipeline/steps/validator.py
       - data/processed/${data.mode}/${data.mode}_processed_dataset.csv
     outs: []
@@ -283,6 +280,7 @@ stages:
       - src/components/backpropagation/core/backward_runner.py
       - src/components/backpropagation/core/forward_runner.py
       - src/components/backpropagation/mc_dropout/forward_runner.py
+      - src/components/const.py
       - src/components/data_loader/builder.py
       - src/components/data_loader/initializer.py
       - src/components/data_loader/targets/extractor.py
@@ -308,7 +306,6 @@ stages:
       - src/components/inference/batches_inferrer.py
       - src/components/inference/single_batch_inferrer.py
       - src/components/json/io/saver.py
-      - src/components/logs/handlers/file_handler_builder.py
       - src/components/logs/handlers/elastic_handler.py
       - src/components/logs/initializer.py
       - src/components/logs/levels/debug_logger.py
@@ -332,9 +329,7 @@ stages:
       - src/components/training/core/epochs_trainer.py
       - src/components/training/core/single_epoch_trainer.py
       - src/components/yaml/io/loader.py
-      - src/components/const.py
       - src/const.py
-      - src/pipeline/const.py
       - src/pipeline/config/configurator.py
       - src/pipeline/config/pydantic/config.py
       - src/pipeline/config/pydantic/sections/data_config.py
@@ -345,6 +340,7 @@ stages:
       - src/pipeline/config/pydantic/sections/testing_config.py
       - src/pipeline/config/pydantic/sections/training_config.py
       - src/pipeline/config/pydantic/sections/validation_config.py
+      - src/pipeline/const.py
       - src/pipeline/steps/trainer.py
       - data/processed/${data.mode}/${data.mode}_processed_dataset.csv
     outs:
@@ -371,6 +367,7 @@ stages:
       - src/components/assertions/min_max_assertor.py
       - src/components/backpropagation/core/forward_runner.py
       - src/components/backpropagation/mc_dropout/forward_runner.py
+      - src/components/const.py
       - src/components/data_loader/builder.py
       - src/components/data_loader/initializer.py
       - src/components/data_loader/targets/extractor.py
@@ -395,7 +392,6 @@ stages:
       - src/components/inference/batches_inferrer.py
       - src/components/inference/single_batch_inferrer.py
       - src/components/json/io/saver.py
-      - src/components/logs/handlers/file_handler_builder.py
       - src/components/logs/handlers/elastic_handler.py
       - src/components/logs/initializer.py
       - src/components/logs/levels/debug_logger.py
@@ -410,14 +406,12 @@ stages:
       - src/components/model/best/initializer.py
       - src/components/model/builder.py
       - src/components/model/environment/initializer.py
-      - src/components/model/io/locator.py
       - src/components/model/io/loader.py
-      - src/components/yaml/io/loader.py
+      - src/components/model/io/locator.py
       - src/components/model/lstm.py
       - src/components/model/mode/setter.py
-      - src/components/const.py
+      - src/components/yaml/io/loader.py
       - src/const.py
-      - src/pipeline/const.py
       - src/pipeline/config/configurator.py
       - src/pipeline/config/pydantic/config.py
       - src/pipeline/config/pydantic/sections/data_config.py
@@ -428,6 +422,7 @@ stages:
       - src/pipeline/config/pydantic/sections/testing_config.py
       - src/pipeline/config/pydantic/sections/training_config.py
       - src/pipeline/config/pydantic/sections/validation_config.py
+      - src/pipeline/const.py
       - src/pipeline/steps/tester.py
       - data/processed/${data.mode}/${data.mode}_processed_dataset.csv
       - models/${data.mode}/trained_${data.mode}_model.pt
@@ -449,17 +444,17 @@ stages:
     deps:
       - src/components/assertions/choice_field_assertor.py
       - src/components/assertions/min_max_assertor.py
-      - src/components/caches/implementations/lfu_cache.py
-      - src/components/caches/implementations/lru_cache.py
-      - src/components/caches/implementations/lstm_cache.py
-      - src/components/caches/implementations/random_cache.py
+      - src/components/caches/implementations/items/evictions/least_frequent_item_evictor.py
+      - src/components/caches/implementations/items/evictions/oldest_item_evictor.py
       - src/components/caches/implementations/items/operations/checker.py
       - src/components/caches/implementations/items/operations/deleter.py
       - src/components/caches/implementations/items/operations/inserter.py
       - src/components/caches/implementations/items/operations/popper.py
       - src/components/caches/implementations/items/operations/retriever.py
-      - src/components/caches/implementations/items/evictions/least_frequent_item_evictor.py
-      - src/components/caches/implementations/items/evictions/oldest_item_evictor.py
+      - src/components/caches/implementations/lfu_cache.py
+      - src/components/caches/implementations/lru_cache.py
+      - src/components/caches/implementations/lstm_cache.py
+      - src/components/caches/implementations/random_cache.py
       - src/components/caches/implementations/utils/base_cache.py
       - src/components/caches/implementations/utils/cache_cleaner.py
       - src/components/caches/implementations/utils/cache_size_calculator.py
@@ -468,6 +463,7 @@ stages:
       - src/components/caches/simulations/runner.py
       - src/components/caches/utils/cache_metrics_logger.py
       - src/components/caches/utils/cache_wrapper.py
+      - src/components/const.py
       - src/components/data_loader/builder.py
       - src/components/data_loader/initializer.py
       - src/components/dataset/access_logs_dataset.py
@@ -484,10 +480,10 @@ stages:
       - src/components/dataset/splits/index/calculator.py
       - src/components/evaluation/simulations/metrics/calculations/eviction_mistake_rate_calculator.py
       - src/components/evaluation/simulations/metrics/calculations/hit_miss_rates_calculator.py
+      - src/components/evaluation/simulations/metrics/calculations/belady_min_calculator.py
       - src/components/evaluation/simulations/metrics/calculator.py
       - src/components/evaluation/simulations/metrics/io/saver.py
       - src/components/json/io/saver.py
-      - src/components/logs/handlers/file_handler_builder.py
       - src/components/logs/handlers/elastic_handler.py
       - src/components/logs/initializer.py
       - src/components/logs/levels/debug_logger.py
@@ -499,9 +495,7 @@ stages:
       - src/components/time/transforms/trig_decoder.py
       - src/components/visualization/hit_miss_rates_plotter.py
       - src/components/yaml/io/loader.py
-      - src/components/const.py
       - src/const.py
-      - src/pipeline/const.py
       - src/pipeline/config/configurator.py
       - src/pipeline/config/pydantic/config.py
       - src/pipeline/config/pydantic/sections/data_config.py
@@ -512,6 +506,7 @@ stages:
       - src/pipeline/config/pydantic/sections/testing_config.py
       - src/pipeline/config/pydantic/sections/training_config.py
       - src/pipeline/config/pydantic/sections/validation_config.py
+      - src/pipeline/const.py
       - src/pipeline/steps/simulator.py
       - data/processed/${data.mode}/${data.mode}_processed_dataset.csv
     outs:

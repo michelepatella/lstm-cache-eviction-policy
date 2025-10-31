@@ -10,7 +10,6 @@ from components.caches.simulations.hit_miss.timeline_updater import (
     update_hit_miss_timeline,
 )
 from components.const import TIME_MICROSECONDS_IN_SECOND
-from components.data_loader.initializer import initialize_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
@@ -19,7 +18,6 @@ from components.time.transforms.trig_decoder import (
 )
 from src.const import (
     CACHE_LSTM_NAME,
-    DATASET_TESTING_SPLIT_TYPE,
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
 )
@@ -28,6 +26,7 @@ from src.const import (
 def run_cache_simulation(
     cache: Any,
     policy: str,
+    testing_set: AccessLogsDataset,
     config: Any,
 ) -> tuple[dict[str, int], list[dict[str, float]], list[float]]:
     """Run a full cache simulation for a given cache eviction policy.
@@ -40,6 +39,7 @@ def run_cache_simulation(
     Args:
         cache (Any): Cache object implementing the eviction policy.
         policy (str): Cache eviction policy name.
+        testing_set (AccessLogsDataset): Access logs dataset.
         config (Any): Configuration object.
 
     Returns:
@@ -69,10 +69,6 @@ def run_cache_simulation(
             },
         )
 
-        # Prepare configuration
-        testing_batch_size = config.testing.general.batch_size
-        testing_shuffle = config.testing.general.shuffle
-
         # Initialize data
         counters = {
             SIMULATIONS_METRICS_HIT_COUNTER_NAME: 0,
@@ -80,15 +76,6 @@ def run_cache_simulation(
         }
         timeline = []
         cache_latencies = []
-
-        # Get testing set
-        testing_set, testing_loader = initialize_data_loader(
-            DATASET_TESTING_SPLIT_TYPE,
-            testing_batch_size,
-            testing_shuffle,
-            AccessLogsDataset,
-            config,
-        )
 
         # Iterate over testing set, assuming each
         # row represents a request to be satisfied
