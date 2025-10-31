@@ -1,4 +1,4 @@
-from torch.utils.data import DataLoader
+import pandas as pd
 
 from components.const import (
     TIME_SECONDS_IN_HOUR,
@@ -19,7 +19,7 @@ from components.time.transforms.trig_decoder import (
 def extract_last_rows_from_dataset(
     current_idx: int,
     seq_len: int,
-    df: DataLoader,
+    df: pd.DataFrame,
     time_conversion_factor: float = TIME_SECONDS_IN_HOUR,
 ) -> list[tuple[float, int]] | None:
     """Extract the last rows from a dataset.
@@ -30,7 +30,7 @@ def extract_last_rows_from_dataset(
     Args:
         current_idx (int): Current dataset index.
         seq_len (int): Sequence length to extract.
-        df (DataLoader): Dataset to extract rows from.
+        df (pd.DataFrame): Dataset to extract rows from.
         time_conversion_factor (float): Factor to convert extracted seconds to
                                         desired unit.
 
@@ -51,7 +51,7 @@ def extract_last_rows_from_dataset(
         # Extract a sliding window from dataset
         # of sequence length size
         window_df = extract_sliding_window_dataset_rows(
-            df.data,
+            df,
             current_idx,
             seq_len,
         )

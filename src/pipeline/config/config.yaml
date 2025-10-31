@@ -85,7 +85,7 @@ model:
     length: 25
 simulations:
   cache:
-    dimension: 40
+    dimension: 20
     ttl: 10000
   metrics:
     mistake_rate:

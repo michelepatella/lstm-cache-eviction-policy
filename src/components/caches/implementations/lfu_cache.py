@@ -27,6 +27,7 @@ from components.caches.implementations.utils.cache_size_calculator import (
     calculate_cache_size,
 )
 from components.logs.levels.debug_logger import debug
+from components.logs.levels.error_logger import error
 
 
 class LFUCache(Cache):
@@ -88,9 +89,40 @@ class LFUCache(Cache):
 
         Returns:
             Any: Retrieved key item.
+
+        Raises:
+            RuntimeError: If getting the LFU cache item fails:
+                * The requested key is not found in the LFU cache
+                  (KeyError).
+                * The cache data structure is invalid or uninitialized
+                  (AttributeError).
+                * The key is not hashable or the frequency update fails
+                  (TypeError).
         """
         # Retrieve item
-        return get_item_from_cache(self._data, key)
+        item = get_item_from_cache(self._data, key)
+
+        try:
+            # Update item frequency
+            self._freq[key] = self._freq.get(key, 0) + 1
+        except (TypeError, KeyError) as e:
+            msg = "LFU cache frequency update failed"
+            error(
+                msg,
+                extra={
+                    "exception": str(e),
+                    "key": key,
+                    "item_type": type(item).__name__,
+                    "freq_type": type(self._freq).__name__ if hasattr(self, "_freq") else None,
+                    "freq_len": len(self._freq) if hasattr(self, "_freq") and self._freq else 0,
+                    "cache_type": type(self._data).__name__,
+                    "cache_size": len(self._data) if hasattr(self._data, "__len__") else None,
+                    "context": "LFU cache",
+                },
+            )
+            raise RuntimeError(msg) from e
+
+        return item
 
     def _evict_least_frequent(self: "LFUCache") -> None:
         """Evict the least frequently used key.

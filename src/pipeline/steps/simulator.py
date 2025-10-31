@@ -224,15 +224,19 @@ def run_simulations() -> None:
 
         # Extract key access sequence
         # to pass to Belady MIN benchmark
-        testing_rows = extract_last_rows_from_dataset(0, len(testing_set), testing_loader)
+        testing_rows = extract_last_rows_from_dataset(
+            len(testing_set) - 1,
+            len(testing_set),
+            testing_set.data
+        )
         access_sequence = [key for _, key in testing_rows]
 
         # Calculate Belady MIN (benchmark) and save them
         # into results
-        belady_min_hit_rate, belady_min_hit_rate = calculate_belady_min(access_sequence, cache_size)
+        belady_min_hit_rate, belady_min_miss_rate = calculate_belady_min(access_sequence, cache_size)
         results.append({
             SIMULATIONS_METRICS_BELADY_MIN_HIT_RATE_NAME: belady_min_hit_rate,
-            SIMULATIONS_METRICS_BELADY_MIN_MISS_RATE_NAME: belady_min_hit_rate
+            SIMULATIONS_METRICS_BELADY_MIN_MISS_RATE_NAME: belady_min_miss_rate
         })
 
         # Determine results and plot file path according
@@ -258,7 +262,7 @@ def run_simulations() -> None:
                         SIMULATIONS_METRICS_TIMELINE_NAME
                     ],
                 }
-                for r in results
+                for r in results if SIMULATIONS_METRICS_POLICY_NAME in r
             ],
             plot_save_path,
         )

@@ -2,9 +2,9 @@ import random
 from http.client import HTTPException
 from typing import Any
 
+import pandas as pd
 import requests
 from box import Box
-from torch.utils.data import DataLoader
 
 from components.caches.implementations.utils.base_cache import BaseCache
 from components.caches.utils.cache_metrics_logger import (
@@ -161,7 +161,7 @@ class LSTMCache(BaseCache):
         key: int,
         current_time: float,
         current_idx: int,
-        testing_set: DataLoader,
+        testing_set: pd.DataFrame,
         config: Any,
     ) -> None:
         """Insert a key in the LSTM cache.
@@ -176,7 +176,7 @@ class LSTMCache(BaseCache):
             key (int): Key to insert.
             current_time (float): Current time.
             current_idx (int): Index of the current request.
-            testing_set (DataLoader): Testing dataset for sequence extraction.
+            testing_set (pd.DataFrame): Testing dataset for sequence extraction.
             config (Config): Configuration object.
 
         Returns:
@@ -205,7 +205,7 @@ class LSTMCache(BaseCache):
                 last_accesses = extract_last_rows_from_dataset(
                     current_idx,
                     seq_len,
-                    testing_set,
+                    testing_set.data,
                 )
 
                 # Check whether last accesses

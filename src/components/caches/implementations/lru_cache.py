@@ -113,17 +113,12 @@ class LRUCache(Cache):
                     "exception": str(e),
                     "key": key,
                     "item_type": type(item).__name__,
-                    "item_repr_len": (
-                        len(repr(item)) if item is not None else 0
-                    ),
                     "cache_type": type(self._data).__name__,
                     "cache_size": (
                         len(self._data)
                         if hasattr(self._data, "__len__")
                         else None
                     ),
-                    "cache_name": getattr(self, "name", None),
-                    "cache_capacity": getattr(self, "capacity", None),
                     "context": "LRU cache",
                 },
             )

@@ -267,6 +267,10 @@ class BaseCache(ABC):
                 key in self.store and not self._is_expired(key, current_time)
             )
 
+            # Access the key if found in cache
+            if in_cache and self.cache is not None:
+                self.cache.get(key)
+
             return in_cache
         except (TypeError, AttributeError) as e:
             msg = "Cache item existence check failed"
