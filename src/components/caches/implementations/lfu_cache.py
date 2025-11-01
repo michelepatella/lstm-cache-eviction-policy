@@ -113,10 +113,16 @@ class LFUCache(Cache):
                     "exception": str(e),
                     "key": key,
                     "item_type": type(item).__name__,
-                    "freq_type": type(self._freq).__name__ if hasattr(self, "_freq") else None,
-                    "freq_len": len(self._freq) if hasattr(self, "_freq") and self._freq else 0,
+                    "freq_type": type(self._freq).__name__
+                    if hasattr(self, "_freq")
+                    else None,
+                    "freq_len": len(self._freq)
+                    if hasattr(self, "_freq") and self._freq
+                    else 0,
                     "cache_type": type(self._data).__name__,
-                    "cache_size": len(self._data) if hasattr(self._data, "__len__") else None,
+                    "cache_size": len(self._data)
+                    if hasattr(self._data, "__len__")
+                    else None,
                     "context": "LFU cache",
                 },
             )

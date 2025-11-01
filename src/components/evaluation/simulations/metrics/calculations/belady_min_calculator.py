@@ -1,4 +1,4 @@
-from collections import deque, defaultdict
+from collections import defaultdict, deque
 
 import numpy as np
 
@@ -7,9 +7,10 @@ from components.logs.levels.info_logger import info
 from components.math.percentage_calculator import calculate_percentage
 
 
-def calculate_belady_min(access_sequence: list[int], cache_size: int) -> tuple[float, float]:
-    """
-    Calculate Belady's MIN cache hit and miss rates.
+def calculate_belady_min(
+    access_sequence: list[int], cache_size: int,
+) -> tuple[float, float]:
+    """Calculate Belady's MIN cache hit and miss rates.
 
     This function calculates Belady's MIN cache hit and
     miss rates for a given access sequence. Belady's MIN algorithm
@@ -115,7 +116,9 @@ def calculate_belady_min(access_sequence: list[int], cache_size: int) -> tuple[f
             msg,
             extra={
                 "exception": str(e),
-                "access_sequence_len": len(access_sequence) if access_sequence else 0,
+                "access_sequence_len": len(access_sequence)
+                if access_sequence
+                else 0,
                 "cache_size": cache_size,
                 "context": "Belady MIN calculation",
             },

@@ -9,6 +9,6 @@ default_api_kwargs:
   excluded_keys: []
   prob_weight: 0.8
   conf_weight: 0.2
-  return_all_scores: false
-  return_prob_conf: false
+  return_all_scores: true
+  return_prob_conf: true
   return_api_kwargs: true

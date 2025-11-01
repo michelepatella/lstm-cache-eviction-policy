@@ -20,8 +20,12 @@ from components.caches.utils.cache_wrapper import (
 )
 from components.data_loader.initializer import initialize_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
-from components.dataset.rows.extractions.lasts_extractor import extract_last_rows_from_dataset
-from components.evaluation.simulations.metrics.calculations.belady_min_calculator import calculate_belady_min
+from components.dataset.rows.extractions.lasts_extractor import (
+    extract_last_rows_from_dataset,
+)
+from components.evaluation.simulations.metrics.calculations.belady_min_calculator import (
+    calculate_belady_min,
+)
 from components.evaluation.simulations.metrics.calculator import (
     calculate_simulation_metrics,
 )
@@ -48,19 +52,21 @@ from pipeline.const import (
     RESULTS_DYNAMIC_SIMULATIONS_FILE_PATH,
     RESULTS_STATIC_SIMULATIONS_FILE_PATH,
     SIMULATIONS_METRICS_AVG_CACHE_LATENCY_NAME,
+    SIMULATIONS_METRICS_BELADY_MIN_HIT_RATE_NAME,
+    SIMULATIONS_METRICS_BELADY_MIN_MISS_RATE_NAME,
     SIMULATIONS_METRICS_EVICTION_MISTAKE_RATE_NAME,
     SIMULATIONS_METRICS_HIT_RATE_NAME,
-    SIMULATIONS_METRICS_MISS_RATE_NAME, SIMULATIONS_METRICS_BELADY_MIN_HIT_RATE_NAME,
-    SIMULATIONS_METRICS_BELADY_MIN_MISS_RATE_NAME,
+    SIMULATIONS_METRICS_MISS_RATE_NAME,
 )
 from src.const import (
     CACHE_LSTM_NAME,
     DATA_DISTRIBUTION_STATIC_MODE,
+    DATASET_TESTING_SPLIT_TYPE,
     MLFLOW_NESTED_ENABLED,
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
     SIMULATIONS_METRICS_POLICY_NAME,
-    SIMULATIONS_METRICS_TIMELINE_NAME, DATASET_TESTING_SPLIT_TYPE,
+    SIMULATIONS_METRICS_TIMELINE_NAME,
 )
 
 # Load env variables
@@ -225,19 +231,21 @@ def run_simulations() -> None:
         # Extract key access sequence
         # to pass to Belady MIN benchmark
         testing_rows = extract_last_rows_from_dataset(
-            len(testing_set) - 1,
-            len(testing_set),
-            testing_set.data
+            len(testing_set) - 1, len(testing_set), testing_set.data,
         )
         access_sequence = [key for _, key in testing_rows]
 
         # Calculate Belady MIN (benchmark) and save them
         # into results
-        belady_min_hit_rate, belady_min_miss_rate = calculate_belady_min(access_sequence, cache_size)
-        results.append({
-            SIMULATIONS_METRICS_BELADY_MIN_HIT_RATE_NAME: belady_min_hit_rate,
-            SIMULATIONS_METRICS_BELADY_MIN_MISS_RATE_NAME: belady_min_miss_rate
-        })
+        belady_min_hit_rate, belady_min_miss_rate = calculate_belady_min(
+            access_sequence, cache_size,
+        )
+        results.append(
+            {
+                SIMULATIONS_METRICS_BELADY_MIN_HIT_RATE_NAME: belady_min_hit_rate,
+                SIMULATIONS_METRICS_BELADY_MIN_MISS_RATE_NAME: belady_min_miss_rate,
+            },
+        )
 
         # Determine results and plot file path according
         # to data distribution mode
@@ -262,7 +270,8 @@ def run_simulations() -> None:
                         SIMULATIONS_METRICS_TIMELINE_NAME
                     ],
                 }
-                for r in results if SIMULATIONS_METRICS_POLICY_NAME in r
+                for r in results
+                if SIMULATIONS_METRICS_POLICY_NAME in r
             ],
             plot_save_path,
         )
@@ -294,6 +303,7 @@ def run_simulations() -> None:
                     "misses_num": r[SIMULATIONS_METRICS_MISS_COUNTER_NAME],
                 }
                 for r in results
+                if SIMULATIONS_METRICS_POLICY_NAME in r
             ],
             "results_save_path": str(results_file_path),
             "plot_save_paths": str(plot_save_path),

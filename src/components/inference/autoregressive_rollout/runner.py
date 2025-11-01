@@ -117,10 +117,10 @@ def compute_autoregressive_rollout(
             # Update the sequence of keys by appending
             # the predicted one at the current step
             pred_key = outputs_mean.argmax(
-                dim=DATASET_COLUMN_TARGET_IDX
+                dim=DATASET_COLUMN_TARGET_IDX,
             ).unsqueeze(1)
             keys_seq = torch.cat(
-                [keys_seq[:, 1:], pred_key], dim=DATASET_COLUMN_TARGET_IDX
+                [keys_seq[:, 1:], pred_key], dim=DATASET_COLUMN_TARGET_IDX,
             )
 
             # Calculate new sin and cos time obtained by adding
