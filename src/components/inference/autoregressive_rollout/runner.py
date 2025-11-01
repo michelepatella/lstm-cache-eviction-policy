@@ -120,7 +120,8 @@ def compute_autoregressive_rollout(
                 dim=DATASET_COLUMN_TARGET_IDX,
             ).unsqueeze(1)
             keys_seq = torch.cat(
-                [keys_seq[:, 1:], pred_key], dim=DATASET_COLUMN_TARGET_IDX,
+                [keys_seq[:, 1:], pred_key],
+                dim=DATASET_COLUMN_TARGET_IDX,
             )
 
             # Calculate new sin and cos time obtained by adding

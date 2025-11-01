@@ -8,7 +8,8 @@ from components.math.percentage_calculator import calculate_percentage
 
 
 def calculate_belady_min(
-    access_sequence: list[int], cache_size: int,
+    access_sequence: list[int],
+    cache_size: int,
 ) -> tuple[float, float]:
     """Calculate Belady's MIN cache hit and miss rates.
 

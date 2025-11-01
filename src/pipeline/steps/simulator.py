@@ -231,14 +231,17 @@ def run_simulations() -> None:
         # Extract key access sequence
         # to pass to Belady MIN benchmark
         testing_rows = extract_last_rows_from_dataset(
-            len(testing_set) - 1, len(testing_set), testing_set.data,
+            len(testing_set) - 1,
+            len(testing_set),
+            testing_set.data,
         )
         access_sequence = [key for _, key in testing_rows]
 
         # Calculate Belady MIN (benchmark) and save them
         # into results
         belady_min_hit_rate, belady_min_miss_rate = calculate_belady_min(
-            access_sequence, cache_size,
+            access_sequence,
+            cache_size,
         )
         results.append(
             {
