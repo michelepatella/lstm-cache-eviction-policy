@@ -8,25 +8,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 # ----------------------------
 API_CONFIG_FILE_PATH = PROJECT_ROOT / "src" / "api" / "config" / "config.yaml"
 
-
-# ----------------------------
-# API Kwargs
-# ----------------------------
-API_KWARGS_ROLLOUT_HORIZON_NAME = "rollout_horizon"
-API_KWARGS_MC_DROPOUT_SAMPLES_NAME = "mc_dropout_samples"
-API_KWARGS_CONFIDENCE_LEVEL_NAME = "confidence_level"
-API_KWARGS_TIME_STEP_INCREMENT_NAME = "time_step_increment"
-API_KWARGS_NUM_EVICTIONS_NAME = "num_evictions"
-API_KWARGS_EXCLUDED_KEYS_NAME = "excluded_keys"
-API_KWARGS_PROB_WEIGHT_NAME = "prob_weight"
-API_KWARGS_CONF_WEIGHT_NAME = "conf_weight"
-API_KWARGS_RETURN_ALL_SCORES_NAME = "return_all_scores"
-API_KWARGS_RETURN_PROB_CONF_NAME = "return_prob_conf"
-API_KWARGS_RETURN_API_KWARGS_NAME = "return_api_kwargs"
-
-API_KWARGS_ROLLOUT_HORIZON_MAX = 50
-API_KWARGS_MC_DROPOUT_SAMPLES_MAX = 1_000
-API_KWARGS_TIME_STEP_INCREMENT_MAX = 5.0
+API_CONFIG_USER_API_KWARG_FIELD_NAME = "user_value"
 
 
 # ----------------------------
@@ -98,3 +80,19 @@ SCORER_SERVICE_PARAMS = {
 SCORER_SERVICE_RETURN_KEY_SCORES_NAME = "key_scores"
 SCORER_SERVICE_RETURN_PROB_MATRIX_NAME = "prob_matrix"
 SCORER_SERVICE_RETURN_CONF_MATRIX_NAME = "conf_matrix"
+
+
+# ----------------------------
+# User API Kwargs
+# ----------------------------
+USER_API_KWARGS_ROLLOUT_HORIZON_NAME = "rollout_horizon"
+USER_API_KWARGS_MC_DROPOUT_SAMPLES_NAME = "mc_dropout_samples"
+USER_API_KWARGS_CONFIDENCE_LEVEL_NAME = "confidence_level"
+USER_API_KWARGS_TIME_STEP_INCREMENT_NAME = "time_step_increment"
+USER_API_KWARGS_NUM_EVICTIONS_NAME = "num_evictions"
+USER_API_KWARGS_EXCLUDED_KEYS_NAME = "excluded_keys"
+USER_API_KWARGS_PROB_WEIGHT_NAME = "prob_weight"
+USER_API_KWARGS_CONF_WEIGHT_NAME = "conf_weight"
+USER_API_KWARGS_RETURN_ALL_SCORES_NAME = "return_all_scores"
+USER_API_KWARGS_RETURN_PROB_CONF_NAME = "return_prob_conf"
+USER_API_KWARGS_RETURN_API_KWARGS_NAME = "return_api_kwargs"

@@ -4,7 +4,7 @@ import torch
 from box import Box
 from fastapi import HTTPException, status
 
-from api.config.kwargs.APIKwargs import APIKwargs
+from api.config.api_config import APIConfig
 from api.const import (
     SCORER_SERVICE_PARAM_CONF_WEIGHT_NAME,
     SCORER_SERVICE_PARAM_CONFIDENCE_LEVEL_NAME,
@@ -16,6 +16,7 @@ from api.const import (
     SCORER_SERVICE_RETURN_KEY_SCORES_NAME,
     SCORER_SERVICE_RETURN_PROB_MATRIX_NAME,
     SCORER_SERVICE_URL,
+    API_CONFIG_USER_API_KWARG_FIELD_NAME,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -24,7 +25,7 @@ from components.logs.levels.error_logger import error
 def call_scorer_service(
     outputs: list[torch.Tensor],
     variances: list[torch.Tensor],
-    api_kwargs: APIKwargs,
+    api_config: APIConfig,
 ) -> tuple[list[float], np.ndarray, np.ndarray]:
     """Call scorer service.
 
@@ -39,7 +40,7 @@ def call_scorer_service(
                                       predictor service.
         variances (list[torch.Tensor]): Corresponding variances for
                                         predicted outputs.
-        api_kwargs (APIKwargs): API kwargs.
+        api_config (APIConfig): API configuration object.
 
     Returns:
         tuple[list[float], np.ndarray, np.ndarray]:
@@ -59,10 +60,31 @@ def call_scorer_service(
         params[SCORER_SERVICE_PARAM_OUTPUTS_NAME] = outputs
         params[SCORER_SERVICE_PARAM_VARIANCES_NAME] = variances
         params[SCORER_SERVICE_PARAM_CONFIDENCE_LEVEL_NAME] = (
-            api_kwargs.confidence_level
+            api_config.api_kwargs.confidence_level.get(
+                API_CONFIG_USER_API_KWARG_FIELD_NAME
+            )
+            or api_config.api_kwargs.confidence_level.default
         )
-        params[SCORER_SERVICE_PARAM_PROB_WEIGHT_NAME] = api_kwargs.prob_weight
-        params[SCORER_SERVICE_PARAM_CONF_WEIGHT_NAME] = api_kwargs.conf_weight
+        params[SCORER_SERVICE_PARAM_CONFIDENCE_LEVEL_NAME] = (
+            api_config.api_kwargs.confidence_level.get(
+                API_CONFIG_USER_API_KWARG_FIELD_NAME
+            )
+            or api_config.api_kwargs.confidence_level.default
+        )
+
+        params[SCORER_SERVICE_PARAM_PROB_WEIGHT_NAME] = (
+            api_config.api_kwargs.prob_weight.get(
+                API_CONFIG_USER_API_KWARG_FIELD_NAME
+            )
+            or api_config.api_kwargs.prob_weight.default
+        )
+
+        params[SCORER_SERVICE_PARAM_CONF_WEIGHT_NAME] = (
+            api_config.api_kwargs.conf_weight.get(
+                API_CONFIG_USER_API_KWARG_FIELD_NAME
+            )
+            or api_config.api_kwargs.conf_weight.default
+        )
 
         debug(
             "Scorer service call started",

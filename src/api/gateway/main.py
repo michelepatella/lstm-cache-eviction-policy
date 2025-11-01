@@ -1,14 +1,9 @@
-from typing import Any
+from typing import Any, Optional
 
-from box import Box
 from fastapi import FastAPI, HTTPException, status
 
-from api.config.kwargs.builder import (
-    build_api_kwargs,
-)
-from api.config.kwargs.default.getter import (
-    get_default_api_kwargs,
-)
+from api.config.api_config import APIConfig
+
 from api.const import (
     API_CONFIG_FILE_PATH,
     GATEWAY_API_ENDPOINT,
@@ -17,6 +12,7 @@ from api.const import (
     GATEWAY_API_RETURN_KEY_SCORES_NAME,
     GATEWAY_API_RETURN_KEYS_TO_EVICT_NAME,
     GATEWAY_API_RETURN_PROB_MATRIX_NAME,
+    API_CONFIG_USER_API_KWARG_FIELD_NAME,
 )
 from api.gateway.callers.predictor_service_caller import (
     call_predictor_service,
@@ -34,15 +30,15 @@ from components.yaml.io.loader import load_yaml
 app = FastAPI()
 
 # Setup for Gateway API: Load API configuration
-api_config = load_yaml(API_CONFIG_FILE_PATH)
-api_config = Box(api_config)
+api_config_file = load_yaml(API_CONFIG_FILE_PATH)
+api_config = APIConfig(**api_config_file)
 
 
 @app.post(GATEWAY_API_ENDPOINT)
 def gateway_api(
     keys_in_cache: list[int],
     last_accesses: list[tuple[float, int]],
-    user_api_kwargs: dict[str, int | float | list[int] | str | bool],
+    user_api_kwargs: Optional[dict[str, int | float | list[int] | str | bool]],
 ) -> dict[str, Any]:
     """Gateway API endpoint for eviction decision.
 
@@ -55,7 +51,7 @@ def gateway_api(
         keys_in_cache (list[int]): List of keys currently in cache.
         last_accesses (list[tuple[float, int]]): List of (timestamp, key)
                                                  tuples.
-        user_api_kwargs (dict[str, int|float|list[int]|str|bool]):
+        user_api_kwargs (Optional[dict[str, int | float | list[int] | str | bool]]):
             Optional user-defined API kwargs overriding default API settings.
 
     Returns:
@@ -82,19 +78,17 @@ def gateway_api(
             },
         )
 
-        # Retrieve default API kwargs from
-        # API configuration
-        default_api_kwargs = get_default_api_kwargs(api_config)
-
-        # Build final API kwargs by merging
-        # default and user-specified ones (if any)
-        api_kwargs = build_api_kwargs(default_api_kwargs, user_api_kwargs)
+        # Merge user-provided API kwargs with
+        # default ones
+        if user_api_kwargs:
+            api_config.api_kwargs = api_config.merge_api_kwargs(
+                user_api_kwargs
+            )
 
         # Invoke predictor service to run autoregressive rollout
         # and get outputs and corresponding variances
         outputs, variances = call_predictor_service(
             last_accesses,
-            api_kwargs,
             api_config,
         )
 
@@ -104,12 +98,23 @@ def gateway_api(
         key_scores, prob_matrix, conf_matrix = call_scorer_service(
             outputs,
             variances,
-            api_kwargs,
+            api_config,
         )
 
         # Decide which keys to be evicted
-        excluded_keys = api_kwargs.excluded_keys
-        num_evictions = api_kwargs.num_evictions
+        excluded_keys = (
+            api_config.api_kwargs.excluded_keys.get(
+                API_CONFIG_USER_API_KWARG_FIELD_NAME
+            )
+            or api_config.api_kwargs.excluded_keys.default
+        )
+
+        num_evictions = (
+            api_config.api_kwargs.num_evictions.get(
+                API_CONFIG_USER_API_KWARG_FIELD_NAME
+            )
+            or api_config.api_kwargs.num_evictions.default
+        )
         keys_to_evict = evict_score_based_items(
             keys_in_cache,
             key_scores,
@@ -121,11 +126,30 @@ def gateway_api(
         response: dict = {
             GATEWAY_API_RETURN_KEYS_TO_EVICT_NAME: keys_to_evict,
         }
-        if api_kwargs.return_api_kwargs:
-            response[GATEWAY_API_RETURN_API_KWARGS_NAME] = api_kwargs.__dict__
-        if api_kwargs.return_all_scores:
+        if (
+            api_config.api_kwargs.return_api_kwargs.get(
+                API_CONFIG_USER_API_KWARG_FIELD_NAME
+            )
+            or api_config.api_kwargs.return_api_kwargs.default
+        ):
+            response[GATEWAY_API_RETURN_API_KWARGS_NAME] = (
+                api_config.api_kwargs.__dict__
+            )
+
+        if (
+            api_config.api_kwargs.return_all_scores.get(
+                API_CONFIG_USER_API_KWARG_FIELD_NAME
+            )
+            or api_config.api_kwargs.return_all_scores.default
+        ):
             response[GATEWAY_API_RETURN_KEY_SCORES_NAME] = key_scores
-        if api_kwargs.return_prob_conf:
+
+        if (
+            api_config.api_kwargs.return_prob_conf.get(
+                API_CONFIG_USER_API_KWARG_FIELD_NAME
+            )
+            or api_config.api_kwargs.return_prob_conf.default
+        ):
             response[GATEWAY_API_RETURN_PROB_MATRIX_NAME] = prob_matrix
             response[GATEWAY_API_RETURN_CONF_MATRIX_NAME] = conf_matrix
 
@@ -133,7 +157,7 @@ def gateway_api(
             "Gateway API completed",
             extra={
                 "keys_to_evict_num": len(keys_to_evict),
-                "api_kwargs": api_kwargs.__dict__,
+                "api_kwargs": api_config.api_kwargs.__dict__,
                 "context": "Gateway API",
             },
         )

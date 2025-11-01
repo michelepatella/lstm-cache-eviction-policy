@@ -3,7 +3,7 @@ import torch
 from box import Box
 from fastapi import HTTPException, status
 
-from api.config.kwargs.APIKwargs import APIKwargs
+from api.config.api_config import APIConfig
 from api.const import (
     PREDICTOR_SERVICE_PARAM_DEVICE_TYPE_NAME,
     PREDICTOR_SERVICE_PARAM_LAST_ACCESSES_NAME,
@@ -14,6 +14,7 @@ from api.const import (
     PREDICTOR_SERVICE_RETURN_OUTPUTS_NAME,
     PREDICTOR_SERVICE_RETURN_VARIANCES_NAME,
     PREDICTOR_SERVICE_URL,
+    API_CONFIG_USER_API_KWARG_FIELD_NAME,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -21,8 +22,7 @@ from components.logs.levels.error_logger import error
 
 def call_predictor_service(
     last_accesses: list[tuple[float, int]],
-    api_kwargs: APIKwargs,
-    api_config: Box,
+    api_config: APIConfig,
 ) -> tuple[list[torch.Tensor], list[torch.Tensor]]:
     """Call predictor service.
 
@@ -35,8 +35,7 @@ def call_predictor_service(
                                                  representing the
                                                  last access time
                                                  and corresponding key.
-        api_kwargs (APIKwargs): API kwargs.
-        api_config (Box): API configuration.
+        api_config (APIConfig): API configuration object.
 
     Returns:
         tuple[list[torch.Tensor], list[torch.Tensor]]:
@@ -55,16 +54,25 @@ def call_predictor_service(
         params = Box(PREDICTOR_SERVICE_PARAMS)
         params[PREDICTOR_SERVICE_PARAM_LAST_ACCESSES_NAME] = last_accesses
         params[PREDICTOR_SERVICE_PARAM_DEVICE_TYPE_NAME] = (
-            api_config.hardware.device_type
+            api_config.hardware.device.type
         )
         params[PREDICTOR_SERVICE_PARAM_ROLLOUT_HORIZON_NAME] = (
-            api_kwargs.rollout_horizon
+            api_config.api_kwargs.rollout_horizon.get(
+                API_CONFIG_USER_API_KWARG_FIELD_NAME
+            )
+            or api_config.api_kwargs.rollout_horizon.default
         )
         params[PREDICTOR_SERVICE_PARAM_MC_DROPOUT_SAMPLES_NAME] = (
-            api_kwargs.mc_dropout_samples
+            api_config.api_kwargs.mc_dropout_samples.get(
+                API_CONFIG_USER_API_KWARG_FIELD_NAME
+            )
+            or api_config.api_kwargs.mc_dropout_samples.default
         )
         params[PREDICTOR_SERVICE_PARAM_TIME_STEP_INCREMENT_NAME] = (
-            api_kwargs.time_step_increment
+            api_config.api_kwargs.time_step_increment.get(
+                API_CONFIG_USER_API_KWARG_FIELD_NAME
+            )
+            or api_config.api_kwargs.time_step_increment.default
         )
 
         debug(
