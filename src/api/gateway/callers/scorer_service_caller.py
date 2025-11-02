@@ -4,7 +4,7 @@ import torch
 from box import Box
 from fastapi import HTTPException, status
 
-from api.config.api_config import APIConfig
+from api.config.pydantic.api_config import APIConfig
 from api.const import (
     API_CONFIG_USER_API_KWARG_FIELD_NAME,
     SCORER_SERVICE_PARAM_CONF_WEIGHT_NAME,

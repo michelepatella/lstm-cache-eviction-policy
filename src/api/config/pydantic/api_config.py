@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
-from api.config.sections.api_hardware import APIHardware
-from api.config.sections.api_kwargs import APIKwargs
+from api.config.pydantic.sections.api_hardware import APIHardware
+from api.config.pydantic.sections.api_kwargs import APIKwargs
 from api.const import API_CONFIG_USER_API_KWARG_FIELD_NAME
 from components.logs.levels.error_logger import error
 

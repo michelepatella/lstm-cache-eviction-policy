@@ -2,7 +2,7 @@ from typing import Any
 
 from fastapi import FastAPI, HTTPException, status
 
-from api.config.api_config import APIConfig
+from api.config.pydantic.api_config import APIConfig
 from api.const import (
     API_CONFIG_FILE_PATH,
     API_CONFIG_USER_API_KWARG_FIELD_NAME,
