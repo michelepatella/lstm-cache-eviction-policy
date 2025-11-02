@@ -1,7 +1,7 @@
 from pydantic import BaseModel, confloat
 
 
-class SplitConfig(BaseModel):
+class DatasetSplitConfig(BaseModel):
     """Configuration for dataset split.
 
     Attributes:
@@ -9,15 +9,15 @@ class SplitConfig(BaseModel):
         validation (float): Fraction of the dataset used for validation (in [0,1]).
     """
 
-    training: confloat(ge=0, le=1)  # type: ignore[valid-type]
-    validation: confloat(ge=0, le=1)  # type: ignore[valid-type]
+    training: confloat(ge=0, le=1)
+    validation: confloat(ge=0, le=1)
 
 
 class DatasetConfig(BaseModel):
     """Dataset configuration.
 
     Attributes:
-        split (SplitConfig): Dataset split configuration.
+        split (DatasetSplitConfig): Dataset split configuration.
     """
 
-    split: SplitConfig
+    split: DatasetSplitConfig

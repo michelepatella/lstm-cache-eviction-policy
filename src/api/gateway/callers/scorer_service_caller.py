@@ -60,30 +60,30 @@ def call_scorer_service(
         params[SCORER_SERVICE_PARAM_OUTPUTS_NAME] = outputs
         params[SCORER_SERVICE_PARAM_VARIANCES_NAME] = variances
         params[SCORER_SERVICE_PARAM_CONFIDENCE_LEVEL_NAME] = (
-            api_config.api_kwargs.confidence_level.get(
+            api_config.kwargs.confidence_level.model_dump().get(
                 API_CONFIG_USER_API_KWARG_FIELD_NAME,
             )
-            or api_config.api_kwargs.confidence_level.default
+            or api_config.kwargs.confidence_level.default
         )
         params[SCORER_SERVICE_PARAM_CONFIDENCE_LEVEL_NAME] = (
-            api_config.api_kwargs.confidence_level.get(
+            api_config.kwargs.confidence_level.model_dump().get(
                 API_CONFIG_USER_API_KWARG_FIELD_NAME,
             )
-            or api_config.api_kwargs.confidence_level.default
+            or api_config.kwargs.confidence_level.default
         )
 
         params[SCORER_SERVICE_PARAM_PROB_WEIGHT_NAME] = (
-            api_config.api_kwargs.prob_weight.get(
+            api_config.kwargs.prob_weight.model_dump().get(
                 API_CONFIG_USER_API_KWARG_FIELD_NAME,
             )
-            or api_config.api_kwargs.prob_weight.default
+            or api_config.kwargs.prob_weight.default
         )
 
         params[SCORER_SERVICE_PARAM_CONF_WEIGHT_NAME] = (
-            api_config.api_kwargs.conf_weight.get(
+            api_config.kwargs.conf_weight.model_dump().get(
                 API_CONFIG_USER_API_KWARG_FIELD_NAME,
             )
-            or api_config.api_kwargs.conf_weight.default
+            or api_config.kwargs.conf_weight.default
         )
 
         debug(

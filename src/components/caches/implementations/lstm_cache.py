@@ -58,12 +58,14 @@ class LSTMCache(BaseCache):
         # Cache class initialization
         super().__init__(cache_class, metrics_logger, config)
 
-        self._api_kwargs = {}
+        # Set API kwargs to use
+        self._api_kwargs = config.simulations.api_kwargs
 
         debug(
             "Cache initialization executed",
             extra={
                 "maxsize": self.maxsize,
+                "api_kwargs": self._api_kwargs.__dict__,
                 "context": "LSTM cache",
             },
         )
@@ -223,7 +225,7 @@ class LSTMCache(BaseCache):
                                 self.store.keys(),
                             ),
                             API_PARAM_LAST_ACCESSES_NAME: last_accesses,
-                            API_PARAM_USER_API_KWARGS_NAME: {},
+                            API_PARAM_USER_API_KWARGS_NAME: self._api_kwargs.__dict__,
                         },
                     )
                     data = Box(response.json())
@@ -231,7 +233,6 @@ class LSTMCache(BaseCache):
                     # Extract the key(s) from API response
                     # as well as the kwargs used
                     key_to_evict = list(data.keys_to_evict)
-                    api_kwargs = dict(data.api_kwargs)
 
                 # Evict key(s)
                 for key in key_to_evict:
@@ -242,10 +243,6 @@ class LSTMCache(BaseCache):
 
             # Insert the key
             self._put_key(key, current_time)
-
-            # Keep track of API kwargs used
-            if api_kwargs is not None:
-                self._api_kwargs = api_kwargs
 
         except (TypeError, AttributeError, HTTPException) as e:
             msg = "Key insertion/eviction in/from LSTM cache failed"

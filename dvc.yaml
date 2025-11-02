@@ -149,7 +149,6 @@ stages:
         - data.keys.min
         - data.keys.max
         - dataset.split.training
-        - model.general.features
         - model.params
         - model.sequence.length
         - model.sequence.embedding.dimension
@@ -258,7 +257,6 @@ stages:
         - data.keys.max
         - dataset.split.training
         - dataset.split.validation
-        - model.general.features
         - model.params
         - model.sequence.length
         - model.sequence.embedding.dimension
@@ -355,7 +353,6 @@ stages:
         - data.keys.min
         - data.keys.max
         - dataset.split.training
-        - model.general.features
         - model.params
         - model.sequence.length
         - model.sequence.embedding.dimension
@@ -441,6 +438,17 @@ stages:
         - simulations.cache.dimension
         - simulations.cache.ttl
         - simulations.metrics.mistake_rate.window
+        - simulations.api_kwargs.rollout_horizon
+        - simulations.api_kwargs.mc_dropout_samples
+        - simulations.api_kwargs.confidence_level
+        - simulations.api_kwargs.time_step_increment
+        - simulations.api_kwargs.num_evictions
+        - simulations.api_kwargs.excluded_keys
+        - simulations.api_kwargs.prob_weight
+        - simulations.api_kwargs.conf_weight
+        - simulations.api_kwargs.return_all_scores
+        - simulations.api_kwargs.return_prob_conf
+        - simulations.api_kwargs.return_api_kwargs
     deps:
       - src/components/assertions/choice_field_assertor.py
       - src/components/assertions/min_max_assertor.py

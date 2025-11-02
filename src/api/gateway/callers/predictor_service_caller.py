@@ -57,22 +57,22 @@ def call_predictor_service(
             api_config.hardware.device.type
         )
         params[PREDICTOR_SERVICE_PARAM_ROLLOUT_HORIZON_NAME] = (
-            api_config.api_kwargs.rollout_horizon.get(
+            api_config.kwargs.rollout_horizon.model_dump().get(
                 API_CONFIG_USER_API_KWARG_FIELD_NAME,
             )
-            or api_config.api_kwargs.rollout_horizon.default
+            or api_config.kwargs.rollout_horizon.default
         )
         params[PREDICTOR_SERVICE_PARAM_MC_DROPOUT_SAMPLES_NAME] = (
-            api_config.api_kwargs.mc_dropout_samples.get(
+            api_config.kwargs.mc_dropout_samples.model_dump().get(
                 API_CONFIG_USER_API_KWARG_FIELD_NAME,
             )
-            or api_config.api_kwargs.mc_dropout_samples.default
+            or api_config.kwargs.mc_dropout_samples.default
         )
         params[PREDICTOR_SERVICE_PARAM_TIME_STEP_INCREMENT_NAME] = (
-            api_config.api_kwargs.time_step_increment.get(
+            api_config.kwargs.time_step_increment.model_dump().get(
                 API_CONFIG_USER_API_KWARG_FIELD_NAME,
             )
-            or api_config.api_kwargs.time_step_increment.default
+            or api_config.kwargs.time_step_increment.default
         )
 
         debug(
