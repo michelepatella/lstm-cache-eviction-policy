@@ -6,7 +6,6 @@ from fastapi import HTTPException, status
 from api.config.pydantic.api_config import APIConfig
 from api.const import (
     API_CONFIG_USER_API_KWARG_FIELD_NAME,
-    PREDICTOR_SERVICE_PARAM_DEVICE_TYPE_NAME,
     PREDICTOR_SERVICE_PARAM_LAST_ACCESSES_NAME,
     PREDICTOR_SERVICE_PARAM_MC_DROPOUT_SAMPLES_NAME,
     PREDICTOR_SERVICE_PARAM_ROLLOUT_HORIZON_NAME,
@@ -53,9 +52,6 @@ def call_predictor_service(
         # Prepare parameters for predictor service
         params = Box(PREDICTOR_SERVICE_PARAMS)
         params[PREDICTOR_SERVICE_PARAM_LAST_ACCESSES_NAME] = last_accesses
-        params[PREDICTOR_SERVICE_PARAM_DEVICE_TYPE_NAME] = (
-            api_config.hardware.device.type
-        )
         params[PREDICTOR_SERVICE_PARAM_ROLLOUT_HORIZON_NAME] = (
             api_config.kwargs.rollout_horizon.model_dump().get(
                 API_CONFIG_USER_API_KWARG_FIELD_NAME,

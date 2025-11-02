@@ -1,26 +1,6 @@
 from pydantic import BaseModel, confloat, conint
 
 
-class ModelOptimizationPruningConfig(BaseModel):
-    """Model optimization pruning configuration.
-
-    Attributes:
-        amount (float): Pruning amount to apply (in [0.0, 1.0]).
-    """
-
-    amount: confloat(ge=0.0, le=1.0)
-
-
-class ModelOptimizationConfig(BaseModel):
-    """Model optimization configuration.
-
-    Attributes:
-        pruning (ModelOptimizationPruningConfig): Pruning configuration.
-    """
-
-    pruning: ModelOptimizationPruningConfig
-
-
 class ModelParamsConfig(BaseModel):
     """Model parameters' configuration.
 
@@ -72,9 +52,7 @@ class ModelConfig(BaseModel):
     Attributes:
         params (ModelParamsConfig): Model layer configuration.
         sequence (ModelSequenceConfig): Sequence and embedding configuration.
-        optimization (ModelOptimizationConfig): Model optimization configuration.
     """
 
     params: ModelParamsConfig
     sequence: ModelSequenceConfig
-    optimization: ModelOptimizationConfig

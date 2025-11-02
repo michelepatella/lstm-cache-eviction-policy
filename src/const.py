@@ -30,10 +30,7 @@ DATASET_TESTING_SPLIT_TYPE = "testing"
 # ----------------------------
 # HW Device
 # ----------------------------
-HW_CPU_DEVICE_NAME = "cpu"
-HW_CUDA_DEVICE_NAME = "cuda"
-HW_MPS_DEVICE_NAME = "mps"
-HW_DEVICE_NAMES = [HW_CPU_DEVICE_NAME, HW_CUDA_DEVICE_NAME, HW_MPS_DEVICE_NAME]
+HW_DEVICE_NAMES = ["cpu", "cuda", "mps"]
 
 
 # ----------------------------

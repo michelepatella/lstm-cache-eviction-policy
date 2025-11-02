@@ -23,8 +23,6 @@ from components.model.environment.initializer import (
 )
 from components.model.io.locator import get_model_abs_path
 from components.model.io.saver import save_model
-from components.model.optimizations.pruner import prune_model
-from components.model.optimizations.quantizer import quantize_model
 from components.optimizer.builder import build_optimizer
 from components.training.core.epochs_trainer import train_epochs
 from pipeline.config.configurator import prepare_config
@@ -87,7 +85,6 @@ def train_model() -> None:
         optimizer_type = config.training.optimizer.type
         learning_rate = config.training.optimizer.params.learning_rate
         weight_decay = config.training.optimizer.params.weight_decay
-        pruning_amount = config.model.optimization.pruning.amount
 
         info(
             "Training started",
@@ -168,11 +165,6 @@ def train_model() -> None:
             logs_phase.get(),
             config,
         )
-
-        # Optimize trained model before saving
-        # it, applying pruning and quantization before
-        model = prune_model(model, pruning_amount)
-        model = quantize_model(model)
 
         # Save the best model trained
         save_model(model, model_path)
