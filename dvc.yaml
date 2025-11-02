@@ -322,7 +322,6 @@ stages:
       - src/components/model/io/saver.py
       - src/components/model/lstm.py
       - src/components/model/mode/setter.py
-      - src/components/model/optimizations/pruner.py
       - src/components/optimizer/builder.py
       - src/components/training/callbacks/early_stopping.py
       - src/components/training/core/epochs_trainer.py

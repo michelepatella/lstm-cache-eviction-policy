@@ -72,7 +72,7 @@ hardware:
 model:
   params:
     batch_first: true
-    bias: false
+    bias: true
     bidirectional: false
     dropout: 0.1
     hidden_size: 256
