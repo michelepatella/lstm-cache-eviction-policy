@@ -70,12 +70,9 @@ hardware:
   device:
     type: mps
 model:
-  optimization:
-    pruning:
-      amount: 0.2
   params:
     batch_first: true
-    bias: true
+    bias: false
     bidirectional: false
     dropout: 0.1
     hidden_size: 256

@@ -4,8 +4,9 @@ from fastapi import Body, FastAPI, HTTPException, status
 from api.const import (
     PREDICTOR_SERVICE_ENDPOINT,
     PREDICTOR_SERVICE_RETURN_OUTPUTS_NAME,
-    PREDICTOR_SERVICE_RETURN_VARIANCES_NAME,
+    PREDICTOR_SERVICE_RETURN_VARIANCES_NAME, MODEL_FILE_PATH,
 )
+from api.gateway.main import api_config
 from components.dataset.features.seq_builder import build_feature_seq
 from components.device.selector import select_device
 from components.inference.autoregressive_rollout.runner import (
@@ -17,12 +18,16 @@ from components.model.io.loader import load_model
 
 app = FastAPI()
 
+# Setup for predictor service: load model
+# to use for inference and select device to
+# run computations on
+device = select_device(api_config.hardware.device.type)
+model = load_model(MODEL_FILE_PATH, device)
+
 
 @app.post(PREDICTOR_SERVICE_ENDPOINT)
 def predictor_service(
     last_accesses: list[tuple[float, int]] = Body(...),
-    model_path: str = Body(...),
-    device_type: str = Body(...),
     rollout_horizon: int = Body(...),
     mc_dropout_samples: int = Body(...),
     time_step_increment: float = Body(...),
@@ -30,9 +35,8 @@ def predictor_service(
     """Predictor microservice for autoregressive rollout.
 
     This endpoint coordinates the autoregressive rollout service.
-    It starts by initializing the predictor model on the specified
-    device and constructs feature and keys sequences from the last
-    accessed data. The endpoint returns predicted outputs along with
+    It constructs feature and keys sequences from the last
+    accessed data, returning the predicted outputs along with
     associated variances coming from autoregressive rollout.
 
     Args:
@@ -40,8 +44,6 @@ def predictor_service(
                                                  the last accessed keys
                                                  and their corresponding
                                                  timestamps (in hours).
-        model_path (str): Path to the pretrained model weights.
-        device_type (str): Device type to run the model on.
         rollout_horizon (int): Number of steps for autoregressive rollout.
         mc_dropout_samples (int): Number of Monte Carlo dropout forward passes
                                   to estimate uncertainty.
@@ -56,10 +58,8 @@ def predictor_service(
         HTTPException: If the predictor service fails:
             * If the last accesses data is malformed or contains invalid types
               (TypeError).
-            * If any value in last accesses, model parameters, or device type is
-              invalid (ValueError).
-            * If a required key is missing in model parameters or last accesses
-              (KeyError).
+            * If any value in last accesses (ValueError).
+            * If a required key is missing in last accesses (KeyError).
             * If building feature and key sequences fails (RuntimeError).
             * If the autoregressive rollout computation fails (RuntimeError).
     """
@@ -68,21 +68,12 @@ def predictor_service(
             "Predictor service started",
             extra={
                 "last_accesses_num": len(last_accesses),
-                "model_path": str(model_path),
-                "device_type": device_type,
                 "rollout_horizon": rollout_horizon,
                 "mc_dropout_samples": mc_dropout_samples,
                 "time_step_increment": time_step_increment,
                 "context": "Predictor service",
             },
         )
-
-        # Setup for autoregressive rollout service
-        # Select computation device
-        device = select_device(device_type)
-
-        # Load pre-trained weights
-        model = load_model(model_path, device)
 
         # Construct features and keys sequences
         # starting from timestamps and keys extracted
@@ -130,8 +121,6 @@ def predictor_service(
             extra={
                 "exception": str(e),
                 "last_accesses_num": len(last_accesses),
-                "model_path": str(model_path),
-                "device_type": device_type,
                 "rollout_horizon": rollout_horizon,
                 "mc_dropout_samples": mc_dropout_samples,
                 "time_step_increment": time_step_increment,
