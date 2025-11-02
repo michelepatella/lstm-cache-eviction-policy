@@ -45,7 +45,7 @@ def initialize_model_environment(
                          (None if no targets provided).
             - model: PyTorch model.
     """
-    device_type = config.hardware.device_type
+    device_type = config.hardware.device.type
     min_key = config.data.keys.min
     max_key = config.data.keys.max
     num_keys = max_key - min_key + 1

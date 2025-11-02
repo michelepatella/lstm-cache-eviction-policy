@@ -2,6 +2,8 @@ import logging
 from pathlib import Path
 from typing import Literal
 
+import torch
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
@@ -191,6 +193,13 @@ MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT = True
 MODEL_METRICS_CLASS_REPORT_ZERO_DIVISION = 0
 
 MODEL_LOADING_WEIGHTS_ONLY = False
+
+MODEL_OPTIMIZATION_PRUNING_TARGET_MODULES = (torch.nn.Linear, torch.nn.LSTM)
+MODEL_OPTIMIZATION_PRUNING_PARAMS = ("weight",)
+
+MODEL_OPTIMIZATION_QUANTIZATION_TARGET_MODULES = (torch.nn.Linear,)
+MODEL_OPTIMIZATION_QUANTIZATION_DTYPE = torch.qint8
+MODEL_OPTIMIZATION_QUANTIZATION_ENGINE = "qnnpack"
 
 
 # ----------------------------

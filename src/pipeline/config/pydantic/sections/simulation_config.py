@@ -1,4 +1,4 @@
-from pydantic import BaseModel, conint, confloat
+from pydantic import BaseModel, confloat, conint
 
 
 class SimulationsMetricsMistakeRateConfig(BaseModel):
@@ -31,7 +31,6 @@ class SimulationsCacheConfig(BaseModel):
 
     dimension: conint(gt=0)
     ttl: conint(gt=0)
-
 
 
 class SimulationsAPIKwargsConfig(BaseModel):

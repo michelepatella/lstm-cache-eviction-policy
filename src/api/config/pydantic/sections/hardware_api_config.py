@@ -14,7 +14,9 @@ class HardwareDeviceAPIConfig(BaseModel):
     type: str
 
     @model_validator(mode="after")
-    def check_device(self: "HardwareDeviceAPIConfig") -> "HardwareDeviceAPIConfig":
+    def check_device(
+        self: "HardwareDeviceAPIConfig",
+    ) -> "HardwareDeviceAPIConfig":
         """Check whether device type is valid or not.
 
         This function validates the device type specified.

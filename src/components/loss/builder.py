@@ -51,7 +51,9 @@ def build_loss(
 
         # Compute class weight
         class_weight = calculate_class_weight(
-            targets, num_classes, CRITERION_CLASS_WEIGHT_TYPE,
+            targets,
+            num_classes,
+            CRITERION_CLASS_WEIGHT_TYPE,
         )
 
         # Move class weight as tensor to

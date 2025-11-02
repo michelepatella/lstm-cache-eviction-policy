@@ -9,9 +9,10 @@ from const import HW_DEVICE_NAMES
 class HardwareDeviceConfig(BaseModel):
     """Hardware device configuration.
 
-        Attributes:
-            type (str): Hardware device type to be used.
-        """
+    Attributes:
+        type (str): Hardware device type to be used.
+    """
+
     type: str
 
     @model_validator(mode="after")

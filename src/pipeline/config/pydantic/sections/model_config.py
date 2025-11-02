@@ -7,6 +7,7 @@ class ModelOptimizationPruningConfig(BaseModel):
     Attributes:
         amount (float): Pruning amount to apply (in [0.0, 1.0]).
     """
+
     amount: confloat(ge=0.0, le=1.0)
 
 
