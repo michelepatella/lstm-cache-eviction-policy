@@ -19,16 +19,16 @@ from pipeline.config.configurator import prepare_config
 from pipeline.const import (
     DAGS_HUB_ENV_VAR_REPO_NAME,
     DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
-    DAGS_HUB_MLFLOW_ENABLED,
+    DAGS_HUB_MLFLOW,
     LOGS_PHASE_TESTING,
-    MODEL_COMPUTE_METRICS_ENABLED,
+    MODEL_COMPUTE_METRICS_TESTING,
     RESULTS_DYNAMIC_MODEL_FILE_PATH,
     RESULTS_STATIC_MODEL_FILE_PATH,
 )
 from src.const import (
     DATA_DISTRIBUTION_STATIC_MODE,
     DATASET_TESTING_SPLIT_TYPE,
-    MLFLOW_NESTED_ENABLED,
+    MLFLOW_NESTED,
 )
 
 # Load env variables
@@ -52,14 +52,14 @@ def test_model() -> None:
     dagshub.init(
         repo_owner=dabs_hub_repo_owner,
         repo_name=dags_hub_repo_name,
-        mlflow=DAGS_HUB_MLFLOW_ENABLED,
+        mlflow=DAGS_HUB_MLFLOW,
     )
 
     import mlflow
 
     with mlflow.start_run(
         run_name=LOGS_PHASE_TESTING,
-        nested=MLFLOW_NESTED_ENABLED,
+        nested=MLFLOW_NESTED,
     ):
         # Setup
         config = prepare_config()
@@ -118,7 +118,7 @@ def test_model() -> None:
             device,
             top_k,
             model_results_save_path,
-            compute_metrics=MODEL_COMPUTE_METRICS_ENABLED,
+            compute_metrics=MODEL_COMPUTE_METRICS_TESTING,
         )
 
         # Experiment tracking

@@ -24,12 +24,12 @@ from pipeline.const import (
     CONFIG_FILE_PATH,
     DAGS_HUB_ENV_VAR_REPO_NAME,
     DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
-    DAGS_HUB_MLFLOW_ENABLED,
+    DAGS_HUB_MLFLOW,
 )
 from src.const import (
     DATASET_TRAINING_SPLIT_TYPE,
     LOGS_PHASE_VALIDATION,
-    MLFLOW_NESTED_ENABLED,
+    MLFLOW_NESTED,
 )
 
 # Load env variables
@@ -54,14 +54,14 @@ def validate_model() -> None:
     dagshub.init(
         repo_owner=dabs_hub_repo_owner,
         repo_name=dags_hub_repo_name,
-        mlflow=DAGS_HUB_MLFLOW_ENABLED,
+        mlflow=DAGS_HUB_MLFLOW,
     )
 
     import mlflow
 
     with mlflow.start_run(
         run_name=LOGS_PHASE_VALIDATION,
-        nested=MLFLOW_NESTED_ENABLED,
+        nested=MLFLOW_NESTED,
     ):
         # Setup
         config = prepare_config()

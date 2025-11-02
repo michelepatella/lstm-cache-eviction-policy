@@ -32,7 +32,7 @@ from pipeline.config.configurator import prepare_config
 from pipeline.const import (
     DAGS_HUB_ENV_VAR_REPO_NAME,
     DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
-    DAGS_HUB_MLFLOW_ENABLED,
+    DAGS_HUB_MLFLOW,
     LOGS_PHASE_DATA_GENERATION,
     PLOT_DYNAMIC_DAILY_PROFILE_FILE_PATH,
     PLOT_DYNAMIC_KEY_USAGE_HEATMAP_FILE_PATH,
@@ -46,7 +46,7 @@ from src.const import (
     DATASET_COLUMN_REQUEST_NAME,
     DATASET_COLUMN_TIMESTAMP_NAME,
     DATASET_RAW_TYPE,
-    MLFLOW_NESTED_ENABLED,
+    MLFLOW_NESTED,
 )
 
 # Load env variables
@@ -74,14 +74,14 @@ def generate_data() -> None:
     dagshub.init(
         repo_owner=dabs_hub_repo_owner,
         repo_name=dags_hub_repo_name,
-        mlflow=DAGS_HUB_MLFLOW_ENABLED,
+        mlflow=DAGS_HUB_MLFLOW,
     )
 
     import mlflow
 
     with mlflow.start_run(
         run_name=LOGS_PHASE_DATA_GENERATION,
-        nested=MLFLOW_NESTED_ENABLED,
+        nested=MLFLOW_NESTED,
     ):
         # Setup
         config = prepare_config()

@@ -45,7 +45,7 @@ from pipeline.const import (
     CACHE_RANDOM_NAME,
     DAGS_HUB_ENV_VAR_REPO_NAME,
     DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
-    DAGS_HUB_MLFLOW_ENABLED,
+    DAGS_HUB_MLFLOW,
     LOGS_PHASE_SIMULATIONS,
     PLOT_DYNAMIC_HIT_MISS_RATES_FILE_PATH,
     PLOT_STATIC_HIT_MISS_RATES_FILE_PATH,
@@ -62,7 +62,7 @@ from src.const import (
     CACHE_LSTM_NAME,
     DATA_DISTRIBUTION_STATIC_MODE,
     DATASET_TESTING_SPLIT_TYPE,
-    MLFLOW_NESTED_ENABLED,
+    MLFLOW_NESTED,
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
     SIMULATIONS_METRICS_POLICY_NAME,
@@ -92,14 +92,14 @@ def run_simulations() -> None:
     dagshub.init(
         repo_owner=dabs_hub_repo_owner,
         repo_name=dags_hub_repo_name,
-        mlflow=DAGS_HUB_MLFLOW_ENABLED,
+        mlflow=DAGS_HUB_MLFLOW,
     )
 
     import mlflow
 
     with mlflow.start_run(
         run_name=LOGS_PHASE_SIMULATIONS,
-        nested=MLFLOW_NESTED_ENABLED,
+        nested=MLFLOW_NESTED,
     ):
         # Setup
         config = prepare_config()
@@ -160,7 +160,7 @@ def run_simulations() -> None:
         for policy, cache in cache_eviction_policies.items():
             with mlflow.start_run(
                 run_name=f"{LOGS_PHASE_SIMULATIONS} ({policy})",
-                nested=MLFLOW_NESTED_ENABLED,
+                nested=MLFLOW_NESTED,
             ):
                 # Simulate a cache policy and
                 # get simulation insights

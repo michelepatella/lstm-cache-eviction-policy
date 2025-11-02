@@ -1,6 +1,6 @@
 import numpy as np
 
-from components.const import EARLY_STOPPING_DISABLED, EARLY_STOPPING_ENABLED
+from components.const import EARLY_STOPPING_UNTRIGGERED, EARLY_STOPPING_TRIGGERED
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
@@ -59,7 +59,7 @@ class EarlyStopping:
 
         # Flag indicating whether early stopping
         # should be triggered
-        self.early_stop = EARLY_STOPPING_DISABLED
+        self.early_stop = EARLY_STOPPING_UNTRIGGERED
 
         debug(
             "EarlyStopping initialization executed",
@@ -111,7 +111,7 @@ class EarlyStopping:
 
                 # Trigger early stopping if patience exceeded
                 if self.counter >= self.patience:
-                    self.early_stop = EARLY_STOPPING_ENABLED
+                    self.early_stop = EARLY_STOPPING_TRIGGERED
 
             debug(
                 "EarlyStopping state updated",

@@ -23,12 +23,6 @@ AUTOREGRESSIVE_ROLLOUT_LAST_TIME_BATCH_IDX = 0
 
 
 # ----------------------------
-# Criterion
-# ----------------------------
-CRITERION_CLASS_WEIGHT_TYPE = "balanced"
-
-
-# ----------------------------
 # Data
 # ----------------------------
 DATA_GENERATION_TIMESTAMPS_START = 0.0
@@ -52,7 +46,12 @@ DATASET_COLUMNS = [
     DATASET_COLUMN_TARGET_IDX,
 ]
 
-DATASET_INDEX_DISABLED = False
+DATASET_FEATURE_COLUMNS = [
+    DATASET_COLUMN_SIN_TIME_NAME,
+    DATASET_COLUMN_COS_TIME_NAME,
+]
+
+DATASET_INDEX = False
 
 DATASET_STATIC_RAW_FILE_PATH = (
     PROJECT_ROOT / "data" / "raw" / "static" / "static_raw_dataset.csv"
@@ -79,8 +78,8 @@ DATASET_DYNAMIC_PROCESSED_FILE_PATH = (
 # ----------------------------
 # Early Stopping
 # ----------------------------
-EARLY_STOPPING_ENABLED = True
-EARLY_STOPPING_DISABLED = False
+EARLY_STOPPING_TRIGGERED = True
+EARLY_STOPPING_UNTRIGGERED = False
 
 
 # ----------------------------
@@ -92,7 +91,7 @@ GRID_SEARCH_DESC = "Grid Search"
 # ----------------------------
 # JSON
 # ----------------------------
-JSON_WRAP_BOX_ENABLED = True
+JSON_WRAP_BOX = True
 JSON_INDENT = 4
 
 
@@ -173,7 +172,7 @@ MODEL_TRAINED_DYNAMIC_FILE_PATH = (
     PROJECT_ROOT / "models" / "dynamic" / "trained_dynamic_model.pt"
 )
 
-MODEL_COMPUTE_METRICS_DISABLED = False
+MODEL_COMPUTE_METRICS_DEFAULT = False
 
 MODEL_METRICS_AVG_LOSS_NAME = "avg_loss"
 MODEL_METRICS_CLASS_REPORT_NAME = "class_report"
@@ -182,20 +181,23 @@ MODEL_METRICS_COHEN_KAPPA_SCORE_NAME = "cohen_kappa_score"
 MODEL_METRICS_ACCURACY_NAME = "accuracy"
 MODEL_METRICS_MACRO_AVG_NAME = "macro avg"
 MODEL_METRICS_WEIGHTED_AVG_NAME = "weighted avg"
-MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT_ENABLED = True
+MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT = True
 MODEL_METRICS_CLASS_REPORT_ZERO_DIVISION = 0
 
-MODEL_LOADING_WEIGHTS_ONLY_DISABLED = False
+MODEL_LOADING_WEIGHTS_ONLY = False
 
 
 # ----------------------------
 # Monte Carlo (MC) Dropout
 # ----------------------------
+MC_DROPOUT_FLAG_NAME = "mc_dropout"
+
 MC_DROPOUT_DISABLED = False
 MC_DROPOUT_ENABLED = True
+
 MC_DROPOUT_NUM_SAMPLES_DEFAULT = 1
-MC_DROPOUT_FLAG_NAME = "mc_dropout"
-MC_DROPOUT_UNBIASED_VARIANCE_DISABLED = False
+
+MC_DROPOUT_UNBIASED_VARIANCE = False
 
 
 # ----------------------------

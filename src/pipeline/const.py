@@ -20,7 +20,7 @@ CONFIG_FILE_PATH = PROJECT_ROOT / "src" / "pipeline" / "config" / "config.yaml"
 # ----------------------------
 # Dagshub
 # ----------------------------
-DAGS_HUB_MLFLOW_ENABLED = True
+DAGS_HUB_MLFLOW = True
 DAGS_HUB_ENV_VAR_REPO_NAME = "DAGS_HUB_REPO"
 DAGS_HUB_ENV_VAR_REPO_OWNER_NAME = "DAGS_HUB_REPO_OWNER"
 
@@ -29,12 +29,6 @@ DAGS_HUB_ENV_VAR_REPO_OWNER_NAME = "DAGS_HUB_REPO_OWNER"
 # Dataset
 # ----------------------------
 DATASET_PROCESSED_TYPE = "processed"
-
-
-# ----------------------------
-# HW Device
-# ----------------------------
-HW_DEVICE_NAMES = ["cpu", "cuda", "mps"]
 
 
 # ----------------------------
@@ -56,7 +50,7 @@ MLFLOW_ARTIFACT_PATH = "model"
 # ----------------------------
 # Model
 # ----------------------------
-MODEL_COMPUTE_METRICS_ENABLED = True
+MODEL_COMPUTE_METRICS_TESTING = True
 
 
 # ----------------------------

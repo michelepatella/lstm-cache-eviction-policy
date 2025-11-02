@@ -3,7 +3,7 @@ import torch
 from torch import Tensor
 from torch.utils.data import DataLoader
 
-from components.const import MODEL_COMPUTE_METRICS_DISABLED
+from components.const import MODEL_COMPUTE_METRICS_DEFAULT
 from components.evaluation.model.metrics.calculator import (
     calculate_model_metrics,
 )
@@ -21,7 +21,7 @@ def evaluate_model(
     device: torch.device,
     top_k: int = None,
     model_results_save_path: str = None,
-    compute_metrics: bool = MODEL_COMPUTE_METRICS_DISABLED,
+    compute_metrics: bool = MODEL_COMPUTE_METRICS_DEFAULT,
 ) -> tuple[
     float,
     dict[str, int | float] | None,

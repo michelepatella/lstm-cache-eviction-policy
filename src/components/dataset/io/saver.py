@@ -1,6 +1,6 @@
 import pandas as pd
 
-from components.const import DATASET_INDEX_DISABLED
+from components.const import DATASET_INDEX
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
@@ -8,7 +8,7 @@ from components.logs.levels.error_logger import error
 def save_dataset(
     df: pd.DataFrame,
     path: str,
-    index: bool = DATASET_INDEX_DISABLED,
+    index: bool = DATASET_INDEX,
 ) -> None:
     """Save Pandas dataframe.
 

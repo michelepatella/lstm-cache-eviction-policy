@@ -14,9 +14,6 @@ DATA_DISTRIBUTION_MODES = [
     DATA_DISTRIBUTION_DYNAMIC_MODE,
 ]
 
-DATA_GENERATION_HOUR_START = 0
-DATA_GENERATION_HOUR_END = 23
-
 
 # ----------------------------
 # Dataset
@@ -31,6 +28,12 @@ DATASET_TESTING_SPLIT_TYPE = "testing"
 
 
 # ----------------------------
+# HW Device
+# ----------------------------
+HW_DEVICE_NAMES = ["cpu", "cuda", "mps"]
+
+
+# ----------------------------
 # Logs
 # ----------------------------
 LOGS_PHASE_VALIDATION = "validation"
@@ -39,7 +42,7 @@ LOGS_PHASE_VALIDATION = "validation"
 # ----------------------------
 # MLFlow
 # ----------------------------
-MLFLOW_NESTED_ENABLED = True
+MLFLOW_NESTED = True
 
 
 # ----------------------------
@@ -62,3 +65,10 @@ SIMULATIONS_METRICS_POLICY_NAME = "policy"
 SIMULATIONS_METRICS_HIT_COUNTER_NAME = "hit_count"
 SIMULATIONS_METRICS_MISS_COUNTER_NAME = "miss_count"
 SIMULATIONS_METRICS_TIMELINE_NAME = "timeline"
+
+
+# ----------------------------
+# Time
+# ----------------------------
+TIME_START_HOUR = 0
+TIME_END_HOUR = 23

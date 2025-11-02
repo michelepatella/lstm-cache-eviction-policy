@@ -2,6 +2,7 @@ from typing import Any
 
 import torch
 
+from components.const import DATASET_FEATURE_COLUMNS
 from components.device.mover import (
     move_to_device,
 )
@@ -48,8 +49,9 @@ def initialize_model_environment(
     min_key = config.data.keys.min
     max_key = config.data.keys.max
     num_keys = max_key - min_key + 1
-    num_features = config.model.general.features
     embedding_dim = config.model.sequence.embedding.dimension
+    weight_type = config.training.criterion.class_weight.type
+    num_features = len(DATASET_FEATURE_COLUMNS)
 
     # Define the device for computations
     device = select_device(device_type)
@@ -58,7 +60,7 @@ def initialize_model_environment(
     # have been provided
     criterion = None
     if targets is not None:
-        criterion = build_loss(targets, num_keys, device)
+        criterion = build_loss(targets, num_keys, device, weight_type)
 
     if model is None:
         # Instantiate model

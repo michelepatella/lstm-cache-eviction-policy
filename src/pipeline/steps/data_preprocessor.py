@@ -23,14 +23,14 @@ from pipeline.config.configurator import prepare_config
 from pipeline.const import (
     DAGS_HUB_ENV_VAR_REPO_NAME,
     DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
-    DAGS_HUB_MLFLOW_ENABLED,
+    DAGS_HUB_MLFLOW,
     DATASET_PROCESSED_TYPE,
     LOGS_PHASE_DATA_PREPROCESSING,
 )
 from src.const import (
     DATASET_COLUMN_TIMESTAMP_NAME,
     DATASET_RAW_TYPE,
-    MLFLOW_NESTED_ENABLED,
+    MLFLOW_NESTED,
 )
 
 # Load env variables
@@ -56,14 +56,14 @@ def preprocess_data() -> None:
     dagshub.init(
         repo_owner=dabs_hub_repo_owner,
         repo_name=dags_hub_repo_name,
-        mlflow=DAGS_HUB_MLFLOW_ENABLED,
+        mlflow=DAGS_HUB_MLFLOW,
     )
 
     import mlflow
 
     with mlflow.start_run(
         run_name=LOGS_PHASE_DATA_PREPROCESSING,
-        nested=MLFLOW_NESTED_ENABLED,
+        nested=MLFLOW_NESTED,
     ):
         # Setup
         config = prepare_config()

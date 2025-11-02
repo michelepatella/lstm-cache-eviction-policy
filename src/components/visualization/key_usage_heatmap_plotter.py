@@ -17,8 +17,8 @@ from components.const import (
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from src.const import (
-    DATA_GENERATION_HOUR_END,
-    DATA_GENERATION_HOUR_START,
+    TIME_END_HOUR,
+    TIME_START_HOUR,
 )
 
 
@@ -54,7 +54,7 @@ def plot_key_usage_heatmap(
     try:
         # Calculate number of hours to
         # show in the heatmap
-        num_hours = DATA_GENERATION_HOUR_END - DATA_GENERATION_HOUR_START + 1
+        num_hours = TIME_END_HOUR - TIME_START_HOUR + 1
 
         # Calculate number of keys involved
         # in the heatmap
@@ -83,14 +83,14 @@ def plot_key_usage_heatmap(
             # corresponding requested key is also
             # within the predefined range
             if (
-                DATA_GENERATION_HOUR_START
-                <= current_timestamp_hour_int
-                < DATA_GENERATION_HOUR_START + num_hours
+                    TIME_START_HOUR
+                    <= current_timestamp_hour_int
+                    < TIME_START_HOUR + num_hours
             ) and (0 <= requested_key_idx < num_keys):
                 # Increment the current heatmap
                 # position by one
                 heatmap[
-                    current_timestamp_hour_int - DATA_GENERATION_HOUR_START,
+                    current_timestamp_hour_int - TIME_START_HOUR,
                     requested_key_idx,
                 ] += 1
 
@@ -119,8 +119,8 @@ def plot_key_usage_heatmap(
             labels=[
                 f"{h}"
                 for h in range(
-                    DATA_GENERATION_HOUR_START,
-                    DATA_GENERATION_HOUR_END + 1,
+                    TIME_START_HOUR,
+                    TIME_END_HOUR + 1,
                 )
             ],
             fontsize=PLOT_LABEL_FONT_SIZE,

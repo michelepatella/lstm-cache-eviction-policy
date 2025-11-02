@@ -1,7 +1,7 @@
 from sklearn.metrics import classification_report
 
 from components.const import (
-    MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT_ENABLED,
+    MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT,
     MODEL_METRICS_CLASS_REPORT_ZERO_DIVISION,
 )
 from components.logs.levels.error_logger import error
@@ -11,7 +11,7 @@ from components.logs.levels.info_logger import info
 def calculate_class_report(
     targets: list[int],
     predictions: list[int],
-    output_dict: bool = MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT_ENABLED,
+    output_dict: bool = MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT,
     zero_division: int = MODEL_METRICS_CLASS_REPORT_ZERO_DIVISION,
 ) -> dict[str, float]:
     """Calculate a classification report.

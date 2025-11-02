@@ -3,14 +3,14 @@ from typing import Any
 
 from box import Box
 
-from components.const import JSON_WRAP_BOX_ENABLED
+from components.const import JSON_WRAP_BOX
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
 def load_json(
     path: str,
-    wrap: bool = JSON_WRAP_BOX_ENABLED,
+    wrap: bool = JSON_WRAP_BOX,
 ) -> dict[Any, Any] | Box:
     """Load a JSON file.
 

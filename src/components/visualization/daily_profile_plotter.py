@@ -14,8 +14,8 @@ from components.const import (
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from src.const import (
-    DATA_GENERATION_HOUR_END,
-    DATA_GENERATION_HOUR_START,
+    TIME_END_HOUR,
+    TIME_START_HOUR,
 )
 
 
@@ -43,7 +43,7 @@ def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
         # be displayed
         num_bins = (
             int(
-                (DATA_GENERATION_HOUR_END - DATA_GENERATION_HOUR_START)
+                (TIME_END_HOUR - TIME_START_HOUR)
                 / PLOT_DAILY_PROFILE_BIN_SIZE,
             )
             + 1
@@ -52,8 +52,8 @@ def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
         # Define the bins ranging from predefined
         # min hour to max hour
         bins = np.linspace(
-            DATA_GENERATION_HOUR_START,
-            DATA_GENERATION_HOUR_END,
+            TIME_START_HOUR,
+            TIME_END_HOUR,
             num_bins + 1,
         )
 
@@ -85,8 +85,8 @@ def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
         )
         plt.xticks(
             np.arange(
-                DATA_GENERATION_HOUR_START,
-                DATA_GENERATION_HOUR_END + 1,
+                TIME_START_HOUR,
+                TIME_END_HOUR + 1,
                 step=PLOT_DAILY_PROFILE_STEP,
             ),
             fontsize=PLOT_LABEL_FONT_SIZE,
@@ -104,8 +104,8 @@ def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
                 "bins_num": num_bins,
                 "bins_size": PLOT_DAILY_PROFILE_BIN_SIZE,
                 "x_range": (
-                    DATA_GENERATION_HOUR_START,
-                    DATA_GENERATION_HOUR_END,
+                    TIME_START_HOUR,
+                    TIME_END_HOUR,
                 ),
                 "context": "Daily profile plot",
             },
@@ -124,8 +124,8 @@ def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
                 ),
                 "bins_size": PLOT_DAILY_PROFILE_BIN_SIZE,
                 "x_range": (
-                    DATA_GENERATION_HOUR_START,
-                    DATA_GENERATION_HOUR_END,
+                    TIME_START_HOUR,
+                    TIME_END_HOUR,
                 ),
                 "context": "Daily profile plot",
             },
