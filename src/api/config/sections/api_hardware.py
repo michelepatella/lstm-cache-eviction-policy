@@ -5,8 +5,7 @@ from const import HW_DEVICE_NAMES
 
 
 class APIHardwareDevice(BaseModel):
-    """
-    Hardware device configuration for API.
+    """Hardware device configuration for API.
 
     This class defines the hardware device type used
     for running the API.
@@ -39,8 +38,7 @@ class APIHardwareDevice(BaseModel):
 
 
 class APIHardware(BaseModel):
-    """
-    Hardware configuration for API.
+    """Hardware configuration for API.
 
     This class encapsulates hardware-related
     configuration for the API.

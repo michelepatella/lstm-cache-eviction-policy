@@ -7,8 +7,7 @@ from components.logs.levels.error_logger import error
 
 
 class APIConfig(BaseModel):
-    """
-    Global API configuration.
+    """Global API configuration.
 
     This class defines the full API configuration,
     including hardware configuration and API kwargs.
@@ -25,8 +24,7 @@ class APIConfig(BaseModel):
         self: "APIConfig",
         user_kwargs: dict[str, int | float | list[int] | str | bool],
     ) -> APIKwargs:
-        """
-        Merge default API kwargs with user-provided ones.
+        """Merge default API kwargs with user-provided ones.
 
         This function merges default API kwargs with those provided
         by the user, ensuring both values are validated.

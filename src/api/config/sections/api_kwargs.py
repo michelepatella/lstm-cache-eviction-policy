@@ -1,11 +1,9 @@
-from typing import Optional
 
-from pydantic import BaseModel, conint, confloat
+from pydantic import BaseModel, confloat, conint
 
 
 class APIKwargInt(BaseModel):
-    """
-    Integer API kwarg configuration.
+    """Integer API kwarg configuration.
 
     Defines an API kwarg of integer type, including its
     default value and optional maximum allowed value.
@@ -16,12 +14,11 @@ class APIKwargInt(BaseModel):
     """
 
     default: conint(gt=0)
-    max: Optional[conint(gt=0)] = None
+    max: conint(gt=0) | None = None
 
 
 class APIKwargFloat(BaseModel):
-    """
-    Float API kwarg configuration.
+    """Float API kwarg configuration.
 
     Defines an API kwarg of float type, including its
     default value and optional maximum allowed value.
@@ -32,12 +29,11 @@ class APIKwargFloat(BaseModel):
     """
 
     default: confloat(gt=0.0)
-    max: Optional[confloat(gt=0.0)] = None
+    max: confloat(gt=0.0) | None = None
 
 
 class APIKwargConfidenceLevel(BaseModel):
-    """
-    Confidence level API kwarg configuration.
+    """Confidence level API kwarg configuration.
 
     Defines the confidence level used for confidence
     intervals.
@@ -50,8 +46,7 @@ class APIKwargConfidenceLevel(BaseModel):
 
 
 class APIKwargListInt(BaseModel):
-    """
-    List of integer API kwarg configuration.
+    """List of integer API kwarg configuration.
 
     Defines an API kwarg containing a list of integer
     values.
@@ -64,8 +59,7 @@ class APIKwargListInt(BaseModel):
 
 
 class APIKwargBool(BaseModel):
-    """
-    Boolean API kwarg configuration.
+    """Boolean API kwarg configuration.
 
     Defines an API kwarg of boolean type with a
     single default value.
@@ -78,8 +72,7 @@ class APIKwargBool(BaseModel):
 
 
 class APIKwargs(BaseModel):
-    """
-    Complete API kwargs configuration.
+    """Complete API kwargs configuration.
 
     This class defines the full configuration for
     API kwargs.

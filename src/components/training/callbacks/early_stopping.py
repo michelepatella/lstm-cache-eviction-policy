@@ -1,6 +1,9 @@
 import numpy as np
 
-from components.const import EARLY_STOPPING_UNTRIGGERED, EARLY_STOPPING_TRIGGERED
+from components.const import (
+    EARLY_STOPPING_TRIGGERED,
+    EARLY_STOPPING_UNTRIGGERED,
+)
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 

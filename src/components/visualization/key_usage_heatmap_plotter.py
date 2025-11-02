@@ -83,9 +83,9 @@ def plot_key_usage_heatmap(
             # corresponding requested key is also
             # within the predefined range
             if (
-                    TIME_START_HOUR
-                    <= current_timestamp_hour_int
-                    < TIME_START_HOUR + num_hours
+                TIME_START_HOUR
+                <= current_timestamp_hour_int
+                < TIME_START_HOUR + num_hours
             ) and (0 <= requested_key_idx < num_keys):
                 # Increment the current heatmap
                 # position by one

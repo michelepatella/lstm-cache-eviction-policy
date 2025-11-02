@@ -23,6 +23,12 @@ AUTOREGRESSIVE_ROLLOUT_LAST_TIME_BATCH_IDX = 0
 
 
 # ----------------------------
+# Criterion
+# ----------------------------
+CRITERION_CLASS_WEIGHT_TYPE = "balanced"
+
+
+# ----------------------------
 # Data
 # ----------------------------
 DATA_GENERATION_TIMESTAMPS_START = 0.0

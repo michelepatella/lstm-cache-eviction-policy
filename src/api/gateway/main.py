@@ -1,18 +1,17 @@
-from typing import Any, Optional
+from typing import Any
 
 from fastapi import FastAPI, HTTPException, status
 
 from api.config.api_config import APIConfig
-
 from api.const import (
     API_CONFIG_FILE_PATH,
+    API_CONFIG_USER_API_KWARG_FIELD_NAME,
     GATEWAY_API_ENDPOINT,
     GATEWAY_API_RETURN_API_KWARGS_NAME,
     GATEWAY_API_RETURN_CONF_MATRIX_NAME,
     GATEWAY_API_RETURN_KEY_SCORES_NAME,
     GATEWAY_API_RETURN_KEYS_TO_EVICT_NAME,
     GATEWAY_API_RETURN_PROB_MATRIX_NAME,
-    API_CONFIG_USER_API_KWARG_FIELD_NAME,
 )
 from api.gateway.callers.predictor_service_caller import (
     call_predictor_service,
@@ -38,7 +37,7 @@ api_config = APIConfig(**api_config_file)
 def gateway_api(
     keys_in_cache: list[int],
     last_accesses: list[tuple[float, int]],
-    user_api_kwargs: Optional[dict[str, int | float | list[int] | str | bool]],
+    user_api_kwargs: dict[str, int | float | list[int] | str | bool] | None,
 ) -> dict[str, Any]:
     """Gateway API endpoint for eviction decision.
 
@@ -82,7 +81,7 @@ def gateway_api(
         # default ones
         if user_api_kwargs:
             api_config.api_kwargs = api_config.merge_api_kwargs(
-                user_api_kwargs
+                user_api_kwargs,
             )
 
         # Invoke predictor service to run autoregressive rollout
@@ -104,14 +103,14 @@ def gateway_api(
         # Decide which keys to be evicted
         excluded_keys = (
             api_config.api_kwargs.excluded_keys.get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME
+                API_CONFIG_USER_API_KWARG_FIELD_NAME,
             )
             or api_config.api_kwargs.excluded_keys.default
         )
 
         num_evictions = (
             api_config.api_kwargs.num_evictions.get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME
+                API_CONFIG_USER_API_KWARG_FIELD_NAME,
             )
             or api_config.api_kwargs.num_evictions.default
         )
@@ -128,7 +127,7 @@ def gateway_api(
         }
         if (
             api_config.api_kwargs.return_api_kwargs.get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME
+                API_CONFIG_USER_API_KWARG_FIELD_NAME,
             )
             or api_config.api_kwargs.return_api_kwargs.default
         ):
@@ -138,7 +137,7 @@ def gateway_api(
 
         if (
             api_config.api_kwargs.return_all_scores.get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME
+                API_CONFIG_USER_API_KWARG_FIELD_NAME,
             )
             or api_config.api_kwargs.return_all_scores.default
         ):
@@ -146,7 +145,7 @@ def gateway_api(
 
         if (
             api_config.api_kwargs.return_prob_conf.get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME
+                API_CONFIG_USER_API_KWARG_FIELD_NAME,
             )
             or api_config.api_kwargs.return_prob_conf.default
         ):

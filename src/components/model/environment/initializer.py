@@ -50,7 +50,6 @@ def initialize_model_environment(
     max_key = config.data.keys.max
     num_keys = max_key - min_key + 1
     embedding_dim = config.model.sequence.embedding.dimension
-    weight_type = config.training.criterion.class_weight.type
     num_features = len(DATASET_FEATURE_COLUMNS)
 
     # Define the device for computations
@@ -60,7 +59,7 @@ def initialize_model_environment(
     # have been provided
     criterion = None
     if targets is not None:
-        criterion = build_loss(targets, num_keys, device, weight_type)
+        criterion = build_loss(targets, num_keys, device)
 
     if model is None:
         # Instantiate model

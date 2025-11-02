@@ -5,6 +5,7 @@ from fastapi import HTTPException, status
 
 from api.config.api_config import APIConfig
 from api.const import (
+    API_CONFIG_USER_API_KWARG_FIELD_NAME,
     PREDICTOR_SERVICE_PARAM_DEVICE_TYPE_NAME,
     PREDICTOR_SERVICE_PARAM_LAST_ACCESSES_NAME,
     PREDICTOR_SERVICE_PARAM_MC_DROPOUT_SAMPLES_NAME,
@@ -14,7 +15,6 @@ from api.const import (
     PREDICTOR_SERVICE_RETURN_OUTPUTS_NAME,
     PREDICTOR_SERVICE_RETURN_VARIANCES_NAME,
     PREDICTOR_SERVICE_URL,
-    API_CONFIG_USER_API_KWARG_FIELD_NAME,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -58,19 +58,19 @@ def call_predictor_service(
         )
         params[PREDICTOR_SERVICE_PARAM_ROLLOUT_HORIZON_NAME] = (
             api_config.api_kwargs.rollout_horizon.get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME
+                API_CONFIG_USER_API_KWARG_FIELD_NAME,
             )
             or api_config.api_kwargs.rollout_horizon.default
         )
         params[PREDICTOR_SERVICE_PARAM_MC_DROPOUT_SAMPLES_NAME] = (
             api_config.api_kwargs.mc_dropout_samples.get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME
+                API_CONFIG_USER_API_KWARG_FIELD_NAME,
             )
             or api_config.api_kwargs.mc_dropout_samples.default
         )
         params[PREDICTOR_SERVICE_PARAM_TIME_STEP_INCREMENT_NAME] = (
             api_config.api_kwargs.time_step_increment.get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME
+                API_CONFIG_USER_API_KWARG_FIELD_NAME,
             )
             or api_config.api_kwargs.time_step_increment.default
         )

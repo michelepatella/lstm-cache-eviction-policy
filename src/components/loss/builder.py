@@ -1,6 +1,7 @@
 import torch
 from torch import nn
 
+from components.const import CRITERION_CLASS_WEIGHT_TYPE
 from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -11,7 +12,6 @@ def build_loss(
     targets: torch.Tensor,
     num_classes: int,
     device: torch.device,
-    weight_type: str = None,
 ) -> nn.CrossEntropyLoss:
     """Build a PyTorch criterion.
 
@@ -23,7 +23,6 @@ def build_loss(
         targets (torch.Tensor): Targets for computing class weight.
         num_classes (int): Number of classes.
         device (torch.device): Device to move the criterion weight onto.
-        weight_type (str): Class weight to use.
 
     Returns:
         nn.CrossEntropyLoss: Criterion with class weight.
@@ -51,7 +50,9 @@ def build_loss(
         )
 
         # Compute class weight
-        class_weight = calculate_class_weight(targets, num_classes, weight_type)
+        class_weight = calculate_class_weight(
+            targets, num_classes, CRITERION_CLASS_WEIGHT_TYPE,
+        )
 
         # Move class weight as tensor to
         # the specified device
