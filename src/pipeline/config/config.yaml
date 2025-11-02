@@ -60,7 +60,7 @@ data:
       periodic:
         amplitude: 50
         scale: 90
-  requests: 200000
+  requests: 100000
   seed: 42
 dataset:
   split:
