@@ -15,12 +15,12 @@ class TrainingGeneralConfig(BaseModel):
         shuffle (bool): Whether to shuffle the dataset during training.
     """
 
-    epochs: conint(gt=0)  # type: ignore[valid-type]
-    batch_size: conint(gt=0)  # type: ignore[valid-type]
+    epochs: conint(gt=0)
+    batch_size: conint(gt=0)
     shuffle: bool
 
 
-class OptimizerParamsConfig(BaseModel):
+class TrainingOptimizerParamsConfig(BaseModel):
     """Configuration for the training optimizer.
 
     Attributes:
@@ -29,32 +29,32 @@ class OptimizerParamsConfig(BaseModel):
         momentum (float): Momentum (in [0,1]).
     """
 
-    learning_rate: confloat(gt=0)  # type: ignore[valid-type]
-    weight_decay: confloat(ge=0)  # type: ignore[valid-type]
-    momentum: confloat(ge=0, le=1)  # type: ignore[valid-type]
+    learning_rate: confloat(gt=0)
+    weight_decay: confloat(ge=0)
+    momentum: confloat(ge=0, le=1)
 
 
-class OptimizerConfig(BaseModel):
+class TrainingOptimizerConfig(BaseModel):
     """Optimizer configuration for training.
 
     Attributes:
         type (str): Optimizer type.
-        params (OptimizerParamsConfig): Configuration for the optimizer.
+        params (TrainingOptimizerParamsConfig): Configuration for the optimizer.
     """
 
     type: str
-    params: OptimizerParamsConfig
+    params: TrainingOptimizerParamsConfig
 
     @model_validator(mode="after")
     def check_data_distribution_mode(
-        self: "OptimizerConfig",
-    ) -> "OptimizerConfig":
+        self: "TrainingOptimizerConfig",
+    ) -> "TrainingOptimizerConfig":
         """Check whether optimizer is valid or not.
 
         This function validates the training optimizer specified.
 
         Args:
-            self (OptimizerConfig): Current model instance.
+            self (TrainingOptimizerConfig): Current model instance.
 
         Returns:
             "OptimizerConfig": Validated model instance.
@@ -68,7 +68,7 @@ class OptimizerConfig(BaseModel):
         return self
 
 
-class EarlyStoppingTrainingConfig(BaseModel):
+class TrainingEarlyStoppingConfig(BaseModel):
     """Early stopping configuration for training.
 
     Attributes:
@@ -77,8 +77,8 @@ class EarlyStoppingTrainingConfig(BaseModel):
         delta (float): Minimum change to qualify as an improvement (>= 0).
     """
 
-    patience: conint(ge=0)  # type: ignore[valid-type]
-    delta: confloat(ge=0)  # type: ignore[valid-type]
+    patience: conint(ge=0)
+    delta: confloat(ge=0)
 
 
 class TrainingConfig(BaseModel):
@@ -86,10 +86,10 @@ class TrainingConfig(BaseModel):
 
     Attributes:
         general (TrainingGeneralConfig): General training configuration.
-        optimizer (OptimizerConfig): Optimizer configuration.
-        early_stopping (EarlyStoppingTrainingConfig): Early stopping configuration.
+        optimizer (TrainingOptimizerConfig): Optimizer configuration.
+        early_stopping (TrainingEarlyStoppingConfig): Early stopping configuration.
     """
 
     general: TrainingGeneralConfig
-    optimizer: OptimizerConfig
-    early_stopping: EarlyStoppingTrainingConfig
+    optimizer: TrainingOptimizerConfig
+    early_stopping: TrainingEarlyStoppingConfig

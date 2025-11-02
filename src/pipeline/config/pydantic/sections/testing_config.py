@@ -1,7 +1,7 @@
 from pydantic import BaseModel, conint
 
 
-class GeneralTestingConfig(BaseModel):
+class TestingGeneralConfig(BaseModel):
     """General configuration for testing.
 
     Attributes:
@@ -9,27 +9,27 @@ class GeneralTestingConfig(BaseModel):
         shuffle (bool): Whether to shuffle the dataset during testing.
     """
 
-    batch_size: conint(gt=0)  # type: ignore[valid-type]
+    batch_size: conint(gt=0)
     shuffle: bool
 
 
-class MetricsConfig(BaseModel):
+class TestingMetricsConfig(BaseModel):
     """Metrics configuration for testing.
 
     Attributes:
         top_k (int): Number of top predictions to consider for evaluation (> 0).
     """
 
-    top_k: conint(gt=0)  # type: ignore[valid-type]
+    top_k: conint(gt=0)
 
 
 class TestingConfig(BaseModel):
     """Testing configuration.
 
     Attributes:
-        general (GeneralTestingConfig): General testing configuration.
-        metrics (MetricsConfig): Testing metrics configuration.
+        general (TestingGeneralConfig): General testing configuration.
+        metrics (TestingMetricsConfig): Testing metrics configuration.
     """
 
-    general: GeneralTestingConfig
-    metrics: MetricsConfig
+    general: TestingGeneralConfig
+    metrics: TestingMetricsConfig

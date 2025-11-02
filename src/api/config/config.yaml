@@ -1,7 +1,7 @@
 hardware:
   device:
     type: mps
-api_kwargs:
+kwargs:
   rollout_horizon:
     default: 5
     max: 50
@@ -11,7 +11,7 @@ api_kwargs:
   confidence_level:
     default: 0.95
   time_step_increment:
-    default: 0.2
+    default: 0.02
     max: 5.0
   num_evictions:
     default: 1
@@ -22,8 +22,8 @@ api_kwargs:
   conf_weight:
     default: 0.2
   return_all_scores:
-    default: true
+    default: false
   return_prob_conf:
-    default: true
+    default: false
   return_api_kwargs:
-    default: true
+    default: false

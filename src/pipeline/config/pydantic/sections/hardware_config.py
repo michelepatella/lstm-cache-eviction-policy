@@ -6,31 +6,40 @@ from components.assertions.choice_field_assertor import (
 from const import HW_DEVICE_NAMES
 
 
-class HardwareConfig(BaseModel):
-    """Hardware configuration.
+class HardwareDeviceConfig(BaseModel):
+    """Hardware device configuration.
 
-    Attributes:
-        device_type (str): Hardware device type to be used.
-    """
-
-    device_type: str
+        Attributes:
+            type (str): Hardware device type to be used.
+        """
+    type: str
 
     @model_validator(mode="after")
-    def check_device(self: "HardwareConfig") -> "HardwareConfig":
+    def check_device(self: "HardwareDeviceConfig") -> "HardwareDeviceConfig":
         """Check whether device type is valid or not.
 
         This function validates the device type specified.
 
         Args:
-            self (HardwareConfig): Current model instance.
+            self (HardwareDeviceConfig): Current model instance.
 
         Returns:
-            "HardwareConfig": Validated model instance.
+            "HardwareDeviceConfig": Validated model instance.
         """
         assert_choice_field(
-            self.device_type,
+            self.type,
             HW_DEVICE_NAMES,
-            "hardware.device_type",
+            "hardware.device.type",
         )
 
         return self
+
+
+class HardwareConfig(BaseModel):
+    """Hardware configuration.
+
+    Attributes:
+        device (str): Hardware device configuration.
+    """
+
+    device: HardwareDeviceConfig

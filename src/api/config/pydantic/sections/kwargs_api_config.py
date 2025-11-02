@@ -2,11 +2,8 @@
 from pydantic import BaseModel, confloat, conint
 
 
-class APIKwargInt(BaseModel):
+class KwargIntAPIConfig(BaseModel):
     """Integer API kwarg configuration.
-
-    Defines an API kwarg of integer type, including its
-    default value and optional maximum allowed value.
 
     Attributes:
         default (int): Default integer value (> 0).
@@ -17,7 +14,7 @@ class APIKwargInt(BaseModel):
     max: conint(gt=0) | None = None
 
 
-class APIKwargFloat(BaseModel):
+class KwargFloatAPIConfig(BaseModel):
     """Float API kwarg configuration.
 
     Defines an API kwarg of float type, including its
@@ -32,7 +29,7 @@ class APIKwargFloat(BaseModel):
     max: confloat(gt=0.0) | None = None
 
 
-class APIKwargConfidenceLevel(BaseModel):
+class KwargConfidenceLevelAPIConfig(BaseModel):
     """Confidence level API kwarg configuration.
 
     Defines the confidence level used for confidence
@@ -45,7 +42,7 @@ class APIKwargConfidenceLevel(BaseModel):
     default: confloat(gt=0.0, le=1.0)
 
 
-class APIKwargListInt(BaseModel):
+class KwargListIntAPIConfig(BaseModel):
     """List of integer API kwarg configuration.
 
     Defines an API kwarg containing a list of integer
@@ -58,7 +55,7 @@ class APIKwargListInt(BaseModel):
     default: list[int]
 
 
-class APIKwargBool(BaseModel):
+class KwargBoolAPIConfig(BaseModel):
     """Boolean API kwarg configuration.
 
     Defines an API kwarg of boolean type with a
@@ -71,40 +68,40 @@ class APIKwargBool(BaseModel):
     default: bool
 
 
-class APIKwargs(BaseModel):
+class KwargsAPIConfig(BaseModel):
     """Complete API kwargs configuration.
 
     This class defines the full configuration for
     API kwargs.
 
     Attributes:
-        rollout_horizon (APIKwargInt): Number of future steps to predict
+        rollout_horizon (KwargIntAPIConfig): Number of future steps to predict
                                        in the autoregressive rollout.
-        mc_dropout_samples (APIKwargInt): Number of Monte Carlo Dropout samples
+        mc_dropout_samples (KwargIntAPIConfig): Number of Monte Carlo Dropout samples
                                           for uncertainty estimation.
-        confidence_level (APIKwargConfidenceLevel): Confidence level for
+        confidence_level (KwargConfidenceLevelAPIConfig): Confidence level for
                                                     prediction intervals.
-        time_step_increment (APIKwargFloat): Time step increment in hours
+        time_step_increment (KwargFloatAPIConfig): Time step increment in hours
                                              for feature progression.
-        num_evictions (APIKwargInt): Number of keys to evict per step.
-        excluded_keys (APIKwargListInt): Keys that should not be evicted.
-        prob_weight (APIKwargFloat): Weight applied to probability in key scoring.
-        conf_weight (APIKwargFloat): Weight applied to confidence in key scoring.
-        return_all_scores (APIKwargBool): Whether to return all scores.
-        return_prob_conf (APIKwargBool): Whether to return probability and
+        num_evictions (KwargIntAPIConfig): Number of keys to evict per step.
+        excluded_keys (KwargListIntAPIConfig): Keys that should not be evicted.
+        prob_weight (KwargFloatAPIConfig): Weight applied to probability in key scoring.
+        conf_weight (KwargFloatAPIConfig): Weight applied to confidence in key scoring.
+        return_all_scores (KwargBoolAPIConfig): Whether to return all scores.
+        return_prob_conf (KwargBoolAPIConfig): Whether to return probability and
                                          confidence matrices.
-        return_api_kwargs (APIKwargBool): Whether to return all API kwargs in
+        return_api_kwargs (KwargBoolAPIConfig): Whether to return all API kwargs in
                                           responses.
     """
 
-    rollout_horizon: APIKwargInt
-    mc_dropout_samples: APIKwargInt
-    confidence_level: APIKwargConfidenceLevel
-    time_step_increment: APIKwargFloat
-    num_evictions: APIKwargInt
-    excluded_keys: APIKwargListInt
-    prob_weight: APIKwargFloat
-    conf_weight: APIKwargFloat
-    return_all_scores: APIKwargBool
-    return_prob_conf: APIKwargBool
-    return_api_kwargs: APIKwargBool
+    rollout_horizon: KwargIntAPIConfig
+    mc_dropout_samples: KwargIntAPIConfig
+    confidence_level: KwargConfidenceLevelAPIConfig
+    time_step_increment: KwargFloatAPIConfig
+    num_evictions: KwargIntAPIConfig
+    excluded_keys: KwargListIntAPIConfig
+    prob_weight: KwargFloatAPIConfig
+    conf_weight: KwargFloatAPIConfig
+    return_all_scores: KwargBoolAPIConfig
+    return_prob_conf: KwargBoolAPIConfig
+    return_api_kwargs: KwargBoolAPIConfig

@@ -4,11 +4,8 @@ from components.assertions.choice_field_assertor import assert_choice_field
 from const import HW_DEVICE_NAMES
 
 
-class APIHardwareDevice(BaseModel):
+class HardwareDeviceAPIConfig(BaseModel):
     """Hardware device configuration for API.
-
-    This class defines the hardware device type used
-    for running the API.
 
     Attributes:
         type (str): The device type name.
@@ -17,13 +14,13 @@ class APIHardwareDevice(BaseModel):
     type: str
 
     @model_validator(mode="after")
-    def check_device(self: "APIHardwareDevice") -> "APIHardwareDevice":
+    def check_device(self: "HardwareDeviceAPIConfig") -> "HardwareDeviceAPIConfig":
         """Check whether device type is valid or not.
 
         This function validates the device type specified.
 
         Args:
-            self (APIHardwareDevice): Current model instance.
+            self (HardwareDeviceAPIConfig): Current model instance.
 
         Returns:
             "HardwareDevice": Validated model instance.
@@ -37,14 +34,11 @@ class APIHardwareDevice(BaseModel):
         return self
 
 
-class APIHardware(BaseModel):
+class HardwareAPIConfig(BaseModel):
     """Hardware configuration for API.
 
-    This class encapsulates hardware-related
-    configuration for the API.
-
     Attributes:
-        device (APIHardwareDevice): Hardware device configuration.
+        device (HardwareDeviceAPIConfig): Hardware device configuration.
     """
 
-    device: APIHardwareDevice
+    device: HardwareDeviceAPIConfig

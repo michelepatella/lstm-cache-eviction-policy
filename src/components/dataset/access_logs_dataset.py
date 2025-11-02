@@ -39,8 +39,8 @@ class AccessLogsDataset(Dataset):
 
     Attributes:
         data (pd.DataFrame): Full dataset stored internally.
-        columns (List[str]): List of column names in the dataset.
-        features (List[str]): List of feature column names.
+        columns (list[str]): List of column names in the dataset.
+        features (list[str]): List of feature column names.
         target (str): Target column name (usually the last column).
         seq_len (int): Sequence length used for model sequences.
     """

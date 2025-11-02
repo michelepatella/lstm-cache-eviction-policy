@@ -13,7 +13,7 @@ class CacheMetricsLogger:
         - Keys evicted from the cache
 
     Attributes:
-        put_events (Dict[int, List[Tuple[float, float]]]):
+        put_events (Dict[int, list[Tuple[float, float]]]):
             Records key insertions with timestamp and TTL.
         access_events (defaultdict(list)): Records access timestamps
                                            for each key.

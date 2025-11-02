@@ -1,14 +1,23 @@
 from pydantic import BaseModel, confloat, conint
 
 
-class GeneralModelConfig(BaseModel):
-    """General configuration for the model.
+class ModelOptimizationPruningConfig(BaseModel):
+    """Model optimization pruning configuration.
 
     Attributes:
-        features (int): Number of input features for the model (> 0).
+        amount (float): Pruning amount to apply (in [0.0, 1.0]).
+    """
+    amount: confloat(ge=0.0, le=1.0)
+
+
+class ModelOptimizationConfig(BaseModel):
+    """Model optimization configuration.
+
+    Attributes:
+        pruning (ModelOptimizationPruningConfig): Pruning configuration.
     """
 
-    features: conint(gt=0)  # type: ignore[valid-type]
+    pruning: ModelOptimizationPruningConfig
 
 
 class ModelParamsConfig(BaseModel):
@@ -25,46 +34,46 @@ class ModelParamsConfig(BaseModel):
         proj_size (int): Output projection size (>= 0).
     """
 
-    hidden_size: conint(gt=0)  # type: ignore[valid-type]
-    num_layers: conint(gt=0)  # type: ignore[valid-type]
+    hidden_size: conint(gt=0)
+    num_layers: conint(gt=0)
     bias: bool
     batch_first: bool
-    dropout: confloat(ge=0, lt=1)  # type: ignore[valid-type]
+    dropout: confloat(ge=0, lt=1)
     bidirectional: bool
-    proj_size: conint(ge=0)  # type: ignore[valid-type]
+    proj_size: conint(ge=0)
 
 
-class EmbeddingConfig(BaseModel):
+class ModelSequenceEmbeddingConfig(BaseModel):
     """Embedding configuration for sequence input.
 
     Attributes:
         dimension (int): Dimension of the embedding vector (> 0).
     """
 
-    dimension: conint(gt=0)  # type: ignore[valid-type]
+    dimension: conint(gt=0)
 
 
-class SequenceConfig(BaseModel):
+class ModelSequenceConfig(BaseModel):
     """Sequence configuration for the model.
 
     Attributes:
         length (int): Length of the input sequences (> 0).
-        embedding (EmbeddingConfig): Embedding configuration.
+        embedding (ModelSequenceEmbeddingConfig): Embedding configuration.
     """
 
-    length: conint(gt=0)  # type: ignore[valid-type]
-    embedding: EmbeddingConfig
+    length: conint(gt=0)
+    embedding: ModelSequenceEmbeddingConfig
 
 
 class ModelConfig(BaseModel):
     """Model configuration.
 
     Attributes:
-        general (GeneralModelConfig): General model configuration.
         params (ModelParamsConfig): Model layer configuration.
-        sequence (SequenceConfig): Sequence and embedding configuration.
+        sequence (ModelSequenceConfig): Sequence and embedding configuration.
+        optimization (ModelOptimizationConfig): Model optimization configuration.
     """
 
-    general: GeneralModelConfig
     params: ModelParamsConfig
-    sequence: SequenceConfig
+    sequence: ModelSequenceConfig
+    optimization: ModelOptimizationConfig

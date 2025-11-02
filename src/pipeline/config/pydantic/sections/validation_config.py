@@ -1,7 +1,7 @@
 from pydantic import BaseModel, confloat, conint
 
 
-class GeneralValidationConfig(BaseModel):
+class ValidationGeneralConfig(BaseModel):
     """General validation configuration.
 
     Attributes:
@@ -9,11 +9,11 @@ class GeneralValidationConfig(BaseModel):
         shuffle (bool): Whether to shuffle the dataset during validation.
     """
 
-    batch_size: conint(gt=0)  # type: ignore[valid-type]
+    batch_size: conint(gt=0)
     shuffle: bool
 
 
-class CrossValidationConfig(BaseModel):
+class ValidationCrossValidationConfig(BaseModel):
     """Cross-validation configuration.
 
     Attributes:
@@ -21,11 +21,11 @@ class CrossValidationConfig(BaseModel):
         epochs (int): Number of epochs for each fold (> 0).
     """
 
-    folds: conint(gt=1)  # type: ignore[valid-type]
-    epochs: conint(gt=0)  # type: ignore[valid-type]
+    folds: conint(gt=1)
+    epochs: conint(gt=0)
 
 
-class EarlyStoppingValidationConfig(BaseModel):
+class ValidationEarlyStoppingConfig(BaseModel):
     """Early stopping configuration for validation.
 
     Attributes:
@@ -34,17 +34,17 @@ class EarlyStoppingValidationConfig(BaseModel):
         delta (float): Minimum change to qualify as improvement (>= 0).
     """
 
-    patience: conint(ge=0)  # type: ignore[valid-type]
-    delta: confloat(ge=0)  # type: ignore[valid-type]
+    patience: conint(ge=0)
+    delta: confloat(ge=0)
 
 
-class ModelSearchSpaceConfig(BaseModel):
+class ValidationSearchSpaceModelConfig(BaseModel):
     """Model search space configuration for hyperparameter optimization.
 
     Attributes:
-        hidden_size (List[int]): Allowed range of hidden layer sizes (> 0).
-        num_layers (List[int]): Allowed range of number of layers (> 0).
-        dropout (List[float]): Allowed range of dropout values (in [0, 1)).
+        hidden_size (list[int]): Allowed range of hidden layer sizes (> 0).
+        num_layers (list[int]): Allowed range of number of layers (> 0).
+        dropout (list[float]): Allowed range of dropout values (in [0, 1)).
     """
 
     hidden_size: list[conint(gt=0)]  # type: ignore[valid-type]
@@ -52,53 +52,53 @@ class ModelSearchSpaceConfig(BaseModel):
     dropout: list[confloat(ge=0, lt=1)]  # type: ignore[valid-type]
 
 
-class TrainingSearchSpaceOptimizerConfig(BaseModel):
+class ValidationSearchSpaceTrainingOptimizerConfig(BaseModel):
     """Optimizer search space configuration for hyperparameter tuning.
 
     Attributes:
-        learning_rate (List[float]): Allowed learning rate values (> 0).
+        learning_rate (list[float]): Allowed learning rate values (> 0).
     """
 
     learning_rate: list[confloat(gt=0)]  # type: ignore[valid-type]
 
 
-class TrainingSearchSpaceConfig(BaseModel):
+class ValidationSearchSpaceTrainingConfig(BaseModel):
     """Training search space configuration.
 
     Attributes:
-        optimizer (TrainingSearchSpaceOptimizerConfig): Optimizer search space
+        optimizer (ValidationSearchSpaceTrainingOptimizerConfig): Optimizer search space
                                                         configuration.
     """
 
-    optimizer: TrainingSearchSpaceOptimizerConfig
+    optimizer: ValidationSearchSpaceTrainingOptimizerConfig
 
 
-class SearchSpaceConfig(BaseModel):
+class ValidationSearchSpaceConfig(BaseModel):
     """Search space configuration.
 
     Attributes:
-        model (ModelSearchSpaceConfig): Model hyperparameter search space
+        model (ValidationSearchSpaceModelConfig): Model hyperparameter search space
                                         configuration.
-        training (TrainingSearchSpaceConfig): Training hyperparameter search space
+        training (ValidationSearchSpaceTrainingConfig): Training hyperparameter search space
                                               configuration.
     """
 
-    model: ModelSearchSpaceConfig
-    training: TrainingSearchSpaceConfig
+    model: ValidationSearchSpaceModelConfig
+    training: ValidationSearchSpaceTrainingConfig
 
 
 class ValidationConfig(BaseModel):
     """Validation configuration.
 
     Attributes:
-        general (GeneralValidationConfig): General validation configuration.
-        cross_validation (CrossValidationConfig): Cross-validation configuration.
-        early_stopping (EarlyStoppingValidationConfig): Early stopping configuration.
-        search_space (SearchSpaceConfig): Hyperparameter search space configuration
+        general (ValidationGeneralConfig): General validation configuration.
+        cross_validation (ValidationCrossValidationConfig): Cross-validation configuration.
+        early_stopping (ValidationEarlyStoppingConfig): Early stopping configuration.
+        search_space (ValidationSearchSpaceConfig): Hyperparameter search space configuration
                                           for tuning.
     """
 
-    general: GeneralValidationConfig
-    cross_validation: CrossValidationConfig
-    early_stopping: EarlyStoppingValidationConfig
-    search_space: SearchSpaceConfig
+    general: ValidationGeneralConfig
+    cross_validation: ValidationCrossValidationConfig
+    early_stopping: ValidationEarlyStoppingConfig
+    search_space: ValidationSearchSpaceConfig
