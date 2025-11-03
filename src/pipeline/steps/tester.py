@@ -69,6 +69,7 @@ def test_model() -> None:
         data_distribution_mode = config.data.mode
         testing_batch_size = config.testing.general.batch_size
         testing_shuffle = config.testing.general.shuffle
+        testing_device = config.hardware.device.testing.type
         top_k = config.testing.metrics.top_k
 
         info(
@@ -94,6 +95,7 @@ def test_model() -> None:
         # Trained model setup for testing
         device, criterion, model = initialize_best_model(
             data_distribution_mode,
+            testing_device,
             config,
             testing_loader,
         )

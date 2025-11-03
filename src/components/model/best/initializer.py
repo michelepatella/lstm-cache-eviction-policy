@@ -19,6 +19,7 @@ from components.model.io.locator import get_model_abs_path
 
 def initialize_best_model(
     data_distribution_mode: str,
+    device_type: str,
     config: Any,
     data_loader: DataLoader | None,
 ) -> tuple[torch.device, nn.Module, nn.Module]:
@@ -32,6 +33,7 @@ def initialize_best_model(
         data_distribution_mode (str): Data distribution mode to
                                       determine the path
                                       of the trained model.
+        device_type (str): Device type to be used.
         config (Any): Configuration object.
         data_loader (DataLoader | None): DataLoader containing the dataset
                                          to be used (if any).
@@ -55,6 +57,7 @@ def initialize_best_model(
     # Setup for model environment
     device, criterion, model = initialize_model_environment(
         targets,
+        device_type,
         config,
         model=model,
     )

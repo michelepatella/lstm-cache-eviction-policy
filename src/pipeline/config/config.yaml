@@ -60,7 +60,7 @@ data:
       periodic:
         amplitude: 50
         scale: 90
-  requests: 50000
+  requests: 200000
   seed: 42
 dataset:
   split:
@@ -68,8 +68,16 @@ dataset:
     validation: 0.2
 hardware:
   device:
-    type: mps
+    validation:
+      type: mps
+    training:
+      type: mps
+    testing:
+      type: cpu
 model:
+  optimization:
+    pruning:
+      amount: 0.2
   params:
     batch_first: true
     bias: false
@@ -90,7 +98,7 @@ simulations:
     mc_dropout_samples: 25
     num_evictions: 1
     prob_weight: 0.8
-    return_all_scores: false
+    return_all_scores: true
     return_api_kwargs: false
     return_prob_conf: false
     rollout_horizon: 5
