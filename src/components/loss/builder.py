@@ -1,7 +1,6 @@
 import torch
 from torch import nn
 
-from components.const import CRITERION_CLASS_WEIGHT_TYPE
 from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -50,11 +49,7 @@ def build_loss(
         )
 
         # Compute class weight
-        class_weight = calculate_class_weight(
-            targets,
-            num_classes,
-            CRITERION_CLASS_WEIGHT_TYPE,
-        )
+        class_weight = calculate_class_weight(targets, num_classes)
 
         # Move class weight as tensor to
         # the specified device

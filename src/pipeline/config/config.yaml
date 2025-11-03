@@ -60,7 +60,7 @@ data:
       periodic:
         amplitude: 50
         scale: 90
-  requests: 100000
+  requests: 50000
   seed: 42
 dataset:
   split:
@@ -72,11 +72,11 @@ hardware:
 model:
   params:
     batch_first: true
-    bias: true
+    bias: false
     bidirectional: false
-    dropout: 0.1
-    hidden_size: 256
-    num_layers: 3
+    dropout: 0.3
+    hidden_size: 128
+    num_layers: 2
     proj_size: 0
   sequence:
     embedding:

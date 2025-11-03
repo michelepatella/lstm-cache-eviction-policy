@@ -2,8 +2,6 @@ import logging
 from pathlib import Path
 from typing import Literal
 
-import torch
-
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
