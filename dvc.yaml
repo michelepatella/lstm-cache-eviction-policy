@@ -144,7 +144,7 @@ stages:
     cmd: PYTHONPATH=src python -m pipeline.steps.validator
     params:
       - src/pipeline/config/config.yaml:
-        - hardware.device_type
+        - hardware.device.validation.type
         - data.mode
         - data.keys.min
         - data.keys.max
@@ -251,7 +251,7 @@ stages:
     cmd: PYTHONPATH=src python -m pipeline.steps.trainer
     params:
       - src/pipeline/config/config.yaml:
-        - hardware.device_type
+        - hardware.device.training.type
         - data.mode
         - data.keys.min
         - data.keys.max
@@ -260,6 +260,7 @@ stages:
         - model.params
         - model.sequence.length
         - model.sequence.embedding.dimension
+        - model.optimization.pruning.amount
         - training.general.batch_size
         - training.general.epochs
         - training.general.shuffle
@@ -322,6 +323,8 @@ stages:
       - src/components/model/io/saver.py
       - src/components/model/lstm.py
       - src/components/model/mode/setter.py
+      - src/components/model/optimizations/pruner.py
+      - src/components/model/optimizations/quantizer.py
       - src/components/optimizer/builder.py
       - src/components/training/callbacks/early_stopping.py
       - src/components/training/core/epochs_trainer.py
@@ -348,7 +351,7 @@ stages:
     cmd: PYTHONPATH=src python -m pipeline.steps.tester
     params:
       - src/pipeline/config/config.yaml:
-        - hardware.device_type
+        - hardware.device.testing.type
         - data.mode
         - data.keys.min
         - data.keys.max

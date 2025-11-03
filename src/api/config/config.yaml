@@ -1,6 +1,6 @@
 hardware:
   device:
-    type: mps
+    type: cpu
 kwargs:
   rollout_horizon:
     default: 5

@@ -36,11 +36,27 @@ class HardwareDeviceConfig(BaseModel):
         return self
 
 
+class HardwareDevicesConfig(BaseModel):
+    """Hardware devices configuration.
+
+    Attributes:
+        validation (HardwareDeviceConfig): Hardware device type to be
+                                           used for validation pipeline step.
+        training (HardwareDeviceConfig): Hardware device type to be
+                                         used for training pipeline step.
+        testing (HardwareDeviceConfig): Hardware device type to be
+                                        used for testing pipeline step.
+    """
+    validation: HardwareDeviceConfig
+    training: HardwareDeviceConfig
+    testing: HardwareDeviceConfig
+
+
 class HardwareConfig(BaseModel):
     """Hardware configuration.
 
     Attributes:
-        device (str): Hardware device configuration.
+        device (str): Hardware devices configuration.
     """
 
-    device: HardwareDeviceConfig
+    device: HardwareDevicesConfig

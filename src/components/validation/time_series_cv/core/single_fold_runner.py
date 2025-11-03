@@ -48,6 +48,7 @@ def compute_single_time_series_cv_fold(
     training_shuffle = config.training.general.shuffle
     validation_batch_size = config.validation.general.batch_size
     validation_shuffle = config.validation.general.shuffle
+    validation_device = config.hardware.device.validation.type
     optimizer_type = config.training.optimizer.type
     learning_rate = config.training.optimizer.params.learning_rate
     weight_decay = config.training.optimizer.params.weight_decay
@@ -78,6 +79,7 @@ def compute_single_time_series_cv_fold(
     # Initialize model environment
     device, criterion, model = initialize_model_environment(
         targets,
+        validation_device,
         config,
         model_params=params,
     )

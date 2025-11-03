@@ -79,10 +79,8 @@ def run_cache_simulation(
 
         # Iterate over testing set, assuming each
         # row represents a request to be satisfied
-        for idx in tqdm(
-            range(len(testing_set)),
-            desc=f"{policy}",
-        ):
+        bar = tqdm(range(len(testing_set)), desc=f"{policy}")
+        for idx in bar:
             # Extract the current row from the dataset
             row = testing_set[idx]
 
@@ -124,6 +122,12 @@ def run_cache_simulation(
 
             # Update number of hits and misses
             timeline = update_hit_miss_timeline(idx, counters, timeline)
+
+            # To update bar real-time
+            bar.set_postfix(
+                hit_rate=f"{(counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME] / max(1, counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME] + counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME])) * 100}%",
+                miss_rate=f"{(counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME] / max(1, counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME] + counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME])) * 100}%",
+            )
 
         info(
             "Cache simulation completed",

@@ -18,6 +18,7 @@ from components.model.builder import (
 
 def initialize_model_environment(
     targets: torch.Tensor | None,
+    device_type: str,
     config: Any,
     model: torch.nn.Module = None,
     model_params: Any | dict[str, int | float | bool] = None,
@@ -33,6 +34,7 @@ def initialize_model_environment(
     Args:
         targets (torch.Tensor | None): Target labels for computing
                                          class weights.
+        device_type (str): Device type to use.
         config (Any): Configuration object.
         model (torch.nn.Module): A PyTorch model to configure environment for.
         model_params (Any | dict[str, int | float | bool]):
@@ -45,7 +47,6 @@ def initialize_model_environment(
                          (None if no targets provided).
             - model: PyTorch model.
     """
-    device_type = config.hardware.device.type
     min_key = config.data.keys.min
     max_key = config.data.keys.max
     num_keys = max_key - min_key + 1
