@@ -5,9 +5,6 @@
 SRC_DIRECTORY := src
 DOCS_OUTPUT_DIRECTORY := docs/_build/html
 
-LOGS_DIRECTORY_PATTERN := logs/*/*.log
-LOGS_DIRECTORY_ROTATED_PATTERN := logs/*/*.log.*
-
 REQUIREMENTS_PATH := requirements.txt
 DVC_LOCK_PATH := dvc.lock
 
@@ -129,11 +126,6 @@ docs_generate:
 # -------------------------------
 # Cleanup
 # -------------------------------
-
-# Clean logs
-logs_clean:
-	rm -rf $(LOGS_DIRECTORY_PATTERN)
-	rm -rf $(LOGS_DIRECTORY_ROTATED_PATTERN)
 
 # Clean pycache
 pycache_clean:
