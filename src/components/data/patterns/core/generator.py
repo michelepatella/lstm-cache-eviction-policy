@@ -138,7 +138,7 @@ def generate_pattern_requests(
             "Pattern request generation completed",
             extra={
                 "requests_generated_num": len(requests),
-                "timestamps_generated_num": len(timestamps_seconds),
+                "timestamps_seconds_generated_num": len(timestamps_seconds),
                 "context": "Pattern request generation",
             },
         )

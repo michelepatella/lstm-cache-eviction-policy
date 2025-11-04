@@ -11,7 +11,6 @@ Functions:
     debug(
         msg: str, log_phase: str = LOGS_FIELD_PHASE_DEFAULT,
         extra: dict[str, Any] | None = None,
-        logger_name: str = LOGS_LOGGER_NAME
     ) -> None
         Logs a message at debug level with optional context.
 """
@@ -19,7 +18,7 @@ Functions:
 import logging
 from typing import Any
 
-from components.const import LOGS_FIELD_PHASE_DEFAULT, LOGS_LOGGER_NAME
+from components.const import LOGS_FIELD_PHASE_DEFAULT
 from components.logs.levels.utils.logger import log
 
 
@@ -27,7 +26,6 @@ def debug(
     msg: str,
     log_phase: str = LOGS_FIELD_PHASE_DEFAULT,
     extra: dict[str, Any] | None = None,
-    logger_name: str = LOGS_LOGGER_NAME,
 ) -> None:
     """Log a debug-level message.
 
@@ -38,9 +36,8 @@ def debug(
         msg (str): The message to log.
         log_phase (str): Current log phase.
         extra (dict[str, Any] | None): Optional additional context.
-        logger_name (str): The name of the logger to use.
 
     Returns:
         None
     """
-    log(logging.DEBUG, msg, log_phase, extra, logger_name)
+    log(logging.DEBUG, msg, log_phase, extra)

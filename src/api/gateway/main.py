@@ -27,6 +27,7 @@ from components.logs.handlers.elastic_handler import ElasticHandler
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.yaml.io.loader import load_yaml
+from const import LOGS_LOGGER_NAME
 
 app = FastAPI()
 
@@ -164,7 +165,7 @@ def gateway_api(
         )
 
         # Async flush logs
-        for handler in logging.getLogger().handlers:
+        for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
             if isinstance(handler, ElasticHandler):
                 handler.flush_buffer_async()
 

@@ -59,6 +59,7 @@ from const import (
     CACHE_LSTM_NAME,
     DATA_DISTRIBUTION_STATIC_MODE,
     DATASET_TESTING_SPLIT_TYPE,
+    LOGS_LOGGER_NAME,
     MLFLOW_NESTED,
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
@@ -240,10 +241,10 @@ def run_simulations() -> None:
                         "hit_rate": hit_rate,
                         "miss_rate": miss_rate,
                         "eviction_mistake_rate": eviction_mistake_rate,
-                        "latency_min": min(cache_latencies),
-                        "latency_max": max(cache_latencies),
-                        "latency_avg": avg_cache_latency,
-                        "latency_std": np.std(cache_latencies),
+                        "latency_us_min": min(cache_latencies),
+                        "latency_us_max": max(cache_latencies),
+                        "latency_us_avg": avg_cache_latency,
+                        "latency_us_std": np.std(cache_latencies),
                     },
                 )
 
@@ -338,6 +339,6 @@ if __name__ == "__main__":
     run_simulations()
 
     # Force logs flush
-    for handler in logging.getLogger().handlers:
+    for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
         if isinstance(handler, ElasticHandler):
-            handler.flush_buffer_async()
+            handler.flush_buffer_sync()

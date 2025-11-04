@@ -34,6 +34,7 @@ from components.model.best.initializer import (
 from const import (
     DATA_DISTRIBUTION_STATIC_MODE,
     DATASET_TESTING_SPLIT_TYPE,
+    LOGS_LOGGER_NAME,
     MLFLOW_NESTED,
 )
 from pipeline.config.configurator import prepare_config
@@ -179,6 +180,6 @@ if __name__ == "__main__":
     test_model()
 
     # Force logs flush
-    for handler in logging.getLogger().handlers:
+    for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
         if isinstance(handler, ElasticHandler):
-            handler.flush_buffer_async()
+            handler.flush_buffer_sync()

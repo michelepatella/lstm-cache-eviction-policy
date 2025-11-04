@@ -109,8 +109,6 @@ JSON_INDENT = 4
 # ----------------------------
 # Logs
 # ----------------------------
-LOGS_LOGGER_NAME = "logger"
-
 LOGS_FIELD_STANDARD_NAMES = {
     "name",
     "msg",

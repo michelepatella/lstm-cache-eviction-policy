@@ -99,10 +99,10 @@ loss:
 model:
   params:
     hidden_size: 256
-    num_layers: 2
+    num_layers: 3
     bias: false
     batch_first: true
-    dropout: 0.1
+    dropout: 0.3
     bidirectional: false
     proj_size: 0
   sequence:

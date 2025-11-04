@@ -37,6 +37,7 @@ from components.logs.levels.info_logger import info
 from const import (
     DATASET_COLUMN_TIMESTAMP_NAME,
     DATASET_RAW_TYPE,
+    LOGS_LOGGER_NAME,
     MLFLOW_NESTED,
 )
 from pipeline.config.configurator import prepare_config
@@ -165,6 +166,6 @@ if __name__ == "__main__":
     preprocess_data()
 
     # Force logs flush
-    for handler in logging.getLogger().handlers:
+    for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
         if isinstance(handler, ElasticHandler):
-            handler.flush_buffer_async()
+            handler.flush_buffer_sync()

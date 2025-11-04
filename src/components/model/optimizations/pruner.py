@@ -64,7 +64,6 @@ def prune_model(
                 "model_type": type(model).__name__,
                 "amount": amount,
                 "target_modules": [m.__name__ for m in target_modules],
-                "params": params,
                 "context": "Model pruning",
             },
         )
@@ -90,7 +89,6 @@ def prune_model(
                 "model_type": type(model).__name__,
                 "amount": amount,
                 "target_modules": [m.__name__ for m in target_modules],
-                "params": params,
                 "context": "Model pruning",
             },
         )
@@ -105,7 +103,7 @@ def prune_model(
                 "model_type": type(model).__name__,
                 "amount": amount,
                 "target_modules": [m.__name__ for m in target_modules],
-                "params": params,
+                "params": list(params),
                 "context": "Model pruning",
             },
         )

@@ -168,7 +168,7 @@ def plot_key_usage_heatmap(
                 "hours_num": num_hours,
                 "keys_num": num_keys,
                 "requests_num": len(requests),
-                "timestamps_num": len(timestamps_hours),
+                "timestamps_hours_num": len(timestamps_hours),
                 "heatmap_shape": heatmap.shape,
                 "context": "Key usage heatmap",
             },
@@ -185,7 +185,7 @@ def plot_key_usage_heatmap(
                 "requests_num": (
                     len(requests) if isinstance(requests, list) else None
                 ),
-                "timestamps_num": (
+                "timestamps_hours_num": (
                     len(timestamps_hours)
                     if isinstance(timestamps_hours, np.ndarray)
                     else None

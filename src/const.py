@@ -50,6 +50,8 @@ HW_DEVICE_NAMES = [HW_DEVICE_CPU_NAME, HW_DEVICE_CUDA_NAME, HW_DEVICE_MPS_NAME]
 # ----------------------------
 # Logs
 # ----------------------------
+LOGS_LOGGER_NAME = "logger"
+
 LOGS_PHASE_VALIDATION = "validation"
 
 

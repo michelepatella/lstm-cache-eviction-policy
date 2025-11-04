@@ -13,7 +13,6 @@ Functions:
         msg: str,
         log_phase: str = LOGS_FIELD_PHASE_DEFAULT,
         extra: dict[str, Any] | None = None,
-        logger_name: str = LOGS_LOGGER_NAME
     ) -> None
         Logs a message at the specified level with optional context.
 """
@@ -24,9 +23,9 @@ from typing import Any
 from components.const import (
     LOGS_FIELD_PHASE_DEFAULT,
     LOGS_FIELD_PHASE_NAME,
-    LOGS_LOGGER_NAME,
 )
 from components.logs.initializer import logs_phase
+from const import LOGS_LOGGER_NAME
 
 
 def log(
@@ -34,7 +33,6 @@ def log(
     msg: str,
     log_phase: str = LOGS_FIELD_PHASE_DEFAULT,
     extra: dict[str, Any] | None = None,
-    logger_name: str = LOGS_LOGGER_NAME,
 ):
     """Log a message.
 
@@ -46,7 +44,6 @@ def log(
         msg (str): The message to log.
         log_phase (str): Current log phase.
         extra (dict[str, Any] | None): Optional additional context.
-        logger_name (str): The name of the logger to use.
 
     Returns:
         None
@@ -60,7 +57,7 @@ def log(
     extra_dict.update(extra)
 
     # Log message using provided level
-    logger = logging.getLogger(logger_name)
+    logger = logging.getLogger(LOGS_LOGGER_NAME)
     logger.log(
         level,
         msg,
