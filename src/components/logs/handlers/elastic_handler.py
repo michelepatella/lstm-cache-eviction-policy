@@ -137,13 +137,7 @@ class ElasticHandler(logging.Handler):
         ]
 
         # Send documents
-        try:
-            helpers.bulk(es, actions)
-        except BulkIndexError as e:
-            print(f"{len(e.errors)} document(s) failed to index:")
-            for error in e.errors:
-                print(error)
-            raise
+        helpers.bulk(es, actions)
 
         # Clear the buffer
         self.buffer.clear()
