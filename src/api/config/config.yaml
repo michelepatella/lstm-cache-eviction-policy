@@ -3,32 +3,34 @@ hardware:
     type: cpu
 kwargs:
   rollout_horizon:
-    default: 5
+    value: 5
     max: 50
   mc_dropout_samples:
-    default: 25
+    value: 25
     max: 100
   confidence_level:
-    default: 0.95
+    value: 0.95
   time_step_increment:
-    default: 0.02
+    value: 0.02
     max: 5.0
   num_evictions:
-    default: 1
+    value: 1
   excluded_keys:
-    default: [ ]
+    value: [ ]
   unbiased_variance:
-    default: true
+    value: true
   prob_weight:
-    default: 0.8
+    value: 0.8
   conf_weight:
-    default: 0.2
+    value: 0.2
   return_all_scores:
-    default: false
+    value: false
   return_prob_conf:
-    default: false
+    value: false
   return_api_kwargs:
-    default: false
+    value: false
+logs:
+  level: INFO
 model:
   optimizations:
     quantization:

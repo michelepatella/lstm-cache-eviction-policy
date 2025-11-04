@@ -6,7 +6,6 @@ from fastapi import HTTPException, status
 
 from api.config.pydantic.api_config import APIConfig
 from api.const import (
-    API_CONFIG_USER_API_KWARG_FIELD_NAME,
     SCORER_SERVICE_FULL_URL,
     SCORER_SERVICE_PARAM_CONF_WEIGHT_NAME,
     SCORER_SERVICE_PARAM_CONFIDENCE_LEVEL_NAME,
@@ -59,32 +58,10 @@ def call_scorer_service(
         params = Box(SCORER_SERVICE_PARAMS)
         params[SCORER_SERVICE_PARAM_OUTPUTS_NAME] = outputs
         params[SCORER_SERVICE_PARAM_VARIANCES_NAME] = variances
-        params[SCORER_SERVICE_PARAM_CONFIDENCE_LEVEL_NAME] = (
-            api_config.kwargs.confidence_level.model_dump().get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME,
-            )
-            or api_config.kwargs.confidence_level.default
-        )
-        params[SCORER_SERVICE_PARAM_CONFIDENCE_LEVEL_NAME] = (
-            api_config.kwargs.confidence_level.model_dump().get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME,
-            )
-            or api_config.kwargs.confidence_level.default
-        )
-
-        params[SCORER_SERVICE_PARAM_PROB_WEIGHT_NAME] = (
-            api_config.kwargs.prob_weight.model_dump().get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME,
-            )
-            or api_config.kwargs.prob_weight.default
-        )
-
-        params[SCORER_SERVICE_PARAM_CONF_WEIGHT_NAME] = (
-            api_config.kwargs.conf_weight.model_dump().get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME,
-            )
-            or api_config.kwargs.conf_weight.default
-        )
+        params[SCORER_SERVICE_PARAM_CONFIDENCE_LEVEL_NAME] = api_config.kwargs.confidence_level.value
+        params[SCORER_SERVICE_PARAM_CONFIDENCE_LEVEL_NAME] = api_config.kwargs.confidence_level.value
+        params[SCORER_SERVICE_PARAM_PROB_WEIGHT_NAME] = api_config.kwargs.prob_weight.value
+        params[SCORER_SERVICE_PARAM_CONF_WEIGHT_NAME] = api_config.kwargs.conf_weight.value
 
         debug(
             "Scorer service call started",

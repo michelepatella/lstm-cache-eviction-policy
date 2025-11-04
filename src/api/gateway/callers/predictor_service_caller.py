@@ -5,7 +5,6 @@ from fastapi import HTTPException, status
 
 from api.config.pydantic.api_config import APIConfig
 from api.const import (
-    API_CONFIG_USER_API_KWARG_FIELD_NAME,
     PREDICTOR_SERVICE_FULL_URL,
     PREDICTOR_SERVICE_PARAM_LAST_ACCESSES_NAME,
     PREDICTOR_SERVICE_PARAM_MC_DROPOUT_SAMPLES_NAME,
@@ -53,30 +52,10 @@ def call_predictor_service(
         # Prepare parameters for predictor service
         params = Box(PREDICTOR_SERVICE_PARAMS)
         params[PREDICTOR_SERVICE_PARAM_LAST_ACCESSES_NAME] = last_accesses
-        params[PREDICTOR_SERVICE_PARAM_ROLLOUT_HORIZON_NAME] = (
-            api_config.kwargs.rollout_horizon.model_dump().get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME,
-            )
-            or api_config.kwargs.rollout_horizon.default
-        )
-        params[PREDICTOR_SERVICE_PARAM_MC_DROPOUT_SAMPLES_NAME] = (
-            api_config.kwargs.mc_dropout_samples.model_dump().get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME,
-            )
-            or api_config.kwargs.mc_dropout_samples.default
-        )
-        params[PREDICTOR_SERVICE_PARAM_TIME_STEP_INCREMENT_NAME] = (
-            api_config.kwargs.time_step_increment.model_dump().get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME,
-            )
-            or api_config.kwargs.time_step_increment.default
-        )
-        params[PREDICTOR_SERVICE_PARAM_UNBIASED_VARIANCE_NAME] = (
-            api_config.kwargs.unbiased_variance.model_dump().get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME,
-            )
-            or api_config.kwargs.unbiased_variance.default
-        )
+        params[PREDICTOR_SERVICE_PARAM_ROLLOUT_HORIZON_NAME] = api_config.kwargs.rollout_horizon.value
+        params[PREDICTOR_SERVICE_PARAM_MC_DROPOUT_SAMPLES_NAME] = api_config.kwargs.mc_dropout_samples.value
+        params[PREDICTOR_SERVICE_PARAM_TIME_STEP_INCREMENT_NAME] = api_config.kwargs.time_step_increment.value
+        params[PREDICTOR_SERVICE_PARAM_UNBIASED_VARIANCE_NAME] = api_config.kwargs.unbiased_variance.value
 
         debug(
             "Predictor service call started",
