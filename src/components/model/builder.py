@@ -1,3 +1,22 @@
+"""builder.py
+
+Utility module for building PyTorch LSTM models.
+
+This module provides the `build_model` function, which instantiates an
+LSTM-based PyTorch model with the given parameters and configuration.
+
+Functions:
+    build_model(
+        model_params: Any | dict[str, int | float | bool],
+        min_key: int,
+        max_key: int,
+        embedding_dim: int,
+        num_features: int,
+        config: Any | None,
+    ) -> LSTM
+        Instantiate and return a PyTorch LSTM model.
+"""
+
 from typing import Any
 
 from components.model.lstm import LSTM

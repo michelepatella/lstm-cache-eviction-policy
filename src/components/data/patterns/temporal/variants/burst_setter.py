@@ -1,3 +1,24 @@
+"""burst_setter.py
+
+Module for setting bursty scale for temporal request patterns.
+
+This module provides the `set_bursty_scale` function, which determines
+the bursty scale for a given hour in the day, using configured high
+and low burst values. It is used as a component in temporal pattern
+generation for synthetic requests.
+
+Functions:
+    set_bursty_scale(
+        burst_high: float,
+        burst_low: float,
+        burst_start_hour: int,
+        burst_end_hour: int,
+        current_hour_in_day: float
+    ) -> float
+        Computes the burst scale for the current hour in day based on
+        configured burst high/low values and the burst time window.
+"""
+
 from components.logs.levels.error_logger import error
 
 

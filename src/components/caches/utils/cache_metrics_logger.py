@@ -1,3 +1,16 @@
+"""cache_metrics_logger.py
+
+Module for logging cache events and metrics.
+
+This module provides the `CacheMetricsLogger` class for tracking cache
+operations such as insertions (put), accesses (get), and evictions.
+Each event is logged with timestamp and optional TTL.
+
+Classes:
+    CacheMetricsLogger
+        Logs put, get, and eviction events for cache items.
+"""
+
 from collections import defaultdict
 
 from components.logs.levels.debug_logger import debug

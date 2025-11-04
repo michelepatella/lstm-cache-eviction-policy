@@ -1,3 +1,19 @@
+"""backward_runner.py
+
+Module for performing a backward pass and updating model parameters.
+
+This module provides the `compute_backward` function, which calculates
+gradients from a loss tensor and updates model parameters using a given
+optimizer.
+
+Functions:
+    compute_backward(
+        loss: Tensor,
+        optimizer: Optimizer
+    ) -> None
+        Computes gradients via backpropagation and updates model parameters.
+"""
+
 import torch
 from torch.optim import Optimizer
 
@@ -18,11 +34,11 @@ def compute_backward(loss: torch.Tensor, optimizer: Optimizer) -> None:
         None
 
     Raises:
-    RuntimeError: If backward pass fails:
-        * Gradient computation fails due to invalid loss tensor or autograd
-          errors (RuntimeError).
-        * Optimizer update fails because optimizer received invalid types or
-          parameters (TypeError, ValueError).
+        RuntimeError: If backward pass fails:
+            * Gradient computation fails due to invalid loss tensor or autograd
+              errors (RuntimeError).
+            * Optimizer update fails because optimizer received invalid types or
+              parameters (TypeError, ValueError).
     """
     try:
         # Compute gradients

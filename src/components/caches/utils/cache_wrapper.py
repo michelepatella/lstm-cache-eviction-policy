@@ -1,3 +1,18 @@
+"""cache_wrapper.py
+
+Module for a generic cache wrapper extending BaseCache.
+
+This module provides the `CacheWrapper` class, a standard cache
+implementation that handles key insertions with TTL management,
+expired key removal, and metrics logging. It serves as a base
+for simple cache use cases or testing of eviction strategies.
+
+Classes:
+    CacheWrapper
+        Generic cache wrapper implementing put method with TTL
+        and metrics logging.
+"""
+
 from components.caches.implementations.utils.base_cache import BaseCache
 from components.logs.levels.error_logger import error
 

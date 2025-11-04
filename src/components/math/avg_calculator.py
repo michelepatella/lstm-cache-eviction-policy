@@ -1,3 +1,16 @@
+"""avg_calculator.py
+
+Utility module for calculating averages.
+
+This module provides the `calculate_average` function, which
+computes the mean of a list of numeric values, returning None
+if the list is empty.
+
+Functions:
+    calculate_average(values: list[int | float]) -> float | None
+        Computes the arithmetic mean of the provided list of numbers.
+"""
+
 from components.logs.levels.error_logger import error
 
 
