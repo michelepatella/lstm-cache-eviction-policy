@@ -33,11 +33,11 @@ class KwargIntAPIConfig(BaseModel):
     """Integer API kwarg configuration.
 
     Attributes:
-        default (int): Default integer value (> 0).
+        value (int): Integer value (> 0).
         max (Optional[int]): Maximum allowed integer value (> 0).
     """
 
-    default: conint(gt=0)
+    value: conint(gt=0)
     max: conint(gt=0) | None = None
 
 
@@ -45,14 +45,14 @@ class KwargFloatAPIConfig(BaseModel):
     """Float API kwarg configuration.
 
     Defines an API kwarg of float type, including its
-    default value and optional maximum allowed value.
+    value and optional maximum allowed value.
 
     Attributes:
-        default (float): Default float value (> 0.0).
+        value (float): Float value (> 0.0).
         max (Optional[float]): Maximum allowed float value (> 0.0).
     """
 
-    default: confloat(gt=0.0)
+    value: confloat(gt=0.0)
     max: confloat(gt=0.0) | None = None
 
 
@@ -63,10 +63,10 @@ class KwargConfidenceLevelAPIConfig(BaseModel):
     intervals.
 
     Attributes:
-        default (float): Default confidence level (0.0–1.0].
+        value (float):  Confidence level value (0.0–1.0].
     """
 
-    default: confloat(gt=0.0, le=1.0)
+    value: confloat(gt=0.0, le=1.0)
 
 
 class KwargListIntAPIConfig(BaseModel):
@@ -76,23 +76,23 @@ class KwargListIntAPIConfig(BaseModel):
     values.
 
     Attributes:
-        default (list[int]): Default list of integers.
+        value (list[int]): List of integer values.
     """
 
-    default: list[int]
+    value: list[int]
 
 
 class KwargBoolAPIConfig(BaseModel):
     """Boolean API kwarg configuration.
 
     Defines an API kwarg of boolean type with a
-    single default value.
+    single value.
 
     Attributes:
-        default (bool): Default boolean value.
+        value (bool): Boolean value.
     """
 
-    default: bool
+    value: bool
 
 
 class KwargsAPIConfig(BaseModel):
@@ -103,7 +103,7 @@ class KwargsAPIConfig(BaseModel):
 
     Attributes:
         rollout_horizon (KwargIntAPIConfig): Number of future steps to predict
-                                       in the autoregressive rollout.
+                                             in the autoregressive rollout.
         mc_dropout_samples (KwargIntAPIConfig): Number of Monte Carlo Dropout samples
                                           for uncertainty estimation.
         confidence_level (KwargConfidenceLevelAPIConfig): Confidence level for

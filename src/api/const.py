@@ -25,8 +25,6 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 # ----------------------------
 API_CONFIG_FILE_PATH = PROJECT_ROOT / "src" / "api" / "config" / "config.yaml"
 
-API_CONFIG_USER_API_KWARG_FIELD_NAME = "user_value"
-
 
 # ----------------------------
 # Gateway API
@@ -38,6 +36,12 @@ GATEWAY_API_RETURN_API_KWARGS_NAME = "api_kwargs"
 GATEWAY_API_RETURN_KEY_SCORES_NAME = "key_scores"
 GATEWAY_API_RETURN_PROB_MATRIX_NAME = "prob_matrix"
 GATEWAY_API_RETURN_CONF_MATRIX_NAME = "conf_matrix"
+
+
+# ----------------------------
+# Logs
+# ----------------------------
+LOGS_PHASE_API = "api"
 
 
 # ----------------------------
