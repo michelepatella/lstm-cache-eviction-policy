@@ -99,7 +99,7 @@ loss:
 model:
   params:
     hidden_size: 256
-    num_layers: 3
+    num_layers: 2
     bias: false
     batch_first: true
     dropout: 0.3
@@ -117,7 +117,7 @@ model:
       engine: qnnpack
 optimizer:
   params:
-    learning_rate: 0.0005
+    learning_rate: 0.001
     momentum: 0.9
     weight_decay: 0.05
   type: adamw
