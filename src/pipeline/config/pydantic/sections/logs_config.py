@@ -5,7 +5,8 @@ Configuration section for logging settings within the pipeline.
 This module defines the desired logging level used by the system's loggers.
 
 Classes:
-    LogsConfig: Configuration for the logging system.
+    LogsConfig(BaseModel):
+        Configuration for the logging system.
 """
 
 from pydantic import BaseModel, model_validator

@@ -9,7 +9,7 @@ of logs, thread-safe buffering, and preserves extra fields in
 the log records.
 
 Classes:
-    ElasticHandler(logging.Handler)
+    ElasticHandler(logging.Handler):
         Custom logging handler that accumulates logs and
         sends them to Elasticsearch using the bulk API.
 """

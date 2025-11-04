@@ -5,8 +5,10 @@ Configuration section for the loss function settings.
 This module defines parameters related to the loss function..
 
 Classes:
-    LossClassWeightConfig: Configuration for class weight calculation.
-    LossConfig: Aggregates all loss-related settings.
+    LossClassWeightConfig(BaseModel):
+        Configuration for class weight calculation.
+    LossConfig(BaseModel):
+        Aggregates all loss-related settings.
 """
 
 from pydantic import BaseModel, model_validator

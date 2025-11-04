@@ -7,7 +7,7 @@ cache, evicting the least recently used items when the maximum cache size is
 reached.
 
 Classes:
-    LRUCache(maxsize, callback)
+    LRUCache(maxsize, callback):
         LRU cache implementation supporting get, set, delete, pop, and clear
         operations with ordering and optional eviction callbacks.
 """

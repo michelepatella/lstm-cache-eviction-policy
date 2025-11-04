@@ -1,7 +1,24 @@
+"""api_config.py
+
+Module defining the top-level Pydantic schema for the entire API configuration.
+
+This schema aggregates configuration sections related to hardware, model settings,
+and the definition of all available API keyword arguments (kwargs). It provides
+core functional logic, notably a method to safely merge default API kwargs with
+user-supplied runtime values, ensuring Pydantic validation is applied to all
+merged parameters.
+
+Classes:
+    APIConfig(BaseModel):
+        The root configuration schema for the API, including merging functionality
+        for user-provided kwargs.
+"""
+
 from pydantic import BaseModel
 
 from api.config.pydantic.sections.hardware_api_config import HardwareAPIConfig
 from api.config.pydantic.sections.kwargs_api_config import KwargsAPIConfig
+from api.config.pydantic.sections.model_api_config import ModelAPIConfig
 from api.const import API_CONFIG_USER_API_KWARG_FIELD_NAME
 from components.logs.levels.error_logger import error
 
@@ -12,10 +29,12 @@ class APIConfig(BaseModel):
     Attributes:
         hardware (HardwareAPIConfig): Hardware configuration for the API.
         kwargs (KwargsAPIConfig): API kwargs configuration.
+        model (ModelAPIConfig): Model configuration for the API.
     """
 
     hardware: HardwareAPIConfig
     kwargs: KwargsAPIConfig
+    model: ModelAPIConfig
 
     def merge_api_kwargs(
         self: "APIConfig",

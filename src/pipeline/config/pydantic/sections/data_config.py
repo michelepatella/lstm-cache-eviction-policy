@@ -10,32 +10,50 @@ It defines parameters for Zipf distribution, burstiness, and various access
 behaviors (repetition, toggle, cycle, distortion, and memory effects).
 
 Classes:
-    DataPatternsAccessBehaviorHoursConfig: Hour range configuration.
-    DataKeysConfig: Configuration for key ID ranges.
-    DataPatternsAccessZipfAlphaConfig: Alpha parameters for Zipf distribution.
-    DataPatternsAccessZipfConfig: Configuration for Zipf distribution.
-    DataPatternsAccessBehaviorRepetitionConfig: Repetition behavior configuration.
-    DataPatternsAccessBehaviorToggleOffsetsConfig: Toggle offsets configuration.
-    DataPatternsAccessBehaviorToggleBaseRequestsConfig: Toggle base requests
-                                                       configuration.
-    DataPatternsAccessBehaviorToggleConfig: Toggle behavior configuration.
-    DataPatternsAccessBehaviorDistortionNoiseConfig: Noise parameters for
-                                                    distortion.
-    DataPatternsAccessBehaviorDistortionOffsetsConfig: Distortion offsets
-                                                      configuration.
-    DataPatternsAccessBehaviorDistortionConfig: Distortion behavior configuration.
-    DataPatternsAccessBehaviorMemoryConfig: Memory behavior configuration.
-    DataPatternsAccessBehaviorCycleConfig: Cyclical behavior configuration.
-    DataPatternsAccessBehaviorConfig: Aggregated access behavior configuration.
-    DataPatternsAccessConfig: Access pattern configuration.
-    DataPatternsTemporalBurstinessHoursConfig: Hour range configuration for
-                                              burstiness.
-    DataPatternsTemporalBurstinessConfig: Burstiness configuration.
-    DataPatternsTemporalPeriodicConfig: Periodic pattern configuration.
-    DataPatternsTemporalConfig: Temporal behavior configuration.
-    DataPatternsConfig: Aggregates access and temporal patterns.
-    DataGeneralConfig: General configuration for data generation.
-    DataConfig: Aggregates general settings and pattern configuration.
+    DataPatternsAccessBehaviorHoursConfig(BaseModel):
+        Hour range configuration.
+    DataKeysConfig(BaseModel):
+        Configuration for key ID ranges.
+    DataPatternsAccessZipfAlphaConfig(BaseModel):
+        Alpha parameters for Zipf distribution.
+    DataPatternsAccessZipfConfig(BaseModel):
+        Configuration for Zipf distribution.
+    DataPatternsAccessBehaviorRepetitionConfig(BaseModel):
+        Repetition behavior configuration.
+    DataPatternsAccessBehaviorToggleOffsetsConfig(BaseModel):
+        Toggle offsets configuration.
+    DataPatternsAccessBehaviorToggleBaseRequestsConfig(BaseModel):
+    Toggle base requests configuration.
+    DataPatternsAccessBehaviorToggleConfig(BaseModel):
+        Toggle behavior configuration.
+    DataPatternsAccessBehaviorDistortionNoiseConfig(BaseModel):
+        Noise parameters for distortion.
+    DataPatternsAccessBehaviorDistortionOffsetsConfig(BaseModel):
+        Distortion offsets configuration.
+    DataPatternsAccessBehaviorDistortionConfig(BaseModel):
+        Distortion behavior configuration.
+    DataPatternsAccessBehaviorMemoryConfig(BaseModel):
+        Memory behavior configuration.
+    DataPatternsAccessBehaviorCycleConfig(BaseModel):
+        Cyclical behavior configuration.
+    DataPatternsAccessBehaviorConfig(BaseModel):
+        Aggregated access behavior configuration.
+    DataPatternsAccessConfig(BaseModel):
+        Access pattern configuration.
+    DataPatternsTemporalBurstinessHoursConfig(BaseModel):
+        Hour range configuration for burstiness.
+    DataPatternsTemporalBurstinessConfig(BaseModel):
+        Burstiness configuration.
+    DataPatternsTemporalPeriodicConfig(BaseModel):
+        Periodic pattern configuration.
+    DataPatternsTemporalConfig(BaseModel):
+        Temporal behavior configuration.
+    DataPatternsConfig(BaseModel):
+        Aggregates access and temporal patterns.
+    DataGeneralConfig(BaseModel):
+        General configuration for data generation.
+    DataConfig(BaseModel):
+        Aggregates general settings and pattern configuration.
 """
 
 from pydantic import BaseModel, confloat, conint, model_validator

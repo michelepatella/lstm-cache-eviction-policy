@@ -8,9 +8,10 @@ external API for eviction decisions, tracks metrics via a logger, and handles
 expired keys automatically.
 
 Classes:
-    LSTMCache(cache_class, metrics_logger, config)
+    LSTMCache(cache_class, metrics_logger, config):
         LSTM cache implementation supporting put, eviction, and key operations.
 """
+
 import os
 import random
 from http.client import HTTPException
@@ -26,9 +27,10 @@ from components.caches.utils.cache_metrics_logger import (
     CacheMetricsLogger,
 )
 from components.const import (
+    API_ENV_VAR_FULL_URL_NAME,
     API_PARAM_KEYS_IN_CACHE_NAME,
     API_PARAM_LAST_ACCESSES_NAME,
-    API_PARAM_USER_API_KWARGS_NAME, API_ENV_VAR_ENDPOINT_NAME,
+    API_PARAM_USER_API_KWARGS_NAME,
 )
 from components.dataset.rows.extractions.lasts_extractor import (
     extract_last_rows_from_dataset,
@@ -76,7 +78,7 @@ class LSTMCache(BaseCache):
         super().__init__(cache_class, metrics_logger, config)
 
         # Set API endpoint and kwargs to use
-        self.api_endpoint = os.getenv(API_ENV_VAR_ENDPOINT_NAME)
+        self.api_endpoint = os.getenv(API_ENV_VAR_FULL_URL_NAME)
         self.api_kwargs = config.api_kwargs
 
         debug(

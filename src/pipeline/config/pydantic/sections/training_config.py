@@ -6,11 +6,14 @@ This module structures all parameters necessary to run the training loop,
 including general settings, hardware selection, and early stopping criteria.
 
 Classes:
-    TrainingDeviceConfig: Configuration for the hardware device used during
-                          training.
-    TrainingGeneralConfig: General configuration for training run parameters.
-    TrainingEarlyStoppingConfig: Criteria for early termination of training.
-    TrainingConfig: Aggregates all training configuration settings.
+    TrainingDeviceConfig(BaseModel):
+        Configuration for the hardware device used during training.
+    TrainingGeneralConfig(BaseModel):
+        General configuration for training run parameters.
+    TrainingEarlyStoppingConfig(BaseModel):
+        Criteria for early termination of training.
+    TrainingConfig(BaseModel):
+        Aggregates all training configuration settings.
 """
 
 from pydantic import BaseModel, confloat, conint, model_validator

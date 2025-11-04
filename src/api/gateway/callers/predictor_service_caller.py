@@ -6,6 +6,7 @@ from fastapi import HTTPException, status
 from api.config.pydantic.api_config import APIConfig
 from api.const import (
     API_CONFIG_USER_API_KWARG_FIELD_NAME,
+    PREDICTOR_SERVICE_FULL_URL,
     PREDICTOR_SERVICE_PARAM_LAST_ACCESSES_NAME,
     PREDICTOR_SERVICE_PARAM_MC_DROPOUT_SAMPLES_NAME,
     PREDICTOR_SERVICE_PARAM_ROLLOUT_HORIZON_NAME,
@@ -14,7 +15,6 @@ from api.const import (
     PREDICTOR_SERVICE_PARAMS,
     PREDICTOR_SERVICE_RETURN_OUTPUTS_NAME,
     PREDICTOR_SERVICE_RETURN_VARIANCES_NAME,
-    PREDICTOR_SERVICE_URL,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -88,7 +88,7 @@ def call_predictor_service(
 
         # Call predictor service and box the response
         response = requests.post(
-            PREDICTOR_SERVICE_URL,
+            PREDICTOR_SERVICE_FULL_URL,
             json=params.to_dict(),
         )
         data = Box(response.json())

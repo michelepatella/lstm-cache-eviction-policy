@@ -7,7 +7,7 @@ a cache, evicting the least frequently used items when the maximum cache size
 is reached.
 
 Classes:
-    LFUCache(maxsize, callback)
+    LFUCache(maxsize, callback):
         LFU cache implementation supporting get, set, delete, pop, and clear
         operations with frequency tracking and optional eviction callbacks.
 """

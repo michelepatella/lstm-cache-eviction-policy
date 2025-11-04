@@ -21,7 +21,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 # ----------------------------
 # API
 # ----------------------------
-API_ENV_VAR_ENDPOINT_NAME = "API_ENDPOINT"
+API_ENV_VAR_FULL_URL_NAME = "API_ENDPOINT_FULL_URL"
 
 API_PARAM_KEYS_IN_CACHE_NAME = "keys_in_cache"
 API_PARAM_LAST_ACCESSES_NAME = "last_accesses"

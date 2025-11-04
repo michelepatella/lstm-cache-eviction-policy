@@ -7,7 +7,7 @@ when the cache reaches its maximum size. It integrates TTL handling and
 metrics logging for cache events.
 
 Classes:
-    RandomCache(cache_class, metrics_logger, config)
+    RandomCache(cache_class, metrics_logger, config):
         Random cache implementation supporting put, eviction, and TTL
         tracking.
 """

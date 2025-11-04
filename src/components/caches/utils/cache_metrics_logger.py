@@ -7,7 +7,7 @@ operations such as insertions (put), accesses (get), and evictions.
 Each event is logged with timestamp and optional TTL.
 
 Classes:
-    CacheMetricsLogger
+    CacheMetricsLogger:
         Logs put, get, and eviction events for cache items.
 """
 

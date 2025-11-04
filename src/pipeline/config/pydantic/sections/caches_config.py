@@ -6,7 +6,8 @@ This module defines core parameters common to most cache implementations,
 such as the cache size and the Time-To-Live (TTL) setting.
 
 Classes:
-    CachesConfig: Configuration for general cache settings.
+    CachesConfig(BaseModel):
+        Configuration for general cache settings.
 """
 
 from pydantic import BaseModel, conint
