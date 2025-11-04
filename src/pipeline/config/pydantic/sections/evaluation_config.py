@@ -6,11 +6,14 @@ This module structures parameters related to specific metrics used during
 simulations and testing.
 
 Classes:
-    EvaluationSimulationsMetricsMistakeRateConfig: Configuration for mistake
-                                                  rate calculation.
-    EvaluationSimulationsMetricsConfig: Configuration for all simulation metrics.
-    EvaluationSimulationsConfig: Configuration for simulation evaluation.
-    EvaluationConfig: Aggregates all evaluation-related settings.
+    EvaluationSimulationsMetricsMistakeRateConfig(BaseModel):
+        Configuration for mistake rate calculation.
+    EvaluationSimulationsMetricsConfig(BaseModel):
+        Configuration for all simulation metrics.
+    EvaluationSimulationsConfig(BaseModel):
+        Configuration for simulation evaluation.
+    EvaluationConfig(BaseModel):
+        Aggregates all evaluation-related settings.
 """
 
 from pydantic import BaseModel, conint

@@ -7,13 +7,20 @@ This module defines the core parameters of the model, sequence processing
 (embedding, length), and post-training optimizations (pruning and quantization).
 
 Classes:
-    ModelOptimizationsPruningConfig: Pruning configuration.
-    ModelOptimizationsQuantizationConfig: Quantization configuration.
-    ModelOptimizationsConfig: Aggregates model optimization settings.
-    ModelParamsConfig: Model parameters' configuration.
-    ModelSequenceEmbeddingConfig: Embedding configuration.
-    ModelSequenceConfig: Sequence configuration.
-    ModelConfig: Aggregates all model configuration settings.
+    ModelOptimizationsPruningConfig(BaseModel):
+        Pruning configuration.
+    ModelOptimizationsQuantizationConfig(BaseModel):
+        Quantization configuration.
+    ModelOptimizationsConfig(BaseModel):
+        Aggregates model optimization settings.
+    ModelParamsConfig(BaseModel):
+        Model parameters' configuration.
+    ModelSequenceEmbeddingConfig(BaseModel):
+        Embedding configuration.
+    ModelSequenceConfig(BaseModel):
+        Sequence configuration.
+    ModelConfig(BaseModel):
+        Aggregates all model configuration settings.
 """
 
 from pydantic import BaseModel, confloat, conint, model_validator

@@ -1,3 +1,31 @@
+"""api_kwargs_api_config.py
+
+Module dedicated to defining Pydantic schemas for the complete set
+of keyword arguments (kwargs) for the API.
+
+These schemas enforce validation rules for various data types—including
+integers, floats, boolean flags, and lists—to ensure the functional
+and statistical integrity of the API calls. This includes specifying
+default values, boundary constraints, and required data types for
+parameters controlling autoregression, uncertainty quantification
+(MC Dropout), and cache eviction logic.
+
+Classes:
+    KwargIntAPIConfig(BaseModel):
+        Configuration for integer kwargs with boundary checks.
+    KwargFloatAPIConfig(BaseModel):
+        Configuration for float kwargs with boundary checks.
+    KwargConfidenceLevelAPIConfig(BaseModel):
+        Configuration for float kwargs constrained to be a probability/level
+        (0.0 < x <= 1.0).
+    KwargListIntAPIConfig(BaseModel):
+        Configuration for list-of-integer kwargs.
+    KwargBoolAPIConfig(BaseModel):
+        Configuration for boolean kwargs.
+    KwargsAPIConfig(BaseModel):
+        The complete, top-level schema defining all supported API kwargs.
+"""
+
 from pydantic import BaseModel, confloat, conint
 
 

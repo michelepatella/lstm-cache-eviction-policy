@@ -1,3 +1,21 @@
+"""hardware_api_config.py
+
+Module defining Pydantic schemas for hardware configuration used
+specifically within the API and simulation components.
+
+These schemas ensure that the specified hardware devices are valid choices
+defined in the project constants, maintaining configuration integrity and
+type safety.
+
+Classes:
+    HardwareDeviceAPIConfig(BaseModel):
+        Configuration schema for a single hardware device, including
+        device type validation.
+
+    HardwareAPIConfig(BaseModel):
+        Top-level schema for hardware configurations specific to the API.
+"""
+
 from pydantic import BaseModel, model_validator
 
 from components.assertions.choice_field_assertor import assert_choice_field

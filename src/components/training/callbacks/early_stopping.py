@@ -8,7 +8,7 @@ a specified delta for a number of consecutive epochs equal to the patience,
 training can be stopped early to prevent overfitting and save computation.
 
 Classes:
-    EarlyStopping(patience: int, delta: float)
+    EarlyStopping(patience: int, delta: float):
         Implements an early stopping callback to track the best average loss
         and determine when to stop training early.
 """

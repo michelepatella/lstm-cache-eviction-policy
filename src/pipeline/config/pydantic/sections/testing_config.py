@@ -7,10 +7,12 @@ on the testing dataset, including hardware selection and general test
 parameters.
 
 Classes:
-    TestingDeviceConfig: Configuration for the hardware device used
-                         during testing.
-    TestingGeneralConfig: General configuration parameters for the test run.
-    TestingConfig: Aggregates all testing configuration settings.
+    TestingDeviceConfig(BaseModel):
+        Configuration for the hardware device used during testing.
+    TestingGeneralConfig(BaseModel):
+        General configuration parameters for the test run.
+    TestingConfig(BaseModel):
+        Aggregates all testing configuration settings.
 """
 
 from pydantic import BaseModel, conint, model_validator

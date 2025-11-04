@@ -1,4 +1,21 @@
+"""const.py
+
+Centralized module for defining static constants, network endpoints,
+and parameter names related to the API and its underlying microservices.
+
+This module organizes critical infrastructural data and magic strings
+to ensure consistency and maintainability across the entire application
+architecture, covering inter-service communication, configuration paths,
+and standardized naming conventions.
+"""
+
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
@@ -34,8 +51,12 @@ MODEL_FILE_PATH = (
 # ----------------------------
 # Predictor service
 # ----------------------------
-PREDICTOR_SERVICE_ENDPOINT = "/predictor"
-PREDICTOR_SERVICE_URL = "http://127.0.0.1:8001" + PREDICTOR_SERVICE_ENDPOINT
+PREDICTOR_SERVICE_ENDPOINT = "/predict"
+PREDICTOR_SERVICE_ENV_VAR_FULL_BASE_NAME = "API_PREDICTOR_SERVICE_BASE_URL"
+PREDICTOR_SERVICE_FULL_URL = (
+    os.getenv(PREDICTOR_SERVICE_ENV_VAR_FULL_BASE_NAME)
+    + PREDICTOR_SERVICE_ENDPOINT
+)
 
 PREDICTOR_SERVICE_PARAM_LAST_ACCESSES_NAME = "last_accesses"
 PREDICTOR_SERVICE_PARAM_DEVICE_TYPE_NAME = "device_type"
@@ -60,8 +81,11 @@ PREDICTOR_SERVICE_RETURN_VARIANCES_NAME = "variances"
 # ----------------------------
 # Scorer service
 # ----------------------------
-SCORER_SERVICE_ENDPOINT = "/scorer"
-SCORER_SERVICE_URL = "http://127.0.0.1:8002" + SCORER_SERVICE_ENDPOINT
+SCORER_SERVICE_ENDPOINT = "/score"
+SCORER_SERVICE_ENV_VAR_BASE_URL_NAME = "API_SCORER_SERVICE_BASE_URL"
+SCORER_SERVICE_FULL_URL = (
+    os.getenv(SCORER_SERVICE_ENV_VAR_BASE_URL_NAME) + SCORER_SERVICE_ENDPOINT
+)
 
 SCORER_SERVICE_PARAM_OUTPUTS_NAME = "outputs"
 SCORER_SERVICE_PARAM_VARIANCES_NAME = "variances"
