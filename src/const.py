@@ -1,3 +1,14 @@
+"""const.py
+
+Module dedicated to defining fundamental constants and enumerations
+specifically related to data characteristics, dataset column names,
+hardware devices, and simulation metrics.
+
+This module provides core definitions used across the entire project,
+including data distribution modes, key dataset identifiers, logger phase
+names, and the set of available optimizers and devices.
+"""
+
 # ----------------------------
 # Cache
 # ----------------------------
@@ -30,7 +41,10 @@ DATASET_TESTING_SPLIT_TYPE = "testing"
 # ----------------------------
 # HW Device
 # ----------------------------
-HW_DEVICE_NAMES = ["cpu", "cuda", "mps"]
+HW_DEVICE_CPU_NAME = "cpu"
+HW_DEVICE_CUDA_NAME = "cuda"
+HW_DEVICE_MPS_NAME = "mps"
+HW_DEVICE_NAMES = [HW_DEVICE_CPU_NAME, HW_DEVICE_CUDA_NAME, HW_DEVICE_MPS_NAME]
 
 
 # ----------------------------

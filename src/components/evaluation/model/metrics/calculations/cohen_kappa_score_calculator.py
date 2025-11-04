@@ -1,3 +1,19 @@
+"""cohen_kappa_score_calculator.py
+
+Utility module for computing Cohen's kappa score.
+
+This module provides the `calculate_cohen_kappa_score` function, which calculates
+Cohen's kappa between true labels and predicted labels. The score measures
+inter-rater agreement while correcting for chance.
+
+Functions:
+    calculate_cohen_kappa_score(
+        targets: list[int],
+        predictions: list[int]
+    ) -> float
+        Computes Cohen's kappa score between targets and predictions.
+"""
+
 from sklearn.metrics import cohen_kappa_score
 
 from components.logs.levels.error_logger import error

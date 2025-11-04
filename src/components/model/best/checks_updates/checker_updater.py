@@ -1,3 +1,21 @@
+"""check_updater.py
+
+Utility module for tracking and updating the best model during training.
+
+This module provides the `check_update_best_model` function, which compares
+the current average loss with the best observed loss. If the current loss is
+lower, it updates the best loss and returns a deep copy of the model's state
+dictionary to track the best-performing model.
+
+Functions:
+    check_update_best_model(
+        curr_avg_loss: float,
+        best_avg_loss: float,
+        model: torch.nn.Module
+    ) -> tuple[float, dict[str, torch.Tensor] | None]
+        Checks and updates the best model based on the current average loss.
+"""
+
 import copy
 
 import numpy as np

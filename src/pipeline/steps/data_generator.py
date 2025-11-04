@@ -1,3 +1,19 @@
+"""data_generator.py
+
+Pipeline step module responsible for generating synthetic dataset requests
+and temporal data based on specified distribution modes.
+
+This module provides the `generate_data` function, which orchestrates the
+creation of raw request data (static or dynamic), builds it into a DataFrame
+dataset, saves the raw dataset, and validates the generated data distribution
+through various plots (Zipf, daily profile, heatmap).
+
+Functions:
+    generate_data() -> None
+        Orchestrates the data generation process, saving the raw dataset
+        and related validation plots.
+"""
+
 import logging
 import os
 from collections import Counter
@@ -28,11 +44,18 @@ from components.visualization.key_usage_heatmap_plotter import (
 from components.visualization.zipf_loglog_plotter import (
     plot_zipf_loglog,
 )
+from const import (
+    DATA_DISTRIBUTION_STATIC_MODE,
+    DATASET_COLUMN_REQUEST_NAME,
+    DATASET_COLUMN_TIMESTAMP_NAME,
+    DATASET_RAW_TYPE,
+    MLFLOW_NESTED,
+)
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
+    DAGS_HUB_DVC,
     DAGS_HUB_ENV_VAR_REPO_NAME,
     DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
-    DAGS_HUB_MLFLOW,
     LOGS_PHASE_DATA_GENERATION,
     PLOT_DYNAMIC_DAILY_PROFILE_FILE_PATH,
     PLOT_DYNAMIC_KEY_USAGE_HEATMAP_FILE_PATH,
@@ -40,13 +63,6 @@ from pipeline.const import (
     PLOT_STATIC_DAILY_PROFILE_FILE_PATH,
     PLOT_STATIC_KEY_USAGE_HEATMAP_FILE_PATH,
     PLOT_STATIC_ZIPF_LOG_LOG_FILE_PATH,
-)
-from src.const import (
-    DATA_DISTRIBUTION_STATIC_MODE,
-    DATASET_COLUMN_REQUEST_NAME,
-    DATASET_COLUMN_TIMESTAMP_NAME,
-    DATASET_RAW_TYPE,
-    MLFLOW_NESTED,
 )
 
 # Load env variables
@@ -74,7 +90,7 @@ def generate_data() -> None:
     dagshub.init(
         repo_owner=dabs_hub_repo_owner,
         repo_name=dags_hub_repo_name,
-        mlflow=DAGS_HUB_MLFLOW,
+        mlflow=DAGS_HUB_DVC,
     )
 
     import mlflow
@@ -85,12 +101,12 @@ def generate_data() -> None:
     ):
         # Setup
         config = prepare_config()
-        initialize_logs()
+        initialize_logs(logging.getLevelName(config.logs.level))
 
         # Prepare configuration
-        data_distribution_mode = config.data.mode
-        min_key = config.data.keys.min
-        max_key = config.data.keys.max
+        data_distribution_mode = config.data.general.mode
+        min_key = config.data.general.keys.min
+        max_key = config.data.general.keys.max
 
         info(
             "Data generation started",
@@ -222,4 +238,4 @@ if __name__ == "__main__":
     # Force logs flush
     for handler in logging.getLogger().handlers:
         if isinstance(handler, ElasticHandler):
-            handler.flush_buffer()
+            handler.flush_buffer_async()
