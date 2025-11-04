@@ -1,3 +1,24 @@
+"""key_usage_heatmap_plotter.py
+
+Utility module for plotting a heatmap of key usage frequency over the
+hours of the day.
+
+This module provides the `plot_key_usage_heatmap` function, which calculates
+and visualizes the access frequency of different keys mapped against
+the time of the day.
+
+Functions:
+    plot_key_usage_heatmap(
+        min_key: int,
+        max_key: int,
+        requests: list[int],
+        timestamps_hours: np.ndarray,
+        save_path: str
+    ) -> None
+        Generates and saves a heatmap illustrating key access frequency
+        by hour.
+"""
+
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -16,7 +37,7 @@ from components.const import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from src.const import (
+from const import (
     TIME_END_HOUR,
     TIME_START_HOUR,
 )

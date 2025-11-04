@@ -1,3 +1,21 @@
+"""least_frequent_item_evictor.py
+
+Module for evicting the least frequently used item from a cache.
+
+This module provides the `evict_least_frequent_item` function, which
+identifies the cache item with the minimum access frequency and removes
+it. In case of ties, the oldest key among candidates is evicted.
+An optional callback can be executed with the evicted key.
+
+Functions:
+    evict_least_frequent_item(
+        data: Any,
+        data_freq: defaultdict,
+        callback: (...) -> Any | None
+    ) -> tuple[int, int]
+        Evicts the least frequently used item from the cache.
+"""
+
 from collections import defaultdict
 from collections.abc import Callable
 from typing import Any
@@ -86,16 +104,6 @@ def evict_least_frequent_item(
                     len(data_freq)
                     if hasattr(data_freq, "__len__") and data_freq
                     else 0
-                ),
-                "evicted_candidates_num": (
-                    len(evicted_candidates)
-                    if "evicted_candidates" in locals()
-                    else 0
-                ),
-                "key_to_evict_type": (
-                    type(key_to_evict).__name__
-                    if "key_to_evict" in locals()
-                    else None
                 ),
                 "callback_present": callback is not None,
                 "context": "Least frequent item eviction",

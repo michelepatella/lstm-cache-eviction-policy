@@ -1,3 +1,20 @@
+"""simulator.py
+
+Pipeline step module responsible for executing and evaluating various
+cache eviction policy simulations.
+
+This module provides the `run_simulations` function, which orchestrates
+the simulation of multiple cache strategies against the test dataset.
+It calculates key metrics (hit rate, miss rate, eviction mistake rate,
+latency), benchmarks against Belady's optimal, saves the simulation results,
+and generates performance plots.
+
+Functions:
+    run_simulations() -> None
+        Runs the full cache simulation workflow for defined policies,
+        saves metrics, and generates visualization plots.
+"""
+
 import logging
 import os
 
@@ -38,14 +55,24 @@ from components.logs.levels.info_logger import info
 from components.visualization.hit_miss_rates_plotter import (
     plot_hit_miss_rate,
 )
+from const import (
+    CACHE_LSTM_NAME,
+    DATA_DISTRIBUTION_STATIC_MODE,
+    DATASET_TESTING_SPLIT_TYPE,
+    MLFLOW_NESTED,
+    SIMULATIONS_METRICS_HIT_COUNTER_NAME,
+    SIMULATIONS_METRICS_MISS_COUNTER_NAME,
+    SIMULATIONS_METRICS_POLICY_NAME,
+    SIMULATIONS_METRICS_TIMELINE_NAME,
+)
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
     CACHE_LFU_NAME,
     CACHE_LRU_NAME,
     CACHE_RANDOM_NAME,
+    DAGS_HUB_DVC,
     DAGS_HUB_ENV_VAR_REPO_NAME,
     DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
-    DAGS_HUB_MLFLOW,
     LOGS_PHASE_SIMULATIONS,
     PLOT_DYNAMIC_HIT_MISS_RATES_FILE_PATH,
     PLOT_STATIC_HIT_MISS_RATES_FILE_PATH,
@@ -57,16 +84,6 @@ from pipeline.const import (
     SIMULATIONS_METRICS_EVICTION_MISTAKE_RATE_NAME,
     SIMULATIONS_METRICS_HIT_RATE_NAME,
     SIMULATIONS_METRICS_MISS_RATE_NAME,
-)
-from src.const import (
-    CACHE_LSTM_NAME,
-    DATA_DISTRIBUTION_STATIC_MODE,
-    DATASET_TESTING_SPLIT_TYPE,
-    MLFLOW_NESTED,
-    SIMULATIONS_METRICS_HIT_COUNTER_NAME,
-    SIMULATIONS_METRICS_MISS_COUNTER_NAME,
-    SIMULATIONS_METRICS_POLICY_NAME,
-    SIMULATIONS_METRICS_TIMELINE_NAME,
 )
 
 # Load env variables
@@ -92,7 +109,7 @@ def run_simulations() -> None:
     dagshub.init(
         repo_owner=dabs_hub_repo_owner,
         repo_name=dags_hub_repo_name,
-        mlflow=DAGS_HUB_MLFLOW,
+        dvc=DAGS_HUB_DVC,
     )
 
     import mlflow
@@ -103,14 +120,16 @@ def run_simulations() -> None:
     ):
         # Setup
         config = prepare_config()
-        initialize_logs()
+        initialize_logs(logging.getLevelName(config.logs.level))
 
         # Prepare configuration
-        data_distribution_mode = config.data.mode
-        mistake_window = config.simulations.metrics.mistake_rate.window
+        data_distribution_mode = config.data.general.mode
+        mistake_window = (
+            config.evaluation.simulations.metrics.mistake_rate.window
+        )
         testing_batch_size = config.testing.general.batch_size
         testing_shuffle = config.testing.general.shuffle
-        cache_size = config.simulations.cache.dimension
+        cache_size = config.caches.dimension
 
         # Define cache eviction policies to simulate
         cache_eviction_policies = {
@@ -137,7 +156,7 @@ def run_simulations() -> None:
         }
 
         # Get testing set
-        testing_set, testing_loader = initialize_data_loader(
+        testing_set, _ = initialize_data_loader(
             DATASET_TESTING_SPLIT_TYPE,
             testing_batch_size,
             testing_shuffle,
@@ -283,7 +302,7 @@ def run_simulations() -> None:
         mlflow.log_params(prepare_config().model_dump())
         mlflow.log_param(
             "api_kwargs",
-            cache_eviction_policies[CACHE_LSTM_NAME]._api_kwargs,
+            cache_eviction_policies[CACHE_LSTM_NAME].api_kwargs,
         )
         mlflow.log_artifact(results_file_path)
         mlflow.log_artifact(plot_save_path)
@@ -321,4 +340,4 @@ if __name__ == "__main__":
     # Force logs flush
     for handler in logging.getLogger().handlers:
         if isinstance(handler, ElasticHandler):
-            handler.flush_buffer()
+            handler.flush_buffer_async()

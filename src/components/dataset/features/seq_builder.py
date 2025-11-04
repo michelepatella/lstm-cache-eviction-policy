@@ -1,6 +1,30 @@
+"""seq_builder.py
+
+Module for constructing feature sequences for autoregressive models.
+
+This module provides the `build_feature_seq` function, which:
+    - Encodes timestamp arrays trigonometrically into sine and cosine features.
+    - Converts key arrays into torch tensors.
+    - Adds batch dimensions to both tensors.
+    - Moves tensors to the specified device for model input.
+
+Functions:
+    build_feature_seq(
+        timestamps: np.ndarray,
+        keys: np.ndarray,
+        device: torch.device
+    ) -> tuple[torch.Tensor, torch.Tensor]
+        Builds time and key sequence tensors ready for model consumption.
+"""
+
 import numpy as np
 import torch
 
+from components.const import (
+    TENSOR_FEATURES_DIM,
+    TENSOR_OUTPUTS_BATCH_DIM,
+    TORCH_DTYPE,
+)
 from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -54,13 +78,15 @@ def build_feature_seq(
 
         # Build times sequence and move to device
         times_seq = torch.tensor(
-            np.stack([sin_time, cos_time], axis=1),
-            dtype=torch.float32,
-        ).unsqueeze(0)
+            np.stack([sin_time, cos_time], axis=TENSOR_FEATURES_DIM),
+            dtype=TORCH_DTYPE,
+        ).unsqueeze(TENSOR_OUTPUTS_BATCH_DIM)
         times_seq = move_to_device(times_seq, device)
 
         # Build keys sequence and move to device
-        keys_seq = torch.tensor(keys, dtype=torch.float32).unsqueeze(0)
+        keys_seq = torch.tensor(keys, dtype=TORCH_DTYPE).unsqueeze(
+            TENSOR_OUTPUTS_BATCH_DIM,
+        )
         keys_seq = move_to_device(keys_seq, device)
 
         debug(

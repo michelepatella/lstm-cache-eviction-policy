@@ -1,3 +1,19 @@
+"""nested_dict_lists_combinator.py
+
+Utility module for combining lists of nested dictionaries.
+
+This module provides the `combine_nested_dict_lists` function, which
+computes all possible combinations across multiple lists of dictionaries
+and merges them into single dictionaries per combination.
+
+Functions:
+    combine_nested_dict_lists(
+        dict_lists: list[list[dict[str, Any]]]
+    ) -> list[dict[str, Any]]
+        Compute Cartesian product of multiple lists of nested dictionaries
+        and merge each combination into a single dictionary.
+"""
+
 import copy
 import itertools
 from typing import Any

@@ -1,3 +1,17 @@
+"""random_cache.py
+
+Module implementing a Random eviction cache.
+
+This module provides the `RandomCache` class, which evicts a random key
+when the cache reaches its maximum size. It integrates TTL handling and
+metrics logging for cache events.
+
+Classes:
+    RandomCache(cache_class, metrics_logger, config)
+        Random cache implementation supporting put, eviction, and TTL
+        tracking.
+"""
+
 import random
 
 from components.caches.implementations.items.operations.inserter import (

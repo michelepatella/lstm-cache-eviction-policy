@@ -1,3 +1,19 @@
+"""locator.py
+
+Utility module for retrieving dataset absolute paths.
+
+This module provides the `get_dataset_abs_path` function, which returns
+the absolute path of a dataset file based on the dataset type (raw or
+preprocessed) and the selected data distribution mode (static or dynamic).
+
+Functions:
+    get_dataset_abs_path(
+        dataset_type: str,
+        data_distribution_mode: str
+    ) -> str
+        Retrieves the absolute path of the requested dataset file.
+"""
+
 from components.const import (
     DATASET_DYNAMIC_PROCESSED_FILE_PATH,
     DATASET_DYNAMIC_RAW_FILE_PATH,
@@ -6,7 +22,7 @@ from components.const import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from src.const import DATA_DISTRIBUTION_STATIC_MODE, DATASET_RAW_TYPE
+from const import DATA_DISTRIBUTION_STATIC_MODE, DATASET_RAW_TYPE
 
 
 def get_dataset_abs_path(

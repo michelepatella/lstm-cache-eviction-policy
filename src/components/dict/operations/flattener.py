@@ -1,3 +1,20 @@
+"""flattener.py
+
+Utility module for flattening nested dictionaries.
+
+This module provides the `flatten_dict` function, which recursively
+converts a nested dictionary into a flat list of tuples. Each tuple
+contains a key path (as a tuple of strings) and the corresponding value,
+allowing traversal and manipulation of deeply nested dictionary structures.
+
+Functions:
+    flatten_dict(
+        nested_dict: dict[str, Any],
+        parent_key: tuple[str, ...] = ()
+    ) -> list[tuple[tuple[str, ...], Any]]
+        Recursively flatten a nested dictionary into key-path/value tuples.
+"""
+
 from typing import Any
 
 from components.logs.levels.debug_logger import debug

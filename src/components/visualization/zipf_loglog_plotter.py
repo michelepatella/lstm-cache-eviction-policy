@@ -1,3 +1,22 @@
+"""zipf_loglog_plotter.py
+
+Utility module for visualizing the distribution of key accesses using
+a Zipfian log-log plot.
+
+This module provides the `plot_zipf_loglog` function, which calculates
+the frequency of each unique key access, ranks them, and plots the
+rank vs. frequency on a log-log scale to show the characteristic
+Zipfian distribution pattern.
+
+Functions:
+    plot_zipf_loglog(
+        requests: list[int],
+        save_path: str
+    ) -> None
+        Plots the key access frequency distribution in a log-log scale
+        and saves the resulting figure.
+"""
+
 from collections import Counter
 
 import numpy as np

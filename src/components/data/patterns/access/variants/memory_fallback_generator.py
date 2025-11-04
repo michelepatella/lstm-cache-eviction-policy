@@ -1,3 +1,25 @@
+"""memory_fallback_generator.py
+
+Module for generating memory/fallback access patterns.
+
+This module provides the `generate_memory_fallback_pattern` function, which
+simulates key accesses based on memory intervals or fallback to Zipfian
+random selection. If the current request index aligns with the memory interval
+and sufficient history exists, the key is chosen from memory offset steps back.
+Otherwise, a key is selected according to Zipfian probabilities.
+
+Functions:
+    generate_memory_fallback_pattern(
+        memory_interval: int,
+        memory_offset: int,
+        requests: list[int],
+        requests_count: int,
+        keys_range: ndarray,
+        zipf_probs: ndarray
+    ) -> int
+        Returns the next key index according to a memory/fallback pattern.
+"""
+
 import numpy as np
 
 from components.logs.levels.error_logger import error

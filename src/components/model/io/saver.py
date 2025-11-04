@@ -1,3 +1,15 @@
+"""saver.py
+
+Utility module for saving PyTorch models.
+
+This module provides the `save_model` function, which allows saving a
+PyTorch model to a specified path.
+
+Functions:
+    save_model(model: torch.nn.Module, path: str) -> None
+        Saves the provided PyTorch model to the given path.
+"""
+
 import torch
 
 from components.logs.levels.debug_logger import debug

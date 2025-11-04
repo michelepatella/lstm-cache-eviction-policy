@@ -1,3 +1,31 @@
+"""epochs_trainer.py
+
+Module for training a model over multiple epochs with validation and
+early stopping.
+
+This module provides the `train_epochs` function, which manages the
+full training loop for a PyTorch model over a specified number of epochs.
+It trains the model on a given training DataLoader, validates it on a
+validation DataLoader, applies early stopping to reduce unnecessary computation,
+and tracks the best model weights.
+
+Functions:
+    train_epochs(
+        num_epochs: int,
+        model: torch.nn.Module,
+        training_loader: DataLoader,
+        validation_loader: DataLoader,
+        optimizer: Optimizer,
+        criterion: torch.nn.Module,
+        device: torch.device,
+        current_phase: str,
+        config: Any
+    ) -> tuple[float, torch.nn.Module]
+        Trains a model over multiple epochs, applies early stopping,
+        and returns the best achieved average loss and the model with
+        best weights applied.
+"""
+
 import copy
 from typing import Any
 
@@ -16,7 +44,7 @@ from components.model.best.checks_updates.checker_updater import (
 )
 from components.training.callbacks.early_stopping import EarlyStopping
 from components.training.core.single_epoch_trainer import train_single_epoch
-from src.const import LOGS_PHASE_VALIDATION
+from const import LOGS_PHASE_VALIDATION
 
 
 def train_epochs(

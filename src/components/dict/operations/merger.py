@@ -1,3 +1,20 @@
+"""merger.py
+
+Utility module for recursively merging dictionaries.
+
+This module provides the `merge_dicts` function, which merges two dictionaries
+by updating the original dictionary with values from the updated dictionary.
+Nested dictionaries are merged recursively, allowing deep updates without
+overwriting entire sub-dictionaries.
+
+Functions:
+    merge_dicts(
+        original_dict: dict[str, Any] | None,
+        updated_dict: dict[str, Any]
+    ) -> dict[str, Any]
+        Recursively merge two dictionaries, returning the merged result.
+"""
+
 import json
 from typing import Any
 

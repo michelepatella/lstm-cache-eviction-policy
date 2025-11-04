@@ -1,8 +1,32 @@
-from pydantic import BaseModel, confloat, conint
+"""model_config.py
+
+Configuration section for the model's architecture,
+sequence handling, and optimizations.
+
+This module defines the core parameters of the model, sequence processing
+(embedding, length), and post-training optimizations (pruning and quantization).
+
+Classes:
+    ModelOptimizationsPruningConfig: Pruning configuration.
+    ModelOptimizationsQuantizationConfig: Quantization configuration.
+    ModelOptimizationsConfig: Aggregates model optimization settings.
+    ModelParamsConfig: Model parameters' configuration.
+    ModelSequenceEmbeddingConfig: Embedding configuration.
+    ModelSequenceConfig: Sequence configuration.
+    ModelConfig: Aggregates all model configuration settings.
+"""
+
+from pydantic import BaseModel, confloat, conint, model_validator
+
+from components.assertions.choice_field_assertor import assert_choice_field
+from pipeline.const import (
+    MODEL_OPTIMIZATION_QUANTIZATION_DTYPES,
+    MODEL_OPTIMIZATION_QUANTIZATION_ENGINE_NAMES,
+)
 
 
-class ModelOptimizationPruningConfig(BaseModel):
-    """Model optimization pruning configuration.
+class ModelOptimizationsPruningConfig(BaseModel):
+    """Model optimizations pruning configuration.
 
     Attributes:
         amount (float): Pruning amount to apply (in [0.0, 1.0]).
@@ -11,14 +35,73 @@ class ModelOptimizationPruningConfig(BaseModel):
     amount: confloat(ge=0.0, le=1.0)
 
 
-class ModelOptimizationConfig(BaseModel):
-    """Model optimization configuration.
+class ModelOptimizationsQuantizationConfig(BaseModel):
+    """Model optimizations quantization configuration.
 
     Attributes:
-        pruning (ModelOptimizationPruningConfig): Pruning configuration.
+        dtype (str): Target data type for quantization.
+        engine (str): Quantization engine to use.
     """
 
-    pruning: ModelOptimizationPruningConfig
+    dtype: str
+    engine: str
+
+    @model_validator(mode="after")
+    def check_model_optimizations_quantization_dtype(
+        self: "ModelOptimizationsQuantizationConfig",
+    ) -> "ModelOptimizationsQuantizationConfig":
+        """Check whether quantization dtype is valid or not.
+
+        This function validates the quantization dtype.
+
+        Args:
+            self (ModelOptimizationsQuantizationConfig): Current model instance.
+
+        Returns:
+            "ModelOptimizationsQuantizationConfig": Validated model instance.
+        """
+        assert_choice_field(
+            self.dtype,
+            MODEL_OPTIMIZATION_QUANTIZATION_DTYPES,
+            "model.optimizations.quantization.dtype",
+        )
+
+        return self
+
+    @model_validator(mode="after")
+    def check_model_optimizations_quantization_engine(
+        self: "ModelOptimizationsQuantizationConfig",
+    ) -> "ModelOptimizationsQuantizationConfig":
+        """Check whether quantization engine is valid or not.
+
+        This function validates the quantization engine.
+
+        Args:
+            self (ModelOptimizationsQuantizationConfig): Current model instance.
+
+        Returns:
+            "ModelOptimizationsQuantizationConfig": Validated model instance.
+        """
+        assert_choice_field(
+            self.engine,
+            MODEL_OPTIMIZATION_QUANTIZATION_ENGINE_NAMES,
+            "model.optimizations.quantization.engine",
+        )
+
+        return self
+
+
+class ModelOptimizationsConfig(BaseModel):
+    """Model optimizations configuration.
+
+    Attributes:
+        pruning (ModelOptimizationsPruningConfig): Pruning configuration.
+        quantization (ModelOptimizationsQuantizationConfig): Quantization
+                                                             configuration.
+    """
+
+    pruning: ModelOptimizationsPruningConfig
+    quantization: ModelOptimizationsQuantizationConfig
 
 
 class ModelParamsConfig(BaseModel):
@@ -72,9 +155,9 @@ class ModelConfig(BaseModel):
     Attributes:
         params (ModelParamsConfig): Model layer configuration.
         sequence (ModelSequenceConfig): Sequence and embedding configuration.
-        optimization (ModelOptimizationConfig): Model optimization configuration.
+        optimizations (ModelOptimizationsConfig): Model optimizations configuration.
     """
 
     params: ModelParamsConfig
     sequence: ModelSequenceConfig
-    optimization: ModelOptimizationConfig
+    optimizations: ModelOptimizationsConfig

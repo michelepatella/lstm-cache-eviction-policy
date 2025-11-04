@@ -1,3 +1,23 @@
+"""eviction_mistake_rate_calculator.py
+
+Utility module for calculating eviction mistake rate in cache simulations.
+
+This module provides the `calculate_eviction_mistake_rate` function, which
+computes the eviction mistake rate given dictionaries of evicted keys with
+their eviction times and access events with their timestamps. An eviction
+mistake is counted when a key is accessed within a specified temporal window
+after it was evicted.
+
+Functions:
+    calculate_eviction_mistake_rate(
+        evicted_items: dict[int, list[float]],
+        access_events_dict: dict[int, list[float]],
+        mistake_window: int
+    ) -> float
+        Calculates the percentage of evicted keys that were accessed again
+        within the mistake window, representing the eviction mistake rate.
+"""
+
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.math.percentage_calculator import calculate_percentage

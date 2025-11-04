@@ -1,3 +1,17 @@
+"""lfu_cache.py
+
+Module implementing an LFU (Least Frequently Used) cache.
+
+This module provides the `LFUCache` class, which manages key-value pairs in
+a cache, evicting the least frequently used items when the maximum cache size
+is reached.
+
+Classes:
+    LFUCache(maxsize, callback)
+        LFU cache implementation supporting get, set, delete, pop, and clear
+        operations with frequency tracking and optional eviction callbacks.
+"""
+
 from collections import defaultdict
 from collections.abc import Callable
 from typing import Any

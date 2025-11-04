@@ -1,3 +1,21 @@
+"""trig_decoder.py
+
+Utility module for decoding time from trigonometric representation.
+
+This module provides the `decode_time_trigonometrically` function,
+which converts sine and cosine components of encoded time back to a
+numeric time value within a specified cycle length and unit scale.
+
+Functions:
+    decode_time_trigonometrically(
+        sin_time: float,
+        cos_time: float,
+        cycle_length: float = TIME_HOURS_IN_DAY,
+        cycle_unit_scale: float = TIME_SECONDS_IN_HOUR
+    ) -> float
+        Decodes trigonometric time encoding into a standard time value.
+"""
+
 import math
 
 from components.const import TIME_HOURS_IN_DAY, TIME_SECONDS_IN_HOUR

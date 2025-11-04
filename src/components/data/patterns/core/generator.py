@@ -1,3 +1,26 @@
+"""generator.py
+
+Module for generating requests and timestamps according to access patterns.
+
+This module provides the `generate_pattern_requests` function, which
+produces a sequence of key requests along with their corresponding timestamps
+in absolute seconds. The requests are generated based on specified access
+patterns, day/time behavior, and Zipfian distribution.
+
+Functions:
+    generate_pattern_requests(
+        keys_range: ndarray,
+        zipf_probs: ndarray,
+        config: Any,
+        time_step_duration: int | None = None,
+        timestamps_start: float = DATA_GENERATION_TIMESTAMPS_START,
+        current_day_start: int = DATA_GENERATION_CURRENT_DAY_START,
+        current_seconds_in_day_start: int = DATA_GENERATION_CURRENT_SECONDS_IN_DAY_START
+    ) -> tuple[list[int], list[float]]
+        Generates requests and timestamps according to the configured access
+        patterns and Zipfian probabilities.
+"""
+
 from typing import Any
 
 import numpy as np
@@ -66,12 +89,12 @@ def generate_pattern_requests(
         num_requests = (
             time_step_duration
             if time_step_duration is not None
-            else config.data.requests
+            else config.data.general.requests
         )
 
         # Define a seed to make the
         # generation process deterministic
-        seed = config.data.seed
+        seed = config.data.general.seed
         np.random.seed(seed)
 
         debug(
@@ -134,9 +157,6 @@ def generate_pattern_requests(
                     float(np.sum(zipf_probs))
                     if zipf_probs is not None
                     else None
-                ),
-                "requests_num": (
-                    num_requests if "num_requests" in locals() else None
                 ),
                 "timestamps_start": timestamps_start,
                 "current_day_start": current_day_start,

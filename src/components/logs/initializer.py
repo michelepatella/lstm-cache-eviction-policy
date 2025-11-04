@@ -1,3 +1,21 @@
+"""initializer.py
+
+Logging initializer module.
+
+This module sets up structured logging for the pipeline using both
+standard Python logging and structlog, with optional Elasticsearch
+integration. It also defines a context variable to track the current
+log phase for contextual logging.
+
+Functions:
+    initialize_logs(
+        logger_level: int,
+        logger_name: str = LOGS_LOGGER_NAME,
+    ) -> None
+        Configures the root logger with the Elasticsearch handler and
+        initializes structlog for structured JSON logging.
+"""
+
 import contextvars
 import logging
 
@@ -6,7 +24,6 @@ import structlog
 from components.const import (
     LOGS_FIELD_PHASE_DEFAULT,
     LOGS_FIELD_PHASE_NAME,
-    LOGS_LEVEL_DEFAULT,
     LOGS_LOGGER_NAME,
 )
 from components.logs.handlers.elastic_handler import ElasticHandler
@@ -19,8 +36,8 @@ logs_phase = contextvars.ContextVar(
 
 
 def initialize_logs(
+    logger_level: int,
     logger_name: str = LOGS_LOGGER_NAME,
-    logger_level: int = LOGS_LEVEL_DEFAULT,
 ) -> None:
     """Initialize logging configuration for the pipeline.
 
@@ -28,8 +45,8 @@ def initialize_logs(
     configures structlog for structured logging.
 
     Args:
-        logger_name (str): Name of the logger to configure.
         logger_level (int): Logging level.
+        logger_name (str): Name of the logger to configure.
 
     Returns:
         None

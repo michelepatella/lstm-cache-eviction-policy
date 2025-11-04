@@ -1,3 +1,21 @@
+"""generator.py
+
+Module for generating temporal patterns for synthetic requests.
+
+This module provides the `generate_temporal_pattern` function, which
+produces a delta time (gap between consecutive requests) based on
+configured periodic and burstiness patterns, simulating real-world
+request temporal dynamics.
+
+Functions:
+    generate_temporal_pattern(
+        current_seconds_in_day: float,
+        config: Any
+    ) -> float
+        Generates the next inter-request time (delta_t) based on current
+        time of day and configuration for periodic and burstiness patterns.
+"""
+
 from typing import Any
 
 import numpy as np
@@ -47,7 +65,7 @@ def generate_temporal_pattern(
         # current hour in day
         current_hour_in_day = current_seconds_in_day / TIME_SECONDS_IN_HOUR
 
-        periodic_pattern_config = config.data.pattern.temporal.periodic
+        periodic_pattern_config = config.data.patterns.temporal.periodic
         # Get scale and amplitude for
         # periodic component generation
         periodic_scale = periodic_pattern_config.scale
@@ -61,7 +79,7 @@ def generate_temporal_pattern(
             current_hour_in_day,
         )
 
-        burstiness_pattern_config = config.data.pattern.temporal.burstiness
+        burstiness_pattern_config = config.data.patterns.temporal.burstiness
         # Get burst high and low for burstiness,
         # as well as burst start and end hours
         burst_high = burstiness_pattern_config.high
@@ -108,28 +126,6 @@ def generate_temporal_pattern(
                     current_seconds_in_day / TIME_SECONDS_IN_HOUR
                     if isinstance(current_seconds_in_day, (int, float))
                     else None
-                ),
-                "periodic_scale": (
-                    periodic_pattern_config.scale
-                    if hasattr(config.data.pattern.temporal, "periodic")
-                    else None
-                ),
-                "periodic_amplitude": (
-                    periodic_pattern_config.amplitude
-                    if hasattr(config.data.pattern.temporal, "periodic")
-                    else None
-                ),
-                "burst_high": getattr(burstiness_pattern_config, "high", None),
-                "burst_low": getattr(burstiness_pattern_config, "low", None),
-                "burst_start_hour": getattr(
-                    burstiness_pattern_config.hours,
-                    "start",
-                    None,
-                ),
-                "burst_end_hour": getattr(
-                    burstiness_pattern_config.hours,
-                    "end",
-                    None,
                 ),
                 "context": "Temporal pattern generation",
             },

@@ -1,3 +1,19 @@
+"""reorderer.py
+
+Utility module for reordering dataset columns.
+
+This module provides the `reorder_dataset_columns` function, which moves
+a specified target column to the last position of a pandas DataFrame,
+treating all other columns as features.
+
+Functions:
+    reorder_dataset_columns(
+        df: pd.DataFrame,
+        target_column: str
+    ) -> pd.DataFrame
+        Reorders columns so that the target column is last.
+"""
+
 import pandas as pd
 
 from components.logs.levels.error_logger import error

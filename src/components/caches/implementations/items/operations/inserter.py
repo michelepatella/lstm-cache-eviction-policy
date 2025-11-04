@@ -1,3 +1,24 @@
+"""inserter.py
+
+Module for inserting items into cache data structures with eviction support.
+
+This module provides the `insert_item_into_cache` function, which inserts
+or updates a key-value pair in a cache, performs eviction if the cache is
+full, and optionally executes pre- and post-insert callbacks.
+
+Functions:
+    insert_item_into_cache(
+        data: Any,
+        key: int,
+        item: Any,
+        cache_maxsize: float,
+        eviction_callback: (...) -> Any,
+        pre_insert_callback: (...) -> Any | None = None,
+        post_insert_callback: (...) -> Any | None = None
+    ) -> None
+        Inserts or updates a cache item and handles eviction logic.
+"""
+
 from collections.abc import Callable
 from typing import Any
 

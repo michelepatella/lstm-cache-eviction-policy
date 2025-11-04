@@ -1,3 +1,19 @@
+"""seconds_to_hours_converter.py
+
+Utility module for converting timestamps from seconds to cyclic hours.
+
+This module provides the `convert_seconds_to_hours_cyclic` function,
+which converts a list of timestamps in seconds to hours, wrapping
+them within a 24-hour day cycle.
+
+Functions:
+    convert_seconds_to_hours_cyclic(
+        timestamps_seconds: list[float]
+    ) -> np.ndarray
+        Converts timestamps from seconds to hours, cyclically over a
+        24-hour period.
+"""
+
 import numpy as np
 
 from components.const import TIME_SECONDS_IN_DAY, TIME_SECONDS_IN_HOUR

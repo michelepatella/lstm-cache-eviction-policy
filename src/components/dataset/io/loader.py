@@ -1,3 +1,15 @@
+"""loader.py
+
+Utility module for loading datasets.
+
+This module provides the `load_dataset` function, which reads a CSV file
+from a specified path and returns it as a pandas DataFrame.
+
+Functions:
+    load_dataset(path: str) -> pd.DataFrame
+        Loads a dataset from the given file path.
+"""
+
 import pandas as pd
 
 from components.logs.levels.debug_logger import debug

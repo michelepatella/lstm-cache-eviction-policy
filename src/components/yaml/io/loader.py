@@ -1,3 +1,17 @@
+"""loader.py
+
+Utility module for securely loading configuration or data from YAML files.
+
+This module provides the `load_yaml` function, which handles file reading
+and safe parsing of a YAML document into a Python dictionary.
+
+Functions:
+    load_yaml(
+        path: str
+    ) -> dict[str, Any]
+        Loads and parses the contents of a YAML file into a dictionary.
+"""
+
 from typing import Any
 
 import yaml

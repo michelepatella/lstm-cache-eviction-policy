@@ -1,3 +1,25 @@
+"""generator.py
+
+Module for generating time-dependent access patterns.
+
+This module provides the `generate_access_pattern` function, which selects
+the next key to access based on the current time of day, past requests,
+and multiple access patterns such as repetition, toggle, cycle, distortion,
+and memory/fallback. The function dynamically adapts to the configured
+behavior of each pattern and ensures continuity in simulated requests.
+
+Functions:
+    generate_access_pattern(
+        zipf_probs: ndarray,
+        keys_range: ndarray,
+        current_abs_seconds: float,
+        requests: list[int],
+        config: Any
+    ) -> int
+        Determines the next key to access according to day-band-specific
+        access patterns.
+"""
+
 from typing import Any
 
 import numpy as np
@@ -64,7 +86,7 @@ def generate_access_pattern(
         num_keys = len(keys_range)
         requests_count = len(requests)
 
-        behavior_config = config.data.pattern.access.behavior
+        behavior_config = config.data.patterns.access.behavior
 
         # Prepare repetition pattern configuration
         repetition_interval = behavior_config.repetition.interval

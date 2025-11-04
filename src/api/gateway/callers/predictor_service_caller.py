@@ -10,6 +10,7 @@ from api.const import (
     PREDICTOR_SERVICE_PARAM_MC_DROPOUT_SAMPLES_NAME,
     PREDICTOR_SERVICE_PARAM_ROLLOUT_HORIZON_NAME,
     PREDICTOR_SERVICE_PARAM_TIME_STEP_INCREMENT_NAME,
+    PREDICTOR_SERVICE_PARAM_UNBIASED_VARIANCE_NAME,
     PREDICTOR_SERVICE_PARAMS,
     PREDICTOR_SERVICE_RETURN_OUTPUTS_NAME,
     PREDICTOR_SERVICE_RETURN_VARIANCES_NAME,
@@ -69,6 +70,12 @@ def call_predictor_service(
                 API_CONFIG_USER_API_KWARG_FIELD_NAME,
             )
             or api_config.kwargs.time_step_increment.default
+        )
+        params[PREDICTOR_SERVICE_PARAM_UNBIASED_VARIANCE_NAME] = (
+            api_config.kwargs.unbiased_variance.model_dump().get(
+                API_CONFIG_USER_API_KWARG_FIELD_NAME,
+            )
+            or api_config.kwargs.unbiased_variance.default
         )
 
         debug(

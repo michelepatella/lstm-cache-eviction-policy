@@ -1,3 +1,25 @@
+"""single_generator.py
+
+Module for generating a single request and updating temporal state.
+
+This module provides the `generate_single_pattern_request` function,
+which produces a single key request based on configured access and
+temporal patterns, updates the current day and seconds-in-day, and
+computes the absolute timestamp for the request.
+
+Functions:
+    generate_single_pattern_request(
+        current_day: int,
+        current_seconds_in_day: float,
+        requests: list[int],
+        keys_range: ndarray,
+        zipf_probs: ndarray,
+        config: Any
+    ) -> tuple[int, float, float, int]
+        Generates one request according to access/temporal patterns and
+        returns the request along with updated temporal state.
+"""
+
 from typing import Any
 
 import numpy as np

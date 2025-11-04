@@ -1,3 +1,23 @@
+"""initializer.py
+
+Utility module for preparing a pre-trained PyTorch model.
+
+This module provides the `initialize_best_model` function, which sets up
+the device, extracts target labels from a data loader, initializes the
+model environment including criterion with class weights, and loads
+the best pre-trained model weights.
+
+Functions:
+    initialize_best_model(
+        data_distribution_mode: str,
+        device_type: str,
+        config: Any,
+        data_loader: DataLoader | None,
+        qengine: str = None
+    ) -> tuple[torch.device, nn.Module, nn.Module]
+        Prepares the device, criterion, and best pre-trained model for inference.
+"""
+
 from typing import Any
 
 import torch
@@ -22,6 +42,7 @@ def initialize_best_model(
     device_type: str,
     config: Any,
     data_loader: DataLoader | None,
+    qengine: str = None,
 ) -> tuple[torch.device, nn.Module, nn.Module]:
     """Prepare a trained PyTorch model.
 
@@ -37,6 +58,7 @@ def initialize_best_model(
         config (Any): Configuration object.
         data_loader (DataLoader | None): DataLoader containing the dataset
                                          to be used (if any).
+        qengine (str): Quantization engine to be used.
 
     Returns:
         tuple[torch.device, nn.Module, nn.Module]:
@@ -52,7 +74,7 @@ def initialize_best_model(
     targets = extract_targets_from_data_loader(data_loader)
 
     # Load the trained model
-    model = load_model(model_path)
+    model = load_model(model_path, qengine=qengine)
 
     # Setup for model environment
     device, criterion, model = initialize_model_environment(

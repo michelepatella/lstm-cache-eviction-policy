@@ -1,3 +1,22 @@
+"""training_validation_splitter.py
+
+Utility module for splitting datasets into training and validation sets.
+
+This module provides the `split_training_validation_sets` function, which
+splits a given dataset into training and validation portions. It can
+use provided indices or compute them based on a validation split percentage,
+returning PyTorch Subset objects for each portion.
+
+Functions:
+    split_training_validation_sets(
+        training_set: AccessLogsDataset,
+        validation_split: float | None = None,
+        training_idx: np.ndarray | None = None,
+        validation_idx: np.ndarray | None = None
+    ) -> tuple[Subset, Subset]
+        Splits a dataset into training and validation PyTorch Subsets.
+"""
+
 import numpy as np
 from torch.utils.data import Subset
 

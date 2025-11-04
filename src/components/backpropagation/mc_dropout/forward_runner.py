@@ -1,3 +1,24 @@
+"""forward_runner.py
+
+Module for performing forward passes with optional Monte Carlo (MC) Dropout.
+
+This module provides the `compute_mc_dropout_forward` function, which executes
+a forward pass on a PyTorch model and optionally performs multiple stochastic
+passes with MC Dropout to estimate predictive uncertainty.
+
+Functions:
+    compute_mc_dropout_forward(
+        model: Module,
+        batch: tuple[Tensor, Tensor, Tensor] | tuple[Tensor, Tensor],
+        device: device,
+        num_mc_dropout_samples: int = MC_DROPOUT_NUM_SAMPLES_DEFAULT,
+        mc_dropout_flag: str = MC_DROPOUT_FLAG_NAME,
+        mc_dropout_unbiased_variance: bool = None,
+    ) -> tuple[Tensor, Any]
+        Performs forward pass with optional MC Dropout and returns mean and
+        variance of outputs.
+"""
+
 import torch
 
 from components.backpropagation.core.forward_runner import compute_forward
@@ -5,7 +26,6 @@ from components.const import (
     DATASET_COLUMNS,
     MC_DROPOUT_FLAG_NAME,
     MC_DROPOUT_NUM_SAMPLES_DEFAULT,
-    MC_DROPOUT_UNBIASED_VARIANCE,
     MODEL_EVAL_MODE,
     MODEL_MC_DROPOUT_MODE,
     TENSOR_OUTPUTS_BATCH_DIM,
@@ -21,7 +41,7 @@ def compute_mc_dropout_forward(
     device: torch.device,
     num_mc_dropout_samples: int = MC_DROPOUT_NUM_SAMPLES_DEFAULT,
     mc_dropout_flag: str = MC_DROPOUT_FLAG_NAME,
-    mc_dropout_unbiased_variance: bool = MC_DROPOUT_UNBIASED_VARIANCE,
+    mc_dropout_unbiased_variance: bool = None,
 ) -> tuple[torch.Tensor, torch.Tensor | None]:
     """Perform forward pass with optional Monte Carlo (MC) Dropout.
 
@@ -82,7 +102,7 @@ def compute_mc_dropout_forward(
                     outputs = model(*batch)
 
                 # Save the current model outputs
-                all_outputs.append(outputs.unsqueeze(0))
+                all_outputs.append(outputs.unsqueeze(TENSOR_OUTPUTS_BATCH_DIM))
 
         # Concatenate outputs as a tensor
         all_outputs_tensor = torch.cat(

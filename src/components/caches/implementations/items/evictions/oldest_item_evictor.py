@@ -1,3 +1,19 @@
+"""oldest_item_evictor.py
+
+Module for evicting the oldest item from a cache.
+
+This module provides the `evict_oldest_item` function, which removes the least
+recently used item from a cache data structure. An optional callback can be
+executed with the evicted key.
+
+Functions:
+    evict_oldest_item(
+        data: Any,
+        callback: (...) -> Any | None
+    ) -> tuple[int, Any]
+        Evicts the oldest item from the cache.
+"""
+
 from collections.abc import Callable
 from typing import Any
 
@@ -49,16 +65,6 @@ def evict_oldest_item(
                 "data_type": type(data).__name__ if data is not None else None,
                 "data_size": (
                     len(data) if hasattr(data, "__len__") and data else 0
-                ),
-                "oldest_key_type": (
-                    type(oldest_key).__name__
-                    if "oldest_key" in locals()
-                    else None
-                ),
-                "oldest_item_type": (
-                    type(oldest_item).__name__
-                    if "oldest_item" in locals()
-                    else None
                 ),
                 "callback_present": callback is not None,
                 "context": "Oldest item eviction",
