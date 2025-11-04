@@ -1,3 +1,15 @@
+"""duplicates_remover.py
+
+Utility module for removing duplicates from pandas DataFrames.
+
+This module provides the `remove_dataset_duplicates` function, which removes
+rows with duplicated values from a specified subset of columns in a DataFrame.
+
+Functions:
+    remove_dataset_duplicates(df: DataFrame, subset: list[str]) -> DataFrame
+        Removes duplicated rows based on the specified subset of columns.
+"""
+
 import pandas as pd
 
 from components.logs.levels.debug_logger import debug
