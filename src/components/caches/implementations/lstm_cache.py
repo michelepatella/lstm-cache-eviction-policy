@@ -49,6 +49,8 @@ class LSTMCache(BaseCache):
     eviction policy when the cache is full.
 
     Attributes:
+        api_endpoint (str): Endpoint of the API to used as
+                            eviction policy.
         api_kwargs (dict): Keyword arguments used by the eviction
                             policy API.
     """
@@ -233,7 +235,7 @@ class LSTMCache(BaseCache):
                 # are not available
                 if last_accesses is None:
                     # Eviction fallback policy: Random
-                    key_to_evict = random.choice(list(self.store.keys()))
+                    keys_to_evict = random.choice(list(self.store.keys()))
                 else:
                     # Call API to get
                     # the key to be evicted from the cache
@@ -249,33 +251,15 @@ class LSTMCache(BaseCache):
                     )
                     data = Box(response.json())
 
-                    lstm_scores = {
-                        k: float(v) for k, v in data.key_scores.items()
-                    }
-
-                    max_freq = max(
-                        len(self.metrics_logger.access_events[k])
-                        for k in self.store.keys()
-                    )
-                    priorities = {}
-                    for k in self.store.keys():
-                        lfu_score = (
-                            len(self.metrics_logger.access_events[k])
-                            / max_freq
-                            if max_freq > 0
-                            else 0
-                        )
-                        priorities[k] = (
-                            0.7 * lstm_scores.get(k, 0) + (1 - 0.7) * lfu_score
-                        )
-
-                    key_to_evict = min(priorities, key=priorities.get)
+                    # Retrieve keys to evict
+                    keys_to_evict = data.keys_to_evict
 
                 # Evict key
-                self.evict_key(key_to_evict)
+                for key_to_evict in keys_to_evict:
+                    self.evict_key(key_to_evict)
 
-                # Track eviction event
-                self.metrics_logger.log_eviction(key_to_evict, current_time)
+                    # Track eviction event
+                    self.metrics_logger.log_eviction(key_to_evict, current_time)
 
             # Insert the key
             self._put_key(key, current_time)

@@ -20,6 +20,7 @@ import os
 import tempfile
 
 import dagshub
+import mlflow
 import numpy as np
 from dotenv import load_dotenv
 
@@ -82,8 +83,6 @@ def train_model() -> None:
         repo_name=dags_hub_repo_name,
         dvc=DAGS_HUB_DVC,
     )
-
-    import mlflow
 
     with mlflow.start_run(
         run_name=LOGS_PHASE_TRAINING,

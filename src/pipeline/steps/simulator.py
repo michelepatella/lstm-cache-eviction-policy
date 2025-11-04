@@ -19,6 +19,7 @@ import logging
 import os
 
 import dagshub
+import mlflow
 import numpy as np
 from dotenv import load_dotenv
 
@@ -112,8 +113,6 @@ def run_simulations() -> None:
         repo_name=dags_hub_repo_name,
         dvc=DAGS_HUB_DVC,
     )
-
-    import mlflow
 
     with mlflow.start_run(
         run_name=LOGS_PHASE_SIMULATIONS,

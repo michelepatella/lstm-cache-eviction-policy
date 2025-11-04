@@ -17,6 +17,7 @@ import logging
 import os
 
 import dagshub
+import mlflow
 from dotenv import load_dotenv
 
 from components.dataset.cleans.duplicates_remover import (
@@ -74,8 +75,6 @@ def preprocess_data() -> None:
         repo_name=dags_hub_repo_name,
         dvc=DAGS_HUB_DVC,
     )
-
-    import mlflow
 
     with mlflow.start_run(
         run_name=LOGS_PHASE_DATA_PREPROCESSING,

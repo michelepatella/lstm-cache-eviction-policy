@@ -21,14 +21,12 @@ import torch
 from torch import nn
 
 from components.const import (
-    DATASET_COLUMNS,
     MC_DROPOUT_DISABLED,
-    MODEL_PARAM_NAMES,
+    MODEL_PARAM_NAMES, TENSOR_SEQUENCE_DIM,
 )
 from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import DATASET_COLUMN_REQUEST_NAME
 
 
 class LSTM(torch.nn.Module):
@@ -337,7 +335,7 @@ class LSTM(torch.nn.Module):
             # Concatenate features with embedded keys
             x = torch.cat(
                 (x_features, embedded_keys),
-                dim=DATASET_COLUMNS.index(DATASET_COLUMN_REQUEST_NAME),
+                dim=TENSOR_SEQUENCE_DIM,
             )
 
             return x
