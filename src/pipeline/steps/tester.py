@@ -18,6 +18,7 @@ import logging
 import os
 
 import dagshub
+import mlflow
 import numpy as np
 from box import Box
 from dotenv import load_dotenv
@@ -71,8 +72,6 @@ def test_model() -> None:
         repo_name=dags_hub_repo_name,
         dvc=DAGS_HUB_DVC,
     )
-
-    import mlflow
 
     with mlflow.start_run(
         run_name=LOGS_PHASE_TESTING,

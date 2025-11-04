@@ -12,12 +12,12 @@ api_kwargs:
   time_step_increment: 0.02
 caches:
   dimension: 40
-  ttl: 1500
+  ttl: 100000000
 data:
   general:
     seed: 42
     mode: static
-    requests: 200
+    requests: 200000
     keys:
       min: 1
       max: 200
@@ -98,7 +98,7 @@ loss:
     type: balanced
 model:
   params:
-    hidden_size: 256
+    hidden_size: 128
     num_layers: 2
     bias: false
     batch_first: true
