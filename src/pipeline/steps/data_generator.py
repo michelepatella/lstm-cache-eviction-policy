@@ -49,6 +49,7 @@ from const import (
     DATASET_COLUMN_REQUEST_NAME,
     DATASET_COLUMN_TIMESTAMP_NAME,
     DATASET_RAW_TYPE,
+    LOGS_LOGGER_NAME,
     MLFLOW_NESTED,
 )
 from pipeline.config.configurator import prepare_config
@@ -186,20 +187,20 @@ def generate_data() -> None:
                 "requests_std": float(np.std(requests)),
                 "requests_skew": float(pd.Series(requests).skew()),
                 "requests_kurt": float(pd.Series(requests).kurt()),
-                "timestamps_min": float(min(timestamps_hours)),
-                "timestamps_max": float(max(timestamps_hours)),
-                "timestamps_mean": float(np.mean(timestamps_hours)),
-                "timestamps_std": float(np.std(timestamps_hours)),
-                "timestamps_diff_mean": float(
+                "timestamps_hours_min": float(min(timestamps_hours)),
+                "timestamps_hours_max": float(max(timestamps_hours)),
+                "timestamps_hours_mean": float(np.mean(timestamps_hours)),
+                "timestamps_hours_std": float(np.std(timestamps_hours)),
+                "timestamps_hours_diff_mean": float(
                     np.mean(np.diff(timestamps_hours)),
                 ),
-                "timestamps_diff_std": float(
+                "timestamps_hours_diff_std": float(
                     np.std(np.diff(timestamps_hours)),
                 ),
-                "timestamps_diff_min": float(
+                "timestamps_hours_diff_min": float(
                     np.min(np.diff(timestamps_hours)),
                 ),
-                "timestamps_diff_max": float(
+                "timestamps_hours_diff_max": float(
                     np.max(np.diff(timestamps_hours)),
                 ),
                 "days_num": 1
@@ -236,6 +237,6 @@ if __name__ == "__main__":
     generate_data()
 
     # Force logs flush
-    for handler in logging.getLogger().handlers:
+    for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
         if isinstance(handler, ElasticHandler):
-            handler.flush_buffer_async()
+            handler.flush_buffer_sync()

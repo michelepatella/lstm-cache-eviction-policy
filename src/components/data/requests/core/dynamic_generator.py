@@ -91,7 +91,7 @@ def generate_dynamic_requests(
             "Dynamic requests generation completed",
             extra={
                 "requests_generated_num": len(requests),
-                "timestamps_generated_num": len(timestamps_hours),
+                "timestamps_hours_generated_num": len(timestamps_hours),
                 "context": "Dynamic requests generation",
             },
         )

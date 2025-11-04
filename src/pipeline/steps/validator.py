@@ -38,6 +38,7 @@ from components.validation.search_space.combinator import (
 from components.yaml.io.saver import save_yaml
 from const import (
     DATASET_TRAINING_SPLIT_TYPE,
+    LOGS_LOGGER_NAME,
     LOGS_PHASE_VALIDATION,
     MLFLOW_NESTED,
 )
@@ -118,7 +119,6 @@ def validate_model() -> None:
         best_params_dict = Box(best_params_dict)
 
         # Prepare the best parameters to be saved
-        print(best_params_dict)
         best_params = Box(config.model_dump())
         best_params.model.params.hidden_size = best_params_dict.hidden_size
         best_params.model.params.num_layers = best_params_dict.num_layers
@@ -163,6 +163,6 @@ if __name__ == "__main__":
     validate_model()
 
     # Force logs flush
-    for handler in logging.getLogger().handlers:
+    for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
         if isinstance(handler, ElasticHandler):
-            handler.flush_buffer_async()
+            handler.flush_buffer_sync()

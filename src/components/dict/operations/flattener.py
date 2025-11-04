@@ -75,7 +75,7 @@ def flatten_dict(
                     "Flattened key added",
                     extra={
                         "flattened_key": new_key,
-                        "value": value,
+                        "current_value": value,
                         "context": "Dictionary flattening",
                     },
                 )

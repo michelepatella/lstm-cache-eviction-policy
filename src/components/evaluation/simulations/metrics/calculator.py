@@ -122,7 +122,7 @@ def calculate_simulation_metrics(
         info(
             "Average cache latency calculated",
             extra={
-                "cache_latency_avg": avg_cache_latency,
+                "cache_latency_us_avg": avg_cache_latency,
                 "latencies_num": len(cache_latencies),
                 "context": "Simulation metrics calculation",
             },
@@ -134,7 +134,7 @@ def calculate_simulation_metrics(
                 "hit_rate": hit_rate,
                 "miss_rate": miss_rate,
                 "eviction_mistake_rate": eviction_mistake_rate,
-                "cache_latency_avg": avg_cache_latency,
+                "cache_latency_us_avg": avg_cache_latency,
                 "cache_accesses_num": total_cache_accesses,
                 "evicted_items_num": len(evicted_items),
                 "access_events_num": len(access_events_dict),

@@ -82,7 +82,7 @@ def generate_requests_for_alpha(
         extra={
             "alpha": alpha,
             "requests_generated_num": len(requests),
-            "timestamps_generated_num": len(timestamps_seconds),
+            "timestamps_seconds_generated_num": len(timestamps_seconds),
             "context": "Requests generation for alpha",
         },
     )

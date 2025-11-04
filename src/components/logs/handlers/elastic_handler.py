@@ -21,6 +21,7 @@ from datetime import datetime, timezone
 
 from dotenv import load_dotenv
 from elasticsearch import Elasticsearch, helpers
+from elasticsearch.helpers import BulkIndexError
 
 from components.const import (
     LOGS_ACTIONS_FIELD_INDEX_NAME,
@@ -108,10 +109,11 @@ class ElasticHandler(logging.Handler):
         # Append document to buffer
         self.buffer.append(doc)
 
-    def _flush_buffer(
+    def flush_buffer_sync(
         self: "ElasticHandler",
     ) -> None:
-        """Send all buffered log records to Elasticsearch.
+        """Send all buffered log records to Elasticsearch
+        synchronously.
 
         This function takes all log documents currently stored
         in the internal buffer and indexes them into the
@@ -135,7 +137,13 @@ class ElasticHandler(logging.Handler):
         ]
 
         # Send documents
-        helpers.bulk(es, actions)
+        try:
+            helpers.bulk(es, actions)
+        except BulkIndexError as e:
+            print(f"{len(e.errors)} document(s) failed to index:")
+            for error in e.errors:
+                print(error)
+            raise
 
         # Clear the buffer
         self.buffer.clear()
@@ -155,7 +163,7 @@ class ElasticHandler(logging.Handler):
             None
         """
         thread = threading.Thread(
-            target=self._flush_buffer,
+            target=self.flush_buffer_sync,
             daemon=LOGS_THREAD_DAEMON,
         )
         thread.start()

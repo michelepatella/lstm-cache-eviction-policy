@@ -46,6 +46,7 @@ from components.optimizer.builder import build_optimizer
 from components.training.core.epochs_trainer import train_epochs
 from const import (
     DATASET_TRAINING_SPLIT_TYPE,
+    LOGS_LOGGER_NAME,
     MLFLOW_NESTED,
 )
 from pipeline.config.configurator import prepare_config
@@ -239,6 +240,6 @@ if __name__ == "__main__":
     train_model()
 
     # Force logs flush
-    for handler in logging.getLogger().handlers:
+    for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
         if isinstance(handler, ElasticHandler):
-            handler.flush_buffer_async()
+            handler.flush_buffer_sync()

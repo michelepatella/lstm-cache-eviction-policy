@@ -15,7 +15,6 @@ Functions:
         Recursively merge two dictionaries, returning the merged result.
 """
 
-import json
 from typing import Any
 
 from components.logs.levels.debug_logger import debug
@@ -64,29 +63,12 @@ def merge_dicts(
                 original_dict.get(key),
                 dict,
             ):
-                debug(
-                    "Merging nested dictionary for key",
-                    extra={
-                        "nested_key": key,
-                        "context": "Dictionaries merging",
-                    },
-                )
                 # If the value is still a dictionary,
                 # apply merge recursively
                 original_dict[key] = merge_dicts(original_dict[key], value)
             else:
                 # Set the final value
                 original_dict[key] = value
-                debug(
-                    "Key to value merged",
-                    extra={
-                        "key": key,
-                        "value": json.dumps(value, default=str)
-                        if isinstance(value, (dict, list))
-                        else value,
-                        "context": "Dictionaries merging",
-                    },
-                )
 
         debug(
             "Dictionaries merging completed",
