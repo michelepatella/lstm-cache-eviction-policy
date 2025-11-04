@@ -1,3 +1,18 @@
+"""dropper.py
+
+Utility module for dropping columns from a dataset.
+
+This module provides the `drop_dataset_column` function, which removes a
+specified column from a pandas DataFrame.
+
+Functions:
+    drop_dataset_column(
+        df: pd.DataFrame,
+        column_name: str
+    ) -> pd.DataFrame
+        Drops the specified column from the provided DataFrame.
+"""
+
 import pandas as pd
 
 from components.logs.levels.error_logger import error

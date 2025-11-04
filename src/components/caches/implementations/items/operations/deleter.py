@@ -1,3 +1,20 @@
+"""deleter.py
+
+Module for removing items from cache data structures.
+
+This module provides the `delete_item_from_cache` function, which deletes
+a given key from the cache data and optionally from an associated frequency
+data structure.
+
+Functions:
+    delete_item_from_cache(
+        data: Any,
+        key: int,
+        freq_data: Any | None = None
+    ) -> None
+        Deletes the key from cache and frequency data if provided.
+"""
+
 from typing import Any
 
 from mypy.checkexpr import defaultdict
