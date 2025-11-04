@@ -1,7 +1,27 @@
+"""checker_updater.py
+
+Module for checking key presence in cache and updating hit/miss counters.
+
+This module provides the `check_update_hit_miss` function, which checks
+whether a key is present and valid in a cache, and updates the hit/miss
+counters.
+
+Functions:
+    check_update_hit_miss(
+        cache: Any,
+        key: int,
+        current_time: float,
+        counters: dict[str, int],
+        hit_counter_name: str = SIMULATIONS_METRICS_HIT_COUNTER_NAME,
+        miss_counter_name: str = SIMULATIONS_METRICS_MISS_COUNTER_NAME
+    ) -> bool
+        Checks key presence in the cache and updates hit/miss counters.
+"""
+
 from typing import Any
 
 from components.logs.levels.error_logger import error
-from src.const import (
+from const import (
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
 )

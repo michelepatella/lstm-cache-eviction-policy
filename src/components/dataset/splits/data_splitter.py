@@ -1,3 +1,21 @@
+"""data_splitter.py
+
+Utility module for splitting datasets.
+
+This module provides the `split_dataset_data` function, which splits
+a pandas DataFrame at a specified index, returning either the first
+or the second portion. Useful for dividing datasets into training,
+validation, and test sets.
+
+Functions:
+    split_dataset_data(
+        df: pd.DataFrame,
+        split_idx: int,
+        take_first: bool
+    ) -> pd.DataFrame
+        Splits a DataFrame at a given index and returns the selected part.
+"""
+
 from typing import Any
 
 import pandas as pd

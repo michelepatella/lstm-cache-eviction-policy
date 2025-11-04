@@ -1,8 +1,26 @@
+"""calculator.py
+
+Class weight calculation utility module.
+
+This module provides the `calculate_class_weight` function, which
+computes class weights for imbalanced classification tasks. It
+ensures that less frequent classes receive higher weights, based
+on the provided target tensor and total number of classes.
+
+Functions:
+    calculate_class_weight(
+        targets: torch.Tensor,
+        num_classes: int,
+        weight_type: str
+    ) -> np.ndarray
+        Computes balanced class weights for the given targets. Returns
+        a NumPy array containing the weight for each class.
+"""
+
 import numpy as np
 from sklearn.utils import compute_class_weight
 from sympy.printing.pytorch import torch
 
-from components.const import CRITERION_CLASS_WEIGHT_TYPE
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
@@ -10,7 +28,7 @@ from components.logs.levels.error_logger import error
 def calculate_class_weight(
     targets: torch.Tensor,
     num_classes: int,
-    weight_type: str = CRITERION_CLASS_WEIGHT_TYPE,
+    weight_type: str,
 ) -> np.ndarray:
     """Compute balanced class weight for targets.
 
@@ -53,6 +71,7 @@ def calculate_class_weight(
         )
 
         # Convert targets to NumPy array
+        targets = targets.long()
         targets_array = targets.cpu().numpy()
 
         # Identify present classes in targets

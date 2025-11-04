@@ -1,3 +1,21 @@
+"""debug_logger.py
+
+Debug-level logging utility.
+
+This module provides a convenience function `debug` for logging
+messages at the debug level. It integrates with the application's
+structured logging system, allowing contextual information
+via log phases and optional extra fields.
+
+Functions:
+    debug(
+        msg: str, log_phase: str = LOGS_FIELD_PHASE_DEFAULT,
+        extra: dict[str, Any] | None = None,
+        logger_name: str = LOGS_LOGGER_NAME
+    ) -> None
+        Logs a message at debug level with optional context.
+"""
+
 import logging
 from typing import Any
 

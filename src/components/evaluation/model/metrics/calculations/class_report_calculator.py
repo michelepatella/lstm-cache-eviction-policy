@@ -1,3 +1,21 @@
+"""class_report_calculator.py
+
+Utility module for computing classification reports.
+
+This module provides the `calculate_class_report` function, which calculates
+the classification metrics given true labels and predicted labels.
+
+Functions:
+    calculate_class_report(
+        targets: list[int],
+        predictions: list[int],
+        output_dict: bool = True,
+        zero_division: int = 0
+    ) -> dict[str, float]
+        Computes the classification report for a set of predictions and
+        true targets, returning metrics per class.
+"""
+
 from sklearn.metrics import classification_report
 
 from components.const import (

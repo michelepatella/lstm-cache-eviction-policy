@@ -1,3 +1,24 @@
+"""calculator.py
+
+Utility module for calculating cache simulation metrics.
+
+This module provides the `calculate_simulation_metrics` function, which
+computes key performance metrics for cache simulations, including hit rate,
+miss rate, eviction mistake rate, and average cache latency.
+
+Functions:
+    calculate_simulation_metrics(
+        counters: dict[str, int],
+        cache_latencies: list[float],
+        mistake_window: int,
+        metrics_logger: CacheMetricsLogger,
+        hit_counter_name: str = SIMULATIONS_METRICS_HIT_COUNTER_NAME,
+        miss_counter_name: str = SIMULATIONS_METRICS_MISS_COUNTER_NAME
+    ) -> tuple[float, float, float, float]
+        Computes cache hit/miss rates, eviction mistake rate, and
+        average latency using simulation counters and a metrics logger.
+"""
+
 from components.caches.utils.cache_metrics_logger import (
     CacheMetricsLogger,
 )
@@ -11,7 +32,7 @@ from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.math.avg_calculator import calculate_average
-from src.const import (
+from const import (
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
 )
