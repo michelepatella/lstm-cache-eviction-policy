@@ -12,7 +12,7 @@ api_kwargs:
   time_step_increment: 0.02
 caches:
   dimension: 40
-  ttl: 100000000
+  ttl: 3000
 data:
   general:
     seed: 42

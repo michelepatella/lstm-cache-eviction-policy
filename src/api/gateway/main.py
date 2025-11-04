@@ -91,8 +91,6 @@ def gateway_api(
                 user_api_kwargs,
             )
 
-            print(api_config.kwargs)
-
         # Invoke predictor service to run autoregressive rollout
         # and get outputs and corresponding variances
         outputs, variances = call_predictor_service(
