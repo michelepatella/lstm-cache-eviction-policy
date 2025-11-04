@@ -1,3 +1,21 @@
+"""builder.py
+
+Helper module for building PyTorch DataLoader instances.
+
+This module provides the `build_data_loader` function, which wraps
+torch.utils.data.DataLoader creation for a given dataset or subset,
+allowing configuration of batch size and shuffling.
+
+Functions:
+    build_data_loader(
+        dataset: AccessLogsDataset | Subset,
+        batch_size: int,
+        shuffle: bool
+    ) -> DataLoader
+        Builds a DataLoader for the provided dataset with specified
+        batch size and shuffle options.
+"""
+
 from torch.utils.data import DataLoader, Subset
 
 from components.dataset.access_logs_dataset import AccessLogsDataset

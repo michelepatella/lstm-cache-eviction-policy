@@ -1,10 +1,26 @@
+"""builder.py
+
+Utility module for building a PyTorch optimizer.
+
+This module provides functionality to build PyTorch optimizers
+for a given model, supporting various types such as Adam, AdamW, and SGD.
+
+Functions:
+    build_optimizer(
+        model: torch.nn.Module,
+        optimizer_type: str,
+        **optimizer_kwargs
+    )
+        Creates and returns a PyTorch optimizer instance for the model.
+"""
+
 from typing import Any
 
 import torch
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from src.const import (
+from const import (
     OPTIMIZER_ADAM_NAME,
     OPTIMIZER_ADAMW_NAME,
     OPTIMIZER_SGD_NAME,

@@ -1,3 +1,30 @@
+"""batches_inferrer.py
+
+Utility module for performing inference over multiple data batches.
+
+This module provides the `infer_batches` function, which iterates over
+a PyTorch DataLoader, performs inference on each batch using a given model,
+computes batch losses, and aggregates predictions, targets, outputs, and
+optional variance tensors.
+
+Functions:
+    infer_batches(
+        model: torch.nn.Module,
+        data_loader: DataLoader,
+        criterion: torch.nn.Module,
+        device: torch.device
+    ) -> tuple[
+        float,
+        list[int],
+        list[int],
+        list[torch.Tensor],
+        list[torch.Tensor]
+    ]
+        Performs batch-wise inference on the provided data loader and
+        returns aggregated loss, predictions, targets, outputs, and
+        variance tensors.
+"""
+
 import numpy as np
 import torch
 from torch.utils.data import DataLoader

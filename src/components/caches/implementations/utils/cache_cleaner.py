@@ -1,3 +1,19 @@
+"""cache_cleaner.py
+
+Utility function for clearing cache data.
+
+This module provides the `clear_cache` function which removes all items
+from a cache data structure and optionally clears the associated
+frequency dictionary.
+
+Functions:
+    clear_cache(
+        data: Any,
+        data_freq: Any | None = None
+    ) -> None
+        Clears all items from the provided cache and frequency data structures.
+"""
+
 from typing import Any
 
 from components.logs.levels.error_logger import error

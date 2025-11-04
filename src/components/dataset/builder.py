@@ -1,3 +1,16 @@
+"""builder.py
+
+Utility module for building a dataset from provided columns.
+
+This module provides the `build_dataset` function to create a Pandas
+DataFrame from a dictionary of column names and corresponding sequences
+or arrays. It ensures the columns have compatible lengths and types.
+
+Functions:
+    build_dataset(columns: dict[str, Sequence | np.ndarray]) -> pd.DataFrame
+        Create a Pandas DataFrame from the given column data.
+"""
+
 from collections.abc import Sequence
 
 import numpy as np

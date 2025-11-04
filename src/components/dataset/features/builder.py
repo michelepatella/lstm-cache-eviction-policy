@@ -1,3 +1,19 @@
+"""builder.py
+
+Module for constructing dataset features including trigonometric time encoding
+and target column reordering.
+
+This module provides the `build_features` function, which:
+    - Encodes the timestamp column into sine and cosine features for cyclical
+      time representation.
+    - Drops the original timestamp column.
+    - Reorders the dataset columns so that the target column is last.
+
+Functions:
+    build_features(df: pd.DataFrame) -> pd.DataFrame
+        Builds features and reorders columns for a dataset.
+"""
+
 import pandas as pd
 
 from components.const import (
@@ -16,7 +32,7 @@ from components.logs.levels.error_logger import error
 from components.time.transforms.trig_encoder import (
     encode_time_trigonometrically,
 )
-from src.const import (
+from const import (
     DATASET_COLUMN_REQUEST_NAME,
     DATASET_COLUMN_TIMESTAMP_NAME,
 )

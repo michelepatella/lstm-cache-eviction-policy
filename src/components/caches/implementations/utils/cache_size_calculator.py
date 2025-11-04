@@ -1,3 +1,15 @@
+"""cache_size_calculator.py
+
+Utility function for calculating cache size.
+
+This module provides the `calculate_cache_size` function which returns
+the current number of items stored in a cache data structure.
+
+Functions:
+    calculate_cache_size(data: Any) -> int
+        Returns the number of items currently stored in the cache.
+"""
+
 from typing import Any
 
 from components.logs.levels.error_logger import error

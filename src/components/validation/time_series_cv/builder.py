@@ -1,3 +1,18 @@
+"""builder.py
+
+Utility module for creating time series cross-validation splitters.
+
+This module provides the `build_time_series_split` function, which
+instantiates a `TimeSeriesSplit` object from scikit-learn, configured
+with the specified number of folds. It is useful for evaluating models
+on sequential data while preserving temporal order.
+
+Functions:
+    build_time_series_split(num_folds: int) -> TimeSeriesSplit
+        Creates a TimeSeriesSplit object configured for the given number
+        of folds for time-series cross-validation.
+"""
+
 from sklearn.model_selection import TimeSeriesSplit
 
 from components.logs.levels.debug_logger import debug

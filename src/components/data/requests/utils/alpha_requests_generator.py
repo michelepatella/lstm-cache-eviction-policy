@@ -1,3 +1,24 @@
+"""alpha_requests_generator.py
+
+Module for generating requests for a single Zipfian alpha value.
+
+This module provides the `generate_requests_for_alpha` function, which generates
+a sequence of key requests and their corresponding timestamps in seconds,
+based on a specific Zipfian alpha parameter. It calculates the Zipfian
+probabilities for the given alpha and keys range, then generates requests
+accordingly using the configured access and temporal patterns.
+
+Functions:
+    generate_requests_for_alpha(
+        alpha: float,
+        keys_range: ndarray,
+        config: Any,
+        time_step_duration: int | None = None
+    ) -> tuple[list[int], list[float]]
+        Generates a list of requested keys and their timestamps in seconds
+        for a given Zipfian alpha value.
+"""
+
 from typing import Any
 
 import numpy as np

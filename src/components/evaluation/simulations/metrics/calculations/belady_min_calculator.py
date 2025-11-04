@@ -1,3 +1,21 @@
+"""belady_min_calculator.py
+
+Utility module for calculating Belady's MIN cache performance metrics.
+
+This module provides the `calculate_belady_min` function, which computes
+cache hit and miss rates for a given access sequence using Belady's optimal
+(MIN) replacement policy. The algorithm evicts the key that will be accessed
+farthest in the future (or never again) when the cache is full.
+
+Functions:
+    calculate_belady_min(
+        access_sequence: list[int],
+        cache_size: int
+    ) -> tuple[float, float]
+        Calculates the hit and miss rates of Belady's MIN policy for the
+        provided access sequence and cache size.
+"""
+
 from collections import defaultdict, deque
 
 import numpy as np
@@ -56,7 +74,7 @@ def calculate_belady_min(
             next_use_positions[key].append(idx)
 
         # For each key access in the sequence
-        for current_idx, key in enumerate(access_sequence):
+        for _, key in enumerate(access_sequence):
             # Remove the current key request
             # as already served
             next_use_positions[key].popleft()

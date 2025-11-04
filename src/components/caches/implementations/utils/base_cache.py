@@ -1,3 +1,19 @@
+"""base_cache.py
+
+Abstract base class for cache implementations with TTL support
+and metrics logging.
+
+This module provides the `BaseCache` class, which defines common
+cache functionalities such as TTL management, expired key removal,
+metrics logging for get/put/eviction operations, and abstract
+methods to enforce implementation of specific cache insertion
+strategies by subclasses.
+
+Classes:
+    BaseCache(ABC):
+        Abstract base class for all cache types.
+"""
+
 from abc import ABC, abstractmethod
 from typing import Any
 
@@ -54,8 +70,8 @@ class BaseCache(ABC):
         """
         try:
             # Prepare configuration
-            cache_dimension = config.simulations.cache.dimension
-            ttl = config.simulations.cache.ttl
+            cache_dimension = config.caches.dimension
+            ttl = config.caches.ttl
 
             # Initialize cache and fields
             self.cache = (
@@ -87,12 +103,12 @@ class BaseCache(ABC):
                         getattr(self, "expiry", None),
                         dict,
                     ),
-                    "ttl": getattr(config.simulations.cache, "ttl", None),
+                    "ttl": getattr(config.caches, "ttl", None),
                     "cache_class": (
                         str(cache_class) if cache_class is not None else None
                     ),
                     "cache_dimension": getattr(
-                        config.simulations.cache,
+                        config.caches,
                         "dimension",
                         None,
                     ),
@@ -203,9 +219,6 @@ class BaseCache(ABC):
                 extra={
                     "exception": str(e),
                     "current_time": current_time,
-                    "expired_keys_num": (
-                        len(expired_keys) if "expired_keys" in locals() else 0
-                    ),
                     "expiry_type": (
                         type(self.expiry).__name__
                         if hasattr(self, "expiry")
