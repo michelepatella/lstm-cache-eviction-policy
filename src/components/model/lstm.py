@@ -1,16 +1,34 @@
+"""lstm.py
+
+This module provides the `LSTM` class, a PyTorch-based
+Long Short-Term Memory (LSTM) model with optional MC Dropout.
+
+The LSTM model:
+    - Embeds key inputs.
+    - Concatenates them with additional features.
+    - Passes the concatenated input through an LSTM layer.
+    - Optionally applies MC Dropout for uncertainty estimation.
+    - Produces output logits through a fully connected layer.
+
+Class:
+    LSTM(torch.nn.Module)
+        Implements the LSTM model for next-key prediction.
+"""
+
 from typing import Any
 
 import torch
 from torch import nn
 
 from components.const import (
-    DATASET_COLUMN_TARGET_IDX,
+    DATASET_COLUMNS,
     MC_DROPOUT_DISABLED,
     MODEL_PARAM_NAMES,
 )
 from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
+from const import DATASET_COLUMN_REQUEST_NAME
 
 
 class LSTM(torch.nn.Module):
@@ -314,7 +332,7 @@ class LSTM(torch.nn.Module):
             # Concatenate features with embedded keys
             x = torch.cat(
                 (x_features, embedded_keys),
-                dim=DATASET_COLUMN_TARGET_IDX,
+                dim=DATASET_COLUMNS.index(DATASET_COLUMN_REQUEST_NAME),
             )
 
             return x

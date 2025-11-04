@@ -1,3 +1,18 @@
+"""early_stopping.py
+
+Utility module for early stopping during model training.
+
+This module provides the `EarlyStopping` class, which monitors the average
+loss during training and validation. If the loss does not improve beyond
+a specified delta for a number of consecutive epochs equal to the patience,
+training can be stopped early to prevent overfitting and save computation.
+
+Classes:
+    EarlyStopping(patience: int, delta: float)
+        Implements an early stopping callback to track the best average loss
+        and determine when to stop training early.
+"""
+
 import numpy as np
 
 from components.const import (

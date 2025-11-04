@@ -1,3 +1,21 @@
+"""periodic_calculator.py
+
+Module for calculating periodic components in temporal request patterns.
+
+This module provides the `calculate_periodic_component` function, which
+computes a cosine-modulated periodic component for a given hour in the day,
+based on configured scale and amplitude. It is used as part of temporal
+pattern generation for synthetic request sequences.
+
+Functions:
+    calculate_periodic_component(
+        scale: int,
+        amplitude: int,
+        current_hour_in_day: float
+    ) -> float
+        Returns the periodic component for the current hour in day.
+"""
+
 import numpy as np
 
 from components.const import TIME_HOURS_IN_DAY

@@ -1,10 +1,31 @@
+"""timeline_updater.py
+
+Module for updating the hit/miss timeline in cache simulations.
+
+This module provides the `update_hit_miss_timeline` function, which
+calculates the instant hit rate based on current hit/miss counters and
+appends the statistics to a timeline for monitoring cache performance.
+
+Functions:
+    update_hit_miss_timeline(
+        idx: int,
+        counters: dict[str, int],
+        timeline: list[dict[str, int]],
+        timeline_index_name: str = SIMULATIONS_METRICS_TIMELINE_INDEX_NAME,
+        timeline_instant_hit_rate_name: str = SIMULATIONS_METRICS_TIMELINE_INSTANT_HIT_RATE_NAME,
+        hit_counter_name: str = SIMULATIONS_METRICS_HIT_COUNTER_NAME,
+        miss_counter_name: str = SIMULATIONS_METRICS_MISS_COUNTER_NAME
+    ) -> list[dict[str, int]]
+        Updates the timeline with the latest hit and miss statistics.
+"""
+
 from components.const import (
     SIMULATIONS_METRICS_TIMELINE_INDEX_NAME,
     SIMULATIONS_METRICS_TIMELINE_INSTANT_HIT_RATE_NAME,
 )
 from components.logs.levels.error_logger import error
 from components.math.percentage_calculator import calculate_percentage
-from src.const import (
+from const import (
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
 )

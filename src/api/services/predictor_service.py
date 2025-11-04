@@ -2,9 +2,10 @@ import numpy as np
 from fastapi import Body, FastAPI, HTTPException, status
 
 from api.const import (
+    MODEL_FILE_PATH,
     PREDICTOR_SERVICE_ENDPOINT,
     PREDICTOR_SERVICE_RETURN_OUTPUTS_NAME,
-    PREDICTOR_SERVICE_RETURN_VARIANCES_NAME, MODEL_FILE_PATH,
+    PREDICTOR_SERVICE_RETURN_VARIANCES_NAME,
 )
 from api.gateway.main import api_config
 from components.dataset.features.seq_builder import build_feature_seq
@@ -31,6 +32,7 @@ def predictor_service(
     rollout_horizon: int = Body(...),
     mc_dropout_samples: int = Body(...),
     time_step_increment: float = Body(...),
+    unbiased_variance: bool = Body(...),
 ) -> dict[str, list[list[float]]]:
     """Predictor microservice for autoregressive rollout.
 
@@ -48,6 +50,7 @@ def predictor_service(
         mc_dropout_samples (int): Number of Monte Carlo dropout forward passes
                                   to estimate uncertainty.
         time_step_increment (float): Time increment per rollout step (in hours).
+        unbiased_variance (bool): Whether to compute unbiased variance or not.
 
     Returns:
         dict[str, list[list[float]]]: Dictionary containing the outputs of the
@@ -96,6 +99,7 @@ def predictor_service(
             rollout_horizon,
             mc_dropout_samples,
             time_step_increment,
+            unbiased_variance,
         )
 
         info(

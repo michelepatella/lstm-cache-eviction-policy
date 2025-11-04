@@ -1,3 +1,20 @@
+"""popper.py
+
+Module for removing items from cache data structures.
+
+This module provides the `pop_item_from_cache` function, which removes
+a key from the cache data, optionally updates the frequency data, and
+returns the removed item.
+
+Functions:
+    pop_item_from_cache(
+        data: Any,
+        key: int,
+        freq_data: Any | None = None
+    ) -> Any | None
+        Removes a cache item and optionally updates frequency tracking.
+"""
+
 from typing import Any
 
 from mypy.checkexpr import defaultdict

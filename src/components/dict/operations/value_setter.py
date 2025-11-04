@@ -1,3 +1,23 @@
+"""value_setter.py
+
+Utility module for setting values in nested dictionaries.
+
+This module provides the `set_dict_value` function, which allows
+setting a value deep inside a nested dictionary structure, given
+a sequence of keys representing the path. Intermediate dictionaries
+are automatically created if missing, ensuring the value is correctly
+placed.
+
+Functions:
+    set_dict_value(
+        data_dict: dict[str, Any],
+        keys: Sequence[str],
+        value: Any
+    ) -> None
+        Sets a value in a nested dictionary according to the provided
+        key sequence.
+"""
+
 from collections.abc import Sequence
 from typing import Any
 

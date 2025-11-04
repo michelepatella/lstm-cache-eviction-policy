@@ -1,3 +1,22 @@
+"""score_based_evictor.py
+
+Module for determining which cache items to evict based on scores.
+
+This module provides the `evict_score_based_items` function, which evaluates
+the scores associated with keys in the cache to decide which keys should be
+evicted. Keys with lower scores are prioritized for eviction, and specific keys
+can be excluded from eviction.
+
+Functions:
+     evict_score_based_items(
+        keys_in_cache: list[int],
+        key_scores: list[float],
+        excluded_keys: list[int],
+        num_evictions: int
+    ) -> list[int]
+        Returns a list of keys to evict based on their scores.
+"""
+
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 

@@ -1,3 +1,19 @@
+"""setter.py
+
+Utility module for setting columns in a pandas DataFrame.
+
+This module provides the `set_dataset_column` function, which sets a specified
+column in a DataFrame to provided values, replacing or creating it as needed.
+
+Functions:
+    set_dataset_column(
+        df: pd.DataFrame,
+        column_name: str,
+        column_values: np.ndarray
+    ) -> pd.DataFrame
+        Sets or updates a column in the DataFrame with the given values.
+"""
+
 import numpy as np
 import pandas as pd
 

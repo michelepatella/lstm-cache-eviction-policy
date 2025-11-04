@@ -1,3 +1,22 @@
+"""runner.py
+
+Module for running cache simulations with different eviction policies.
+
+This module provides the `run_cache_simulation` function, which
+simulates cache behavior over a testing dataset, tracks hit/miss
+counters, maintains a timeline of hits/misses, and measures
+cache access latencies for analysis.
+
+Functions:
+    run_cache_simulation(
+        cache: Any,
+        policy: str,
+        testing_set: AccessLogsDataset,
+        config: Any
+    ) -> tuple[dict[str, int], list[dict[str, float]], list[float]]
+        Executes the cache simulation for the given cache and policy.
+"""
+
 import time
 from typing import Any
 
@@ -16,7 +35,7 @@ from components.logs.levels.info_logger import info
 from components.time.transforms.trig_decoder import (
     decode_time_trigonometrically,
 )
-from src.const import (
+from const import (
     CACHE_LSTM_NAME,
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
@@ -79,8 +98,8 @@ def run_cache_simulation(
 
         # Iterate over testing set, assuming each
         # row represents a request to be satisfied
-        bar = tqdm(range(len(testing_set)), desc=f"{policy}")
-        for idx in bar:
+        tqdm_bar = tqdm(range(len(testing_set)), desc=f"{policy}")
+        for idx in tqdm_bar:
             # Extract the current row from the dataset
             row = testing_set[idx]
 
@@ -124,9 +143,29 @@ def run_cache_simulation(
             timeline = update_hit_miss_timeline(idx, counters, timeline)
 
             # To update bar real-time
-            bar.set_postfix(
-                hit_rate=f"{(counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME] / max(1, counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME] + counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME])) * 100}%",
-                miss_rate=f"{(counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME] / max(1, counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME] + counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME])) * 100}%",
+            tqdm_bar.set_postfix(
+                hit_rate=f"{
+                    (
+                        counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME]
+                        / max(
+                            1,
+                            counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME]
+                            + counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME],
+                        )
+                    )
+                    * 100
+                }%",
+                miss_rate=f"{
+                    (
+                        counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME]
+                        / max(
+                            1,
+                            counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME]
+                            + counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME],
+                        )
+                    )
+                    * 100
+                }%",
             )
 
         info(
@@ -149,10 +188,6 @@ def run_cache_simulation(
             extra={
                 "exception": str(e),
                 "policy": policy,
-                "counters": (
-                    {k: v for k, v in counters.items()} if counters else None
-                ),
-                "timeline_len": len(timeline) if timeline else 0,
                 "cache_type": type(cache).__name__ if cache else None,
                 "context": f"{policy} cache simulation",
             },

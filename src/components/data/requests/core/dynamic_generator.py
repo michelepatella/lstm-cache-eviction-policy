@@ -1,3 +1,18 @@
+"""dynamic_generator.py
+
+Module for generating dynamic request sequences with temporal variability.
+
+This module provides the `generate_dynamic_requests` function, which produces
+a sequence of requested keys along with their corresponding timestamps in hours.
+Dynamic requests evolve over time by splitting the total number of requests
+into time steps and varying the Zipfian alpha parameter across these steps,
+allowing for temporal variation in the access distribution.
+
+Functions:
+    generate_dynamic_requests(config: Any) -> tuple[list[int], ndarray]
+        Generates a list of requested keys and their timestamps in hours.
+"""
+
 from typing import Any
 
 import numpy as np
@@ -37,11 +52,11 @@ def generate_dynamic_requests(
     """
     try:
         # Prepare configuration
-        zipf_config = config.data.pattern.access.zipf
+        zipf_config = config.data.patterns.access.zipf
         alpha_min = zipf_config.alpha.min
         alpha_max = zipf_config.alpha.max
         steps = zipf_config.steps
-        num_requests = config.data.requests
+        num_requests = config.data.general.requests
 
         # Generate evenly spaced alpha
         # values for dynamic time steps
@@ -88,10 +103,6 @@ def generate_dynamic_requests(
             msg,
             extra={
                 "exception": str(e),
-                "alpha_min": alpha_min,
-                "alpha_max": alpha_max,
-                "steps": steps,
-                "requests_num": num_requests,
                 "context": "Dynamic requests generation",
             },
         )

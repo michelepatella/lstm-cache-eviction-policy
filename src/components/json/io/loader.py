@@ -1,3 +1,17 @@
+"""loader.py
+
+Utility module for loading JSON files with optional Box wrapping.
+
+This module provides the `load_json` function, which loads a JSON file from
+disk and optionally wraps it into a Box object to allow dot-notation access.
+
+Functions:
+    load_json(
+        path: str, wrap: bool = JSON_WRAP_BOX
+    ) -> dict[Any, Any] | Box
+        Load a JSON file from the given path and optionally wrap it in a Box.
+"""
+
 import json
 from typing import Any
 

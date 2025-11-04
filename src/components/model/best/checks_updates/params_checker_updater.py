@@ -1,3 +1,24 @@
+"""params_checker_updater.py
+
+Utility module for tracking and updating the best model parameters during
+training or hyperparameter optimization.
+
+This module provides the `check_update_best_model_params` function, which
+compares the current average loss with the best observed loss. If the
+current loss improves, it updates the best average loss and stores the
+corresponding model parameters.
+
+Functions:
+    check_update_best_model_params(
+        curr_avg_loss: float,
+        best_avg_loss: float | None,
+        curr_model_params: dict[str, int | float | bool],
+        best_model_params: dict[str, int | float | bool]
+    ) -> tuple[float, dict[str, int | float | bool]]
+        Checks and updates the best model parameters based on current
+        average loss.
+"""
+
 import numpy as np
 
 from components.logs.levels.debug_logger import debug

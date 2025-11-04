@@ -1,3 +1,19 @@
+"""trig_encoder.py
+
+Utility module for encoding timestamps into trigonometric representation.
+
+This module provides the `encode_time_trigonometrically` function, which
+converts numeric timestamps into sine and cosine components to represent
+time cyclically within a specified cycle length.
+
+Functions:
+    encode_time_trigonometrically(
+        timestamps: np.ndarray,
+        cycle_length: float = TIME_HOURS_IN_DAY
+    ) -> tuple[np.ndarray, np.ndarray]
+        Encodes timestamps as sine and cosine values for cyclical time.
+"""
+
 import numpy as np
 
 from components.const import TIME_HOURS_IN_DAY

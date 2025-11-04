@@ -1,3 +1,23 @@
+"""logger.py
+
+Core logging function for structured logging.
+
+This module provides the `log` function, which is the underlying
+utility used by all logging level helpers (debug, info, error, etc.).
+It standardizes the way messages are logged, attaching the current
+log phase and any optional extra context to the log record.
+
+Functions:
+    log(
+        level: int,
+        msg: str,
+        log_phase: str = LOGS_FIELD_PHASE_DEFAULT,
+        extra: dict[str, Any] | None = None,
+        logger_name: str = LOGS_LOGGER_NAME
+    ) -> None
+        Logs a message at the specified level with optional context.
+"""
+
 import logging
 from typing import Any
 

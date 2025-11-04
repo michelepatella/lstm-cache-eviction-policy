@@ -1,3 +1,17 @@
+"""lru_cache.py
+
+Module implementing an LRU (Least Recently Used) cache.
+
+This module provides the `LRUCache` class, which manages key-value pairs in a
+cache, evicting the least recently used items when the maximum cache size is
+reached.
+
+Classes:
+    LRUCache(maxsize, callback)
+        LRU cache implementation supporting get, set, delete, pop, and clear
+        operations with ordering and optional eviction callbacks.
+"""
+
 from collections import OrderedDict
 from collections.abc import Callable
 from typing import Any

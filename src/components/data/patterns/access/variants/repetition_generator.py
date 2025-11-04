@@ -1,3 +1,24 @@
+"""repetition_generator.py
+
+Module for generating repetition-based access patterns.
+
+This module provides the `generate_repetition_pattern` function, which
+simulates key accesses based on a repetition pattern. Some accesses are
+regularly repeated from history, while others are randomly selected from
+a subset of initial keys.
+
+Functions:
+    generate_repetition_pattern(
+        repetition_interval: int,
+        repetition_offset: int,
+        requests_count: int,
+        requests: list[int],
+        keys_range: ndarray,
+        num_keys: int
+    ) -> int
+        Returns the next key index according to a repetition access pattern.
+"""
+
 import numpy as np
 
 from components.logs.levels.error_logger import error

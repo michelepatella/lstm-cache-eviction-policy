@@ -1,3 +1,17 @@
+"""lstm_cache.py
+
+Module implementing an LSTM-based cache.
+
+This module provides the `LSTMCache` class, which manages key-value pairs in a
+cache using an LSTM eviction policy when the cache is full. It interacts with an
+external API for eviction decisions, tracks metrics via a logger, and handles
+expired keys automatically.
+
+Classes:
+    LSTMCache(cache_class, metrics_logger, config)
+        LSTM cache implementation supporting put, eviction, and key operations.
+"""
+
 import random
 from http.client import HTTPException
 from typing import Any
@@ -30,7 +44,7 @@ class LSTMCache(BaseCache):
     eviction policy when the cache is full.
 
     Attributes:
-        _api_kwargs (dict): Keyword arguments used by the eviction
+        api_kwargs (dict): Keyword arguments used by the eviction
                             policy API.
     """
 
@@ -59,13 +73,13 @@ class LSTMCache(BaseCache):
         super().__init__(cache_class, metrics_logger, config)
 
         # Set API kwargs to use
-        self._api_kwargs = config.simulations.api_kwargs
+        self.api_kwargs = config.api_kwargs
 
         debug(
             "Cache initialization executed",
             extra={
                 "maxsize": self.maxsize,
-                "api_kwargs": self._api_kwargs.__dict__,
+                "api_kwargs": self.api_kwargs.__dict__,
                 "context": "LSTM cache",
             },
         )
@@ -195,7 +209,6 @@ class LSTMCache(BaseCache):
             # before insertion
             self._remove_expired_keys(current_time)
 
-            api_kwargs = None
             # Check whether the cache is full
             if key not in self.store and len(self.store) >= self.maxsize:
                 # Get the sequence length
@@ -225,21 +238,38 @@ class LSTMCache(BaseCache):
                                 self.store.keys(),
                             ),
                             API_PARAM_LAST_ACCESSES_NAME: last_accesses,
-                            API_PARAM_USER_API_KWARGS_NAME: self._api_kwargs.__dict__,
+                            API_PARAM_USER_API_KWARGS_NAME: self.api_kwargs.__dict__,
                         },
                     )
                     data = Box(response.json())
 
-                    # Extract the key(s) from API response
-                    # as well as the kwargs used
-                    key_to_evict = list(data.keys_to_evict)
+                    lstm_scores = {
+                        k: float(v) for k, v in data.key_scores.items()
+                    }
 
-                # Evict key(s)
-                for key in key_to_evict:
-                    self.evict_key(key)
+                    max_freq = max(
+                        len(self.metrics_logger.access_events[k])
+                        for k in self.store.keys()
+                    )
+                    priorities = {}
+                    for k in self.store.keys():
+                        lfu_score = (
+                            len(self.metrics_logger.access_events[k])
+                            / max_freq
+                            if max_freq > 0
+                            else 0
+                        )
+                        priorities[k] = (
+                            0.7 * lstm_scores.get(k, 0) + (1 - 0.7) * lfu_score
+                        )
 
-                    # Track eviction event
-                    self.metrics_logger.log_eviction(key, current_time)
+                    key_to_evict = min(priorities, key=priorities.get)
+
+                # Evict key
+                self.evict_key(key_to_evict)
+
+                # Track eviction event
+                self.metrics_logger.log_eviction(key_to_evict, current_time)
 
             # Insert the key
             self._put_key(key, current_time)

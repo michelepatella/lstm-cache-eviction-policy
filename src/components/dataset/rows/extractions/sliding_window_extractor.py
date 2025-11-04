@@ -1,3 +1,22 @@
+"""sliding_window_extractor.py
+
+Utility module for extracting sliding windows of dataset rows.
+
+This module provides the `extract_sliding_window_dataset_rows` function, which
+retrieves a sequence of consecutive rows from a pandas DataFrame based on a
+specified index and window size. If the dataset does not contain enough rows,
+the function returns None.
+
+Functions:
+    extract_sliding_window_dataset_rows(
+        df: pd.DataFrame,
+        idx: int,
+        window_size: int
+    ) -> pd.DataFrame | None
+        Returns a sliding window of rows from the dataset or None if
+        insufficient rows are available.
+"""
+
 import pandas as pd
 
 from components.logs.levels.debug_logger import debug

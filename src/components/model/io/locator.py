@@ -1,9 +1,23 @@
+"""locator.py
+
+Utility module for retrieving absolute paths to trained models.
+
+This module provides the `get_model_abs_path` function, which returns
+the file path of a trained PyTorch model based on the data distribution
+mode (static or dynamic).
+
+Functions:
+    get_model_abs_path(data_distribution_mode: str) -> str
+        Returns the absolute path to the trained model corresponding
+        to the specified data distribution mode.
+"""
+
 from components.const import (
     MODEL_TRAINED_DYNAMIC_FILE_PATH,
     MODEL_TRAINED_STATIC_FILE_PATH,
 )
 from components.logs.levels.debug_logger import debug
-from src.const import DATA_DISTRIBUTION_STATIC_MODE
+from const import DATA_DISTRIBUTION_STATIC_MODE
 
 
 def get_model_abs_path(data_distribution_mode: str) -> str:

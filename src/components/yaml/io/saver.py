@@ -1,7 +1,24 @@
+"""saver.py
+
+Utility module for saving Python data structures to a YAML file.
+
+This module provides the `save_yaml` function, which serializes a
+given data dictionary into YAML format and writes it to the specified
+file path, ensuring keys are sorted for consistent output.
+
+Functions:
+    save_yaml(
+        data_dict: dict[str, Any],
+        path: str
+    ) -> None
+        Writes the contents of a Python dictionary to a YAML file.
+"""
+
 from typing import Any
 
 import yaml
 
+from components.const import YAML_DUMP_SORT_KEYS
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
@@ -39,7 +56,7 @@ def save_yaml(data_dict: dict[str, Any], path: str) -> None:
         # Save provided data dictionary at
         # specified path
         with open(path, "w") as f:
-            yaml.dump(data_dict, f)
+            yaml.dump(data_dict, f, sort_keys=YAML_DUMP_SORT_KEYS)
 
         debug(
             "YAML saving completed",

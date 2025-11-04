@@ -1,3 +1,21 @@
+"""saver.py
+
+Utility module for saving dictionaries or lists of dictionaries to JSON files.
+
+This module provides the `save_json` function, which serializes Python data
+(dictionaries or lists of dictionaries) into a JSON file on disk with a
+configurable indentation level.
+
+Functions:
+    save_json(
+        data_dict: dict | list[dict],
+        path: str,
+        json_indent: int = JSON_INDENT
+    ) -> None
+        Save a Python dictionary or a list of dictionaries as a JSON file
+        at the specified path with optional indentation.
+"""
+
 import json
 
 from components.const import JSON_INDENT

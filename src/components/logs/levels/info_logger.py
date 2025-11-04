@@ -1,3 +1,21 @@
+"""info_logger.py
+
+Info-level logging utility.
+
+This module provides a convenience function `info` for logging
+messages at the info level. It integrates with the application's
+structured logging system, allowing contextual information
+via log phases and optional extra fields.
+
+Functions:
+    info(
+        msg: str, log_phase: str = LOGS_FIELD_PHASE_DEFAULT,
+        extra: dict[str, Any] | None = None,
+        logger_name: str = LOGS_LOGGER_NAME
+    ) -> None
+        Logs a message at info level with optional context.
+"""
+
 import logging
 from typing import Any
 

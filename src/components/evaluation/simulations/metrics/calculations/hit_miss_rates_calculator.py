@@ -1,3 +1,21 @@
+"""hit_miss_rates_calculator.py
+
+Utility module for calculating cache hit and miss rates.
+
+This module provides the `calculate_hit_miss_rate` function, which
+computes the hit and miss rates of a cache given the number of hits,
+number of misses, and total cache accesses. The rates are expressed as
+percentages.
+
+Functions:
+    calculate_hit_miss_rate(
+        num_hits: int,
+        num_misses: int,
+        total_cache_accesses: int
+    ) -> tuple[float, float]
+        Returns the hit rate and miss rate as percentages.
+"""
+
 from components.logs.levels.info_logger import info
 from components.math.percentage_calculator import calculate_percentage
 

@@ -1,3 +1,21 @@
+"""setter.py
+
+Utility module to set the mode of a PyTorch model.
+
+This module provides the `set_model_mode` function, which allows switching
+a PyTorch model between standard training, evaluation, or MC Dropout modes.
+It optionally sets a flag on the model to indicate MC Dropout is enabled.
+
+Functions:
+    set_model_mode(
+        model: torch.nn.Module,
+        mode: str,
+        mc_dropout_flag_name: str = None,
+        mc_dropout_flag_value: Any = MC_DROPOUT_ENABLED
+    ) -> None
+        Set the mode of a PyTorch model, optionally enabling MC Dropout.
+"""
+
 from typing import Any
 
 import torch

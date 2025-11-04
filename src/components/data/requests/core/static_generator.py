@@ -1,3 +1,18 @@
+"""static_generator.py
+
+Module for generating static request sequences with fixed Zipfian distribution.
+
+This module provides the `generate_static_requests` function, which produces
+a sequence of requested keys along with their corresponding timestamps in hours.
+Unlike dynamic requests, static requests use a fixed Zipfian parameter, meaning
+the access distribution over keys remains constant throughout the simulation.
+
+Functions:
+    generate_static_requests(config: Any) -> tuple[list[int], ndarray]
+        Generates a list of requested keys and their timestamps in hours with a
+        fixed Zipfian alpha parameter.
+"""
+
 from typing import Any
 
 import numpy as np
@@ -25,7 +40,7 @@ def generate_static_requests(
             - requests: List of generated keys requested.
             - timestamps_hours: Corresponding timestamps of requests in hours.
     """
-    alpha_fixed = config.data.pattern.access.zipf.alpha.fixed
+    alpha_fixed = config.data.patterns.access.zipf.alpha.fixed
 
     info(
         "Static requests generation started",

@@ -1,3 +1,22 @@
+"""updater.py
+
+Utility module for handling cyclic time updates.
+
+This module provides the `update_cyclic_time` function, which
+updates the current time within a repeating cycle, adjusting
+the cycle count if the time overflows the period.
+
+Functions:
+    update_cyclic_time(
+        current_time_in_cycle: float,
+        cycle_count: int,
+        period: float,
+        delta_t: float
+    ) -> tuple[float, int]
+        Updates the current time in a cycle and increments the cycle count
+        if the updated time exceeds the period.
+"""
+
 from components.logs.levels.error_logger import error
 
 

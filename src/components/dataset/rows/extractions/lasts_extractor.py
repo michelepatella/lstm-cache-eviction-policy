@@ -1,3 +1,23 @@
+"""lasts_extractor.py
+
+Utility module for extracting the last rows from a dataset.
+
+This module provides the `extract_last_rows_from_dataset` function, which
+retrieves a sliding window of the last rows from a pandas DataFrame and
+returns them as a list of tuples, each containing the hour (converted from
+seconds) and the corresponding key. It ensures the extracted rows are properly
+decoded and handles cases where there is insufficient data.
+
+Functions:
+    extract_last_rows_from_dataset(
+        current_idx: int,
+        seq_len: int,
+        df: pd.DataFrame,
+        time_conversion_factor: float = TIME_SECONDS_IN_HOUR
+    ) -> list[tuple[float, int]] | None
+        Returns the last sequence of dataset rows as tuples of (hour, key).
+"""
+
 import pandas as pd
 
 from components.const import (

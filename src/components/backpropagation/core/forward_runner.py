@@ -1,3 +1,16 @@
+"""forward_runner.py
+
+Module for performing a forward pass and optional loss computation.
+
+This module provides the `compute_forward` function, which handles moving
+a batch to a device, computing the model's forward pass, and optionally
+calculating the loss with a given criterion.
+
+Functions:
+    compute_forward(batch, model, device, criterion)
+        Computes the forward pass of a model and optionally calculates loss.
+"""
+
 import torch
 
 from components.device.mover import (
