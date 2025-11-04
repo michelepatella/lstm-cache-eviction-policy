@@ -11,7 +11,7 @@ Classes:
     LSTMCache(cache_class, metrics_logger, config)
         LSTM cache implementation supporting put, eviction, and key operations.
 """
-
+import os
 import random
 from http.client import HTTPException
 from typing import Any
@@ -19,22 +19,25 @@ from typing import Any
 import pandas as pd
 import requests
 from box import Box
+from dotenv import load_dotenv
 
 from components.caches.implementations.utils.base_cache import BaseCache
 from components.caches.utils.cache_metrics_logger import (
     CacheMetricsLogger,
 )
 from components.const import (
-    API_ENDPOINT,
     API_PARAM_KEYS_IN_CACHE_NAME,
     API_PARAM_LAST_ACCESSES_NAME,
-    API_PARAM_USER_API_KWARGS_NAME,
+    API_PARAM_USER_API_KWARGS_NAME, API_ENV_VAR_ENDPOINT_NAME,
 )
 from components.dataset.rows.extractions.lasts_extractor import (
     extract_last_rows_from_dataset,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
+
+# Load environment variables
+load_dotenv()
 
 
 class LSTMCache(BaseCache):
@@ -72,7 +75,8 @@ class LSTMCache(BaseCache):
         # Cache class initialization
         super().__init__(cache_class, metrics_logger, config)
 
-        # Set API kwargs to use
+        # Set API endpoint and kwargs to use
+        self.api_endpoint = os.getenv(API_ENV_VAR_ENDPOINT_NAME)
         self.api_kwargs = config.api_kwargs
 
         debug(
@@ -232,7 +236,7 @@ class LSTMCache(BaseCache):
                     # Call API to get
                     # the key to be evicted from the cache
                     response = requests.post(
-                        API_ENDPOINT,
+                        self.api_endpoint,
                         json={
                             API_PARAM_KEYS_IN_CACHE_NAME: list(
                                 self.store.keys(),
