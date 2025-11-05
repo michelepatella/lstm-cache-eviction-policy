@@ -2,6 +2,7 @@
 # Constants
 # -------------------------------
 
+ROOT_DIRECTORY := .
 SRC_DIRECTORY := src
 DOCS_OUTPUT_DIRECTORY := docs/_build/html
 
@@ -99,11 +100,11 @@ dvc_plots_show:
 
 # Fix code
 code_fix:
-	ruff check $(SRC_DIRECTORY) --fix
+	ruff check $(ROOT_DIRECTORY) --fix
 
 # Format code
 code_format:
-	ruff format $(SRC_DIRECTORY)
+	ruff format $(ROOT_DIRECTORY)
 
 # Lint code with Pylint
 code_lint:
@@ -111,7 +112,7 @@ code_lint:
 
 # Check type on code
 code_check_type:
-	mypy $(SRC_DIRECTORY)
+	mypy $(ROOT_DIRECTORY)
 
 
 # -------------------------------

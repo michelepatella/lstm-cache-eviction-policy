@@ -11,7 +11,7 @@ kwargs:
   confidence_level:
     value: 0.95
   time_step_increment:
-    value: 0.02
+    value: 0.05
     max: 5.0
   num_evictions:
     value: 1

@@ -15,14 +15,14 @@ Functions:
         from a list of dataset columns.
 """
 
-from components.const import DATASET_COLUMNS
+from components.const import DATASET_PROCESSED_COLUMNS
 from components.logs.levels.error_logger import error
 from const import DATASET_COLUMN_REQUEST_NAME
 
 
 def extract_features_target_from_dataset_columns(
     columns: list[str],
-    target_column_idx: int = DATASET_COLUMNS.index(
+    target_column_idx: int = DATASET_PROCESSED_COLUMNS.index(
         DATASET_COLUMN_REQUEST_NAME,
     ),
 ) -> tuple[list[str], str]:

@@ -300,7 +300,7 @@ def run_simulations() -> None:
 
         # Experiment tracking
         mlflow.log_params(
-            prepare_config().model_dump()
+            prepare_config().model_dump(),
         )
         mlflow.log_artifact(results_file_path)
         mlflow.log_artifact(plot_save_path)

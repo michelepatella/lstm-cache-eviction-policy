@@ -22,7 +22,7 @@ from typing import Any
 
 import torch
 
-from components.const import DATASET_FEATURE_COLUMNS
+from components.const import DATASET_PROCESSED_FEATURE_COLUMNS
 from components.device.mover import (
     move_to_device,
 )
@@ -72,7 +72,7 @@ def initialize_model_environment(
     num_keys = max_key - min_key + 1
     embedding_dim = config.model.sequence.embedding.dimension
     class_weight_type = config.loss.class_weight.type
-    num_features = len(DATASET_FEATURE_COLUMNS)
+    num_features = len(DATASET_PROCESSED_FEATURE_COLUMNS)
 
     # Define the device for computations
     device = select_device(device_type)

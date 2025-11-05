@@ -52,10 +52,18 @@ def call_predictor_service(
         # Prepare parameters for predictor service
         params = Box(PREDICTOR_SERVICE_PARAMS)
         params[PREDICTOR_SERVICE_PARAM_LAST_ACCESSES_NAME] = last_accesses
-        params[PREDICTOR_SERVICE_PARAM_ROLLOUT_HORIZON_NAME] = api_config.kwargs.rollout_horizon.value
-        params[PREDICTOR_SERVICE_PARAM_MC_DROPOUT_SAMPLES_NAME] = api_config.kwargs.mc_dropout_samples.value
-        params[PREDICTOR_SERVICE_PARAM_TIME_STEP_INCREMENT_NAME] = api_config.kwargs.time_step_increment.value
-        params[PREDICTOR_SERVICE_PARAM_UNBIASED_VARIANCE_NAME] = api_config.kwargs.unbiased_variance.value
+        params[PREDICTOR_SERVICE_PARAM_ROLLOUT_HORIZON_NAME] = (
+            api_config.kwargs.rollout_horizon.value
+        )
+        params[PREDICTOR_SERVICE_PARAM_MC_DROPOUT_SAMPLES_NAME] = (
+            api_config.kwargs.mc_dropout_samples.value
+        )
+        params[PREDICTOR_SERVICE_PARAM_TIME_STEP_INCREMENT_NAME] = (
+            api_config.kwargs.time_step_increment.value
+        )
+        params[PREDICTOR_SERVICE_PARAM_UNBIASED_VARIANCE_NAME] = (
+            api_config.kwargs.unbiased_variance.value
+        )
 
         debug(
             "Predictor service call started",

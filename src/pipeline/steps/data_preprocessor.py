@@ -39,7 +39,7 @@ from const import (
     DATASET_COLUMN_TIMESTAMP_NAME,
     DATASET_RAW_TYPE,
     LOGS_LOGGER_NAME,
-    MLFLOW_NESTED,
+    MLFLOW_NESTED, DATASET_COLUMN_REQUEST_NAME,
 )
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
@@ -116,7 +116,7 @@ def preprocess_data() -> None:
         # Remove duplicates
         duplicates_removed_df = remove_dataset_duplicates(
             missing_values_removed_df,
-            [DATASET_COLUMN_TIMESTAMP_NAME],
+            [DATASET_COLUMN_TIMESTAMP_NAME, DATASET_COLUMN_REQUEST_NAME],
         )
 
         # Build new features
