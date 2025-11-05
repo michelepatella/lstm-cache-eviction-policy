@@ -23,7 +23,7 @@ import torch
 
 from components.backpropagation.core.forward_runner import compute_forward
 from components.const import (
-    DATASET_COLUMNS,
+    DATASET_PROCESSED_COLUMNS,
     MC_DROPOUT_FLAG_NAME,
     MC_DROPOUT_NUM_SAMPLES_DEFAULT,
     MODEL_EVAL_MODE,
@@ -96,7 +96,7 @@ def compute_mc_dropout_forward(
             for _i in range(num_mc_dropout_samples):
                 # Compute forward pass and get the
                 # model outputs
-                if len(batch) == len(DATASET_COLUMNS):
+                if len(batch) == len(DATASET_PROCESSED_COLUMNS):
                     _, outputs = compute_forward(batch, model, device)
                 else:
                     outputs = model(*batch)

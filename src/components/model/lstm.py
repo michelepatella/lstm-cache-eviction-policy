@@ -22,7 +22,8 @@ from torch import nn
 
 from components.const import (
     MC_DROPOUT_DISABLED,
-    MODEL_PARAM_NAMES, TENSOR_SEQUENCE_DIM,
+    MODEL_PARAM_NAMES,
+    TENSOR_SEQUENCE_DIM,
 )
 from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug

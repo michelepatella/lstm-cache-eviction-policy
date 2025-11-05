@@ -11,7 +11,8 @@ from api.const import (
     GATEWAY_API_RETURN_CONF_MATRIX_NAME,
     GATEWAY_API_RETURN_KEY_SCORES_NAME,
     GATEWAY_API_RETURN_KEYS_TO_EVICT_NAME,
-    GATEWAY_API_RETURN_PROB_MATRIX_NAME, LOGS_PHASE_API,
+    GATEWAY_API_RETURN_PROB_MATRIX_NAME,
+    LOGS_PHASE_API,
 )
 from api.gateway.callers.predictor_service_caller import (
     call_predictor_service,

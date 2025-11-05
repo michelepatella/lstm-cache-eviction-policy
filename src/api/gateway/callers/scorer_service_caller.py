@@ -58,10 +58,18 @@ def call_scorer_service(
         params = Box(SCORER_SERVICE_PARAMS)
         params[SCORER_SERVICE_PARAM_OUTPUTS_NAME] = outputs
         params[SCORER_SERVICE_PARAM_VARIANCES_NAME] = variances
-        params[SCORER_SERVICE_PARAM_CONFIDENCE_LEVEL_NAME] = api_config.kwargs.confidence_level.value
-        params[SCORER_SERVICE_PARAM_CONFIDENCE_LEVEL_NAME] = api_config.kwargs.confidence_level.value
-        params[SCORER_SERVICE_PARAM_PROB_WEIGHT_NAME] = api_config.kwargs.prob_weight.value
-        params[SCORER_SERVICE_PARAM_CONF_WEIGHT_NAME] = api_config.kwargs.conf_weight.value
+        params[SCORER_SERVICE_PARAM_CONFIDENCE_LEVEL_NAME] = (
+            api_config.kwargs.confidence_level.value
+        )
+        params[SCORER_SERVICE_PARAM_CONFIDENCE_LEVEL_NAME] = (
+            api_config.kwargs.confidence_level.value
+        )
+        params[SCORER_SERVICE_PARAM_PROB_WEIGHT_NAME] = (
+            api_config.kwargs.prob_weight.value
+        )
+        params[SCORER_SERVICE_PARAM_CONF_WEIGHT_NAME] = (
+            api_config.kwargs.conf_weight.value
+        )
 
         debug(
             "Scorer service call started",

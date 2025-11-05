@@ -36,10 +36,11 @@ from components.const import (
     AUTOREGRESSIVE_ROLLOUT_TIME_ARRAY_IDX,
     DATASET_COLUMN_COS_TIME_NAME,
     DATASET_COLUMN_SIN_TIME_NAME,
-    DATASET_COLUMNS,
+    DATASET_PROCESSED_COLUMNS,
     TENSOR_FEATURES_DIM,
     TENSOR_OUTPUTS_BATCH_DIM,
-    TORCH_DTYPE, TENSOR_SEQUENCE_DIM,
+    TENSOR_SEQUENCE_DIM,
+    TORCH_DTYPE,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -113,12 +114,12 @@ def compute_autoregressive_rollout(
             features_seq[
                 AUTOREGRESSIVE_ROLLOUT_LAST_TIME_BATCH_IDX,
                 AUTOREGRESSIVE_ROLLOUT_LAST_TIME_IDX,
-                DATASET_COLUMNS.index(DATASET_COLUMN_SIN_TIME_NAME),
+                DATASET_PROCESSED_COLUMNS.index(DATASET_COLUMN_SIN_TIME_NAME),
             ].item(),
             features_seq[
                 AUTOREGRESSIVE_ROLLOUT_LAST_TIME_BATCH_IDX,
                 AUTOREGRESSIVE_ROLLOUT_LAST_TIME_IDX,
-                DATASET_COLUMNS.index(DATASET_COLUMN_COS_TIME_NAME),
+                DATASET_PROCESSED_COLUMNS.index(DATASET_COLUMN_COS_TIME_NAME),
             ].item(),
         )
 

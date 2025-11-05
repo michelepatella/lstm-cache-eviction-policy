@@ -235,7 +235,7 @@ class LSTMCache(BaseCache):
                 # are not available
                 if last_accesses is None:
                     # Eviction fallback policy: Random
-                    keys_to_evict = random.choice(list(self.store.keys()))
+                    key_to_evict = random.choice(list(self.store.keys()))
                 else:
                     # Call API to get
                     # the key to be evicted from the cache
@@ -252,14 +252,16 @@ class LSTMCache(BaseCache):
                     data = Box(response.json())
 
                     # Retrieve keys to evict
-                    keys_to_evict = data.keys_to_evict
+                    key_to_evict = data.keys_to_evict[0]
 
                 # Evict key
-                for key_to_evict in keys_to_evict:
-                    self.evict_key(key_to_evict)
+                self.evict_key(key_to_evict)
 
-                    # Track eviction event
-                    self.metrics_logger.log_eviction(key_to_evict, current_time)
+                # Track eviction event
+                self.metrics_logger.log_eviction(
+                    key_to_evict,
+                    current_time,
+                )
 
             # Insert the key
             self._put_key(key, current_time)

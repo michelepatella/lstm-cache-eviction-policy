@@ -21,7 +21,6 @@ from datetime import datetime, timezone
 
 from dotenv import load_dotenv
 from elasticsearch import Elasticsearch, helpers
-from elasticsearch.helpers import BulkIndexError
 
 from components.const import (
     LOGS_ACTIONS_FIELD_INDEX_NAME,
