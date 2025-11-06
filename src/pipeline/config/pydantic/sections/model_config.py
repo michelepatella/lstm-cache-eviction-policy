@@ -23,7 +23,9 @@ Classes:
         Aggregates all model configuration settings.
 """
 
-from pydantic import BaseModel, confloat, conint, model_validator
+from typing import Annotated
+
+from pydantic import BaseModel, Field, model_validator
 
 from components.assertions.choice_field_assertor import assert_choice_field
 from pipeline.const import (
@@ -39,7 +41,7 @@ class ModelOptimizationsPruningConfig(BaseModel):
         amount (float): Pruning amount to apply (in [0.0, 1.0]).
     """
 
-    amount: confloat(ge=0.0, le=1.0)
+    amount: Annotated[float, Field(ge=0.0, le=1.0)]
 
 
 class ModelOptimizationsQuantizationConfig(BaseModel):
@@ -125,13 +127,13 @@ class ModelParamsConfig(BaseModel):
         proj_size (int): Output projection size (>= 0).
     """
 
-    hidden_size: conint(gt=0)
-    num_layers: conint(gt=0)
+    hidden_size: Annotated[int, Field(gt=0)]
+    num_layers: Annotated[int, Field(gt=0)]
     bias: bool
     batch_first: bool
-    dropout: confloat(ge=0, lt=1)
+    dropout: Annotated[float, Field(ge=0, lt=1)]
     bidirectional: bool
-    proj_size: conint(ge=0)
+    proj_size: Annotated[int, Field(ge=0)]
 
 
 class ModelSequenceEmbeddingConfig(BaseModel):
@@ -141,7 +143,7 @@ class ModelSequenceEmbeddingConfig(BaseModel):
         dimension (int): Dimension of the embedding vector (> 0).
     """
 
-    dimension: conint(gt=0)
+    dimension: Annotated[int, Field(gt=0)]
 
 
 class ModelSequenceConfig(BaseModel):
@@ -152,7 +154,7 @@ class ModelSequenceConfig(BaseModel):
         embedding (ModelSequenceEmbeddingConfig): Embedding configuration.
     """
 
-    length: conint(gt=0)
+    length: Annotated[int, Field(gt=0)]
     embedding: ModelSequenceEmbeddingConfig
 
 

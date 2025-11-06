@@ -28,7 +28,9 @@ Classes:
         Root class aggregating all validation settings.
 """
 
-from pydantic import BaseModel, confloat, conint, model_validator
+from typing import Annotated
+
+from pydantic import BaseModel, Field, model_validator
 
 from components.assertions.choice_field_assertor import assert_choice_field
 from const import HW_DEVICE_NAMES
@@ -74,7 +76,7 @@ class ValidationGeneralConfig(BaseModel):
         shuffle (bool): Whether to shuffle the dataset during validation.
     """
 
-    batch_size: conint(gt=0)
+    batch_size: Annotated[int, Field(gt=0)]
     shuffle: bool
 
 
@@ -86,8 +88,8 @@ class ValidationTimeSeriesCVConfig(BaseModel):
         epochs (int): Number of epochs for each fold (> 0).
     """
 
-    folds: conint(gt=1)
-    epochs: conint(gt=0)
+    folds: Annotated[int, Field(gt=1)]
+    epochs: Annotated[int, Field(gt=0)]
 
 
 class ValidationEarlyStoppingConfig(BaseModel):
@@ -99,8 +101,8 @@ class ValidationEarlyStoppingConfig(BaseModel):
         delta (float): Minimum change to qualify as improvement (>= 0).
     """
 
-    patience: conint(ge=0)
-    delta: confloat(ge=0)
+    patience: Annotated[int, Field(ge=0)]
+    delta: Annotated[float, Field(ge=0)]
 
 
 class ValidationSearchSpaceModelConfig(BaseModel):
@@ -112,9 +114,9 @@ class ValidationSearchSpaceModelConfig(BaseModel):
         dropout (list[float]): Allowed range of dropout values (in [0, 1)).
     """
 
-    hidden_size: list[conint(gt=0)]  # type: ignore[valid-type]
-    num_layers: list[conint(gt=0)]  # type: ignore[valid-type]
-    dropout: list[confloat(ge=0, lt=1)]  # type: ignore[valid-type]
+    hidden_size: list[Annotated[int, Field(gt=0)]]
+    num_layers: list[Annotated[int, Field(gt=0)]]
+    dropout: list[Annotated[float, Field(ge=0, lt=1)]]
 
 
 class ValidationSearchSpaceOptimizerConfig(BaseModel):
@@ -124,7 +126,7 @@ class ValidationSearchSpaceOptimizerConfig(BaseModel):
         learning_rate (list[float]): Allowed learning rate values (> 0).
     """
 
-    learning_rate: list[confloat(gt=0)]  # type: ignore[valid-type]
+    learning_rate: list[Annotated[float, Field(gt=0)]]
 
 
 class ValidationSearchSpaceConfig(BaseModel):

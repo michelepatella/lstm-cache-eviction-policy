@@ -18,7 +18,9 @@ Functions:
 """
 
 import logging
-from typing import Any
+from typing import Any, cast
+
+from _typeshed import SupportsKeysAndGetItem
 
 from components.const import (
     LOGS_FIELD_PHASE_DEFAULT,
@@ -54,7 +56,7 @@ def log(
 
     # Prepare extra section as dictionary
     extra_dict = {LOGS_FIELD_PHASE_NAME: log_phase}
-    extra_dict.update(extra)
+    extra_dict.update(cast("SupportsKeysAndGetItem[str, str]", extra))
 
     # Log message using provided level
     logger = logging.getLogger(LOGS_LOGGER_NAME)
