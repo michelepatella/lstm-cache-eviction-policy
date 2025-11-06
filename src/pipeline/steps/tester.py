@@ -33,10 +33,11 @@ from components.model.best.initializer import (
     initialize_best_model,
 )
 from const import (
+    DATA_DYNAMIC_MODE,
     DATA_STATIC_MODE,
     DATASET_TESTING_SPLIT_TYPE,
     LOGS_LOGGER_NAME,
-    MLFLOW_NESTED, DATA_DYNAMIC_MODE,
+    MLFLOW_NESTED,
 )
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
@@ -46,7 +47,8 @@ from pipeline.const import (
     LOGS_PHASE_TESTING,
     MODEL_COMPUTE_METRICS_TESTING,
     RESULTS_DYNAMIC_MODEL_FILE_PATH,
-    RESULTS_STATIC_MODEL_FILE_PATH, RESULTS_REAL_MODEL_FILE_PATH,
+    RESULTS_REAL_MODEL_FILE_PATH,
+    RESULTS_STATIC_MODEL_FILE_PATH,
 )
 
 # Load env variables

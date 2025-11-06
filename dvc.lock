@@ -27,7 +27,7 @@ stages:
       hash: md5
       md5: 07d5b57488a510f1f2efed337d75545e
       size: 4881
-    - path: 
+    - path:
         src/components/data/patterns/access/variants/memory_fallback_generator.py
       hash: md5
       md5: 59da4400dadcd207d41605ccf27df009
@@ -56,7 +56,7 @@ stages:
       hash: md5
       md5: 69c45dd862a04455ae5deaf2d2a16175
       size: 2694
-    - path: 
+    - path:
         src/components/data/patterns/temporal/variants/periodic_calculator.py
       hash: md5
       md5: d395b55d88871a56109aba48be80056d
@@ -481,7 +481,7 @@ stages:
       hash: md5
       md5: 414e94ba0605fa4f03ad75e76ea8b52f
       size: 1487
-    - path: 
+    - path:
         src/components/dataset/columns/extractions/features_target_extractor.py
       hash: md5
       md5: 56ca24e70f74cf1f3477a60c36416d84
@@ -498,7 +498,7 @@ stages:
       hash: md5
       md5: 289fb7a539a62c74bad70c456db3bab9
       size: 3439
-    - path: 
+    - path:
         src/components/dataset/rows/calculations/effective_rows_calculator.py
       hash: md5
       md5: 047694161cb632377fe74bf73d6b8286
@@ -551,12 +551,12 @@ stages:
       hash: md5
       md5: f5463d874dc54414fb8aa7fea4c70819
       size: 5242
-    - path: 
+    - path:
         src/components/evaluation/model/metrics/calculations/class_report_calculator.py
       hash: md5
       md5: b92aa69c6cd102191b1835ecd37e674e
       size: 2920
-    - path: 
+    - path:
         src/components/evaluation/model/metrics/calculations/cohen_kappa_score_calculator.py
       hash: md5
       md5: 87c50fe0926478683a3ebf2e28508184
@@ -851,7 +851,7 @@ stages:
       hash: md5
       md5: 414e94ba0605fa4f03ad75e76ea8b52f
       size: 1487
-    - path: 
+    - path:
         src/components/dataset/columns/extractions/features_target_extractor.py
       hash: md5
       md5: 56ca24e70f74cf1f3477a60c36416d84
@@ -868,7 +868,7 @@ stages:
       hash: md5
       md5: 289fb7a539a62c74bad70c456db3bab9
       size: 3439
-    - path: 
+    - path:
         src/components/dataset/rows/calculations/effective_rows_calculator.py
       hash: md5
       md5: 047694161cb632377fe74bf73d6b8286
@@ -901,12 +901,12 @@ stages:
       hash: md5
       md5: f5463d874dc54414fb8aa7fea4c70819
       size: 5242
-    - path: 
+    - path:
         src/components/evaluation/model/metrics/calculations/class_report_calculator.py
       hash: md5
       md5: b92aa69c6cd102191b1835ecd37e674e
       size: 2920
-    - path: 
+    - path:
         src/components/evaluation/model/metrics/calculations/cohen_kappa_score_calculator.py
       hash: md5
       md5: 87c50fe0926478683a3ebf2e28508184
@@ -1185,7 +1185,7 @@ stages:
       hash: md5
       md5: 414e94ba0605fa4f03ad75e76ea8b52f
       size: 1487
-    - path: 
+    - path:
         src/components/dataset/columns/extractions/features_target_extractor.py
       hash: md5
       md5: 56ca24e70f74cf1f3477a60c36416d84
@@ -1202,7 +1202,7 @@ stages:
       hash: md5
       md5: 289fb7a539a62c74bad70c456db3bab9
       size: 3439
-    - path: 
+    - path:
         src/components/dataset/rows/calculations/effective_rows_calculator.py
       hash: md5
       md5: 047694161cb632377fe74bf73d6b8286
@@ -1231,12 +1231,12 @@ stages:
       hash: md5
       md5: f5463d874dc54414fb8aa7fea4c70819
       size: 5242
-    - path: 
+    - path:
         src/components/evaluation/model/metrics/calculations/class_report_calculator.py
       hash: md5
       md5: b92aa69c6cd102191b1835ecd37e674e
       size: 2920
-    - path: 
+    - path:
         src/components/evaluation/model/metrics/calculations/cohen_kappa_score_calculator.py
       hash: md5
       md5: 87c50fe0926478683a3ebf2e28508184
@@ -1442,12 +1442,12 @@ stages:
       hash: md5
       md5: 849e7904a1d404826ce8b2c00a2abd94
       size: 2603
-    - path: 
+    - path:
         src/components/caches/implementations/items/evictions/least_frequent_item_evictor.py
       hash: md5
       md5: ae9cc1b0d8a68d2543e1335460f98395
       size: 3706
-    - path: 
+    - path:
         src/components/caches/implementations/items/evictions/oldest_item_evictor.py
       hash: md5
       md5: 6ee9549138b6be9b39a92611bc758a3c
@@ -1540,7 +1540,7 @@ stages:
       hash: md5
       md5: 9e1368fe7c2abb50dfbd9c3924c4e566
       size: 1131
-    - path: 
+    - path:
         src/components/dataset/columns/extractions/features_target_extractor.py
       hash: md5
       md5: f074a20bc6a684db3677128d8220eb7a
@@ -1557,7 +1557,7 @@ stages:
       hash: md5
       md5: 6b1c9efbd7654872049e867d9611ff58
       size: 2966
-    - path: 
+    - path:
         src/components/dataset/rows/calculations/effective_rows_calculator.py
       hash: md5
       md5: 9df7452c96a71826e434bceb42063b2c
@@ -1582,12 +1582,12 @@ stages:
       hash: md5
       md5: 12ab4b2da4d012f202df9b03ff186bb7
       size: 1138
-    - path: 
+    - path:
         src/components/evaluation/simulations/metrics/calculations/eviction_mistake_rate_calculator.py
       hash: md5
       md5: 03ad66957db1022a9578c39a98370e45
       size: 3926
-    - path: 
+    - path:
         src/components/evaluation/simulations/metrics/calculations/hit_miss_rates_calculator.py
       hash: md5
       md5: ce2820ff10b71b96b0be15543f7e4ed0

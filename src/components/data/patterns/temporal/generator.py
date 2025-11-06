@@ -65,7 +65,9 @@ def generate_temporal_pattern(
         # current hour in day
         current_hour_in_day = current_seconds_in_day / TIME_SECONDS_IN_HOUR
 
-        periodic_pattern_config = config.data.synthetic.patterns.temporal.periodic
+        periodic_pattern_config = (
+            config.data.synthetic.patterns.temporal.periodic
+        )
         # Get scale and amplitude for
         # periodic component generation
         periodic_scale = periodic_pattern_config.scale
@@ -79,7 +81,9 @@ def generate_temporal_pattern(
             current_hour_in_day,
         )
 
-        burstiness_pattern_config = config.data.synthetic.patterns.temporal.burstiness
+        burstiness_pattern_config = (
+            config.data.synthetic.patterns.temporal.burstiness
+        )
         # Get burst high and low for burstiness,
         # as well as burst start and end hours
         burst_high = burstiness_pattern_config.high

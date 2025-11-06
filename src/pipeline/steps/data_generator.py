@@ -46,12 +46,13 @@ from components.visualization.zipf_loglog_plotter import (
     plot_zipf_loglog,
 )
 from const import (
+    DATA_REAL_MODE,
     DATA_STATIC_MODE,
     DATASET_COLUMN_REQUEST_NAME,
     DATASET_COLUMN_TIMESTAMP_NAME,
     DATASET_RAW_TYPE,
     LOGS_LOGGER_NAME,
-    MLFLOW_NESTED, DATA_REAL_MODE,
+    MLFLOW_NESTED,
 )
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (

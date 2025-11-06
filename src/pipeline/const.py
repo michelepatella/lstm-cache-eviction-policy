@@ -133,21 +133,13 @@ PLOT_REAL_ZIPF_LOG_LOG_FILE_PATH = (
     PROJECT_ROOT / "reports" / "plots" / "real" / "real_zipf_log_log.png"
 )
 PLOT_REAL_DAILY_PROFILE_FILE_PATH = (
-    PROJECT_ROOT
-    / "reports"
-    / "plots"
-    / "real"
-    / "real_daily_profile.png"
+    PROJECT_ROOT / "reports" / "plots" / "real" / "real_daily_profile.png"
 )
 PLOT_REAL_KEY_USAGE_HEATMAP_FILE_PATH = (
     PROJECT_ROOT / "reports" / "plots" / "real" / "real_key_usage.png"
 )
 PLOT_REAL_HIT_MISS_RATES_FILE_PATH = (
-    PROJECT_ROOT
-    / "reports"
-    / "plots"
-    / "real"
-    / "real_hit_miss_rates.png"
+    PROJECT_ROOT / "reports" / "plots" / "real" / "real_hit_miss_rates.png"
 )
 
 # ----------------------------
@@ -168,11 +160,7 @@ RESULTS_DYNAMIC_MODEL_FILE_PATH = (
     / "dynamic_model_results.json"
 )
 RESULTS_REAL_MODEL_FILE_PATH = (
-    PROJECT_ROOT
-    / "reports"
-    / "results"
-    / "real"
-    / "real_model_results.json"
+    PROJECT_ROOT / "reports" / "results" / "real" / "real_model_results.json"
 )
 
 
