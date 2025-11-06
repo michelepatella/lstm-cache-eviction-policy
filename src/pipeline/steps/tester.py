@@ -36,7 +36,7 @@ from const import (
     DATA_STATIC_MODE,
     DATASET_TESTING_SPLIT_TYPE,
     LOGS_LOGGER_NAME,
-    MLFLOW_NESTED,
+    MLFLOW_NESTED, DATA_DYNAMIC_MODE,
 )
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
@@ -46,7 +46,7 @@ from pipeline.const import (
     LOGS_PHASE_TESTING,
     MODEL_COMPUTE_METRICS_TESTING,
     RESULTS_DYNAMIC_MODEL_FILE_PATH,
-    RESULTS_STATIC_MODEL_FILE_PATH,
+    RESULTS_STATIC_MODEL_FILE_PATH, RESULTS_REAL_MODEL_FILE_PATH,
 )
 
 # Load env variables
@@ -119,8 +119,10 @@ def test_model() -> None:
         # Prepare file name where to save model results
         if data_mode == DATA_STATIC_MODE:
             model_results_save_path = RESULTS_STATIC_MODEL_FILE_PATH
-        else:
+        elif data_mode == DATA_DYNAMIC_MODE:
             model_results_save_path = RESULTS_DYNAMIC_MODEL_FILE_PATH
+        else:
+            model_results_save_path = RESULTS_REAL_MODEL_FILE_PATH
 
         # Evaluate model
         (

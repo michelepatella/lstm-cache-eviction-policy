@@ -51,7 +51,7 @@ from const import (
     DATASET_COLUMN_TIMESTAMP_NAME,
     DATASET_RAW_TYPE,
     LOGS_LOGGER_NAME,
-    MLFLOW_NESTED,
+    MLFLOW_NESTED, DATA_REAL_MODE,
 )
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
@@ -105,6 +105,11 @@ def generate_data() -> None:
 
         # Prepare configuration
         data_mode = config.data.general.mode
+
+        # Skip this step if data is real
+        if data_mode == DATA_REAL_MODE:
+            return
+
         min_key = config.data.general.keys.min
         max_key = config.data.general.keys.max
 

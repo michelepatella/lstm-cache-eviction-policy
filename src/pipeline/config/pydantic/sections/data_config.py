@@ -23,7 +23,7 @@ Classes:
     DataPatternsAccessBehaviorToggleOffsetsConfig(BaseModel):
         Toggle offsets configuration.
     DataPatternsAccessBehaviorToggleBaseRequestsConfig(BaseModel):
-    Toggle base requests configuration.
+        Toggle base requests configuration.
     DataPatternsAccessBehaviorToggleConfig(BaseModel):
         Toggle behavior configuration.
     DataPatternsAccessBehaviorDistortionNoiseConfig(BaseModel):
@@ -52,6 +52,8 @@ Classes:
         Aggregates access and temporal patterns.
     DataGeneralConfig(BaseModel):
         General configuration for data generation.
+    DataSyntheticConfig(BaseModel):
+        Synthetic data generation configuration, aggregating mode, patterns, and seed.
     DataConfig(BaseModel):
         Aggregates general settings and pattern configuration.
 """
@@ -414,35 +416,45 @@ class DataGeneralConfig(BaseModel):
     """General configuration for data generation.
 
     Attributes:
-        seed (int): Random seed for generation (>= 0).
-        mode (str): Data distribution mode.
         requests (int): Number of requests (> 0).
         keys (DataKeysConfig): Key range configuration.
     """
 
-    seed: conint(ge=0)
-    mode: str
     requests: conint(gt=0)
     keys: DataKeysConfig
 
+
+class DataSyntheticConfig(BaseModel):
+    """Synthetic data generation configuration.
+
+    Attributes:
+        mode (str): Data distribution mode (e.g., 'static').
+        patterns (DataPatternsConfig): Access and temporal pattern configuration.
+        seed (int): Random seed for generation (>= 0).
+    """
+
+    mode: str
+    patterns: DataPatternsConfig
+    seed: conint(ge=0)
+
     @model_validator(mode="after")
     def check_data_mode(
-        self: "DataGeneralConfig",
-    ) -> "DataGeneralConfig":
+        self: "DataSyntheticConfig",
+    ) -> "DataSyntheticConfig":
         """Check whether data distribution mode is valid or not.
 
         This function validates the data distribution mode.
 
         Args:
-            self (DataGeneralConfig): Current model instance.
+            self (DataSyntheticConfig): Current model instance.
 
         Returns:
-            "DataGeneralConfig": Validated model instance.
+            "DataSyntheticConfig": Validated model instance.
         """
         assert_choice_field(
             self.mode,
             DATA_MODES,
-            "data.general.mode",
+            "data.synthetic.mode",
         )
 
         return self
@@ -453,8 +465,8 @@ class DataConfig(BaseModel):
 
     Attributes:
         general (DataGeneralConfig): General data configuration settings.
-        patterns (DataPatternsConfig): Pattern configuration.
+        synthetic (DataSyntheticConfig): Synthetic data generation settings and patterns.
     """
 
     general: DataGeneralConfig
-    patterns: DataPatternsConfig
+    synthetic: DataSyntheticConfig
