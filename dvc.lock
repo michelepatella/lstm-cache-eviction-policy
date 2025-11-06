@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
-  data_generation:
-    cmd: PYTHONPATH=src python -m pipeline.steps.data_generator
+  data_preparation:
+    cmd: PYTHONPATH=src python -m pipeline.steps.data_preparer
     deps:
     - path: src/components/assertions/choice_field_assertor.py
       hash: md5
@@ -205,7 +205,7 @@ stages:
       hash: md5
       md5: d54b4f180138db5111c31b6e67af712b
       size: 4267
-    - path: src/pipeline/steps/data_generator.py
+    - path: src/pipeline/steps/data_preparer.py
       hash: md5
       md5: 7a63b3edac1440f7b4dbe46f052c60f3
       size: 8528

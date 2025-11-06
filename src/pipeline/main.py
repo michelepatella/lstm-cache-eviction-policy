@@ -8,11 +8,11 @@ respective functions from the pipeline steps.
 
 Functions:
     main() -> None
-        Executes the full pipeline workflow in sequence: data generation,
+        Executes the full pipeline workflow in sequence: data preparation,
         preprocessing, validation, training, testing, and simulations.
 """
 
-from pipeline.steps.data_generator import generate_data
+from pipeline.steps.data_preparer import prepare_data
 from pipeline.steps.data_preprocessor import preprocess_data
 from pipeline.steps.simulator import run_simulations
 from pipeline.steps.tester import test_model
@@ -25,7 +25,7 @@ def main() -> None:
 
     This function orchestrates the entire pipeline,
     running the following steps in sequence:
-    1. Data generation.
+    1. Data preparation.
     2. Data preprocessing.
     3. Model validation.
     4. Model training.
@@ -39,8 +39,8 @@ def main() -> None:
     # Pipeline
     # -----------------------
 
-    # (1) Data generation
-    generate_data()
+    # (1) Data preparation
+    prepare_data()
 
     # (2) Data preprocessing
     preprocess_data()

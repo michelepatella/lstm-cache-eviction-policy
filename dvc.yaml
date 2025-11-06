@@ -1,6 +1,6 @@
 stages:
-  data_generation:
-    cmd: PYTHONPATH=src python -m pipeline.steps.data_generator
+  data_preparation:
+    cmd: PYTHONPATH=src python -m pipeline.steps.data_preparer
     params:
       - src/pipeline/config/config.yaml:
         - data.synthetic.seed
@@ -48,6 +48,7 @@ stages:
       - src/components/assertions/choice_field_assertor.py
       - src/components/assertions/min_max_assertor.py
       - src/components/const.py
+      - src/components/data/exploration/explorer.py
       - src/components/data/patterns/access/generator.py
       - src/components/data/patterns/access/variants/cycle_generator.py
       - src/components/data/patterns/access/variants/distortion_generator.py
@@ -95,7 +96,7 @@ stages:
       - src/pipeline/config/pydantic/sections/training_config.py
       - src/pipeline/config/pydantic/sections/validation_config.py
       - src/pipeline/const.py
-      - src/pipeline/steps/data_generator.py
+      - src/pipeline/steps/data_preparer.py
     outs:
       - data/raw/${data.general.mode}/${data.general.mode}_raw_dataset.csv
       - reports/plots/${data.general.mode}/${data.general.mode}_daily_profile.png
