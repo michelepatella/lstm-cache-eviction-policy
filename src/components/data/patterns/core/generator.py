@@ -94,7 +94,7 @@ def generate_pattern_requests(
 
         # Define a seed to make the
         # generation process deterministic
-        seed = config.data.general.seed
+        seed = config.data.synthetic.seed
         np.random.seed(seed)
 
         debug(

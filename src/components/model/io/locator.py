@@ -14,10 +14,10 @@ Functions:
 
 from components.const import (
     MODEL_TRAINED_DYNAMIC_FILE_PATH,
-    MODEL_TRAINED_STATIC_FILE_PATH,
+    MODEL_TRAINED_STATIC_FILE_PATH, MODEL_TRAINED_REAL_FILE_PATH,
 )
 from components.logs.levels.debug_logger import debug
-from const import DATA_STATIC_MODE
+from const import DATA_STATIC_MODE, DATA_DYNAMIC_MODE
 
 
 def get_model_abs_path(data_mode: str) -> str:
@@ -44,8 +44,10 @@ def get_model_abs_path(data_mode: str) -> str:
     # data distribution mode
     if data_mode == DATA_STATIC_MODE:
         model_abs_path = MODEL_TRAINED_STATIC_FILE_PATH
-    else:
+    elif data_mode == DATA_DYNAMIC_MODE:
         model_abs_path = MODEL_TRAINED_DYNAMIC_FILE_PATH
+    else:
+        model_abs_path = MODEL_TRAINED_REAL_FILE_PATH
 
     debug(
         "Model absolute path retrieval completed",

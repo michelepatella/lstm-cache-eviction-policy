@@ -20,9 +20,11 @@ CACHE_LSTM_NAME = "LSTM"
 # ----------------------------
 DATA_STATIC_MODE = "static"
 DATA_DYNAMIC_MODE = "dynamic"
+DATA_REAL_MODE = "real"
 DATA_MODES = [
     DATA_STATIC_MODE,
     DATA_DYNAMIC_MODE,
+    DATA_REAL_MODE
 ]
 
 

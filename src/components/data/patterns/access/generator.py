@@ -86,7 +86,7 @@ def generate_access_pattern(
         num_keys = len(keys_range)
         requests_count = len(requests)
 
-        behavior_config = config.data.patterns.access.behavior
+        behavior_config = config.data.synthetic.patterns.access.behavior
 
         # Prepare repetition pattern configuration
         repetition_interval = behavior_config.repetition.interval

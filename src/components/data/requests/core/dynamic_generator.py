@@ -52,7 +52,7 @@ def generate_dynamic_requests(
     """
     try:
         # Prepare configuration
-        zipf_config = config.data.patterns.access.zipf
+        zipf_config = config.data.synthetic.patterns.access.zipf
         alpha_min = zipf_config.alpha.min
         alpha_max = zipf_config.alpha.max
         steps = zipf_config.steps

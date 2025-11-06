@@ -65,7 +65,7 @@ from const import (
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
     SIMULATIONS_METRICS_POLICY_NAME,
-    SIMULATIONS_METRICS_TIMELINE_NAME,
+    SIMULATIONS_METRICS_TIMELINE_NAME, DATA_DYNAMIC_MODE,
 )
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
@@ -85,7 +85,7 @@ from pipeline.const import (
     SIMULATIONS_METRICS_BELADY_MIN_MISS_RATE_NAME,
     SIMULATIONS_METRICS_EVICTION_MISTAKE_RATE_NAME,
     SIMULATIONS_METRICS_HIT_RATE_NAME,
-    SIMULATIONS_METRICS_MISS_RATE_NAME,
+    SIMULATIONS_METRICS_MISS_RATE_NAME, RESULTS_REAL_SIMULATIONS_FILE_PATH, PLOT_REAL_HIT_MISS_RATES_FILE_PATH,
 )
 
 # Load env variables
@@ -274,9 +274,12 @@ def run_simulations() -> None:
         if data_mode == DATA_STATIC_MODE:
             results_file_path = RESULTS_STATIC_SIMULATIONS_FILE_PATH
             plot_save_path = PLOT_STATIC_HIT_MISS_RATES_FILE_PATH
-        else:
+        elif data_mode == DATA_DYNAMIC_MODE:
             results_file_path = RESULTS_DYNAMIC_SIMULATIONS_FILE_PATH
             plot_save_path = PLOT_DYNAMIC_HIT_MISS_RATES_FILE_PATH
+        else:
+            results_file_path = RESULTS_REAL_SIMULATIONS_FILE_PATH
+            plot_save_path = PLOT_REAL_HIT_MISS_RATES_FILE_PATH
 
         # Save simulations results
         save_simulations_metrics(results, results_file_path)

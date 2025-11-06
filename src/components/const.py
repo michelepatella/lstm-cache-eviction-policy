@@ -70,6 +70,9 @@ DATASET_STATIC_RAW_FILE_PATH = (
 DATASET_DYNAMIC_RAW_FILE_PATH = (
     PROJECT_ROOT / "data" / "raw" / "dynamic" / "dynamic_raw_dataset.csv"
 )
+DATASET_REAL_RAW_FILE_PATH = (
+    PROJECT_ROOT / "data" / "raw" / "real" / "real_raw_dataset.csv"
+)
 DATASET_STATIC_PROCESSED_FILE_PATH = (
     PROJECT_ROOT
     / "data"
@@ -83,6 +86,13 @@ DATASET_DYNAMIC_PROCESSED_FILE_PATH = (
     / "processed"
     / "dynamic"
     / "dynamic_processed_dataset.csv"
+)
+DATASET_REAL_PROCESSED_FILE_PATH = (
+    PROJECT_ROOT
+    / "data"
+    / "processed"
+    / "real"
+    / "real_processed_dataset.csv"
 )
 
 
@@ -176,6 +186,9 @@ MODEL_TRAINED_STATIC_FILE_PATH = (
 )
 MODEL_TRAINED_DYNAMIC_FILE_PATH = (
     PROJECT_ROOT / "models" / "dynamic" / "trained_dynamic_model.pt"
+)
+MODEL_TRAINED_REAL_FILE_PATH = (
+    PROJECT_ROOT / "models" / "real" / "trained_real_model.pt"
 )
 
 MODEL_COMPUTE_METRICS_DEFAULT = False
