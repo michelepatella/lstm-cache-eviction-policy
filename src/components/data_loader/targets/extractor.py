@@ -25,7 +25,9 @@ from const import DATASET_COLUMN_REQUEST_NAME
 
 def extract_targets_from_data_loader(
     data_loader: DataLoader,
-    target_idx: int = DATASET_PROCESSED_COLUMNS.index(DATASET_COLUMN_REQUEST_NAME),
+    target_idx: int = DATASET_PROCESSED_COLUMNS.index(
+        DATASET_COLUMN_REQUEST_NAME,
+    ),
 ) -> torch.Tensor:
     """Extract all target tensors from a data loader.
 

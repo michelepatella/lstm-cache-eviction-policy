@@ -65,7 +65,7 @@ from components.assertions.min_max_assertor import (
     assert_min_less_than_max,
 )
 from const import (
-    DATA_DISTRIBUTION_MODES,
+    DATA_MODES,
     TIME_END_HOUR,
     TIME_START_HOUR,
 )
@@ -426,7 +426,7 @@ class DataGeneralConfig(BaseModel):
     keys: DataKeysConfig
 
     @model_validator(mode="after")
-    def check_data_distribution_mode(
+    def check_data_mode(
         self: "DataGeneralConfig",
     ) -> "DataGeneralConfig":
         """Check whether data distribution mode is valid or not.
@@ -441,7 +441,7 @@ class DataGeneralConfig(BaseModel):
         """
         assert_choice_field(
             self.mode,
-            DATA_DISTRIBUTION_MODES,
+            DATA_MODES,
             "data.general.mode",
         )
 

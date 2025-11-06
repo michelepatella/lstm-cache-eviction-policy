@@ -33,7 +33,7 @@ from components.model.best.initializer import (
     initialize_best_model,
 )
 from const import (
-    DATA_DISTRIBUTION_STATIC_MODE,
+    DATA_STATIC_MODE,
     DATASET_TESTING_SPLIT_TYPE,
     LOGS_LOGGER_NAME,
     MLFLOW_NESTED,
@@ -82,7 +82,7 @@ def test_model() -> None:
         initialize_logs(logging.getLevelName(config.logs.level))
 
         # Prepare configuration
-        data_distribution_mode = config.data.general.mode
+        data_mode = config.data.general.mode
         testing_batch_size = config.testing.general.batch_size
         testing_shuffle = config.testing.general.shuffle
         testing_device = config.testing.device.type
@@ -91,7 +91,7 @@ def test_model() -> None:
         info(
             "Testing started",
             extra={
-                "data_distribution_mode": data_distribution_mode,
+                "data_mode": data_mode,
                 "testing_batch_size": testing_batch_size,
                 "testing_shuffle": testing_shuffle,
                 "context": "Testing",
@@ -109,7 +109,7 @@ def test_model() -> None:
 
         # Trained model setup for testing
         device, criterion, model = initialize_best_model(
-            data_distribution_mode,
+            data_mode,
             testing_device,
             config,
             testing_loader,
@@ -117,7 +117,7 @@ def test_model() -> None:
         )
 
         # Prepare file name where to save model results
-        if data_distribution_mode == DATA_DISTRIBUTION_STATIC_MODE:
+        if data_mode == DATA_STATIC_MODE:
             model_results_save_path = RESULTS_STATIC_MODEL_FILE_PATH
         else:
             model_results_save_path = RESULTS_DYNAMIC_MODEL_FILE_PATH

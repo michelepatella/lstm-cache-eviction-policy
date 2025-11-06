@@ -113,7 +113,6 @@ stages:
       - src/components/assertions/choice_field_assertor.py
       - src/components/assertions/min_max_assertor.py
       - src/components/const.py
-      - src/components/dataset/cleans/duplicates_remover.py
       - src/components/dataset/cleans/missing_values_remover.py
       - src/components/dataset/columns/manipulations/dropper.py
       - src/components/dataset/columns/manipulations/reorderer.py

@@ -9,7 +9,7 @@ the best pre-trained model weights.
 
 Functions:
     initialize_best_model(
-        data_distribution_mode: str,
+        data_mode: str,
         device_type: str,
         config: Any,
         data_loader: DataLoader | None,
@@ -38,7 +38,7 @@ from components.model.io.locator import get_model_abs_path
 
 
 def initialize_best_model(
-    data_distribution_mode: str,
+    data_mode: str,
     device_type: str,
     config: Any,
     data_loader: DataLoader | None,
@@ -51,9 +51,8 @@ def initialize_best_model(
     the best PyTorch model.
 
     Args:
-        data_distribution_mode (str): Data distribution mode to
-                                      determine the path
-                                      of the trained model.
+        data_mode (str): Data distribution mode to determine the path
+                         of the trained model.
         device_type (str): Device type to be used.
         config (Any): Configuration object.
         data_loader (DataLoader | None): DataLoader containing the dataset
@@ -67,7 +66,7 @@ def initialize_best_model(
             - model: Pre-trained model ready for inference.
     """
     # Get the model path
-    model_path = get_model_abs_path(data_distribution_mode)
+    model_path = get_model_abs_path(data_mode)
 
     # Extract targets from
     # provided data loader

@@ -1,168 +1,130 @@
-import great_expectations as gx
+"""test_raw_dataset.py
 
-from components.dataset.io.loader import load_dataset
-from components.dataset.io.locator import get_dataset_abs_path
+Module dedicated to running data quality validation checks on the initial,
+unprocessed (raw) dataset using the Great Expectations (GX) framework.
+
+This module loads the raw data and applies a comprehensive Expectation Suite
+to verify its integrity before any pipeline transformations occur. The checks
+cover:
+    - Numeric Constraints: Ensures timestamp and request values fall within
+                           defined boundaries.
+    - Schema Integrity: Verifies the existence, data types, count, and order
+                        of the essential columns.
+    - Volume Check: Asserts that the dataset contains the expected number
+                    of rows (requests).
+
+Functions:
+    test_raw_dataset() -> None
+        Executes the full suite of data quality expectations for the raw dataset.
+"""
+
+from helpers import (
+    add_column_count_expectation,
+    add_column_existence_expectations,
+    add_column_order_expectation,
+    add_column_range_expectations,
+    add_column_type_expectations,
+    add_row_count_expectation,
+    initialize_dataset_testing,
+    run_dataset_testing,
+)
+
 from const import (
     DATASET_COLUMN_REQUEST_NAME,
     DATASET_COLUMN_TIMESTAMP_NAME,
+    DATASET_RAW_TYPE,
     TIME_END_HOUR,
-    TIME_START_HOUR, DATASET_RAW_COLUMNS, DATASET_COLUMN_TIMESTAMP_TYPE, DATASET_COLUMN_REQUEST_TYPE, DATASET_RAW_TYPE,
+    TIME_START_HOUR,
 )
 from pipeline.config.configurator import prepare_config
+from tests.const import (
+    DATASET_COLUMN_REQUEST_TYPE,
+    DATASET_COLUMN_TIMESTAMP_TYPE,
+    DATASET_RAW_COLUMNS,
+)
 
 
 def test_raw_dataset() -> None:
-    # ----------------------------
-    # Setup
-    # ----------------------------
+    """Tests the integrity and schema of the raw dataset.
+
+    This function performs a complete data validation check on the raw dataset
+    by:
+        - Initializing the Great Expectations environment.
+        - Defining Numeric Expectations (range checks for timestamps and requests).
+        - Defining Schema Expectations (existence, type, count, and order of columns).
+        - Defining Volume Expectations (total row count).
+        - Executing the Checkpoint and asserting that all expectations are met.
+
+    Returns:
+        None
+    """
+    # Setup for raw dataset testing
     config = prepare_config()
-    df = load_dataset(get_dataset_abs_path(DATASET_RAW_TYPE, config.data.general.mode))
-
-    # 1. Create a data context
-    context = gx.get_context()
-
-    # 2. Define a datasource
-    data_source = context.data_sources.add_pandas(name="datasource")
-
-    # 3. Create a data asset for the dataframe
-    data_asset = data_source.add_dataframe_asset(name="dataframe_asset")
-
-    # 4. Create a batch definition and a batch to validate
-    batch_definition = data_asset.add_batch_definition_whole_dataframe("batch definition")
-
-    # 5. Create a suite of expectations
-    suite = context.suites.add(
-        gx.core.expectation_suite.ExpectationSuite(
-            name="Raw dataset expectations",
-        ),
-    )
-
-    # ----------------------------
-    # Completeness checks
-    # ----------------------------
-
-    # Ensure no columns have NaN as value
-    suite.add_expectation(
-        gx.expectations.ExpectColumnValuesToNotBeNull(
-            column=DATASET_COLUMN_TIMESTAMP_NAME,
-        ),
-    )
-    suite.add_expectation(
-        gx.expectations.ExpectColumnValuesToNotBeNull(
-            column=DATASET_COLUMN_REQUEST_NAME,
-        ),
+    df, context, data_source, data_asset, batch_definition, suite = (
+        initialize_dataset_testing(DATASET_RAW_TYPE, config.data.general.mode)
     )
 
     # ----------------------------
     # Numeric checks
     # ----------------------------
-
     # Ensure timestamps (in hours) are
     # within the valid range, as well as requests
     # are between min and max keys
-    suite.add_expectation(
-        gx.expectations.ExpectColumnValuesToBeBetween(
-            column=DATASET_COLUMN_TIMESTAMP_NAME,
-            min_value=TIME_START_HOUR,
-            max_value=TIME_END_HOUR + 1,
-        ),
-    )
-    suite.add_expectation(
-        gx.expectations.ExpectColumnValuesToBeBetween(
-            column=DATASET_COLUMN_REQUEST_NAME,
-            min_value=config.data.general.keys.min,
-            max_value=config.data.general.keys.max,
-        ),
+    add_column_range_expectations(
+        suite,
+        {
+            DATASET_COLUMN_TIMESTAMP_NAME: (
+                TIME_START_HOUR,
+                TIME_END_HOUR + 1,
+            ),
+            DATASET_COLUMN_REQUEST_NAME: (
+                config.data.general.keys.min,
+                config.data.general.keys.max,
+            ),
+        },
     )
 
     # ----------------------------
     # Schema checks
     # ----------------------------
-
     # Ensure columns existence
-    suite.add_expectation(
-        gx.expectations.ExpectColumnToExist(
-            column=DATASET_COLUMN_TIMESTAMP_NAME,
-            column_index=DATASET_RAW_COLUMNS.index(DATASET_COLUMN_TIMESTAMP_NAME),
-        ),
-    )
-    suite.add_expectation(
-        gx.expectations.ExpectColumnToExist(
-            column=DATASET_COLUMN_REQUEST_NAME,
-            column_index=DATASET_RAW_COLUMNS.index(DATASET_COLUMN_REQUEST_NAME),
-        ),
+    add_column_existence_expectations(
+        suite,
+        {
+            DATASET_COLUMN_TIMESTAMP_NAME: DATASET_RAW_COLUMNS.index(
+                DATASET_COLUMN_TIMESTAMP_NAME,
+            ),
+            DATASET_COLUMN_REQUEST_NAME: DATASET_RAW_COLUMNS.index(
+                DATASET_COLUMN_REQUEST_NAME,
+            ),
+        },
     )
 
     # Ensure columns are of correct type
-    suite.add_expectation(
-        gx.expectations.ExpectColumnValuesToBeOfType(
-            column=DATASET_COLUMN_TIMESTAMP_NAME,
-            type_=DATASET_COLUMN_TIMESTAMP_TYPE,
-        ),
-    )
-    suite.add_expectation(
-        gx.expectations.ExpectColumnValuesToBeOfType(
-            column=DATASET_COLUMN_REQUEST_NAME,
-            type_=DATASET_COLUMN_REQUEST_TYPE,
-        ),
+    add_column_type_expectations(
+        suite,
+        {
+            DATASET_COLUMN_TIMESTAMP_NAME: DATASET_COLUMN_TIMESTAMP_TYPE,
+            DATASET_COLUMN_REQUEST_NAME: DATASET_COLUMN_REQUEST_TYPE,
+        },
     )
 
     # Ensure the number of columns is correct
-    suite.add_expectation(
-        gx.expectations.ExpectTableColumnCountToEqual(
-            value=len(DATASET_RAW_COLUMNS)
-        ),
-    )
+    add_column_count_expectation(suite, len(DATASET_RAW_COLUMNS))
 
     # Ensure columns are sorted as expected
-    suite.add_expectation(
-        gx.expectations.ExpectTableColumnsToMatchOrderedList(
-            column_list=DATASET_RAW_COLUMNS,
-        ),
-    )
-
-    # ----------------------------
-    # Uniqueness checks
-    # ----------------------------
-
-    # Ensure dataset has no duplicates
-    suite.add_expectation(
-        gx.expectations.ExpectCompoundColumnsToBeUnique(
-            column_list=[DATASET_COLUMN_TIMESTAMP_NAME, DATASET_COLUMN_REQUEST_NAME],
-        ),
-    )
+    add_column_order_expectation(suite, DATASET_RAW_COLUMNS)
 
     # ----------------------------
     # Volume checks
     # ----------------------------
-
     # Ensure dataset has expected volume
-    suite.add_expectation(
-        gx.expectations.ExpectTableRowCountToEqual(
-            value=config.data.general.requests,
-        ),
-    )
+    add_row_count_expectation(suite, config.data.general.requests)
 
     # ----------------------------
     # Suite validation
     # ----------------------------
-    validation_definition = context.validation_definitions.add(
-        gx.core.validation_definition.ValidationDefinition(
-            name="Validation definition",
-            data=batch_definition,
-            suite=suite
-        )
-    )
-
-    checkpoint = context.checkpoints.add(
-        gx.checkpoint.checkpoint.Checkpoint(
-            name="Checkpoint",
-            validation_definitions=[validation_definition],
-        )
-    )
-    checkpoint_result = checkpoint.run(batch_parameters={"dataframe": df})
-    print(checkpoint_result.describe())
-    assert checkpoint_result.success is True
+    run_dataset_testing(context, batch_definition, suite, df)
 
 
 if __name__ == "__main__":
