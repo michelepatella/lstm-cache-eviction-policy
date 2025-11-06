@@ -15,7 +15,7 @@ caches:
   ttl: 10000
 data:
   general:
-    mode: static
+    mode: real
     keys:
       min: 1
       max: 200

@@ -27,7 +27,7 @@ from components.data.requests.core.static_generator import (
     generate_static_requests,
 )
 from components.dataset.builder import build_dataset
-from components.data.exporation.explorer import explore_data
+from components.data.exploration.explorer import explore_data
 from components.dataset.io.loader import load_dataset
 from components.dataset.io.locator import get_dataset_abs_path
 from components.dataset.io.saver import save_dataset
@@ -102,7 +102,7 @@ def prepare_data() -> None:
             "Data preparation started",
             extra={
                 "data_mode": data_mode,
-                "dataset_path": dataset_path,
+                "dataset_path": str(dataset_path),
                 "key_min": min_key,
                 "key_max": max_key,
                 "context": "Data preparation",
