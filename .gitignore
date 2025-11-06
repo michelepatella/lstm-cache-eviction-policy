@@ -9,7 +9,6 @@ __pycache__/
 .Python
 .env/
 venv/
-.env/
 mlruns/
 .env
 build/
