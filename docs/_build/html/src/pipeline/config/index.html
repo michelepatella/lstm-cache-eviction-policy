@@ -33,22 +33,18 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>src.pipeline.config</code></h1>
+<h1 class="title">Namespace <code>src.pipeline.config</code></h1>
 </header>
 <section id="section-intro">
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="src.pipeline.config.classes" href="classes/index.html">src.pipeline.config.classes</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
 <dt><code class="name"><a title="src.pipeline.config.configurator" href="configurator.html">src.pipeline.config.configurator</a></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>configurator.py …</p></div>
 </dd>
-<dt><code class="name"><a title="src.pipeline.config.io" href="io/index.html">src.pipeline.config.io</a></code></dt>
+<dt><code class="name"><a title="src.pipeline.config.pydantic" href="pydantic/index.html">src.pipeline.config.pydantic</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -57,57 +53,6 @@ el.replaceWith(d);
 <section>
 </section>
 <section>
-<h2 class="section-title" id="header-functions">Functions</h2>
-<dl>
-<dt id="src.pipeline.config.prepare_config"><code class="name flex">
-<span>def <span class="ident">prepare_config</span></span>(<span>) ‑> pipeline.config.classes.Config.Config</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def prepare_config() -&gt; Config:
-    &#34;&#34;&#34;
-    Prepare configuration required to run
-    the entire pipeline.
-
-    This function prepares the pipeline&#39;s configuration
-    by orchestrating loading and validation of YAML configuration file.
-    If the whole YAML configuration file is valid, it builds
-    and returns the class representing the configuration settings.
-
-    Returns:
-        Config: Class representing the configuration settings of
-                the entire pipeline.
-    &#34;&#34;&#34;
-    # Set the new pipeline state
-    logs_phase.set(LOGS_CONFIGURATION_PHASE)
-
-    # Load the YAML configuration file
-    config_file = load_config()
-
-    # Validate and parse YAML configuration file
-    config = Config(**config_file)
-
-    info(&#34;Configuration loading and validation completed&#34;)
-
-    return config</code></pre>
-</details>
-<div class="desc"><p>Prepare configuration required to run
-the entire pipeline.</p>
-<p>This function prepares the pipeline's configuration
-by orchestrating loading and validation of YAML configuration file.
-If the whole YAML configuration file is valid, it builds
-and returns the class representing the configuration settings.</p>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>Config</code></dt>
-<dd>Class representing the configuration settings of
-the entire pipeline.</dd>
-</dl></div>
-</dd>
-</dl>
 </section>
 <section>
 </section>
@@ -124,14 +69,8 @@ the entire pipeline.</dd>
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="src.pipeline.config.classes" href="classes/index.html">src.pipeline.config.classes</a></code></li>
 <li><code><a title="src.pipeline.config.configurator" href="configurator.html">src.pipeline.config.configurator</a></code></li>
-<li><code><a title="src.pipeline.config.io" href="io/index.html">src.pipeline.config.io</a></code></li>
-</ul>
-</li>
-<li><h3><a href="#header-functions">Functions</a></h3>
-<ul class="">
-<li><code><a title="src.pipeline.config.prepare_config" href="#src.pipeline.config.prepare_config">prepare_config</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic" href="pydantic/index.html">src.pipeline.config.pydantic</a></code></li>
 </ul>
 </li>
 </ul>
