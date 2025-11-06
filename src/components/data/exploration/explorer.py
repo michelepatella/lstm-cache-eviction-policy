@@ -19,6 +19,7 @@ Functions:
 
 import numpy as np
 
+from components.logs.levels.debug_logger import debug
 from components.visualization.daily_profile_plotter import plot_daily_profile
 from components.visualization.key_usage_heatmap_plotter import (
     plot_key_usage_heatmap,
@@ -69,6 +70,18 @@ def explore_data(
             - key_usage_heatmap_plot_save_path: Path key usage heatmap plot is
                                                 saved to.
     """
+    debug(
+        "Data exploration completed",
+        extra={
+            "num_timestamps": len(timestamps_hours),
+            "num_requests": len(requests),
+            "min_key": min_key,
+            "max_key": max_key,
+            "data_mode": data_mode,
+            "context": "Data exploration",
+        },
+    )
+
     # Prepare save paths according to data mode
     SAVE_PATHS = {
         DATA_STATIC_MODE: (
@@ -102,6 +115,18 @@ def explore_data(
         requests,
         timestamps_hours,
         key_usage_heatmap_plot_save_path,
+    )
+
+    debug(
+        "Data exploration completed",
+        extra={
+            "context": "Data exploration",
+            "plot_save_path": [
+                str(zipf_log_log_plot_save_path),
+                str(daily_profile_plot_save_path),
+                str(key_usage_heatmap_plot_save_path),
+            ],
+        },
     )
 
     return (
