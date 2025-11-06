@@ -13,12 +13,16 @@ stages:
       size: 3090
     - path: src/components/const.py
       hash: md5
-      md5: 4d46c07bc4f3b95ac665b00882666245
-      size: 7866
+      md5: 0c033abae5095b684e63a37a60514ee5
+      size: 8209
+    - path: src/components/data/exploration/explorer.py
+      hash: md5
+      md5: 060c5bf8dcc8600cc5f77294744df433
+      size: 3664
     - path: src/components/data/patterns/access/generator.py
       hash: md5
-      md5: 433ac459400616205a099cd5221ce3d5
-      size: 8033
+      md5: 586b742022d937aed0208596ad5e1ea8
+      size: 8043
     - path: src/components/data/patterns/access/variants/cycle_generator.py
       hash: md5
       md5: de093f254b1be7ec2b17941b27aeb34f
@@ -42,16 +46,16 @@ stages:
       size: 5611
     - path: src/components/data/patterns/core/generator.py
       hash: md5
-      md5: 97dc6d94bb96a9e96c37f9d6720c9429
-      size: 6239
+      md5: abb07852fe84fa9de450993a43fec846
+      size: 6249
     - path: src/components/data/patterns/core/single_generator.py
       hash: md5
       md5: 7a29766fb1b21f6a1ebdf2695fa0c82b
       size: 3050
     - path: src/components/data/patterns/temporal/generator.py
       hash: md5
-      md5: ef264abbcd73a9befac0780a690fb574
-      size: 4710
+      md5: eedef2484a5e31650febfad8fd651f16
+      size: 4778
     - path: src/components/data/patterns/temporal/variants/burst_setter.py
       hash: md5
       md5: 69c45dd862a04455ae5deaf2d2a16175
@@ -63,56 +67,56 @@ stages:
       size: 2424
     - path: src/components/data/requests/core/dynamic_generator.py
       hash: md5
-      md5: 3cd7beeb19117e3f594136bdce029fd6
-      size: 3775
+      md5: a0d75d355bdea926a332040c440dfb51
+      size: 3791
     - path: src/components/data/requests/core/static_generator.py
       hash: md5
-      md5: 09cd5a6d4654ffdf71a433d28b4dad02
-      size: 2205
+      md5: f4b655c83c1464bc8ceed1e338a8d709
+      size: 2221
     - path: src/components/data/requests/utils/alpha_requests_generator.py
       hash: md5
-      md5: 7a70a5343e83e7dfec695c299b679f55
-      size: 2859
+      md5: cd6e222bb87fcf8310d62234fa3a28c5
+      size: 2867
     - path: src/components/data/requests/utils/generation_helper.py
       hash: md5
-      md5: 09e1699b4db59b72c2bf7b3e33addd76
-      size: 4522
+      md5: 5cf4d0bf8bf9c83f16d7320c3f3abb74
+      size: 4530
     - path: src/components/dataset/builder.py
       hash: md5
       md5: 8c5aae12c3ffd2e9fdf7ba573c8bf5bb
       size: 2453
     - path: src/components/dataset/io/locator.py
       hash: md5
-      md5: 289fb7a539a62c74bad70c456db3bab9
-      size: 3439
+      md5: b55a61859ea914c58c4fa1184992ee9f
+      size: 3711
     - path: src/components/dataset/io/saver.py
       hash: md5
       md5: d8a1ee0d0ea8b2ce6ab950c0da9a8d08
       size: 2652
     - path: src/components/logs/handlers/elastic_handler.py
       hash: md5
-      md5: fe23f0cf5c7d21290b93098d4f308ade
-      size: 4738
+      md5: 6e8c47e992fa9364c7633281cc59dc6a
+      size: 4822
     - path: src/components/logs/initializer.py
       hash: md5
-      md5: 91c0aa2ce5c73168b6e44f02ffa5fc7f
-      size: 1763
+      md5: bbf4f2b591112131515f7c5cda0e508e
+      size: 1635
     - path: src/components/logs/levels/debug_logger.py
       hash: md5
-      md5: 14569859c05896789801f93959416043
-      size: 1302
+      md5: 64f813e8cac276c51f1e1de666e64a4b
+      size: 1128
     - path: src/components/logs/levels/error_logger.py
       hash: md5
-      md5: b4f5f7d7e4575b404f3f9a68328d4cbc
-      size: 1303
+      md5: 02cddbb383a13c02b7e0536c02f7e1bb
+      size: 1129
     - path: src/components/logs/levels/info_logger.py
       hash: md5
-      md5: 7912002f749725d050bb4ad88d624653
-      size: 1293
+      md5: a14c07171bd9ab1e59302963f30d648f
+      size: 1119
     - path: src/components/logs/levels/utils/logger.py
       hash: md5
-      md5: bc5c81a91eabdca49850bff1615cb48f
-      size: 1808
+      md5: 1ad82a12d3113375b285714696e461f9
+      size: 1689
     - path: src/components/math/zipf_probs_calculator.py
       hash: md5
       md5: aeb2daadd6a302cb5233d5454e9bc3bd
@@ -127,12 +131,12 @@ stages:
       size: 2593
     - path: src/components/visualization/daily_profile_plotter.py
       hash: md5
-      md5: d824e9fde7884b4a6a429ee7096b2ccc
-      size: 4473
+      md5: a569c21d0f0f72bb21da168a0035e66e
+      size: 4487
     - path: src/components/visualization/key_usage_heatmap_plotter.py
       hash: md5
-      md5: e4c7e5fc6354d62dcaacafb336f1687d
-      size: 6157
+      md5: 0d2e2269a14233aa3ab5c5841b18920c
+      size: 6165
     - path: src/components/visualization/zipf_loglog_plotter.py
       hash: md5
       md5: dd7a6c01a0cc04c18dccdd6ea11b289a
@@ -143,8 +147,8 @@ stages:
       size: 2035
     - path: src/const.py
       hash: md5
-      md5: fe3338e1fd70e2f71a410fa06bd7de26
-      size: 2103
+      md5: a5aa35a8b17a4df3aa385853dcfb90dc
+      size: 2111
     - path: src/pipeline/config/configurator.py
       hash: md5
       md5: 36e5c87cba533a7f621f009ce612f810
@@ -155,67 +159,66 @@ stages:
       size: 2625
     - path: src/pipeline/config/pydantic/sections/api_kwargs_config.py
       hash: md5
-      md5: 3652cda14a898b1f9ab81a73901d6e42
-      size: 2059
+      md5: 61c876fc0068ebed44c99d60a0704ce1
+      size: 2181
     - path: src/pipeline/config/pydantic/sections/caches_config.py
       hash: md5
-      md5: 0e3dee9f65abeb9fd9ede970766c8a62
-      size: 675
+      md5: 8785d6c3b3569c16c76a31933912271d
+      size: 747
     - path: src/pipeline/config/pydantic/sections/data_config.py
       hash: md5
-      md5: 7411cd288786eae2cb6325ff64dcce5d
-      size: 14100
+      md5: 102a27d5600822f224881d7e2ecdad13
+      size: 14976
     - path: src/pipeline/config/pydantic/sections/dataset_config.py
       hash: md5
-      md5: 13b8ec5aad3b0010defc40f0c9f69396
-      size: 3247
+      md5: 58fa33e32e06ef83dd12320f936f034e
+      size: 3299
     - path: src/pipeline/config/pydantic/sections/evaluation_config.py
       hash: md5
-      md5: c66046794982d413a381322164c52827
-      size: 1741
+      md5: d65e19535bdd7f55bcf833767b5de161
+      size: 1805
     - path: src/pipeline/config/pydantic/sections/logs_config.py
       hash: md5
-      md5: e0ce415565f0f490fbb2fd618496e04c
-      size: 1080
+      md5: 0ccbef9c1cc2d498185c7e3af866abb8
+      size: 1099
     - path: src/pipeline/config/pydantic/sections/loss_config.py
       hash: md5
-      md5: 68011669f2103d807a0dcf66d08f164e
-      size: 1520
+      md5: 64bf9361d42c3268053cf2e7793025b4
+      size: 1558
     - path: src/pipeline/config/pydantic/sections/model_config.py
       hash: md5
-      md5: fcfd0d945279e3c4e64f752f83d171d4
-      size: 5043
+      md5: f6883a675bb95b94c61f2b374ed4429a
+      size: 5300
     - path: src/pipeline/config/pydantic/sections/optimizer_config.py
       hash: md5
-      md5: 3412cab18f1ed5773fe84cfbc5a0e926
-      size: 1855
+      md5: 790803ca4b7c01bb5642fb9788098701
+      size: 1949
     - path: src/pipeline/config/pydantic/sections/testing_config.py
       hash: md5
-      md5: 06c72b6d37ef7190996451f0ed608adc
-      size: 2017
+      md5: b0ec8f40d4585b7aeb0a809f7502bf2d
+      size: 2093
     - path: src/pipeline/config/pydantic/sections/training_config.py
       hash: md5
-      md5: 03c73f3854ff108c18c83a70a578cfc7
-      size: 2692
+      md5: f4cacf9e29a749494beb2dacf38619f2
+      size: 2817
     - path: src/pipeline/config/pydantic/sections/validation_config.py
       hash: md5
-      md5: afdb0283bb140e1a079d50fbca7a5316
-      size: 5237
+      md5: c36e27a32e23b0ee69b568360c1b41bb
+      size: 5342
     - path: src/pipeline/const.py
       hash: md5
-      md5: d54b4f180138db5111c31b6e67af712b
-      size: 4267
+      md5: df03aeb211f18a66e00eb862c05e04f6
+      size: 4984
     - path: src/pipeline/steps/data_preparer.py
       hash: md5
-      md5: 7a63b3edac1440f7b4dbe46f052c60f3
-      size: 8528
+      md5: 7b6d97817769c68b10362ba37e80202b
+      size: 7632
     params:
       src/pipeline/config/config.yaml:
         data.general.keys.max: 200
         data.general.keys.min: 1
-        data.general.mode: static
-        data.general.requests: 200
-        data.synthetic.general.seed: 42
+        data.general.mode: real
+        data.general.requests: 200000
         data.synthetic.patterns.access.behavior.cycle.base: 5
         data.synthetic.patterns.access.behavior.cycle.divisor: 100
         data.synthetic.patterns.access.behavior.cycle.hours.end: 19
@@ -251,31 +254,32 @@ stages:
         data.synthetic.patterns.temporal.burstiness.low: 1.2
         data.synthetic.patterns.temporal.periodic.amplitude: 50
         data.synthetic.patterns.temporal.periodic.scale: 90
+        data.synthetic.seed: 42
         logs.level: DEBUG
     outs:
-    - path: data/raw/static/static_raw_dataset.csv
+    - path: data/raw/real/real_raw_dataset.csv
       hash: md5
-      md5: b34cddd62b27a64dc4f5bf690c164134
-      size: 4198
-    - path: reports/plots/static/static_daily_profile.png
+      md5: 4f517bd7b6e1230bcbbb3ddc95a3854e
+      size: 4284096
+    - path: reports/plots/real/real_daily_profile.png
       hash: md5
-      md5: e488e67fb3eca3cdeb40260a6430127f
-      size: 71839
-    - path: reports/plots/static/static_key_usage.png
+      md5: 815e9ff562e75dd3087e5283fde139b6
+      size: 75258
+    - path: reports/plots/real/real_key_usage.png
       hash: md5
-      md5: e130a23d9872d55e0d6a757215f29422
-      size: 94765
-    - path: reports/plots/static/static_zipf_log_log.png
+      md5: b64f6fe3d54abd385c0366194974ed93
+      size: 100681
+    - path: reports/plots/real/real_zipf_log_log.png
       hash: md5
-      md5: 5196378013af5bde0d1b7a56e002d0df
-      size: 103332
+      md5: d261b59aded7ff9b68d0cce8daa83929
+      size: 115812
   data_preprocessing:
     cmd: PYTHONPATH=src python -m pipeline.steps.data_preprocessor
     deps:
-    - path: data/raw/static/static_raw_dataset.csv
+    - path: data/raw/real/real_raw_dataset.csv
       hash: md5
-      md5: b34cddd62b27a64dc4f5bf690c164134
-      size: 4198
+      md5: 4f517bd7b6e1230bcbbb3ddc95a3854e
+      size: 4284096
     - path: src/components/assertions/choice_field_assertor.py
       hash: md5
       md5: 14c153425aa8ef36316b3148a5613197
@@ -286,8 +290,8 @@ stages:
       size: 3090
     - path: src/components/const.py
       hash: md5
-      md5: 4d46c07bc4f3b95ac665b00882666245
-      size: 7866
+      md5: 0c033abae5095b684e63a37a60514ee5
+      size: 8209
     - path: src/components/dataset/cleans/missing_values_remover.py
       hash: md5
       md5: 05b50a05c51ae7a1ad075d3dae0af769
@@ -306,44 +310,44 @@ stages:
       size: 2078
     - path: src/components/dataset/features/builder.py
       hash: md5
-      md5: 9302af69c32f34113c041f6dedbb15aa
-      size: 4061
+      md5: f22666625fb15165c4738df7720156ab
+      size: 4057
     - path: src/components/dataset/io/loader.py
       hash: md5
       md5: 4e2d5615030d07e01fa38b60ffc6d109
       size: 2011
     - path: src/components/dataset/io/locator.py
       hash: md5
-      md5: 289fb7a539a62c74bad70c456db3bab9
-      size: 3439
+      md5: b55a61859ea914c58c4fa1184992ee9f
+      size: 3711
     - path: src/components/dataset/io/saver.py
       hash: md5
       md5: d8a1ee0d0ea8b2ce6ab950c0da9a8d08
       size: 2652
     - path: src/components/logs/handlers/elastic_handler.py
       hash: md5
-      md5: fe23f0cf5c7d21290b93098d4f308ade
-      size: 4738
+      md5: 6e8c47e992fa9364c7633281cc59dc6a
+      size: 4822
     - path: src/components/logs/initializer.py
       hash: md5
-      md5: 91c0aa2ce5c73168b6e44f02ffa5fc7f
-      size: 1763
+      md5: bbf4f2b591112131515f7c5cda0e508e
+      size: 1635
     - path: src/components/logs/levels/debug_logger.py
       hash: md5
-      md5: 14569859c05896789801f93959416043
-      size: 1302
+      md5: 64f813e8cac276c51f1e1de666e64a4b
+      size: 1128
     - path: src/components/logs/levels/error_logger.py
       hash: md5
-      md5: b4f5f7d7e4575b404f3f9a68328d4cbc
-      size: 1303
+      md5: 02cddbb383a13c02b7e0536c02f7e1bb
+      size: 1129
     - path: src/components/logs/levels/info_logger.py
       hash: md5
-      md5: 7912002f749725d050bb4ad88d624653
-      size: 1293
+      md5: a14c07171bd9ab1e59302963f30d648f
+      size: 1119
     - path: src/components/logs/levels/utils/logger.py
       hash: md5
-      md5: bc5c81a91eabdca49850bff1615cb48f
-      size: 1808
+      md5: 1ad82a12d3113375b285714696e461f9
+      size: 1689
     - path: src/components/time/transforms/trig_encoder.py
       hash: md5
       md5: 69d527a5f422e9a6783b098911fcd703
@@ -354,8 +358,8 @@ stages:
       size: 2035
     - path: src/const.py
       hash: md5
-      md5: fe3338e1fd70e2f71a410fa06bd7de26
-      size: 2103
+      md5: a5aa35a8b17a4df3aa385853dcfb90dc
+      size: 2111
     - path: src/pipeline/config/configurator.py
       hash: md5
       md5: 36e5c87cba533a7f621f009ce612f810
@@ -366,70 +370,70 @@ stages:
       size: 2625
     - path: src/pipeline/config/pydantic/sections/api_kwargs_config.py
       hash: md5
-      md5: 3652cda14a898b1f9ab81a73901d6e42
-      size: 2059
+      md5: 61c876fc0068ebed44c99d60a0704ce1
+      size: 2181
     - path: src/pipeline/config/pydantic/sections/caches_config.py
       hash: md5
-      md5: 0e3dee9f65abeb9fd9ede970766c8a62
-      size: 675
+      md5: 8785d6c3b3569c16c76a31933912271d
+      size: 747
     - path: src/pipeline/config/pydantic/sections/data_config.py
       hash: md5
-      md5: 7411cd288786eae2cb6325ff64dcce5d
-      size: 14100
+      md5: 102a27d5600822f224881d7e2ecdad13
+      size: 14976
     - path: src/pipeline/config/pydantic/sections/dataset_config.py
       hash: md5
-      md5: 13b8ec5aad3b0010defc40f0c9f69396
-      size: 3247
+      md5: 58fa33e32e06ef83dd12320f936f034e
+      size: 3299
     - path: src/pipeline/config/pydantic/sections/evaluation_config.py
       hash: md5
-      md5: c66046794982d413a381322164c52827
-      size: 1741
+      md5: d65e19535bdd7f55bcf833767b5de161
+      size: 1805
     - path: src/pipeline/config/pydantic/sections/logs_config.py
       hash: md5
-      md5: e0ce415565f0f490fbb2fd618496e04c
-      size: 1080
+      md5: 0ccbef9c1cc2d498185c7e3af866abb8
+      size: 1099
     - path: src/pipeline/config/pydantic/sections/loss_config.py
       hash: md5
-      md5: 68011669f2103d807a0dcf66d08f164e
-      size: 1520
+      md5: 64bf9361d42c3268053cf2e7793025b4
+      size: 1558
     - path: src/pipeline/config/pydantic/sections/model_config.py
       hash: md5
-      md5: fcfd0d945279e3c4e64f752f83d171d4
-      size: 5043
+      md5: f6883a675bb95b94c61f2b374ed4429a
+      size: 5300
     - path: src/pipeline/config/pydantic/sections/optimizer_config.py
       hash: md5
-      md5: 3412cab18f1ed5773fe84cfbc5a0e926
-      size: 1855
+      md5: 790803ca4b7c01bb5642fb9788098701
+      size: 1949
     - path: src/pipeline/config/pydantic/sections/testing_config.py
       hash: md5
-      md5: 06c72b6d37ef7190996451f0ed608adc
-      size: 2017
+      md5: b0ec8f40d4585b7aeb0a809f7502bf2d
+      size: 2093
     - path: src/pipeline/config/pydantic/sections/training_config.py
       hash: md5
-      md5: 03c73f3854ff108c18c83a70a578cfc7
-      size: 2692
+      md5: f4cacf9e29a749494beb2dacf38619f2
+      size: 2817
     - path: src/pipeline/config/pydantic/sections/validation_config.py
       hash: md5
-      md5: afdb0283bb140e1a079d50fbca7a5316
-      size: 5237
+      md5: c36e27a32e23b0ee69b568360c1b41bb
+      size: 5342
     - path: src/pipeline/const.py
       hash: md5
-      md5: d54b4f180138db5111c31b6e67af712b
-      size: 4267
+      md5: df03aeb211f18a66e00eb862c05e04f6
+      size: 4984
     - path: src/pipeline/steps/data_preprocessor.py
       hash: md5
-      md5: fba0c84d30dfabd07ba244bb1e7ea855
-      size: 5243
+      md5: f7966ae368381de0b2fdc7ced175cdea
+      size: 4478
     params:
       src/pipeline/config/config.yaml:
-        data.general.mode: static
+        data.general.mode: real
         dataset.cleaning.missing_values_removal.dropna.how: any
         logs.level: DEBUG
     outs:
-    - path: data/processed/static/static_processed_dataset.csv
+    - path: data/processed/real/real_processed_dataset.csv
       hash: md5
-      md5: c21b2f60409e6c613981571475c0ad54
-      size: 8257
+      md5: 7fd51d5e491c70cf6709044ed2bae5a5
+      size: 8485048
   validation:
     cmd: PYTHONPATH=src python -m pipeline.steps.validator
     deps:

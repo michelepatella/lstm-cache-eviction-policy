@@ -414,24 +414,12 @@ class DataGeneralConfig(BaseModel):
     Attributes:
         requests (int): Number of requests (> 0).
         keys (DataKeysConfig): Key range configuration.
+        mode (str): Data distribution mode.
     """
 
     requests: Annotated[int, Field(gt=0)]
     keys: DataKeysConfig
-
-
-class DataSyntheticConfig(BaseModel):
-    """Synthetic data configuration.
-
-    Attributes:
-        mode (str): Data distribution mode (e.g., 'static').
-        patterns (DataPatternsConfig): Access and temporal pattern configuration.
-        seed (int): Random seed for generation (>= 0).
-    """
-
     mode: str
-    patterns: DataPatternsConfig
-    seed: Annotated[int, Field(ge=0)]
 
     @model_validator(mode="after")
     def check_data_mode(
@@ -450,10 +438,22 @@ class DataSyntheticConfig(BaseModel):
         assert_choice_field(
             self.mode,
             DATA_MODES,
-            "data.synthetic.mode",
+            "data.general.mode",
         )
 
         return self
+
+
+class DataSyntheticConfig(BaseModel):
+    """Synthetic data configuration.
+
+    Attributes:
+        patterns (DataPatternsConfig): Access and temporal pattern configuration.
+        seed (int): Random seed for generation (>= 0).
+    """
+
+    patterns: DataPatternsConfig
+    seed: Annotated[int, Field(ge=0)]
 
 
 class DataConfig(BaseModel):
