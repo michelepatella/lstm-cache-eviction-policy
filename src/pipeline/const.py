@@ -44,7 +44,7 @@ DATASET_PROCESSED_TYPE = "processed"
 # ----------------------------
 # Logs
 # ----------------------------
-LOGS_PHASE_DATA_GENERATION = "data generation"
+LOGS_PHASE_DATA_PREPARATION = "data preparation"
 LOGS_PHASE_DATA_PREPROCESSING = "data preprocessing"
 LOGS_PHASE_TRAINING = "training"
 LOGS_PHASE_TESTING = "testing"

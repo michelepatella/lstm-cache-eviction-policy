@@ -1,7 +1,7 @@
 """data_preprocessor.py
 
 Pipeline step module responsible for cleaning and enriching the raw
-dataset generated in the previous step.
+dataset.
 
 This module provides the `preprocess_data` function, which handles data
 cleaning (removing missing values) and feature engineering
@@ -53,9 +53,9 @@ dags_hub_repo_name = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME)
 
 
 def preprocess_data() -> None:
-    """Preprocess generated data.
+    """Preprocess data.
 
-    This function preprocesses generated data by orchestrating missing values removal and
+    This function preprocesses data by orchestrating missing values removal and
     new features construction, saving the final preprocessed dataset for further
     usage.
 

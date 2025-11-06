@@ -1,6 +1,6 @@
 """data_config.py
 
-Configuration section for data generation parameters and patterns.
+Configuration section for data parameters.
 
 This module structures all parameters necessary for generating synthetic
 request data, covering core aspects like key ranges, total request count,
@@ -51,9 +51,9 @@ Classes:
     DataPatternsConfig(BaseModel):
         Aggregates access and temporal patterns.
     DataGeneralConfig(BaseModel):
-        General configuration for data generation.
+        General configuration for data.
     DataSyntheticConfig(BaseModel):
-        Synthetic data generation configuration, aggregating mode, patterns, and seed.
+        Synthetic data configuration, aggregating mode, patterns, and seed.
     DataConfig(BaseModel):
         Aggregates general settings and pattern configuration.
 """
@@ -409,7 +409,7 @@ class DataPatternsConfig(BaseModel):
 
 
 class DataGeneralConfig(BaseModel):
-    """General configuration for data generation.
+    """General configuration for data.
 
     Attributes:
         requests (int): Number of requests (> 0).
@@ -421,7 +421,7 @@ class DataGeneralConfig(BaseModel):
 
 
 class DataSyntheticConfig(BaseModel):
-    """Synthetic data generation configuration.
+    """Synthetic data configuration.
 
     Attributes:
         mode (str): Data distribution mode (e.g., 'static').
