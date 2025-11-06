@@ -14,10 +14,11 @@ Functions:
 
 from components.const import (
     MODEL_TRAINED_DYNAMIC_FILE_PATH,
-    MODEL_TRAINED_STATIC_FILE_PATH, MODEL_TRAINED_REAL_FILE_PATH,
+    MODEL_TRAINED_REAL_FILE_PATH,
+    MODEL_TRAINED_STATIC_FILE_PATH,
 )
 from components.logs.levels.debug_logger import debug
-from const import DATA_STATIC_MODE, DATA_DYNAMIC_MODE
+from const import DATA_DYNAMIC_MODE, DATA_STATIC_MODE
 
 
 def get_model_abs_path(data_mode: str) -> str:

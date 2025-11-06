@@ -88,11 +88,7 @@ DATASET_DYNAMIC_PROCESSED_FILE_PATH = (
     / "dynamic_processed_dataset.csv"
 )
 DATASET_REAL_PROCESSED_FILE_PATH = (
-    PROJECT_ROOT
-    / "data"
-    / "processed"
-    / "real"
-    / "real_processed_dataset.csv"
+    PROJECT_ROOT / "data" / "processed" / "real" / "real_processed_dataset.csv"
 )
 
 

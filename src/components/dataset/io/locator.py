@@ -17,12 +17,14 @@ Functions:
 from components.const import (
     DATASET_DYNAMIC_PROCESSED_FILE_PATH,
     DATASET_DYNAMIC_RAW_FILE_PATH,
+    DATASET_REAL_PROCESSED_FILE_PATH,
+    DATASET_REAL_RAW_FILE_PATH,
     DATASET_STATIC_PROCESSED_FILE_PATH,
-    DATASET_STATIC_RAW_FILE_PATH, DATASET_REAL_RAW_FILE_PATH, DATASET_REAL_PROCESSED_FILE_PATH,
+    DATASET_STATIC_RAW_FILE_PATH,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import DATA_STATIC_MODE, DATASET_RAW_TYPE, DATA_DYNAMIC_MODE
+from const import DATA_DYNAMIC_MODE, DATA_STATIC_MODE, DATASET_RAW_TYPE
 
 
 def get_dataset_abs_path(
@@ -79,13 +81,12 @@ def get_dataset_abs_path(
                 # For preprocessed dataset
                 dataset_abs_path = DATASET_DYNAMIC_PROCESSED_FILE_PATH
         # For real data
+        elif dataset_type == DATASET_RAW_TYPE:
+            # For raw dataset
+            dataset_abs_path = DATASET_REAL_RAW_FILE_PATH
         else:
-            if dataset_type == DATASET_RAW_TYPE:
-                # For raw dataset
-                dataset_abs_path = DATASET_REAL_RAW_FILE_PATH
-            else:
-                # For preprocessed dataset
-                dataset_abs_path = DATASET_REAL_PROCESSED_FILE_PATH
+            # For preprocessed dataset
+            dataset_abs_path = DATASET_REAL_PROCESSED_FILE_PATH
 
         debug(
             "Dataset absolute path retrieval completed",
