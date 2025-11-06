@@ -288,10 +288,6 @@ stages:
       hash: md5
       md5: 4d46c07bc4f3b95ac665b00882666245
       size: 7866
-    - path: src/components/dataset/cleans/duplicates_remover.py
-      hash: md5
-      md5: fc97d2f6a04ef1b49d90195307e77d34
-      size: 2470
     - path: src/components/dataset/cleans/missing_values_remover.py
       hash: md5
       md5: 05b50a05c51ae7a1ad075d3dae0af769

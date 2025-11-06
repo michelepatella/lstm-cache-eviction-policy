@@ -46,7 +46,7 @@ from components.visualization.zipf_loglog_plotter import (
     plot_zipf_loglog,
 )
 from const import (
-    DATA_DISTRIBUTION_STATIC_MODE,
+    DATA_STATIC_MODE,
     DATASET_COLUMN_REQUEST_NAME,
     DATASET_COLUMN_TIMESTAMP_NAME,
     DATASET_RAW_TYPE,
@@ -104,14 +104,14 @@ def generate_data() -> None:
         initialize_logs(logging.getLevelName(config.logs.level))
 
         # Prepare configuration
-        data_distribution_mode = config.data.general.mode
+        data_mode = config.data.general.mode
         min_key = config.data.general.keys.min
         max_key = config.data.general.keys.max
 
         info(
             "Data generation started",
             extra={
-                "data_distribution_mode": data_distribution_mode,
+                "data_mode": data_mode,
                 "key_min": min_key,
                 "key_max": max_key,
                 "context": "Data generation",
@@ -120,7 +120,7 @@ def generate_data() -> None:
 
         # Generate requests with corresponding timestamps,
         # based on the data distribution mode
-        if data_distribution_mode == DATA_DISTRIBUTION_STATIC_MODE:
+        if data_mode == DATA_STATIC_MODE:
             # Static requests generation
             requests, timestamps_hours = generate_static_requests(config)
 
@@ -156,7 +156,7 @@ def generate_data() -> None:
         # to save dataset
         dataset_path = get_dataset_abs_path(
             DATASET_RAW_TYPE,
-            data_distribution_mode,
+            data_mode,
         )
 
         # Save just created dataset
@@ -217,7 +217,7 @@ def generate_data() -> None:
     info(
         "Data generation completed",
         extra={
-            "data_distribution_mode": data_distribution_mode,
+            "data_mode": data_mode,
             "dataset_raw_save_path": str(dataset_path),
             "rows_num": len(df),
             "columns_num": len(df.columns),

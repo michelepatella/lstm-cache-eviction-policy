@@ -42,7 +42,9 @@ def infer_single_batch(
     model: torch.nn.Module,
     criterion: torch.nn.Module,
     device: torch.device,
-    target_idx: int = DATASET_PROCESSED_COLUMNS.index(DATASET_COLUMN_REQUEST_NAME),
+    target_idx: int = DATASET_PROCESSED_COLUMNS.index(
+        DATASET_COLUMN_REQUEST_NAME,
+    ),
 ) -> tuple[
     float,
     list[int],

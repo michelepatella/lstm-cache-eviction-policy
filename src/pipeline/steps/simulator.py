@@ -58,7 +58,7 @@ from components.visualization.hit_miss_rates_plotter import (
 )
 from const import (
     CACHE_LSTM_NAME,
-    DATA_DISTRIBUTION_STATIC_MODE,
+    DATA_STATIC_MODE,
     DATASET_TESTING_SPLIT_TYPE,
     LOGS_LOGGER_NAME,
     MLFLOW_NESTED,
@@ -123,7 +123,7 @@ def run_simulations() -> None:
         initialize_logs(logging.getLevelName(config.logs.level))
 
         # Prepare configuration
-        data_distribution_mode = config.data.general.mode
+        data_mode = config.data.general.mode
         mistake_window = (
             config.evaluation.simulations.metrics.mistake_rate.window
         )
@@ -167,7 +167,7 @@ def run_simulations() -> None:
         info(
             "Simulations started",
             extra={
-                "data_distribution_mode": data_distribution_mode,
+                "data_mode": data_mode,
                 "policies_simulated": list(cache_eviction_policies.keys()),
                 "mistake_window": mistake_window,
                 "context": "Simulations",
@@ -271,7 +271,7 @@ def run_simulations() -> None:
 
         # Determine results and plot file path according
         # to data distribution mode
-        if data_distribution_mode == DATA_DISTRIBUTION_STATIC_MODE:
+        if data_mode == DATA_STATIC_MODE:
             results_file_path = RESULTS_STATIC_SIMULATIONS_FILE_PATH
             plot_save_path = PLOT_STATIC_HIT_MISS_RATES_FILE_PATH
         else:
