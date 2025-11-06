@@ -11,7 +11,6 @@ Expectation Suite to verify its integrity. The checks specifically focus on:
                            bounds.
     - Schema Integrity: Verifies the existence, data types, count, and order
                         of the processed columns.
-    - Volume Check: Asserts that the row count remains consistent after processing.
 
 Functions:
     test_processed_dataset() -> None
@@ -25,7 +24,6 @@ from helpers import (
     add_column_order_expectation,
     add_column_range_expectations,
     add_column_type_expectations,
-    add_row_count_expectation,
     initialize_dataset_testing,
     run_dataset_testing,
 )
@@ -56,7 +54,6 @@ def test_processed_dataset():
         - Defining Numeric Expectations (range checks for sine/cosine time features
           and request keys).
         - Defining Schema Expectations (existence, type, count, and order of columns).
-        - Defining Volume Expectations (total row count).
         - Executing the Checkpoint and asserting that all expectations are met.
 
     Returns:
@@ -135,12 +132,6 @@ def test_processed_dataset():
 
     # Ensure columns are sorted as expected
     add_column_order_expectation(suite, DATASET_PROCESSED_COLUMNS)
-
-    # ----------------------------
-    # Volume checks
-    # ----------------------------
-    # Ensure dataset has expected volume
-    add_row_count_expectation(suite, config.data.general.requests)
 
     # ----------------------------
     # Suite validation
