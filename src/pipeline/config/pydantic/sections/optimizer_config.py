@@ -12,7 +12,9 @@ Classes:
         Aggregates the optimizer type and its parameters.
 """
 
-from pydantic import BaseModel, confloat, model_validator
+from typing import Annotated
+
+from pydantic import BaseModel, Field, model_validator
 
 from components.assertions.choice_field_assertor import (
     assert_choice_field,
@@ -24,15 +26,15 @@ class OptimizerParamsConfig(BaseModel):
     """Configuration for optimizer hyperparameters.
 
     Attributes:
-        learning_rate (confloat): The learning rate (> 0).
-        momentum (confloat): The momentum factor (>= 0, <= 1).
-        weight_decay (confloat): The weight decay (L2 penalty) factor
-                                 (>= 0).
+        learning_rate (float): The learning rate (> 0).
+        momentum (float): The momentum factor (>= 0, <= 1).
+        weight_decay (float): The weight decay (L2 penalty) factor
+                              (>= 0).
     """
 
-    learning_rate: confloat(gt=0)
-    momentum: confloat(ge=0, le=1)
-    weight_decay: confloat(ge=0)
+    learning_rate: Annotated[float, Field(gt=0)]
+    momentum: Annotated[float, Field(ge=0, le=1)]
+    weight_decay: Annotated[float, Field(ge=0)]
 
 
 class OptimizerConfig(BaseModel):

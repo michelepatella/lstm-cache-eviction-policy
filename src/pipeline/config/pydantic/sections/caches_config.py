@@ -10,17 +10,19 @@ Classes:
         Configuration for general cache settings.
 """
 
-from pydantic import BaseModel, conint
+from typing import Annotated
+
+from pydantic import BaseModel, Field
 
 
 class CachesConfig(BaseModel):
     """Configuration for general cache settings.
 
     Attributes:
-        dimension (conint): The maximum size (number of keys)
+        dimension (int): The maximum size (number of keys)
                             of the cache (>= 1).
-        ttl (conint): Time-To-Live for cache entries (>= 0).
+        ttl (int): Time-To-Live for cache entries (>= 0).
     """
 
-    dimension: conint(ge=1)
-    ttl: conint(ge=0)
+    dimension: Annotated[int, Field(ge=1)]
+    ttl: Annotated[int, Field(ge=0)]

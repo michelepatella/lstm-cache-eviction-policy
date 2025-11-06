@@ -15,7 +15,9 @@ Classes:
         Aggregates all testing configuration settings.
 """
 
-from pydantic import BaseModel, conint, model_validator
+from typing import Annotated
+
+from pydantic import BaseModel, Field, model_validator
 
 from components.assertions.choice_field_assertor import assert_choice_field
 from const import HW_DEVICE_NAMES
@@ -61,7 +63,7 @@ class TestingGeneralConfig(BaseModel):
         shuffle (bool): Whether to shuffle the dataset during testing.
     """
 
-    batch_size: conint(gt=0)
+    batch_size: Annotated[int, Field(gt=0)]
     shuffle: bool
 
 

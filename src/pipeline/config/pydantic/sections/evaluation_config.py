@@ -16,18 +16,20 @@ Classes:
         Aggregates all evaluation-related settings.
 """
 
-from pydantic import BaseModel, conint
+from typing import Annotated
+
+from pydantic import BaseModel, Field
 
 
 class EvaluationSimulationsMetricsMistakeRateConfig(BaseModel):
     """Configuration for mistake rate calculation.
 
     Attributes:
-        window (conint): The look-ahead window size used to
-                         determine an eviction mistake (>= 1).
+        window (int): The look-ahead window size used to
+                      determine an eviction mistake (>= 1).
     """
 
-    window: conint(ge=1)
+    window: Annotated[int, Field(ge=1)]
 
 
 class EvaluationSimulationsMetricsConfig(BaseModel):
