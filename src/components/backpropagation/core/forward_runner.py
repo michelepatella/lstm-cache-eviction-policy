@@ -54,18 +54,18 @@ def compute_forward(
     """
     try:
         # Unpack batch
-        first_input, second_input, target = batch
+        x_features, x_keys, y_key = batch
 
         # Move batch to device
-        first_input = move_to_device(first_input, device)
-        second_input = move_to_device(second_input, device)
-        target = move_to_device(target, device)
+        x_features = move_to_device(x_features, device)
+        x_keys = move_to_device(x_keys, device)
+        y_key = move_to_device(y_key, device)
 
         # Compute forward pass
-        outputs = model(first_input, second_input)
+        outputs = model(x_features, x_keys)
 
         # Calculate loss
-        loss = calculate_loss(outputs, target, criterion)
+        loss = calculate_loss(outputs, y_key, criterion)
 
         return loss, outputs
     except (ValueError, TypeError, RuntimeError) as e:

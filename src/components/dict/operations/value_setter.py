@@ -21,6 +21,7 @@ Functions:
 from collections.abc import Sequence
 from typing import Any
 
+from components.const import LIST_LAST_IDX
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
@@ -63,7 +64,7 @@ def set_dict_value(
         # Iterate over all the keys except
         # the last one to go down the nested levels
         current_dict = data_dict
-        for key in keys[:-1]:
+        for key in keys[:LIST_LAST_IDX]:
             # If the current key is not in the
             # current dictionary or this latter is not
             # a dictionary, make it one
@@ -78,7 +79,7 @@ def set_dict_value(
 
         # Set the desired value in the last
         # position
-        current_dict[keys[-1]] = value
+        current_dict[keys[LIST_LAST_IDX]] = value
 
         debug(
             "Dictionary value setting completed",

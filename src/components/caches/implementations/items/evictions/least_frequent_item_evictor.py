@@ -20,6 +20,7 @@ from collections import defaultdict
 from collections.abc import Callable
 from typing import Any
 
+from components.const import LIST_FIRST_IDX
 from components.logs.levels.error_logger import error
 
 
@@ -69,7 +70,7 @@ def evict_least_frequent_item(
 
         # Tiebreak strategy: select the oldest
         # key among them
-        key_to_evict = evicted_candidates[0]
+        key_to_evict = evicted_candidates[LIST_FIRST_IDX]
 
         # Remove selected key from cache
         # and frequency dictionary

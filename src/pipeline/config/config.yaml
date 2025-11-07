@@ -11,7 +11,7 @@ api_kwargs:
   rollout_horizon: 3
   time_step_increment: 0.02
 caches:
-  dimension: 40
+  dimension: 10
   ttl: 10000
 data:
   general:

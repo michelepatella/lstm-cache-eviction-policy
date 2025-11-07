@@ -28,7 +28,7 @@ from components.caches.simulations.hit_miss.checker_updater import (
 from components.caches.simulations.hit_miss.timeline_updater import (
     update_hit_miss_timeline,
 )
-from components.const import TIME_MICROSECONDS_IN_SECOND
+from components.const import TIME_MICROSECONDS_IN_SECOND, LIST_FIRST_IDX
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
@@ -108,7 +108,7 @@ def run_cache_simulation(
             features, _, target = row
 
             # Decode time
-            sin_time, cos_time = features[0]
+            sin_time, cos_time, _, _ = features[LIST_FIRST_IDX]
             current_time = decode_time_trigonometrically(sin_time, cos_time)
 
             # Decode key

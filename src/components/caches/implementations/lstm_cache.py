@@ -31,6 +31,7 @@ from components.const import (
     API_PARAM_KEYS_IN_CACHE_NAME,
     API_PARAM_LAST_ACCESSES_NAME,
     API_PARAM_USER_API_KWARGS_NAME,
+    LIST_FIRST_IDX,
 )
 from components.dataset.rows.extractions.lasts_extractor import (
     extract_last_rows_from_dataset,
@@ -252,7 +253,7 @@ class LSTMCache(BaseCache):
                     data = Box(response.json())
 
                     # Retrieve keys to evict
-                    key_to_evict = data.keys_to_evict[0]
+                    key_to_evict = data.keys_to_evict[LIST_FIRST_IDX]
 
                 # Evict key
                 self.evict_key(key_to_evict)
