@@ -1,0 +1,1903 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>src.pipeline.config.pydantic.sections.data_config API documentation</title>
+<meta name="description" content="data_config.py …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>src.pipeline.config.pydantic.sections.data_config</code></h1>
+</header>
+<section id="section-intro">
+<p>data_config.py</p>
+<p>Configuration section for data parameters.</p>
+<p>This module structures all parameters necessary for generating synthetic
+request data, covering core aspects like key ranges, total request count,
+distribution mode, and complex temporal and access patterns.</p>
+<p>It defines parameters for Zipf distribution, burstiness, and various access
+behaviors (repetition, toggle, cycle, distortion, and memory effects).</p>
+<h2 id="classes">Classes</h2>
+<p>DataPatternsAccessBehaviorHoursConfig(BaseModel):
+Hour range configuration.
+DataKeysConfig(BaseModel):
+Configuration for key ID ranges.
+DataPatternsAccessZipfAlphaConfig(BaseModel):
+Alpha parameters for Zipf distribution.
+DataPatternsAccessZipfConfig(BaseModel):
+Configuration for Zipf distribution.
+DataPatternsAccessBehaviorRepetitionConfig(BaseModel):
+Repetition behavior configuration.
+DataPatternsAccessBehaviorToggleOffsetsConfig(BaseModel):
+Toggle offsets configuration.
+DataPatternsAccessBehaviorToggleBaseRequestsConfig(BaseModel):
+Toggle base requests configuration.
+DataPatternsAccessBehaviorToggleConfig(BaseModel):
+Toggle behavior configuration.
+DataPatternsAccessBehaviorDistortionNoiseConfig(BaseModel):
+Noise parameters for distortion.
+DataPatternsAccessBehaviorDistortionOffsetsConfig(BaseModel):
+Distortion offsets configuration.
+DataPatternsAccessBehaviorDistortionConfig(BaseModel):
+Distortion behavior configuration.
+DataPatternsAccessBehaviorMemoryConfig(BaseModel):
+Memory behavior configuration.
+DataPatternsAccessBehaviorCycleConfig(BaseModel):
+Cyclical behavior configuration.
+DataPatternsAccessBehaviorConfig(BaseModel):
+Aggregated access behavior configuration.
+DataPatternsAccessConfig(BaseModel):
+Access pattern configuration.
+DataPatternsTemporalBurstinessHoursConfig(BaseModel):
+Hour range configuration for burstiness.
+DataPatternsTemporalBurstinessConfig(BaseModel):
+Burstiness configuration.
+DataPatternsTemporalPeriodicConfig(BaseModel):
+Periodic pattern configuration.
+DataPatternsTemporalConfig(BaseModel):
+Temporal behavior configuration.
+DataPatternsConfig(BaseModel):
+Aggregates access and temporal patterns.
+DataGeneralConfig(BaseModel):
+General configuration for data.
+DataSyntheticConfig(BaseModel):
+Synthetic data configuration, aggregating mode, patterns, and seed.
+DataConfig(BaseModel):
+Aggregates general settings and pattern configuration.</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataConfig"><code class="flex name class">
+<span>class <span class="ident">DataConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataConfig(BaseModel):
+    &#34;&#34;&#34;Data configuration.
+
+    Attributes:
+        general (DataGeneralConfig): General data configuration settings.
+        synthetic (DataSyntheticConfig): Synthetic data generation settings and patterns.
+    &#34;&#34;&#34;
+
+    general: DataGeneralConfig
+    synthetic: DataSyntheticConfig</code></pre>
+</details>
+<div class="desc"><p>Data configuration.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>general</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig">DataGeneralConfig</a></code></dt>
+<dd>General data configuration settings.</dd>
+<dt><strong><code>synthetic</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig">DataSyntheticConfig</a></code></dt>
+<dd>Synthetic data generation settings and patterns.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataConfig.general"><code class="name">var <span class="ident">general</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig">DataGeneralConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataConfig.synthetic"><code class="name">var <span class="ident">synthetic</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig">DataSyntheticConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig"><code class="flex name class">
+<span>class <span class="ident">DataGeneralConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataGeneralConfig(BaseModel):
+    &#34;&#34;&#34;General configuration for data.
+
+    Attributes:
+        requests (int): Number of requests (&gt; 0).
+        keys (DataKeysConfig): Key range configuration.
+        mode (str): Data distribution mode.
+    &#34;&#34;&#34;
+
+    requests: Annotated[int, Field(gt=0)]
+    keys: DataKeysConfig
+    mode: str
+
+    @model_validator(mode=&#34;after&#34;)
+    def check_data_mode(
+        self: &#34;DataSyntheticConfig&#34;,
+    ) -&gt; &#34;DataSyntheticConfig&#34;:
+        &#34;&#34;&#34;Check whether data distribution mode is valid or not.
+
+        This function validates the data distribution mode.
+
+        Args:
+            self (DataSyntheticConfig): Current model instance.
+
+        Returns:
+            &#34;DataSyntheticConfig&#34;: Validated model instance.
+        &#34;&#34;&#34;
+        assert_choice_field(
+            self.mode,
+            DATA_MODES,
+            &#34;data.general.mode&#34;,
+        )
+
+        return self</code></pre>
+</details>
+<div class="desc"><p>General configuration for data.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>requests</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of requests (&gt; 0).</dd>
+<dt><strong><code>keys</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataKeysConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataKeysConfig">DataKeysConfig</a></code></dt>
+<dd>Key range configuration.</dd>
+<dt><strong><code>mode</code></strong> :&ensp;<code>str</code></dt>
+<dd>Data distribution mode.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig.keys"><code class="name">var <span class="ident">keys</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataKeysConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataKeysConfig">DataKeysConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig.mode"><code class="name">var <span class="ident">mode</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig.requests"><code class="name">var <span class="ident">requests</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig.check_data_mode"><code class="name flex">
+<span>def <span class="ident">check_data_mode</span></span>(<span>self: <a title="src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig">DataSyntheticConfig</a>) ‑> <a title="src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig">DataSyntheticConfig</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@model_validator(mode=&#34;after&#34;)
+def check_data_mode(
+    self: &#34;DataSyntheticConfig&#34;,
+) -&gt; &#34;DataSyntheticConfig&#34;:
+    &#34;&#34;&#34;Check whether data distribution mode is valid or not.
+
+    This function validates the data distribution mode.
+
+    Args:
+        self (DataSyntheticConfig): Current model instance.
+
+    Returns:
+        &#34;DataSyntheticConfig&#34;: Validated model instance.
+    &#34;&#34;&#34;
+    assert_choice_field(
+        self.mode,
+        DATA_MODES,
+        &#34;data.general.mode&#34;,
+    )
+
+    return self</code></pre>
+</details>
+<div class="desc"><p>Check whether data distribution mode is valid or not.</p>
+<p>This function validates the data distribution mode.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>self</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig">DataSyntheticConfig</a></code></dt>
+<dd>Current model instance.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>"DataSyntheticConfig": Validated model instance.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataKeysConfig"><code class="flex name class">
+<span>class <span class="ident">DataKeysConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataKeysConfig(BaseModel):
+    &#34;&#34;&#34;Configuration for key ranges.
+
+    Attributes:
+        min (int): Minimum key (&gt; 0).
+        max (int): Maximum key (&gt; 0).
+    &#34;&#34;&#34;
+
+    min: Annotated[int, Field(gt=0)]
+    max: Annotated[int, Field(gt=0)]
+
+    @model_validator(mode=&#34;after&#34;)
+    def check_min_max_keys(
+        self: &#34;DataKeysConfig&#34;,
+    ) -&gt; &#34;DataKeysConfig&#34;:
+        &#34;&#34;&#34;Check whether the least key is greater than or equal to the
+        greatest key or not.
+
+        Args:
+            self (DataKeysConfig): Current model instance.
+
+        Returns:
+            DataKeysConfig: Validated model instance.
+        &#34;&#34;&#34;
+        # Check min/max validity
+        assert_min_less_than_max(
+            self.min,
+            self.max,
+            values_context=&#34;data.keys&#34;,
+        )
+
+        return self</code></pre>
+</details>
+<div class="desc"><p>Configuration for key ranges.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>min</code></strong> :&ensp;<code>int</code></dt>
+<dd>Minimum key (&gt; 0).</dd>
+<dt><strong><code>max</code></strong> :&ensp;<code>int</code></dt>
+<dd>Maximum key (&gt; 0).</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataKeysConfig.max"><code class="name">var <span class="ident">max</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataKeysConfig.min"><code class="name">var <span class="ident">min</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataKeysConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataKeysConfig.check_min_max_keys"><code class="name flex">
+<span>def <span class="ident">check_min_max_keys</span></span>(<span>self: <a title="src.pipeline.config.pydantic.sections.data_config.DataKeysConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataKeysConfig">DataKeysConfig</a>) ‑> <a title="src.pipeline.config.pydantic.sections.data_config.DataKeysConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataKeysConfig">DataKeysConfig</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@model_validator(mode=&#34;after&#34;)
+def check_min_max_keys(
+    self: &#34;DataKeysConfig&#34;,
+) -&gt; &#34;DataKeysConfig&#34;:
+    &#34;&#34;&#34;Check whether the least key is greater than or equal to the
+    greatest key or not.
+
+    Args:
+        self (DataKeysConfig): Current model instance.
+
+    Returns:
+        DataKeysConfig: Validated model instance.
+    &#34;&#34;&#34;
+    # Check min/max validity
+    assert_min_less_than_max(
+        self.min,
+        self.max,
+        values_context=&#34;data.keys&#34;,
+    )
+
+    return self</code></pre>
+</details>
+<div class="desc"><p>Check whether the least key is greater than or equal to the
+greatest key or not.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>self</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataKeysConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataKeysConfig">DataKeysConfig</a></code></dt>
+<dd>Current model instance.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="src.pipeline.config.pydantic.sections.data_config.DataKeysConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataKeysConfig">DataKeysConfig</a></code></dt>
+<dd>Validated model instance.</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig"><code class="flex name class">
+<span>class <span class="ident">DataPatternsAccessBehaviorConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPatternsAccessBehaviorConfig(BaseModel):
+    &#34;&#34;&#34;Aggregated access behavior configuration.
+
+    Attributes:
+        repetition (DataPatternsAccessBehaviorRepetitionConfig): Repetition configuration.
+        toggle (DataPatternsAccessBehaviorToggleConfig): Toggle configuration.
+        cycle (DataPatternsAccessBehaviorCycleConfig): Cycle configuration.
+        distortion (DataPatternsAccessBehaviorDistortionConfig): Distortion configuration.
+        memory (DataPatternsAccessBehaviorMemoryConfig): Memory configuration.
+    &#34;&#34;&#34;
+
+    repetition: DataPatternsAccessBehaviorRepetitionConfig
+    toggle: DataPatternsAccessBehaviorToggleConfig
+    cycle: DataPatternsAccessBehaviorCycleConfig
+    distortion: DataPatternsAccessBehaviorDistortionConfig
+    memory: DataPatternsAccessBehaviorMemoryConfig</code></pre>
+</details>
+<div class="desc"><p>Aggregated access behavior configuration.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>repetition</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorRepetitionConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorRepetitionConfig">DataPatternsAccessBehaviorRepetitionConfig</a></code></dt>
+<dd>Repetition configuration.</dd>
+<dt><strong><code>toggle</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig">DataPatternsAccessBehaviorToggleConfig</a></code></dt>
+<dd>Toggle configuration.</dd>
+<dt><strong><code>cycle</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig">DataPatternsAccessBehaviorCycleConfig</a></code></dt>
+<dd>Cycle configuration.</dd>
+<dt><strong><code>distortion</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig">DataPatternsAccessBehaviorDistortionConfig</a></code></dt>
+<dd>Distortion configuration.</dd>
+<dt><strong><code>memory</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorMemoryConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorMemoryConfig">DataPatternsAccessBehaviorMemoryConfig</a></code></dt>
+<dd>Memory configuration.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig.cycle"><code class="name">var <span class="ident">cycle</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig">DataPatternsAccessBehaviorCycleConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig.distortion"><code class="name">var <span class="ident">distortion</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig">DataPatternsAccessBehaviorDistortionConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig.memory"><code class="name">var <span class="ident">memory</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorMemoryConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorMemoryConfig">DataPatternsAccessBehaviorMemoryConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig.repetition"><code class="name">var <span class="ident">repetition</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorRepetitionConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorRepetitionConfig">DataPatternsAccessBehaviorRepetitionConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig.toggle"><code class="name">var <span class="ident">toggle</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig">DataPatternsAccessBehaviorToggleConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig"><code class="flex name class">
+<span>class <span class="ident">DataPatternsAccessBehaviorCycleConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPatternsAccessBehaviorCycleConfig(BaseModel):
+    &#34;&#34;&#34;Cyclical behavior configuration.
+
+    Attributes:
+        base (int): Base value for cycle (&gt; 0).
+        mod (int): Modulus for cycle (&gt; 0).
+        divisor (int): Divisor for cycle (&gt; 0).
+        hours (DataPatternsAccessBehaviorHoursConfig): Hours during which cyclical behavior occurs.
+    &#34;&#34;&#34;
+
+    base: Annotated[int, Field(gt=0)]
+    mod: Annotated[int, Field(gt=0)]
+    divisor: Annotated[int, Field(gt=0)]
+    hours: DataPatternsAccessBehaviorHoursConfig</code></pre>
+</details>
+<div class="desc"><p>Cyclical behavior configuration.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>base</code></strong> :&ensp;<code>int</code></dt>
+<dd>Base value for cycle (&gt; 0).</dd>
+<dt><strong><code>mod</code></strong> :&ensp;<code>int</code></dt>
+<dd>Modulus for cycle (&gt; 0).</dd>
+<dt><strong><code>divisor</code></strong> :&ensp;<code>int</code></dt>
+<dd>Divisor for cycle (&gt; 0).</dd>
+<dt><strong><code>hours</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig">DataPatternsAccessBehaviorHoursConfig</a></code></dt>
+<dd>Hours during which cyclical behavior occurs.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig.base"><code class="name">var <span class="ident">base</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig.divisor"><code class="name">var <span class="ident">divisor</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig.hours"><code class="name">var <span class="ident">hours</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig">DataPatternsAccessBehaviorHoursConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig.mod"><code class="name">var <span class="ident">mod</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig"><code class="flex name class">
+<span>class <span class="ident">DataPatternsAccessBehaviorDistortionConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPatternsAccessBehaviorDistortionConfig(BaseModel):
+    &#34;&#34;&#34;Distortion configuration for access behavior.
+
+    Attributes:
+        interval (int): Interval at which distortion is applied (&gt; 0).
+        hours (DataPatternsAccessBehaviorHoursConfig): Hours during which distortion occurs.
+        offsets (DataPatternsAccessBehaviorDistortionOffsetsConfig): Distortion offsets.
+        noise (DataPatternsAccessBehaviorDistortionNoiseConfig): Noise parameters for distortion.
+    &#34;&#34;&#34;
+
+    interval: Annotated[int, Field(gt=0)]
+    hours: DataPatternsAccessBehaviorHoursConfig
+    offsets: DataPatternsAccessBehaviorDistortionOffsetsConfig
+    noise: DataPatternsAccessBehaviorDistortionNoiseConfig</code></pre>
+</details>
+<div class="desc"><p>Distortion configuration for access behavior.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>interval</code></strong> :&ensp;<code>int</code></dt>
+<dd>Interval at which distortion is applied (&gt; 0).</dd>
+<dt><strong><code>hours</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig">DataPatternsAccessBehaviorHoursConfig</a></code></dt>
+<dd>Hours during which distortion occurs.</dd>
+<dt><strong><code>offsets</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionOffsetsConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionOffsetsConfig">DataPatternsAccessBehaviorDistortionOffsetsConfig</a></code></dt>
+<dd>Distortion offsets.</dd>
+<dt><strong><code>noise</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig">DataPatternsAccessBehaviorDistortionNoiseConfig</a></code></dt>
+<dd>Noise parameters for distortion.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig.hours"><code class="name">var <span class="ident">hours</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig">DataPatternsAccessBehaviorHoursConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig.interval"><code class="name">var <span class="ident">interval</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig.noise"><code class="name">var <span class="ident">noise</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig">DataPatternsAccessBehaviorDistortionNoiseConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig.offsets"><code class="name">var <span class="ident">offsets</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionOffsetsConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionOffsetsConfig">DataPatternsAccessBehaviorDistortionOffsetsConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig"><code class="flex name class">
+<span>class <span class="ident">DataPatternsAccessBehaviorDistortionNoiseConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPatternsAccessBehaviorDistortionNoiseConfig(BaseModel):
+    &#34;&#34;&#34;Noise distortion configuration for access behavior.
+
+    Attributes:
+        min (int): Minimum noise value.
+        max (int): Maximum noise value.
+    &#34;&#34;&#34;
+
+    min: int
+    max: int
+
+    @model_validator(mode=&#34;after&#34;)
+    def check_min_max_noises(
+        self: &#34;DataPatternsAccessBehaviorDistortionNoiseConfig&#34;,
+    ) -&gt; &#34;DataPatternsAccessBehaviorDistortionNoiseConfig&#34;:
+        &#34;&#34;&#34;Check whether the least noise value is greater than or equal to
+        the greatest one or not.
+
+        Args:
+            self (DataPatternsAccessBehaviorDistortionNoiseConfig): Current model instance.
+
+        Returns:
+            DataPatternsAccessBehaviorDistortionNoiseConfig: Validated model instance.
+        &#34;&#34;&#34;
+        assert_min_less_than_max(
+            self.min,
+            self.max,
+            values_context=&#34;data.pattern.access.behavior.distortion.noise&#34;,
+        )
+
+        return self</code></pre>
+</details>
+<div class="desc"><p>Noise distortion configuration for access behavior.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>min</code></strong> :&ensp;<code>int</code></dt>
+<dd>Minimum noise value.</dd>
+<dt><strong><code>max</code></strong> :&ensp;<code>int</code></dt>
+<dd>Maximum noise value.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig.max"><code class="name">var <span class="ident">max</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig.min"><code class="name">var <span class="ident">min</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig.check_min_max_noises"><code class="name flex">
+<span>def <span class="ident">check_min_max_noises</span></span>(<span>self: <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig">DataPatternsAccessBehaviorDistortionNoiseConfig</a>) ‑> <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig">DataPatternsAccessBehaviorDistortionNoiseConfig</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@model_validator(mode=&#34;after&#34;)
+def check_min_max_noises(
+    self: &#34;DataPatternsAccessBehaviorDistortionNoiseConfig&#34;,
+) -&gt; &#34;DataPatternsAccessBehaviorDistortionNoiseConfig&#34;:
+    &#34;&#34;&#34;Check whether the least noise value is greater than or equal to
+    the greatest one or not.
+
+    Args:
+        self (DataPatternsAccessBehaviorDistortionNoiseConfig): Current model instance.
+
+    Returns:
+        DataPatternsAccessBehaviorDistortionNoiseConfig: Validated model instance.
+    &#34;&#34;&#34;
+    assert_min_less_than_max(
+        self.min,
+        self.max,
+        values_context=&#34;data.pattern.access.behavior.distortion.noise&#34;,
+    )
+
+    return self</code></pre>
+</details>
+<div class="desc"><p>Check whether the least noise value is greater than or equal to
+the greatest one or not.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>self</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig">DataPatternsAccessBehaviorDistortionNoiseConfig</a></code></dt>
+<dd>Current model instance.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig">DataPatternsAccessBehaviorDistortionNoiseConfig</a></code></dt>
+<dd>Validated model instance.</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionOffsetsConfig"><code class="flex name class">
+<span>class <span class="ident">DataPatternsAccessBehaviorDistortionOffsetsConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPatternsAccessBehaviorDistortionOffsetsConfig(BaseModel):
+    &#34;&#34;&#34;Offsets configuration for distortion behavior.
+
+    Attributes:
+        history (int): Past history.
+        correction (int): Offset for distortion correction.
+    &#34;&#34;&#34;
+
+    history: int
+    correction: int</code></pre>
+</details>
+<div class="desc"><p>Offsets configuration for distortion behavior.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>history</code></strong> :&ensp;<code>int</code></dt>
+<dd>Past history.</dd>
+<dt><strong><code>correction</code></strong> :&ensp;<code>int</code></dt>
+<dd>Offset for distortion correction.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionOffsetsConfig.correction"><code class="name">var <span class="ident">correction</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionOffsetsConfig.history"><code class="name">var <span class="ident">history</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionOffsetsConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig"><code class="flex name class">
+<span>class <span class="ident">DataPatternsAccessBehaviorHoursConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPatternsAccessBehaviorHoursConfig(BaseModel):
+    &#34;&#34;&#34;Configuration for a range of hours within the day.
+
+    Attributes:
+        start (int): Start hour (between DATA_GENERATION_INITIAL_HOUR
+                     and DATA_GENERATION_FINAL_HOUR).
+        end (int): End hour (between DATA_GENERATION_INITIAL_HOUR
+                   and DATA_GENERATION_FINAL_HOUR).
+    &#34;&#34;&#34;
+
+    start: Annotated[int, Field(ge=TIME_START_HOUR, le=TIME_END_HOUR)]
+    end: Annotated[int, Field(ge=TIME_START_HOUR, le=TIME_END_HOUR)]</code></pre>
+</details>
+<div class="desc"><p>Configuration for a range of hours within the day.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>start</code></strong> :&ensp;<code>int</code></dt>
+<dd>Start hour (between DATA_GENERATION_INITIAL_HOUR
+and DATA_GENERATION_FINAL_HOUR).</dd>
+<dt><strong><code>end</code></strong> :&ensp;<code>int</code></dt>
+<dd>End hour (between DATA_GENERATION_INITIAL_HOUR
+and DATA_GENERATION_FINAL_HOUR).</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig.end"><code class="name">var <span class="ident">end</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig.start"><code class="name">var <span class="ident">start</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorMemoryConfig"><code class="flex name class">
+<span>class <span class="ident">DataPatternsAccessBehaviorMemoryConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPatternsAccessBehaviorMemoryConfig(BaseModel):
+    &#34;&#34;&#34;Memory behavior configuration.
+
+    Attributes:
+        interval (int): Interval at which memory is applied (&gt; 0).
+        offset (int): Offset applied to memory (&gt; 0).
+    &#34;&#34;&#34;
+
+    interval: Annotated[int, Field(gt=0)]
+    offset: Annotated[int, Field(gt=0)]</code></pre>
+</details>
+<div class="desc"><p>Memory behavior configuration.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>interval</code></strong> :&ensp;<code>int</code></dt>
+<dd>Interval at which memory is applied (&gt; 0).</dd>
+<dt><strong><code>offset</code></strong> :&ensp;<code>int</code></dt>
+<dd>Offset applied to memory (&gt; 0).</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorMemoryConfig.interval"><code class="name">var <span class="ident">interval</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorMemoryConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorMemoryConfig.offset"><code class="name">var <span class="ident">offset</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorRepetitionConfig"><code class="flex name class">
+<span>class <span class="ident">DataPatternsAccessBehaviorRepetitionConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPatternsAccessBehaviorRepetitionConfig(BaseModel):
+    &#34;&#34;&#34;Configuration for repetition behavior in access patterns.
+
+    Attributes:
+        interval (int): Interval between repetitions (&gt; 0).
+        offset (int): Offset applied to repetitions (&gt; 0).
+        hours (DataPatternsAccessBehaviorHoursConfig): Hours during which repetitions occur.
+    &#34;&#34;&#34;
+
+    interval: Annotated[int, Field(gt=0)]
+    offset: Annotated[int, Field(gt=0)]
+    hours: DataPatternsAccessBehaviorHoursConfig</code></pre>
+</details>
+<div class="desc"><p>Configuration for repetition behavior in access patterns.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>interval</code></strong> :&ensp;<code>int</code></dt>
+<dd>Interval between repetitions (&gt; 0).</dd>
+<dt><strong><code>offset</code></strong> :&ensp;<code>int</code></dt>
+<dd>Offset applied to repetitions (&gt; 0).</dd>
+<dt><strong><code>hours</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig">DataPatternsAccessBehaviorHoursConfig</a></code></dt>
+<dd>Hours during which repetitions occur.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorRepetitionConfig.hours"><code class="name">var <span class="ident">hours</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig">DataPatternsAccessBehaviorHoursConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorRepetitionConfig.interval"><code class="name">var <span class="ident">interval</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorRepetitionConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorRepetitionConfig.offset"><code class="name">var <span class="ident">offset</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleBaseRequestsConfig"><code class="flex name class">
+<span>class <span class="ident">DataPatternsAccessBehaviorToggleBaseRequestsConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPatternsAccessBehaviorToggleBaseRequestsConfig(BaseModel):
+    &#34;&#34;&#34;Base requests configuration for toggle behavior.
+
+    Attributes:
+        first (int): First base request (&gt; 0).
+        second (int): Second base request (&gt; 0).
+    &#34;&#34;&#34;
+
+    first: Annotated[int, Field(gt=0)]
+    second: Annotated[int, Field(gt=0)]</code></pre>
+</details>
+<div class="desc"><p>Base requests configuration for toggle behavior.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>first</code></strong> :&ensp;<code>int</code></dt>
+<dd>First base request (&gt; 0).</dd>
+<dt><strong><code>second</code></strong> :&ensp;<code>int</code></dt>
+<dd>Second base request (&gt; 0).</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleBaseRequestsConfig.first"><code class="name">var <span class="ident">first</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleBaseRequestsConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleBaseRequestsConfig.second"><code class="name">var <span class="ident">second</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig"><code class="flex name class">
+<span>class <span class="ident">DataPatternsAccessBehaviorToggleConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPatternsAccessBehaviorToggleConfig(BaseModel):
+    &#34;&#34;&#34;Configuration for toggle behavior.
+
+    Attributes:
+        interval (int): Toggle interval (&gt; 0).
+        hours (DataPatternsAccessBehaviorHoursConfig): Hours during which toggle behavior occurs.
+        base_requests (DataPatternsAccessBehaviorToggleBaseRequestsConfig): Base request indices.
+        offsets (DataPatternsAccessBehaviorToggleOffsetsConfig): Offsets for toggle behavior.
+    &#34;&#34;&#34;
+
+    interval: Annotated[int, Field(gt=0)]
+    hours: DataPatternsAccessBehaviorHoursConfig
+    base_requests: DataPatternsAccessBehaviorToggleBaseRequestsConfig
+    offsets: DataPatternsAccessBehaviorToggleOffsetsConfig</code></pre>
+</details>
+<div class="desc"><p>Configuration for toggle behavior.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>interval</code></strong> :&ensp;<code>int</code></dt>
+<dd>Toggle interval (&gt; 0).</dd>
+<dt><strong><code>hours</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig">DataPatternsAccessBehaviorHoursConfig</a></code></dt>
+<dd>Hours during which toggle behavior occurs.</dd>
+<dt><strong><code>base_requests</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleBaseRequestsConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleBaseRequestsConfig">DataPatternsAccessBehaviorToggleBaseRequestsConfig</a></code></dt>
+<dd>Base request indices.</dd>
+<dt><strong><code>offsets</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleOffsetsConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleOffsetsConfig">DataPatternsAccessBehaviorToggleOffsetsConfig</a></code></dt>
+<dd>Offsets for toggle behavior.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig.base_requests"><code class="name">var <span class="ident">base_requests</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleBaseRequestsConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleBaseRequestsConfig">DataPatternsAccessBehaviorToggleBaseRequestsConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig.hours"><code class="name">var <span class="ident">hours</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig">DataPatternsAccessBehaviorHoursConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig.interval"><code class="name">var <span class="ident">interval</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig.offsets"><code class="name">var <span class="ident">offsets</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleOffsetsConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleOffsetsConfig">DataPatternsAccessBehaviorToggleOffsetsConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleOffsetsConfig"><code class="flex name class">
+<span>class <span class="ident">DataPatternsAccessBehaviorToggleOffsetsConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPatternsAccessBehaviorToggleOffsetsConfig(BaseModel):
+    &#34;&#34;&#34;Offset configuration for toggle behavior.
+
+    Attributes:
+        forward (int): Forward offset.
+        backward (int): Backward offset.
+    &#34;&#34;&#34;
+
+    forward: int
+    backward: int</code></pre>
+</details>
+<div class="desc"><p>Offset configuration for toggle behavior.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>forward</code></strong> :&ensp;<code>int</code></dt>
+<dd>Forward offset.</dd>
+<dt><strong><code>backward</code></strong> :&ensp;<code>int</code></dt>
+<dd>Backward offset.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleOffsetsConfig.backward"><code class="name">var <span class="ident">backward</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleOffsetsConfig.forward"><code class="name">var <span class="ident">forward</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleOffsetsConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessConfig"><code class="flex name class">
+<span>class <span class="ident">DataPatternsAccessConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPatternsAccessConfig(BaseModel):
+    &#34;&#34;&#34;Configuration for access patterns.
+
+    Attributes:
+        zipf (DataPatternsAccessZipfConfig): Zipf distribution configuration.
+        behavior (DataPatternsAccessBehaviorConfig): Behavioral access configuration.
+    &#34;&#34;&#34;
+
+    zipf: DataPatternsAccessZipfConfig
+    behavior: DataPatternsAccessBehaviorConfig</code></pre>
+</details>
+<div class="desc"><p>Configuration for access patterns.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>zipf</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfConfig">DataPatternsAccessZipfConfig</a></code></dt>
+<dd>Zipf distribution configuration.</dd>
+<dt><strong><code>behavior</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig">DataPatternsAccessBehaviorConfig</a></code></dt>
+<dd>Behavioral access configuration.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessConfig.behavior"><code class="name">var <span class="ident">behavior</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig">DataPatternsAccessBehaviorConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessConfig.zipf"><code class="name">var <span class="ident">zipf</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfConfig">DataPatternsAccessZipfConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfAlphaConfig"><code class="flex name class">
+<span>class <span class="ident">DataPatternsAccessZipfAlphaConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPatternsAccessZipfAlphaConfig(BaseModel):
+    &#34;&#34;&#34;Configuration for alpha parameters of Zipf distribution.
+
+    Attributes:
+        fixed (float): Fixed alpha value (&gt; 0).
+        min (float): Minimum alpha (&gt; 0).
+        max (float): Maximum alpha (&gt; 0).
+    &#34;&#34;&#34;
+
+    fixed: Annotated[float, Field(gt=0)]
+    min: Annotated[float, Field(gt=0)]
+    max: Annotated[float, Field(gt=0)]</code></pre>
+</details>
+<div class="desc"><p>Configuration for alpha parameters of Zipf distribution.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>fixed</code></strong> :&ensp;<code>float</code></dt>
+<dd>Fixed alpha value (&gt; 0).</dd>
+<dt><strong><code>min</code></strong> :&ensp;<code>float</code></dt>
+<dd>Minimum alpha (&gt; 0).</dd>
+<dt><strong><code>max</code></strong> :&ensp;<code>float</code></dt>
+<dd>Maximum alpha (&gt; 0).</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfAlphaConfig.fixed"><code class="name">var <span class="ident">fixed</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfAlphaConfig.max"><code class="name">var <span class="ident">max</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfAlphaConfig.min"><code class="name">var <span class="ident">min</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfAlphaConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfConfig"><code class="flex name class">
+<span>class <span class="ident">DataPatternsAccessZipfConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPatternsAccessZipfConfig(BaseModel):
+    &#34;&#34;&#34;Configuration for Zipf distribution.
+
+    Attributes:
+        alpha (DataPatternsAccessZipfAlphaConfig): Alpha configuration.
+        steps (int): Number of steps (&gt; 0).
+    &#34;&#34;&#34;
+
+    alpha: DataPatternsAccessZipfAlphaConfig
+    steps: Annotated[int, Field(gt=0)]</code></pre>
+</details>
+<div class="desc"><p>Configuration for Zipf distribution.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>alpha</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfAlphaConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfAlphaConfig">DataPatternsAccessZipfAlphaConfig</a></code></dt>
+<dd>Alpha configuration.</dd>
+<dt><strong><code>steps</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of steps (&gt; 0).</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfConfig.alpha"><code class="name">var <span class="ident">alpha</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfAlphaConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfAlphaConfig">DataPatternsAccessZipfAlphaConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfConfig.steps"><code class="name">var <span class="ident">steps</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsConfig"><code class="flex name class">
+<span>class <span class="ident">DataPatternsConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPatternsConfig(BaseModel):
+    &#34;&#34;&#34;Pattern configuration.
+
+    Attributes:
+        access (DataPatternsAccessConfig): Access pattern configuration.
+        temporal (DataPatternsTemporalConfig): Temporal pattern configuration.
+    &#34;&#34;&#34;
+
+    access: DataPatternsAccessConfig
+    temporal: DataPatternsTemporalConfig</code></pre>
+</details>
+<div class="desc"><p>Pattern configuration.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>access</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessConfig">DataPatternsAccessConfig</a></code></dt>
+<dd>Access pattern configuration.</dd>
+<dt><strong><code>temporal</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalConfig">DataPatternsTemporalConfig</a></code></dt>
+<dd>Temporal pattern configuration.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsConfig.access"><code class="name">var <span class="ident">access</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessConfig">DataPatternsAccessConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsConfig.temporal"><code class="name">var <span class="ident">temporal</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalConfig">DataPatternsTemporalConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig"><code class="flex name class">
+<span>class <span class="ident">DataPatternsTemporalBurstinessConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPatternsTemporalBurstinessConfig(BaseModel):
+    &#34;&#34;&#34;Burstiness configuration for temporal patterns.
+
+    Attributes:
+        high (float): High burstiness value (&gt; 0).
+        low (float): Low burstiness value (&gt; 0).
+        hours (DataPatternsTemporalBurstinessHoursConfig): Hours during which burstiness occurs.
+    &#34;&#34;&#34;
+
+    high: Annotated[float, Field(gt=0.0)]
+    low: Annotated[float, Field(gt=0.0)]
+    hours: DataPatternsTemporalBurstinessHoursConfig
+
+    @model_validator(mode=&#34;after&#34;)
+    def check_high_low_bursts(
+        self: &#34;DataPatternsTemporalBurstinessConfig&#34;,
+    ) -&gt; &#34;DataPatternsTemporalBurstinessConfig&#34;:
+        &#34;&#34;&#34;Check whether the highest burst value is greater than or equal to the
+        lowest one or not.
+
+        Args:
+            self (DataPatternsTemporalBurstinessConfig): Current model instance.
+
+        Returns:
+            DataPatternsTemporalBurstinessConfig: Validated model instance.
+        &#34;&#34;&#34;
+        # Check min/max validity
+        assert_min_less_than_max(
+            self.high,
+            self.low,
+            values_context=&#34;data.pattern.temporal.burstiness&#34;,
+        )
+
+        return self</code></pre>
+</details>
+<div class="desc"><p>Burstiness configuration for temporal patterns.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>high</code></strong> :&ensp;<code>float</code></dt>
+<dd>High burstiness value (&gt; 0).</dd>
+<dt><strong><code>low</code></strong> :&ensp;<code>float</code></dt>
+<dd>Low burstiness value (&gt; 0).</dd>
+<dt><strong><code>hours</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessHoursConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessHoursConfig">DataPatternsTemporalBurstinessHoursConfig</a></code></dt>
+<dd>Hours during which burstiness occurs.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig.high"><code class="name">var <span class="ident">high</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig.hours"><code class="name">var <span class="ident">hours</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessHoursConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessHoursConfig">DataPatternsTemporalBurstinessHoursConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig.low"><code class="name">var <span class="ident">low</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig.check_high_low_bursts"><code class="name flex">
+<span>def <span class="ident">check_high_low_bursts</span></span>(<span>self: <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig">DataPatternsTemporalBurstinessConfig</a>) ‑> <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig">DataPatternsTemporalBurstinessConfig</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@model_validator(mode=&#34;after&#34;)
+def check_high_low_bursts(
+    self: &#34;DataPatternsTemporalBurstinessConfig&#34;,
+) -&gt; &#34;DataPatternsTemporalBurstinessConfig&#34;:
+    &#34;&#34;&#34;Check whether the highest burst value is greater than or equal to the
+    lowest one or not.
+
+    Args:
+        self (DataPatternsTemporalBurstinessConfig): Current model instance.
+
+    Returns:
+        DataPatternsTemporalBurstinessConfig: Validated model instance.
+    &#34;&#34;&#34;
+    # Check min/max validity
+    assert_min_less_than_max(
+        self.high,
+        self.low,
+        values_context=&#34;data.pattern.temporal.burstiness&#34;,
+    )
+
+    return self</code></pre>
+</details>
+<div class="desc"><p>Check whether the highest burst value is greater than or equal to the
+lowest one or not.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>self</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig">DataPatternsTemporalBurstinessConfig</a></code></dt>
+<dd>Current model instance.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig">DataPatternsTemporalBurstinessConfig</a></code></dt>
+<dd>Validated model instance.</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessHoursConfig"><code class="flex name class">
+<span>class <span class="ident">DataPatternsTemporalBurstinessHoursConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPatternsTemporalBurstinessHoursConfig(BaseModel):
+    &#34;&#34;&#34;Hour range configuration for burstiness.
+
+    Attributes:
+        start (int): Start hour of burstiness range (between
+            DATA_GENERATION_INITIAL_HOUR and DATA_GENERATION_FINAL_HOUR).
+        end (int): End hour of burstiness range (between DATA_GENERATION_INITIAL_HOUR
+            and DATA_GENERATION_FINAL_HOUR).
+    &#34;&#34;&#34;
+
+    start: Annotated[int, Field(ge=TIME_START_HOUR, le=TIME_END_HOUR)]
+    end: Annotated[int, Field(ge=TIME_START_HOUR, le=TIME_END_HOUR)]</code></pre>
+</details>
+<div class="desc"><p>Hour range configuration for burstiness.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>start</code></strong> :&ensp;<code>int</code></dt>
+<dd>Start hour of burstiness range (between
+DATA_GENERATION_INITIAL_HOUR and DATA_GENERATION_FINAL_HOUR).</dd>
+<dt><strong><code>end</code></strong> :&ensp;<code>int</code></dt>
+<dd>End hour of burstiness range (between DATA_GENERATION_INITIAL_HOUR
+and DATA_GENERATION_FINAL_HOUR).</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessHoursConfig.end"><code class="name">var <span class="ident">end</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessHoursConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessHoursConfig.start"><code class="name">var <span class="ident">start</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalConfig"><code class="flex name class">
+<span>class <span class="ident">DataPatternsTemporalConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPatternsTemporalConfig(BaseModel):
+    &#34;&#34;&#34;Temporal behavior configuration.
+
+    Attributes:
+        burstiness (DataPatternsTemporalBurstinessConfig): Burstiness configuration.
+        periodic (DataPatternsTemporalPeriodicConfig): Periodic pattern configuration.
+    &#34;&#34;&#34;
+
+    burstiness: DataPatternsTemporalBurstinessConfig
+    periodic: DataPatternsTemporalPeriodicConfig</code></pre>
+</details>
+<div class="desc"><p>Temporal behavior configuration.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>burstiness</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig">DataPatternsTemporalBurstinessConfig</a></code></dt>
+<dd>Burstiness configuration.</dd>
+<dt><strong><code>periodic</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalPeriodicConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalPeriodicConfig">DataPatternsTemporalPeriodicConfig</a></code></dt>
+<dd>Periodic pattern configuration.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalConfig.burstiness"><code class="name">var <span class="ident">burstiness</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig">DataPatternsTemporalBurstinessConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalConfig.periodic"><code class="name">var <span class="ident">periodic</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalPeriodicConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalPeriodicConfig">DataPatternsTemporalPeriodicConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalPeriodicConfig"><code class="flex name class">
+<span>class <span class="ident">DataPatternsTemporalPeriodicConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPatternsTemporalPeriodicConfig(BaseModel):
+    &#34;&#34;&#34;Periodic access pattern configuration.
+
+    Attributes:
+        scale (int): Period scale (&gt; 0).
+        amplitude (int): Period amplitude (&gt;= 0).
+    &#34;&#34;&#34;
+
+    scale: Annotated[int, Field(gt=0)]
+    amplitude: Annotated[int, Field(ge=0)]</code></pre>
+</details>
+<div class="desc"><p>Periodic access pattern configuration.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>scale</code></strong> :&ensp;<code>int</code></dt>
+<dd>Period scale (&gt; 0).</dd>
+<dt><strong><code>amplitude</code></strong> :&ensp;<code>int</code></dt>
+<dd>Period amplitude (&gt;= 0).</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalPeriodicConfig.amplitude"><code class="name">var <span class="ident">amplitude</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalPeriodicConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalPeriodicConfig.scale"><code class="name">var <span class="ident">scale</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig"><code class="flex name class">
+<span>class <span class="ident">DataSyntheticConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataSyntheticConfig(BaseModel):
+    &#34;&#34;&#34;Synthetic data configuration.
+
+    Attributes:
+        patterns (DataPatternsConfig): Access and temporal pattern configuration.
+        seed (int): Random seed for generation (&gt;= 0).
+    &#34;&#34;&#34;
+
+    patterns: DataPatternsConfig
+    seed: Annotated[int, Field(ge=0)]</code></pre>
+</details>
+<div class="desc"><p>Synthetic data configuration.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>patterns</code></strong> :&ensp;<code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsConfig">DataPatternsConfig</a></code></dt>
+<dd>Access and temporal pattern configuration.</dd>
+<dt><strong><code>seed</code></strong> :&ensp;<code>int</code></dt>
+<dd>Random seed for generation (&gt;= 0).</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig.patterns"><code class="name">var <span class="ident">patterns</span> : <a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsConfig">DataPatternsConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig.seed"><code class="name">var <span class="ident">seed</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="src.pipeline.config.pydantic.sections" href="index.html">src.pipeline.config.pydantic.sections</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataConfig">DataConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataConfig.general" href="#src.pipeline.config.pydantic.sections.data_config.DataConfig.general">general</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataConfig.synthetic" href="#src.pipeline.config.pydantic.sections.data_config.DataConfig.synthetic">synthetic</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig">DataGeneralConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig.check_data_mode" href="#src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig.check_data_mode">check_data_mode</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig.keys" href="#src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig.keys">keys</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig.mode" href="#src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig.mode">mode</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig.requests" href="#src.pipeline.config.pydantic.sections.data_config.DataGeneralConfig.requests">requests</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataKeysConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataKeysConfig">DataKeysConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataKeysConfig.check_min_max_keys" href="#src.pipeline.config.pydantic.sections.data_config.DataKeysConfig.check_min_max_keys">check_min_max_keys</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataKeysConfig.max" href="#src.pipeline.config.pydantic.sections.data_config.DataKeysConfig.max">max</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataKeysConfig.min" href="#src.pipeline.config.pydantic.sections.data_config.DataKeysConfig.min">min</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataKeysConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataKeysConfig.model_config">model_config</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig">DataPatternsAccessBehaviorConfig</a></code></h4>
+<ul class="two-column">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig.cycle" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig.cycle">cycle</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig.distortion" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig.distortion">distortion</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig.memory" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig.memory">memory</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig.repetition" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig.repetition">repetition</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig.toggle" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorConfig.toggle">toggle</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig">DataPatternsAccessBehaviorCycleConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig.base" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig.base">base</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig.divisor" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig.divisor">divisor</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig.hours" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig.hours">hours</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig.mod" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig.mod">mod</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorCycleConfig.model_config">model_config</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig">DataPatternsAccessBehaviorDistortionConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig.hours" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig.hours">hours</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig.interval" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig.interval">interval</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig.noise" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig.noise">noise</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig.offsets" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionConfig.offsets">offsets</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig">DataPatternsAccessBehaviorDistortionNoiseConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig.check_min_max_noises" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig.check_min_max_noises">check_min_max_noises</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig.max" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig.max">max</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig.min" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig.min">min</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionNoiseConfig.model_config">model_config</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionOffsetsConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionOffsetsConfig">DataPatternsAccessBehaviorDistortionOffsetsConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionOffsetsConfig.correction" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionOffsetsConfig.correction">correction</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionOffsetsConfig.history" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionOffsetsConfig.history">history</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionOffsetsConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorDistortionOffsetsConfig.model_config">model_config</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig">DataPatternsAccessBehaviorHoursConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig.end" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig.end">end</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig.start" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorHoursConfig.start">start</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorMemoryConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorMemoryConfig">DataPatternsAccessBehaviorMemoryConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorMemoryConfig.interval" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorMemoryConfig.interval">interval</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorMemoryConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorMemoryConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorMemoryConfig.offset" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorMemoryConfig.offset">offset</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorRepetitionConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorRepetitionConfig">DataPatternsAccessBehaviorRepetitionConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorRepetitionConfig.hours" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorRepetitionConfig.hours">hours</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorRepetitionConfig.interval" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorRepetitionConfig.interval">interval</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorRepetitionConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorRepetitionConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorRepetitionConfig.offset" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorRepetitionConfig.offset">offset</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleBaseRequestsConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleBaseRequestsConfig">DataPatternsAccessBehaviorToggleBaseRequestsConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleBaseRequestsConfig.first" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleBaseRequestsConfig.first">first</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleBaseRequestsConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleBaseRequestsConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleBaseRequestsConfig.second" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleBaseRequestsConfig.second">second</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig">DataPatternsAccessBehaviorToggleConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig.base_requests" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig.base_requests">base_requests</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig.hours" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig.hours">hours</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig.interval" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig.interval">interval</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig.offsets" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleConfig.offsets">offsets</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleOffsetsConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleOffsetsConfig">DataPatternsAccessBehaviorToggleOffsetsConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleOffsetsConfig.backward" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleOffsetsConfig.backward">backward</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleOffsetsConfig.forward" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleOffsetsConfig.forward">forward</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleOffsetsConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessBehaviorToggleOffsetsConfig.model_config">model_config</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessConfig">DataPatternsAccessConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessConfig.behavior" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessConfig.behavior">behavior</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessConfig.zipf" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessConfig.zipf">zipf</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfAlphaConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfAlphaConfig">DataPatternsAccessZipfAlphaConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfAlphaConfig.fixed" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfAlphaConfig.fixed">fixed</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfAlphaConfig.max" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfAlphaConfig.max">max</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfAlphaConfig.min" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfAlphaConfig.min">min</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfAlphaConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfAlphaConfig.model_config">model_config</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfConfig">DataPatternsAccessZipfConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfConfig.alpha" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfConfig.alpha">alpha</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfConfig.steps" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsAccessZipfConfig.steps">steps</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsConfig">DataPatternsConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsConfig.access" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsConfig.access">access</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsConfig.temporal" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsConfig.temporal">temporal</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig">DataPatternsTemporalBurstinessConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig.check_high_low_bursts" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig.check_high_low_bursts">check_high_low_bursts</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig.high" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig.high">high</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig.hours" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig.hours">hours</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig.low" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig.low">low</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessConfig.model_config">model_config</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessHoursConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessHoursConfig">DataPatternsTemporalBurstinessHoursConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessHoursConfig.end" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessHoursConfig.end">end</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessHoursConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessHoursConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessHoursConfig.start" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalBurstinessHoursConfig.start">start</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalConfig">DataPatternsTemporalConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalConfig.burstiness" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalConfig.burstiness">burstiness</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalConfig.periodic" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalConfig.periodic">periodic</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalPeriodicConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalPeriodicConfig">DataPatternsTemporalPeriodicConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalPeriodicConfig.amplitude" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalPeriodicConfig.amplitude">amplitude</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalPeriodicConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalPeriodicConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalPeriodicConfig.scale" href="#src.pipeline.config.pydantic.sections.data_config.DataPatternsTemporalPeriodicConfig.scale">scale</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig" href="#src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig">DataSyntheticConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig.model_config" href="#src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig.patterns" href="#src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig.patterns">patterns</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig.seed" href="#src.pipeline.config.pydantic.sections.data_config.DataSyntheticConfig.seed">seed</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

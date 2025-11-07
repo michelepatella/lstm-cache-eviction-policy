@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>src.components.caches.implementations.utils.base_cache API documentation</title>
+<meta name="description" content="base_cache.py …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>src.components.caches.implementations.utils.base_cache</code></h1>
+</header>
+<section id="section-intro">
+<p>base_cache.py</p>
+<p>Abstract base class for cache implementations with TTL support
+and metrics logging.</p>
+<p>This module provides the <code><a title="src.components.caches.implementations.utils.base_cache.BaseCache" href="#src.components.caches.implementations.utils.base_cache.BaseCache">BaseCache</a></code> class, which defines common
+cache functionalities such as TTL management, expired key removal,
+metrics logging for get/put/eviction operations, and abstract
+methods to enforce implementation of specific cache insertion
+strategies by subclasses.</p>
+<h2 id="classes">Classes</h2>
+<p>BaseCache(ABC):
+Abstract base class for all cache types.</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="src.components.caches.implementations.utils.base_cache.BaseCache"><code class="flex name class">
+<span>class <span class="ident">BaseCache</span></span>
+<span>(</span><span>cache_class: Any,<br>metrics_logger: components.caches.utils.cache_metrics_logger.CacheMetricsLogger,<br>config: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BaseCache(ABC):
+    &#34;&#34;&#34;Abstract base class for all cache implementations.
+
+    Provides common functionalities such as:
+    - TTL (Time-To-Live) management
+    - Expired key removal
+    - Metrics logging for get, put, and eviction events
+
+    Attributes:
+        cache (Any): Underlying cache instance.
+        maxsize (int): Maximum number of keys allowed in the cache.
+        ttl (float): Time-to-Live for each key.
+        metrics_logger (CacheMetricsLogger): Logger for cache events.
+        store (dict): Dictionary storing cache keys and values.
+        expiry (dict): Dictionary storing expiration time per key.
+        _last_put_time (Optional[float]): Timestamp of the last put operation.
+    &#34;&#34;&#34;
+
+    def __init__(
+        self: &#34;BaseCache&#34;,
+        cache_class: Any,
+        metrics_logger: CacheMetricsLogger,
+        config: Any,
+    ) -&gt; None:
+        &#34;&#34;&#34;Initialize the BaseCache.
+
+        This function sets up the cache, metrics logger, TTL, maximum size,
+        and auxiliary data structures.
+
+        Args:
+            self (BaseCache): Current class instance.
+            cache_class (Any): Class implementing a cache.
+            metrics_logger (CacheMetricsLogger): Object to log cache events.
+            config (Any): Configuration object.
+
+        Returns:
+            None
+
+        Raises:
+            RuntimeError: If base cache initialization fails:
+                * Invalid or incompatible cache class (TypeError).
+                * Missing or invalid attributes in callback (AttributeError).
+                * Invalid cache dimension or TTL (ValueError).
+        &#34;&#34;&#34;
+        try:
+            # Prepare configuration
+            cache_dimension = config.caches.dimension
+            ttl = config.caches.ttl
+
+            # Initialize cache and fields
+            self.cache = (
+                cache_class(
+                    cache_dimension,
+                    callback=self._on_evict,
+                )
+                if cache_class is not None
+                else None
+            )
+            self.maxsize = cache_dimension
+            self.ttl = ttl
+            self.metrics_logger = metrics_logger
+            self.store = {}
+            self.expiry = {}
+            self._last_put_time = None
+
+            debug(
+                &#34;BaseCache initialization executed&#34;,
+                extra={&#34;context&#34;: &#34;BaseCache&#34;},
+            )
+        except (TypeError, AttributeError, ValueError) as e:
+            msg = &#34;Cache initialization failed&#34;
+            error(
+                msg,
+                extra={
+                    &#34;exception&#34;: str(e),
+                    &#34;expiry_initialized&#34;: isinstance(
+                        getattr(self, &#34;expiry&#34;, None),
+                        dict,
+                    ),
+                    &#34;ttl&#34;: getattr(config.caches, &#34;ttl&#34;, None),
+                    &#34;cache_class&#34;: (
+                        str(cache_class) if cache_class is not None else None
+                    ),
+                    &#34;cache_dimension&#34;: getattr(
+                        config.caches,
+                        &#34;dimension&#34;,
+                        None,
+                    ),
+                    &#34;store_initialized&#34;: isinstance(
+                        getattr(self, &#34;store&#34;, None),
+                        dict,
+                    ),
+                    &#34;metrics_logger_type&#34;: type(metrics_logger).__name__,
+                    &#34;context&#34;: &#34;BaseCache&#34;,
+                },
+            )
+            raise RuntimeError(msg) from e
+
+    def _is_expired(self: &#34;BaseCache&#34;, key: int, current_time: float) -&gt; bool:
+        &#34;&#34;&#34;Check if a key has expired based on its TTL.
+
+        This function, given a key and the current time, checks whether a
+        key has expired, based on the TTL. The function returns True if the key
+        has expired, False otherwise.
+
+        Args:
+            self (BaseCache): Current class instance.
+            key (int): Key to check expiration for.
+            current_time (float): Current timestamp.
+
+        Returns:
+            bool: True if key has expired, False otherwise.
+
+        Raises:
+            RuntimeError: If checking expiration fails:
+                * The key is not hashable (TypeError).
+                * The key is not present in the expiry dictionary
+                  (KeyError).
+                * The values involved are not comparable or invalid
+                  (ValueError).
+        &#34;&#34;&#34;
+        try:
+            # Check whether the key has expired,
+            # provided it is stored in the cache
+            return key in self.expiry and self.expiry[key] &lt; current_time
+        except (TypeError, KeyError, ValueError) as e:
+            msg = &#34;Cache item expiration check failed&#34;
+            error(
+                msg,
+                extra={
+                    &#34;exception&#34;: str(e),
+                    &#34;key&#34;: key,
+                    &#34;key_type&#34;: type(key).__name__,
+                    &#34;current_time&#34;: current_time,
+                    &#34;expiry_type&#34;: (
+                        type(self.expiry).__name__
+                        if hasattr(self, &#34;expiry&#34;)
+                        else None
+                    ),
+                    &#34;expiry_len&#34;: (
+                        len(self.expiry)
+                        if hasattr(self, &#34;expiry&#34;) and self.expiry
+                        else 0
+                    ),
+                    &#34;context&#34;: &#34;BaseCache&#34;,
+                },
+            )
+            raise RuntimeError(msg) from e
+
+    def _remove_expired_keys(self: &#34;BaseCache&#34;, current_time: float) -&gt; None:
+        &#34;&#34;&#34;Remove all expired keys from the cache.
+
+        This function, given the current time, removes all the expired keys
+        from the cache, based on TTL.
+
+        Args:
+            self (BaseCache): Current class instance.
+            current_time (float): Current timestamp.
+
+        Returns:
+            None
+
+        Raises:
+            RuntimeError: If removing expired keys fails:
+                * Cache object not supporting pop operation
+                  (TypeError, AttributeError).
+                * Metrics logger failing to log an eviction
+                  (AttributeError, TypeError).
+        &#34;&#34;&#34;
+        try:
+            # Identify expired keys
+            expired_keys = [
+                k for k in self.expiry if self._is_expired(k, current_time)
+            ]
+
+            # Remove all the expired keys
+            for k in expired_keys:
+                # Remove key from cache/store
+                if self.cache is not None:
+                    self.cache.pop(k)
+                else:
+                    self.store.pop(k, None)
+
+                # Remove TTL
+                self.expiry.pop(k, None)
+
+                # Trace eviction
+                self.metrics_logger.log_eviction(k, current_time)
+        except (TypeError, AttributeError) as e:
+            msg = &#34;Cache expired key removal failed&#34;
+            error(
+                msg,
+                extra={
+                    &#34;exception&#34;: str(e),
+                    &#34;current_time&#34;: current_time,
+                    &#34;expiry_type&#34;: (
+                        type(self.expiry).__name__
+                        if hasattr(self, &#34;expiry&#34;)
+                        else None
+                    ),
+                    &#34;expiry_len&#34;: (
+                        len(self.expiry)
+                        if hasattr(self, &#34;expiry&#34;) and self.expiry
+                        else 0
+                    ),
+                    &#34;store_type&#34;: (
+                        type(self.store).__name__
+                        if hasattr(self, &#34;store&#34;)
+                        else None
+                    ),
+                    &#34;store_size&#34;: (
+                        len(self.store)
+                        if hasattr(self, &#34;store&#34;) and self.store
+                        else 0
+                    ),
+                    &#34;context&#34;: &#34;BaseCache&#34;,
+                },
+            )
+            raise RuntimeError(msg) from e
+
+    def contains(self: &#34;BaseCache&#34;, key: int, current_time: float) -&gt; bool:
+        &#34;&#34;&#34;Check if a key exists in the cache and is not expired.
+
+        This function, given a key and the current time, checks
+        whether a key exists in the cache and is not expired, returning
+        True if both condition are verified, False otherwise.
+
+        Args:
+            self (BaseCache): Current class instance.
+            key (int): Key to check.
+            current_time (float): Current timestamp.
+
+        Returns:
+            bool: True if key exists and is valid, False otherwise.
+
+        Raises:
+            RuntimeError: If the key existence check fails:
+                * The cache or store not being initialized (AttributeError).
+                * Membership check failing (TypeError).
+                * The metrics logger failing to log the get event
+                  (AttributeError, TypeError).
+        &#34;&#34;&#34;
+        try:
+            # Trace the get event
+            self.metrics_logger.log_get(key, current_time)
+
+            # Check whether the key is
+            # in the cache/store and is not expired
+            in_cache = (
+                self.cache is not None
+                and key in self.cache
+                and not self._is_expired(key, current_time)
+            ) or (
+                key in self.store and not self._is_expired(key, current_time)
+            )
+
+            # Access the key if found in cache
+            if in_cache and self.cache is not None:
+                self.cache.get(key)
+
+            return in_cache
+        except (TypeError, AttributeError) as e:
+            msg = &#34;Cache item existence check failed&#34;
+            error(
+                msg,
+                extra={
+                    &#34;exception&#34;: str(e),
+                    &#34;key&#34;: key,
+                    &#34;key_type&#34;: type(key).__name__,
+                    &#34;current_time&#34;: current_time,
+                    &#34;store_type&#34;: (
+                        type(self.store).__name__
+                        if hasattr(self, &#34;store&#34;)
+                        else None
+                    ),
+                    &#34;store_size&#34;: (
+                        len(self.store)
+                        if hasattr(self, &#34;store&#34;) and self.store
+                        else 0
+                    ),
+                    &#34;cache_type&#34;: (
+                        type(self.cache).__name__
+                        if hasattr(self, &#34;cache&#34;) and self.cache
+                        else None
+                    ),
+                    &#34;cache_size&#34;: (
+                        len(self.cache)
+                        if hasattr(self, &#34;cache&#34;) and self.cache
+                        else 0
+                    ),
+                    &#34;context&#34;: &#34;BaseCache&#34;,
+                },
+            )
+            raise RuntimeError(msg) from e
+
+    def _on_evict(self: &#34;BaseCache&#34;, key: int) -&gt; None:
+        &#34;&#34;&#34;Callback triggered when a key is evicted from BaseCache.
+
+        This function represents a callback triggered when a key is evicted
+        from BaseCache. The callback removes expiration time for the evicted
+        key as well as logs the eviction event.
+
+        Args:
+            self (BaseCache): Current class instance.
+            key (int): Key that was evicted.
+
+        Returns:
+            None
+
+        Raises:
+            RuntimeError: If the eviction handling fails:
+                * The expiry dictionary not being initialized (AttributeError).
+                * The metrics logger not being initialized or failing to log
+                  (AttributeError, TypeError).
+                * The last put time being invalid or causing issues in logging
+                  (TypeError, ValueError).
+        &#34;&#34;&#34;
+        try:
+            # Remove expiration time
+            # of the evicted key
+            self.expiry.pop(key, None)
+
+            # Trace eviction event
+            self.metrics_logger.log_eviction(key, self._last_put_time)
+        except (TypeError, AttributeError, ValueError) as e:
+            msg = &#34;Cache item eviction failed&#34;
+            error(
+                msg,
+                extra={
+                    &#34;exception&#34;: str(e),
+                    &#34;key&#34;: key,
+                    &#34;key_type&#34;: type(key).__name__,
+                    &#34;expiry_type&#34;: (
+                        type(self.expiry).__name__
+                        if hasattr(self, &#34;expiry&#34;)
+                        else None
+                    ),
+                    &#34;expiry_len&#34;: (
+                        len(self.expiry)
+                        if hasattr(self, &#34;expiry&#34;) and self.expiry
+                        else 0
+                    ),
+                    &#34;last_put_time&#34;: self._last_put_time,
+                    &#34;context&#34;: &#34;BaseCache&#34;,
+                },
+            )
+            raise RuntimeError(msg) from e
+
+    @abstractmethod
+    def put(self: &#34;BaseCache&#34;, *args: Any, **kwargs: Any) -&gt; None:
+        &#34;&#34;&#34;Insert a key into the cache.
+
+        This function represents an abstract method managing key items
+        insertion in the cache. Each cache eviction strategy must implement
+        its own put method.
+
+        Args:
+            self (&#34;BaseCache&#34;): Current class instance.
+            *args (Any): Positional arguments required by the specific
+                         cache strategy.
+            **kwargs (Any): Keyword arguments required by the specific
+                            cache strategy.
+
+        Returns:
+            None
+
+        Raises:
+            NotImplementedError: If the method is not implemented
+                                 by the subclass.
+        &#34;&#34;&#34;
+        raise NotImplementedError</code></pre>
+</details>
+<div class="desc"><p>Abstract base class for all cache implementations.</p>
+<p>Provides common functionalities such as:
+- TTL (Time-To-Live) management
+- Expired key removal
+- Metrics logging for get, put, and eviction events</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>cache</code></strong> :&ensp;<code>Any</code></dt>
+<dd>Underlying cache instance.</dd>
+<dt><strong><code>maxsize</code></strong> :&ensp;<code>int</code></dt>
+<dd>Maximum number of keys allowed in the cache.</dd>
+<dt><strong><code>ttl</code></strong> :&ensp;<code>float</code></dt>
+<dd>Time-to-Live for each key.</dd>
+<dt><strong><code>metrics_logger</code></strong> :&ensp;<code>CacheMetricsLogger</code></dt>
+<dd>Logger for cache events.</dd>
+<dt><strong><code>store</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Dictionary storing cache keys and values.</dd>
+<dt><strong><code>expiry</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Dictionary storing expiration time per key.</dd>
+<dt><strong><code>_last_put_time</code></strong> :&ensp;<code>Optional[float]</code></dt>
+<dd>Timestamp of the last put operation.</dd>
+</dl>
+<p>Initialize the BaseCache.</p>
+<p>This function sets up the cache, metrics logger, TTL, maximum size,
+and auxiliary data structures.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>self</code></strong> :&ensp;<code><a title="src.components.caches.implementations.utils.base_cache.BaseCache" href="#src.components.caches.implementations.utils.base_cache.BaseCache">BaseCache</a></code></dt>
+<dd>Current class instance.</dd>
+<dt><strong><code>cache_class</code></strong> :&ensp;<code>Any</code></dt>
+<dd>Class implementing a cache.</dd>
+<dt><strong><code>metrics_logger</code></strong> :&ensp;<code>CacheMetricsLogger</code></dt>
+<dd>Object to log cache events.</dd>
+<dt><strong><code>config</code></strong> :&ensp;<code>Any</code></dt>
+<dd>Configuration object.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>None</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RuntimeError</code></dt>
+<dd>If base cache initialization fails:
+* Invalid or incompatible cache class (TypeError).
+* Missing or invalid attributes in callback (AttributeError).
+* Invalid cache dimension or TTL (ValueError).</dd>
+</dl></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>abc.ABC</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="src.components.caches.implementations.utils.base_cache.BaseCache.contains"><code class="name flex">
+<span>def <span class="ident">contains</span></span>(<span>self: <a title="src.components.caches.implementations.utils.base_cache.BaseCache" href="#src.components.caches.implementations.utils.base_cache.BaseCache">BaseCache</a>,<br>key: int,<br>current_time: float) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def contains(self: &#34;BaseCache&#34;, key: int, current_time: float) -&gt; bool:
+    &#34;&#34;&#34;Check if a key exists in the cache and is not expired.
+
+    This function, given a key and the current time, checks
+    whether a key exists in the cache and is not expired, returning
+    True if both condition are verified, False otherwise.
+
+    Args:
+        self (BaseCache): Current class instance.
+        key (int): Key to check.
+        current_time (float): Current timestamp.
+
+    Returns:
+        bool: True if key exists and is valid, False otherwise.
+
+    Raises:
+        RuntimeError: If the key existence check fails:
+            * The cache or store not being initialized (AttributeError).
+            * Membership check failing (TypeError).
+            * The metrics logger failing to log the get event
+              (AttributeError, TypeError).
+    &#34;&#34;&#34;
+    try:
+        # Trace the get event
+        self.metrics_logger.log_get(key, current_time)
+
+        # Check whether the key is
+        # in the cache/store and is not expired
+        in_cache = (
+            self.cache is not None
+            and key in self.cache
+            and not self._is_expired(key, current_time)
+        ) or (
+            key in self.store and not self._is_expired(key, current_time)
+        )
+
+        # Access the key if found in cache
+        if in_cache and self.cache is not None:
+            self.cache.get(key)
+
+        return in_cache
+    except (TypeError, AttributeError) as e:
+        msg = &#34;Cache item existence check failed&#34;
+        error(
+            msg,
+            extra={
+                &#34;exception&#34;: str(e),
+                &#34;key&#34;: key,
+                &#34;key_type&#34;: type(key).__name__,
+                &#34;current_time&#34;: current_time,
+                &#34;store_type&#34;: (
+                    type(self.store).__name__
+                    if hasattr(self, &#34;store&#34;)
+                    else None
+                ),
+                &#34;store_size&#34;: (
+                    len(self.store)
+                    if hasattr(self, &#34;store&#34;) and self.store
+                    else 0
+                ),
+                &#34;cache_type&#34;: (
+                    type(self.cache).__name__
+                    if hasattr(self, &#34;cache&#34;) and self.cache
+                    else None
+                ),
+                &#34;cache_size&#34;: (
+                    len(self.cache)
+                    if hasattr(self, &#34;cache&#34;) and self.cache
+                    else 0
+                ),
+                &#34;context&#34;: &#34;BaseCache&#34;,
+            },
+        )
+        raise RuntimeError(msg) from e</code></pre>
+</details>
+<div class="desc"><p>Check if a key exists in the cache and is not expired.</p>
+<p>This function, given a key and the current time, checks
+whether a key exists in the cache and is not expired, returning
+True if both condition are verified, False otherwise.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>self</code></strong> :&ensp;<code><a title="src.components.caches.implementations.utils.base_cache.BaseCache" href="#src.components.caches.implementations.utils.base_cache.BaseCache">BaseCache</a></code></dt>
+<dd>Current class instance.</dd>
+<dt><strong><code>key</code></strong> :&ensp;<code>int</code></dt>
+<dd>Key to check.</dd>
+<dt><strong><code>current_time</code></strong> :&ensp;<code>float</code></dt>
+<dd>Current timestamp.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if key exists and is valid, False otherwise.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RuntimeError</code></dt>
+<dd>If the key existence check fails:
+* The cache or store not being initialized (AttributeError).
+* Membership check failing (TypeError).
+* The metrics logger failing to log the get event
+(AttributeError, TypeError).</dd>
+</dl></div>
+</dd>
+<dt id="src.components.caches.implementations.utils.base_cache.BaseCache.put"><code class="name flex">
+<span>def <span class="ident">put</span></span>(<span>self: <a title="src.components.caches.implementations.utils.base_cache.BaseCache" href="#src.components.caches.implementations.utils.base_cache.BaseCache">BaseCache</a>,<br>*args: Any,<br>**kwargs: Any) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def put(self: &#34;BaseCache&#34;, *args: Any, **kwargs: Any) -&gt; None:
+    &#34;&#34;&#34;Insert a key into the cache.
+
+    This function represents an abstract method managing key items
+    insertion in the cache. Each cache eviction strategy must implement
+    its own put method.
+
+    Args:
+        self (&#34;BaseCache&#34;): Current class instance.
+        *args (Any): Positional arguments required by the specific
+                     cache strategy.
+        **kwargs (Any): Keyword arguments required by the specific
+                        cache strategy.
+
+    Returns:
+        None
+
+    Raises:
+        NotImplementedError: If the method is not implemented
+                             by the subclass.
+    &#34;&#34;&#34;
+    raise NotImplementedError</code></pre>
+</details>
+<div class="desc"><p>Insert a key into the cache.</p>
+<p>This function represents an abstract method managing key items
+insertion in the cache. Each cache eviction strategy must implement
+its own put method.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt>self ("BaseCache"): Current class instance.</dt>
+<dt><strong><code>*args</code></strong> :&ensp;<code>Any</code></dt>
+<dd>Positional arguments required by the specific
+cache strategy.</dd>
+<dt><strong><code>**kwargs</code></strong> :&ensp;<code>Any</code></dt>
+<dd>Keyword arguments required by the specific
+cache strategy.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>None</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>NotImplementedError</code></dt>
+<dd>If the method is not implemented
+by the subclass.</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="src.components.caches.implementations.utils" href="index.html">src.components.caches.implementations.utils</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="src.components.caches.implementations.utils.base_cache.BaseCache" href="#src.components.caches.implementations.utils.base_cache.BaseCache">BaseCache</a></code></h4>
+<ul class="">
+<li><code><a title="src.components.caches.implementations.utils.base_cache.BaseCache.contains" href="#src.components.caches.implementations.utils.base_cache.BaseCache.contains">contains</a></code></li>
+<li><code><a title="src.components.caches.implementations.utils.base_cache.BaseCache.put" href="#src.components.caches.implementations.utils.base_cache.BaseCache.put">put</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>
