@@ -30,10 +30,8 @@ from components.backpropagation.mc_dropout.forward_runner import (
     compute_mc_dropout_forward,
 )
 from components.const import (
-    AUTOREGRESSIVE_ROLLOUT_LAST_TIME_BATCH_IDX,
-    AUTOREGRESSIVE_ROLLOUT_LAST_TIME_IDX,
+    LIST_LAST_IDX,
     AUTOREGRESSIVE_ROLLOUT_SEQUENCE_SHIFT_IDX,
-    AUTOREGRESSIVE_ROLLOUT_TIME_ARRAY_IDX,
     DATASET_COLUMN_COS_TIME_NAME,
     DATASET_COLUMN_SIN_TIME_NAME,
     DATASET_PROCESSED_COLUMNS,
@@ -41,6 +39,8 @@ from components.const import (
     TENSOR_OUTPUTS_BATCH_DIM,
     TENSOR_SEQUENCE_DIM,
     TORCH_DTYPE,
+    LIST_FIRST_IDX,
+    TENSOR_TARGET_DIM,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -49,6 +49,12 @@ from components.time.transforms.trig_decoder import (
 )
 from components.time.transforms.trig_encoder import (
     encode_time_trigonometrically,
+)
+from components.dataset.features.derived.local_frequencies_calculator import (
+    calculate_local_frequencies,
+)
+from components.dataset.features.derived.local_recencies_calculator import (
+    calculate_local_recencies,
 )
 
 
@@ -112,13 +118,13 @@ def compute_autoregressive_rollout(
         # first batch and the last request
         last_time = decode_time_trigonometrically(
             features_seq[
-                AUTOREGRESSIVE_ROLLOUT_LAST_TIME_BATCH_IDX,
-                AUTOREGRESSIVE_ROLLOUT_LAST_TIME_IDX,
+                LIST_FIRST_IDX,
+                LIST_LAST_IDX,
                 DATASET_PROCESSED_COLUMNS.index(DATASET_COLUMN_SIN_TIME_NAME),
             ].item(),
             features_seq[
-                AUTOREGRESSIVE_ROLLOUT_LAST_TIME_BATCH_IDX,
-                AUTOREGRESSIVE_ROLLOUT_LAST_TIME_IDX,
+                LIST_FIRST_IDX,
+                LIST_LAST_IDX,
                 DATASET_PROCESSED_COLUMNS.index(DATASET_COLUMN_COS_TIME_NAME),
             ].item(),
         )
@@ -152,7 +158,7 @@ def compute_autoregressive_rollout(
             # the predicted one at the current step
             pred_key = outputs_mean.argmax(
                 dim=TENSOR_SEQUENCE_DIM,
-            ).unsqueeze(TENSOR_FEATURES_DIM)
+            ).unsqueeze(TENSOR_SEQUENCE_DIM)
             keys_seq = torch.cat(
                 [
                     keys_seq[:, AUTOREGRESSIVE_ROLLOUT_SEQUENCE_SHIFT_IDX:],
@@ -164,28 +170,45 @@ def compute_autoregressive_rollout(
             # Calculate new sin and cos time obtained by adding
             # a time step increment simulating passing of time,
             # resulting in new features for the next rollout step
+            last_time += time_step_increment
             new_sin_time, new_cos_time = encode_time_trigonometrically(
-                np.array([last_time + time_step_increment]),
+                np.array([last_time])
             )
+
+            # Calculate new local frequencies and recencies
+            current_keys = (
+                keys_seq.squeeze(TENSOR_OUTPUTS_BATCH_DIM)
+                .detach()
+                .cpu()
+                .numpy()
+                .tolist()
+            )
+            seq_len = len(current_keys)
+            local_frequencies = calculate_local_frequencies(
+                current_keys, seq_len
+            )
+            local_recencies = calculate_local_recencies(current_keys, seq_len)
+            new_local_frequency = local_frequencies[LIST_LAST_IDX]
+            new_local_recency = local_recencies[LIST_LAST_IDX]
+
+            # Update the sequence of features by appending
+            # the new features
             new_features = torch.tensor(
                 [
                     [
-                        new_sin_time[AUTOREGRESSIVE_ROLLOUT_TIME_ARRAY_IDX],
-                        new_cos_time[AUTOREGRESSIVE_ROLLOUT_TIME_ARRAY_IDX],
-                    ],
+                        new_sin_time[LIST_FIRST_IDX],
+                        new_cos_time[LIST_FIRST_IDX],
+                        new_local_frequency,
+                        new_local_recency,
+                    ]
                 ],
                 device=device,
                 dtype=TORCH_DTYPE,
             ).unsqueeze(TENSOR_OUTPUTS_BATCH_DIM)
-
-            # Update the sequence of features by appending
-            # the new features
             features_seq = torch.cat(
                 [
                     features_seq[
-                        :,
-                        AUTOREGRESSIVE_ROLLOUT_SEQUENCE_SHIFT_IDX:,
-                        :,
+                        :, AUTOREGRESSIVE_ROLLOUT_SEQUENCE_SHIFT_IDX:, :
                     ],
                     new_features,
                 ],

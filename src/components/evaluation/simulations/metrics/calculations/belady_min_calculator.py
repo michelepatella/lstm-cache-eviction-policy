@@ -20,6 +20,7 @@ from collections import defaultdict, deque
 
 import numpy as np
 
+from components.const import LIST_FIRST_IDX
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.math.percentage_calculator import calculate_percentage
@@ -100,7 +101,7 @@ def calculate_belady_min(
                     key_to_evict = None
                     for k in cache:
                         if next_use_positions[k]:
-                            next_use = next_use_positions[k][0]
+                            next_use = next_use_positions[k][LIST_FIRST_IDX]
                         else:
                             next_use = np.inf
                         if next_use > farthest_next_use:

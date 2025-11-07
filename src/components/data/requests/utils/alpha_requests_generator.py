@@ -23,6 +23,7 @@ from typing import Any
 
 import numpy as np
 
+from components.const import LIST_LAST_IDX, LIST_FIRST_IDX
 from components.data.patterns.core.generator import (
     generate_pattern_requests,
 )
@@ -62,7 +63,10 @@ def generate_requests_for_alpha(
         "Request generation for alpha started",
         extra={
             "alpha": alpha,
-            "keys_range": [int(keys_range[0]), int(keys_range[-1])],
+            "keys_range": [
+                int(keys_range[LIST_FIRST_IDX]),
+                int(keys_range[LIST_LAST_IDX]),
+            ],
             "keys_num": len(keys_range),
             "time_step_duration": time_step_duration,
             "context": "Requests generation for alpha",

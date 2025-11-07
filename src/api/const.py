@@ -47,9 +47,7 @@ LOGS_PHASE_API = "api"
 # ----------------------------
 # Model
 # ----------------------------
-MODEL_FILE_PATH = (
-    PROJECT_ROOT / "models" / "static" / "trained_static_model.pt"
-)
+MODEL_FILE_PATH = PROJECT_ROOT / "models" / "real" / "trained_real_model.pt"
 
 
 # ----------------------------

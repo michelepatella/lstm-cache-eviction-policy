@@ -24,7 +24,11 @@ from typing import Any
 
 import numpy as np
 
-from components.const import TIME_SECONDS_IN_DAY, TIME_SECONDS_IN_HOUR
+from components.const import (
+    TIME_SECONDS_IN_DAY,
+    TIME_SECONDS_IN_HOUR,
+    LIST_FIRST_IDX,
+)
 from components.data.patterns.access.variants.cycle_generator import (
     generate_cycle_pattern,
 )
@@ -82,7 +86,7 @@ def generate_access_pattern(
         ) / TIME_SECONDS_IN_HOUR
 
         # Prepare general configuration
-        first_key = int(keys_range[0])
+        first_key = int(keys_range[LIST_FIRST_IDX])
         num_keys = len(keys_range)
         requests_count = len(requests)
 
@@ -217,7 +221,9 @@ def generate_access_pattern(
                 "requests_count": (
                     len(requests) if requests is not None else None
                 ),
-                "first_request": requests[0] if requests else None,
+                "first_request": requests[LIST_FIRST_IDX]
+                if requests
+                else None,
                 "context": "Access pattern generation",
             },
         )

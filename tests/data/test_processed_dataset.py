@@ -6,9 +6,8 @@ dataset using the Great Expectations (GX) framework.
 This module loads the processed dataset and applies a comprehensive
 Expectation Suite to verify its integrity. The checks specifically focus on:
     - Completeness: Ensures no critical columns contain null values.
-    - Numeric Constraints: Validates that engineered features (sine/cosine time)
-                           and request keys are within their expected numerical
-                           bounds.
+    - Numeric Constraints: Validates that engineered features and request
+                           keys are within their expected numerical bounds.
     - Schema Integrity: Verifies the existence, data types, count, and order
                         of the processed columns.
 
@@ -32,6 +31,8 @@ from components.const import (
     DATASET_COLUMN_COS_TIME_NAME,
     DATASET_COLUMN_SIN_TIME_NAME,
     DATASET_PROCESSED_COLUMNS,
+    DATASET_COLUMN_LOCAL_FREQUENCY_NAME,
+    DATASET_COLUMN_LOCAL_RECENCY_NAME,
 )
 from const import DATASET_COLUMN_REQUEST_NAME
 from pipeline.config.configurator import prepare_config
@@ -41,6 +42,10 @@ from tests.const import (
     DATASET_COLUMN_SIN_COS_TIME_MAX_VALUE,
     DATASET_COLUMN_SIN_COS_TIME_MIN_VALUE,
     DATASET_COLUMN_SIN_COS_TIME_TYPE,
+    DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MIN_VALUE,
+    DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MAX_VALUE,
+    DATASET_COLUMN_LOCAL_FREQUENCY_TYPE,
+    DATASET_COLUMN_LOCAL_RECENCY_TYPE,
 )
 
 
@@ -51,8 +56,7 @@ def test_processed_dataset():
     after preprocessing by:
         - Initializing the Great Expectations environment.
         - Defining Completeness Expectations (non-null checks).
-        - Defining Numeric Expectations (range checks for sine/cosine time features
-          and request keys).
+        - Defining Numeric Expectations (range checks for features and request keys).
         - Defining Schema Expectations (existence, type, count, and order of columns).
         - Executing the Checkpoint and asserting that all expectations are met.
 
@@ -77,9 +81,8 @@ def test_processed_dataset():
     # ----------------------------
     # Numeric checks
     # ----------------------------
-    # Ensure sin and cos times are
-    # within the valid range, as well as requests
-    # are between min and max keys
+    # Ensure features are within the valid range,
+    # as well as requests are between min and max keys
     add_column_range_expectations(
         suite,
         {
@@ -90,6 +93,14 @@ def test_processed_dataset():
             DATASET_COLUMN_COS_TIME_NAME: (
                 DATASET_COLUMN_SIN_COS_TIME_MIN_VALUE,
                 DATASET_COLUMN_SIN_COS_TIME_MAX_VALUE,
+            ),
+            DATASET_COLUMN_LOCAL_FREQUENCY_NAME: (
+                DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MIN_VALUE,
+                DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MAX_VALUE,
+            ),
+            DATASET_COLUMN_LOCAL_RECENCY_NAME: (
+                DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MIN_VALUE,
+                DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MAX_VALUE,
             ),
             DATASET_COLUMN_REQUEST_NAME: (
                 config.data.general.keys.min,
@@ -111,6 +122,12 @@ def test_processed_dataset():
             DATASET_COLUMN_COS_TIME_NAME: DATASET_PROCESSED_COLUMNS.index(
                 DATASET_COLUMN_COS_TIME_NAME,
             ),
+            DATASET_COLUMN_LOCAL_FREQUENCY_NAME: DATASET_PROCESSED_COLUMNS.index(
+                DATASET_COLUMN_LOCAL_FREQUENCY_NAME,
+            ),
+            DATASET_COLUMN_LOCAL_RECENCY_NAME: DATASET_PROCESSED_COLUMNS.index(
+                DATASET_COLUMN_LOCAL_RECENCY_NAME,
+            ),
             DATASET_COLUMN_REQUEST_NAME: DATASET_PROCESSED_COLUMNS.index(
                 DATASET_COLUMN_REQUEST_NAME,
             ),
@@ -123,6 +140,8 @@ def test_processed_dataset():
         {
             DATASET_COLUMN_SIN_TIME_NAME: DATASET_COLUMN_SIN_COS_TIME_TYPE,
             DATASET_COLUMN_COS_TIME_NAME: DATASET_COLUMN_SIN_COS_TIME_TYPE,
+            DATASET_COLUMN_LOCAL_FREQUENCY_NAME: DATASET_COLUMN_LOCAL_FREQUENCY_TYPE,
+            DATASET_COLUMN_LOCAL_RECENCY_NAME: DATASET_COLUMN_LOCAL_RECENCY_TYPE,
             DATASET_COLUMN_REQUEST_NAME: DATASET_COLUMN_REQUEST_TYPE,
         },
     )

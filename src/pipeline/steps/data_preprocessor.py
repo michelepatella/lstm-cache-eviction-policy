@@ -84,6 +84,7 @@ def preprocess_data() -> None:
         missing_values_removal_dropna_how = (
             config.dataset.cleaning.missing_values_removal.dropna.how
         )
+        seq_len = config.model.sequence.length
 
         info(
             "Data preprocessing started",
@@ -109,7 +110,7 @@ def preprocess_data() -> None:
         )
 
         # Build new features
-        final_df = build_features(missing_values_removed_df)
+        final_df = build_features(missing_values_removed_df, seq_len)
 
         # Retrieve path to save dataset from
         dataset_processed_path = get_dataset_abs_path(

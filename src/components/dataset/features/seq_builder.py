@@ -1,12 +1,15 @@
 """seq_builder.py
 
-Module for constructing feature sequences for autoregressive models.
+Module for constructing features and key sequences for autoregressive models.
 
 This module provides the `build_feature_seq` function, which:
     - Encodes timestamp arrays trigonometrically into sine and cosine features.
+    - Computes local frequency and local recency features for each key
+      within the given sequence window.
+    - Stacks all features into a single tensor suitable for model input.
     - Converts key arrays into torch tensors.
-    - Adds batch dimensions to both tensors.
-    - Moves tensors to the specified device for model input.
+    - Adds batch dimensions to both feature and key tensors.
+    - Moves tensors to the specified device for model consumption.
 
 Functions:
     build_feature_seq(
@@ -14,7 +17,7 @@ Functions:
         keys: np.ndarray,
         device: torch.device
     ) -> tuple[torch.Tensor, torch.Tensor]
-        Builds time and key sequence tensors ready for model consumption.
+        Builds features and key sequence tensors ready for model consumption.
 """
 
 import numpy as np
@@ -24,6 +27,12 @@ from components.const import (
     TENSOR_FEATURES_DIM,
     TENSOR_OUTPUTS_BATCH_DIM,
     TORCH_DTYPE,
+)
+from components.dataset.features.derived.local_frequencies_calculator import (
+    calculate_local_frequencies,
+)
+from components.dataset.features.derived.local_recencies_calculator import (
+    calculate_local_recencies,
 )
 from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug
@@ -38,14 +47,14 @@ def build_feature_seq(
     keys: np.ndarray,
     device: torch.device,
 ) -> tuple[torch.Tensor, torch.Tensor]:
-    """Build time and key sequence tensors for autoregressive models.
+    """Build features and key sequence tensors for autoregressive models.
 
     This function takes an array of timestamps and an array of corresponding
-    keys, encodes the timestamps trigonometrically using sine and cosine,
-    and stacks them into a tensor with an added batch dimension.
-    Similarly, the keys are converted into a tensor with batch dimension.
-    Both resulting tensors are then moved to the specified device to be
-    ready for model input.
+    keys, encodes the timestamps trigonometrically using sine and cosine, as
+    well as calculates local frequencies and recencies for keys, and stacks
+    them into a tensor with an added batch dimension. Similarly, the keys are
+    converted into a tensor with batch dimension. Both resulting tensors are
+    then moved to the specified device to be ready for model input.
 
     Args:
         timestamps (np.ndarray): Array of timestamps.
@@ -54,7 +63,7 @@ def build_feature_seq(
 
     Returns:
         tuple[torch.Tensor, torch.Tensor]:
-            - times_seq: Tensor with sin/cos features.
+            - features_seq: Tensor with features.
             - keys_seq: Tensor with keys.
 
     Raises:
@@ -76,12 +85,23 @@ def build_feature_seq(
         # Encode time trigonometrically
         sin_time, cos_time = encode_time_trigonometrically(timestamps)
 
-        # Build times sequence and move to device
-        times_seq = torch.tensor(
-            np.stack([sin_time, cos_time], axis=TENSOR_FEATURES_DIM),
-            dtype=TORCH_DTYPE,
-        ).unsqueeze(TENSOR_OUTPUTS_BATCH_DIM)
-        times_seq = move_to_device(times_seq, device)
+        # Compute local frequencies and recencies
+        # for the keys
+        seq_len = len(keys)
+        local_frequencies = calculate_local_frequencies(keys.tolist(), seq_len)
+        local_recencies = calculate_local_recencies(keys.tolist(), seq_len)
+
+        # Stack all features
+        features = np.stack(
+            [sin_time, cos_time, local_frequencies, local_recencies],
+            axis=TENSOR_FEATURES_DIM,
+        )
+
+        # Convert to tensor and move to device
+        features_seq = torch.tensor(features, dtype=TORCH_DTYPE).unsqueeze(
+            TENSOR_OUTPUTS_BATCH_DIM,
+        )
+        features_seq = move_to_device(features_seq, device)
 
         # Build keys sequence and move to device
         keys_seq = torch.tensor(keys, dtype=TORCH_DTYPE).unsqueeze(
@@ -92,13 +112,13 @@ def build_feature_seq(
         debug(
             "Feature sequences building completed",
             extra={
-                "times_seq_shape": times_seq.shape,
+                "features_seq_shape": features_seq.shape,
                 "keys_seq_shape": keys_seq.shape,
                 "context": "Feature sequences building",
             },
         )
 
-        return times_seq, keys_seq
+        return features_seq, keys_seq
     except (TypeError, RuntimeError) as e:
         msg = "Feature sequences building failed"
         error(

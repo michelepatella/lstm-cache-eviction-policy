@@ -24,6 +24,7 @@ Functions:
 
 import numpy as np
 
+from components.const import LIST_LAST_IDX
 from components.logs.levels.error_logger import error
 
 
@@ -105,7 +106,7 @@ def generate_distortion_pattern(
             # adding random noise (within noise min and max)
             noise = np.random.randint(noise_min, noise_max + 1)
             requested_key = (
-                (requests[-1] - first_key + noise) % keys_range_size
+                (requests[LIST_LAST_IDX] - first_key + noise) % keys_range_size
             ) + first_key
 
         return requested_key
