@@ -30,7 +30,7 @@ from components.model.best.checks_updates.params_checker_updater import (
     check_update_best_model_params,
 )
 from components.ray.initializer import initialize_ray
-from components.ray.tasks.model.validator import (
+from components.ray.tasks.time_series_cv.folds_runner import (
     compute_time_series_cv_folds_task,
 )
 from components.yaml.io.loader import load_yaml
@@ -102,14 +102,17 @@ def compute_grid_search(
         # and get the final results coming from remote
         futures = [
             compute_time_series_cv_folds_task.remote(
-                training_set, params, config
+                training_set,
+                params,
+                config,
             )
             for params in params_combinations
         ]
         results = ray.get(futures)
 
         for idx, (params, avg_loss, fold_losses) in enumerate(
-            results, start=1
+            results,
+            start=1,
         ):
             with mlflow.start_run(
                 run_name=f"{LOGS_PHASE_VALIDATION} ({idx})",
@@ -132,7 +135,7 @@ def compute_grid_search(
                         "loss_std": np.std(fold_losses),
                         "loss_min": np.min(fold_losses),
                         "loss_max": np.max(fold_losses),
-                    }
+                    },
                 )
 
         info(

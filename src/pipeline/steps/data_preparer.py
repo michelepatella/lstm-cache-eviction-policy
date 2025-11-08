@@ -20,6 +20,7 @@ import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
 
+from components.data.exploration.explorer import explore_data
 from components.data.requests.core.dynamic_generator import (
     generate_dynamic_requests,
 )
@@ -27,7 +28,6 @@ from components.data.requests.core.static_generator import (
     generate_static_requests,
 )
 from components.dataset.builder import build_dataset
-from components.data.exploration.explorer import explore_data
 from components.dataset.io.loader import load_dataset
 from components.dataset.io.locator import get_dataset_abs_path
 from components.dataset.io.saver import save_dataset
@@ -148,7 +148,11 @@ def prepare_data() -> None:
             daily_profile_plot_save_path,
             key_usage_heatmap_plot_save_path,
         ) = explore_data(
-            timestamps_hours, requests, min_key, max_key, data_mode
+            timestamps_hours,
+            requests,
+            min_key,
+            max_key,
+            data_mode,
         )
 
         # Experiment tracking

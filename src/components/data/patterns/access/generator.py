@@ -25,9 +25,9 @@ from typing import Any
 import numpy as np
 
 from components.const import (
+    LIST_FIRST_IDX,
     TIME_SECONDS_IN_DAY,
     TIME_SECONDS_IN_HOUR,
-    LIST_FIRST_IDX,
 )
 from components.data.patterns.access.variants.cycle_generator import (
     generate_cycle_pattern,

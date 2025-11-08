@@ -24,26 +24,26 @@ from components.const import RAY_CONFIG_FILE_PATH
 from components.logs.levels.debug_logger import debug
 from components.ray.initializer import initialize_ray
 from components.ray.tasks.data.explorer import (
-    plot_zipf_loglog_task,
     plot_daily_profile_task,
     plot_key_usage_heatmap_task,
+    plot_zipf_loglog_task,
 )
 from components.yaml.io.loader import load_yaml
 from const import (
-    DATA_STATIC_MODE,
     DATA_DYNAMIC_MODE,
     DATA_REAL_MODE,
+    DATA_STATIC_MODE,
 )
 from pipeline.const import (
-    PLOT_STATIC_ZIPF_LOG_LOG_FILE_PATH,
-    PLOT_STATIC_DAILY_PROFILE_FILE_PATH,
-    PLOT_STATIC_KEY_USAGE_HEATMAP_FILE_PATH,
-    PLOT_DYNAMIC_ZIPF_LOG_LOG_FILE_PATH,
     PLOT_DYNAMIC_DAILY_PROFILE_FILE_PATH,
     PLOT_DYNAMIC_KEY_USAGE_HEATMAP_FILE_PATH,
-    PLOT_REAL_ZIPF_LOG_LOG_FILE_PATH,
+    PLOT_DYNAMIC_ZIPF_LOG_LOG_FILE_PATH,
     PLOT_REAL_DAILY_PROFILE_FILE_PATH,
     PLOT_REAL_KEY_USAGE_HEATMAP_FILE_PATH,
+    PLOT_REAL_ZIPF_LOG_LOG_FILE_PATH,
+    PLOT_STATIC_DAILY_PROFILE_FILE_PATH,
+    PLOT_STATIC_KEY_USAGE_HEATMAP_FILE_PATH,
+    PLOT_STATIC_ZIPF_LOG_LOG_FILE_PATH,
 )
 
 
@@ -118,7 +118,8 @@ def explore_data(
     # via remote tasks through Ray
     plot_zipf_loglog_task.remote(requests, zipf_log_log_plot_save_path)
     plot_daily_profile_task.remote(
-        timestamps_hours, daily_profile_plot_save_path
+        timestamps_hours,
+        daily_profile_plot_save_path,
     )
     plot_key_usage_heatmap_task.remote(
         requests,

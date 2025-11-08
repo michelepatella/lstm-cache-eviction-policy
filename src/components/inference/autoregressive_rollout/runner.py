@@ -30,17 +30,22 @@ from components.backpropagation.mc_dropout.forward_runner import (
     compute_mc_dropout_forward,
 )
 from components.const import (
-    LIST_LAST_IDX,
     AUTOREGRESSIVE_ROLLOUT_SEQUENCE_SHIFT_IDX,
     DATASET_COLUMN_COS_TIME_NAME,
     DATASET_COLUMN_SIN_TIME_NAME,
     DATASET_PROCESSED_COLUMNS,
+    LIST_FIRST_IDX,
+    LIST_LAST_IDX,
     TENSOR_FEATURES_DIM,
     TENSOR_OUTPUTS_BATCH_DIM,
     TENSOR_SEQUENCE_DIM,
     TORCH_DTYPE,
-    LIST_FIRST_IDX,
-    TENSOR_TARGET_DIM,
+)
+from components.dataset.features.derived.local_frequencies_calculator import (
+    calculate_local_frequencies,
+)
+from components.dataset.features.derived.local_recencies_calculator import (
+    calculate_local_recencies,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -49,12 +54,6 @@ from components.time.transforms.trig_decoder import (
 )
 from components.time.transforms.trig_encoder import (
     encode_time_trigonometrically,
-)
-from components.dataset.features.derived.local_frequencies_calculator import (
-    calculate_local_frequencies,
-)
-from components.dataset.features.derived.local_recencies_calculator import (
-    calculate_local_recencies,
 )
 
 
@@ -172,7 +171,7 @@ def compute_autoregressive_rollout(
             # resulting in new features for the next rollout step
             last_time += time_step_increment
             new_sin_time, new_cos_time = encode_time_trigonometrically(
-                np.array([last_time])
+                np.array([last_time]),
             )
 
             # Calculate new local frequencies and recencies
@@ -185,7 +184,8 @@ def compute_autoregressive_rollout(
             )
             seq_len = len(current_keys)
             local_frequencies = calculate_local_frequencies(
-                current_keys, seq_len
+                current_keys,
+                seq_len,
             )
             local_recencies = calculate_local_recencies(current_keys, seq_len)
             new_local_frequency = local_frequencies[LIST_LAST_IDX]
@@ -200,7 +200,7 @@ def compute_autoregressive_rollout(
                         new_cos_time[LIST_FIRST_IDX],
                         new_local_frequency,
                         new_local_recency,
-                    ]
+                    ],
                 ],
                 device=device,
                 dtype=TORCH_DTYPE,
@@ -208,7 +208,9 @@ def compute_autoregressive_rollout(
             features_seq = torch.cat(
                 [
                     features_seq[
-                        :, AUTOREGRESSIVE_ROLLOUT_SEQUENCE_SHIFT_IDX:, :
+                        :,
+                        AUTOREGRESSIVE_ROLLOUT_SEQUENCE_SHIFT_IDX:,
+                        :,
                     ],
                     new_features,
                 ],

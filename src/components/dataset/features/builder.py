@@ -22,9 +22,9 @@ import pandas as pd
 
 from components.const import (
     DATASET_COLUMN_COS_TIME_NAME,
-    DATASET_COLUMN_SIN_TIME_NAME,
     DATASET_COLUMN_LOCAL_FREQUENCY_NAME,
     DATASET_COLUMN_LOCAL_RECENCY_NAME,
+    DATASET_COLUMN_SIN_TIME_NAME,
 )
 from components.dataset.columns.manipulations.dropper import (
     drop_dataset_column,
@@ -106,19 +106,25 @@ def build_features(df: pd.DataFrame, seq_len: int) -> pd.DataFrame:
         # Construct local frequencies for each key and
         # add this new column to the dataset
         local_frequencies = calculate_local_frequencies(
-            df[DATASET_COLUMN_REQUEST_NAME], seq_len
+            df[DATASET_COLUMN_REQUEST_NAME],
+            seq_len,
         )
         df = set_dataset_column(
-            df, DATASET_COLUMN_LOCAL_FREQUENCY_NAME, local_frequencies
+            df,
+            DATASET_COLUMN_LOCAL_FREQUENCY_NAME,
+            local_frequencies,
         )
 
         # Construct local recencies for each key
         # and add this new column to the dataset
         local_recencies = calculate_local_recencies(
-            df[DATASET_COLUMN_REQUEST_NAME], seq_len
+            df[DATASET_COLUMN_REQUEST_NAME],
+            seq_len,
         )
         df = set_dataset_column(
-            df, DATASET_COLUMN_LOCAL_RECENCY_NAME, local_recencies
+            df,
+            DATASET_COLUMN_LOCAL_RECENCY_NAME,
+            local_recencies,
         )
 
         # Reorder columns so that target is last

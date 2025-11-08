@@ -54,7 +54,8 @@ def plot_zipf_loglog_task(requests: list[int], save_path: str) -> None:
 
 @ray.remote
 def plot_daily_profile_task(
-    timestamps_hours: np.ndarray, save_path: str
+    timestamps_hours: np.ndarray,
+    save_path: str,
 ) -> None:
     """Remote task to generate and save the daily profile plot.
 
@@ -95,5 +96,9 @@ def plot_key_usage_heatmap_task(
         None
     """
     plot_key_usage_heatmap(
-        min_key, max_key, requests, timestamps_hours, save_path
+        min_key,
+        max_key,
+        requests,
+        timestamps_hours,
+        save_path,
     )
