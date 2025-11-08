@@ -21,10 +21,10 @@ import torch
 from torch import nn
 
 from components.const import (
+    LIST_LAST_IDX,
     MC_DROPOUT_DISABLED,
     MODEL_PARAM_NAMES,
     TENSOR_SEQUENCE_DIM,
-    LIST_LAST_IDX,
 )
 from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug

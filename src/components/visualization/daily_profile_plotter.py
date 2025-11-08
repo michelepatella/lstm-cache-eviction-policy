@@ -20,6 +20,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 from components.const import (
+    LIST_LAST_IDX,
     PLOT_DAILY_PROFILE_BIN_SIZE,
     PLOT_DAILY_PROFILE_STEP,
     PLOT_DAILY_PROFILE_TITLE,
@@ -28,7 +29,6 @@ from components.const import (
     PLOT_LABEL_FONT_SIZE,
     PLOT_SIZE,
     PLOT_TITLE_FONT_SIZE,
-    LIST_LAST_IDX,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error

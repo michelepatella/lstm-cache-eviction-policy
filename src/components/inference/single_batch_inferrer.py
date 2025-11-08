@@ -30,7 +30,7 @@ import torch
 from components.backpropagation.mc_dropout.forward_runner import (
     compute_mc_dropout_forward,
 )
-from components.const import TENSOR_TARGET_DIM, DATASET_COLUMN_TARGET_IDX
+from components.const import DATASET_COLUMN_TARGET_IDX, TENSOR_TARGET_DIM
 from components.device.mover import move_to_device
 from components.logs.levels.error_logger import error
 from components.loss.calculator import calculate_loss

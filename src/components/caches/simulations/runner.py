@@ -28,7 +28,7 @@ from components.caches.simulations.hit_miss.checker_updater import (
 from components.caches.simulations.hit_miss.timeline_updater import (
     update_hit_miss_timeline,
 )
-from components.const import TIME_MICROSECONDS_IN_SECOND, LIST_FIRST_IDX
+from components.const import LIST_FIRST_IDX, TIME_MICROSECONDS_IN_SECOND
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
