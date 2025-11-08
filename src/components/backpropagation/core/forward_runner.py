@@ -59,7 +59,7 @@ def compute_forward(
         # Move batch to device
         x_features = move_to_device(x_features, device)
         x_keys = move_to_device(x_keys, device)
-        y_key = move_to_device(y_key, device)
+        y_key = move_to_device(y_key, device).long()
 
         # Compute forward pass
         outputs = model(x_features, x_keys)

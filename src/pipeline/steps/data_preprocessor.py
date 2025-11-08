@@ -18,20 +18,29 @@ import os
 
 import dagshub
 import mlflow
+import numpy as np
+import pandas as pd
+import ray
+from box import Box
 from dotenv import load_dotenv
 
+from components.const import (
+    RAY_CONFIG_FILE_PATH,
+    DATASET_INDEX,
+    LIST_FIRST_IDX,
+)
 from components.dataset.cleans.missing_values_remover import (
     remove_dataset_missing_values,
 )
-from components.dataset.features.builder import (
-    build_features,
-)
+from components.ray.tasks.features.builder import build_features_task
 from components.dataset.io.loader import load_dataset
 from components.dataset.io.locator import get_dataset_abs_path
 from components.dataset.io.saver import save_dataset
 from components.logs.handlers.elastic_handler import ElasticHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
+from components.ray.initializer import initialize_ray
+from components.yaml.io.loader import load_yaml
 from const import (
     DATASET_RAW_TYPE,
     LOGS_LOGGER_NAME,
@@ -44,6 +53,7 @@ from pipeline.const import (
     DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
     DATASET_PROCESSED_TYPE,
     LOGS_PHASE_DATA_PREPROCESSING,
+    DATASET_RESET_INDEX_DROP,
 )
 
 # Load env variables
@@ -109,8 +119,43 @@ def preprocess_data() -> None:
             missing_values_removal_dropna_how,
         )
 
-        # Build new features
-        final_df = build_features(missing_values_removed_df, seq_len)
+        # Initialize ray with its configuration
+        ray_config = load_yaml(RAY_CONFIG_FILE_PATH)
+        initialize_ray(ray_config)
+
+        # Determine the dataset chunks dimension
+        num_df_chunks = Box(ray_config).num_cpus
+        df_chunk_size = int(np.ceil(len(initial_df) / num_df_chunks))
+
+        # Create dataset chunks with overlap of last sequence
+        # length requests
+        df_chunks = [
+            initial_df.iloc[
+                max(LIST_FIRST_IDX, i * df_chunk_size - seq_len) : min(
+                    len(initial_df), (i + 1) * df_chunk_size
+                )
+            ].copy()
+            for i in range(num_df_chunks)
+        ]
+
+        # Build features in a distributed way
+        # via remote Ray tasks, each one of them
+        # working on a dataset chunk
+        futures = [
+            build_features_task.remote(
+                chunk.reset_index(drop=DATASET_RESET_INDEX_DROP), seq_len
+            )
+            for chunk in df_chunks
+        ]
+        processed_chunks = ray.get(futures)
+
+        # Build final dataset by removing overlapping
+        # requests and concatenating preprocessed dataset chunks
+        final_chunks = [
+            chunk_df if i == LIST_FIRST_IDX else chunk_df.iloc[seq_len:].copy()
+            for i, chunk_df in enumerate(processed_chunks)
+        ]
+        final_df = pd.concat(final_chunks, ignore_index=DATASET_INDEX)
 
         # Retrieve path to save dataset from
         dataset_processed_path = get_dataset_abs_path(

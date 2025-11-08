@@ -40,6 +40,8 @@ DAGS_HUB_ENV_VAR_REPO_OWNER_NAME = "DAGS_HUB_REPO_OWNER"
 # ----------------------------
 DATASET_PROCESSED_TYPE = "processed"
 
+DATASET_RESET_INDEX_DROP = True
+
 
 # ----------------------------
 # Logs
