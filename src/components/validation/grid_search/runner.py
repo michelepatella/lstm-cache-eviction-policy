@@ -2,45 +2,46 @@
 
 Module for performing grid search over model hyperparameters.
 
-This module provides the `compute_grid_search` function, which evaluates
-different combinations of hyperparameters using time-series cross-validation
-on a training dataset. It tracks the performance of each combination and
-selects the one that achieves the lowest average loss.
+This module provides the hyperparameter tuning of the model. It leverages
+the Ray framework to parallelize the evaluation of numerous hyperparameter
+combinations. The module aims at assessing the parameters combination's
+performance using Time Series Cross-Validation (TSCV) against a training dataset.
+It identifies and returns the set of parameters that yield the lowest average TSCV loss.
 
 Functions:
     compute_grid_search(
         training_set: AccessLogsDataset,
         params_combinations: list[dict[str, int | float | bool]],
-        config: Any
+        config: Config
     ) -> tuple[dict[str, int | float | bool], float]
-        Iterates over hyperparameter combinations, evaluates each using
-        time-series cross-validation, and returns the best parameters
-        with the corresponding average loss.
+        Executes the parallelized grid search, evaluates parameter combinations
+        using TSCV, and determines the optimal hyperparameter set.
 """
-
-from typing import Any
 
 import mlflow
 import numpy as np
-from tqdm import tqdm
+import ray
 
-from components.const import GRID_SEARCH_DESC
+from components.const import RAY_CONFIG_FILE_PATH
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.model.best.checks_updates.params_checker_updater import (
     check_update_best_model_params,
 )
-from components.validation.time_series_cv.core.folds_runner import (
-    compute_time_series_cv_folds,
+from components.ray.initializer import initialize_ray
+from components.ray.tasks.model.validator import (
+    compute_time_series_cv_folds_task,
 )
+from components.yaml.io.loader import load_yaml
 from const import LOGS_PHASE_VALIDATION, MLFLOW_NESTED
+from pipeline.config.pydantic.config import Config
 
 
 def compute_grid_search(
     training_set: AccessLogsDataset,
     params_combinations: list[dict[str, int | float | bool]],
-    config: Any,
+    config: Config,
 ) -> tuple[dict[str, int | float | bool], float]:
     """Perform grid search to find the best parameters.
 
@@ -53,7 +54,7 @@ def compute_grid_search(
                                           evaluation.
         params_combinations (list[dict[str, int | float | bool]]):
             Parameter combinations to be evaluated.
-        config (Any): Configuration object.
+        config (Config): Configuration object.
 
     Returns:
         tuple[dict[str, int | float | bool], float]:
@@ -93,50 +94,46 @@ def compute_grid_search(
         best_params = {}
         best_avg_loss = np.inf
 
-        # Iterate over all parameter combinations
-        with tqdm(
-            total=len(params_combinations),
-            desc=GRID_SEARCH_DESC,
-        ) as pbar:
-            for idx, params in enumerate(params_combinations, start=1):
-                with mlflow.start_run(
-                    run_name=f"{LOGS_PHASE_VALIDATION} ({idx}/{len(params_combinations)})",
-                    nested=MLFLOW_NESTED,
-                ):
-                    # Perform time series CV
-                    avg_loss, fold_losses = compute_time_series_cv_folds(
-                        cv_num_folds,
-                        training_set,
-                        params,
-                        config,
-                    )
+        # Initialize ray with its config
+        ray_config = load_yaml(RAY_CONFIG_FILE_PATH)
+        initialize_ray(ray_config)
 
-                    # Check and update the best parameters
-                    # if improvement found
-                    best_avg_loss, best_params = (
-                        check_update_best_model_params(
-                            avg_loss,
-                            best_avg_loss,
-                            params,
-                            best_params,
-                        )
-                    )
+        # Parallelize params tuning through Ray
+        # and get the final results coming from remote
+        futures = [
+            compute_time_series_cv_folds_task.remote(
+                training_set, params, config
+            )
+            for params in params_combinations
+        ]
+        results = ray.get(futures)
 
-                    # Experiment tracking
-                    mlflow.log_params(params)
-                    mlflow.log_metrics(
-                        {
-                            "loss_avg": None
-                            if np.isinf(avg_loss) or np.isnan(avg_loss)
-                            else float(avg_loss),
-                            "loss_std": np.std(fold_losses),
-                            "loss_min": np.min(fold_losses),
-                            "loss_max": np.max(fold_losses),
-                        },
-                    )
+        for idx, (params, avg_loss, fold_losses) in enumerate(
+            results, start=1
+        ):
+            with mlflow.start_run(
+                run_name=f"{LOGS_PHASE_VALIDATION} ({idx})",
+                nested=MLFLOW_NESTED,
+            ):
+                # Check and update the best parameters
+                # if improvement found
+                best_avg_loss, best_params = check_update_best_model_params(
+                    avg_loss,
+                    best_avg_loss,
+                    params,
+                    best_params,
+                )
 
-                # To update the progress bar
-                pbar.update(1)
+                # Experiment tracking
+                mlflow.log_params(params)
+                mlflow.log_metrics(
+                    {
+                        "loss_avg": float(avg_loss),
+                        "loss_std": np.std(fold_losses),
+                        "loss_min": np.min(fold_losses),
+                        "loss_max": np.max(fold_losses),
+                    }
+                )
 
         info(
             "Grid search completed",
@@ -175,14 +172,6 @@ def compute_grid_search(
                     len(params_combinations)
                     if "params_combinations" in locals()
                     else None
-                ),
-                "loss_avg_best_current": (
-                    None
-                    if (
-                        "best_avg_loss" not in locals()
-                        or np.isinf(best_avg_loss)
-                    )
-                    else float(best_avg_loss)
                 ),
                 "context": "Grid search",
             },

@@ -288,6 +288,11 @@ PLOT_HIT_MISS_RATES_SUBPLOTS = [
     },
 ]
 
+# ----------------------------
+# Ray
+# ----------------------------
+RAY_CONFIG_FILE_PATH = str(PROJECT_ROOT / "ray_config.yaml")
+
 
 # ----------------------------
 # Simulations Metrics
