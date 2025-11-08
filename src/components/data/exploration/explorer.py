@@ -20,12 +20,15 @@ Functions:
 
 import numpy as np
 
+from components.const import RAY_CONFIG_FILE_PATH
 from components.logs.levels.debug_logger import debug
+from components.ray.initializer import initialize_ray
 from components.ray.tasks.data.explorer import (
     plot_zipf_loglog_task,
     plot_daily_profile_task,
     plot_key_usage_heatmap_task,
 )
+from components.yaml.io.loader import load_yaml
 from const import (
     DATA_STATIC_MODE,
     DATA_DYNAMIC_MODE,
@@ -107,8 +110,12 @@ def explore_data(
         key_usage_heatmap_plot_save_path,
     ) = SAVE_PATHS.get(data_mode)
 
+    # Initialize ray with its config
+    ray_config = load_yaml(RAY_CONFIG_FILE_PATH)
+    initialize_ray(ray_config)
+
     # Explore data through plots and save them
-    # via remote tasks
+    # via remote tasks through Ray
     plot_zipf_loglog_task.remote(requests, zipf_log_log_plot_save_path)
     plot_daily_profile_task.remote(
         timestamps_hours, daily_profile_plot_save_path
