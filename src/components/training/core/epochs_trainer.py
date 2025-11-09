@@ -54,11 +54,11 @@ from tqdm import tqdm
 
 from components.const import (
     TRAINING_EPOCHS_DESC,
-    TRAINING_DISTRIBUTED_WORKERS_JOIN,
-    TRAINING_DISTRIBUTED_BACKEND_NCCL,
-    TRAINING_DISTRIBUTED_BACKEND_GLOO,
-    TRAINING_DISTRIBUTED_INIT_METHOD,
-    TRAINING_DISTRIBUTED_MASTER_PROCESS_RANK,
+    TRAINING_WORKERS_JOIN,
+    TRAINING_BACKEND_NCCL,
+    TRAINING_BACKEND_GLOO,
+    TRAINING_INIT_METHOD,
+    TRAINING_MASTER_PROCESS_RANK,
 )
 from components.data_loader.builder import build_data_loader
 from components.evaluation.model.evaluator import evaluate_model
@@ -158,10 +158,10 @@ def _train_epochs_worker(
 
         # Configuration for distributing training
         dist.init_process_group(
-            backend=TRAINING_DISTRIBUTED_BACKEND_NCCL
+            backend=TRAINING_BACKEND_NCCL
             if device_type == HW_DEVICE_CUDA_NAME
-            else TRAINING_DISTRIBUTED_BACKEND_GLOO,
-            init_method=TRAINING_DISTRIBUTED_INIT_METHOD,
+            else TRAINING_BACKEND_GLOO,
+            init_method=TRAINING_INIT_METHOD,
             world_size=num_workers,
             rank=rank,
         )
@@ -203,20 +203,18 @@ def _train_epochs_worker(
         # Instantiate early stopping
         es = (
             EarlyStopping(es_patience, es_delta)
-            if rank == TRAINING_DISTRIBUTED_MASTER_PROCESS_RANK
+            if rank == TRAINING_MASTER_PROCESS_RANK
             else None
         )
 
         # Initialization
         best_model_weights = (
             copy.deepcopy(model.state_dict())
-            if rank == TRAINING_DISTRIBUTED_MASTER_PROCESS_RANK
+            if rank == TRAINING_MASTER_PROCESS_RANK
             else None
         )
         best_avg_loss = (
-            np.inf
-            if rank == TRAINING_DISTRIBUTED_MASTER_PROCESS_RANK
-            else None
+            np.inf if rank == TRAINING_MASTER_PROCESS_RANK else None
         )
 
         # Train the model over each epoch
@@ -232,7 +230,7 @@ def _train_epochs_worker(
                 epoch,
             )
 
-            if rank == TRAINING_DISTRIBUTED_MASTER_PROCESS_RANK:
+            if rank == TRAINING_MASTER_PROCESS_RANK:
                 # Evaluate the model to get the
                 # average loss after the current epoch
                 avg_loss, *_ = evaluate_model(
@@ -283,7 +281,7 @@ def _train_epochs_worker(
 
         # Keep track of results if and only if
         # the current process is the master
-        if rank == TRAINING_DISTRIBUTED_MASTER_PROCESS_RANK:
+        if rank == TRAINING_MASTER_PROCESS_RANK:
             return_queue.put((best_avg_loss, model))
     except (RuntimeError, TypeError) as e:
         msg = "Epochs training failed"
@@ -359,7 +357,7 @@ def train_epochs(
             return_queue,
         ),
         nprocs=num_workers,
-        join=TRAINING_DISTRIBUTED_WORKERS_JOIN,
+        join=TRAINING_WORKERS_JOIN,
     )
 
     # Retrieve final results

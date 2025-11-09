@@ -22,7 +22,6 @@ import tempfile
 import dagshub
 import mlflow
 import numpy as np
-from dotenv import load_dotenv
 
 from components.data_loader.builder import build_data_loader
 from components.data_loader.initializer import initialize_data_loader
@@ -57,12 +56,9 @@ from pipeline.const import (
     DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
     LOGS_PHASE_TRAINING,
     MLFLOW_ARTIFACT_PATH,
+    DAGS_HUB_REPO_OWNER,
+    DAGS_HUB_REPO_NAME,
 )
-
-# Load env variables
-load_dotenv()
-dabs_hub_repo_owner = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME)
-dags_hub_repo_name = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME)
 
 
 def train_model() -> None:
@@ -79,8 +75,8 @@ def train_model() -> None:
     logs_phase.set(LOGS_PHASE_TRAINING)
 
     dagshub.init(
-        repo_owner=dabs_hub_repo_owner,
-        repo_name=dags_hub_repo_name,
+        repo_owner=DAGS_HUB_REPO_OWNER,
+        repo_name=DAGS_HUB_REPO_NAME,
         dvc=DAGS_HUB_DVC,
     )
 

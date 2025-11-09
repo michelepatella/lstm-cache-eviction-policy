@@ -22,7 +22,6 @@ import numpy as np
 import pandas as pd
 import ray
 from box import Box
-from dotenv import load_dotenv
 
 from components.const import (
     DATASET_INDEX,
@@ -54,12 +53,9 @@ from pipeline.const import (
     DATASET_PROCESSED_TYPE,
     DATASET_RESET_INDEX_DROP,
     LOGS_PHASE_DATA_PREPROCESSING,
+    DAGS_HUB_REPO_NAME,
+    DAGS_HUB_REPO_OWNER,
 )
-
-# Load env variables
-load_dotenv()
-dabs_hub_repo_owner = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME)
-dags_hub_repo_name = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME)
 
 
 def preprocess_data() -> None:
@@ -76,8 +72,8 @@ def preprocess_data() -> None:
     logs_phase.set(LOGS_PHASE_DATA_PREPROCESSING)
 
     dagshub.init(
-        repo_owner=dabs_hub_repo_owner,
-        repo_name=dags_hub_repo_name,
+        repo_owner=DAGS_HUB_REPO_OWNER,
+        repo_name=DAGS_HUB_REPO_NAME,
         dvc=DAGS_HUB_DVC,
     )
 

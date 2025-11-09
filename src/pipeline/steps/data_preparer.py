@@ -18,7 +18,6 @@ import dagshub
 import mlflow
 import numpy as np
 import pandas as pd
-from dotenv import load_dotenv
 
 from components.data.exploration.explorer import explore_data
 from components.data.requests.core.dynamic_generator import (
@@ -49,12 +48,9 @@ from pipeline.const import (
     DAGS_HUB_ENV_VAR_REPO_NAME,
     DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
     LOGS_PHASE_DATA_PREPARATION,
+    DAGS_HUB_REPO_OWNER,
+    DAGS_HUB_REPO_NAME,
 )
-
-# Load env variables
-load_dotenv()
-dabs_hub_repo_owner = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME)
-dags_hub_repo_name = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME)
 
 
 def prepare_data() -> None:
@@ -74,8 +70,8 @@ def prepare_data() -> None:
     logs_phase.set(LOGS_PHASE_DATA_PREPARATION)
 
     dagshub.init(
-        repo_owner=dabs_hub_repo_owner,
-        repo_name=dags_hub_repo_name,
+        repo_owner=DAGS_HUB_REPO_OWNER,
+        repo_name=DAGS_HUB_REPO_NAME,
         mlflow=DAGS_HUB_DVC,
     )
 

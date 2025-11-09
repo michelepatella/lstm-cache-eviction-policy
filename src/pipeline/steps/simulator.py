@@ -21,7 +21,6 @@ import os
 import dagshub
 import mlflow
 import numpy as np
-from dotenv import load_dotenv
 
 from components.caches.implementations.lfu_cache import LFUCache
 from components.caches.implementations.lru_cache import LRUCache
@@ -89,12 +88,9 @@ from pipeline.const import (
     SIMULATIONS_METRICS_EVICTION_MISTAKE_RATE_NAME,
     SIMULATIONS_METRICS_HIT_RATE_NAME,
     SIMULATIONS_METRICS_MISS_RATE_NAME,
+    DAGS_HUB_REPO_OWNER,
+    DAGS_HUB_REPO_NAME,
 )
-
-# Load env variables
-load_dotenv()
-dabs_hub_repo_owner = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME)
-dags_hub_repo_name = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME)
 
 
 def run_simulations() -> None:
@@ -112,8 +108,8 @@ def run_simulations() -> None:
     logs_phase.set(LOGS_PHASE_SIMULATIONS)
 
     dagshub.init(
-        repo_owner=dabs_hub_repo_owner,
-        repo_name=dags_hub_repo_name,
+        repo_owner=DAGS_HUB_REPO_OWNER,
+        repo_name=DAGS_HUB_REPO_NAME,
         dvc=DAGS_HUB_DVC,
     )
 
