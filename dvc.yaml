@@ -251,7 +251,6 @@ stages:
       - src/components/optimizer/builder.py
       - src/components/ray/initializer.py
       - src/components/ray/tasks/time_series_cv/folds_runner.py
-      - src/components/ray/tasks/time_series_cv/single_fold_runner.py
       - src/components/training/callbacks/early_stopping.py
       - src/components/training/core/epochs_trainer.py
       - src/components/training/core/single_epoch_trainer.py
