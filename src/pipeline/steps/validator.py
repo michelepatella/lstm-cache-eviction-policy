@@ -16,7 +16,6 @@ Functions:
 """
 
 import logging
-import os
 
 import dagshub
 import mlflow
@@ -46,10 +45,8 @@ from pipeline.config.configurator import prepare_config
 from pipeline.const import (
     CONFIG_FILE_PATH,
     DAGS_HUB_DVC,
-    DAGS_HUB_ENV_VAR_REPO_NAME,
-    DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
-    DAGS_HUB_REPO_OWNER,
     DAGS_HUB_REPO_NAME,
+    DAGS_HUB_REPO_OWNER,
 )
 
 

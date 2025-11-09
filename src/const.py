@@ -64,6 +64,13 @@ MLFLOW_NESTED = True
 
 
 # ----------------------------
+# Network
+# ----------------------------
+NETWORK_FIND_FREE_PORT_AUTO = 0
+NETWORK_FIND_FREE_PORT_INTERFACES = ""
+
+
+# ----------------------------
 # Optimizer
 # ----------------------------
 OPTIMIZER_ADAM_NAME = "adam"

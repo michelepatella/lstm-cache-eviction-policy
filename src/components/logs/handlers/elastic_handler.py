@@ -15,7 +15,6 @@ Classes:
 """
 
 import logging
-import os
 import threading
 from datetime import datetime, timezone
 from typing import Any
@@ -25,16 +24,15 @@ from elasticsearch import Elasticsearch, helpers
 from components.const import (
     LOGS_ACTIONS_FIELD_INDEX_NAME,
     LOGS_ACTIONS_FIELD_SOURCE_NAME,
+    LOGS_ELASTIC_ENDPOINT,
+    LOGS_ELASTIC_INDEX,
+    LOGS_ELASTIC_TOKEN,
     LOGS_FIELD_LEVEL_NAME,
     LOGS_FIELD_MESSAGE_NAME,
     LOGS_FIELD_STANDARD_NAMES,
     LOGS_FIELD_TIMESTAMP_NAME,
     LOGS_THREAD_DAEMON,
-    LOGS_ELASTIC_ENDPOINT,
-    LOGS_ELASTIC_TOKEN,
-    LOGS_ELASTIC_INDEX,
 )
-
 
 # Configure Elasticsearch
 es = Elasticsearch(
