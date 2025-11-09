@@ -11,24 +11,20 @@ Functions:
         Initializes the Ray environment using the provided configuration.
 """
 
-from typing import Any
-
 import ray
-from box import Box
 
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
-def initialize_ray(ray_config: dict[str, Any]) -> None:
+def initialize_ray(num_cpus: int, num_gpus: int) -> None:
     """Initializes the Ray environment.
 
-    This initializes the Ray environment using the provided configuration
-    parameters.
+    This initializes the Ray environment using the provided parameters.
 
     Args:
-        ray_config (dict[str, Any]): A dictionary containing Ray initialization
-                                     parameters.
+        num_cpus (int): Number of CPUs to allocate for Ray tasks.
+        num_gpus (int): Number of GPUs to allocate for Ray tasks.
 
     Returns:
         None
@@ -37,38 +33,31 @@ def initialize_ray(ray_config: dict[str, Any]) -> None:
         RuntimeError: If Ray initialization fails:
             * Invalid type in configuration values (TypeError).
             * Invalid value in configuration (ValueError).
-            * Missing expected configuration attributes (AttributeError).
     """
     try:
-        # Box Ray configuration
-        ray_config = Box(ray_config)
-
         # Shut down Ray if already initialized
         if ray.is_initialized():
             ray.shutdown()
 
         # Initialize Ray according to its config file
-        ray.init(
-            ignore_reinit_error=ray_config.ignore_reinit_error,
-            include_dashboard=ray_config.include_dashboard,
-            log_to_driver=ray_config.log_to_driver,
-            local_mode=ray_config.local_mode,
-            num_cpus=ray_config.num_cpus,
-            num_gpus=ray_config.num_gpus,
-            object_store_memory=ray_config.object_store_memory,
-        )
+        ray.init(num_cpus=num_cpus, num_gpus=num_gpus)
 
         debug(
             "Ray initialization executed",
-            extra={"ray_config": ray_config, "context": "Ray initialization"},
+            extra={
+                "cpus_num": num_cpus,
+                "gpus_num": num_cpus,
+                "context": "Ray initialization",
+            },
         )
-    except (TypeError, ValueError, AttributeError) as e:
+    except (TypeError, ValueError) as e:
         msg = "Ray initialization failed"
         error(
             msg,
             extra={
                 "exception": str(e),
-                "ray_config": ray_config,
+                "cpus_num": num_cpus,
+                "gpus_num": num_cpus,
                 "context": "Ray initialization",
             },
         )

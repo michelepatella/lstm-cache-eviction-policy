@@ -66,11 +66,11 @@ def compute_single_time_series_cv_fold(
         float: Average loss for the current fold.
     """
     # Prepare configuration
-    training_batch_size = config.training.general.batch_size
-    training_shuffle = config.training.general.shuffle
-    validation_batch_size = config.validation.general.batch_size
-    validation_shuffle = config.validation.general.shuffle
-    validation_device = config.validation.device.type
+    training_batch_size = config.data_loader.batch_size.training
+    training_shuffle = config.data_loader.shuffle.training
+    validation_batch_size = config.data_loader.batch_size.validation
+    validation_shuffle = config.data_loader.shuffle.validation
+    validation_device = config.resources.devices.validation
     optimizer_type = config.optimizer.type
     learning_rate = config.optimizer.params.learning_rate
     weight_decay = config.optimizer.params.weight_decay

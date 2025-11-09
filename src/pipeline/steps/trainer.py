@@ -22,6 +22,7 @@ import dagshub
 import mlflow
 import numpy as np
 
+from components.const import DATASET_PROCESSED_FEATURE_COLUMNS
 from components.data_loader.builder import build_data_loader
 from components.data_loader.initializer import initialize_data_loader
 from components.data_loader.targets.extractor import (
@@ -31,9 +32,10 @@ from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.dataset.splits.training_validation_splitter import (
     split_training_validation_sets,
 )
-from components.logs.handlers.elastic_handler import ElasticHandler
+from components.logs.handlers.grafana_loki_handler import GrafanaLokiHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
+from components.model.builder import build_model
 from components.model.environment.initializer import (
     initialize_model_environment,
 )
@@ -83,24 +85,30 @@ def train_model() -> None:
     ):
         # Setup
         config = prepare_config()
-        initialize_logs(logging.getLevelName(config.logs.level))
+        initialize_logs(
+            logging.getLevelName(config.logs.level), GrafanaLokiHandler()
+        )
 
         # Prepare configuration
         data_mode = config.data.general.mode
-        training_batch_size = config.training.general.batch_size
-        training_shuffle = config.training.general.shuffle
-        training_device = config.training.device.type
-        validation_batch_size = config.validation.general.batch_size
-        validation_shuffle = config.validation.general.shuffle
+        min_key = config.data.general.keys.min
+        max_key = config.data.general.keys.max
+        training_batch_size = config.data_loader.batch_size.training
+        training_shuffle = config.data_loader.shuffle.training
+        training_device = config.resources.devices.training
+        validation_batch_size = config.data_loader.batch_size.validation
+        validation_shuffle = config.data_loader.shuffle.validation
         validation_split = config.dataset.splits.validation
         model_params = config.model.params
-        training_num_epochs = config.training.general.epochs
+        embedding_dim = config.model.sequence.embedding.dimension
+        training_num_epochs = config.training.epochs
         optimizer_type = config.optimizer.type
         learning_rate = config.optimizer.params.learning_rate
         weight_decay = config.optimizer.params.weight_decay
         pruning_amount = config.model.optimizations.pruning.amount
         quantization_dtype = config.model.optimizations.quantization.dtype
         quantization_engine = config.model.optimizations.quantization.engine
+        num_features = len(DATASET_PROCESSED_FEATURE_COLUMNS)
 
         info(
             "Training started",
@@ -171,7 +179,7 @@ def train_model() -> None:
         )
 
         # Train the model
-        best_avg_loss, model = train_epochs(
+        best_avg_loss, best_model_weights = train_epochs(
             training_num_epochs,
             model,
             training_loader,
@@ -182,6 +190,17 @@ def train_model() -> None:
             logs_phase.get(),
             config,
         )
+
+        # Re-built model with best weights found
+        model = build_model(
+            model_params.__dict__,
+            min_key,
+            max_key,
+            embedding_dim,
+            num_features,
+            config,
+        )
+        model.load_state_dict(best_model_weights)
 
         # Optimize trained model before saving
         # it, applying pruning and quantization before
@@ -219,9 +238,9 @@ def train_model() -> None:
         extra={
             "training_samples_num": len(training_set),
             "validation_samples_num": len(validation_set),
-            "loss_best_avg": None
-            if np.isinf(best_avg_loss) or np.isnan(best_avg_loss)
-            else float(best_avg_loss),
+            "loss_best_avg": float(best_avg_loss)
+            if not (np.isinf(best_avg_loss) or np.isnan(best_avg_loss))
+            else None,
             "model_save_path": str(model_path),
             "context": "Training",
         },
@@ -233,5 +252,5 @@ if __name__ == "__main__":
 
     # Force logs flush
     for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
-        if isinstance(handler, ElasticHandler):
+        if isinstance(handler, GrafanaLokiHandler):
             handler.flush_buffer_sync()

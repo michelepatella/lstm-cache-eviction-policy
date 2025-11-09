@@ -22,18 +22,15 @@ import mlflow
 import numpy as np
 import ray
 
-from components.const import RAY_CONFIG_FILE_PATH
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.model.best.checks_updates.params_checker_updater import (
     check_update_best_model_params,
 )
-from components.ray.initializer import initialize_ray
 from components.ray.tasks.time_series_cv.folds_runner import (
     compute_time_series_cv_folds_task,
 )
-from components.yaml.io.loader import load_yaml
 from const import LOGS_PHASE_VALIDATION, MLFLOW_NESTED
 from pipeline.config.pydantic.config import Config
 
@@ -93,10 +90,6 @@ def compute_grid_search(
         # Initialize best tracking variables
         best_params = {}
         best_avg_loss = np.inf
-
-        # Initialize ray with its config
-        ray_config = load_yaml(RAY_CONFIG_FILE_PATH)
-        initialize_ray(ray_config)
 
         # Parallelize params tuning through Ray
         # and get the final results coming from remote

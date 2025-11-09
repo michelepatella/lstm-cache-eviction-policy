@@ -70,8 +70,8 @@ class BaseCache(ABC):
         """
         try:
             # Prepare configuration
-            cache_dimension = config.caches.dimension
-            ttl = config.caches.ttl
+            cache_dimension = config.simulations.caches.dimension
+            ttl = config.simulations.caches.ttl
 
             # Initialize cache and fields
             self.cache = (

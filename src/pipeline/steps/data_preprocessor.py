@@ -20,12 +20,10 @@ import mlflow
 import numpy as np
 import pandas as pd
 import ray
-from box import Box
 
 from components.const import (
     DATASET_INDEX,
     LIST_FIRST_IDX,
-    RAY_CONFIG_FILE_PATH,
 )
 from components.dataset.cleans.missing_values_remover import (
     remove_dataset_missing_values,
@@ -33,12 +31,11 @@ from components.dataset.cleans.missing_values_remover import (
 from components.dataset.io.loader import load_dataset
 from components.dataset.io.locator import get_dataset_abs_path
 from components.dataset.io.saver import save_dataset
-from components.logs.handlers.elastic_handler import ElasticHandler
+from components.logs.handlers.grafana_loki_handler import GrafanaLokiHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
 from components.ray.initializer import initialize_ray
 from components.ray.tasks.features.builder import build_features_task
-from components.yaml.io.loader import load_yaml
 from const import (
     DATASET_RAW_TYPE,
     LOGS_LOGGER_NAME,
@@ -80,7 +77,13 @@ def preprocess_data() -> None:
     ):
         # Setup
         config = prepare_config()
-        initialize_logs(logging.getLevelName(config.logs.level))
+        initialize_logs(
+            logging.getLevelName(config.logs.level), GrafanaLokiHandler()
+        )
+        initialize_ray(
+            config.resources.general.num_cpus,
+            config.resources.general.num_gpus,
+        )
 
         # Prepare configuration
         data_mode = config.data.general.mode
@@ -88,11 +91,15 @@ def preprocess_data() -> None:
             config.dataset.cleaning.missing_values_removal.dropna.how
         )
         seq_len = config.model.sequence.length
+        num_cpus = config.resources.general.num_cpus
+        num_gpus = config.resources.general.num_gpus
 
         info(
             "Data preprocessing started",
             extra={
                 "data_mode": data_mode,
+                "missing_values_removal_dropna_how": missing_values_removal_dropna_how,
+                "seq_len": seq_len,
                 "context": "Data preprocessing",
             },
         )
@@ -112,13 +119,12 @@ def preprocess_data() -> None:
             missing_values_removal_dropna_how,
         )
 
-        # Initialize ray with its configuration
-        ray_config = load_yaml(RAY_CONFIG_FILE_PATH)
-        initialize_ray(ray_config)
-
-        # Determine the dataset chunks dimension
-        num_df_chunks = Box(ray_config).num_cpus
-        df_chunk_size = int(np.ceil(len(initial_df) / num_df_chunks))
+        # Determine the dataset chunks dimension as the
+        # initial length divided by the max among CPUs
+        # and GPUs available
+        df_chunk_size = int(
+            np.ceil(len(initial_df) / max(num_cpus, num_gpus)),
+        )
 
         # Create dataset chunks with overlap of last sequence
         # length requests
@@ -129,7 +135,7 @@ def preprocess_data() -> None:
                     (i + 1) * df_chunk_size,
                 )
             ].copy()
-            for i in range(num_df_chunks)
+            for i in range(max(num_cpus, num_gpus))
         ]
 
         # Build features in a distributed way
@@ -191,5 +197,5 @@ if __name__ == "__main__":
 
     # Force logs flush
     for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
-        if isinstance(handler, ElasticHandler):
+        if isinstance(handler, GrafanaLokiHandler):
             handler.flush_buffer_sync()
