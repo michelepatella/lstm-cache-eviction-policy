@@ -21,12 +21,13 @@ Functions:
         device: torch.device,
         current_phase: str,
         config: Any,
-    ) -> tuple[float, torch.nn.Module]
+    ) -> tuple[float, tuple[float, Mapping[str, Any]]]
         Spawns worker processes for distributed training, collects the results
-        from the master process, and returns the best model and loss.
+        from the master process, and returns the best model weights and loss.
     _train_epochs_worker(
         rank: int,
         num_workers: int,
+        master_port: int,
         num_epochs: int,
         current_phase: str,
         model: torch.nn.Module,
@@ -43,6 +44,7 @@ Functions:
 """
 
 import copy
+from collections.abc import Mapping
 from multiprocessing import Queue
 from typing import Any
 
@@ -85,6 +87,7 @@ from pipeline.config.pydantic.config import Config
 def _train_epochs_worker(
     rank: int,
     num_workers: int,
+    master_port: int,
     num_epochs: int,
     current_phase: str,
     model: torch.nn.Module,
@@ -106,12 +109,13 @@ def _train_epochs_worker(
     1. Evaluating the model after each epoch.
     2. Checking and updating the best model weights.
     3. Applying the Early Stopping mechanism.
-    4. Sending the final best model and average loss back to the
+    4. Sending the final best model weights and average loss back to the
        main thread via a Queue.
 
     Args:
         rank (int): The current process rank.
         num_workers (int): The total number of processes/workers.
+        master_port (int): The master process port.
         num_epochs (int): The maximum number of epochs to run.
         current_phase (str): The current pipeline phase.
         model (torch.nn.Module): The model to be trained (pre-DDP wrapper).
@@ -151,16 +155,16 @@ def _train_epochs_worker(
         )
 
         # Prepare configuration
-        device_type = config.training.device.type
-        training_shuffle = config.training.general.shuffle
-        training_batch_size = config.training.general.batch_size
+        device_type = device.type
+        training_shuffle = config.data_loader.shuffle.training
+        training_batch_size = config.data_loader.batch_size.training
 
         # Configuration for distributing training
         dist.init_process_group(
             backend=TRAINING_BACKEND_NCCL
             if device_type == HW_DEVICE_CUDA_NAME
             else TRAINING_BACKEND_GLOO,
-            init_method=f"{TRAINING_INIT_METHOD}:{find_free_port()}",
+            init_method=f"{TRAINING_INIT_METHOD}:{master_port}",
             world_size=num_workers,
             rank=rank,
         )
@@ -189,14 +193,14 @@ def _train_epochs_worker(
 
         # Prepare configuration
         es_patience = (
-            config.validation.early_stopping.patience
+            config.early_stopping.validation.patience
             if current_phase == LOGS_PHASE_VALIDATION
-            else config.training.early_stopping.patience
+            else config.early_stopping.training.patience
         )
         es_delta = (
-            config.validation.early_stopping.delta
+            config.early_stopping.validation.delta
             if current_phase == LOGS_PHASE_VALIDATION
-            else config.training.early_stopping.delta
+            else config.early_stopping.training.delta
         )
 
         # Instantiate early stopping
@@ -237,6 +241,7 @@ def _train_epochs_worker(
                     validation_loader,
                     criterion,
                     device,
+                    num_workers,
                 )
 
                 # Check for an update in average loss
@@ -258,18 +263,27 @@ def _train_epochs_worker(
                 if es.early_stop:
                     break
 
-        # Apply the best weights
-        # before returning the trained model
-        model.load_state_dict(best_model_weights)
+        # Keep track of results if and only if
+        # the current process is the master
+        if rank == TRAINING_MASTER_PROCESS_RANK:
+            model.load_state_dict(best_model_weights)
+            best_model_state_dict = copy.deepcopy(model.module.state_dict())
+            return_queue.put((best_avg_loss, best_model_state_dict))
 
         info(
             "Epochs training completed",
             extra={
                 "loss_avg_best": None
-                if np.isinf(best_avg_loss) or np.isnan(best_avg_loss)
+                if (
+                    best_avg_loss is None
+                    or np.isinf(best_avg_loss)
+                    or np.isnan(best_avg_loss)
+                )
                 else float(best_avg_loss),
                 "epochs_run_num": epoch,
-                "early_stop_triggered": es.early_stop,
+                "early_stop_triggered": es.early_stop
+                if es is not None
+                else None,
                 "context": "Epochs training",
             },
         )
@@ -277,11 +291,6 @@ def _train_epochs_worker(
         # Before terminating, destroy the
         # current process
         dist.destroy_process_group()
-
-        # Keep track of results if and only if
-        # the current process is the master
-        if rank == TRAINING_MASTER_PROCESS_RANK:
-            return_queue.put((best_avg_loss, model))
     except (RuntimeError, TypeError) as e:
         msg = "Epochs training failed"
         error(
@@ -310,7 +319,7 @@ def train_epochs(
     device: torch.device,
     current_phase: str,
     config: Any,
-) -> tuple[float, torch.nn.Module]:
+) -> tuple[float, Mapping[str, Any]]:
     """Manages and executes the distributed training loop across multiple
      epochs.
 
@@ -333,17 +342,24 @@ def train_epochs(
     Returns:
         tuple[float, torch.nn.Module]:
             - best_avg_loss: The best average validation loss achieved during training.
-            - best_model: The best model corresponding to the lowest loss.
+            - best_weights_model: The best model weights corresponding to the lowest loss.
     """
     # Configuration for distributed training
-    num_workers = config.training.general.num_workers
+    num_workers = max(
+        config.resources.general.num_cpus,
+        config.resources.general.num_gpus,
+    )
     return_queue = mp.Queue()
+
+    # Calculate master port
+    master_port = find_free_port()
 
     # Spawn different workers for training
     mp.spawn(
         _train_epochs_worker,
         args=(
             num_workers,
+            master_port,
             num_epochs,
             current_phase,
             model,
@@ -360,6 +376,6 @@ def train_epochs(
     )
 
     # Retrieve final results
-    best_avg_loss, best_model = return_queue.get()
+    best_avg_loss, best_weights_model = return_queue.get()
 
-    return best_avg_loss, best_model
+    return best_avg_loss, best_weights_model

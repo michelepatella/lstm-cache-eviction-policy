@@ -29,9 +29,10 @@ from components.dataset.builder import build_dataset
 from components.dataset.io.loader import load_dataset
 from components.dataset.io.locator import get_dataset_abs_path
 from components.dataset.io.saver import save_dataset
-from components.logs.handlers.elastic_handler import ElasticHandler
+from components.logs.handlers.grafana_loki_handler import GrafanaLokiHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
+from components.ray.initializer import initialize_ray
 from const import (
     DATA_REAL_MODE,
     DATA_STATIC_MODE,
@@ -78,7 +79,13 @@ def prepare_data() -> None:
     ):
         # Setup
         config = prepare_config()
-        initialize_logs(logging.getLevelName(config.logs.level))
+        initialize_logs(
+            logging.getLevelName(config.logs.level), GrafanaLokiHandler()
+        )
+        initialize_ray(
+            config.resources.general.num_cpus,
+            config.resources.general.num_gpus,
+        )
 
         # Prepare configuration
         data_mode = config.data.general.mode
@@ -212,5 +219,5 @@ if __name__ == "__main__":
 
     # Force logs flush
     for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
-        if isinstance(handler, ElasticHandler):
+        if isinstance(handler, GrafanaLokiHandler):
             handler.flush_buffer_sync()

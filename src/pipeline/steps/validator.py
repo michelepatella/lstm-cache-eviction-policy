@@ -25,9 +25,10 @@ from box import Box
 from components.data_loader.initializer import initialize_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.dict.operations.merger import merge_dicts
-from components.logs.handlers.elastic_handler import ElasticHandler
+from components.logs.handlers.grafana_loki_handler import GrafanaLokiHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
+from components.ray.initializer import initialize_ray
 from components.validation.grid_search.runner import (
     compute_grid_search,
 )
@@ -75,11 +76,17 @@ def validate_model() -> None:
     ):
         # Setup
         config = prepare_config()
-        initialize_logs(logging.getLevelName(config.logs.level))
+        initialize_logs(
+            logging.getLevelName(config.logs.level), GrafanaLokiHandler()
+        )
+        initialize_ray(
+            config.resources.general.num_cpus,
+            config.resources.general.num_gpus,
+        )
 
         # Prepare configuration
-        validation_batch_size = config.validation.general.batch_size
-        validation_shuffle = config.validation.general.shuffle
+        validation_batch_size = config.data_loader.batch_size.validation
+        validation_shuffle = config.data_loader.shuffle.validation
 
         info(
             "Validation started",
@@ -156,5 +163,5 @@ if __name__ == "__main__":
 
     # Force logs flush
     for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
-        if isinstance(handler, ElasticHandler):
+        if isinstance(handler, GrafanaLokiHandler):
             handler.flush_buffer_sync()

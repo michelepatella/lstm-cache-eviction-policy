@@ -77,7 +77,7 @@ class LSTMCache(BaseCache):
 
         # Set API endpoint and kwargs to use
         self.api_endpoint = API_ENDPOINT_FULL_URL
-        self.api_kwargs = config.api_kwargs
+        self.api_kwargs = config.simulations.api_kwargs
 
         debug(
             "Cache initialization executed",

@@ -27,9 +27,8 @@ class OptimizerParamsConfig(BaseModel):
 
     Attributes:
         learning_rate (float): The learning rate (> 0).
-        momentum (float): The momentum factor (>= 0, <= 1).
-        weight_decay (float): The weight decay (L2 penalty) factor
-                              (>= 0).
+        momentum (float): The momentum factor (in [0,1]).
+        weight_decay (float): The weight decay factor (>= 0).
     """
 
     learning_rate: Annotated[float, Field(gt=0)]

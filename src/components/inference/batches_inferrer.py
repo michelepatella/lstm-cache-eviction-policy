@@ -12,7 +12,8 @@ Functions:
         model: torch.nn.Module,
         data_loader: DataLoader,
         criterion: torch.nn.Module,
-        device: torch.device
+        device: torch.device,
+        num_workers: int
     ) -> tuple[
         float,
         list[int],
@@ -24,6 +25,8 @@ Functions:
         returns aggregated loss, predictions, targets, outputs, and
         variance tensors.
 """
+
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import numpy as np
 import torch
@@ -39,6 +42,7 @@ def infer_batches(
     data_loader: DataLoader,
     criterion: torch.nn.Module,
     device: torch.device,
+    num_workers: int,
 ) -> tuple[
     float,
     list[int],
@@ -57,6 +61,7 @@ def infer_batches(
         data_loader (DataLoader): DataLoader providing batches of data.
         criterion (torch.nn.Module): Loss function for computing batch loss.
         device (torch.device): Device on which to perform computation.
+        num_workers (int): Number of workers to parallelize inference.
 
     Returns:
     tuple[
@@ -102,27 +107,25 @@ def infer_batches(
         all_outputs = []
         all_variances = []
 
-        with torch.no_grad():
-            # Iterate over all the batches of the
-            # data loader
-            for _batch_idx, batch in enumerate(data_loader):
-                # Infer the current batch
-                (
-                    loss,
-                    predictions,
-                    targets,
-                    outputs,
-                    variances,
-                ) = infer_single_batch(
+        # Run multi-thread inference over all the batches
+        # according to the given number of workers
+        with ThreadPoolExecutor(max_workers=num_workers) as executor:
+            futures = [
+                executor.submit(
+                    infer_single_batch,
                     batch,
                     model,
                     criterion,
                     device,
                 )
+                for batch in data_loader
+            ]
 
-                # Keep track of results
+            # Collect all the results
+            for f in as_completed(futures):
+                loss, preds, targets, outputs, variances = f.result()
                 total_loss += loss
-                all_predictions.extend(predictions)
+                all_predictions.extend(preds)
                 all_targets.extend(targets)
                 all_outputs.extend(outputs)
                 all_variances.extend(variances)

@@ -48,7 +48,7 @@ from components.evaluation.simulations.metrics.calculator import (
 from components.evaluation.simulations.metrics.io.saver import (
     save_simulations_metrics,
 )
-from components.logs.handlers.elastic_handler import ElasticHandler
+from components.logs.handlers.grafana_loki_handler import GrafanaLokiHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
 from components.visualization.hit_miss_rates_plotter import (
@@ -116,16 +116,18 @@ def run_simulations() -> None:
     ):
         # Setup
         config = prepare_config()
-        initialize_logs(logging.getLevelName(config.logs.level))
+        initialize_logs(
+            logging.getLevelName(config.logs.level), GrafanaLokiHandler()
+        )
 
         # Prepare configuration
         data_mode = config.data.general.mode
         mistake_window = (
             config.evaluation.simulations.metrics.mistake_rate.window
         )
-        testing_batch_size = config.testing.general.batch_size
-        testing_shuffle = config.testing.general.shuffle
-        cache_size = config.caches.dimension
+        testing_batch_size = config.data_loader.batch_size.testing
+        testing_shuffle = config.data_loader.shuffle.testing
+        cache_size = config.simulations.caches.dimension
 
         # Define cache eviction policies to simulate
         cache_eviction_policies = {
@@ -336,5 +338,5 @@ if __name__ == "__main__":
 
     # Force logs flush
     for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
-        if isinstance(handler, ElasticHandler):
+        if isinstance(handler, GrafanaLokiHandler):
             handler.flush_buffer_sync()

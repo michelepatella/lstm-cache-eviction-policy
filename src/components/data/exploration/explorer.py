@@ -20,15 +20,12 @@ Functions:
 
 import numpy as np
 
-from components.const import RAY_CONFIG_FILE_PATH
 from components.logs.levels.debug_logger import debug
-from components.ray.initializer import initialize_ray
 from components.ray.tasks.data.explorer import (
     plot_daily_profile_task,
     plot_key_usage_heatmap_task,
     plot_zipf_loglog_task,
 )
-from components.yaml.io.loader import load_yaml
 from const import (
     DATA_DYNAMIC_MODE,
     DATA_REAL_MODE,
@@ -77,10 +74,10 @@ def explore_data(
     debug(
         "Data exploration completed",
         extra={
-            "num_timestamps": len(timestamps_hours),
-            "num_requests": len(requests),
-            "min_key": min_key,
-            "max_key": max_key,
+            "timestamps_num": len(timestamps_hours),
+            "requests_num": len(requests),
+            "key_min": min_key,
+            "key_max": max_key,
             "data_mode": data_mode,
             "context": "Data exploration",
         },
@@ -109,10 +106,6 @@ def explore_data(
         daily_profile_plot_save_path,
         key_usage_heatmap_plot_save_path,
     ) = SAVE_PATHS.get(data_mode)
-
-    # Initialize ray with its config
-    ray_config = load_yaml(RAY_CONFIG_FILE_PATH)
-    initialize_ray(ray_config)
 
     # Explore data through plots and save them
     # via remote tasks through Ray

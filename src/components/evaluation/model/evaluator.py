@@ -12,6 +12,7 @@ Functions:
         data_loader: DataLoader,
         criterion: torch.nn.Module,
         device: torch.device,
+        num_workers: int,
         model_results_save_path: str = None,
         compute_metrics: bool = True
     ) -> tuple[
@@ -46,6 +47,7 @@ def evaluate_model(
     data_loader: DataLoader,
     criterion: torch.nn.Module,
     device: torch.device,
+    num_workers: int,
     model_results_save_path: str = None,
     compute_metrics: bool = MODEL_COMPUTE_METRICS_DEFAULT,
 ) -> tuple[
@@ -67,6 +69,7 @@ def evaluate_model(
         data_loader (DataLoader): DataLoader containing the evaluation dataset.
         criterion (torch.nn.Module): Loss function used for evaluation.
         device (torch.device): Device on which to perform computations.
+        num_workers (int): Number of workers to use during inference.
         model_results_save_path (str): Path to save metrics.
         compute_metrics (bool): Whether to compute evaluation metrics
                                 in addition to loss.
@@ -108,7 +111,7 @@ def evaluate_model(
         all_targets,
         all_outputs,
         all_variances,
-    ) = infer_batches(model, data_loader, criterion, device)
+    ) = infer_batches(model, data_loader, criterion, device, num_workers)
 
     # Calculate average loss
     avg_loss = calculate_average([total_loss / len(data_loader)])

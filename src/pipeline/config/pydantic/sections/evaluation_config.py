@@ -47,8 +47,8 @@ class EvaluationSimulationsConfig(BaseModel):
     """Configuration for simulation evaluation.
 
     Attributes:
-        metrics (EvaluationSimulationsMetricsConfig):
-            Metrics calculation configuration.
+        metrics (EvaluationSimulationsMetricsConfig): Metrics calculation
+                                                      configuration.
     """
 
     metrics: EvaluationSimulationsMetricsConfig
