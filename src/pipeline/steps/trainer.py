@@ -16,7 +16,6 @@ Functions:
 """
 
 import logging
-import os
 import tempfile
 
 import dagshub
@@ -52,12 +51,10 @@ from const import (
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
     DAGS_HUB_DVC,
-    DAGS_HUB_ENV_VAR_REPO_NAME,
-    DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
+    DAGS_HUB_REPO_NAME,
+    DAGS_HUB_REPO_OWNER,
     LOGS_PHASE_TRAINING,
     MLFLOW_ARTIFACT_PATH,
-    DAGS_HUB_REPO_OWNER,
-    DAGS_HUB_REPO_NAME,
 )
 
 

@@ -141,7 +141,7 @@ training:
     delta: 0.0001
 validation:
   device:
-    type: mps
+    type: cpu
   general:
     batch_size: 128
     shuffle: false

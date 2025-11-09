@@ -17,7 +17,7 @@ Functions:
         batch size and shuffle options.
 """
 
-from torch.utils.data import DataLoader, Subset, Dataset, Sampler
+from torch.utils.data import DataLoader, Dataset, Sampler, Subset
 
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.debug_logger import debug
@@ -68,7 +68,10 @@ def build_data_loader(
 
         # Instantiate the data loader
         data_loader = DataLoader(
-            dataset, batch_size=batch_size, shuffle=shuffle, sampler=sampler
+            dataset,
+            batch_size=batch_size,
+            shuffle=shuffle,
+            sampler=sampler,
         )
 
         debug(

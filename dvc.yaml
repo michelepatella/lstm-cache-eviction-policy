@@ -248,6 +248,7 @@ stages:
       - src/components/model/environment/initializer.py
       - src/components/model/lstm.py
       - src/components/model/mode/setter.py
+      - src/components/network/free_port_finder.py
       - src/components/optimizer/builder.py
       - src/components/ray/initializer.py
       - src/components/ray/tasks/time_series_cv/folds_runner.py
@@ -368,6 +369,7 @@ stages:
       - src/components/model/mode/setter.py
       - src/components/model/optimizations/pruner.py
       - src/components/model/optimizations/quantizer.py
+      - src/components/network/free_port_finder.py
       - src/components/optimizer/builder.py
       - src/components/training/callbacks/early_stopping.py
       - src/components/training/core/epochs_trainer.py

@@ -48,17 +48,21 @@ from typing import Any
 
 import numpy as np
 import torch
+import torch.distributed as dist
+import torch.multiprocessing as mp
+from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
+from torch.utils.data.distributed import DistributedSampler
 from tqdm import tqdm
 
 from components.const import (
-    TRAINING_EPOCHS_DESC,
-    TRAINING_WORKERS_JOIN,
-    TRAINING_BACKEND_NCCL,
     TRAINING_BACKEND_GLOO,
+    TRAINING_BACKEND_NCCL,
+    TRAINING_EPOCHS_DESC,
     TRAINING_INIT_METHOD,
     TRAINING_MASTER_PROCESS_RANK,
+    TRAINING_WORKERS_JOIN,
 )
 from components.data_loader.builder import build_data_loader
 from components.evaluation.model.evaluator import evaluate_model
@@ -67,19 +71,14 @@ from components.logs.levels.info_logger import info
 from components.model.best.checks_updates.checker_updater import (
     check_update_best_model,
 )
+from components.network.free_port_finder import find_free_port
 from components.training.callbacks.early_stopping import EarlyStopping
 from components.training.core.single_epoch_trainer import train_single_epoch
 from const import (
-    LOGS_PHASE_VALIDATION,
     HW_DEVICE_CUDA_NAME,
     HW_DEVICE_MPS_NAME,
+    LOGS_PHASE_VALIDATION,
 )
-
-import torch.distributed as dist
-from torch.nn.parallel import DistributedDataParallel as DDP
-from torch.utils.data.distributed import DistributedSampler
-import torch.multiprocessing as mp
-
 from pipeline.config.pydantic.config import Config
 
 
@@ -161,7 +160,7 @@ def _train_epochs_worker(
             backend=TRAINING_BACKEND_NCCL
             if device_type == HW_DEVICE_CUDA_NAME
             else TRAINING_BACKEND_GLOO,
-            init_method=TRAINING_INIT_METHOD,
+            init_method=f"{TRAINING_INIT_METHOD}:{find_free_port()}",
             world_size=num_workers,
             rank=rank,
         )
