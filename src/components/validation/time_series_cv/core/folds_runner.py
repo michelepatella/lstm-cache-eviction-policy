@@ -21,17 +21,16 @@ Functions:
 from typing import Any
 
 import numpy as np
-import ray
 
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.math.avg_calculator import calculate_average
-from components.ray.tasks.time_series_cv.single_fold_runner import (
-    compute_single_time_series_cv_fold_task,
-)
 from components.validation.time_series_cv.builder import (
     build_time_series_split,
+)
+from components.validation.time_series_cv.core.single_fold_runner import (
+    compute_single_time_series_cv_fold,
 )
 
 
@@ -88,20 +87,21 @@ def compute_time_series_cv_folds(
             },
         )
 
-        # Train each Time Series CV fold in
-        # a parallel way via remote Ray tasks
-        training_set_ref = ray.put(training_set)
-        futures = [
-            compute_single_time_series_cv_fold_task.remote(
+        # Iterate over all folds
+        fold_losses = []
+        for _, (train_idx, val_idx) in enumerate(fold_indices):
+            # Compute single fold and get
+            # its average loss
+            avg_loss = compute_single_time_series_cv_fold(
                 train_idx,
                 val_idx,
-                training_set_ref,
+                training_set,
                 params,
                 config,
             )
-            for train_idx, val_idx in fold_indices
-        ]
-        fold_losses = ray.get(futures)
+
+            # Record current fold average loss
+            fold_losses.append(avg_loss)
 
         # Compute final average loss for the current
         # parameters configuration
