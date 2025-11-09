@@ -8,12 +8,17 @@ logging field names, and plot configurations used across various
 components of the project.
 """
 
+import os
 from pathlib import Path
 from typing import Literal
 
 import torch
+from dotenv import load_dotenv
 
 from const import DATASET_COLUMN_REQUEST_NAME
+
+
+load_dotenv()
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
@@ -22,6 +27,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 # API
 # ----------------------------
 API_ENV_VAR_FULL_URL_NAME = "API_ENDPOINT_FULL_URL"
+API_ENDPOINT_FULL_URL = os.getenv(API_ENV_VAR_FULL_URL_NAME, "")
 
 API_PARAM_KEYS_IN_CACHE_NAME = "keys_in_cache"
 API_PARAM_LAST_ACCESSES_NAME = "last_accesses"
@@ -165,6 +171,9 @@ LOGS_FIELD_MESSAGE_NAME = "message"
 LOGS_ENV_VAR_ELASTIC_ENDPOINT_NAME = "ELASTIC_ENDPOINT"
 LOGS_ENV_VAR_ELASTIC_TOKEN_NAME = "ELASTIC_TOKEN"
 LOGS_ENV_VAR_ELASTIC_INDEX_NAME = "ELASTIC_INDEX"
+LOGS_ELASTIC_ENDPOINT = os.getenv(LOGS_ENV_VAR_ELASTIC_ENDPOINT_NAME, "")
+LOGS_ELASTIC_TOKEN = os.getenv(LOGS_ENV_VAR_ELASTIC_TOKEN_NAME, "")
+LOGS_ELASTIC_INDEX = os.getenv(LOGS_ENV_VAR_ELASTIC_INDEX_NAME, "")
 
 LOGS_ACTIONS_FIELD_INDEX_NAME = "_index"
 LOGS_ACTIONS_FIELD_SOURCE_NAME = "_source"
@@ -331,11 +340,12 @@ TORCH_DTYPE = torch.float32
 TRAINING_EPOCHS_DESC = "Training"
 TRAINING_SINGLE_EPOCH_DESC = "Epoch"
 
-TRAINING_DISTRIBUTED_WORKERS_JOIN = True
-TRAINING_DISTRIBUTED_BACKEND_NCCL = "nccl"
-TRAINING_DISTRIBUTED_BACKEND_GLOO = "gloo"
-TRAINING_DISTRIBUTED_INIT_METHOD = "tcp://127.0.0.1:29500"
-TRAINING_DISTRIBUTED_MASTER_PROCESS_RANK = 0
+TRAINING_WORKERS_JOIN = True
+TRAINING_BACKEND_NCCL = "nccl"
+TRAINING_BACKEND_GLOO = "gloo"
+TRAINING_ENV_VAR_MASTER_URL_NAME = "TRAINING_MASTER_URL"
+TRAINING_INIT_METHOD = os.getenv(TRAINING_ENV_VAR_MASTER_URL_NAME, "")
+TRAINING_MASTER_PROCESS_RANK = 0
 
 # ----------------------------
 # YAML

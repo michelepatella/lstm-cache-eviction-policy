@@ -20,7 +20,6 @@ from typing import Any
 import pandas as pd
 import requests
 from box import Box
-from dotenv import load_dotenv
 
 from components.caches.implementations.utils.base_cache import BaseCache
 from components.caches.utils.cache_metrics_logger import (
@@ -32,15 +31,13 @@ from components.const import (
     API_PARAM_LAST_ACCESSES_NAME,
     API_PARAM_USER_API_KWARGS_NAME,
     LIST_FIRST_IDX,
+    API_ENDPOINT_FULL_URL,
 )
 from components.dataset.rows.extractions.lasts_extractor import (
     extract_last_rows_from_dataset,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-
-# Load environment variables
-load_dotenv()
 
 
 class LSTMCache(BaseCache):
@@ -81,7 +78,7 @@ class LSTMCache(BaseCache):
         super().__init__(cache_class, metrics_logger, config)
 
         # Set API endpoint and kwargs to use
-        self.api_endpoint = os.getenv(API_ENV_VAR_FULL_URL_NAME)
+        self.api_endpoint = API_ENDPOINT_FULL_URL
         self.api_kwargs = config.api_kwargs
 
         debug(

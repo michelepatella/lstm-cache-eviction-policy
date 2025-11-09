@@ -22,7 +22,6 @@ import dagshub
 import mlflow
 import numpy as np
 from box import Box
-from dotenv import load_dotenv
 
 from components.data_loader.initializer import initialize_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
@@ -49,12 +48,9 @@ from pipeline.const import (
     DAGS_HUB_DVC,
     DAGS_HUB_ENV_VAR_REPO_NAME,
     DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
+    DAGS_HUB_REPO_OWNER,
+    DAGS_HUB_REPO_NAME,
 )
-
-# Load env variables
-load_dotenv()
-dabs_hub_repo_owner = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME)
-dags_hub_repo_name = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME)
 
 
 def validate_model() -> None:
@@ -71,8 +67,8 @@ def validate_model() -> None:
     logs_phase.set(LOGS_PHASE_VALIDATION)
 
     dagshub.init(
-        repo_owner=dabs_hub_repo_owner,
-        repo_name=dags_hub_repo_name,
+        repo_owner=DAGS_HUB_REPO_OWNER,
+        repo_name=DAGS_HUB_REPO_NAME,
         dvc=DAGS_HUB_DVC,
     )
 
