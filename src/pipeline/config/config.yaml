@@ -130,10 +130,11 @@ testing:
     shuffle: false
 training:
   device:
-    type: mps
+    type: cpu
   general:
     epochs: 500
     batch_size: 128
+    num_workers: 6
     shuffle: true
   early_stopping:
     patience: 10

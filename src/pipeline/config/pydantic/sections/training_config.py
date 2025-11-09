@@ -64,11 +64,13 @@ class TrainingGeneralConfig(BaseModel):
     Attributes:
         epochs (int): Number of training epochs (> 0).
         batch_size (int): Batch size for training (> 0).
+        num_workers (int): Number of workers (> 0).
         shuffle (bool): Whether to shuffle the dataset during training.
     """
 
     epochs: Annotated[int, Field(gt=0)]
     batch_size: Annotated[int, Field(gt=0)]
+    num_workers: Annotated[int, Field(gt=0)]
     shuffle: bool
 
 

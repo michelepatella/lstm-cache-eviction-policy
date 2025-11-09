@@ -74,6 +74,8 @@ stages:
       - src/components/logs/levels/info_logger.py
       - src/components/logs/levels/utils/logger.py
       - src/components/math/zipf_probs_calculator.py
+      - src/components/ray/initializer.py
+      - src/components/ray/tasks/data/explorer.py
       - src/components/time/cyclics/seconds_to_hours_converter.py
       - src/components/time/cyclics/updater.py
       - src/components/visualization/daily_profile_plotter.py
@@ -131,6 +133,8 @@ stages:
       - src/components/logs/levels/error_logger.py
       - src/components/logs/levels/info_logger.py
       - src/components/logs/levels/utils/logger.py
+      - src/components/ray/initializer.py
+      - src/components/ray/tasks/features/builder.py
       - src/components/time/transforms/trig_encoder.py
       - src/components/yaml/io/loader.py
       - src/const.py
@@ -179,6 +183,7 @@ stages:
         - training.early_stopping.delta
         - training.early_stopping.patience
         - training.general.batch_size
+        - training.general.num_workers
         - training.general.shuffle
         - validation.device.type
         - validation.early_stopping.delta
@@ -244,6 +249,9 @@ stages:
       - src/components/model/lstm.py
       - src/components/model/mode/setter.py
       - src/components/optimizer/builder.py
+      - src/components/ray/initializer.py
+      - src/components/ray/tasks/time_series_cv/folds_runner.py
+      - src/components/ray/tasks/time_series_cv/single_fold_runner.py
       - src/components/training/callbacks/early_stopping.py
       - src/components/training/core/epochs_trainer.py
       - src/components/training/core/single_epoch_trainer.py
@@ -303,6 +311,7 @@ stages:
         - training.device.type
         - training.general.batch_size
         - training.general.epochs
+        - training.general.num_workers
         - training.general.shuffle
         - training.early_stopping.delta
         - training.early_stopping.patience
