@@ -59,12 +59,12 @@ from torch.utils.data.distributed import DistributedSampler
 from tqdm import tqdm
 
 from components.const import (
-    TRAINING_BACKEND_GLOO,
-    TRAINING_BACKEND_NCCL,
+    TRAINING_DDP_BACKEND_GLOO,
+    TRAINING_DDP_BACKEND_NCCL,
     TRAINING_EPOCHS_DESC,
-    TRAINING_INIT_METHOD,
-    TRAINING_MASTER_PROCESS_RANK,
-    TRAINING_WORKERS_JOIN,
+    TRAINING_DDP_INIT_METHOD,
+    TRAINING_DDP_MASTER_PROCESS_RANK,
+    TRAINING_DDP_WORKERS_JOIN,
 )
 from components.data_loader.builder import build_data_loader
 from components.evaluation.model.evaluator import evaluate_model
@@ -77,9 +77,9 @@ from components.network.free_port_finder import find_free_port
 from components.training.callbacks.early_stopping import EarlyStopping
 from components.training.core.single_epoch_trainer import train_single_epoch
 from const import (
-    HW_DEVICE_CUDA_NAME,
-    HW_DEVICE_MPS_NAME,
     LOGS_PHASE_VALIDATION,
+    RESOURCES_DEVICE_CUDA_NAME,
+    RESOURCES_DEVICE_MPS_NAME,
 )
 from pipeline.config.pydantic.config import Config
 
@@ -161,10 +161,10 @@ def _train_epochs_worker(
 
         # Configuration for distributing training
         dist.init_process_group(
-            backend=TRAINING_BACKEND_NCCL
-            if device_type == HW_DEVICE_CUDA_NAME
-            else TRAINING_BACKEND_GLOO,
-            init_method=f"{TRAINING_INIT_METHOD}:{master_port}",
+            backend=TRAINING_DDP_BACKEND_NCCL
+            if device_type == RESOURCES_DEVICE_CUDA_NAME
+            else TRAINING_DDP_BACKEND_GLOO,
+            init_method=f"{TRAINING_DDP_INIT_METHOD}:{master_port}",
             world_size=num_workers,
             rank=rank,
         )
@@ -173,7 +173,8 @@ def _train_epochs_worker(
         model = DDP(
             model,
             device_ids=[rank]
-            if device_type in (HW_DEVICE_CUDA_NAME, HW_DEVICE_MPS_NAME)
+            if device_type
+            in (RESOURCES_DEVICE_CUDA_NAME, RESOURCES_DEVICE_MPS_NAME)
             else None,
         )
 
@@ -206,18 +207,18 @@ def _train_epochs_worker(
         # Instantiate early stopping
         es = (
             EarlyStopping(es_patience, es_delta)
-            if rank == TRAINING_MASTER_PROCESS_RANK
+            if rank == TRAINING_DDP_MASTER_PROCESS_RANK
             else None
         )
 
         # Initialization
         best_model_weights = (
             copy.deepcopy(model.state_dict())
-            if rank == TRAINING_MASTER_PROCESS_RANK
+            if rank == TRAINING_DDP_MASTER_PROCESS_RANK
             else None
         )
         best_avg_loss = (
-            np.inf if rank == TRAINING_MASTER_PROCESS_RANK else None
+            np.inf if rank == TRAINING_DDP_MASTER_PROCESS_RANK else None
         )
 
         # Train the model over each epoch
@@ -233,7 +234,7 @@ def _train_epochs_worker(
                 epoch,
             )
 
-            if rank == TRAINING_MASTER_PROCESS_RANK:
+            if rank == TRAINING_DDP_MASTER_PROCESS_RANK:
                 # Evaluate the model to get the
                 # average loss after the current epoch
                 avg_loss, *_ = evaluate_model(
@@ -265,7 +266,7 @@ def _train_epochs_worker(
 
         # Keep track of results if and only if
         # the current process is the master
-        if rank == TRAINING_MASTER_PROCESS_RANK:
+        if rank == TRAINING_DDP_MASTER_PROCESS_RANK:
             model.load_state_dict(best_model_weights)
             best_model_state_dict = copy.deepcopy(model.module.state_dict())
             return_queue.put((best_avg_loss, best_model_state_dict))
@@ -372,7 +373,7 @@ def train_epochs(
             return_queue,
         ),
         nprocs=num_workers,
-        join=TRAINING_WORKERS_JOIN,
+        join=TRAINING_DDP_WORKERS_JOIN,
     )
 
     # Retrieve final results

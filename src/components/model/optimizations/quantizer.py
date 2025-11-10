@@ -27,7 +27,7 @@ from components.device.mover import move_to_device
 from components.device.selector import select_device
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import HW_DEVICE_CPU_NAME
+from const import RESOURCES_DEVICE_CPU_NAME
 
 
 def quantize_model(
@@ -74,7 +74,7 @@ def quantize_model(
 
         # Move model to CPU before
         # running quantization
-        device = select_device(HW_DEVICE_CPU_NAME)
+        device = select_device(RESOURCES_DEVICE_CPU_NAME)
         model = move_to_device(model, device)
 
         # Set quantization engine

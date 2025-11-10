@@ -41,15 +41,6 @@ DATASET_TESTING_SPLIT_TYPE = "testing"
 
 
 # ----------------------------
-# HW Device
-# ----------------------------
-HW_DEVICE_CPU_NAME = "cpu"
-HW_DEVICE_CUDA_NAME = "cuda"
-HW_DEVICE_MPS_NAME = "mps"
-HW_DEVICE_NAMES = [HW_DEVICE_CPU_NAME, HW_DEVICE_CUDA_NAME, HW_DEVICE_MPS_NAME]
-
-
-# ----------------------------
 # Logs
 # ----------------------------
 LOGS_LOGGER_NAME = "logger"
@@ -61,13 +52,6 @@ LOGS_PHASE_VALIDATION = "validation"
 # MLFlow
 # ----------------------------
 MLFLOW_NESTED = True
-
-
-# ----------------------------
-# Network
-# ----------------------------
-NETWORK_FIND_FREE_PORT_AUTO = 0
-NETWORK_FIND_FREE_PORT_INTERFACES = ""
 
 
 # ----------------------------
@@ -84,7 +68,20 @@ OPTIMIZER_NAMES = [
 
 
 # ----------------------------
-# Simulations Metrics
+# Resources
+# ----------------------------
+RESOURCES_DEVICE_CPU_NAME = "cpu"
+RESOURCES_DEVICE_CUDA_NAME = "cuda"
+RESOURCES_DEVICE_MPS_NAME = "mps"
+RESOURCES_DEVICE_NAMES = [
+    RESOURCES_DEVICE_CPU_NAME,
+    RESOURCES_DEVICE_CUDA_NAME,
+    RESOURCES_DEVICE_MPS_NAME,
+]
+
+
+# ----------------------------
+# Simulations
 # ----------------------------
 SIMULATIONS_METRICS_POLICY_NAME = "policy"
 SIMULATIONS_METRICS_HIT_COUNTER_NAME = "hit_count"
