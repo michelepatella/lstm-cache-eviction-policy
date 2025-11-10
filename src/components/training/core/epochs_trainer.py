@@ -61,10 +61,10 @@ from tqdm import tqdm
 from components.const import (
     TRAINING_DDP_BACKEND_GLOO,
     TRAINING_DDP_BACKEND_NCCL,
-    TRAINING_EPOCHS_DESC,
     TRAINING_DDP_INIT_METHOD,
     TRAINING_DDP_MASTER_PROCESS_RANK,
     TRAINING_DDP_WORKERS_JOIN,
+    TRAINING_EPOCHS_DESC,
 )
 from components.data_loader.builder import build_data_loader
 from components.evaluation.model.evaluator import evaluate_model

@@ -18,14 +18,14 @@ import pandas as pd
 import torch
 from torch.utils.data import Dataset
 
-from components.const import TORCH_DTYPE
-from components.dataset.columns.extractions.extractor import (
-    extract_dataset_columns,
+from components.const import (
+    DATASET_PROCESSED_COLUMNS,
+    DATASET_PROCESSED_FEATURE_COLUMNS,
+    DATASET_TARGET_COLUMN_SHIFT,
+    LIST_LAST_IDX,
+    TORCH_DTYPE,
 )
-from components.dataset.columns.extractions.features_target_extractor import (
-    extract_features_target_from_dataset_columns,
-)
-from components.dataset.columns.manipulations.shifter import (
+from components.dataset.columns.shifter import (
     shift_dataset_column,
 )
 from components.dataset.io.loader import load_dataset
@@ -96,7 +96,6 @@ class AccessLogsDataset(Dataset):
 
     def _set_fields(
         self: "AccessLogsDataset",
-        data: "pd.DataFrame",
         config: Any,
     ) -> None:
         """Set the feature, target, and sequence length fields of the dataset.
@@ -106,18 +105,15 @@ class AccessLogsDataset(Dataset):
 
         Args:
             self (AccessLogsDataset): Instance of AccessLogsDataset.
-            data (pd.DataFrame): Dataset from which fields are extracted.
             config (Any): Configuration object.
 
         Returns:
             None
         """
-        # Set column names extracted from data
-        self.columns = extract_dataset_columns(data)
-
-        # Set features and target extracted from columns
+        # Set features and target of dataset
         self.features, self.target = (
-            extract_features_target_from_dataset_columns(self.columns)
+            DATASET_PROCESSED_FEATURE_COLUMNS,
+            DATASET_PROCESSED_COLUMNS[LIST_LAST_IDX],
         )
 
         # Set sequence length
@@ -126,7 +122,6 @@ class AccessLogsDataset(Dataset):
         debug(
             "Dataset fields setting executed",
             extra={
-                "columns_num": len(self.columns),
                 "feature_columns": self.features,
                 "target_column": self.target,
                 "sequence_length": self.seq_len,
@@ -174,10 +169,14 @@ class AccessLogsDataset(Dataset):
         self._split_dataset(dataset_type, training_split)
 
         # Set the fields of the dataset
-        self._set_fields(self.data, config)
+        self._set_fields(config)
 
         # Shift target by -1
-        shift_dataset_column(self.data, self.target, -1)
+        shift_dataset_column(
+            self.data,
+            self.target,
+            DATASET_TARGET_COLUMN_SHIFT,
+        )
 
         debug(
             "AccessLogsDataset initialization executed",
