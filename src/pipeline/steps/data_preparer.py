@@ -33,6 +33,7 @@ from components.logs.handlers.grafana_loki_handler import GrafanaLokiHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
 from components.ray.initializer import initialize_ray
+from components.seed.setter import set_seed
 from const import (
     DATA_REAL_MODE,
     DATA_STATIC_MODE,
@@ -91,6 +92,10 @@ def prepare_data() -> None:
         data_mode = config.data.general.mode
         min_key = config.data.general.keys.min
         max_key = config.data.general.keys.max
+        seed = config.seed.value
+
+        # Ensure reproducibility
+        set_seed(seed)
 
         # Retrieve dataset path for further usage
         dataset_path = get_dataset_abs_path(
