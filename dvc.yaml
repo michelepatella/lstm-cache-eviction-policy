@@ -527,6 +527,8 @@ stages:
         - evaluation.simulations.metrics.mistake_rate.window
         - logs.level
         - model.sequence.length
+        - resources.general.num_cpus
+        - resources.general.num_gpus
         - seed.value
         - simulations.api_kwargs.conf_weight
         - simulations.api_kwargs.conf_level
@@ -592,6 +594,7 @@ stages:
       - src/components/logs/levels/utils/logger.py
       - src/components/math/avg_calculator.py
       - src/components/math/percentage_calculator.py
+      - src/components/ray/tasks/caches/simulator.py
       - src/components/seed/setter.py
       - src/components/time/transforms/trig_decoder.py
       - src/components/visualization/hit_miss_rates_plotter.py
