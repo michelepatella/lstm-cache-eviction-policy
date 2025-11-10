@@ -333,6 +333,9 @@ TIME_NANOSECONDS_IN_SECOND = 1_000_000_000
 # ----------------------------
 TORCH_DTYPE = torch.float32
 
+TORCH_BACKENDS_CUDNN_DETERMINISTIC = True
+TORCH_BACKENDS_CUDNN_BENCHMARK = False
+
 
 # ----------------------------
 # Training

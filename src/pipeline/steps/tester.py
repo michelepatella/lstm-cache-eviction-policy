@@ -30,6 +30,7 @@ from components.logs.levels.info_logger import info
 from components.model.best.initializer import (
     initialize_best_model,
 )
+from components.seed.setter import set_seed
 from const import (
     DATA_DYNAMIC_MODE,
     DATA_STATIC_MODE,
@@ -88,6 +89,10 @@ def test_model() -> None:
             config.resources.general.num_cpus,
             config.resources.general.num_gpus,
         )
+        seed = config.seed.value
+
+        # Ensure reproducibility
+        set_seed(seed)
 
         info(
             "Testing started",

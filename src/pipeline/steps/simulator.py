@@ -51,6 +51,7 @@ from components.evaluation.simulations.metrics.io.saver import (
 from components.logs.handlers.grafana_loki_handler import GrafanaLokiHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
+from components.seed.setter import set_seed
 from components.visualization.hit_miss_rates_plotter import (
     plot_hit_miss_rate,
 )
@@ -128,6 +129,10 @@ def run_simulations() -> None:
         testing_batch_size = config.data_loader.batch_size.testing
         testing_shuffle = config.data_loader.shuffle.testing
         cache_size = config.simulations.caches.dimension
+        seed = config.seed.value
+
+        # Ensure reproducibility
+        set_seed(seed)
 
         # Define cache eviction policies to simulate
         cache_eviction_policies = {

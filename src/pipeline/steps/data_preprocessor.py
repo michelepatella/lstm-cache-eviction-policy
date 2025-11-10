@@ -36,6 +36,7 @@ from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
 from components.ray.initializer import initialize_ray
 from components.ray.tasks.features.builder import build_features_task
+from components.seed.setter import set_seed
 from const import (
     DATASET_RAW_TYPE,
     LOGS_LOGGER_NAME,
@@ -93,6 +94,10 @@ def preprocess_data() -> None:
         seq_len = config.model.sequence.length
         num_cpus = config.resources.general.num_cpus
         num_gpus = config.resources.general.num_gpus
+        seed = config.seed.value
+
+        # Ensure reproducibility
+        set_seed(seed)
 
         info(
             "Data preprocessing started",

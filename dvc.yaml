@@ -79,6 +79,7 @@ stages:
       - src/components/math/zipf_probs_calculator.py
       - src/components/ray/initializer.py
       - src/components/ray/tasks/data/explorer.py
+      - src/components/seed/setter.py
       - src/components/time/cyclics/seconds_to_hours_converter.py
       - src/components/time/cyclics/updater.py
       - src/components/visualization/daily_profile_plotter.py
@@ -120,6 +121,7 @@ stages:
         - model.sequence.length
         - resources.general.num_cpus
         - resources.general.num_gpus
+        - seed.value
     deps:
       - src/components/assertions/choice_field_assertor.py
       - src/components/assertions/min_max_assertor.py
@@ -142,6 +144,7 @@ stages:
       - src/components/logs/levels/utils/logger.py
       - src/components/ray/initializer.py
       - src/components/ray/tasks/features/builder.py
+      - src/components/seed/setter.py
       - src/components/time/transforms/trig_encoder.py
       - src/components/yaml/io/loader.py
       - src/const.py
@@ -200,6 +203,7 @@ stages:
         - resources.devices.validation
         - resources.general.num_cpus
         - resources.general.num_gpus
+        - seed.value
         - validation.search_space.model.hidden_size
         - validation.search_space.model.num_layers
         - validation.search_space.model.dropout
@@ -262,6 +266,7 @@ stages:
       - src/components/optimizer/builder.py
       - src/components/ray/initializer.py
       - src/components/ray/tasks/time_series_cv/folds_runner.py
+      - src/components/seed/setter.py
       - src/components/training/callbacks/early_stopping.py
       - src/components/training/core/epochs_trainer.py
       - src/components/training/core/single_epoch_trainer.py
@@ -331,6 +336,7 @@ stages:
         - resources.devices.training
         - resources.general.num_cpus
         - resources.general.num_gpus
+        - seed.value
         - training.epochs
     deps:
       - src/components/assertions/choice_field_assertor.py
@@ -384,6 +390,7 @@ stages:
       - src/components/model/optimizations/quantizer.py
       - src/components/network/free_port_finder.py
       - src/components/optimizer/builder.py
+      - src/components/seed/setter.py
       - src/components/training/callbacks/early_stopping.py
       - src/components/training/core/epochs_trainer.py
       - src/components/training/core/single_epoch_trainer.py
@@ -436,6 +443,7 @@ stages:
         - resources.devices.testing
         - resources.general.num_cpus
         - resources.general.num_gpus
+        - seed.value
     deps:
       - src/components/assertions/choice_field_assertor.py
       - src/components/assertions/min_max_assertor.py
@@ -482,6 +490,7 @@ stages:
       - src/components/model/io/locator.py
       - src/components/model/lstm.py
       - src/components/model/mode/setter.py
+      - src/components/seed/setter.py
       - src/components/yaml/io/loader.py
       - src/const.py
       - src/pipeline/config/configurator.py
@@ -518,6 +527,7 @@ stages:
         - evaluation.simulations.metrics.mistake_rate.window
         - logs.level
         - model.sequence.length
+        - seed.value
         - simulations.api_kwargs.conf_weight
         - simulations.api_kwargs.conf_level
         - simulations.api_kwargs.excluded_keys
@@ -582,6 +592,7 @@ stages:
       - src/components/logs/levels/utils/logger.py
       - src/components/math/avg_calculator.py
       - src/components/math/percentage_calculator.py
+      - src/components/seed/setter.py
       - src/components/time/transforms/trig_decoder.py
       - src/components/visualization/hit_miss_rates_plotter.py
       - src/components/yaml/io/loader.py
