@@ -78,7 +78,8 @@ def validate_model() -> None:
         # Setup
         config = prepare_config()
         initialize_logs(
-            logging.getLevelName(config.logs.level), GrafanaLokiHandler()
+            logging.getLevelName(config.logs.level),
+            GrafanaLokiHandler(),
         )
         initialize_ray(
             config.resources.general.num_cpus,

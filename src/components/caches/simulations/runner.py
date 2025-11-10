@@ -12,7 +12,7 @@ Functions:
         cache: Any,
         policy: str,
         testing_set: AccessLogsDataset,
-        config: Any
+        config: Config
     ) -> tuple[dict[str, int], list[dict[str, float]], list[float]]
         Executes the cache simulation for the given cache and policy.
 """
@@ -40,13 +40,14 @@ from const import (
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
 )
+from pipeline.config.pydantic.config import Config
 
 
 def run_cache_simulation(
     cache: Any,
     policy: str,
     testing_set: AccessLogsDataset,
-    config: Any,
+    config: Config,
 ) -> tuple[dict[str, int], list[dict[str, float]], list[float]]:
     """Run a full cache simulation for a given cache eviction policy.
 
@@ -59,7 +60,7 @@ def run_cache_simulation(
         cache (Any): Cache object implementing the eviction policy.
         policy (str): Cache eviction policy name.
         testing_set (AccessLogsDataset): Access logs dataset.
-        config (Any): Configuration object.
+        config (Config): Configuration object.
 
     Returns:
         tuple[dict[str, int], list[dict[str, float]], list[float]]:

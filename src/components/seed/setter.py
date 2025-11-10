@@ -14,7 +14,10 @@ Functions:
         configures PyTorch backends.
 """
 
-import random, numpy as np, torch
+import random
+
+import numpy as np
+import torch
 
 from components.const import (
     TORCH_BACKENDS_CUDNN_BENCHMARK,
