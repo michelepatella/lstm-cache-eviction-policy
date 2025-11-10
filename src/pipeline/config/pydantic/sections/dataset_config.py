@@ -24,7 +24,7 @@ from typing import Annotated
 from pydantic import BaseModel, Field, model_validator
 
 from components.assertions.choice_field_assertor import assert_choice_field
-from pipeline.const import MISSING_VALUES_REMOVAL_DROPNA_HOWS
+from pipeline.const import DATASET_MISSING_VALUES_REMOVAL_DROPNA_HOWS
 
 
 class DatasetSplitsConfig(BaseModel):
@@ -68,7 +68,7 @@ class DatasetCleaningMissingValuesRemovalDropnaConfig(BaseModel):
         """
         assert_choice_field(
             self.how,
-            MISSING_VALUES_REMOVAL_DROPNA_HOWS,
+            DATASET_MISSING_VALUES_REMOVAL_DROPNA_HOWS,
             "dataset.cleaning.missing_values_removal.dropna.how",
         )
 

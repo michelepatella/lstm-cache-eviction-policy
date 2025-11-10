@@ -117,7 +117,7 @@ def prepare_data() -> None:
 
         # Check whether data needs to be
         # synthetically generated
-        if data_mode is not DATA_REAL_MODE:
+        if data_mode != DATA_REAL_MODE:
             # Generate requests with corresponding timestamps,
             # based on the data distribution mode
             if data_mode == DATA_STATIC_MODE:

@@ -29,8 +29,8 @@ from pydantic import BaseModel, Field, model_validator
 
 from components.assertions.choice_field_assertor import assert_choice_field
 from pipeline.const import (
-    MODEL_OPTIMIZATION_QUANTIZATION_DTYPES,
-    MODEL_OPTIMIZATION_QUANTIZATION_ENGINE_NAMES,
+    MODEL_OPTIMIZATIONS_QUANTIZATION_DTYPES,
+    MODEL_OPTIMIZATIONS_QUANTIZATION_ENGINE_NAMES,
 )
 
 
@@ -71,7 +71,7 @@ class ModelOptimizationsQuantizationConfig(BaseModel):
         """
         assert_choice_field(
             self.dtype,
-            MODEL_OPTIMIZATION_QUANTIZATION_DTYPES,
+            MODEL_OPTIMIZATIONS_QUANTIZATION_DTYPES,
             "model.optimizations.quantization.dtype",
         )
 
@@ -93,7 +93,7 @@ class ModelOptimizationsQuantizationConfig(BaseModel):
         """
         assert_choice_field(
             self.engine,
-            MODEL_OPTIMIZATION_QUANTIZATION_ENGINE_NAMES,
+            MODEL_OPTIMIZATIONS_QUANTIZATION_ENGINE_NAMES,
             "model.optimizations.quantization.engine",
         )
 

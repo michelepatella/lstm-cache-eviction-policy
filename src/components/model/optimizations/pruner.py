@@ -21,7 +21,7 @@ Functions:
 import torch
 from torch.nn.utils import prune
 
-from components.const import MODEL_OPTIMIZATION_PRUNING_PARAMS
+from components.const import MODEL_OPTIMIZATIONS_PRUNING_PARAMS
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
@@ -33,7 +33,7 @@ def prune_model(
         type[torch.nn.Module],
         ...,
     ] = (torch.nn.Linear, torch.nn.LSTM),
-    params: tuple[str] = MODEL_OPTIMIZATION_PRUNING_PARAMS,
+    params: tuple[str] = MODEL_OPTIMIZATIONS_PRUNING_PARAMS,
 ) -> torch.nn.Module:
     """Apply pruning to a PyTorch model.
 

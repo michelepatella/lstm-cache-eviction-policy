@@ -48,7 +48,7 @@ from pipeline.const import (
     DAGS_HUB_REPO_NAME,
     DAGS_HUB_REPO_OWNER,
     DATASET_PROCESSED_TYPE,
-    DATASET_RESET_INDEX_DROP,
+    DATASET_CHUNK_RESET_INDEX_DROP,
     LOGS_PHASE_DATA_PREPROCESSING,
 )
 
@@ -149,7 +149,7 @@ def preprocess_data() -> None:
         # working on a dataset chunk
         futures = [
             build_features_task.remote(
-                chunk.reset_index(drop=DATASET_RESET_INDEX_DROP),
+                chunk.reset_index(drop=DATASET_CHUNK_RESET_INDEX_DROP),
                 seq_len,
             )
             for chunk in df_chunks

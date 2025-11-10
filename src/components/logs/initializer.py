@@ -23,15 +23,15 @@ from typing import Any
 import structlog
 
 from components.const import (
-    LOGS_FIELD_PHASE_DEFAULT,
-    LOGS_FIELD_PHASE_NAME,
+    LOGS_GRAFANA_LOKI_FIELD_PHASE_DEFAULT,
+    LOGS_GRAFANA_LOKI_FIELD_PHASE_NAME,
 )
 from const import LOGS_LOGGER_NAME
 
 # Contextual variable for logging messages
 logs_phase = contextvars.ContextVar(
-    LOGS_FIELD_PHASE_NAME,
-    default=LOGS_FIELD_PHASE_DEFAULT,
+    LOGS_GRAFANA_LOKI_FIELD_PHASE_NAME,
+    default=LOGS_GRAFANA_LOKI_FIELD_PHASE_DEFAULT,
 )
 
 

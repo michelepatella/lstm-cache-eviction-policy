@@ -13,6 +13,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+
 load_dotenv()
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
@@ -36,6 +37,7 @@ CONFIG_FILE_PATH = PROJECT_ROOT / "src" / "pipeline" / "config" / "config.yaml"
 # Dagshub
 # ----------------------------
 DAGS_HUB_DVC = True
+
 DAGS_HUB_ENV_VAR_REPO_NAME = "DAGS_HUB_REPO"
 DAGS_HUB_ENV_VAR_REPO_OWNER_NAME = "DAGS_HUB_REPO_OWNER"
 DAGS_HUB_REPO_OWNER = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME, "")
@@ -47,7 +49,9 @@ DAGS_HUB_REPO_NAME = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME, "")
 # ----------------------------
 DATASET_PROCESSED_TYPE = "processed"
 
-DATASET_RESET_INDEX_DROP = True
+DATASET_CHUNK_RESET_INDEX_DROP = True
+
+DATASET_MISSING_VALUES_REMOVAL_DROPNA_HOWS = ["any", "all"]
 
 
 # ----------------------------
@@ -69,12 +73,6 @@ LOSS_CLASS_WEIGHT_TYPES = [None, "balanced"]
 
 
 # ----------------------------
-# Missing Values Removal
-# ----------------------------
-MISSING_VALUES_REMOVAL_DROPNA_HOWS = ["any", "all"]
-
-
-# ----------------------------
 # MLFlow
 # ----------------------------
 MLFLOW_ARTIFACT_PATH = "model"
@@ -85,13 +83,13 @@ MLFLOW_ARTIFACT_PATH = "model"
 # ----------------------------
 MODEL_COMPUTE_METRICS_TESTING = True
 
-MODEL_OPTIMIZATION_QUANTIZATION_DTYPES = [
+MODEL_OPTIMIZATIONS_QUANTIZATION_DTYPES = [
     "qint8",
     "quint8",
     "float16",
     "bfloat16",
 ]
-MODEL_OPTIMIZATION_QUANTIZATION_ENGINE_NAMES = [
+MODEL_OPTIMIZATIONS_QUANTIZATION_ENGINE_NAMES = [
     "fbgemm",
     "qnnpack",
     "onednn",
@@ -151,6 +149,7 @@ PLOT_REAL_HIT_MISS_RATES_FILE_PATH = (
     PROJECT_ROOT / "reports" / "plots" / "real" / "real_hit_miss_rates.png"
 )
 
+
 # ----------------------------
 # Results
 # ----------------------------
@@ -195,8 +194,9 @@ RESULTS_REAL_SIMULATIONS_FILE_PATH = (
     / "real_simulations_results.json"
 )
 
+
 # ----------------------------
-# Simulations Metrics
+# Simulations
 # ----------------------------
 SIMULATIONS_METRICS_HIT_RATE_NAME = "hit_rate"
 SIMULATIONS_METRICS_MISS_RATE_NAME = "miss_rate"
