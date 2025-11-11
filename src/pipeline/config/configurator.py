@@ -16,7 +16,7 @@ Functions:
 
 from components.yaml.io.loader import load_yaml
 from pipeline.config.pydantic.pipeline_config import PipelineConfig
-from pipeline.const import CONFIG_FILE_PATH
+from pipeline.const import PIPELINE_CONFIG_FILE_PATH
 
 
 def prepare_pipeline_config() -> PipelineConfig:
@@ -32,7 +32,7 @@ def prepare_pipeline_config() -> PipelineConfig:
                         the entire pipeline.
     """
     # Load the YAML configuration file
-    pipeline_config_file = load_yaml(CONFIG_FILE_PATH)
+    pipeline_config_file = load_yaml(PIPELINE_CONFIG_FILE_PATH)
 
     # Validate and parse YAML configuration file
     pipeline_config = PipelineConfig(**pipeline_config_file)

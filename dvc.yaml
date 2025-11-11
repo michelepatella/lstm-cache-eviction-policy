@@ -505,8 +505,7 @@ stages:
       - src/pipeline/steps/tester.py
       - data/processed/${data.general.mode}/${data.general.mode}_processed_dataset.csv
       - models/${data.general.mode}/trained_${data.general.mode}_model.pt
-    outs:
-      - []
+    outs: []
 
   simulations:
     cmd: PYTHONPATH=src python -m pipeline.steps.simulator

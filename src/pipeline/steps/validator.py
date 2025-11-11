@@ -45,7 +45,7 @@ from const import (
 )
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
-    CONFIG_FILE_PATH,
+    PIPELINE_CONFIG_FILE_PATH,
     DAGS_HUB_DVC,
     DAGS_HUB_REPO_NAME,
     DAGS_HUB_REPO_OWNER,
@@ -141,7 +141,9 @@ def validate_model() -> None:
         )
 
         # Save updated configuration dictionary as file
-        save_yaml(Box(updated_config_dict).to_dict(), CONFIG_FILE_PATH)
+        save_yaml(
+            Box(updated_config_dict).to_dict(), PIPELINE_CONFIG_FILE_PATH
+        )
 
         # Experiment tracking
         mlflow.log_params(prepare_pipeline_config().model_dump())
@@ -153,7 +155,7 @@ def validate_model() -> None:
                 else float(best_avg_loss),
             },
         )
-        mlflow.log_artifact(CONFIG_FILE_PATH)
+        mlflow.log_artifact(PIPELINE_CONFIG_FILE_PATH)
 
     info(
         "Validation completed",
@@ -162,7 +164,7 @@ def validate_model() -> None:
             "loss_avg_best": None
             if np.isinf(best_avg_loss) or np.isnan(best_avg_loss)
             else float(best_avg_loss),
-            "config_save_path": str(CONFIG_FILE_PATH),
+            "config_save_path": str(PIPELINE_CONFIG_FILE_PATH),
             "context": "Validation",
         },
     )
