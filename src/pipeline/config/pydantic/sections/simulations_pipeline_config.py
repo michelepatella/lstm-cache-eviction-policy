@@ -1,4 +1,4 @@
-"""simulations_config.py
+"""simulations_pipeline_config.py
 
 Configuration section for the simulation environment and parameters.
 
@@ -7,11 +7,11 @@ including specific API arguments and configuration for the underlying caching
 mechanisms.
 
 Classes:
-    SimulationsApiKwargsConfig(BaseModel):
+    SimulationsApiKwargsPipelineConfig(BaseModel):
         Configuration for API-specific arguments (e.g., weights, levels).
-    SimulationsCachesConfig(BaseModel):
+    SimulationsCachesPipelineConfig(BaseModel):
         Configuration for general cache settings (e.g., size, TTL).
-    SimulationsConfig(BaseModel):
+    SimulationsPipelineConfig(BaseModel):
         Aggregates all configuration settings for simulations.
 """
 
@@ -20,20 +20,20 @@ from typing import Annotated
 from pydantic import BaseModel, Field
 
 
-class SimulationsApiKwargsConfig(BaseModel):
+class SimulationsApiKwargsPipelineConfig(BaseModel):
     """Configuration for API-specific arguments.
 
     Attributes:
         conf_weight (float): Weight applied to the confidence score
-                             in decision-making (in (0,1]).
+                             in decision-making (in (0.0, 1.0]).
         conf_level (float): Minimum confidence level required
-                            for certain decisions (in (0,1]).
+                            for certain decisions (in (0.0, 1.0]).
         excluded_keys (list[int]): List of keys to exclude from cache operations.
         mc_dropout_samples (int): Number of Monte Carlo Dropout samples
                                   to use for uncertainty estimation (>= 1).
         num_evictions (int): Number of items to evict simultaneously (>= 1).
         prob_weight (float): Weight applied to the prediction probability
-                             score (in (0,1]).
+                             score (in (0.0, 1.0]).
         return_all_scores (bool): Flag to return all scores from the API.
         return_api_kwargs (bool): Flag to return API arguments alongside results.
         return_prob_conf (bool): Flag to return probability and confidence scores.
@@ -56,7 +56,7 @@ class SimulationsApiKwargsConfig(BaseModel):
     time_step_increment: Annotated[float, Field(gt=0)]
 
 
-class SimulationsCachesConfig(BaseModel):
+class SimulationsCachesPipelineConfig(BaseModel):
     """Configuration for cache settings.
 
     Attributes:
@@ -68,15 +68,17 @@ class SimulationsCachesConfig(BaseModel):
     ttl: Annotated[int, Field(ge=0)]
 
 
-class SimulationsConfig(BaseModel):
+class SimulationsPipelineConfig(BaseModel):
     """Simulations configuration.
 
     Attributes:
-        api_kwargs (SimulationsApiKwargsConfig): Keyword arguments passed to the
-                                                 internal simulation API calls.
-        caches (SimulationsCachesConfig): Configuration for the caching mechanism used
-                                          within the simulation environment.
+        api_kwargs (SimulationsApiKwargsPipelineConfig): Keyword arguments passed
+                                                         to the internal simulation
+                                                         API calls.
+        caches (SimulationsCachesPipelineConfig): Configuration for the caching
+                                                  mechanism used within the simulation
+                                                  environment.
     """
 
-    api_kwargs: SimulationsApiKwargsConfig
-    caches: SimulationsCachesConfig
+    api_kwargs: SimulationsApiKwargsPipelineConfig
+    caches: SimulationsCachesPipelineConfig

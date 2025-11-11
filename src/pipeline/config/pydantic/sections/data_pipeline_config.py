@@ -1,4 +1,4 @@
-"""data_config.py
+"""data_pipeline_config.py
 
 Configuration section for data parameters.
 
@@ -10,51 +10,51 @@ It defines parameters for Zipf distribution, burstiness, and various access
 behaviors (repetition, toggle, cycle, distortion, and memory effects).
 
 Classes:
-    DataPatternsAccessBehaviorHoursConfig(BaseModel):
+    DataPatternsAccessBehaviorHoursPipelineConfig(BaseModel):
         Hour range configuration.
-    DataKeysConfig(BaseModel):
+    DataKeysPipelineConfig(BaseModel):
         Configuration for key ID ranges.
-    DataPatternsAccessZipfAlphaConfig(BaseModel):
+    DataPatternsAccessZipfAlphaPipelineConfig(BaseModel):
         Alpha parameters for Zipf distribution.
-    DataPatternsAccessZipfConfig(BaseModel):
+    DataPatternsAccessZipfPipelineConfig(BaseModel):
         Configuration for Zipf distribution.
-    DataPatternsAccessBehaviorRepetitionConfig(BaseModel):
+    DataPatternsAccessBehaviorRepetitionPipelineConfig(BaseModel):
         Repetition behavior configuration.
-    DataPatternsAccessBehaviorToggleOffsetsConfig(BaseModel):
+    DataPatternsAccessBehaviorToggleOffsetsPipelineConfig(BaseModel):
         Toggle offsets configuration.
-    DataPatternsAccessBehaviorToggleBaseRequestsConfig(BaseModel):
+    DataPatternsAccessBehaviorToggleBaseRequestsPipelineConfig(BaseModel):
         Toggle base requests configuration.
-    DataPatternsAccessBehaviorToggleConfig(BaseModel):
+    DataPatternsAccessBehaviorTogglePipelineConfig(BaseModel):
         Toggle behavior configuration.
-    DataPatternsAccessBehaviorDistortionNoiseConfig(BaseModel):
+    DataPatternsAccessBehaviorDistortionNoisePipelineConfig(BaseModel):
         Noise parameters for distortion.
-    DataPatternsAccessBehaviorDistortionOffsetsConfig(BaseModel):
+    DataPatternsAccessBehaviorDistortionOffsetsPipelineConfig(BaseModel):
         Distortion offsets configuration.
-    DataPatternsAccessBehaviorDistortionConfig(BaseModel):
+    DataPatternsAccessBehaviorDistortionPipelineConfig(BaseModel):
         Distortion behavior configuration.
-    DataPatternsAccessBehaviorMemoryConfig(BaseModel):
+    DataPatternsAccessBehaviorMemoryPipelineConfig(BaseModel):
         Memory behavior configuration.
-    DataPatternsAccessBehaviorCycleConfig(BaseModel):
+    DataPatternsAccessBehaviorCyclePipelineConfig(BaseModel):
         Cyclical behavior configuration.
-    DataPatternsAccessBehaviorConfig(BaseModel):
+    DataPatternsAccessBehaviorPipelineConfig(BaseModel):
         Aggregated access behavior configuration.
-    DataPatternsAccessConfig(BaseModel):
+    DataPatternsAccessPipelineConfig(BaseModel):
         Access pattern configuration.
-    DataPatternsTemporalBurstinessHoursConfig(BaseModel):
+    DataPatternsTemporalBurstinessHoursPipelineConfig(BaseModel):
         Hour range configuration for burstiness.
-    DataPatternsTemporalBurstinessConfig(BaseModel):
+    DataPatternsTemporalBurstinessPipelineConfig(BaseModel):
         Burstiness configuration.
-    DataPatternsTemporalPeriodicConfig(BaseModel):
+    DataPatternsTemporalPeriodicPipelineConfig(BaseModel):
         Periodic pattern configuration.
-    DataPatternsTemporalConfig(BaseModel):
+    DataPatternsTemporalPipelineConfig(BaseModel):
         Temporal behavior configuration.
-    DataPatternsConfig(BaseModel):
+    DataPatternsPipelineConfig(BaseModel):
         Aggregates access and temporal patterns.
-    DataGeneralConfig(BaseModel):
+    DataGeneralPipelineConfig(BaseModel):
         General configuration for data.
-    DataSyntheticConfig(BaseModel):
+    DataSyntheticPipelineConfig(BaseModel):
         Synthetic data configuration, aggregating mode, and patterns.
-    DataConfig(BaseModel):
+    DataPipelineConfig(BaseModel):
         Aggregates general settings and pattern configuration.
 """
 
@@ -75,7 +75,7 @@ from const import (
 )
 
 
-class DataPatternsAccessBehaviorHoursConfig(BaseModel):
+class DataPatternsAccessBehaviorHoursPipelineConfig(BaseModel):
     """Configuration for a range of hours within the day.
 
     Attributes:
@@ -89,7 +89,7 @@ class DataPatternsAccessBehaviorHoursConfig(BaseModel):
     end: Annotated[int, Field(ge=TIME_START_HOUR, le=TIME_END_HOUR)]
 
 
-class DataKeysConfig(BaseModel):
+class DataKeysPipelineConfig(BaseModel):
     """Configuration for key ranges.
 
     Attributes:
@@ -102,16 +102,16 @@ class DataKeysConfig(BaseModel):
 
     @model_validator(mode="after")
     def check_min_max_keys(
-        self: "DataKeysConfig",
-    ) -> "DataKeysConfig":
+        self: "DataKeysPipelineConfig",
+    ) -> "DataKeysPipelineConfig":
         """Check whether the least key is greater than or equal to the
         greatest key or not.
 
         Args:
-            self (DataKeysConfig): Current model instance.
+            self (DataKeysPipelineConfig): Current model instance.
 
         Returns:
-            DataKeysConfig: Validated model instance.
+            DataKeysPipelineConfig: Validated model instance.
         """
         # Check min/max validity
         assert_min_less_than_max(
@@ -123,7 +123,7 @@ class DataKeysConfig(BaseModel):
         return self
 
 
-class DataPatternsAccessZipfAlphaConfig(BaseModel):
+class DataPatternsAccessZipfAlphaPipelineConfig(BaseModel):
     """Configuration for alpha parameters of Zipf distribution.
 
     Attributes:
@@ -137,34 +137,34 @@ class DataPatternsAccessZipfAlphaConfig(BaseModel):
     max: Annotated[float, Field(gt=0)]
 
 
-class DataPatternsAccessZipfConfig(BaseModel):
+class DataPatternsAccessZipfPipelineConfig(BaseModel):
     """Configuration for Zipf distribution.
 
     Attributes:
-        alpha (DataPatternsAccessZipfAlphaConfig): Alpha configuration.
+        alpha (DataPatternsAccessZipfAlphaPipelineConfig): Alpha configuration.
         steps (int): Number of steps (> 0).
     """
 
-    alpha: DataPatternsAccessZipfAlphaConfig
+    alpha: DataPatternsAccessZipfAlphaPipelineConfig
     steps: Annotated[int, Field(gt=0)]
 
 
-class DataPatternsAccessBehaviorRepetitionConfig(BaseModel):
+class DataPatternsAccessBehaviorRepetitionPipelineConfig(BaseModel):
     """Configuration for repetition behavior in access patterns.
 
     Attributes:
         interval (int): Interval between repetitions (> 0).
         offset (int): Offset applied to repetitions (> 0).
-        hours (DataPatternsAccessBehaviorHoursConfig): Hours during which repetitions
-                                                       occur.
+        hours (DataPatternsAccessBehaviorHoursPipelineConfig):
+            Hours during which repetitions occur.
     """
 
     interval: Annotated[int, Field(gt=0)]
     offset: Annotated[int, Field(gt=0)]
-    hours: DataPatternsAccessBehaviorHoursConfig
+    hours: DataPatternsAccessBehaviorHoursPipelineConfig
 
 
-class DataPatternsAccessBehaviorToggleOffsetsConfig(BaseModel):
+class DataPatternsAccessBehaviorToggleOffsetsPipelineConfig(BaseModel):
     """Offset configuration for toggle behavior.
 
     Attributes:
@@ -176,7 +176,7 @@ class DataPatternsAccessBehaviorToggleOffsetsConfig(BaseModel):
     backward: int
 
 
-class DataPatternsAccessBehaviorToggleBaseRequestsConfig(BaseModel):
+class DataPatternsAccessBehaviorToggleBaseRequestsPipelineConfig(BaseModel):
     """Base requests configuration for toggle behavior.
 
     Attributes:
@@ -188,26 +188,26 @@ class DataPatternsAccessBehaviorToggleBaseRequestsConfig(BaseModel):
     second: Annotated[int, Field(gt=0)]
 
 
-class DataPatternsAccessBehaviorToggleConfig(BaseModel):
+class DataPatternsAccessBehaviorTogglePipelineConfig(BaseModel):
     """Configuration for toggle behavior.
 
     Attributes:
         interval (int): Toggle interval (> 0).
-        hours (DataPatternsAccessBehaviorHoursConfig): Hours during which toggle
-                                                       behavior occurs.
-        base_requests (DataPatternsAccessBehaviorToggleBaseRequestsConfig):
+        hours (DataPatternsAccessBehaviorHoursPipelineConfig):
+            Hours during which toggle behavior occurs.
+        base_requests (DataPatternsAccessBehaviorToggleBaseRequestsPipelineConfig):
             Base request indices.
-        offsets (DataPatternsAccessBehaviorToggleOffsetsConfig): Offsets for toggle
-                                                                 behavior.
+        offsets (DataPatternsAccessBehaviorToggleOffsetsPipelineConfig):
+            Offsets for toggle behavior.
     """
 
     interval: Annotated[int, Field(gt=0)]
-    hours: DataPatternsAccessBehaviorHoursConfig
-    base_requests: DataPatternsAccessBehaviorToggleBaseRequestsConfig
-    offsets: DataPatternsAccessBehaviorToggleOffsetsConfig
+    hours: DataPatternsAccessBehaviorHoursPipelineConfig
+    base_requests: DataPatternsAccessBehaviorToggleBaseRequestsPipelineConfig
+    offsets: DataPatternsAccessBehaviorToggleOffsetsPipelineConfig
 
 
-class DataPatternsAccessBehaviorDistortionNoiseConfig(BaseModel):
+class DataPatternsAccessBehaviorDistortionNoisePipelineConfig(BaseModel):
     """Noise distortion configuration for access behavior.
 
     Attributes:
@@ -220,16 +220,16 @@ class DataPatternsAccessBehaviorDistortionNoiseConfig(BaseModel):
 
     @model_validator(mode="after")
     def check_min_max_noises(
-        self: "DataPatternsAccessBehaviorDistortionNoiseConfig",
-    ) -> "DataPatternsAccessBehaviorDistortionNoiseConfig":
+        self: "DataPatternsAccessBehaviorDistortionNoisePipelineConfig",
+    ) -> "DataPatternsAccessBehaviorDistortionNoisePipelineConfig":
         """Check whether the least noise value is greater than or equal to
         the greatest one or not.
 
         Args:
-            self (DataPatternsAccessBehaviorDistortionNoiseConfig): Current model instance.
+            self (DataPatternsAccessBehaviorDistortionNoisePipelineConfig): Current model instance.
 
         Returns:
-            DataPatternsAccessBehaviorDistortionNoiseConfig: Validated model instance.
+            DataPatternsAccessBehaviorDistortionNoisePipelineConfig: Validated model instance.
         """
         assert_min_less_than_max(
             self.min,
@@ -240,7 +240,7 @@ class DataPatternsAccessBehaviorDistortionNoiseConfig(BaseModel):
         return self
 
 
-class DataPatternsAccessBehaviorDistortionOffsetsConfig(BaseModel):
+class DataPatternsAccessBehaviorDistortionOffsetsPipelineConfig(BaseModel):
     """Offsets configuration for distortion behavior.
 
     Attributes:
@@ -252,25 +252,26 @@ class DataPatternsAccessBehaviorDistortionOffsetsConfig(BaseModel):
     correction: int
 
 
-class DataPatternsAccessBehaviorDistortionConfig(BaseModel):
+class DataPatternsAccessBehaviorDistortionPipelineConfig(BaseModel):
     """Distortion configuration for access behavior.
 
     Attributes:
         interval (int): Interval at which distortion is applied (> 0).
-        hours (DataPatternsAccessBehaviorHoursConfig): Hours during which
-                                                       distortion occurs.
-        offsets (DataPatternsAccessBehaviorDistortionOffsetsConfig): Distortion offsets.
-        noise (DataPatternsAccessBehaviorDistortionNoiseConfig): Noise parameters for
-                                                                 distortion.
+        hours (DataPatternsAccessBehaviorHoursPipelineConfig):
+            Hours during which distortion occurs.
+        offsets (DataPatternsAccessBehaviorDistortionOffsetsPipelineConfig):
+            Distortion offsets.
+        noise (DataPatternsAccessBehaviorDistortionNoisePipelineConfig):
+            Noise parameters for distortion.
     """
 
     interval: Annotated[int, Field(gt=0)]
-    hours: DataPatternsAccessBehaviorHoursConfig
-    offsets: DataPatternsAccessBehaviorDistortionOffsetsConfig
-    noise: DataPatternsAccessBehaviorDistortionNoiseConfig
+    hours: DataPatternsAccessBehaviorHoursPipelineConfig
+    offsets: DataPatternsAccessBehaviorDistortionOffsetsPipelineConfig
+    noise: DataPatternsAccessBehaviorDistortionNoisePipelineConfig
 
 
-class DataPatternsAccessBehaviorMemoryConfig(BaseModel):
+class DataPatternsAccessBehaviorMemoryPipelineConfig(BaseModel):
     """Memory behavior configuration.
 
     Attributes:
@@ -282,54 +283,60 @@ class DataPatternsAccessBehaviorMemoryConfig(BaseModel):
     offset: Annotated[int, Field(gt=0)]
 
 
-class DataPatternsAccessBehaviorCycleConfig(BaseModel):
+class DataPatternsAccessBehaviorCyclePipelineConfig(BaseModel):
     """Cyclical behavior configuration.
 
     Attributes:
         base (int): Base value for cycle (> 0).
         mod (int): Modulus for cycle (> 0).
         divisor (int): Divisor for cycle (> 0).
-        hours (DataPatternsAccessBehaviorHoursConfig): Hours during which cyclical
-                                                       behavior occurs.
+        hours (DataPatternsAccessBehaviorHoursPipelineConfig):
+            Hours during which cyclical behavior occurs.
     """
 
     base: Annotated[int, Field(gt=0)]
     mod: Annotated[int, Field(gt=0)]
     divisor: Annotated[int, Field(gt=0)]
-    hours: DataPatternsAccessBehaviorHoursConfig
+    hours: DataPatternsAccessBehaviorHoursPipelineConfig
 
 
-class DataPatternsAccessBehaviorConfig(BaseModel):
+class DataPatternsAccessBehaviorPipelineConfig(BaseModel):
     """Aggregated access behavior configuration.
 
     Attributes:
-        repetition (DataPatternsAccessBehaviorRepetitionConfig): Repetition configuration.
-        toggle (DataPatternsAccessBehaviorToggleConfig): Toggle configuration.
-        cycle (DataPatternsAccessBehaviorCycleConfig): Cycle configuration.
-        distortion (DataPatternsAccessBehaviorDistortionConfig): Distortion configuration.
-        memory (DataPatternsAccessBehaviorMemoryConfig): Memory configuration.
+        repetition (DataPatternsAccessBehaviorRepetitionPipelineConfig):
+            Repetition configuration.
+        toggle (DataPatternsAccessBehaviorTogglePipelineConfig):
+            Toggle configuration.
+        cycle (DataPatternsAccessBehaviorCyclePipelineConfig):
+            Cycle configuration.
+        distortion (DataPatternsAccessBehaviorDistortionPipelineConfig):
+            Distortion configuration.
+        memory (DataPatternsAccessBehaviorMemoryPipelineConfig):
+            Memory configuration.
     """
 
-    repetition: DataPatternsAccessBehaviorRepetitionConfig
-    toggle: DataPatternsAccessBehaviorToggleConfig
-    cycle: DataPatternsAccessBehaviorCycleConfig
-    distortion: DataPatternsAccessBehaviorDistortionConfig
-    memory: DataPatternsAccessBehaviorMemoryConfig
+    repetition: DataPatternsAccessBehaviorRepetitionPipelineConfig
+    toggle: DataPatternsAccessBehaviorTogglePipelineConfig
+    cycle: DataPatternsAccessBehaviorCyclePipelineConfig
+    distortion: DataPatternsAccessBehaviorDistortionPipelineConfig
+    memory: DataPatternsAccessBehaviorMemoryPipelineConfig
 
 
-class DataPatternsAccessConfig(BaseModel):
+class DataPatternsAccessPipelineConfig(BaseModel):
     """Configuration for access patterns.
 
     Attributes:
-        zipf (DataPatternsAccessZipfConfig): Zipf distribution configuration.
-        behavior (DataPatternsAccessBehaviorConfig): Behavioral access configuration.
+        zipf (DataPatternsAccessZipfPipelineConfig): Zipf distribution configuration.
+        behavior (DataPatternsAccessBehaviorPipelineConfig): Behavioral access
+                                                             configuration.
     """
 
-    zipf: DataPatternsAccessZipfConfig
-    behavior: DataPatternsAccessBehaviorConfig
+    zipf: DataPatternsAccessZipfPipelineConfig
+    behavior: DataPatternsAccessBehaviorPipelineConfig
 
 
-class DataPatternsTemporalBurstinessHoursConfig(BaseModel):
+class DataPatternsTemporalBurstinessHoursPipelineConfig(BaseModel):
     """Hour range configuration for burstiness.
 
     Attributes:
@@ -343,32 +350,32 @@ class DataPatternsTemporalBurstinessHoursConfig(BaseModel):
     end: Annotated[int, Field(ge=TIME_START_HOUR, le=TIME_END_HOUR)]
 
 
-class DataPatternsTemporalBurstinessConfig(BaseModel):
+class DataPatternsTemporalBurstinessPipelineConfig(BaseModel):
     """Burstiness configuration for temporal patterns.
 
     Attributes:
         high (float): High burstiness value (> 0).
         low (float): Low burstiness value (> 0).
-        hours (DataPatternsTemporalBurstinessHoursConfig): Hours during which burstiness
-                                                           occurs.
+        hours (DataPatternsTemporalBurstinessHoursPipelineConfig):
+            Hours during which burstiness occurs.
     """
 
     high: Annotated[float, Field(gt=0.0)]
     low: Annotated[float, Field(gt=0.0)]
-    hours: DataPatternsTemporalBurstinessHoursConfig
+    hours: DataPatternsTemporalBurstinessHoursPipelineConfig
 
     @model_validator(mode="after")
     def check_high_low_bursts(
-        self: "DataPatternsTemporalBurstinessConfig",
-    ) -> "DataPatternsTemporalBurstinessConfig":
+        self: "DataPatternsTemporalBurstinessPipelineConfig",
+    ) -> "DataPatternsTemporalBurstinessPipelineConfig":
         """Check whether the highest burst value is greater than or equal to the
         lowest one or not.
 
         Args:
-            self (DataPatternsTemporalBurstinessConfig): Current model instance.
+            self (DataPatternsTemporalBurstinessPipelineConfig): Current model instance.
 
         Returns:
-            DataPatternsTemporalBurstinessConfig: Validated model instance.
+            DataPatternsTemporalBurstinessPipelineConfig: Validated model instance.
         """
         # Check min/max validity
         assert_min_less_than_max(
@@ -380,7 +387,7 @@ class DataPatternsTemporalBurstinessConfig(BaseModel):
         return self
 
 
-class DataPatternsTemporalPeriodicConfig(BaseModel):
+class DataPatternsTemporalPeriodicPipelineConfig(BaseModel):
     """Periodic access pattern configuration.
 
     Attributes:
@@ -392,53 +399,55 @@ class DataPatternsTemporalPeriodicConfig(BaseModel):
     amplitude: Annotated[int, Field(ge=0)]
 
 
-class DataPatternsTemporalConfig(BaseModel):
+class DataPatternsTemporalPipelineConfig(BaseModel):
     """Temporal behavior configuration.
 
     Attributes:
-        burstiness (DataPatternsTemporalBurstinessConfig): Burstiness configuration.
-        periodic (DataPatternsTemporalPeriodicConfig): Periodic pattern configuration.
+        burstiness (DataPatternsTemporalBurstinessPipelineConfig):
+            Burstiness configuration.
+        periodic (DataPatternsTemporalPeriodicPipelineConfig): Periodic pattern
+                                                               configuration.
     """
 
-    burstiness: DataPatternsTemporalBurstinessConfig
-    periodic: DataPatternsTemporalPeriodicConfig
+    burstiness: DataPatternsTemporalBurstinessPipelineConfig
+    periodic: DataPatternsTemporalPeriodicPipelineConfig
 
 
-class DataPatternsConfig(BaseModel):
+class DataPatternsPipelineConfig(BaseModel):
     """Pattern configuration.
 
     Attributes:
-        access (DataPatternsAccessConfig): Access pattern configuration.
-        temporal (DataPatternsTemporalConfig): Temporal pattern configuration.
+        access (DataPatternsAccessPipelineConfig): Access pattern configuration.
+        temporal (DataPatternsTemporalPipelineConfig): Temporal pattern configuration.
     """
 
-    access: DataPatternsAccessConfig
-    temporal: DataPatternsTemporalConfig
+    access: DataPatternsAccessPipelineConfig
+    temporal: DataPatternsTemporalPipelineConfig
 
 
-class DataGeneralConfig(BaseModel):
+class DataGeneralPipelineConfig(BaseModel):
     """General configuration for data.
 
     Attributes:
         requests (int): Number of requests (> 0).
-        keys (DataKeysConfig): Key range configuration.
+        keys (DataKeysPipelineConfig): Key range configuration.
         mode (str): Data distribution mode.
     """
 
     requests: Annotated[int, Field(gt=0)]
-    keys: DataKeysConfig
+    keys: DataKeysPipelineConfig
     mode: str
 
     @model_validator(mode="after")
     def check_data_mode(
-        self: "DataSyntheticConfig",
-    ) -> "DataSyntheticConfig":
+        self: "DataSyntheticPipelineConfig",
+    ) -> "DataSyntheticPipelineConfig":
         """Check whether data distribution mode is valid or not.
 
         This function validates the data distribution mode.
 
         Args:
-            self (DataSyntheticConfig): Current model instance.
+            self (DataSyntheticPipelineConfig): Current model instance.
 
         Returns:
             "DataSyntheticConfig": Validated model instance.
@@ -452,24 +461,25 @@ class DataGeneralConfig(BaseModel):
         return self
 
 
-class DataSyntheticConfig(BaseModel):
+class DataSyntheticPipelineConfig(BaseModel):
     """Synthetic data configuration.
 
     Attributes:
-        patterns (DataPatternsConfig): Access and temporal pattern configuration.
+        patterns (DataPatternsPipelineConfig): Access and temporal pattern
+                                               configuration.
     """
 
-    patterns: DataPatternsConfig
+    patterns: DataPatternsPipelineConfig
 
 
-class DataConfig(BaseModel):
+class DataPipelineConfig(BaseModel):
     """Data configuration.
 
     Attributes:
-        general (DataGeneralConfig): General data configuration settings.
-        synthetic (DataSyntheticConfig): Synthetic data generation settings
-                                         and patterns.
+        general (DataGeneralPipelineConfig): General data configuration settings.
+        synthetic (DataSyntheticPipelineConfig): Synthetic data generation settings
+                                                 and patterns.
     """
 
-    general: DataGeneralConfig
-    synthetic: DataSyntheticConfig
+    general: DataGeneralPipelineConfig
+    synthetic: DataSyntheticPipelineConfig

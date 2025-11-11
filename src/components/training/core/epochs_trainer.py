@@ -81,7 +81,7 @@ from const import (
     RESOURCES_DEVICE_CUDA_NAME,
     RESOURCES_DEVICE_MPS_NAME,
 )
-from pipeline.config.pydantic.config import Config
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def _train_epochs_worker(
@@ -96,7 +96,7 @@ def _train_epochs_worker(
     optimizer: Optimizer,
     criterion: torch.nn.Module,
     device: torch.device,
-    config: Config,
+    config: PipelineConfig,
     return_queue: Queue,
 ) -> None:
     """Worker function executed by each process during Distributed
@@ -125,7 +125,7 @@ def _train_epochs_worker(
         optimizer (Optimizer): The optimizer instance.
         criterion (torch.nn.Module): The loss function.
         device (torch.device): The device for this worker.
-        config (Config): The configuration object.
+        config (PipelineConfig): The configuration object.
         return_queue (Queue): A multiprocessing Queue to pass results back
                               to the main thread.
 

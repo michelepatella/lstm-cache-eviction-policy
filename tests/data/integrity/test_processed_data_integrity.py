@@ -19,7 +19,7 @@ from deepchecks.tabular.checks import (
     PercentOfNulls,
 )
 
-from pipeline.config.configurator import prepare_config
+from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import DATASET_PROCESSED_TYPE
 from tests.const import (
     DATA_INTEGRITY_TESTS_PROCESSED_DATA_RESULTS_SAVE_PATH,
@@ -45,7 +45,7 @@ def test_processed_data_integrity() -> None:
         None
     """
     # Prepare pipeline configuration
-    pipeline_config = prepare_config()
+    pipeline_config = prepare_pipeline_config()
 
     # Initialization
     dc_dataset, tests_config = initialize_data_integrity_tests(

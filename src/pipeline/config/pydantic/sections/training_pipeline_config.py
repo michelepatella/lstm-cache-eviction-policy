@@ -1,9 +1,9 @@
-"""training_config.py
+"""training_pipeline_config.py
 
 Configuration section for the training phase.
 
 Classes:
-    TrainingEpochsConfig(BaseModel):
+    TrainingEpochsPipelineConfig(BaseModel):
         Configuration for the training phase.
 """
 
@@ -12,7 +12,7 @@ from typing import Annotated
 from pydantic import BaseModel, Field
 
 
-class TrainingConfig(BaseModel):
+class TrainingPipelineConfig(BaseModel):
     """Training configuration.
 
     Attributes:

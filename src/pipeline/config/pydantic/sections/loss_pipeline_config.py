@@ -1,13 +1,13 @@
-"""loss_config.py
+"""loss_pipeline_config.py
 
 Configuration section for the loss function settings.
 
-This module defines parameters related to the loss function..
+This module defines parameters related to the loss function.
 
 Classes:
-    LossClassWeightConfig(BaseModel):
+    LossClassWeightPipelineConfig(BaseModel):
         Configuration for class weight calculation.
-    LossConfig(BaseModel):
+    LossPipelineConfig(BaseModel):
         Aggregates all loss-related settings.
 """
 
@@ -17,7 +17,7 @@ from components.assertions.choice_field_assertor import assert_choice_field
 from pipeline.const import LOSS_CLASS_WEIGHT_TYPES
 
 
-class LossClassWeightConfig(BaseModel):
+class LossClassWeightPipelineConfig(BaseModel):
     """Configuration for class weight calculation.
 
     Attributes:
@@ -28,14 +28,14 @@ class LossClassWeightConfig(BaseModel):
 
     @model_validator(mode="after")
     def check_loss_class_weight_type(
-        self: "LossClassWeightConfig",
-    ) -> "LossClassWeightConfig":
+        self: "LossClassWeightPipelineConfig",
+    ) -> "LossClassWeightPipelineConfig":
         """Check whether loss class weight type is valid or not.
 
         This function validates the loss class weight type.
 
         Args:
-            self (LossClassWeightConfig): Current model instance.
+            self (LossClassWeightPipelineConfig): Current model instance.
 
         Returns:
             "LossClassWeightConfig": Validated model instance.
@@ -49,12 +49,12 @@ class LossClassWeightConfig(BaseModel):
         return self
 
 
-class LossConfig(BaseModel):
+class LossPipelineConfig(BaseModel):
     """Aggregates all loss-related settings.
 
     Attributes:
-        class_weight (LossClassWeightConfig): Configuration for class
-                                              weight calculation.
+        class_weight (LossClassWeightPipelineConfig): Configuration for class
+                                                      weight calculation.
     """
 
-    class_weight: LossClassWeightConfig
+    class_weight: LossClassWeightPipelineConfig

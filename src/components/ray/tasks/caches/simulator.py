@@ -23,7 +23,7 @@ import ray
 
 from components.caches.simulations.runner import run_cache_simulation
 from components.dataset.access_logs_dataset import AccessLogsDataset
-from pipeline.config.pydantic.config import Config
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 @ray.remote
@@ -31,7 +31,7 @@ def run_cache_simulation_task(
     cache: Any,
     policy: str,
     testing_set: AccessLogsDataset,
-    config: Config,
+    config: PipelineConfig,
 ) -> tuple[dict[str, int], list[dict[str, float]], list[float]]:
     """Remote task to run a full cache simulation using a specified policy.
 
@@ -44,7 +44,7 @@ def run_cache_simulation_task(
         policy (str): The name of the eviction policy being tested.
         testing_set (AccessLogsDataset): The access log dataset used to drive
                                          the simulation.
-        config (Config): The configuration object.
+        config (PipelineConfig): The configuration object.
 
     Returns:
         tuple[dict[str, int], list[dict[str, float]], list[float]]:

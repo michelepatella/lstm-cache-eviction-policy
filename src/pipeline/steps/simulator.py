@@ -65,7 +65,7 @@ from const import (
     SIMULATIONS_METRICS_POLICY_NAME,
     SIMULATIONS_METRICS_TIMELINE_NAME,
 )
-from pipeline.config.configurator import prepare_config
+from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     CACHE_LFU_NAME,
     CACHE_LRU_NAME,
@@ -111,25 +111,25 @@ def run_simulations() -> None:
         nested=MLFLOW_NESTED,
     ):
         # Setup
-        config = prepare_config()
+        pipeline_config = prepare_pipeline_config()
         initialize_logs(
-            logging.getLevelName(config.logs.level),
+            logging.getLevelName(pipeline_config.logs.level),
             GrafanaLokiHandler(),
         )
         initialize_ray(
-            config.resources.general.num_cpus,
-            config.resources.general.num_gpus,
+            pipeline_config.resources.general.num_cpus,
+            pipeline_config.resources.general.num_gpus,
         )
 
         # Prepare configuration
-        data_mode = config.data.general.mode
+        data_mode = pipeline_config.data.general.mode
         mistake_window = (
-            config.evaluation.simulations.metrics.mistake_rate.window
+            pipeline_config.evaluation.simulations.metrics.mistake_rate.window
         )
-        testing_batch_size = config.data_loader.batch_size.testing
-        testing_shuffle = config.data_loader.shuffle.testing
-        cache_size = config.simulations.caches.dimension
-        seed = config.seed.value
+        testing_batch_size = pipeline_config.data_loader.batch_size.testing
+        testing_shuffle = pipeline_config.data_loader.shuffle.testing
+        cache_size = pipeline_config.simulations.caches.dimension
+        seed = pipeline_config.seed.value
 
         # Ensure reproducibility
         set_seed(seed)
@@ -139,22 +139,22 @@ def run_simulations() -> None:
             CACHE_LRU_NAME: CacheWrapper(
                 LRUCache,
                 CacheMetricsLogger(),
-                config,
+                pipeline_config,
             ),
             CACHE_LFU_NAME: CacheWrapper(
                 LFUCache,
                 CacheMetricsLogger(),
-                config,
+                pipeline_config,
             ),
             CACHE_RANDOM_NAME: RandomCache(
                 None,
                 CacheMetricsLogger(),
-                config,
+                pipeline_config,
             ),
             CACHE_LSTM_NAME: LSTMCache(
                 None,
                 CacheMetricsLogger(),
-                config,
+                pipeline_config,
             ),
         }
 
@@ -164,7 +164,7 @@ def run_simulations() -> None:
             testing_batch_size,
             testing_shuffle,
             AccessLogsDataset,
-            config,
+            pipeline_config,
         )
 
         info(
@@ -187,7 +187,7 @@ def run_simulations() -> None:
                     cache,
                     policy,
                     testing_set,
-                    config,
+                    pipeline_config,
                 ),
             )
 
@@ -293,7 +293,7 @@ def run_simulations() -> None:
 
         # Experiment tracking
         mlflow.log_params(
-            prepare_config().model_dump(),
+            prepare_pipeline_config().model_dump(),
         )
         mlflow.log_artifact(plot_save_path)
 

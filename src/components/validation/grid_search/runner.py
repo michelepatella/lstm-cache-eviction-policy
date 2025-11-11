@@ -32,13 +32,13 @@ from components.ray.tasks.time_series_cv.folds_runner import (
     compute_time_series_cv_folds_task,
 )
 from const import LOGS_PHASE_VALIDATION, MLFLOW_NESTED
-from pipeline.config.pydantic.config import Config
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def compute_grid_search(
     training_set: AccessLogsDataset,
     params_combinations: list[dict[str, int | float | bool]],
-    config: Config,
+    config: PipelineConfig,
 ) -> tuple[dict[str, int | float | bool], float]:
     """Perform grid search to find the best parameters.
 
@@ -51,7 +51,7 @@ def compute_grid_search(
                                           evaluation.
         params_combinations (list[dict[str, int | float | bool]]):
             Parameter combinations to be evaluated.
-        config (Config): Configuration object.
+        config (PipelineConfig): Configuration object.
 
     Returns:
         tuple[dict[str, int | float | bool], float]:

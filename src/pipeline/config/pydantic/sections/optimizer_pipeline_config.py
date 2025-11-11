@@ -1,4 +1,4 @@
-"""optimizer_config.py
+"""optimizer_pipeline_config.py
 
 Configuration section for the model's primary optimizer settings.
 
@@ -6,9 +6,9 @@ This module defines the type of optimizer to use and its key
 hyperparameters, such as learning rate, momentum, and weight decay.
 
 Classes:
-    OptimizerParamsConfig(BaseModel):
+    OptimizerParamsPipelineConfig(BaseModel):
         Configuration for optimizer hyperparameters.
-    OptimizerConfig(BaseModel):
+    OptimizerPipelineConfig(BaseModel):
         Aggregates the optimizer type and its parameters.
 """
 
@@ -22,12 +22,12 @@ from components.assertions.choice_field_assertor import (
 from const import OPTIMIZER_NAMES
 
 
-class OptimizerParamsConfig(BaseModel):
+class OptimizerParamsPipelineConfig(BaseModel):
     """Configuration for optimizer hyperparameters.
 
     Attributes:
         learning_rate (float): The learning rate (> 0).
-        momentum (float): The momentum factor (in [0,1]).
+        momentum (float): The momentum factor (in [0.0, 1.0]).
         weight_decay (float): The weight decay factor (>= 0).
     """
 
@@ -36,27 +36,27 @@ class OptimizerParamsConfig(BaseModel):
     weight_decay: Annotated[float, Field(ge=0)]
 
 
-class OptimizerConfig(BaseModel):
+class OptimizerPipelineConfig(BaseModel):
     """Aggregates the optimizer type and its parameters.
 
     Attributes:
-        params (OptimizerParamsConfig): Optimizer hyperparameters.
+        params (OptimizerParamsPipelineConfig): Optimizer hyperparameters.
         type (str): The optimizer type to be used.
     """
 
-    params: OptimizerParamsConfig
+    params: OptimizerParamsPipelineConfig
     type: str
 
     @model_validator(mode="after")
     def check_optimizer_type(
-        self: "OptimizerConfig",
-    ) -> "OptimizerConfig":
+        self: "OptimizerPipelineConfig",
+    ) -> "OptimizerPipelineConfig":
         """Check whether the optimizer type is valid or not.
 
         This function validates the specified optimizer type.
 
         Args:
-            self (OptimizerConfig): Current model instance.
+            self (OptimizerPipelineConfig): Current model instance.
 
         Returns:
             "OptimizerConfig": Validated model instance.
