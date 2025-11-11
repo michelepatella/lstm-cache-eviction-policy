@@ -1,19 +1,19 @@
-"""test_processed_dataset.py
+"""test_processed_data_quality.py
 
 Module dedicated to running data quality validation checks on the processed
 dataset using the Great Expectations (GX) framework.
 
 This module loads the processed dataset and applies a comprehensive
-Expectation Suite to verify its integrity. The checks specifically focus on:
+Expectation Suite to verify its quality. The checks specifically focus on:
     - Completeness: Ensures no critical columns contain null values.
     - Numeric Constraints: Validates that engineered features and request
                            keys are within their expected numerical bounds.
-    - Schema Integrity: Verifies the existence, data types, count, and order
+    - Schema Quality: Verifies the existence, data types, count, and order
                         of the processed columns.
 
 Functions:
-    test_processed_dataset() -> None
-        Executes the full suite of data quality expectations for the processed dataset.
+    test_processed_data_quality() -> None
+        Executes the full suite of data quality expectations for the processed data.
 """
 
 from helpers import (
@@ -23,8 +23,8 @@ from helpers import (
     add_column_order_expectation,
     add_column_range_expectations,
     add_column_type_expectations,
-    initialize_dataset_testing,
-    run_dataset_testing,
+    initialize_data_quality_tests,
+    run_data_quality_tests,
 )
 
 from components.const import (
@@ -38,6 +38,7 @@ from const import DATASET_COLUMN_REQUEST_NAME
 from pipeline.config.configurator import prepare_config
 from pipeline.const import DATASET_PROCESSED_TYPE
 from tests.const import (
+    DATA_QUALITY_TESTS_PROCESSED_DATA_RESULTS_SAVE_PATH,
     DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MAX_VALUE,
     DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MIN_VALUE,
     DATASET_COLUMN_LOCAL_FREQUENCY_TYPE,
@@ -49,10 +50,10 @@ from tests.const import (
 )
 
 
-def test_processed_dataset():
-    """Tests the integrity and schema of the processed dataset.
+def test_processed_data_quality() -> None:
+    """Tests the quality and schema of the processed data.
 
-    This function performs a complete data validation check on the dataset
+    This function performs a complete data validation check on the data
     after preprocessing by:
         - Initializing the Great Expectations environment.
         - Defining Completeness Expectations (non-null checks).
@@ -63,12 +64,12 @@ def test_processed_dataset():
     Returns:
         None
     """
-    # Setup for processed dataset testing
-    config = prepare_config()
+    # Setup for processed data testing
+    pipeline_config = prepare_config()
     df, context, data_source, data_asset, batch_definition, suite = (
-        initialize_dataset_testing(
+        initialize_data_quality_tests(
             DATASET_PROCESSED_TYPE,
-            config.data.general.mode,
+            pipeline_config.data.general.mode,
         )
     )
 
@@ -103,8 +104,8 @@ def test_processed_dataset():
                 DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MAX_VALUE,
             ),
             DATASET_COLUMN_REQUEST_NAME: (
-                config.data.general.keys.min,
-                config.data.general.keys.max,
+                pipeline_config.data.general.keys.min,
+                pipeline_config.data.general.keys.max,
             ),
         },
     )
@@ -155,8 +156,14 @@ def test_processed_dataset():
     # ----------------------------
     # Suite validation
     # ----------------------------
-    run_dataset_testing(context, batch_definition, suite, df)
+    run_data_quality_tests(
+        context,
+        batch_definition,
+        suite,
+        df,
+        DATA_QUALITY_TESTS_PROCESSED_DATA_RESULTS_SAVE_PATH,
+    )
 
 
 if __name__ == "__main__":
-    test_processed_dataset()
+    test_processed_data_quality()
