@@ -9,7 +9,7 @@ It supports complex nested configurations and ensures that every combination
 from the search space is represented.
 
 Functions:
-    get_parameters_combination(config: Any) -> list[dict[str, int | float | bool]]
+    get_parameters_combination(pipeline_config: PipelineConfig) -> list[dict[str, int | float | bool]]
         Generates all nested parameter combinations from the provided search
         space configuration and returns them as a list of dictionaries.
 """

@@ -9,7 +9,7 @@ into time steps and varying the Zipfian alpha parameter across these steps,
 allowing for temporal variation in the access distribution.
 
 Functions:
-    generate_dynamic_requests(config: PipelineConfig) -> tuple[list[int], ndarray]
+    generate_dynamic_requests(pipeline_config: PipelineConfig) -> tuple[list[int], ndarray]
         Generates a list of requested keys and their timestamps in hours.
 """
 
