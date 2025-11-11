@@ -17,7 +17,7 @@ This manager module centralizes all necessary components for robust data testing
                  completion of all defined expectations.
 
 Functions:
-    initialize_dataset_testing(
+    initialize_data_quality_tests(
         dataset_type: str,
         data_mode: str,
         data_source_name: str,
@@ -76,16 +76,20 @@ Functions:
     ) -> None
         Checks for the expected total number of rows.
 
-    run_dataset_testing(
+    run_data_quality_tests(
         context: EphemeralDataContext,
         batch_definition: BatchDefinition,
         suite: ExpectationSuite,
         df: pd.DataFrame,
+        results_save_path: str,
         validation_definition_name: str,
         checkpoint_name: str,
     ) -> None
         Executes the defined validation Checkpoint and asserts success.
 """
+
+import sys
+from pathlib import Path
 
 import great_expectations as gx
 import pandas as pd
@@ -100,23 +104,23 @@ from great_expectations.datasource.fluent.pandas_datasource import (
 from components.dataset.io.loader import load_dataset
 from components.dataset.io.locator import get_dataset_abs_path
 from tests.const import (
-    DATA_TESTING_BATCH_DEFINITION_NAME_DEFAULT,
-    DATA_TESTING_CHECKPOINT_BATCH_PARAMETERS_DATAFRAME_KEY_NAME,
-    DATA_TESTING_CHECKPOINT_NAME,
-    DATA_TESTING_DATA_SOURCE_NAME_DEFAULT,
-    DATA_TESTING_DATAFRAME_ASSET_NAME_DEFAULT,
-    DATA_TESTING_EXPECTATION_SUITE_NAME_DEFAULT,
-    DATA_TESTING_VALIDATION_DEFINITION_NAME,
+    DATA_QUALITY_TESTS_BATCH_DEFINITION_NAME_DEFAULT,
+    DATA_QUALITY_TESTS_CHECKPOINT_BATCH_PARAMETERS_DATAFRAME_KEY_NAME,
+    DATA_QUALITY_TESTS_CHECKPOINT_NAME_DEFAULT,
+    DATA_QUALITY_TESTS_DATA_SOURCE_NAME_DEFAULT,
+    DATA_QUALITY_TESTS_DATAFRAME_ASSET_NAME_DEFAULT,
+    DATA_QUALITY_TESTS_EXPECTATION_SUITE_NAME_DEFAULT,
+    DATA_QUALITY_TESTS_VALIDATION_DEFINITION_NAME_DEFAULT,
 )
 
 
-def initialize_dataset_testing(
+def initialize_data_quality_tests(
     dataset_type: str,
     data_mode: str,
-    data_source_name: str = DATA_TESTING_DATA_SOURCE_NAME_DEFAULT,
-    dataframe_asset_name: str = DATA_TESTING_DATAFRAME_ASSET_NAME_DEFAULT,
-    batch_definition_name: str = DATA_TESTING_BATCH_DEFINITION_NAME_DEFAULT,
-    expectation_suite_name: str = DATA_TESTING_EXPECTATION_SUITE_NAME_DEFAULT,
+    data_source_name: str = DATA_QUALITY_TESTS_DATA_SOURCE_NAME_DEFAULT,
+    dataframe_asset_name: str = DATA_QUALITY_TESTS_DATAFRAME_ASSET_NAME_DEFAULT,
+    batch_definition_name: str = DATA_QUALITY_TESTS_BATCH_DEFINITION_NAME_DEFAULT,
+    expectation_suite_name: str = DATA_QUALITY_TESTS_EXPECTATION_SUITE_NAME_DEFAULT,
 ) -> tuple[
     pd.DataFrame,
     EphemeralDataContext,
@@ -125,7 +129,7 @@ def initialize_dataset_testing(
     BatchDefinition,
     ExpectationSuite,
 ]:
-    """Initializes the Great Expectations testing environment for a dataset.
+    """Initializes the Great Expectations quality testing environment for data.
 
     This function loads a specified dataset into a Pandas DataFrame and
     configures all necessary Great Expectations components, including an
@@ -385,13 +389,14 @@ def add_row_count_expectation(
     )
 
 
-def run_dataset_testing(
+def run_data_quality_tests(
     context: EphemeralDataContext,
     batch_definition: BatchDefinition,
     suite: ExpectationSuite,
     df: pd.DataFrame,
-    validation_definition_name: str = DATA_TESTING_VALIDATION_DEFINITION_NAME,
-    checkpoint_name: str = DATA_TESTING_CHECKPOINT_NAME,
+    results_save_path: str,
+    validation_definition_name: str = DATA_QUALITY_TESTS_VALIDATION_DEFINITION_NAME_DEFAULT,
+    checkpoint_name: str = DATA_QUALITY_TESTS_CHECKPOINT_NAME_DEFAULT,
 ) -> None:
     """Executes the data validation process using Great Expectations.
 
@@ -408,11 +413,16 @@ def run_dataset_testing(
         suite (ExpectationSuite): The suite containing all defined data quality
                                   expectations.
         df (pd.DataFrame): The DataFrame containing the data to be validated.
+        results_save_path (Path): The path where the results will be saved.
         validation_definition_name (str): Name to assign to the Validation Definition.
         checkpoint_name (str): Name to assign to the Checkpoint.
 
     Returns:
         None
+
+    Raises:
+        AssertionError: If `checkpoint_results.passed` is False, meaning one or more
+                        checks in the suite failed their conditions.
     """
     # Define validation definition
     validation_definition = context.validation_definitions.add(
@@ -431,12 +441,20 @@ def run_dataset_testing(
         ),
     )
 
-    # Run checkpoint over dataframe, show the results,
-    # and assert everything went well
-    checkpoint_result = checkpoint.run(
-        batch_parameters={
-            DATA_TESTING_CHECKPOINT_BATCH_PARAMETERS_DATAFRAME_KEY_NAME: df,
-        },
-    )
-    print(checkpoint_result.describe())
+    # Show and save the results at specified path
+    with Path(results_save_path).open("w") as f:
+        old_stdout = sys.stdout
+        sys.stdout = f
+
+        # Run checkpoint over dataframe, show the results,
+        # and assert everything went well
+        checkpoint_result = checkpoint.run(
+            batch_parameters={
+                DATA_QUALITY_TESTS_CHECKPOINT_BATCH_PARAMETERS_DATAFRAME_KEY_NAME: df,
+            },
+        )
+        print(checkpoint_result.describe())
+
+        sys.stdout = old_stdout
+
     assert checkpoint_result.success is True

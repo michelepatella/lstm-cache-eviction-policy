@@ -1,21 +1,21 @@
-"""test_raw_dataset.py
+"""test_raw_data_quality.py
 
 Module dedicated to running data quality validation checks on the initial,
-unprocessed (raw) dataset using the Great Expectations (GX) framework.
+unprocessed (raw) data using the Great Expectations (GX) framework.
 
 This module loads the raw data and applies a comprehensive Expectation Suite
-to verify its integrity before any pipeline transformations occur. The checks
+to verify its quality before any pipeline transformations occur. The checks
 cover:
     - Numeric Constraints: Ensures timestamp and request values fall within
                            defined boundaries.
-    - Schema Integrity: Verifies the existence, data types, count, and order
-                        of the essential columns.
+    - Schema Quality: Verifies the existence, data types, count, and order
+                      of the essential columns.
     - Volume Check: Asserts that the dataset contains the expected number
                     of rows (requests).
 
 Functions:
-    test_raw_dataset() -> None
-        Executes the full suite of data quality expectations for the raw dataset.
+    test_raw_data_quality() -> None
+        Executes the full suite of data quality expectations for the raw data.
 """
 
 from helpers import (
@@ -25,8 +25,8 @@ from helpers import (
     add_column_range_expectations,
     add_column_type_expectations,
     add_row_count_expectation,
-    initialize_dataset_testing,
-    run_dataset_testing,
+    initialize_data_quality_tests,
+    run_data_quality_tests,
 )
 
 from const import (
@@ -38,16 +38,17 @@ from const import (
 )
 from pipeline.config.configurator import prepare_config
 from tests.const import (
+    DATA_QUALITY_TESTS_RAW_DATA_RESULTS_SAVE_PATH,
     DATASET_COLUMN_REQUEST_TYPE,
     DATASET_COLUMN_TIMESTAMP_TYPE,
     DATASET_RAW_COLUMNS,
 )
 
 
-def test_raw_dataset() -> None:
-    """Tests the integrity and schema of the raw dataset.
+def test_raw_data_quality() -> None:
+    """Tests the quality and schema of the raw data.
 
-    This function performs a complete data validation check on the raw dataset
+    This function performs a complete data validation check on the raw data
     by:
         - Initializing the Great Expectations environment.
         - Defining Numeric Expectations (range checks for timestamps and requests).
@@ -58,10 +59,13 @@ def test_raw_dataset() -> None:
     Returns:
         None
     """
-    # Setup for raw dataset testing
-    config = prepare_config()
+    # Setup for raw data testing
+    pipeline_config = prepare_config()
     df, context, data_source, data_asset, batch_definition, suite = (
-        initialize_dataset_testing(DATASET_RAW_TYPE, config.data.general.mode)
+        initialize_data_quality_tests(
+            DATASET_RAW_TYPE,
+            pipeline_config.data.general.mode,
+        )
     )
 
     # ----------------------------
@@ -78,8 +82,8 @@ def test_raw_dataset() -> None:
                 TIME_END_HOUR + 1,
             ),
             DATASET_COLUMN_REQUEST_NAME: (
-                config.data.general.keys.min,
-                config.data.general.keys.max,
+                pipeline_config.data.general.keys.min,
+                pipeline_config.data.general.keys.max,
             ),
         },
     )
@@ -119,13 +123,19 @@ def test_raw_dataset() -> None:
     # Volume checks
     # ----------------------------
     # Ensure dataset has expected volume
-    add_row_count_expectation(suite, config.data.general.requests)
+    add_row_count_expectation(suite, pipeline_config.data.general.requests)
 
     # ----------------------------
     # Suite validation
     # ----------------------------
-    run_dataset_testing(context, batch_definition, suite, df)
+    run_data_quality_tests(
+        context,
+        batch_definition,
+        suite,
+        df,
+        DATA_QUALITY_TESTS_RAW_DATA_RESULTS_SAVE_PATH,
+    )
 
 
 if __name__ == "__main__":
-    test_raw_dataset()
+    test_raw_data_quality()

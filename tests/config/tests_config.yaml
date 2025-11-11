@@ -1,0 +1,21 @@
+data:
+  processed:
+    integrity:
+      feature_feature_correlation:
+        num_pairs: 2
+        threshold: 0.8
+      feature_label_correlation:
+        threshold: 0.8
+      percent_of_nulls:
+        threshold: 0.0
+  raw:
+    integrity:
+      feature_feature_correlation:
+        num_pairs: 2
+        threshold: 0.8
+      feature_label_correlation:
+        threshold: 0.8
+      percent_of_nulls:
+        threshold: 0.2
+seed:
+  value: 42
