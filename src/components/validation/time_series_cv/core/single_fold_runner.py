@@ -14,7 +14,7 @@ Functions:
         val_idx: np.ndarray,
         training_set: AccessLogsDataset,
         params: dict[str, int | float | bool],
-        config: Any
+        pipeline_config: PipelineConfig
     ) -> float
         Executes a single fold of time series cross-validation and
         returns the average loss for that fold.
@@ -38,6 +38,7 @@ from components.model.environment.initializer import (
 )
 from components.optimizer.builder import build_optimizer
 from components.training.core.epochs_trainer import train_epochs
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def compute_single_time_series_cv_fold(
@@ -45,7 +46,7 @@ def compute_single_time_series_cv_fold(
     val_idx: np.ndarray,
     training_set: AccessLogsDataset,
     params: dict[str, int | float | bool],
-    config: Any,
+    pipeline_config: PipelineConfig,
 ) -> float:
     """Execute a single fold of time series cross-validation.
 
@@ -60,21 +61,21 @@ def compute_single_time_series_cv_fold(
         training_set (AccessLogsDataset): Full training set.
         params (dict[str, int | float | bool]): Parameters configuration
                                                      for the current fold.
-        config (Any): Configuration object.
+        pipeline_config (PipelineConfig): Configuration object.
 
     Returns:
         float: Average loss for the current fold.
     """
     # Prepare configuration
-    training_batch_size = config.data_loader.batch_size.training
-    training_shuffle = config.data_loader.shuffle.training
-    validation_batch_size = config.data_loader.batch_size.validation
-    validation_shuffle = config.data_loader.shuffle.validation
-    validation_device = config.resources.devices.validation
-    optimizer_type = config.optimizer.type
-    learning_rate = config.optimizer.params.learning_rate
-    weight_decay = config.optimizer.params.weight_decay
-    num_epochs = config.validation.time_series_cv.epochs
+    training_batch_size = pipeline_config.data_loader.batch_size.training
+    training_shuffle = pipeline_config.data_loader.shuffle.training
+    validation_batch_size = pipeline_config.data_loader.batch_size.validation
+    validation_shuffle = pipeline_config.data_loader.shuffle.validation
+    validation_device = pipeline_config.resources.devices.validation
+    optimizer_type = pipeline_config.optimizer.type
+    learning_rate = pipeline_config.optimizer.params.learning_rate
+    weight_decay = pipeline_config.optimizer.params.weight_decay
+    num_epochs = pipeline_config.validation.time_series_cv.epochs
 
     # Split training set into training and validation sets
     training_set, validation_set = split_training_validation_sets(
@@ -102,7 +103,7 @@ def compute_single_time_series_cv_fold(
     device, criterion, model = initialize_model_environment(
         targets,
         validation_device,
-        config,
+        pipeline_config,
         model_params=params,
     )
 
@@ -124,7 +125,7 @@ def compute_single_time_series_cv_fold(
         criterion,
         device,
         logs_phase.get(),
-        config,
+        pipeline_config,
     )
 
     return avg_loss

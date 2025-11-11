@@ -12,7 +12,7 @@ Functions:
         cv_num_folds: int,
         training_set: AccessLogsDataset,
         params: dict[str, int | float | bool],
-        config: Any
+        pipeline_config: PipelineConfig
     ) -> tuple[float, list[float]]
         Performs time series CV and returns the final average loss and
         list of fold-specific losses.
@@ -32,13 +32,14 @@ from components.validation.time_series_cv.builder import (
 from components.validation.time_series_cv.core.single_fold_runner import (
     compute_single_time_series_cv_fold,
 )
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def compute_time_series_cv_folds(
     cv_num_folds: int,
     training_set: AccessLogsDataset,
     params: dict[str, int | float | bool],
-    config: Any,
+    pipeline_config: PipelineConfig,
 ) -> tuple[float, list[float]]:
     """Compute Time Series Cross-Validation (CV).
 
@@ -50,7 +51,7 @@ def compute_time_series_cv_folds(
         training_set (AccessLogsDataset): Dataset to perform CV on.
         params (dict[str, int | float | bool]): Parameter configuration
                                                 for model and training.
-        config (Any): Configuration object.
+        pipeline_config (PipelineConfig): Configuration object.
 
     Returns:
         tuple[float, list[float]]:
@@ -97,7 +98,7 @@ def compute_time_series_cv_folds(
                 val_idx,
                 training_set,
                 params,
-                config,
+                pipeline_config,
             )
 
             # Record current fold average loss

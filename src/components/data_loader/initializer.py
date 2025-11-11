@@ -12,7 +12,7 @@ Functions:
         batch_size: int,
         shuffle: bool,
         dataset_class: Type[AccessLogsDataset],
-        config: Any
+        pipeline_config: PipelineConfig
     ) -> tuple[AccessLogsDataset, DataLoader]
         Instantiates the dataset and returns it along with a configured DataLoader.
 """
@@ -24,6 +24,7 @@ from torch.utils.data import DataLoader
 from components.data_loader.builder import build_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.debug_logger import debug
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def initialize_data_loader(
@@ -31,7 +32,7 @@ def initialize_data_loader(
     batch_size: int,
     shuffle: bool,
     dataset_class: type[AccessLogsDataset],
-    config: Any,
+    pipeline_config: PipelineConfig,
 ) -> tuple[AccessLogsDataset, DataLoader]:
     """Set up a data loader.
 
@@ -44,7 +45,7 @@ def initialize_data_loader(
         batch_size (int): Batch size for the data loader to create.
         shuffle (bool): Whether to apply shuffle to the data loader to create.
         dataset_class (type[AccessLogsDataset]): Dataset class to instantiate.
-        config (Config): Configuration object.
+        pipeline_config (PipelineConfig): Configuration object.
 
     Returns:
         tuple[AccessLogsDataset, DataLoader]:
@@ -52,7 +53,7 @@ def initialize_data_loader(
             - data_loader: DataLoader created from the dataset instance.
     """
     # Instantiate the dataset class
-    dataset = dataset_class(data_loader_type, config)
+    dataset = dataset_class(data_loader_type, pipeline_config)
 
     # Create a data loader from the
     # dataset instance

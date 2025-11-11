@@ -14,7 +14,7 @@ Functions:
         keys_range: ndarray,
         current_abs_seconds: float,
         requests: list[int],
-        config: Any
+        pipeline_config: PipelineConfig
     ) -> int
         Determines the next key to access according to day-band-specific
         access patterns.
@@ -45,6 +45,7 @@ from components.data.patterns.access.variants.toggle_generator import (
     generate_toggle_pattern,
 )
 from components.logs.levels.error_logger import error
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def generate_access_pattern(
@@ -52,7 +53,7 @@ def generate_access_pattern(
     keys_range: np.ndarray,
     current_abs_seconds: float,
     requests: list[int],
-    config: Any,
+    pipeline_config: PipelineConfig,
 ) -> int:
     """Generate access pattern based on day band.
 
@@ -65,7 +66,7 @@ def generate_access_pattern(
         keys_range (np.ndarray): List of all available keys.
         current_abs_seconds (float): Current absolute time in seconds.
         requests (list[int]): List of keys requested so far.
-        config (Any): Configuration object.
+        pipeline_config (PipelineConfig): Configuration object.
 
     Returns:
         int: Index of the next key to be accessed.
@@ -90,7 +91,9 @@ def generate_access_pattern(
         num_keys = len(keys_range)
         requests_count = len(requests)
 
-        behavior_config = config.data.synthetic.patterns.access.behavior
+        behavior_config = (
+            pipeline_config.data.synthetic.patterns.access.behavior
+        )
 
         # Prepare repetition pattern configuration
         repetition_interval = behavior_config.repetition.interval

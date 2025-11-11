@@ -10,7 +10,7 @@ request temporal dynamics.
 Functions:
     generate_temporal_pattern(
         current_seconds_in_day: float,
-        config: Any
+        pipeline_config: PipelineConfig
     ) -> float
         Generates the next inter-request time (delta_t) based on current
         time of day and configuration for periodic and burstiness patterns.
@@ -28,11 +28,12 @@ from components.data.patterns.temporal.variants.periodic_calculator import (
     calculate_periodic_component,
 )
 from components.logs.levels.error_logger import error
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def generate_temporal_pattern(
     current_seconds_in_day: float,
-    config: Any,
+    pipeline_config: PipelineConfig,
 ) -> float:
     """Generate temporal pattern for current seconds in day.
 
@@ -46,7 +47,7 @@ def generate_temporal_pattern(
         current_seconds_in_day (float): Current seconds in day for which
                                         temporal pattern (i.e., delta time)
                                         is to be generated.
-        config (Any): Configuration object.
+        pipeline_config (PipelineConfig): Configuration object.
 
     Returns:
         float: Delta time for current seconds in day.
@@ -66,7 +67,7 @@ def generate_temporal_pattern(
         current_hour_in_day = current_seconds_in_day / TIME_SECONDS_IN_HOUR
 
         periodic_pattern_config = (
-            config.data.synthetic.patterns.temporal.periodic
+            pipeline_config.data.synthetic.patterns.temporal.periodic
         )
         # Get scale and amplitude for
         # periodic component generation
@@ -82,7 +83,7 @@ def generate_temporal_pattern(
         )
 
         burstiness_pattern_config = (
-            config.data.synthetic.patterns.temporal.burstiness
+            pipeline_config.data.synthetic.patterns.temporal.burstiness
         )
         # Get burst high and low for burstiness,
         # as well as burst start and end hours

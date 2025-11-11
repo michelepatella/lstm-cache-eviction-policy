@@ -12,7 +12,7 @@ Functions:
         cache: Any,
         policy: str,
         testing_set: AccessLogsDataset,
-        config: Config
+        pipeline_config: PipelineConfig
     ) -> tuple[dict[str, int], list[dict[str, float]], list[float]]
         Remote task to execute a full cache simulation for a specific policy.
 """
@@ -31,7 +31,7 @@ def run_cache_simulation_task(
     cache: Any,
     policy: str,
     testing_set: AccessLogsDataset,
-    config: PipelineConfig,
+    pipeline_config: PipelineConfig,
 ) -> tuple[dict[str, int], list[dict[str, float]], list[float]]:
     """Remote task to run a full cache simulation using a specified policy.
 
@@ -44,7 +44,7 @@ def run_cache_simulation_task(
         policy (str): The name of the eviction policy being tested.
         testing_set (AccessLogsDataset): The access log dataset used to drive
                                          the simulation.
-        config (PipelineConfig): The configuration object.
+        pipeline_config (PipelineConfig): The configuration object.
 
     Returns:
         tuple[dict[str, int], list[dict[str, float]], list[float]]:
@@ -53,4 +53,4 @@ def run_cache_simulation_task(
                         and misses over time.
             - cache_latencies: List of cache access latencies in microseconds.
     """
-    return run_cache_simulation(cache, policy, testing_set, config)
+    return run_cache_simulation(cache, policy, testing_set, pipeline_config)
