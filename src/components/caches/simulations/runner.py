@@ -12,7 +12,7 @@ Functions:
         cache: Any,
         policy: str,
         testing_set: AccessLogsDataset,
-        config: Config
+        pipeline_config: PipelineConfig
     ) -> tuple[dict[str, int], list[dict[str, float]], list[float]]
         Executes the cache simulation for the given cache and policy.
 """
@@ -47,7 +47,7 @@ def run_cache_simulation(
     cache: Any,
     policy: str,
     testing_set: AccessLogsDataset,
-    config: PipelineConfig,
+    pipeline_config: PipelineConfig,
 ) -> tuple[dict[str, int], list[dict[str, float]], list[float]]:
     """Run a full cache simulation for a given cache eviction policy.
 
@@ -60,7 +60,7 @@ def run_cache_simulation(
         cache (Any): Cache object implementing the eviction policy.
         policy (str): Cache eviction policy name.
         testing_set (AccessLogsDataset): Access logs dataset.
-        config (PipelineConfig): Configuration object.
+        pipeline_config (PipelineConfig): Configuration object.
 
     Returns:
         tuple[dict[str, int], list[dict[str, float]], list[float]]:
@@ -126,7 +126,9 @@ def run_cache_simulation(
             if not is_hit:
                 if policy == CACHE_LSTM_NAME:
                     # Put the requested key into the LSTM cache
-                    cache.put(key, current_time, idx, testing_set, config)
+                    cache.put(
+                        key, current_time, idx, testing_set, pipeline_config
+                    )
                 else:
                     # Put the requested key into the baseline cache
                     cache.put(key, current_time)

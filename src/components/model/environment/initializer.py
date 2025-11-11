@@ -10,7 +10,7 @@ Functions:
     initialize_model_environment(
         targets: torch.Tensor | None,
         device_type: str,
-        config: Any,
+        pipeline_config: PipelineConfig,
         model: torch.nn.Module = None,
         model_params: Any | dict[str, int | float | bool] = None
     ) -> tuple[torch.device, torch.nn.Module | None, torch.nn.Module]
@@ -34,12 +34,13 @@ from components.loss.builder import build_loss
 from components.model.builder import (
     build_model,
 )
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def initialize_model_environment(
     targets: torch.Tensor | None,
     device_type: str,
-    config: Any,
+    pipeline_config: PipelineConfig,
     model: torch.nn.Module = None,
     model_params: Any | dict[str, int | float | bool] = None,
 ) -> tuple[torch.device, torch.nn.Module | None, torch.nn.Module]:
@@ -55,7 +56,7 @@ def initialize_model_environment(
         targets (torch.Tensor | None): Target labels for computing
                                          class weights.
         device_type (str): Device type to use.
-        config (Any): Configuration object.
+        pipeline_config (PipelineConfig): Configuration object.
         model (torch.nn.Module): A PyTorch model to configure environment for.
         model_params (Any | dict[str, int | float | bool]):
             Model parameters.
@@ -67,11 +68,11 @@ def initialize_model_environment(
                          (None if no targets provided).
             - model: PyTorch model.
     """
-    min_key = config.data.general.keys.min
-    max_key = config.data.general.keys.max
+    min_key = pipeline_config.data.general.keys.min
+    max_key = pipeline_config.data.general.keys.max
     num_keys = max_key - min_key + 1
-    embedding_dim = config.model.sequence.embedding.dimension
-    class_weight_type = config.loss.class_weight.type
+    embedding_dim = pipeline_config.model.sequence.embedding.dimension
+    class_weight_type = pipeline_config.loss.class_weight.type
     num_features = len(DATASET_PROCESSED_FEATURE_COLUMNS)
 
     # Define the device for computations
@@ -91,7 +92,7 @@ def initialize_model_environment(
             max_key,
             embedding_dim,
             num_features,
-            config,
+            pipeline_config,
         )
 
     # Move model to device

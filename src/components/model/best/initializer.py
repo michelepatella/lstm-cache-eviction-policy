@@ -11,7 +11,7 @@ Functions:
     initialize_best_model(
         data_mode: str,
         device_type: str,
-        config: Any,
+        pipeline_config: PipelineConfig,
         data_loader: DataLoader | None,
         qengine: str = None
     ) -> tuple[torch.device, nn.Module, nn.Module]
@@ -35,12 +35,13 @@ from components.model.io.loader import (
     load_model,
 )
 from components.model.io.locator import get_model_abs_path
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def initialize_best_model(
     data_mode: str,
     device_type: str,
-    config: Any,
+    pipeline_config: PipelineConfig,
     data_loader: DataLoader | None,
     qengine: str = None,
 ) -> tuple[torch.device, nn.Module, nn.Module]:
@@ -54,7 +55,7 @@ def initialize_best_model(
         data_mode (str): Data distribution mode to determine the path
                          of the trained model.
         device_type (str): Device type to be used.
-        config (Any): Configuration object.
+        pipeline_config (PipelineConfig): Configuration object.
         data_loader (DataLoader | None): DataLoader containing the dataset
                                          to be used (if any).
         qengine (str): Quantization engine to be used.
@@ -79,7 +80,7 @@ def initialize_best_model(
     device, criterion, model = initialize_model_environment(
         targets,
         device_type,
-        config,
+        pipeline_config,
         model=model,
     )
 

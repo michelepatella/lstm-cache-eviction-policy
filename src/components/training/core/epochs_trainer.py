@@ -20,7 +20,7 @@ Functions:
         criterion: torch.nn.Module,
         device: torch.device,
         current_phase: str,
-        config: Any,
+        pipeline_config: PipelineConfig,
     ) -> tuple[float, tuple[float, Mapping[str, Any]]]
         Spawns worker processes for distributed training, collects the results
         from the master process, and returns the best model weights and loss.
@@ -36,7 +36,7 @@ Functions:
         optimizer: Optimizer,
         criterion: torch.nn.Module,
         device: torch.device,
-        config: Config,
+        pipeline_config: PipelineConfig,
         return_queue: Queue,
     ) -> None
         The worker function executed by each DDP process, managing the
@@ -96,7 +96,7 @@ def _train_epochs_worker(
     optimizer: Optimizer,
     criterion: torch.nn.Module,
     device: torch.device,
-    config: PipelineConfig,
+    pipeline_config: PipelineConfig,
     return_queue: Queue,
 ) -> None:
     """Worker function executed by each process during Distributed
@@ -125,7 +125,7 @@ def _train_epochs_worker(
         optimizer (Optimizer): The optimizer instance.
         criterion (torch.nn.Module): The loss function.
         device (torch.device): The device for this worker.
-        config (PipelineConfig): The configuration object.
+        pipeline_config (PipelineConfig): The configuration object.
         return_queue (Queue): A multiprocessing Queue to pass results back
                               to the main thread.
 
@@ -156,8 +156,8 @@ def _train_epochs_worker(
 
         # Prepare configuration
         device_type = device.type
-        training_shuffle = config.data_loader.shuffle.training
-        training_batch_size = config.data_loader.batch_size.training
+        training_shuffle = pipeline_config.data_loader.shuffle.training
+        training_batch_size = pipeline_config.data_loader.batch_size.training
 
         # Configuration for distributing training
         dist.init_process_group(
@@ -194,14 +194,14 @@ def _train_epochs_worker(
 
         # Prepare configuration
         es_patience = (
-            config.early_stopping.validation.patience
+            pipeline_config.early_stopping.validation.patience
             if current_phase == LOGS_PHASE_VALIDATION
-            else config.early_stopping.training.patience
+            else pipeline_config.early_stopping.training.patience
         )
         es_delta = (
-            config.early_stopping.validation.delta
+            pipeline_config.early_stopping.validation.delta
             if current_phase == LOGS_PHASE_VALIDATION
-            else config.early_stopping.training.delta
+            else pipeline_config.early_stopping.training.delta
         )
 
         # Instantiate early stopping
@@ -319,7 +319,7 @@ def train_epochs(
     criterion: torch.nn.Module,
     device: torch.device,
     current_phase: str,
-    config: Any,
+    pipeline_config: PipelineConfig,
 ) -> tuple[float, Mapping[str, Any]]:
     """Manages and executes the distributed training loop across multiple
      epochs.
@@ -338,7 +338,7 @@ def train_epochs(
         criterion (torch.nn.Module): The loss function.
         device (torch.device): The base device used for training.
         current_phase (str): The current pipeline phase.
-        config (Any): The configuration object.
+        pipeline_config (PipelineConfig): The configuration object.
 
     Returns:
         tuple[float, torch.nn.Module]:
@@ -347,8 +347,8 @@ def train_epochs(
     """
     # Configuration for distributed training
     num_workers = max(
-        config.resources.general.num_cpus,
-        config.resources.general.num_gpus,
+        pipeline_config.resources.general.num_cpus,
+        pipeline_config.resources.general.num_gpus,
     )
     return_queue = mp.Queue()
 
@@ -369,7 +369,7 @@ def train_epochs(
             optimizer,
             criterion,
             device,
-            config,
+            pipeline_config,
             return_queue,
         ),
         nprocs=num_workers,

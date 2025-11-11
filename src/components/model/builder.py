@@ -12,7 +12,7 @@ Functions:
         max_key: int,
         embedding_dim: int,
         num_features: int,
-        config: Any | None,
+        pipeline_config: PipelineConfig | None,
     ) -> LSTM
         Instantiate and return a PyTorch LSTM model.
 """
@@ -20,6 +20,7 @@ Functions:
 from typing import Any
 
 from components.model.lstm import LSTM
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def build_model(
@@ -28,7 +29,7 @@ def build_model(
     max_key: int,
     embedding_dim: int,
     num_features: int,
-    config: Any | None,
+    pipeline_config: PipelineConfig | None,
 ) -> LSTM:
     """Build a PyTorch model.
 
@@ -42,7 +43,7 @@ def build_model(
         max_key (int): Maximum key index used in the model.
         embedding_dim (int): Dimension of the key embedding for the model.
         num_features (int): Number of input features for the model.
-        config (Any | None): Configuration object.
+        pipeline_config (PipelineConfig | None): Configuration object.
 
     Returns:
         LSTM: Instantiated PyTorch model.
@@ -54,7 +55,7 @@ def build_model(
         max_key,
         embedding_dim,
         num_features,
-        config,
+        pipeline_config,
     )
 
     return model

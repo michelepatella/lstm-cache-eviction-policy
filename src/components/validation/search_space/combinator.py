@@ -24,10 +24,11 @@ from components.dict.combinations.nested_dicts_combinator import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def get_parameters_combination(
-    config: Any,
+    pipeline_config: PipelineConfig,
 ) -> list[dict[str, int | float | bool]]:
     """Generate all possible parameter combinations from the search space.
 
@@ -37,7 +38,7 @@ def get_parameters_combination(
     fully nested parameter configurations.
 
     Args:
-        config (Any): Configuration object.
+        pipeline_config (PipelineConfig): Configuration object.
 
     Returns:
         list[dict[str, int | float | bool]]: List of nested dictionaries
@@ -51,7 +52,7 @@ def get_parameters_combination(
     """
     try:
         # Prepare configuration
-        search_space = config.validation.search_space.model_dump()
+        search_space = pipeline_config.validation.search_space.model_dump()
 
         debug(
             "Parameter combinations generation started",

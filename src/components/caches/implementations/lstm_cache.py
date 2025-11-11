@@ -36,6 +36,7 @@ from components.dataset.rows.extractions.lasts_extractor import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 class LSTMCache(BaseCache):
@@ -55,7 +56,7 @@ class LSTMCache(BaseCache):
         self: "LSTMCache",
         cache_class: Any,
         metrics_logger: CacheMetricsLogger,
-        config: Any,
+        pipeline_config: PipelineConfig,
     ) -> None:
         """Initialize the LSTM cache.
 
@@ -67,17 +68,17 @@ class LSTMCache(BaseCache):
             cache_class (Any): Underlying cache class
                                to store items.
             metrics_logger (CacheMetricsLogger): Logger for cache events.
-            config (Any): Configuration object.
+            pipeline_config (PipelineConfig): Configuration object.
 
         Returns:
             None
         """
         # Cache class initialization
-        super().__init__(cache_class, metrics_logger, config)
+        super().__init__(cache_class, metrics_logger, pipeline_config)
 
         # Set API endpoint and kwargs to use
         self.api_endpoint = API_ENDPOINT_FULL_URL
-        self.api_kwargs = config.simulations.api_kwargs
+        self.api_kwargs = pipeline_config.simulations.api_kwargs
 
         debug(
             "Cache initialization executed",
@@ -182,7 +183,7 @@ class LSTMCache(BaseCache):
         current_time: float,
         current_idx: int,
         testing_set: pd.DataFrame,
-        config: Any,
+        pipeline_config: PipelineConfig,
     ) -> None:
         """Insert a key in the LSTM cache.
 
@@ -197,7 +198,7 @@ class LSTMCache(BaseCache):
             current_time (float): Current time.
             current_idx (int): Index of the current request.
             testing_set (pd.DataFrame): Testing dataset for sequence extraction.
-            config (Config): Configuration object.
+            pipeline_config (PipelineConfig): Configuration object.
 
         Returns:
             None
@@ -217,7 +218,7 @@ class LSTMCache(BaseCache):
             if key not in self.store and len(self.store) >= self.maxsize:
                 # Get the sequence length
                 # of the LSTM model
-                seq_len = config.model.sequence.length
+                seq_len = pipeline_config.model.sequence.length
 
                 # Extract last accesses of
                 # sequence length

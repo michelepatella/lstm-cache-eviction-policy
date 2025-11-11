@@ -9,7 +9,7 @@ into time steps and varying the Zipfian alpha parameter across these steps,
 allowing for temporal variation in the access distribution.
 
 Functions:
-    generate_dynamic_requests(config: Any) -> tuple[list[int], ndarray]
+    generate_dynamic_requests(config: PipelineConfig) -> tuple[list[int], ndarray]
         Generates a list of requested keys and their timestamps in hours.
 """
 
@@ -22,10 +22,11 @@ from components.data.requests.utils.generation_helper import (
 )
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def generate_dynamic_requests(
-    config: Any,
+    pipeline_config: PipelineConfig,
 ) -> tuple[list[int], np.ndarray]:
     """Generate dynamic requests and corresponding timestamps in hours.
 
@@ -36,7 +37,7 @@ def generate_dynamic_requests(
     creating temporal variability in the access distribution.
 
     Args:
-        config (Any): Configuration object.
+        pipeline_config (PipelineConfig): Configuration object.
 
     Returns:
         tuple[list[int], np.ndarray]:
@@ -52,11 +53,11 @@ def generate_dynamic_requests(
     """
     try:
         # Prepare configuration
-        zipf_config = config.data.synthetic.patterns.access.zipf
+        zipf_config = pipeline_config.data.synthetic.patterns.access.zipf
         alpha_min = zipf_config.alpha.min
         alpha_max = zipf_config.alpha.max
         steps = zipf_config.steps
-        num_requests = config.data.general.requests
+        num_requests = pipeline_config.data.general.requests
 
         # Generate evenly spaced alpha
         # values for dynamic time steps
@@ -83,7 +84,7 @@ def generate_dynamic_requests(
         # requests based on dynamic alpha range
         requests, timestamps_hours = generate_requests_helper(
             alpha_range,
-            config,
+            pipeline_config,
             time_step_duration,
         )
 
