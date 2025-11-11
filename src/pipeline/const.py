@@ -27,12 +27,6 @@ CACHE_RANDOM_NAME = "RANDOM"
 
 
 # ----------------------------
-# Config
-# ----------------------------
-CONFIG_FILE_PATH = PROJECT_ROOT / "src" / "pipeline" / "config" / "config.yaml"
-
-
-# ----------------------------
 # Dagshub
 # ----------------------------
 DAGS_HUB_DVC = True
@@ -96,6 +90,14 @@ MODEL_OPTIMIZATIONS_QUANTIZATION_ENGINE_NAMES = [
     "nnpi",
     "acl",
 ]
+
+
+# ----------------------------
+# Pipeline Config
+# ----------------------------
+PIPELINE_CONFIG_FILE_PATH = (
+    PROJECT_ROOT / "src" / "pipeline" / "config" / "pipeline_config.yaml"
+)
 
 
 # ----------------------------
