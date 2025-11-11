@@ -150,51 +150,6 @@ PLOT_REAL_HIT_MISS_RATES_FILE_PATH = (
 
 
 # ----------------------------
-# Results
-# ----------------------------
-RESULTS_STATIC_MODEL_FILE_PATH = (
-    PROJECT_ROOT
-    / "reports"
-    / "results"
-    / "static"
-    / "static_model_results.json"
-)
-RESULTS_DYNAMIC_MODEL_FILE_PATH = (
-    PROJECT_ROOT
-    / "reports"
-    / "results"
-    / "dynamic"
-    / "dynamic_model_results.json"
-)
-RESULTS_REAL_MODEL_FILE_PATH = (
-    PROJECT_ROOT / "reports" / "results" / "real" / "real_model_results.json"
-)
-
-
-RESULTS_STATIC_SIMULATIONS_FILE_PATH = (
-    PROJECT_ROOT
-    / "reports"
-    / "results"
-    / "static"
-    / "static_simulations_results.json"
-)
-RESULTS_DYNAMIC_SIMULATIONS_FILE_PATH = (
-    PROJECT_ROOT
-    / "reports"
-    / "results"
-    / "dynamic"
-    / "dynamic_simulations_results.json"
-)
-RESULTS_REAL_SIMULATIONS_FILE_PATH = (
-    PROJECT_ROOT
-    / "reports"
-    / "results"
-    / "real"
-    / "real_simulations_results.json"
-)
-
-
-# ----------------------------
 # Simulations
 # ----------------------------
 SIMULATIONS_METRICS_HIT_RATE_NAME = "hit_rate"

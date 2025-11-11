@@ -43,9 +43,7 @@ from components.evaluation.simulations.metrics.calculations.belady_min_calculato
 from components.evaluation.simulations.metrics.calculator import (
     calculate_simulation_metrics,
 )
-from components.evaluation.simulations.metrics.io.saver import (
-    save_simulations_metrics,
-)
+
 from components.logs.handlers.grafana_loki_handler import GrafanaLokiHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
@@ -79,9 +77,6 @@ from pipeline.const import (
     PLOT_DYNAMIC_HIT_MISS_RATES_FILE_PATH,
     PLOT_REAL_HIT_MISS_RATES_FILE_PATH,
     PLOT_STATIC_HIT_MISS_RATES_FILE_PATH,
-    RESULTS_DYNAMIC_SIMULATIONS_FILE_PATH,
-    RESULTS_REAL_SIMULATIONS_FILE_PATH,
-    RESULTS_STATIC_SIMULATIONS_FILE_PATH,
     SIMULATIONS_METRICS_AVG_CACHE_LATENCY_NAME,
     SIMULATIONS_METRICS_BELADY_MIN_HIT_RATE_NAME,
     SIMULATIONS_METRICS_BELADY_MIN_MISS_RATE_NAME,
@@ -270,20 +265,14 @@ def run_simulations() -> None:
             },
         )
 
-        # Determine results and plot file path according
+        # Determine plot file path according
         # to data distribution mode
         if data_mode == DATA_STATIC_MODE:
-            results_file_path = RESULTS_STATIC_SIMULATIONS_FILE_PATH
             plot_save_path = PLOT_STATIC_HIT_MISS_RATES_FILE_PATH
         elif data_mode == DATA_DYNAMIC_MODE:
-            results_file_path = RESULTS_DYNAMIC_SIMULATIONS_FILE_PATH
             plot_save_path = PLOT_DYNAMIC_HIT_MISS_RATES_FILE_PATH
         else:
-            results_file_path = RESULTS_REAL_SIMULATIONS_FILE_PATH
             plot_save_path = PLOT_REAL_HIT_MISS_RATES_FILE_PATH
-
-        # Save simulations results
-        save_simulations_metrics(results, results_file_path)
 
         # Plot hit and miss rates over time
         plot_hit_miss_rate(
@@ -306,7 +295,6 @@ def run_simulations() -> None:
         mlflow.log_params(
             prepare_config().model_dump(),
         )
-        mlflow.log_artifact(results_file_path)
         mlflow.log_artifact(plot_save_path)
 
     info(
@@ -329,7 +317,6 @@ def run_simulations() -> None:
                 for r in results
                 if SIMULATIONS_METRICS_POLICY_NAME in r
             ],
-            "results_save_path": str(results_file_path),
             "plot_save_path": str(plot_save_path),
             "context": "Simulations",
         },
