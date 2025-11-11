@@ -16,9 +16,9 @@ PROJECT_ROOT = Path(__file__).parent.parent
 # ----------------------------
 # Data Integrity Tests
 # ----------------------------
-DATA_INTEGRITY_TESTS_RAW_DATA_SUITE_NAME = "Raw data integry tests"
+DATA_INTEGRITY_TESTS_RAW_DATA_SUITE_NAME = "Raw Data Integrity Tests"
 DATA_INTEGRITY_TESTS_PROCESSED_DATA_SUITE_NAME = (
-    "Processed data integrity tests"
+    "Processed Data Integrity Tests"
 )
 
 DATA_INTEGRITY_TESTS_RAW_DATA_RESULTS_SAVE_PATH = (

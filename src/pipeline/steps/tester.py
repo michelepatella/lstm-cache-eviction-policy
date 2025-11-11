@@ -5,8 +5,7 @@ trained model on the dedicated testing set.
 
 This module provides the `test_model` function, which orchestrates the
 loading of the best-trained model, initializes the testing data loader,
-runs the final evaluation, computes various performance metrics, and
-saves the results in a structured format.
+runs the final evaluation, and computes various performance metrics.
 
 Functions:
     test_model() -> None
@@ -32,8 +31,6 @@ from components.model.best.initializer import (
 )
 from components.seed.setter import set_seed
 from const import (
-    DATA_DYNAMIC_MODE,
-    DATA_STATIC_MODE,
     DATASET_TESTING_SPLIT_TYPE,
     LOGS_LOGGER_NAME,
     MLFLOW_NESTED,
@@ -45,9 +42,6 @@ from pipeline.const import (
     DAGS_HUB_REPO_OWNER,
     LOGS_PHASE_TESTING,
     MODEL_COMPUTE_METRICS_TESTING,
-    RESULTS_DYNAMIC_MODEL_FILE_PATH,
-    RESULTS_REAL_MODEL_FILE_PATH,
-    RESULTS_STATIC_MODEL_FILE_PATH,
 )
 
 
@@ -124,14 +118,6 @@ def test_model() -> None:
             qengine=qengine,
         )
 
-        # Prepare file name where to save model results
-        if data_mode == DATA_STATIC_MODE:
-            model_results_save_path = RESULTS_STATIC_MODEL_FILE_PATH
-        elif data_mode == DATA_DYNAMIC_MODE:
-            model_results_save_path = RESULTS_DYNAMIC_MODEL_FILE_PATH
-        else:
-            model_results_save_path = RESULTS_REAL_MODEL_FILE_PATH
-
         # Evaluate model
         (
             avg_loss,
@@ -145,7 +131,6 @@ def test_model() -> None:
             criterion,
             device,
             num_workers,
-            model_results_save_path=model_results_save_path,
             compute_metrics=MODEL_COMPUTE_METRICS_TESTING,
         )
 
@@ -170,7 +155,6 @@ def test_model() -> None:
                 "cohen_kappa_score": metrics.cohen_kappa_score,
             },
         )
-        mlflow.log_artifact(model_results_save_path)
 
     info(
         "Testing completed",
@@ -180,7 +164,6 @@ def test_model() -> None:
             if np.isinf(avg_loss) or np.isnan(avg_loss)
             else float(avg_loss),
             "accuracy": metrics.class_report.accuracy,
-            "model_results_save_path": str(model_results_save_path),
             "context": "Testing",
         },
     )
