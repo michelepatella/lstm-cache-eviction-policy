@@ -1,4 +1,4 @@
-"""data_loader_config.py
+"""data_loader_pipeline_config.py
 
 Configuration section for the data loader.
 
@@ -7,11 +7,11 @@ including batch sizing and shuffling settings for different phases (training,
 validation, testing).
 
 Classes:
-    DataLoaderBatchSizeConfig(BaseModel):
+    DataLoaderBatchSizePipelineConfig(BaseModel):
         Defines the batch size for each phase.
-    DataLoaderShuffleConfig(BaseModel):
+    DataLoaderShufflePipelineConfig(BaseModel):
         Defines whether to shuffle the dataset for each phase.
-    DataLoaderConfig(BaseModel):
+    DataLoaderPipelineConfig(BaseModel):
         Aggregates all data loader configuration settings.
 """
 
@@ -20,7 +20,7 @@ from typing import Annotated
 from pydantic import BaseModel, Field
 
 
-class DataLoaderBatchSizeConfig(BaseModel):
+class DataLoaderBatchSizePipelineConfig(BaseModel):
     """Batch size configuration for the data loader.
 
     Attributes:
@@ -34,7 +34,7 @@ class DataLoaderBatchSizeConfig(BaseModel):
     testing: Annotated[int, Field(gt=0)]
 
 
-class DataLoaderShuffleConfig(BaseModel):
+class DataLoaderShufflePipelineConfig(BaseModel):
     """Shuffle configuration for data loader.
 
     Attributes:
@@ -48,14 +48,15 @@ class DataLoaderShuffleConfig(BaseModel):
     testing: bool
 
 
-class DataLoaderConfig(BaseModel):
+class DataLoaderPipelineConfig(BaseModel):
     """Data loader configuration.
 
     Attributes:
-        batch_size (DataLoaderBatchSizeConfig): Batch size settings for different
-                                                phases.
-        shuffle (DataLoaderShuffleConfig): Shuffle settings for different phases.
+        batch_size (DataLoaderBatchSizePipelineConfig): Batch size settings for
+                                                        different phases.
+        shuffle (DataLoaderShufflePipelineConfig): Shuffle settings for different
+                                                   phases.
     """
 
-    batch_size: DataLoaderBatchSizeConfig
-    shuffle: DataLoaderShuffleConfig
+    batch_size: DataLoaderBatchSizePipelineConfig
+    shuffle: DataLoaderShufflePipelineConfig

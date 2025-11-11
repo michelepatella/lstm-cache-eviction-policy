@@ -20,7 +20,7 @@ from deepchecks.tabular.checks import (
 )
 
 from const import DATASET_RAW_TYPE
-from pipeline.config.configurator import prepare_config
+from pipeline.config.configurator import prepare_pipeline_config
 from tests.const import (
     DATA_INTEGRITY_TESTS_RAW_DATA_RESULTS_SAVE_PATH,
     DATA_INTEGRITY_TESTS_RAW_DATA_SUITE_NAME,
@@ -45,7 +45,7 @@ def test_raw_data_integrity() -> None:
         None
     """
     # Prepare pipeline configuration
-    pipeline_config = prepare_config()
+    pipeline_config = prepare_pipeline_config()
 
     # Initialization
     dc_dataset, tests_config = initialize_data_integrity_tests(

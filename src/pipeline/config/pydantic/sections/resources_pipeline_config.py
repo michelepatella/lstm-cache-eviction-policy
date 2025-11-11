@@ -1,17 +1,17 @@
-"""resources_config.py
+"""resources_pipeline_config.py
 
 Configuration section for hardware resource allocation.
 
-This module structures parameters defining the availability of hardware resources
-and which devices are used for specific pipeline phases (training,
-testing, validation).
+This module structures parameters defining the availability of hardware
+resources and which devices are used for specific pipeline phases
+(training, testing, validation).
 
 Classes:
-    ResourcesGeneralConfig(BaseModel):
+    ResourcesGeneralPipelineConfig(BaseModel):
         Defines the total number of CPUs and GPUs available.
-    ResourcesDevicesConfig(BaseModel):
+    ResourcesDevicesPipelineConfig(BaseModel):
         Specifies the device type to use for each phase.
-    ResourcesConfig(BaseModel):
+    ResourcesPipelineConfig(BaseModel):
         Aggregates all resource configuration settings.
 """
 
@@ -25,7 +25,7 @@ from components.assertions.choice_field_assertor import (
 from const import RESOURCES_DEVICE_NAMES
 
 
-class ResourcesGeneralConfig(BaseModel):
+class ResourcesGeneralPipelineConfig(BaseModel):
     """General hardware resource allocation.
 
     Attributes:
@@ -37,7 +37,7 @@ class ResourcesGeneralConfig(BaseModel):
     num_gpus: Annotated[int, Field(ge=0)]
 
 
-class ResourcesDevicesConfig(BaseModel):
+class ResourcesDevicesPipelineConfig(BaseModel):
     """Device selection for each pipeline phase.
 
     Attributes:
@@ -52,12 +52,12 @@ class ResourcesDevicesConfig(BaseModel):
 
     @model_validator(mode="after")
     def check_device_types(
-        self: "ResourcesDevicesConfig",
-    ) -> "ResourcesDevicesConfig":
+        self: "ResourcesDevicesPipelineConfig",
+    ) -> "ResourcesDevicesPipelineConfig":
         """Check whether all device types are valid.
 
         Args:
-            self (ResourcesDevicesConfig): Current model instance.
+            self (ResourcesDevicesPipelineConfig): Current model instance.
 
         Returns:
             "ResourcesDevicesConfig": Validated model instance.
@@ -80,13 +80,14 @@ class ResourcesDevicesConfig(BaseModel):
         return self
 
 
-class ResourcesConfig(BaseModel):
+class ResourcesPipelineConfig(BaseModel):
     """Resources configuration.
 
     Attributes:
-        general (ResourcesGeneralConfig): General hardware availability.
-        devices (ResourcesDevicesConfig): Device selection per pipeline phase.
+        general (ResourcesGeneralPipelineConfig): General hardware availability.
+        devices (ResourcesDevicesPipelineConfig): Device selection per pipeline
+                                                  phase.
     """
 
-    general: ResourcesGeneralConfig
-    devices: ResourcesDevicesConfig
+    general: ResourcesGeneralPipelineConfig
+    devices: ResourcesDevicesPipelineConfig

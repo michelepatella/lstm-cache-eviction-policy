@@ -35,7 +35,7 @@ from components.const import (
     DATASET_PROCESSED_COLUMNS,
 )
 from const import DATASET_COLUMN_REQUEST_NAME
-from pipeline.config.configurator import prepare_config
+from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import DATASET_PROCESSED_TYPE
 from tests.const import (
     DATA_QUALITY_TESTS_PROCESSED_DATA_RESULTS_SAVE_PATH,
@@ -65,7 +65,7 @@ def test_processed_data_quality() -> None:
         None
     """
     # Setup for processed data testing
-    pipeline_config = prepare_config()
+    pipeline_config = prepare_pipeline_config()
     df, context, data_source, data_asset, batch_definition, suite = (
         initialize_data_quality_tests(
             DATASET_PROCESSED_TYPE,

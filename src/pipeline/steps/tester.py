@@ -35,7 +35,7 @@ from const import (
     LOGS_LOGGER_NAME,
     MLFLOW_NESTED,
 )
-from pipeline.config.configurator import prepare_config
+from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     DAGS_HUB_DVC,
     DAGS_HUB_REPO_NAME,
@@ -68,23 +68,23 @@ def test_model() -> None:
         nested=MLFLOW_NESTED,
     ):
         # Setup
-        config = prepare_config()
+        pipeline_config = prepare_pipeline_config()
         initialize_logs(
-            logging.getLevelName(config.logs.level),
+            logging.getLevelName(pipeline_config.logs.level),
             GrafanaLokiHandler(),
         )
 
         # Prepare configuration
-        data_mode = config.data.general.mode
-        testing_batch_size = config.data_loader.batch_size.testing
-        testing_shuffle = config.data_loader.shuffle.testing
-        testing_device = config.resources.devices.testing
-        qengine = config.model.optimizations.quantization.engine
+        data_mode = pipeline_config.data.general.mode
+        testing_batch_size = pipeline_config.data_loader.batch_size.testing
+        testing_shuffle = pipeline_config.data_loader.shuffle.testing
+        testing_device = pipeline_config.resources.devices.testing
+        qengine = pipeline_config.model.optimizations.quantization.engine
         num_workers = max(
-            config.resources.general.num_cpus,
-            config.resources.general.num_gpus,
+            pipeline_config.resources.general.num_cpus,
+            pipeline_config.resources.general.num_gpus,
         )
-        seed = config.seed.value
+        seed = pipeline_config.seed.value
 
         # Ensure reproducibility
         set_seed(seed)
@@ -106,14 +106,14 @@ def test_model() -> None:
             testing_batch_size,
             testing_shuffle,
             AccessLogsDataset,
-            config,
+            pipeline_config,
         )
 
         # Trained model setup for testing
         device, criterion, model = initialize_best_model(
             data_mode,
             testing_device,
-            config,
+            pipeline_config,
             testing_loader,
             qengine=qengine,
         )
@@ -136,7 +136,7 @@ def test_model() -> None:
 
         # Experiment tracking
         metrics = Box(metrics, delimiter="_")
-        mlflow.log_params(prepare_config().model_dump())
+        mlflow.log_params(prepare_pipeline_config().model_dump())
         mlflow.log_metrics(
             {
                 "testing_samples_num": len(testing_set),

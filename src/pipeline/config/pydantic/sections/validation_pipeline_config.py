@@ -1,4 +1,4 @@
-"""validation_config.py
+"""validation_pipeline_config.py
 
 Configuration section for defining model validation and
 hyperparameter tuning procedures.
@@ -8,15 +8,15 @@ focusing on Time Series Cross-Validation (TSCV) settings and the
 full search space for hyperparameter optimization.
 
 Classes:
-    ValidationTimeSeriesCVConfig(BaseModel):
+    ValidationTimeSeriesCVPipelineConfig(BaseModel):
         Time Series Cross-Validation (TSCV) parameters.
-    ValidationSearchSpaceModelConfig(BaseModel):
+    ValidationSearchSpaceModelPipelineConfig(BaseModel):
         Search space for model hyperparameters.
-    ValidationSearchSpaceOptimizerConfig(BaseModel):
+    ValidationSearchSpaceOptimizerPipelineConfig(BaseModel):
         Search space for optimizer.
-    ValidationSearchSpaceConfig(BaseModel):
+    ValidationSearchSpacePipelineConfig(BaseModel):
         Aggregates all hyperparameter search spaces.
-    ValidationConfig(BaseModel):
+    ValidationPipelineConfig(BaseModel):
         Root class aggregating TSCV and search space settings.
 """
 
@@ -25,7 +25,7 @@ from typing import Annotated
 from pydantic import BaseModel, Field
 
 
-class ValidationTimeSeriesCVConfig(BaseModel):
+class ValidationTimeSeriesCVPipelineConfig(BaseModel):
     """Time Series Cross-validation configuration.
 
     Attributes:
@@ -37,13 +37,14 @@ class ValidationTimeSeriesCVConfig(BaseModel):
     epochs: Annotated[int, Field(gt=0)]
 
 
-class ValidationSearchSpaceModelConfig(BaseModel):
+class ValidationSearchSpaceModelPipelineConfig(BaseModel):
     """Model search space configuration for hyperparameter optimization.
 
     Attributes:
         hidden_size (list[int]): Allowed range of hidden layer sizes (> 0).
         num_layers (list[int]): Allowed range of number of layers (> 0).
-        dropout (list[float]): Allowed range of dropout values (in [0,1]).
+        dropout (list[float]): Allowed range of dropout values
+                               (in [0.0, 1.0]).
     """
 
     hidden_size: list[Annotated[int, Field(gt=0)]]
@@ -51,7 +52,7 @@ class ValidationSearchSpaceModelConfig(BaseModel):
     dropout: list[Annotated[float, Field(ge=0, le=1)]]
 
 
-class ValidationSearchSpaceOptimizerConfig(BaseModel):
+class ValidationSearchSpaceOptimizerPipelineConfig(BaseModel):
     """Optimizer search space configuration for hyperparameter tuning.
 
     Attributes:
@@ -61,29 +62,29 @@ class ValidationSearchSpaceOptimizerConfig(BaseModel):
     learning_rate: list[Annotated[float, Field(gt=0)]]
 
 
-class ValidationSearchSpaceConfig(BaseModel):
+class ValidationSearchSpacePipelineConfig(BaseModel):
     """Search space configuration.
 
     Attributes:
-        model (ValidationSearchSpaceModelConfig): Model hyperparameter search space
-                                                  configuration.
-        optimizer (ValidationSearchSpaceOptimizerConfig): Optimizer hyperparameter
+        model (ValidationSearchSpaceModelPipelineConfig): Model hyperparameter
                                                           search space configuration.
+        optimizer (ValidationSearchSpaceOptimizerPipelineConfig):
+            Optimizer hyperparameter search space configuration.
     """
 
-    model: ValidationSearchSpaceModelConfig
-    optimizer: ValidationSearchSpaceOptimizerConfig
+    model: ValidationSearchSpaceModelPipelineConfig
+    optimizer: ValidationSearchSpaceOptimizerPipelineConfig
 
 
-class ValidationConfig(BaseModel):
+class ValidationPipelineConfig(BaseModel):
     """Validation configuration.
 
     Attributes:
-        time_series_cv (ValidationTimeSeriesCVConfig): Time series
-                                                       cross-validation configuration.
-        search_space (ValidationSearchSpaceConfig): Hyperparameter search space
-                                                    configuration for tuning.
+        time_series_cv (ValidationTimeSeriesCVPipelineConfig):
+            Time series cross-validation configuration.
+        search_space (ValidationSearchSpacePipelineConfig):
+            Hyperparameter search space configuration for tuning.
     """
 
-    time_series_cv: ValidationTimeSeriesCVConfig
-    search_space: ValidationSearchSpaceConfig
+    time_series_cv: ValidationTimeSeriesCVPipelineConfig
+    search_space: ValidationSearchSpacePipelineConfig

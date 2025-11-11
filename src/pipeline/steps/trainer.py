@@ -51,7 +51,7 @@ from const import (
     LOGS_LOGGER_NAME,
     MLFLOW_NESTED,
 )
-from pipeline.config.configurator import prepare_config
+from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     DAGS_HUB_DVC,
     DAGS_HUB_REPO_NAME,
@@ -85,33 +85,39 @@ def train_model() -> None:
         nested=MLFLOW_NESTED,
     ):
         # Setup
-        config = prepare_config()
+        pipeline_config = prepare_pipeline_config()
         initialize_logs(
-            logging.getLevelName(config.logs.level),
+            logging.getLevelName(pipeline_config.logs.level),
             GrafanaLokiHandler(),
         )
 
         # Prepare configuration
-        data_mode = config.data.general.mode
-        min_key = config.data.general.keys.min
-        max_key = config.data.general.keys.max
-        training_batch_size = config.data_loader.batch_size.training
-        training_shuffle = config.data_loader.shuffle.training
-        training_device = config.resources.devices.training
-        validation_batch_size = config.data_loader.batch_size.validation
-        validation_shuffle = config.data_loader.shuffle.validation
-        validation_split = config.dataset.splits.validation
-        model_params = config.model.params
-        embedding_dim = config.model.sequence.embedding.dimension
-        training_num_epochs = config.training.epochs
-        optimizer_type = config.optimizer.type
-        learning_rate = config.optimizer.params.learning_rate
-        weight_decay = config.optimizer.params.weight_decay
-        pruning_amount = config.model.optimizations.pruning.amount
-        quantization_dtype = config.model.optimizations.quantization.dtype
-        quantization_engine = config.model.optimizations.quantization.engine
+        data_mode = pipeline_config.data.general.mode
+        min_key = pipeline_config.data.general.keys.min
+        max_key = pipeline_config.data.general.keys.max
+        training_batch_size = pipeline_config.data_loader.batch_size.training
+        training_shuffle = pipeline_config.data_loader.shuffle.training
+        training_device = pipeline_config.resources.devices.training
+        validation_batch_size = (
+            pipeline_config.data_loader.batch_size.validation
+        )
+        validation_shuffle = pipeline_config.data_loader.shuffle.validation
+        validation_split = pipeline_config.dataset.splits.validation
+        model_params = pipeline_config.model.params
+        embedding_dim = pipeline_config.model.sequence.embedding.dimension
+        training_num_epochs = pipeline_config.training.epochs
+        optimizer_type = pipeline_config.optimizer.type
+        learning_rate = pipeline_config.optimizer.params.learning_rate
+        weight_decay = pipeline_config.optimizer.params.weight_decay
+        pruning_amount = pipeline_config.model.optimizations.pruning.amount
+        quantization_dtype = (
+            pipeline_config.model.optimizations.quantization.dtype
+        )
+        quantization_engine = (
+            pipeline_config.model.optimizations.quantization.engine
+        )
         num_features = len(DATASET_PROCESSED_FEATURE_COLUMNS)
-        seed = config.seed.value
+        seed = pipeline_config.seed.value
 
         # Ensure reproducibility
         set_seed(seed)
@@ -142,7 +148,7 @@ def train_model() -> None:
             training_batch_size,
             validation_shuffle,
             AccessLogsDataset,
-            config,
+            pipeline_config,
         )
 
         # Split training set into training
@@ -172,7 +178,7 @@ def train_model() -> None:
         device, criterion, model = initialize_model_environment(
             targets,
             training_device,
-            config,
+            pipeline_config,
             model_params=model_params,
         )
 
@@ -194,7 +200,7 @@ def train_model() -> None:
             criterion,
             device,
             logs_phase.get(),
-            config,
+            pipeline_config,
         )
 
         # Re-built model with best weights found
@@ -204,7 +210,7 @@ def train_model() -> None:
             max_key,
             embedding_dim,
             num_features,
-            config,
+            pipeline_config,
         )
         model.load_state_dict(best_model_weights)
 
@@ -217,7 +223,7 @@ def train_model() -> None:
         save_model(model, model_path)
 
         # Experiment tracking
-        mlflow.log_params(prepare_config().model_dump())
+        mlflow.log_params(prepare_pipeline_config().model_dump())
         mlflow.log_metrics(
             {
                 "training_samples_num": len(training_set),
