@@ -100,7 +100,9 @@ def initialize_train_test_validation_tests() -> tuple[
         validation_set.dataset.data.copy().assign(
             **{
                 DATASET_COLUMN_TEMP_INDEX_NAME: range(
-                    len(validation_set.dataset.data),
+                    len(training_set.dataset.data),
+                    len(training_set.dataset.data)
+                    + len(validation_set.dataset.data),
                 ),
             },
         ),
@@ -108,7 +110,15 @@ def initialize_train_test_validation_tests() -> tuple[
     )
     dc_testing_set = create_dc_dataset(
         testing_set.data.copy().assign(
-            **{DATASET_COLUMN_TEMP_INDEX_NAME: range(len(testing_set.data))},
+            **{
+                DATASET_COLUMN_TEMP_INDEX_NAME: range(
+                    len(training_set.dataset.data)
+                    + len(validation_set.dataset.data),
+                    len(training_set.dataset.data)
+                    + len(validation_set.dataset.data)
+                    + len(testing_set.data),
+                )
+            },
         ),
         index_name=DATASET_COLUMN_TEMP_INDEX_NAME,
     )

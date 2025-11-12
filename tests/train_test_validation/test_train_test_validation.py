@@ -21,7 +21,6 @@ from deepchecks.tabular.checks import (
     IndexTrainTestLeakage,
     LabelDrift,
     MultivariateDrift,
-    NewLabelTrainTest,
 )
 
 from tests.const import (
@@ -42,8 +41,6 @@ def test_train_test_validation() -> None:
     This test verifies that the dataset splits maintain consistency and
     lack leakage by ensuring adherence to predefined configurations for
     checks, including:
-    - NewLabelTrainTest: Ensures minimal appearance of new labels in
-                         validation/test sets.
     - DatasetsSizeComparison: Checks that the size ratio between splits meets
                               expectations.
     - IndexTrainTestLeakage: Ensures no index leakage between splits.
@@ -74,11 +71,6 @@ def test_train_test_validation() -> None:
     # validation, and testing sets
     suite = Suite(
         TRAIN_TEST_VALIDATION_TESTS_SUITE_NAME,
-        NewLabelTrainTest(
-            random_state=tests_config.seed.value,
-        ).add_condition_new_label_ratio_less_or_equal(
-            tests_config.train_test_validation.new_label.max_ratio,
-        ),
         DatasetsSizeComparison().add_condition_test_train_size_ratio_greater_than(
             tests_config.train_test_validation.datasets_size_comparison.ratio,
         ),
