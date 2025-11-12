@@ -23,7 +23,7 @@ train_test_validation:
   new_label:
     max_ratio: 0.0
   datasets_size_comparison:
-    ratio: 0.4
+    ratio: 0.2
   index_leakage:
     max_ratio: 0.0
   feature_label_correlation_change:
