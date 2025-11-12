@@ -7,8 +7,6 @@ These classes enforce validation rules for thresholds on data quality checks
 across data splits, including drift metrics and leakage prevention.
 
 Classes:
-    TrainTestValidationNewLabelTestsConfig(BaseModel): Configuration for the new label
-                                                       check.
     TrainTestValidationIndexLeakageTestsConfig(BaseModel): Configuration for the index
                                                            leakage check.
     TrainTestValidationFeatureLabelCorrelationChangeTestsConfig(BaseModel):
@@ -29,17 +27,6 @@ Classes:
 from typing import Annotated
 
 from pydantic import BaseModel, Field
-
-
-class TrainTestValidationNewLabelTestsConfig(BaseModel):
-    """Configuration model for the NewLabelTrainTest check.
-
-    Attributes:
-        max_ratio (float): The maximum allowed ratio of new labels in the
-                           test/validation sets (in [0.0, 1.0]).
-    """
-
-    max_ratio: Annotated[float, Field(ge=0.0, le=1.0)]
 
 
 class TrainTestValidationIndexLeakageTestsConfig(BaseModel):
@@ -118,8 +105,6 @@ class TrainTestValidationTestsConfig(BaseModel):
     and drift tests.
 
     Attributes:
-        new_label (TrainTestValidationNewLabelTestsConfig):
-            Configuration for new label appearance in testing/validation sets.
         index_leakage (TrainTestValidationIndexLeakageTestsConfig):
             Configuration for training-testing index leakage check.
         feature_label_correlation_change (TrainTestValidationFeatureLabelCorrelationChangeTestsConfig):
@@ -134,7 +119,6 @@ class TrainTestValidationTestsConfig(BaseModel):
             Configuration for checking the size ratio between training and other splits.
     """
 
-    new_label: TrainTestValidationNewLabelTestsConfig
     index_leakage: TrainTestValidationIndexLeakageTestsConfig
     feature_label_correlation_change: (
         TrainTestValidationFeatureLabelCorrelationChangeTestsConfig
