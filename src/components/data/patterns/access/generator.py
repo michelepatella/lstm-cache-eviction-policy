@@ -20,8 +20,6 @@ Functions:
         access patterns.
 """
 
-from typing import Any
-
 import numpy as np
 
 from components.const import (

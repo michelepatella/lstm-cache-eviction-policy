@@ -16,8 +16,6 @@ Functions:
         time of day and configuration for periodic and burstiness patterns.
 """
 
-from typing import Any
-
 import numpy as np
 
 from components.const import TIME_SECONDS_IN_HOUR

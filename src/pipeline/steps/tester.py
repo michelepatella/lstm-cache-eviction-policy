@@ -40,6 +40,7 @@ from pipeline.const import (
     DAGS_HUB_DVC,
     DAGS_HUB_REPO_NAME,
     DAGS_HUB_REPO_OWNER,
+    DATASET_PROCESSED_TYPE,
     LOGS_PHASE_TESTING,
     MODEL_COMPUTE_METRICS_TESTING,
 )
@@ -102,6 +103,7 @@ def test_model() -> None:
 
         # Setup testing data loader
         testing_set, testing_loader = initialize_data_loader(
+            DATASET_PROCESSED_TYPE,
             DATASET_TESTING_SPLIT_TYPE,
             testing_batch_size,
             testing_shuffle,

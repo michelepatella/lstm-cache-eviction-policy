@@ -21,8 +21,6 @@ Functions:
         patterns and Zipfian probabilities.
 """
 
-from typing import Any
-
 import numpy as np
 
 from components.const import (

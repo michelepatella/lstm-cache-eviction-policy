@@ -123,12 +123,12 @@ def prepare_data() -> None:
             if data_mode == DATA_STATIC_MODE:
                 # Static requests generation
                 requests, timestamps_hours = generate_static_requests(
-                    pipeline_config
+                    pipeline_config,
                 )
             else:
                 # Dynamic requests generation
                 requests, timestamps_hours = generate_dynamic_requests(
-                    pipeline_config
+                    pipeline_config,
                 )
 
             # Create a dataset where each row is composed of

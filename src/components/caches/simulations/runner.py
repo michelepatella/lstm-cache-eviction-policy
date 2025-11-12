@@ -127,7 +127,11 @@ def run_cache_simulation(
                 if policy == CACHE_LSTM_NAME:
                     # Put the requested key into the LSTM cache
                     cache.put(
-                        key, current_time, idx, testing_set, pipeline_config
+                        key,
+                        current_time,
+                        idx,
+                        testing_set,
+                        pipeline_config,
                     )
                 else:
                     # Put the requested key into the baseline cache

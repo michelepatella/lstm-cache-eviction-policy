@@ -59,7 +59,9 @@ def test_raw_data_quality() -> None:
     Returns:
         None
     """
-    # Setup for raw data testing
+    # ----------------------------
+    # Setup
+    # ----------------------------
     pipeline_config = prepare_pipeline_config()
     df, context, data_source, data_asset, batch_definition, suite = (
         initialize_data_quality_tests(
@@ -126,7 +128,7 @@ def test_raw_data_quality() -> None:
     add_row_count_expectation(suite, pipeline_config.data.general.requests)
 
     # ----------------------------
-    # Suite validation
+    # Suite running
     # ----------------------------
     run_data_quality_tests(
         context,

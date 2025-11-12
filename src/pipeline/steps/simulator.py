@@ -43,7 +43,6 @@ from components.evaluation.simulations.metrics.calculations.belady_min_calculato
 from components.evaluation.simulations.metrics.calculator import (
     calculate_simulation_metrics,
 )
-
 from components.logs.handlers.grafana_loki_handler import GrafanaLokiHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
@@ -73,6 +72,7 @@ from pipeline.const import (
     DAGS_HUB_DVC,
     DAGS_HUB_REPO_NAME,
     DAGS_HUB_REPO_OWNER,
+    DATASET_PROCESSED_TYPE,
     LOGS_PHASE_SIMULATIONS,
     PLOT_DYNAMIC_HIT_MISS_RATES_FILE_PATH,
     PLOT_REAL_HIT_MISS_RATES_FILE_PATH,
@@ -160,6 +160,7 @@ def run_simulations() -> None:
 
         # Get testing set
         testing_set, _ = initialize_data_loader(
+            DATASET_PROCESSED_TYPE,
             DATASET_TESTING_SPLIT_TYPE,
             testing_batch_size,
             testing_shuffle,

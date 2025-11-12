@@ -19,8 +19,6 @@ Functions:
         in hours, supporting both static and dynamic Zipfian request generation.
 """
 
-from typing import Any
-
 import numpy as np
 
 from components.data.requests.utils.alpha_requests_generator import (

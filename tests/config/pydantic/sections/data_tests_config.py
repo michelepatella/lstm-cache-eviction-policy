@@ -7,15 +7,17 @@ These classes enforce strict validation rules for various data quality checks,
 ensuring consistent configuration throughout  the testing phase of the pipeline.
 
 Classes:
-    DataIntegrityFeatureLabelCorrelationTestsConfig: Configuration for feature-label
-                                                     correlation check.
-    DataIntegrityFeatureFeatureCorrelationTestsConfig: Configuration for feature-feature
-                                                       correlation check.
-    DataIntegrityPercentOfNullsTestsConfig: Configuration for percentage of nulls check.
-    DataIntegrityTestsConfig: Aggregates all specific data integrity test configurations.
-    DataRawProcessedTestsConfig: Configuration for tests on a single data type
-                                 (raw/processed).
-    DataTestsConfig: Root configuration aggregating tests for data.
+    DataIntegrityFeatureLabelCorrelationTestsConfig(BaseModel):
+        Configuration for feature-label correlation check.
+    DataIntegrityFeatureFeatureCorrelationTestsConfig(BaseModel):
+        Configuration for feature-feature correlation check.
+    DataIntegrityPercentOfNullsTestsConfig(BaseModel): Configuration for percentage of
+                                                       nulls check.
+    DataIntegrityTestsConfig(BaseModel): Aggregates all specific data integrity test
+                                         configurations.
+    DataRawProcessedTestsConfig(BaseModel): Configuration for tests on a single data
+                                            type (raw/processed).
+    DataTestsConfig(BaseModel): Root configuration aggregating tests for data.
 """
 
 from typing import Annotated
