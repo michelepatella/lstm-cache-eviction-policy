@@ -20,8 +20,6 @@ Functions:
         returns the request along with updated temporal state.
 """
 
-from typing import Any
-
 import numpy as np
 
 from components.const import TIME_SECONDS_IN_DAY
@@ -69,7 +67,8 @@ def generate_single_pattern_request(
     """
     # Generate delta time (gap between consecutive requests)
     delta_t = generate_temporal_pattern(
-        current_seconds_in_day, pipeline_config
+        current_seconds_in_day,
+        pipeline_config,
     )
 
     # Update temporal state

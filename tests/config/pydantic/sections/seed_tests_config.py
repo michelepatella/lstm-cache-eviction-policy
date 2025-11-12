@@ -7,7 +7,7 @@ This class ensures strict validation for the seed value for ensuring test
 reproducibility.
 
 Classes:
-    SeedTestsConfig: Configuration for the global random seed value.
+    SeedTestsConfig(BaseModel): Configuration for the global random seed value.
 """
 
 from typing import Annotated

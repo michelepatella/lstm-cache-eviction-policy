@@ -8,7 +8,8 @@ given batch size and shuffle configuration.
 
 Functions:
     initialize_data_loader(
-        data_loader_type: str,
+        dataset_type: str,
+        split_type: str,
         batch_size: int,
         shuffle: bool,
         dataset_class: Type[AccessLogsDataset],
@@ -16,8 +17,6 @@ Functions:
     ) -> tuple[AccessLogsDataset, DataLoader]
         Instantiates the dataset and returns it along with a configured DataLoader.
 """
-
-from typing import Any
 
 from torch.utils.data import DataLoader
 
@@ -28,7 +27,8 @@ from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def initialize_data_loader(
-    data_loader_type: str,
+    dataset_type: str,
+    split_type: str,
     batch_size: int,
     shuffle: bool,
     dataset_class: type[AccessLogsDataset],
@@ -36,12 +36,13 @@ def initialize_data_loader(
 ) -> tuple[AccessLogsDataset, DataLoader]:
     """Set up a data loader.
 
-    This function setups a data loader of a specific type (e.g., training),
+    This function setups a data loader of a specific type,
     by instantiating the dataset class and creating a data loader from that
     instance.
 
     Args:
-        data_loader_type (str): Type of data loader to create (e.g., training).
+        dataset_type (str): Type of the dataset requested.
+        split_type (str): Type of split to apply.
         batch_size (int): Batch size for the data loader to create.
         shuffle (bool): Whether to apply shuffle to the data loader to create.
         dataset_class (type[AccessLogsDataset]): Dataset class to instantiate.
@@ -53,7 +54,7 @@ def initialize_data_loader(
             - data_loader: DataLoader created from the dataset instance.
     """
     # Instantiate the dataset class
-    dataset = dataset_class(data_loader_type, pipeline_config)
+    dataset = dataset_class(dataset_type, split_type, pipeline_config)
 
     # Create a data loader from the
     # dataset instance
@@ -66,7 +67,7 @@ def initialize_data_loader(
     debug(
         "Data loader initialization executed",
         extra={
-            "data_loader_type": data_loader_type,
+            "data_loader_type": split_type,
             "batch_size": batch_size,
             "shuffle": shuffle,
             "dataset_class": dataset_class.__name__,

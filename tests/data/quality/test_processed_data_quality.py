@@ -64,7 +64,9 @@ def test_processed_data_quality() -> None:
     Returns:
         None
     """
-    # Setup for processed data testing
+    # ----------------------------
+    # Setup
+    # ----------------------------
     pipeline_config = prepare_pipeline_config()
     df, context, data_source, data_asset, batch_definition, suite = (
         initialize_data_quality_tests(
@@ -154,7 +156,7 @@ def test_processed_data_quality() -> None:
     add_column_order_expectation(suite, DATASET_PROCESSED_COLUMNS)
 
     # ----------------------------
-    # Suite validation
+    # Suite running
     # ----------------------------
     run_data_quality_tests(
         context,

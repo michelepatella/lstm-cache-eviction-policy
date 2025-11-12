@@ -56,6 +56,7 @@ from pipeline.const import (
     DAGS_HUB_DVC,
     DAGS_HUB_REPO_NAME,
     DAGS_HUB_REPO_OWNER,
+    DATASET_PROCESSED_TYPE,
     LOGS_PHASE_TRAINING,
     MLFLOW_ARTIFACT_PATH,
 )
@@ -144,6 +145,7 @@ def train_model() -> None:
         # Load the training set and the
         # training loader
         training_set, training_loader = initialize_data_loader(
+            DATASET_PROCESSED_TYPE,
             DATASET_TRAINING_SPLIT_TYPE,
             training_batch_size,
             validation_shuffle,

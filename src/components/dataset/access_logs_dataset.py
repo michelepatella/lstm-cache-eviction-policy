@@ -12,8 +12,6 @@ Classes:
         PyTorch-compatible dataset class for sequential access logs.
 """
 
-from typing import Any
-
 import torch
 from torch.utils.data import Dataset
 
@@ -54,7 +52,6 @@ class AccessLogsDataset(Dataset):
 
     Attributes:
         data (pd.DataFrame): Full dataset stored internally.
-        columns (list[str]): List of column names in the dataset.
         features (list[str]): List of feature column names.
         target (str): Target column name (usually the last column).
         seq_len (int): Sequence length used for model sequences.
@@ -62,7 +59,7 @@ class AccessLogsDataset(Dataset):
 
     def _split_dataset(
         self: "AccessLogsDataset",
-        dataset_type: str,
+        split_type: str,
         split_perc: float,
     ) -> None:
         """Split the dataset based on the requested dataset type.
@@ -73,7 +70,7 @@ class AccessLogsDataset(Dataset):
 
         Args:
             self (AccessLogsDataset): Instance of AccessLogsDataset.
-            dataset_type (str): The dataset type to split.
+            split_type (str): The type of split to apply.
             split_perc (float): The split percentage.
 
         Returns:
@@ -91,7 +88,7 @@ class AccessLogsDataset(Dataset):
         self.data = split_dataset_data(
             self.data,
             dataset_split_idx,
-            (dataset_type == DATASET_TRAINING_SPLIT_TYPE),
+            (split_type == DATASET_TRAINING_SPLIT_TYPE),
         )
 
     def _set_fields(
@@ -132,6 +129,7 @@ class AccessLogsDataset(Dataset):
     def __init__(
         self: "AccessLogsDataset",
         dataset_type: str,
+        split_type: str,
         pipeline_config: PipelineConfig,
     ) -> None:
         """Initialize the AccessLogsDataset class.
@@ -144,6 +142,7 @@ class AccessLogsDataset(Dataset):
             self (AccessLogsDataset): AccessLogsDataset class.
             dataset_type (str): The dataset type requested to
                                 be created.
+            split_type (str): The split type requested.
             pipeline_config (PipelineConfig): Configuration object.
 
         Returns:
@@ -166,7 +165,7 @@ class AccessLogsDataset(Dataset):
         self.data = df.copy()
 
         # Split the dataset
-        self._split_dataset(dataset_type, training_split)
+        self._split_dataset(split_type, training_split)
 
         # Set the fields of the dataset
         self._set_fields(pipeline_config)

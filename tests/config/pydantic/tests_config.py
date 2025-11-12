@@ -14,6 +14,9 @@ from pydantic import BaseModel
 
 from tests.config.pydantic.sections.data_tests_config import DataTestsConfig
 from tests.config.pydantic.sections.seed_tests_config import SeedTestsConfig
+from tests.config.pydantic.sections.train_test_validation_tests_config import (
+    TrainTestValidationTestsConfig,
+)
 
 
 class TestsConfig(BaseModel):
@@ -23,7 +26,10 @@ class TestsConfig(BaseModel):
         data (DataTestsConfig): Configuration for all data tests.
         seed (SeedTestsConfig): Configuration for the global seed used during
                                 testing.
+        train_test_validation (TrainTestValidationTestsConfig):
+            Configuration for checks between data splits.
     """
 
     data: DataTestsConfig
     seed: SeedTestsConfig
+    train_test_validation: TrainTestValidationTestsConfig

@@ -38,9 +38,6 @@ DATA_INTEGRITY_TESTS_PROCESSED_DATA_RESULTS_SAVE_PATH = (
     / "processed_data_results.html"
 )
 
-DATA_INTEGRITY_RESULTS_HTML_AS_WIDGET = False
-DATA_INTEGRITY_RESULTS_HTML_REQUIREJS = False
-
 
 # ----------------------------
 # Data Quality Tests
@@ -75,6 +72,8 @@ DATA_QUALITY_TESTS_PROCESSED_DATA_RESULTS_SAVE_PATH = (
 # ----------------------------
 # Dataset
 # ----------------------------
+DATASET_COLUMN_TEMP_INDEX_NAME = "_index"
+
 DATASET_RAW_COLUMNS = [
     DATASET_COLUMN_TIMESTAMP_NAME,
     DATASET_COLUMN_REQUEST_NAME,
@@ -93,8 +92,36 @@ DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MAX_VALUE = 1.0
 
 
 # ----------------------------
+# DeepChecks
+# ----------------------------
+DEEP_CHECKS_SAVE_AS_HTML_AS_WIDGET = False
+DEEP_CHECKS_SAVE_AS_HTML_REQUIREJS = False
+
+
+# ----------------------------
 # Tests Config
 # ----------------------------
 TESTS_CONFIG_FILE_PATH = (
     PROJECT_ROOT / "tests" / "config" / "tests_config.yaml"
+)
+
+
+# ----------------------------
+# Train Test Validation Tests
+# ----------------------------
+TRAIN_TEST_VALIDATION_TESTS_SUITE_NAME = "Train Test Validation Tests"
+
+TRAIN_VALIDATION_TESTS_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "train_test_validation"
+    / "train_validation_results.html"
+)
+TRAIN_TEST_TESTS_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "train_test_validation"
+    / "train_test_results.html"
 )

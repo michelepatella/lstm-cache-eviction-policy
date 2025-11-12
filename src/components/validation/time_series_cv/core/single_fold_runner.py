@@ -20,8 +20,6 @@ Functions:
         returns the average loss for that fold.
 """
 
-from typing import Any
-
 import numpy as np
 
 from components.data_loader.builder import build_data_loader

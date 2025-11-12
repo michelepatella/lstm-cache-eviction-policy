@@ -13,8 +13,6 @@ Functions:
         Generates a list of requested keys and their timestamps in hours.
 """
 
-from typing import Any
-
 import numpy as np
 
 from components.data.requests.utils.generation_helper import (

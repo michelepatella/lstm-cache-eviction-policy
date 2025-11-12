@@ -27,8 +27,8 @@ from tests.const import (
 )
 from tests.data.integrity.helpers import (
     initialize_data_integrity_tests,
-    run_data_integrity_tests,
 )
+from tests.helpers import run_dc_suite
 
 
 def test_raw_data_integrity() -> None:
@@ -44,6 +44,9 @@ def test_raw_data_integrity() -> None:
     Returns:
         None
     """
+    # ----------------------------
+    # Setup
+    # ----------------------------
     # Prepare pipeline configuration
     pipeline_config = prepare_pipeline_config()
 
@@ -53,36 +56,36 @@ def test_raw_data_integrity() -> None:
         pipeline_config.data.general.mode,
     )
 
-    # Build a suite of checks
+    # ----------------------------
+    # Suite building
+    # ----------------------------
     suite = Suite(
         DATA_INTEGRITY_TESTS_RAW_DATA_SUITE_NAME,
         PercentOfNulls(
             random_state=tests_config.seed.value,
-            n_samples=pipeline_config.data.general.requests,
         ).add_condition_percent_of_nulls_not_greater_than(
             tests_config.data.raw.integrity.percent_of_nulls.threshold,
         ),
         FeatureLabelCorrelation(
             random_state=tests_config.seed.value,
-            n_samples=pipeline_config.data.general.requests,
         ).add_condition_feature_pps_less_than(
             tests_config.data.raw.integrity.feature_label_correlation.threshold,
         ),
         FeatureFeatureCorrelation(
             random_state=tests_config.seed.value,
-            n_samples=pipeline_config.data.general.requests,
         ).add_condition_max_number_of_pairs_above_threshold(
             tests_config.data.raw.integrity.feature_feature_correlation.threshold,
             tests_config.data.raw.integrity.feature_feature_correlation.num_pairs,
         ),
         IsSingleValue(
             random_state=tests_config.seed.value,
-            n_samples=pipeline_config.data.general.requests,
         ).add_condition_not_single_value(),
     )
 
-    # Run all integrity tests
-    run_data_integrity_tests(
+    # ----------------------------
+    # Suite running
+    # ----------------------------
+    run_dc_suite(
         dc_dataset,
         suite,
         str(DATA_INTEGRITY_TESTS_RAW_DATA_RESULTS_SAVE_PATH),
