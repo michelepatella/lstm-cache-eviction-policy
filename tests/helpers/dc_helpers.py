@@ -13,6 +13,7 @@ Functions:
         Dataset,
         Dataset,
         Module,
+        PipelineConfig,
         TestsConfig
     ]
         Initialize all what is needed for running DeepChecks tests.
@@ -57,6 +58,7 @@ from const import (
     DATASET_TESTING_SPLIT_TYPE,
 )
 from pipeline.config.configurator import prepare_pipeline_config
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 from pipeline.const import DATASET_PROCESSED_TYPE
 from tests.config.configurator import prepare_tests_config
 from tests.config.pydantic.tests_config import TestsConfig
@@ -69,7 +71,7 @@ from tests.const import (
 
 def initialize_dc_tests(
     add_index_column: bool,
-) -> tuple[Dataset, Dataset, Dataset, Module, TestsConfig]:
+) -> tuple[Dataset, Dataset, Dataset, Module, PipelineConfig, TestsConfig]:
     """Loads and prepares all what is needed for DeepChecks tests.
 
     This function orchestrates the setup of the DeepChecks testing environment.
@@ -86,11 +88,13 @@ def initialize_dc_tests(
         add_index_column (bool): Whether to add the index column to the datasets or not.
 
     Returns:
-        tuple[Dataset, Dataset, Dataset, PipelineConfig, Module, TestsConfig]:
+        tuple[Dataset, Dataset, Dataset, Module, PipelineConfig, TestsConfig]:
             - dc_training_set (Dataset): Training data as a Deepchecks Dataset.
             - dc_validation_set (Dataset): Validation data as a Deepchecks Dataset.
             - dc_testing_set (Dataset): Testing data as a Deepchecks Dataset.
             - model (Module): The predictive model.
+            - pipeline_config (PipelineConfig): The validated pipeline configuration
+                                                object.
             - tests_config (TestsConfig): The validated tests configuration object.
     """
     # Prepare configurations
@@ -151,6 +155,7 @@ def initialize_dc_tests(
         dc_validation_set,
         dc_testing_set,
         model,
+        pipeline_config,
         tests_config,
     )
 

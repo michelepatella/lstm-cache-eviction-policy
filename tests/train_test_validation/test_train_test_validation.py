@@ -23,11 +23,16 @@ from deepchecks.tabular.checks import (
     MultivariateDrift,
 )
 
+from const import DATA_STATIC_MODE, DATA_DYNAMIC_MODE
 from tests.const import (
     TRAIN_TEST_VALIDATION_TESTS_SUITE_NAME,
-    TRAIN_VALIDATION_TESTS_RESULTS_SAVE_PATH,
-    TRAIN_TEST_TESTS_RESULTS_SAVE_PATH,
+    TRAIN_VALIDATION_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH,
+    TRAIN_TEST_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH,
     TRAIN_TEST_VALIDATION_TESTS_ADD_INDEX_COLUMN,
+    TRAIN_TEST_TESTS_STATIC_DATA_RESULTS_SAVE_PATH,
+    TRAIN_VALIDATION_TESTS_STATIC_DATA_RESULTS_SAVE_PATH,
+    TRAIN_TEST_TESTS_REAL_DATA_RESULTS_SAVE_PATH,
+    TRAIN_VALIDATION_TESTS_REAL_DATA_RESULTS_SAVE_PATH,
 )
 from tests.helpers.dc_helpers import run_dc_suite, initialize_dc_tests
 
@@ -60,6 +65,7 @@ def test_train_test_validation() -> None:
         dc_validation_set,
         dc_testing_set,
         _,
+        pipeline_config,
         tests_config,
     ) = initialize_dc_tests(TRAIN_TEST_VALIDATION_TESTS_ADD_INDEX_COLUMN)
 
@@ -104,19 +110,37 @@ def test_train_test_validation() -> None:
     # ----------------------------
     # Suite running
     # ----------------------------
+    # Determine save paths based on the
+    # data mode
+    if pipeline_config.data.general.mode == DATA_STATIC_MODE:
+        train_validation_save_path = (
+            TRAIN_VALIDATION_TESTS_STATIC_DATA_RESULTS_SAVE_PATH
+        )
+        train_test_save_path = TRAIN_TEST_TESTS_STATIC_DATA_RESULTS_SAVE_PATH
+    elif pipeline_config.data.general.mode == DATA_DYNAMIC_MODE:
+        train_validation_save_path = (
+            TRAIN_VALIDATION_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH
+        )
+        train_test_save_path = TRAIN_TEST_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH
+    else:
+        train_validation_save_path = (
+            TRAIN_VALIDATION_TESTS_REAL_DATA_RESULTS_SAVE_PATH
+        )
+        train_test_save_path = TRAIN_TEST_TESTS_REAL_DATA_RESULTS_SAVE_PATH
+
     # Run the suite over training vs.
     # validation sets and training vs.
     # testing sets
     run_dc_suite(
         dc_training_set,
         suite,
-        str(TRAIN_VALIDATION_TESTS_RESULTS_SAVE_PATH),
+        str(train_validation_save_path),
         dc_validation_set,
     )
     run_dc_suite(
         dc_training_set,
         suite,
-        str(TRAIN_TEST_TESTS_RESULTS_SAVE_PATH),
+        str(train_test_save_path),
         dc_testing_set,
     )
 

@@ -34,11 +34,14 @@ from components.const import (
     DATASET_COLUMN_SIN_TIME_NAME,
     DATASET_PROCESSED_COLUMNS,
 )
-from const import DATASET_COLUMN_REQUEST_NAME
+from const import (
+    DATASET_COLUMN_REQUEST_NAME,
+    DATA_STATIC_MODE,
+    DATA_DYNAMIC_MODE,
+)
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import DATASET_PROCESSED_TYPE
 from tests.const import (
-    DATA_QUALITY_TESTS_PROCESSED_DATA_RESULTS_SAVE_PATH,
     DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MAX_VALUE,
     DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MIN_VALUE,
     DATASET_COLUMN_LOCAL_FREQUENCY_TYPE,
@@ -47,6 +50,9 @@ from tests.const import (
     DATASET_COLUMN_SIN_COS_TIME_MAX_VALUE,
     DATASET_COLUMN_SIN_COS_TIME_MIN_VALUE,
     DATASET_COLUMN_SIN_COS_TIME_TYPE,
+    DATA_QUALITY_TESTS_PROCESSED_STATIC_DATA_RESULTS_SAVE_PATH,
+    DATA_QUALITY_TESTS_PROCESSED_DYNAMIC_DATA_RESULTS_SAVE_PATH,
+    DATA_QUALITY_TESTS_PROCESSED_REAL_DATA_RESULTS_SAVE_PATH,
 )
 
 
@@ -158,12 +164,22 @@ def test_processed_data_quality() -> None:
     # ----------------------------
     # Suite running
     # ----------------------------
+    # Determine the save path based on
+    # the data mode
+    if pipeline_config.data.general.mode == DATA_STATIC_MODE:
+        save_path = DATA_QUALITY_TESTS_PROCESSED_STATIC_DATA_RESULTS_SAVE_PATH
+    elif pipeline_config.data.general.mode == DATA_DYNAMIC_MODE:
+        save_path = DATA_QUALITY_TESTS_PROCESSED_DYNAMIC_DATA_RESULTS_SAVE_PATH
+    else:
+        save_path = DATA_QUALITY_TESTS_PROCESSED_REAL_DATA_RESULTS_SAVE_PATH
+
+    # Run tests suite
     run_data_quality_tests(
         context,
         batch_definition,
         suite,
         df,
-        DATA_QUALITY_TESTS_PROCESSED_DATA_RESULTS_SAVE_PATH,
+        save_path,
     )
 
 

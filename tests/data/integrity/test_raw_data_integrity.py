@@ -19,11 +19,13 @@ from deepchecks.tabular.checks import (
     PercentOfNulls,
 )
 
-from const import DATASET_RAW_TYPE
+from const import DATASET_RAW_TYPE, DATA_STATIC_MODE, DATA_DYNAMIC_MODE
 from pipeline.config.configurator import prepare_pipeline_config
 from tests.const import (
-    DATA_INTEGRITY_TESTS_RAW_DATA_RESULTS_SAVE_PATH,
     DATA_INTEGRITY_TESTS_RAW_DATA_SUITE_NAME,
+    DATA_INTEGRITY_TESTS_RAW_STATIC_DATA_RESULTS_SAVE_PATH,
+    DATA_INTEGRITY_TESTS_RAW_DYNAMIC_DATA_RESULTS_SAVE_PATH,
+    DATA_INTEGRITY_TESTS_RAW_REAL_DATA_RESULTS_SAVE_PATH,
 )
 from tests.helpers.data_integrity_helpers import (
     initialize_data_integrity_tests,
@@ -85,10 +87,20 @@ def test_raw_data_integrity() -> None:
     # ----------------------------
     # Suite running
     # ----------------------------
+    # Determine the save path based on
+    # the data mode
+    if pipeline_config.data.general.mode == DATA_STATIC_MODE:
+        save_path = DATA_INTEGRITY_TESTS_RAW_STATIC_DATA_RESULTS_SAVE_PATH
+    elif pipeline_config.data.general.mode == DATA_DYNAMIC_MODE:
+        save_path = DATA_INTEGRITY_TESTS_RAW_DYNAMIC_DATA_RESULTS_SAVE_PATH
+    else:
+        save_path = DATA_INTEGRITY_TESTS_RAW_REAL_DATA_RESULTS_SAVE_PATH
+
+    # Run tests suite
     run_dc_suite(
         dc_dataset,
         suite,
-        str(DATA_INTEGRITY_TESTS_RAW_DATA_RESULTS_SAVE_PATH),
+        str(save_path),
     )
 
 

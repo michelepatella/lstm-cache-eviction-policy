@@ -26,11 +26,17 @@ from deepchecks.tabular.checks import (
 )
 from deepchecks.tabular.checks.model_evaluation import PerformanceBias
 
-from const import DATASET_COLUMN_REQUEST_NAME
+from const import (
+    DATASET_COLUMN_REQUEST_NAME,
+    DATA_STATIC_MODE,
+    DATA_DYNAMIC_MODE,
+)
 from tests.const import (
     MODEL_TESTS_SUITE_NAME,
-    MODEL_TESTS_RESULTS_SAVE_PATH,
     MODEL_TESTS_ADD_INDEX_COLUMN,
+    MODEL_TESTS_STATIC_DATA_RESULTS_SAVE_PATH,
+    MODEL_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH,
+    MODEL_TESTS_REAL_DATA_RESULTS_SAVE_PATH,
 )
 from tests.helpers.dc_helpers import run_dc_suite, initialize_dc_tests
 
@@ -64,6 +70,7 @@ def test_model() -> None:
         dc_validation_set,
         dc_testing_set,
         model,
+        pipeline_config,
         tests_config,
     ) = initialize_dc_tests(MODEL_TESTS_ADD_INDEX_COLUMN)
 
@@ -145,12 +152,21 @@ def test_model() -> None:
     # ----------------------------
     # Suite running
     # ----------------------------
+    # Determine save path based on the
+    # data mode
+    if pipeline_config.data.general.mode == DATA_STATIC_MODE:
+        save_path = MODEL_TESTS_STATIC_DATA_RESULTS_SAVE_PATH
+    elif pipeline_config.data.general.mode == DATA_DYNAMIC_MODE:
+        save_path = MODEL_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH
+    else:
+        save_path = MODEL_TESTS_REAL_DATA_RESULTS_SAVE_PATH
+
     # Run the suite over the training and
     # testing sets as well as the model
     run_dc_suite(
         dc_training_set,
         suite,
-        str(MODEL_TESTS_RESULTS_SAVE_PATH),
+        str(save_path),
         dc_testing_set=dc_testing_set,
         model=model,
     )
