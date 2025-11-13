@@ -27,11 +27,9 @@ from tests.const import (
     TRAIN_TEST_VALIDATION_TESTS_SUITE_NAME,
     TRAIN_VALIDATION_TESTS_RESULTS_SAVE_PATH,
     TRAIN_TEST_TESTS_RESULTS_SAVE_PATH,
+    TRAIN_TEST_VALIDATION_TESTS_ADD_INDEX_COLUMN,
 )
-from tests.helpers import run_dc_suite
-from tests.train_test_validation.helpers import (
-    initialize_train_test_validation_tests,
-)
+from tests.helpers.dc_helpers import run_dc_suite, initialize_dc_tests
 
 
 def test_train_test_validation() -> None:
@@ -61,8 +59,9 @@ def test_train_test_validation() -> None:
         dc_training_set,
         dc_validation_set,
         dc_testing_set,
+        _,
         tests_config,
-    ) = initialize_train_test_validation_tests()
+    ) = initialize_dc_tests(TRAIN_TEST_VALIDATION_TESTS_ADD_INDEX_COLUMN)
 
     # ----------------------------
     # Suite building
@@ -72,33 +71,33 @@ def test_train_test_validation() -> None:
     suite = Suite(
         TRAIN_TEST_VALIDATION_TESTS_SUITE_NAME,
         DatasetsSizeComparison().add_condition_test_train_size_ratio_greater_than(
-            tests_config.train_test_validation.datasets_size_comparison.ratio,
+            ratio=tests_config.train_test_validation.datasets_size_comparison.ratio,
         ),
         IndexTrainTestLeakage(
             random_state=tests_config.seed.value,
         ).add_condition_ratio_less_or_equal(
-            tests_config.train_test_validation.index_leakage.max_ratio,
+            max_ratio=tests_config.train_test_validation.index_leakage.max_ratio,
         ),
         FeatureLabelCorrelationChange(
             random_state=tests_config.seed.value,
         ).add_condition_feature_pps_difference_less_than(
-            tests_config.train_test_validation.feature_label_correlation_change.threshold,
+            threshold=tests_config.train_test_validation.feature_label_correlation_change.threshold,
         ),
         MultivariateDrift(
             random_state=tests_config.seed.value,
         ).add_condition_overall_drift_value_less_than(
-            tests_config.train_test_validation.multivariate_drift.max_drift_value,
+            max_drift_value=tests_config.train_test_validation.multivariate_drift.max_drift_value,
         ),
         LabelDrift(
             random_state=tests_config.seed.value,
         ).add_condition_drift_score_less_than(
-            tests_config.train_test_validation.label_drift.max_allowed_drift_score,
+            max_allowed_drift_score=tests_config.train_test_validation.label_drift.max_allowed_drift_score,
         ),
         FeatureDrift(
             random_state=tests_config.seed.value,
         ).add_condition_drift_score_less_than(
-            tests_config.train_test_validation.feature_drift.max_allowed_numeric_score,
-            tests_config.train_test_validation.feature_drift.allowed_num_features_exceeding_threshold,
+            max_allowed_numeric_score=tests_config.train_test_validation.feature_drift.max_allowed_numeric_score,
+            allowed_num_features_exceeding_threshold=tests_config.train_test_validation.feature_drift.allowed_num_features_exceeding_threshold,
         ),
     )
 

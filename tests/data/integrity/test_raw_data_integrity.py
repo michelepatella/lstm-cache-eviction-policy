@@ -25,10 +25,10 @@ from tests.const import (
     DATA_INTEGRITY_TESTS_RAW_DATA_RESULTS_SAVE_PATH,
     DATA_INTEGRITY_TESTS_RAW_DATA_SUITE_NAME,
 )
-from tests.data.integrity.helpers import (
+from tests.helpers.data_integrity_helpers import (
     initialize_data_integrity_tests,
 )
-from tests.helpers import run_dc_suite
+from tests.helpers.dc_helpers import run_dc_suite
 
 
 def test_raw_data_integrity() -> None:
@@ -64,18 +64,18 @@ def test_raw_data_integrity() -> None:
         PercentOfNulls(
             random_state=tests_config.seed.value,
         ).add_condition_percent_of_nulls_not_greater_than(
-            tests_config.data.raw.integrity.percent_of_nulls.threshold,
+            threshold=tests_config.data.raw.integrity.percent_of_nulls.threshold,
         ),
         FeatureLabelCorrelation(
             random_state=tests_config.seed.value,
         ).add_condition_feature_pps_less_than(
-            tests_config.data.raw.integrity.feature_label_correlation.threshold,
+            threshold=tests_config.data.raw.integrity.feature_label_correlation.threshold,
         ),
         FeatureFeatureCorrelation(
             random_state=tests_config.seed.value,
         ).add_condition_max_number_of_pairs_above_threshold(
-            tests_config.data.raw.integrity.feature_feature_correlation.threshold,
-            tests_config.data.raw.integrity.feature_feature_correlation.num_pairs,
+            threshold=tests_config.data.raw.integrity.feature_feature_correlation.threshold,
+            n_pairs=tests_config.data.raw.integrity.feature_feature_correlation.num_pairs,
         ),
         IsSingleValue(
             random_state=tests_config.seed.value,

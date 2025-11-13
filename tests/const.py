@@ -99,6 +99,18 @@ DEEP_CHECKS_SAVE_AS_HTML_REQUIREJS = False
 
 
 # ----------------------------
+# Model Tests
+# ----------------------------
+MODEL_TESTS_SUITE_NAME = "Model Tests"
+
+MODEL_TESTS_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT / "reports" / "model" / "model_results.html"
+)
+
+MODEL_TESTS_ADD_INDEX_COLUMN = False
+
+
+# ----------------------------
 # Tests Config
 # ----------------------------
 TESTS_CONFIG_FILE_PATH = (
@@ -125,3 +137,5 @@ TRAIN_TEST_TESTS_RESULTS_SAVE_PATH = (
     / "train_test_validation"
     / "train_test_results.html"
 )
+
+TRAIN_TEST_VALIDATION_TESTS_ADD_INDEX_COLUMN = True

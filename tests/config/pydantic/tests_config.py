@@ -13,6 +13,7 @@ Classes:
 from pydantic import BaseModel
 
 from tests.config.pydantic.sections.data_tests_config import DataTestsConfig
+from tests.config.pydantic.sections.model_tests_config import ModelTestsConfig
 from tests.config.pydantic.sections.seed_tests_config import SeedTestsConfig
 from tests.config.pydantic.sections.train_test_validation_tests_config import (
     TrainTestValidationTestsConfig,
@@ -24,6 +25,8 @@ class TestsConfig(BaseModel):
 
     Attributes:
         data (DataTestsConfig): Configuration for all data tests.
+        model (ModelTestsConfig): Configuration for all model performance and
+                                  robustness tests.
         seed (SeedTestsConfig): Configuration for the global seed used during
                                 testing.
         train_test_validation (TrainTestValidationTestsConfig):
@@ -31,5 +34,6 @@ class TestsConfig(BaseModel):
     """
 
     data: DataTestsConfig
+    model: ModelTestsConfig
     seed: SeedTestsConfig
     train_test_validation: TrainTestValidationTestsConfig
