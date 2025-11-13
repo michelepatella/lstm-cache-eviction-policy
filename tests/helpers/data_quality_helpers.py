@@ -177,7 +177,7 @@ def initialize_data_quality_tests(
 
     # Create a batch definition and a batch to validate
     batch_definition = data_asset.add_batch_definition_whole_dataframe(
-        batch_definition_name,
+        name=batch_definition_name,
     )
 
     # Create a suite of expectations

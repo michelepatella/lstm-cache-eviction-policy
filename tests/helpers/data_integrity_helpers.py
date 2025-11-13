@@ -1,4 +1,4 @@
-"""helpers.py
+"""data_integrity_helpers.py
 
 Module dedicated to preparing the necessary data and configuration structure
 for executing data integrity tests.
@@ -21,7 +21,7 @@ from components.dataset.io.loader import load_dataset
 from components.dataset.io.locator import get_dataset_abs_path
 from tests.config.configurator import prepare_tests_config
 from tests.config.pydantic.tests_config import TestsConfig
-from tests.helpers import create_dc_dataset
+from tests.helpers.dc_helpers import create_dc_dataset
 
 
 def initialize_data_integrity_tests(
