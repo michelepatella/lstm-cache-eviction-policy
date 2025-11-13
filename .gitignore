@@ -3,8 +3,10 @@ __pycache__/
 *$py.class
 *.so
 *.db
-.reports/
-.models/
+reports/
+models/
+data/
+docs/
 .Python
 .env/
 venv/
