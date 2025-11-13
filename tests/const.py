@@ -21,21 +21,61 @@ DATA_INTEGRITY_TESTS_PROCESSED_DATA_SUITE_NAME = (
     "Processed Data Integrity Tests"
 )
 
-DATA_INTEGRITY_TESTS_RAW_DATA_RESULTS_SAVE_PATH = (
+DATA_INTEGRITY_TESTS_RAW_STATIC_DATA_RESULTS_SAVE_PATH = (
     PROJECT_ROOT
     / "reports"
     / "tests"
+    / "static"
     / "data"
     / "integrity"
-    / "raw_data_results.html"
+    / "raw_static_data_integrity_tests_results.html"
 )
-DATA_INTEGRITY_TESTS_PROCESSED_DATA_RESULTS_SAVE_PATH = (
+DATA_INTEGRITY_TESTS_PROCESSED_STATIC_DATA_RESULTS_SAVE_PATH = (
     PROJECT_ROOT
     / "reports"
     / "tests"
+    / "static"
     / "data"
     / "integrity"
-    / "processed_data_results.html"
+    / "processed_static_data_integrity_tests_results.html"
+)
+
+DATA_INTEGRITY_TESTS_RAW_DYNAMIC_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "dynamic"
+    / "data"
+    / "integrity"
+    / "raw_dynamic_data_integrity_tests_results.html"
+)
+DATA_INTEGRITY_TESTS_PROCESSED_DYNAMIC_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "dynamic"
+    / "data"
+    / "integrity"
+    / "processed_dynamic_data_integrity_tests_results.html"
+)
+
+DATA_INTEGRITY_TESTS_RAW_REAL_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "real"
+    / "data"
+    / "integrity"
+    / "raw_real_data_integrity_tests_results.html"
+)
+DATA_INTEGRITY_TESTS_PROCESSED_REAL_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "real"
+    / "data"
+    / "integrity"
+    / "processed_real_data_integrity_tests_results.html"
 )
 
 
@@ -51,21 +91,61 @@ DATA_QUALITY_TESTS_CHECKPOINT_NAME_DEFAULT = "Checkpoint"
 
 DATA_QUALITY_TESTS_CHECKPOINT_BATCH_PARAMETERS_DATAFRAME_KEY_NAME = "dataframe"
 
-DATA_QUALITY_TESTS_RAW_DATA_RESULTS_SAVE_PATH = (
+DATA_QUALITY_TESTS_RAW_STATIC_DATA_RESULTS_SAVE_PATH = (
     PROJECT_ROOT
     / "reports"
     / "tests"
+    / "static"
     / "data"
     / "quality"
-    / "raw_data_results.json"
+    / "raw_static_data_quality_tests_results.json"
 )
-DATA_QUALITY_TESTS_PROCESSED_DATA_RESULTS_SAVE_PATH = (
+DATA_QUALITY_TESTS_PROCESSED_STATIC_DATA_RESULTS_SAVE_PATH = (
     PROJECT_ROOT
     / "reports"
     / "tests"
+    / "static"
     / "data"
     / "quality"
-    / "processed_data_results.json"
+    / "processed_static_data_quality_tests_results.json"
+)
+
+DATA_QUALITY_TESTS_RAW_DYNAMIC_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "dynamic"
+    / "data"
+    / "quality"
+    / "raw_dynamic_data_quality_tests_results.json"
+)
+DATA_QUALITY_TESTS_PROCESSED_DYNAMIC_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "dynamic"
+    / "data"
+    / "quality"
+    / "processed_dynamic_data_quality_tests_results.json"
+)
+
+DATA_QUALITY_TESTS_RAW_REAL_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "real"
+    / "data"
+    / "quality"
+    / "raw_real_data_quality_tests_results.json"
+)
+DATA_QUALITY_TESTS_PROCESSED_REAL_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "real"
+    / "data"
+    / "quality"
+    / "processed_real_data_quality_tests_results.json"
 )
 
 
@@ -103,8 +183,29 @@ DEEP_CHECKS_SAVE_AS_HTML_REQUIREJS = False
 # ----------------------------
 MODEL_TESTS_SUITE_NAME = "Model Tests"
 
-MODEL_TESTS_RESULTS_SAVE_PATH = (
-    PROJECT_ROOT / "reports" / "model" / "model_results.html"
+MODEL_TESTS_STATIC_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "static"
+    / "model"
+    / "static_model_tests_results.html"
+)
+MODEL_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "dynamic"
+    / "model"
+    / "dynamic_model_tests_results.html"
+)
+MODEL_TESTS_REAL_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "real"
+    / "model"
+    / "real_model_tests_results.html"
 )
 
 MODEL_TESTS_ADD_INDEX_COLUMN = False
@@ -123,19 +224,55 @@ TESTS_CONFIG_FILE_PATH = (
 # ----------------------------
 TRAIN_TEST_VALIDATION_TESTS_SUITE_NAME = "Train Test Validation Tests"
 
-TRAIN_VALIDATION_TESTS_RESULTS_SAVE_PATH = (
+TRAIN_VALIDATION_TESTS_STATIC_DATA_RESULTS_SAVE_PATH = (
     PROJECT_ROOT
     / "reports"
     / "tests"
+    / "static"
     / "train_test_validation"
-    / "train_validation_results.html"
+    / "static_train_validation_tests_results.html"
 )
-TRAIN_TEST_TESTS_RESULTS_SAVE_PATH = (
+TRAIN_TEST_TESTS_STATIC_DATA_RESULTS_SAVE_PATH = (
     PROJECT_ROOT
     / "reports"
     / "tests"
+    / "static"
     / "train_test_validation"
-    / "train_test_results.html"
+    / "static_train_test_tests_results.html"
+)
+
+TRAIN_VALIDATION_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "dynamic"
+    / "train_test_validation"
+    / "dynamic_train_validation_tests_results.html"
+)
+TRAIN_TEST_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "dynamic"
+    / "train_test_validation"
+    / "dynamic_train_test_tests_results.html"
+)
+
+TRAIN_VALIDATION_TESTS_REAL_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "real"
+    / "train_test_validation"
+    / "real_train_validation_tests_results.html"
+)
+TRAIN_TEST_TESTS_REAL_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "real"
+    / "train_test_validation"
+    / "real_train_test_tests_results.html"
 )
 
 TRAIN_TEST_VALIDATION_TESTS_ADD_INDEX_COLUMN = True

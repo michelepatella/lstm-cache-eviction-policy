@@ -35,13 +35,17 @@ from const import (
     DATASET_RAW_TYPE,
     TIME_END_HOUR,
     TIME_START_HOUR,
+    DATA_STATIC_MODE,
+    DATA_DYNAMIC_MODE,
 )
 from pipeline.config.configurator import prepare_pipeline_config
 from tests.const import (
-    DATA_QUALITY_TESTS_RAW_DATA_RESULTS_SAVE_PATH,
     DATASET_COLUMN_REQUEST_TYPE,
     DATASET_COLUMN_TIMESTAMP_TYPE,
     DATASET_RAW_COLUMNS,
+    DATA_QUALITY_TESTS_RAW_STATIC_DATA_RESULTS_SAVE_PATH,
+    DATA_QUALITY_TESTS_RAW_DYNAMIC_DATA_RESULTS_SAVE_PATH,
+    DATA_QUALITY_TESTS_RAW_REAL_DATA_RESULTS_SAVE_PATH,
 )
 
 
@@ -65,8 +69,7 @@ def test_raw_data_quality() -> None:
     pipeline_config = prepare_pipeline_config()
     df, context, data_source, data_asset, batch_definition, suite = (
         initialize_data_quality_tests(
-            DATASET_RAW_TYPE,
-            pipeline_config.data.general.mode,
+            DATASET_RAW_TYPE, pipeline_config.data.general.mode
         )
     )
 
@@ -130,12 +133,22 @@ def test_raw_data_quality() -> None:
     # ----------------------------
     # Suite running
     # ----------------------------
+    # Determine the save path based on
+    # the data mode
+    if pipeline_config.data.general.mode == DATA_STATIC_MODE:
+        save_path = DATA_QUALITY_TESTS_RAW_STATIC_DATA_RESULTS_SAVE_PATH
+    elif pipeline_config.data.general.mode == DATA_DYNAMIC_MODE:
+        save_path = DATA_QUALITY_TESTS_RAW_DYNAMIC_DATA_RESULTS_SAVE_PATH
+    else:
+        save_path = DATA_QUALITY_TESTS_RAW_REAL_DATA_RESULTS_SAVE_PATH
+
+    # Run tests suite
     run_data_quality_tests(
         context,
         batch_definition,
         suite,
         df,
-        DATA_QUALITY_TESTS_RAW_DATA_RESULTS_SAVE_PATH,
+        save_path,
     )
 
 
