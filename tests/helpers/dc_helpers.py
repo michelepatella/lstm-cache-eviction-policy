@@ -112,52 +112,33 @@ def initialize_dc_tests(
         pipeline_config,
     )
 
-    # Convert sets to DeepChecks datasets,
-    # adding a temporary index column to all
-    # them for further tests if requested
+    # Add a temporary index column
+    # to all the datasets if requested
     if add_index_column:
-        dc_training_set = create_dc_dataset(
-            training_set.dataset.data.copy().assign(
-                **{
-                    DATASET_COLUMN_TEMP_INDEX_NAME: range(
-                        len(training_set.dataset.data),
-                    ),
-                },
-            ),
-            index_name=DATASET_COLUMN_TEMP_INDEX_NAME,
+        training_set.data[DATASET_COLUMN_TEMP_INDEX_NAME] = range(
+            len(training_set.data)
         )
-        dc_validation_set = create_dc_dataset(
-            validation_set.dataset.data.copy().assign(
-                **{
-                    DATASET_COLUMN_TEMP_INDEX_NAME: range(
-                        len(training_set.dataset.data),
-                        len(training_set.dataset.data)
-                        + len(validation_set.dataset.data),
-                    ),
-                },
-            ),
-            index_name=DATASET_COLUMN_TEMP_INDEX_NAME,
+        validation_set.data[DATASET_COLUMN_TEMP_INDEX_NAME] = range(
+            len(training_set.data),
+            len(training_set.data) + len(validation_set.data),
         )
-        dc_testing_set = create_dc_dataset(
-            testing_set.data.copy().assign(
-                **{
-                    DATASET_COLUMN_TEMP_INDEX_NAME: range(
-                        len(training_set.dataset.data)
-                        + len(validation_set.dataset.data),
-                        len(training_set.dataset.data)
-                        + len(validation_set.dataset.data)
-                        + len(testing_set.data),
-                    )
-                },
-            ),
-            index_name=DATASET_COLUMN_TEMP_INDEX_NAME,
+        testing_set.data[DATASET_COLUMN_TEMP_INDEX_NAME] = range(
+            len(training_set.data) + len(validation_set.data),
+            len(training_set.data)
+            + len(validation_set.data)
+            + len(testing_set.data),
         )
-    else:
-        dc_training_set = create_dc_dataset(training_set.dataset.data.copy())
-        dc_validation_set = create_dc_dataset(
-            validation_set.dataset.data.copy()
-        )
-        dc_testing_set = create_dc_dataset(testing_set.data.copy())
+
+    # Convert datasets to DeepChecks Dataset objects
+    dc_training_set = create_dc_dataset(
+        training_set.data, index_name=DATASET_COLUMN_TEMP_INDEX_NAME
+    )
+    dc_validation_set = create_dc_dataset(
+        validation_set.data, index_name=DATASET_COLUMN_TEMP_INDEX_NAME
+    )
+    dc_testing_set = create_dc_dataset(
+        testing_set.data, index_name=DATASET_COLUMN_TEMP_INDEX_NAME
+    )
 
     # Load the model
     model_path = get_model_abs_path(pipeline_config.data.general.mode)

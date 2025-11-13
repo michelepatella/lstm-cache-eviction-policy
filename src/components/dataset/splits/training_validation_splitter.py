@@ -5,7 +5,7 @@ Utility module for splitting datasets into training and validation sets.
 This module provides the `split_training_validation_sets` function, which
 splits a given dataset into training and validation portions. It can
 use provided indices or compute them based on a validation split percentage,
-returning PyTorch Subset objects for each portion.
+returning sets for each portion.
 
 Functions:
     split_training_validation_sets(
@@ -13,18 +13,18 @@ Functions:
         validation_split: float | None = None,
         training_idx: np.ndarray | None = None,
         validation_idx: np.ndarray | None = None
-    ) -> tuple[Subset, Subset]
-        Splits a dataset into training and validation PyTorch Subsets.
+    ) -> tuple[AccessLogsDataset, AccessLogsDataset]
+        Splits a dataset into training and validation sets.
 """
 
 import numpy as np
-from torch.utils.data import Subset
 
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.dataset.splits.index.calculator import (
     calculate_dataset_split_index,
 )
 from components.logs.levels.error_logger import error
+from pipeline.const import DATASET_RESET_INDEX_DROP
 
 
 def split_training_validation_sets(
@@ -32,25 +32,23 @@ def split_training_validation_sets(
     validation_split: float | None = None,
     training_idx: np.ndarray | None = None,
     validation_idx: np.ndarray | None = None,
-) -> tuple[Subset, Subset]:
+) -> tuple[AccessLogsDataset, AccessLogsDataset]:
     """Split the dataset into training and validation sets.
 
     This function either uses provided indices or calculates them based on
-    the validation percentage, and returns PyTorch Subsets for training
-    and validation.
+    the validation percentage, and returns the training and validation sets.
 
     Args:
         training_set (AccessLogsDataset): The dataset to split.
-        validation_split (float | None): Validation percentage to
-                                         split dataset.
+        validation_split (float | None): Validation percentage to split dataset.
         training_idx (np.ndarray | None): Training set index.
         validation_idx (np.ndarray | None): Validation set index.
 
     Returns:
-        tuple[Subset, Subset]:
-            - final_training_set: PyTorch Subset containing the training
+        tuple[AccessLogsDataset, AccessLogsDataset]:
+            - final_training_set: The set containing the training
                                   portion of the dataset.
-            - final_validation_set: PyTorch Subset containing the validation
+            - final_validation_set: The set containing the validation
                                     portion of the dataset.
 
     Raises:
@@ -84,10 +82,23 @@ def split_training_validation_sets(
                 range(training_size, training_size + validation_size),
             )
 
-        # Create Subset objects both for
+        # Create sets both for
         # training and validation sets
-        final_training_set = Subset(training_set, training_idx)
-        final_validation_set = Subset(training_set, validation_idx)
+        training_df = training_set.data.iloc[training_idx].reset_index(
+            drop=DATASET_RESET_INDEX_DROP
+        )
+        validation_df = training_set.data.iloc[validation_idx].reset_index(
+            drop=DATASET_RESET_INDEX_DROP
+        )
+
+        # Build AccessLogsDataset both for
+        # training and testing set
+        final_training_set = AccessLogsDataset(
+            None, None, None, parent=training_set, data=training_df
+        )
+        final_validation_set = AccessLogsDataset(
+            None, None, None, parent=training_set, data=validation_df
+        )
 
         return final_training_set, final_validation_set
     except (TypeError, ValueError, AttributeError, IndexError, NameError) as e:

@@ -12,6 +12,7 @@ Classes:
         PyTorch-compatible dataset class for sequential access logs.
 """
 
+import pandas as pd
 import torch
 from torch.utils.data import Dataset
 
@@ -128,9 +129,11 @@ class AccessLogsDataset(Dataset):
 
     def __init__(
         self: "AccessLogsDataset",
-        dataset_type: str,
-        split_type: str,
-        pipeline_config: PipelineConfig,
+        dataset_type: str | None,
+        split_type: str | None,
+        pipeline_config: PipelineConfig | None,
+        parent: "AccessLogsDataset" = None,
+        data: pd.DataFrame = None,
     ) -> None:
         """Initialize the AccessLogsDataset class.
 
@@ -140,14 +143,26 @@ class AccessLogsDataset(Dataset):
 
         Args:
             self (AccessLogsDataset): AccessLogsDataset class.
-            dataset_type (str): The dataset type requested to
+            dataset_type (str | None): The dataset type requested to
                                 be created.
-            split_type (str): The split type requested.
-            pipeline_config (PipelineConfig): Configuration object.
+            split_type (str | None): The split type requested.
+            pipeline_config (PipelineConfig | None): Configuration object.
+            parent (AccessLogsDataset): Parent class instance.
+            data (pd.DataFrame): Data already stored for a parent class instance.
 
         Returns:
             None
         """
+        # Check whether to create a new class instance
+        # starting from an already existing one
+        if isinstance(parent, AccessLogsDataset):
+            # Set data and fields
+            self.data = data.copy() if data is not None else parent.data.copy()
+            self.features = parent.features
+            self.target = parent.target
+            self.seq_len = parent.seq_len
+            return
+
         # Prepare configuration
         data_mode = pipeline_config.data.general.mode
         training_split = pipeline_config.dataset.splits.training
