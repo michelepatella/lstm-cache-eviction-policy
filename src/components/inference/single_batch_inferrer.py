@@ -30,7 +30,11 @@ import torch
 from components.backpropagation.mc_dropout.forward_runner import (
     compute_mc_dropout_forward,
 )
-from components.const import DATASET_COLUMN_TARGET_IDX, TENSOR_TARGET_DIM
+from components.const import (
+    DATASET_COLUMN_TARGET_IDX,
+    TENSOR_CLASS_DIM,
+    TORCH_DTYPE_TARGET,
+)
 from components.device.mover import move_to_device
 from components.logs.levels.error_logger import error
 from components.loss.calculator import calculate_loss
@@ -105,14 +109,14 @@ def infer_single_batch(
 
         # Extract target from batch
         target = batch[target_idx]
-        target = target.long()
+        target = target.to(TORCH_DTYPE_TARGET)
 
         # Compute batch loss
         loss = calculate_loss(outputs_mean, target, criterion).item()
 
         # Prepare data to be returned
         predictions = (
-            torch.argmax(outputs_mean, dim=TENSOR_TARGET_DIM)
+            torch.argmax(outputs_mean, dim=TENSOR_CLASS_DIM)
             .cpu()
             .numpy()
             .tolist()

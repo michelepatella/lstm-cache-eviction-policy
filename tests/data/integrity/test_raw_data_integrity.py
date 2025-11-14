@@ -27,7 +27,7 @@ from tests.const import (
     DATA_INTEGRITY_TESTS_RAW_DYNAMIC_DATA_RESULTS_SAVE_PATH,
     DATA_INTEGRITY_TESTS_RAW_REAL_DATA_RESULTS_SAVE_PATH,
 )
-from tests.helpers.data_integrity_helpers import (
+from tests.data.integrity.helpers import (
     initialize_data_integrity_tests,
 )
 from tests.helpers.dc_helpers import run_dc_suite

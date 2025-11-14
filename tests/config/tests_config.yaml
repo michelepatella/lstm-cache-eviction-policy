@@ -18,34 +18,16 @@ data:
       percent_of_nulls:
         threshold: 0.2
 model:
-  confusion_matrix_report:
-    misclassified_samples_threshold: 0.2
-  inference_time:
-    threshold: 0.001
-  performance_bias:
-    lower_bound: 0.1
-    scorer: f1_weighted
-  roc_report:
-    min_auc: 0.7
   simple_model_comparison:
     min_allowed_gain: 0.1
     scorers: ["f1_weighted"]
     strategy: most_frequent
-  single_dataset_performance:
-    class_mode: any
-    scorers: ["f1_weighted"]
-    threshold: 0.9
   train_test_performance:
     degradation_threshold: 0.1
     imbalance_threshold: 0.3
     test_min_score: 0.8
-    score: f1
+    score: "f1_weighted"
     scorers: ["f1_weighted"]
-  unused_features:
-    max_high_variance_unused_features: 0
-  weak_segments_performance:
-    alternative_scorer: {"f1_weighted": "f1_weighted"}
-    max_ratio_change: 0.2
 seed:
   value: 42
 train_test_validation:

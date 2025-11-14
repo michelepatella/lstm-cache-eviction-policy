@@ -23,18 +23,19 @@ from deepchecks.tabular.checks import (
     MultivariateDrift,
 )
 
-from const import DATA_STATIC_MODE, DATA_DYNAMIC_MODE
+from const import DATA_DYNAMIC_MODE, DATA_STATIC_MODE
 from tests.const import (
+    TRAIN_TEST_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH,
+    TRAIN_TEST_TESTS_REAL_DATA_RESULTS_SAVE_PATH,
+    TRAIN_TEST_TESTS_STATIC_DATA_RESULTS_SAVE_PATH,
+    TRAIN_TEST_VALIDATION_TESTS_ADD_INDEX_COLUMN,
     TRAIN_TEST_VALIDATION_TESTS_SUITE_NAME,
     TRAIN_VALIDATION_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH,
-    TRAIN_TEST_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH,
-    TRAIN_TEST_VALIDATION_TESTS_ADD_INDEX_COLUMN,
-    TRAIN_TEST_TESTS_STATIC_DATA_RESULTS_SAVE_PATH,
-    TRAIN_VALIDATION_TESTS_STATIC_DATA_RESULTS_SAVE_PATH,
-    TRAIN_TEST_TESTS_REAL_DATA_RESULTS_SAVE_PATH,
     TRAIN_VALIDATION_TESTS_REAL_DATA_RESULTS_SAVE_PATH,
+    TRAIN_VALIDATION_TESTS_STATIC_DATA_RESULTS_SAVE_PATH,
+    TRAIN_TEST_VALIDATION_TESTS_REMOVE_SEQ_LEN,
 )
-from tests.helpers.dc_helpers import run_dc_suite, initialize_dc_tests
+from tests.helpers.dc_helpers import initialize_dc_tests, run_dc_suite
 
 
 def test_train_test_validation() -> None:
@@ -61,13 +62,16 @@ def test_train_test_validation() -> None:
     # ----------------------------
     # Initialization
     (
+        *_,
         dc_training_set,
         dc_validation_set,
         dc_testing_set,
-        _,
         pipeline_config,
         tests_config,
-    ) = initialize_dc_tests(TRAIN_TEST_VALIDATION_TESTS_ADD_INDEX_COLUMN)
+    ) = initialize_dc_tests(
+        TRAIN_TEST_VALIDATION_TESTS_ADD_INDEX_COLUMN,
+        TRAIN_TEST_VALIDATION_TESTS_REMOVE_SEQ_LEN,
+    )
 
     # ----------------------------
     # Suite building

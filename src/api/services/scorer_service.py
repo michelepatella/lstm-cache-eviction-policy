@@ -10,7 +10,7 @@ from api.const import (
     SCORER_SERVICE_RETURN_KEY_SCORES_NAME,
     SCORER_SERVICE_RETURN_PROB_MATRIX_NAME,
 )
-from components.const import TENSOR_OUTPUTS_BATCH_DIM
+from components.const import TENSOR_BATCH_DIM
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.math.confidence_interval_calculator import (
@@ -88,9 +88,7 @@ def scorer_service(
         # at time step j
         prob_matrix = np.stack(
             [
-                softmax(torch.tensor(o), dim=TENSOR_OUTPUTS_BATCH_DIM)
-                .cpu()
-                .numpy()
+                softmax(torch.tensor(o), dim=TENSOR_BATCH_DIM).cpu().numpy()
                 for o in outputs
             ],
         )
