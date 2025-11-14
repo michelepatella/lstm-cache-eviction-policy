@@ -85,19 +85,27 @@ def split_training_validation_sets(
         # Create sets both for
         # training and validation sets
         training_df = training_set.data.iloc[training_idx].reset_index(
-            drop=DATASET_RESET_INDEX_DROP
+            drop=DATASET_RESET_INDEX_DROP,
         )
         validation_df = training_set.data.iloc[validation_idx].reset_index(
-            drop=DATASET_RESET_INDEX_DROP
+            drop=DATASET_RESET_INDEX_DROP,
         )
 
         # Build AccessLogsDataset both for
         # training and testing set
         final_training_set = AccessLogsDataset(
-            None, None, None, parent=training_set, data=training_df
+            None,
+            None,
+            None,
+            parent=training_set,
+            data=training_df,
         )
         final_validation_set = AccessLogsDataset(
-            None, None, None, parent=training_set, data=validation_df
+            None,
+            None,
+            None,
+            parent=training_set,
+            data=validation_df,
         )
 
         return final_training_set, final_validation_set

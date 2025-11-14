@@ -37,9 +37,9 @@ from components.const import (
     LIST_FIRST_IDX,
     LIST_LAST_IDX,
     TENSOR_FEATURES_DIM,
-    TENSOR_OUTPUTS_BATCH_DIM,
-    TENSOR_SEQUENCE_DIM,
-    TORCH_DTYPE,
+    TENSOR_BATCH_DIM,
+    TENSOR_CLASS_DIM,
+    TORCH_DTYPE_FEATURES,
 )
 from components.dataset.features.derived.local_frequencies_calculator import (
     calculate_local_frequencies,
@@ -147,23 +147,23 @@ def compute_autoregressive_rollout(
 
             # Save outputs and variances
             all_outputs.append(
-                outputs_mean.squeeze(dim=TENSOR_OUTPUTS_BATCH_DIM),
+                outputs_mean.squeeze(dim=TENSOR_BATCH_DIM),
             )
             all_variances.append(
-                outputs_variance.squeeze(dim=TENSOR_OUTPUTS_BATCH_DIM),
+                outputs_variance.squeeze(dim=TENSOR_BATCH_DIM),
             )
 
             # Update the sequence of keys by appending
             # the predicted one at the current step
             pred_key = outputs_mean.argmax(
-                dim=TENSOR_SEQUENCE_DIM,
-            ).unsqueeze(TENSOR_SEQUENCE_DIM)
+                dim=TENSOR_CLASS_DIM,
+            ).unsqueeze(TENSOR_CLASS_DIM)
             keys_seq = torch.cat(
                 [
                     keys_seq[:, AUTOREGRESSIVE_ROLLOUT_SEQUENCE_SHIFT_IDX:],
                     pred_key,
                 ],
-                dim=TENSOR_SEQUENCE_DIM,
+                dim=TENSOR_CLASS_DIM,
             )
 
             # Calculate new sin and cos time obtained by adding
@@ -176,7 +176,7 @@ def compute_autoregressive_rollout(
 
             # Calculate new local frequencies and recencies
             current_keys = (
-                keys_seq.squeeze(TENSOR_OUTPUTS_BATCH_DIM)
+                keys_seq.squeeze(TENSOR_BATCH_DIM)
                 .detach()
                 .cpu()
                 .numpy()
@@ -203,8 +203,8 @@ def compute_autoregressive_rollout(
                     ],
                 ],
                 device=device,
-                dtype=TORCH_DTYPE,
-            ).unsqueeze(TENSOR_OUTPUTS_BATCH_DIM)
+                dtype=TORCH_DTYPE_FEATURES,
+            ).unsqueeze(TENSOR_BATCH_DIM)
             features_seq = torch.cat(
                 [
                     features_seq[

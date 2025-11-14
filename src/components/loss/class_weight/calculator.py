@@ -21,6 +21,7 @@ import numpy as np
 from sklearn.utils import compute_class_weight
 from sympy.printing.pytorch import torch
 
+from components.const import TORCH_DTYPE_TARGET
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
@@ -71,7 +72,7 @@ def calculate_class_weight(
         )
 
         # Convert targets to NumPy array
-        targets = targets.long()
+        targets = targets.to(TORCH_DTYPE_TARGET)
         targets_array = targets.cpu().numpy()
 
         # Identify present classes in targets

@@ -21,7 +21,8 @@ from components.const import (
     DATASET_PROCESSED_FEATURE_COLUMNS,
     DATASET_TARGET_COLUMN_SHIFT,
     LIST_LAST_IDX,
-    TORCH_DTYPE,
+    TORCH_DTYPE_FEATURES,
+    TORCH_DTYPE_TARGET,
 )
 from components.dataset.columns.shifter import (
     shift_dataset_column,
@@ -276,19 +277,19 @@ class AccessLogsDataset(Dataset):
             # Convert features to float tensor and keys
             # to long tensor
             x_features = torch.tensor(
-                seq_data[self.features].values.astype(float),
-                dtype=TORCH_DTYPE,
+                seq_data[self.features].values,
+                dtype=TORCH_DTYPE_FEATURES,
             )
             x_keys = torch.tensor(
-                seq_data[self.target].values.astype(int),
-                dtype=TORCH_DTYPE,
+                seq_data[self.target].values,
+                dtype=TORCH_DTYPE_TARGET,
             )
 
             # Get the next target key
             target_row = self.data.iloc[idx + self.seq_len]
             y_key = torch.tensor(
                 int(target_row[self.target]),
-                dtype=TORCH_DTYPE,
+                dtype=TORCH_DTYPE_TARGET,
             )
         except (
             IndexError,

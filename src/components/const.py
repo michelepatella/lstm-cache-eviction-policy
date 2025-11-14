@@ -14,6 +14,7 @@ from typing import Literal
 
 import torch
 from dotenv import load_dotenv
+from torch import long
 
 from const import DATASET_COLUMN_REQUEST_NAME
 
@@ -313,10 +314,9 @@ SIMULATIONS_METRICS_TIMELINE_INSTANT_HIT_RATE_NAME = "instant_hit_rate"
 # ----------------------------
 # Tensor
 # ----------------------------
-TENSOR_OUTPUTS_BATCH_DIM = 0
+TENSOR_BATCH_DIM = 0
 TENSOR_FEATURES_DIM = 1
-TENSOR_TARGET_DIM = 1
-TENSOR_SEQUENCE_DIM = -1
+TENSOR_CLASS_DIM = -1
 
 
 # ----------------------------
@@ -332,7 +332,8 @@ TIME_NANOSECONDS_IN_SECOND = 1_000_000_000
 # ----------------------------
 # Torch
 # ----------------------------
-TORCH_DTYPE = torch.float32
+TORCH_DTYPE_FEATURES = torch.float32
+TORCH_DTYPE_TARGET = torch.long
 
 TORCH_BACKENDS_CUDNN_DETERMINISTIC = True
 TORCH_BACKENDS_CUDNN_BENCHMARK = False

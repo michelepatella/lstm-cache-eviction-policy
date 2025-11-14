@@ -16,7 +16,7 @@ Functions:
         Executes the full suite of data quality expectations for the processed data.
 """
 
-from tests.helpers.data_quality_helpers import (
+from tests.data.quality.helpers import (
     add_column_count_expectation,
     add_column_existence_expectations,
     add_column_not_null_expectations,

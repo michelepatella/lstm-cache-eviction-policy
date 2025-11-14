@@ -131,7 +131,6 @@ def evaluate_model(
         metrics = calculate_model_metrics(
             all_targets,
             all_predictions,
-            all_outputs,
         )
 
     debug(

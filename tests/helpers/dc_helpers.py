@@ -8,54 +8,69 @@ Deepchecks Dataset objects and manage the setup, execution, reporting, and
 assertion logic for Deepchecks Suites across the tests.
 
 Functions:
-    initialize_dc_tests(add_index_column: bool) -> tuple[
+    initialize_dc_tests(add_index_column: bool, remove_seq_len: bool) -> tuple[
+        AccessLogsDataset,
+        AccessLogsDataset,
+        AccessLogsDataset,
         Dataset,
         Dataset,
         Dataset,
-        Module,
         PipelineConfig,
-        TestsConfig
+        TestsConfig,
     ]
         Initialize all what is needed for running DeepChecks tests.
     create_dc_dataset(
         df: pd.DataFrame,
-        target_column: str,
-        cat_features: list[str],
-        index_name: str
+        seq_len: int = None,
+        target_column: str = DATASET_COLUMN_REQUEST_NAME,
+        cat_features: list[str] = [],
+        index_name: str = None,
+        label_type: str = DEEP_CHECKS_LABEL_TYPE,
     ) -> Dataset
         Wraps a pandas DataFrame into a Deepchecks Dataset object.
+    compute_dc_model_predictions(
+        training_set: AccessLogsDataset,
+        testing_set: AccessLogsDataset,
+        pipeline_config: PipelineConfig,
+    ) -> tuple[ndarray, ndarray, ndarray, ndarray]
+        Initializes the model and computes class predictions and probabilities
+        for both training and testing sets.
     run_dc_suite(
         dc_training_set: Dataset,
         suite: Suite,
         results_save_path: str,
-        dc_testing_set: Dataset,
-        model: Any = None,
-        html_as_widget: bool,
-        html_requirejs: bool,
+        dc_testing_set: Dataset = None,
+        y_pred_train: np.ndarray = None,
+        y_pred_test: np.ndarray = None,
+        y_proba_train: np.ndarray = None,
+        y_proba_test: np.ndarray = None,
+        html_as_widget: bool = DEEP_CHECKS_SAVE_AS_HTML_AS_WIDGET,
+        html_requirejs: bool = DEEP_CHECKS_SAVE_AS_HTML_REQUIREJS,
     ) -> None
         Executes a Deepchecks Suite on the provided dataset(s), saves the report,
         and asserts that all checks have passed.
 """
 
 from pathlib import Path
-from typing import Any
 
-from deepchecks import Dataset, Suite
-
+import numpy as np
 import pandas as pd
-from torch.nn import Module
+import torch
+from deepchecks import Dataset, Suite
+from numpy import ndarray
 
+from components.const import TENSOR_BATCH_DIM, TENSOR_CLASS_DIM
+from components.data_loader.builder import build_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.dataset.splits.training_validation_splitter import (
     split_training_validation_sets,
 )
-from components.device.selector import select_device
-from components.model.io.loader import load_model
-from components.model.io.locator import get_model_abs_path
+from components.evaluation.model.evaluator import evaluate_model
+from components.model.best.initializer import initialize_best_model
 from const import (
     DATASET_COLUMN_REQUEST_NAME,
-    DATASET_TRAINING_SPLIT_TYPE,
     DATASET_TESTING_SPLIT_TYPE,
+    DATASET_TRAINING_SPLIT_TYPE,
 )
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.config.pydantic.pipeline_config import PipelineConfig
@@ -63,36 +78,57 @@ from pipeline.const import DATASET_PROCESSED_TYPE
 from tests.config.configurator import prepare_tests_config
 from tests.config.pydantic.tests_config import TestsConfig
 from tests.const import (
+    DATASET_COLUMN_TEMP_INDEX_NAME,
+    DEEP_CHECKS_LABEL_TYPE,
     DEEP_CHECKS_SAVE_AS_HTML_AS_WIDGET,
     DEEP_CHECKS_SAVE_AS_HTML_REQUIREJS,
-    DATASET_COLUMN_TEMP_INDEX_NAME,
 )
 
 
 def initialize_dc_tests(
-    add_index_column: bool,
-) -> tuple[Dataset, Dataset, Dataset, Module, PipelineConfig, TestsConfig]:
+    add_index_column: bool, remove_seq_len: bool
+) -> tuple[
+    AccessLogsDataset,
+    AccessLogsDataset,
+    AccessLogsDataset,
+    Dataset,
+    Dataset,
+    Dataset,
+    PipelineConfig,
+    TestsConfig,
+]:
     """Loads and prepares all what is needed for DeepChecks tests.
 
     This function orchestrates the setup of the DeepChecks testing environment.
     It begins by loading the global pipeline configuration alongside the specific
     tests' configuration. Next, it retrieves the processed training and testing
-    datasets, and then splits the training data to create the validation subset
-    using the configured ratio. All three resulting dataframes (training, validation,
-    testing) are subsequently converted into Deepchecks Dataset objects. Additionally,
-    a necessary temporary index column is added to each Deepchecks Dataset to facilitate
-    index-based consistency checks. Finally, it loads the predictive model used for
-    running the DeepChecks tests suite on.
+    datasets, and then splits the training data to create the validation subset using
+    the configured ratio. All three resulting dataframes (training, validation, testing)
+    are subsequently converted into Deepchecks Dataset objects. Additionally, a necessary
+    temporary index column is added to each Deepchecks Dataset to facilitate index-based
+    consistency checks.
 
     Args:
         add_index_column (bool): Whether to add the index column to the datasets or not.
+        remove_seq_len (bool): Whether to remove sequence length from data or not.
 
     Returns:
-        tuple[Dataset, Dataset, Dataset, Module, PipelineConfig, TestsConfig]:
+        tuple[
+            AccessLogsDataset,
+            AccessLogsDataset,
+            AccessLogsDataset,
+            Dataset,
+            Dataset,
+            Dataset,
+            PipelineConfig,
+            TestsConfig,
+        ]:
+            - training_set (AccessLogsDataset): The training dataset.
+            - testing_set (AccessLogsDataset): The testing dataset.
+            - validation_set (AccessLogsDataset): The validation dataset.
             - dc_training_set (Dataset): Training data as a Deepchecks Dataset.
             - dc_validation_set (Dataset): Validation data as a Deepchecks Dataset.
             - dc_testing_set (Dataset): Testing data as a Deepchecks Dataset.
-            - model (Module): The predictive model.
             - pipeline_config (PipelineConfig): The validated pipeline configuration
                                                 object.
             - tests_config (TestsConfig): The validated tests configuration object.
@@ -120,7 +156,7 @@ def initialize_dc_tests(
     # to all the datasets if requested
     if add_index_column:
         training_set.data[DATASET_COLUMN_TEMP_INDEX_NAME] = range(
-            len(training_set.data)
+            len(training_set.data),
         )
         validation_set.data[DATASET_COLUMN_TEMP_INDEX_NAME] = range(
             len(training_set.data),
@@ -135,26 +171,40 @@ def initialize_dc_tests(
 
     # Convert datasets to DeepChecks Dataset objects
     dc_training_set = create_dc_dataset(
-        training_set.data, index_name=DATASET_COLUMN_TEMP_INDEX_NAME
+        training_set.data,
+        seq_len=pipeline_config.model.sequence.length
+        if remove_seq_len
+        else None,
+        index_name=DATASET_COLUMN_TEMP_INDEX_NAME
+        if add_index_column
+        else None,
     )
     dc_validation_set = create_dc_dataset(
-        validation_set.data, index_name=DATASET_COLUMN_TEMP_INDEX_NAME
+        validation_set.data,
+        seq_len=pipeline_config.model.sequence.length
+        if remove_seq_len
+        else None,
+        index_name=DATASET_COLUMN_TEMP_INDEX_NAME
+        if add_index_column
+        else None,
     )
     dc_testing_set = create_dc_dataset(
-        testing_set.data, index_name=DATASET_COLUMN_TEMP_INDEX_NAME
+        testing_set.data,
+        seq_len=pipeline_config.model.sequence.length
+        if remove_seq_len
+        else None,
+        index_name=DATASET_COLUMN_TEMP_INDEX_NAME
+        if add_index_column
+        else None,
     )
 
-    # Load the model
-    model_path = get_model_abs_path(pipeline_config.data.general.mode)
-    device = select_device(pipeline_config.resources.devices.testing)
-    qengine = pipeline_config.model.optimizations.quantization.engine
-    model = load_model(model_path, device, qengine)
-
     return (
+        training_set,
+        validation_set,
+        testing_set,
         dc_training_set,
         dc_validation_set,
         dc_testing_set,
-        model,
         pipeline_config,
         tests_config,
     )
@@ -162,9 +212,11 @@ def initialize_dc_tests(
 
 def create_dc_dataset(
     df: pd.DataFrame,
+    seq_len: int = None,
     target_column: str = DATASET_COLUMN_REQUEST_NAME,
     cat_features: list[str] = [],
     index_name: str = None,
+    label_type: str = DEEP_CHECKS_LABEL_TYPE,
 ) -> Dataset:
     """Wraps a pandas DataFrame into a Deepchecks Dataset object.
 
@@ -173,21 +225,144 @@ def create_dc_dataset(
 
     Args:
         df (pd.DataFrame): The input pandas DataFrame containing the data.
+        seq_len (int): Data sequence length for the predictive model.
         target_column (str): The name of the target/label column in the DataFrame.
         cat_features (list[str]): A list of column names to be treated as
                                   categorical features by Deepchecks.
         index_name (str): The name of the column to be used as the index
                           for the Deepchecks Dataset.
+        label_type (str): The type of task to solve.
 
     Returns:
         Dataset: The initialized Deepchecks Dataset object.
     """
     return Dataset(
-        df,
+        df.iloc[seq_len:] if seq_len is not None else df,
         label=target_column,
         cat_features=cat_features,
         index_name=index_name,
+        label_type=label_type,
     )
+
+
+def compute_dc_model_predictions(
+    training_set: AccessLogsDataset,
+    testing_set: AccessLogsDataset,
+    pipeline_config: PipelineConfig,
+) -> tuple[ndarray, ndarray, ndarray, ndarray]:
+    """Initializes the best model and computes predictions/probabilities
+     for DeepChecks.
+
+    This function sets up the data loaders and initializes the trained model
+    environment for both the training and testing sets. It then evaluates the
+    model on both sets to obtain the raw logits, which are converted into
+    class predictions and probabilities (using softmax). These results are
+    returned as numpy arrays, ready to be consumed by Deepchecks for model-related
+    tests.
+
+    Args:
+        training_set (AccessLogsDataset): The training dataset.
+        testing_set (AccessLogsDataset): The testing dataset.
+        pipeline_config (PipelineConfig): The pipeline configuration object.
+
+    Returns:
+        tuple[ndarray, ndarray, ndarray, ndarray]:
+            - y_pred_train (np.ndarray): Predicted classes for the training set.
+            - y_pred_test (np.ndarray): Predicted classes for the testing set.
+            - y_proba_train (np.ndarray): Predicted probabilities for the training set.
+            - y_proba_test (np.ndarray): Predicted probabilities for the testing set.
+    """
+    # Prepare configuration
+    data_mode = pipeline_config.data.general.mode
+    training_batch_size = pipeline_config.data_loader.batch_size.training
+    testing_batch_size = pipeline_config.data_loader.batch_size.testing
+    training_shuffle = pipeline_config.data_loader.shuffle.training
+    testing_shuffle = pipeline_config.data_loader.shuffle.testing
+    training_device_type = pipeline_config.resources.devices.training
+    testing_device_type = pipeline_config.resources.devices.testing
+    qengine = pipeline_config.model.optimizations.quantization.engine
+    num_classes = (
+        pipeline_config.data.general.keys.max
+        - pipeline_config.data.general.keys.min
+        + 1
+    )
+    num_workers = max(
+        pipeline_config.resources.general.num_cpus,
+        pipeline_config.resources.general.num_gpus,
+    )
+
+    # Prepare data loaders
+    training_loader = build_data_loader(
+        training_set,
+        training_batch_size,
+        training_shuffle,
+    )
+    testing_loader = build_data_loader(
+        testing_set,
+        testing_batch_size,
+        testing_shuffle,
+    )
+
+    # Initialize best model environment
+    # both for training and testing sets
+    training_device, training_criterion, model = initialize_best_model(
+        data_mode,
+        training_device_type,
+        pipeline_config,
+        training_loader,
+        qengine=qengine,
+    )
+    testing_device, testing_criterion, _ = initialize_best_model(
+        data_mode,
+        testing_device_type,
+        pipeline_config,
+        testing_loader,
+        qengine=qengine,
+    )
+
+    # Evaluate model both on training and
+    # testing sets
+    (*_, train_outputs, y_pred_train, _) = evaluate_model(
+        model,
+        training_loader,
+        training_criterion,
+        training_device,
+        num_workers,
+    )
+    (*_, test_outputs, y_pred_test, _) = evaluate_model(
+        model,
+        testing_loader,
+        testing_criterion,
+        testing_device,
+        num_workers,
+    )
+
+    # Extract probabilities from raw logits
+    train_outputs = torch.cat(train_outputs, dim=TENSOR_BATCH_DIM)
+    test_outputs = torch.cat(test_outputs, dim=TENSOR_BATCH_DIM)
+    y_proba_train = (
+        torch.nn.functional.softmax(train_outputs, dim=TENSOR_CLASS_DIM)
+        .detach()
+        .cpu()
+        .numpy()
+    )
+    y_proba_test = (
+        torch.nn.functional.softmax(test_outputs, dim=TENSOR_CLASS_DIM)
+        .detach()
+        .cpu()
+        .numpy()
+    )
+
+    print(max(y_proba_train))
+    print(max(y_proba_test))
+
+    # Reshape np.ndarray
+    num_samples_train = y_proba_train.size // num_classes
+    y_proba_train = y_proba_train.reshape(num_samples_train, num_classes)
+    num_samples_test = y_proba_test.size // num_classes
+    y_proba_test = y_proba_test.reshape(num_samples_test, num_classes)
+
+    return y_pred_train, y_pred_test, y_proba_train, y_proba_test
 
 
 def run_dc_suite(
@@ -195,7 +370,10 @@ def run_dc_suite(
     suite: Suite,
     results_save_path: str,
     dc_testing_set: Dataset = None,
-    model: Any = None,
+    y_pred_train: np.ndarray = None,
+    y_pred_test: np.ndarray = None,
+    y_proba_train: np.ndarray = None,
+    y_proba_test: np.ndarray = None,
     html_as_widget: bool = DEEP_CHECKS_SAVE_AS_HTML_AS_WIDGET,
     html_requirejs: bool = DEEP_CHECKS_SAVE_AS_HTML_REQUIREJS,
 ) -> None:
@@ -213,7 +391,10 @@ def run_dc_suite(
         results_save_path (str): The file path where the HTML report of the results
                                  should be saved.
         dc_testing_set (Dataset): The Deepchecks testing Dataset object to be tested.
-        model (Any): A predictive model to run the suite on.
+        y_pred_train (np.ndarray): Classes predicted by the model on training set.
+        y_pred_test (np.ndarray): Classes predicted by the model on testing set.
+        y_proba_train (np.ndarray): Probabilities predicted by the model on training set.
+        y_proba_test (np.ndarray): Probabilities predicted by the model on testing set.
         html_as_widget (bool): Whether the HTML report should be displayed as a widget.
         html_requirejs (bool): Whether the HTML report should include JS code.
 
@@ -226,7 +407,12 @@ def run_dc_suite(
     """
     # Run the suite
     result = suite.run(
-        train_dataset=dc_training_set, test_dataset=dc_testing_set, model=model
+        train_dataset=dc_training_set,
+        test_dataset=dc_testing_set,
+        y_pred_train=y_pred_train,
+        y_pred_test=y_pred_test,
+        y_proba_train=y_proba_train,
+        y_proba_test=y_proba_test,
     )
 
     # Save the results

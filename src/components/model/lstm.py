@@ -24,7 +24,8 @@ from components.const import (
     LIST_LAST_IDX,
     MC_DROPOUT_DISABLED,
     MODEL_PARAM_NAMES,
-    TENSOR_SEQUENCE_DIM,
+    TENSOR_CLASS_DIM,
+    TORCH_DTYPE_TARGET,
 )
 from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug
@@ -332,13 +333,13 @@ class LSTM(torch.nn.Module):
             x_keys = move_to_device(x_keys, device)
 
             # Perform embedding
-            x_keys = x_keys.long()
+            x_keys = x_keys.to(TORCH_DTYPE_TARGET)
             embedded_keys = self.embedding(x_keys)
 
             # Concatenate features with embedded keys
             x = torch.cat(
                 (x_features, embedded_keys),
-                dim=TENSOR_SEQUENCE_DIM,
+                dim=TENSOR_CLASS_DIM,
             )
 
             return x
