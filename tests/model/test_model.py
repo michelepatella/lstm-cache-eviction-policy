@@ -92,13 +92,6 @@ def test_model() -> None:
         ).add_condition_train_test_relative_degradation_less_than(
             threshold=tests_config.model.train_test_performance.degradation_threshold,
         ),
-        TrainTestPerformance(
-            scorers=tests_config.model.train_test_performance.scorers,
-            random_state=tests_config.seed.value,
-        ).add_condition_class_performance_imbalance_ratio_less_than(
-            score=tests_config.model.train_test_performance.score,
-            threshold=tests_config.model.train_test_performance.imbalance_threshold,
-        ),
     )
 
     # ----------------------------

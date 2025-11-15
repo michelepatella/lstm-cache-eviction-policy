@@ -10,7 +10,7 @@ Functions:
     build_data_loader(
         dataset: AccessLogsDataset | Dataset,
         batch_size: int,
-        shuffle: bool = False,
+        shuffle: bool = DATA_LOADER_SHUFFLE_DEFAULT,
         sampler: Sampler = None
     ) -> DataLoader
         Builds a DataLoader for the provided dataset with specified
@@ -22,12 +22,13 @@ from torch.utils.data import DataLoader, Dataset, Sampler
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
+from const import DATA_LOADER_SHUFFLE_DEFAULT
 
 
 def build_data_loader(
     dataset: AccessLogsDataset | Dataset,
     batch_size: int,
-    shuffle: bool = False,
+    shuffle: bool = DATA_LOADER_SHUFFLE_DEFAULT,
     sampler: Sampler = None,
 ) -> DataLoader:
     """Create a data loader for the given dataset.

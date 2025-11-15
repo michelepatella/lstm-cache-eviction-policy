@@ -277,8 +277,6 @@ def compute_dc_model_predictions(
     data_mode = pipeline_config.data.general.mode
     training_batch_size = pipeline_config.data_loader.batch_size.training
     testing_batch_size = pipeline_config.data_loader.batch_size.testing
-    training_shuffle = pipeline_config.data_loader.shuffle.training
-    testing_shuffle = pipeline_config.data_loader.shuffle.testing
     training_device_type = pipeline_config.resources.devices.training
     testing_device_type = pipeline_config.resources.devices.testing
     qengine = pipeline_config.model.optimizations.quantization.engine
@@ -296,12 +294,10 @@ def compute_dc_model_predictions(
     training_loader = build_data_loader(
         training_set,
         training_batch_size,
-        training_shuffle,
     )
     testing_loader = build_data_loader(
         testing_set,
         testing_batch_size,
-        testing_shuffle,
     )
 
     # Initialize best model environment
@@ -323,14 +319,14 @@ def compute_dc_model_predictions(
 
     # Evaluate model both on training and
     # testing sets
-    (*_, train_outputs, y_pred_train, _) = evaluate_model(
+    (_, _, train_outputs, y_pred_train, *_) = evaluate_model(
         model,
         training_loader,
         training_criterion,
         training_device,
         num_workers,
     )
-    (*_, test_outputs, y_pred_test, _) = evaluate_model(
+    (_, _, test_outputs, y_pred_test, *_) = evaluate_model(
         model,
         testing_loader,
         testing_criterion,
@@ -353,9 +349,6 @@ def compute_dc_model_predictions(
         .cpu()
         .numpy()
     )
-
-    print(max(y_proba_train))
-    print(max(y_proba_test))
 
     # Reshape np.ndarray
     num_samples_train = y_proba_train.size // num_classes

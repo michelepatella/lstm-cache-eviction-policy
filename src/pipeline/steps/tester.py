@@ -121,13 +121,7 @@ def test_model() -> None:
         )
 
         # Evaluate model
-        (
-            avg_loss,
-            metrics,
-            _,
-            _,
-            _,
-        ) = evaluate_model(
+        (avg_loss, metrics, *_) = evaluate_model(
             model,
             testing_loader,
             criterion,
@@ -135,7 +129,6 @@ def test_model() -> None:
             num_workers,
             compute_metrics=MODEL_COMPUTE_METRICS_TESTING,
         )
-
         # Experiment tracking
         metrics = Box(metrics, delimiter="_")
         mlflow.log_params(prepare_pipeline_config().model_dump())
