@@ -86,7 +86,8 @@ from tests.const import (
 
 
 def initialize_dc_tests(
-    add_index_column: bool, remove_seq_len: bool
+    add_index_column: bool,
+    remove_seq_len: bool,
 ) -> tuple[
     AccessLogsDataset,
     AccessLogsDataset,

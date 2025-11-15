@@ -26,9 +26,9 @@ from tests.const import (
     MODEL_TESTS_ADD_INDEX_COLUMN,
     MODEL_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH,
     MODEL_TESTS_REAL_DATA_RESULTS_SAVE_PATH,
+    MODEL_TESTS_REMOVE_SEQ_LEN,
     MODEL_TESTS_STATIC_DATA_RESULTS_SAVE_PATH,
     MODEL_TESTS_SUITE_NAME,
-    MODEL_TESTS_REMOVE_SEQ_LEN,
 )
 from tests.helpers.dc_helpers import (
     compute_dc_model_predictions,
@@ -63,7 +63,8 @@ def test_model() -> None:
         pipeline_config,
         tests_config,
     ) = initialize_dc_tests(
-        MODEL_TESTS_ADD_INDEX_COLUMN, MODEL_TESTS_REMOVE_SEQ_LEN
+        MODEL_TESTS_ADD_INDEX_COLUMN,
+        MODEL_TESTS_REMOVE_SEQ_LEN,
     )
 
     # ----------------------------
@@ -108,7 +109,9 @@ def test_model() -> None:
     # suite on
     y_pred_train, y_pred_test, y_proba_train, y_proba_test = (
         compute_dc_model_predictions(
-            training_set, testing_set, pipeline_config
+            training_set,
+            testing_set,
+            pipeline_config,
         )
     )
 

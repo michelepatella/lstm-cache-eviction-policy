@@ -83,7 +83,8 @@ def build_loss(
         # Move class weight as tensor to
         # the specified device
         class_weight_tensor = torch.tensor(
-            class_weight, dtype=TORCH_DTYPE_FEATURES
+            class_weight,
+            dtype=TORCH_DTYPE_FEATURES,
         )
         class_weight_tensor = move_to_device(class_weight_tensor, device)
 
