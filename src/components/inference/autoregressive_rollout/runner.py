@@ -36,9 +36,9 @@ from components.const import (
     DATASET_PROCESSED_COLUMNS,
     LIST_FIRST_IDX,
     LIST_LAST_IDX,
-    TENSOR_FEATURES_DIM,
     TENSOR_BATCH_DIM,
     TENSOR_CLASS_DIM,
+    TENSOR_FEATURES_DIM,
     TORCH_DTYPE_FEATURES,
 )
 from components.dataset.features.derived.local_frequencies_calculator import (

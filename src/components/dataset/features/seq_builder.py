@@ -24,8 +24,8 @@ import numpy as np
 import torch
 
 from components.const import (
-    TENSOR_FEATURES_DIM,
     TENSOR_BATCH_DIM,
+    TENSOR_FEATURES_DIM,
     TORCH_DTYPE_FEATURES,
     TORCH_DTYPE_TARGET,
 )
@@ -100,7 +100,8 @@ def build_feature_seq(
 
         # Convert to tensor and move to device
         features_seq = torch.tensor(
-            features, dtype=TORCH_DTYPE_FEATURES
+            features,
+            dtype=TORCH_DTYPE_FEATURES,
         ).unsqueeze(
             TENSOR_BATCH_DIM,
         )

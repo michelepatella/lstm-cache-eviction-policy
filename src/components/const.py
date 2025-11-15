@@ -14,7 +14,6 @@ from typing import Literal
 
 import torch
 from dotenv import load_dotenv
-from torch import long
 
 from const import DATASET_COLUMN_REQUEST_NAME
 
@@ -118,6 +117,9 @@ DATASET_INDEX = False
 # ----------------------------
 EARLY_STOPPING_TRIGGERED = True
 EARLY_STOPPING_UNTRIGGERED = False
+
+EARLY_STOPPING_TRIGGERED_TENSOR = 1
+EARLY_STOPPING_UNTRIGGERED_TENSOR = 0
 
 
 # ----------------------------

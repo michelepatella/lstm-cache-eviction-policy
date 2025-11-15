@@ -1,6 +1,6 @@
 data:
   general:
-    requests: 200000
+    requests: 400000
     keys:
       min: 1
       max: 200

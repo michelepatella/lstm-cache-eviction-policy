@@ -193,7 +193,7 @@ def train_model() -> None:
         )
 
         # Train the model
-        best_avg_loss, best_model_weights = train_epochs(
+        best_avg_loss, best_model_weights, num_epochs_run = train_epochs(
             training_num_epochs,
             model,
             training_loader,
@@ -233,6 +233,7 @@ def train_model() -> None:
                 "loss_best_avg": None
                 if np.isinf(best_avg_loss) or np.isnan(best_avg_loss)
                 else float(best_avg_loss),
+                "epochs_run_num": num_epochs_run,
             },
         )
         with (
@@ -255,6 +256,7 @@ def train_model() -> None:
             "loss_best_avg": float(best_avg_loss)
             if not (np.isinf(best_avg_loss) or np.isnan(best_avg_loss))
             else None,
+            "epochs_run_num": num_epochs_run,
             "model_save_path": str(model_path),
             "context": "Training",
         },

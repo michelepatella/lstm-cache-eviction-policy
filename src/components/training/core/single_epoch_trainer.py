@@ -89,8 +89,7 @@ def train_single_epoch(
 
         # To display the one-epoch progress
         training_loader_tqdm = tqdm(
-            training_loader,
-            desc=TRAINING_SINGLE_EPOCH_DESC + f" {epoch}",
+            training_loader, desc=TRAINING_SINGLE_EPOCH_DESC + f" {epoch}"
         )
 
         # Set the model to training mode
