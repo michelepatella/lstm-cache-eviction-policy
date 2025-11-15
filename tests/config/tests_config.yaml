@@ -17,6 +17,20 @@ data:
         threshold: 0.8
       percent_of_nulls:
         threshold: 0.2
+  train_test_validation:
+    datasets_size_comparison:
+      ratio: 0.2
+    feature_drift:
+      allowed_num_features_exceeding_threshold: 1
+      max_allowed_numeric_score: 0.2
+    feature_label_correlation_change:
+      threshold: 0.2
+    index_leakage:
+      max_ratio: 0.0
+    label_drift:
+      max_allowed_drift_score: 0.25
+    multivariate_drift:
+      max_drift_value: 0.25
 model:
   simple_model_comparison:
     min_allowed_gain: 0.1
@@ -30,17 +44,3 @@ model:
     scorers: ["f1_weighted"]
 seed:
   value: 42
-train_test_validation:
-  datasets_size_comparison:
-    ratio: 0.2
-  feature_drift:
-    allowed_num_features_exceeding_threshold: 1
-    max_allowed_numeric_score: 0.2
-  feature_label_correlation_change:
-    threshold: 0.2
-  index_leakage:
-    max_ratio: 0.0
-  label_drift:
-    max_allowed_drift_score: 0.25
-  multivariate_drift:
-    max_drift_value: 0.25

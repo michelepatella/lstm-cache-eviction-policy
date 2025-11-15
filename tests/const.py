@@ -13,9 +13,9 @@ from const import DATASET_COLUMN_REQUEST_NAME, DATASET_COLUMN_TIMESTAMP_NAME
 PROJECT_ROOT = Path(__file__).parent.parent
 
 
-# ----------------------------
+# -----------------------------------
 # Data Integrity Tests
-# ----------------------------
+# -----------------------------------
 DATA_INTEGRITY_TESTS_RAW_DATA_SUITE_NAME = "Raw Data Integrity Tests"
 DATA_INTEGRITY_TESTS_PROCESSED_DATA_SUITE_NAME = (
     "Processed Data Integrity Tests"
@@ -79,9 +79,9 @@ DATA_INTEGRITY_TESTS_PROCESSED_REAL_DATA_RESULTS_SAVE_PATH = (
 )
 
 
-# ----------------------------
+# -----------------------------------
 # Data Quality Tests
-# ----------------------------
+# -----------------------------------
 DATA_QUALITY_TESTS_DATA_SOURCE_NAME_DEFAULT = "data_source"
 DATA_QUALITY_TESTS_DATAFRAME_ASSET_NAME_DEFAULT = "dataframe_asset"
 DATA_QUALITY_TESTS_BATCH_DEFINITION_NAME_DEFAULT = "batch_definition"
@@ -149,9 +149,71 @@ DATA_QUALITY_TESTS_PROCESSED_REAL_DATA_RESULTS_SAVE_PATH = (
 )
 
 
-# ----------------------------
+# -----------------------------------
+# Data Train Test Validation Tests
+# -----------------------------------
+DATA_TRAIN_TEST_VALIDATION_TESTS_SUITE_NAME = (
+    "Data Train Test Validation Tests"
+)
+
+DATA_TRAIN_VALIDATION_TESTS_STATIC_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "static"
+    / "data"
+    / "static_data_train_validation_tests_results.html"
+)
+DATA_TRAIN_TEST_TESTS_STATIC_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "static"
+    / "data"
+    / "static_data_train_test_tests_results.html"
+)
+
+DATA_TRAIN_VALIDATION_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "dynamic"
+    / "data"
+    / "dynamic_data_train_validation_tests_results.html"
+)
+DATA_TRAIN_TEST_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "dynamic"
+    / "data"
+    / "dynamic_data_train_test_tests_results.html"
+)
+
+DATA_TRAIN_VALIDATION_TESTS_REAL_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "real"
+    / "data"
+    / "real_data_train_validation_tests_results.html"
+)
+DATA_TRAIN_TEST_TESTS_REAL_DATA_RESULTS_SAVE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "tests"
+    / "real"
+    / "data"
+    / "real_data_train_test_tests_results.html"
+)
+
+DATA_TRAIN_TEST_VALIDATION_TESTS_ADD_INDEX_COLUMN = True
+DATA_TRAIN_TEST_VALIDATION_TESTS_REMOVE_SEQ_LEN = False
+
+
+# -----------------------------------
 # Dataset
-# ----------------------------
+# -----------------------------------
 DATASET_COLUMN_TEMP_INDEX_NAME = "_index"
 
 DATASET_RAW_COLUMNS = [
@@ -171,18 +233,18 @@ DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MIN_VALUE = 0.0
 DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MAX_VALUE = 1.0
 
 
-# ----------------------------
+# -----------------------------------
 # DeepChecks
-# ----------------------------
+# -----------------------------------
 DEEP_CHECKS_SAVE_AS_HTML_AS_WIDGET = False
 DEEP_CHECKS_SAVE_AS_HTML_REQUIREJS = False
 
 DEEP_CHECKS_LABEL_TYPE = "multiclass"
 
 
-# ----------------------------
+# -----------------------------------
 # Model Tests
-# ----------------------------
+# -----------------------------------
 MODEL_TESTS_SUITE_NAME = "Model Tests"
 
 MODEL_TESTS_STATIC_DATA_RESULTS_SAVE_PATH = (
@@ -214,69 +276,9 @@ MODEL_TESTS_ADD_INDEX_COLUMN = False
 MODEL_TESTS_REMOVE_SEQ_LEN = True
 
 
-# ----------------------------
+# -----------------------------------
 # Tests Config
-# ----------------------------
+# -----------------------------------
 TESTS_CONFIG_FILE_PATH = (
     PROJECT_ROOT / "tests" / "config" / "tests_config.yaml"
 )
-
-
-# ----------------------------
-# Train Test Validation Tests
-# ----------------------------
-TRAIN_TEST_VALIDATION_TESTS_SUITE_NAME = "Train Test Validation Tests"
-
-TRAIN_VALIDATION_TESTS_STATIC_DATA_RESULTS_SAVE_PATH = (
-    PROJECT_ROOT
-    / "reports"
-    / "tests"
-    / "static"
-    / "train_test_validation"
-    / "static_train_validation_tests_results.html"
-)
-TRAIN_TEST_TESTS_STATIC_DATA_RESULTS_SAVE_PATH = (
-    PROJECT_ROOT
-    / "reports"
-    / "tests"
-    / "static"
-    / "train_test_validation"
-    / "static_train_test_tests_results.html"
-)
-
-TRAIN_VALIDATION_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH = (
-    PROJECT_ROOT
-    / "reports"
-    / "tests"
-    / "dynamic"
-    / "train_test_validation"
-    / "dynamic_train_validation_tests_results.html"
-)
-TRAIN_TEST_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH = (
-    PROJECT_ROOT
-    / "reports"
-    / "tests"
-    / "dynamic"
-    / "train_test_validation"
-    / "dynamic_train_test_tests_results.html"
-)
-
-TRAIN_VALIDATION_TESTS_REAL_DATA_RESULTS_SAVE_PATH = (
-    PROJECT_ROOT
-    / "reports"
-    / "tests"
-    / "real"
-    / "train_test_validation"
-    / "real_train_validation_tests_results.html"
-)
-TRAIN_TEST_TESTS_REAL_DATA_RESULTS_SAVE_PATH = (
-    PROJECT_ROOT
-    / "reports"
-    / "tests"
-    / "real"
-    / "train_test_validation"
-    / "real_train_test_tests_results.html"
-)
-
-TRAIN_TEST_VALIDATION_TESTS_ADD_INDEX_COLUMN = True
-TRAIN_TEST_VALIDATION_TESTS_REMOVE_SEQ_LEN = False
