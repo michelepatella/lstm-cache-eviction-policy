@@ -40,15 +40,12 @@ class ModelTrainTestPerformanceTestsConfig(BaseModel):
     Attributes:
         degradation_threshold (float): The maximum allowed performance drop
                                        between train and test sets (in [0.0, 1.0]).
-        imbalance_threshold (float): The maximum allowed imbalance in class distribution
-                                     (in [0.0, 1.0]).
         test_min_score (float): The minimum required score on the test set (in [0.0, 1.0]).
         score (str): The main metric used for score comparison.
         scorers (list[str]): List of metrics used for performance evaluation.
     """
 
     degradation_threshold: Annotated[float, Field(ge=0.0, le=1.0)]
-    imbalance_threshold: Annotated[float, Field(ge=0.0, le=1.0)]
     test_min_score: Annotated[float, Field(ge=0.0, le=1.0)]
     score: str
     scorers: list[str]

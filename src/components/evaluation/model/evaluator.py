@@ -15,9 +15,10 @@ Functions:
         num_workers: int,
         compute_metrics: bool = True
     ) -> tuple[
-        float,
+        float | None,
         dict[str, int | float] | None,
         list[Tensor],
+        list[int],
         list[int],
         list[Tensor]
     ]
@@ -48,9 +49,10 @@ def evaluate_model(
     num_workers: int,
     compute_metrics: bool = MODEL_COMPUTE_METRICS_DEFAULT,
 ) -> tuple[
-    float,
+    float | None,
     dict[str, int | float] | None,
     list[Tensor],
+    list[int],
     list[int],
     list[Tensor],
 ]:
@@ -85,6 +87,7 @@ def evaluate_model(
                        kappa), or None if not computed.
             - all_outputs: List of tensors containing the model outputs
                            per batch.
+            - all_predictions: List of tensors containing the model predictions.
             - all_targets: List of ground truth labels corresponding to
                            the inputs.
             - all_variances: List of tensors containing variances from MC
@@ -148,4 +151,11 @@ def evaluate_model(
         },
     )
 
-    return avg_loss, metrics, all_outputs, all_targets, all_variances
+    return (
+        avg_loss,
+        metrics,
+        all_outputs,
+        all_predictions,
+        all_targets,
+        all_variances,
+    )

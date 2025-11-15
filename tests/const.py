@@ -162,6 +162,7 @@ DATA_TRAIN_VALIDATION_TESTS_STATIC_DATA_RESULTS_SAVE_PATH = (
     / "tests"
     / "static"
     / "data"
+    / "train_test_validation"
     / "static_data_train_validation_tests_results.html"
 )
 DATA_TRAIN_TEST_TESTS_STATIC_DATA_RESULTS_SAVE_PATH = (
@@ -170,6 +171,7 @@ DATA_TRAIN_TEST_TESTS_STATIC_DATA_RESULTS_SAVE_PATH = (
     / "tests"
     / "static"
     / "data"
+    / "train_test_validation"
     / "static_data_train_test_tests_results.html"
 )
 
@@ -179,6 +181,7 @@ DATA_TRAIN_VALIDATION_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH = (
     / "tests"
     / "dynamic"
     / "data"
+    / "train_test_validation"
     / "dynamic_data_train_validation_tests_results.html"
 )
 DATA_TRAIN_TEST_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH = (
@@ -187,6 +190,7 @@ DATA_TRAIN_TEST_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH = (
     / "tests"
     / "dynamic"
     / "data"
+    / "train_test_validation"
     / "dynamic_data_train_test_tests_results.html"
 )
 
@@ -196,6 +200,7 @@ DATA_TRAIN_VALIDATION_TESTS_REAL_DATA_RESULTS_SAVE_PATH = (
     / "tests"
     / "real"
     / "data"
+    / "train_test_validation"
     / "real_data_train_validation_tests_results.html"
 )
 DATA_TRAIN_TEST_TESTS_REAL_DATA_RESULTS_SAVE_PATH = (
@@ -204,6 +209,7 @@ DATA_TRAIN_TEST_TESTS_REAL_DATA_RESULTS_SAVE_PATH = (
     / "tests"
     / "real"
     / "data"
+    / "train_test_validation"
     / "real_data_train_test_tests_results.html"
 )
 

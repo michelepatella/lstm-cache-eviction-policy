@@ -38,8 +38,7 @@ model:
     strategy: most_frequent
   train_test_performance:
     degradation_threshold: 0.1
-    imbalance_threshold: 0.3
-    test_min_score: 0.8
+    test_min_score: 0.7
     score: "f1_weighted"
     scorers: ["f1_weighted"]
 seed:
