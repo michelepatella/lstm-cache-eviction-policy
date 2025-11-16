@@ -114,7 +114,7 @@ def compute_single_time_series_cv_fold(
     )
 
     # Train model
-    avg_loss, _ = train_epochs(
+    avg_loss, *_ = train_epochs(
         num_epochs,
         model,
         training_loader,

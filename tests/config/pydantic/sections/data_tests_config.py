@@ -51,7 +51,7 @@ class DataTrainTestValidationIndexLeakageTestsConfig(BaseModel):
 
 
 class DataTrainTestValidationFeatureLabelCorrelationChangeTestsConfig(
-    BaseModel
+    BaseModel,
 ):
     """Configuration model for the FeatureLabelCorrelationChange check.
 

@@ -17,6 +17,11 @@ repos:
     rev: v0.14.3
     hooks:
     -   id: ruff-format
+    -   id: ruff
+        args: [--fix, --exit-zero]
+        pass_filenames: true
+        always_run: true
+        verbose: true
 -   repo: https://github.com/kynan/nbstripout
     rev: 0.7.1
     hooks:
