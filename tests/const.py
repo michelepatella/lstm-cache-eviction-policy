@@ -249,37 +249,40 @@ DEEP_CHECKS_LABEL_TYPE = "multiclass"
 
 
 # -----------------------------------
-# Model Tests
+# Model Performance Tests
 # -----------------------------------
-MODEL_TESTS_SUITE_NAME = "Model Tests"
+MODEL_PERFORMANCE_TESTS_SUITE_NAME = "Model Performance Tests"
 
-MODEL_TESTS_STATIC_DATA_RESULTS_SAVE_PATH = (
+MODEL_PERFORMANCE_TESTS_STATIC_DATA_RESULTS_SAVE_PATH = (
     PROJECT_ROOT
     / "reports"
     / "tests"
     / "static"
     / "model"
-    / "static_model_tests_results.html"
+    / "performance"
+    / "static_model_performance_tests_results.html"
 )
-MODEL_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH = (
+MODEL_PERFORMANCE_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH = (
     PROJECT_ROOT
     / "reports"
     / "tests"
     / "dynamic"
     / "model"
-    / "dynamic_model_tests_results.html"
+    / "performance"
+    / "dynamic_model_performance_tests_results.html"
 )
-MODEL_TESTS_REAL_DATA_RESULTS_SAVE_PATH = (
+MODEL_PERFORMANCE_TESTS_REAL_DATA_RESULTS_SAVE_PATH = (
     PROJECT_ROOT
     / "reports"
     / "tests"
     / "real"
     / "model"
-    / "real_model_tests_results.html"
+    / "performance"
+    / "real_model_performance_tests_results.html"
 )
 
-MODEL_TESTS_ADD_INDEX_COLUMN = False
-MODEL_TESTS_REMOVE_SEQ_LEN = True
+MODEL_PERFORMANCE_TESTS_ADD_INDEX_COLUMN = False
+MODEL_PERFORMANCE_TESTS_REMOVE_SEQ_LEN = True
 
 
 # -----------------------------------

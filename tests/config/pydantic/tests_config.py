@@ -14,7 +14,6 @@ from pydantic import BaseModel
 
 from tests.config.pydantic.sections.data_tests_config import DataTestsConfig
 from tests.config.pydantic.sections.model_tests_config import ModelTestsConfig
-from tests.config.pydantic.sections.seed_tests_config import SeedTestsConfig
 
 
 class TestsConfig(BaseModel):
@@ -22,12 +21,8 @@ class TestsConfig(BaseModel):
 
     Attributes:
         data (DataTestsConfig): Configuration for all data tests.
-        model (ModelTestsConfig): Configuration for all model performance and
-                                  robustness tests.
-        seed (SeedTestsConfig): Configuration for the global seed used during
-                                testing.
+        model (ModelTestsConfig): Configuration for all model tests
     """
 
     data: DataTestsConfig
     model: ModelTestsConfig
-    seed: SeedTestsConfig

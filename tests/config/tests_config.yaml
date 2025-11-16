@@ -32,14 +32,20 @@ data:
     multivariate_drift:
       max_drift_value: 0.25
 model:
-  simple_model_comparison:
-    min_allowed_gain: 0.1
-    scorers: ["f1_weighted"]
-    strategy: most_frequent
-  train_test_performance:
-    degradation_threshold: 0.1
-    test_min_score: 0.7
-    score: "f1_weighted"
-    scorers: ["f1_weighted"]
-seed:
-  value: 42
+  performance:
+    simple_model_comparison:
+      min_allowed_gain: 0.1
+      scorers: ["accuracy", "precision_macro", "recall_macro", "f1_macro", "precision_weighted", "recall_weighted", "f1_weighted"]
+      strategy: most_frequent
+    train_test_performance:
+      degradation_threshold: 0.1
+      test_min_score: 0.7
+      scorers: ["accuracy", "precision_macro", "recall_macro", "f1_macro", "precision_weighted", "recall_weighted", "f1_weighted"]
+    confusion_matrix_report:
+      misclassified_samples_threshold: 0.2
+  training:
+    learnability:
+      target_avg_loss: 0.1
+      avg_loss_tolerance: 0.5
+    reproducibility:
+      avg_loss_tolerance: 0.000005
