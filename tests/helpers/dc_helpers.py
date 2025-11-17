@@ -67,14 +67,14 @@ from components.dataset.splits.training_validation_splitter import (
 )
 from components.evaluation.model.evaluator import evaluate_model
 from components.model.best.initializer import initialize_best_model
-from const import (
+from pipeline.config.configurator import prepare_pipeline_config
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
+from pipeline.const import DATASET_PROCESSED_TYPE
+from src.const import (
     DATASET_COLUMN_REQUEST_NAME,
     DATASET_TESTING_SPLIT_TYPE,
     DATASET_TRAINING_SPLIT_TYPE,
 )
-from pipeline.config.configurator import prepare_pipeline_config
-from pipeline.config.pydantic.pipeline_config import PipelineConfig
-from pipeline.const import DATASET_PROCESSED_TYPE
 from tests.config.configurator import prepare_tests_config
 from tests.config.pydantic.tests_config import TestsConfig
 from tests.const import (
@@ -275,8 +275,8 @@ def compute_dc_model_predictions(
     """
     # Prepare configuration
     data_mode = pipeline_config.data.general.mode
-    training_batch_size = pipeline_config.data_loader.batch_size.training
-    testing_batch_size = pipeline_config.data_loader.batch_size.testing
+    training_batch_size = pipeline_config.data_loader.training.batch_size
+    testing_batch_size = pipeline_config.data_loader.testing.batch_size
     training_device_type = pipeline_config.resources.devices.training
     testing_device_type = pipeline_config.resources.devices.testing
     qengine = pipeline_config.model.optimizations.quantization.engine

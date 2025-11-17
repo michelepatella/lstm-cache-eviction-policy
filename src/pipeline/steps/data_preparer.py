@@ -34,7 +34,14 @@ from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
 from components.ray.initializer import initialize_ray
 from components.seed.setter import set_seed
-from const import (
+from pipeline.config.configurator import prepare_pipeline_config
+from pipeline.const import (
+    DAGS_HUB_DVC,
+    DAGS_HUB_REPO_NAME,
+    DAGS_HUB_REPO_OWNER,
+    LOGS_PHASE_DATA_PREPARATION,
+)
+from src.const import (
     DATA_REAL_MODE,
     DATA_STATIC_MODE,
     DATASET_COLUMN_REQUEST_NAME,
@@ -42,13 +49,6 @@ from const import (
     DATASET_RAW_TYPE,
     LOGS_LOGGER_NAME,
     MLFLOW_NESTED,
-)
-from pipeline.config.configurator import prepare_pipeline_config
-from pipeline.const import (
-    DAGS_HUB_DVC,
-    DAGS_HUB_REPO_NAME,
-    DAGS_HUB_REPO_OWNER,
-    LOGS_PHASE_DATA_PREPARATION,
 )
 
 

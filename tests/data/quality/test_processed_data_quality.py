@@ -25,13 +25,13 @@ from components.const import (
     DATASET_COLUMN_SIN_TIME_NAME,
     DATASET_PROCESSED_COLUMNS,
 )
-from const import (
+from pipeline.config.configurator import prepare_pipeline_config
+from pipeline.const import DATASET_PROCESSED_TYPE
+from src.const import (
     DATA_DYNAMIC_MODE,
     DATA_STATIC_MODE,
     DATASET_COLUMN_REQUEST_NAME,
 )
-from pipeline.config.configurator import prepare_pipeline_config
-from pipeline.const import DATASET_PROCESSED_TYPE
 from tests.const import (
     DATA_QUALITY_TESTS_PROCESSED_DYNAMIC_DATA_RESULTS_SAVE_PATH,
     DATA_QUALITY_TESTS_PROCESSED_REAL_DATA_RESULTS_SAVE_PATH,
@@ -57,7 +57,7 @@ from tests.data.quality.helpers import (
 )
 
 
-@pytest.mark.data.quality.processed
+@pytest.mark.data_quality_processed
 def test_processed_data_quality() -> None:
     """Tests the quality and schema of the processed data.
 

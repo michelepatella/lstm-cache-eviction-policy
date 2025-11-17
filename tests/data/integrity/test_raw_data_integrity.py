@@ -20,8 +20,8 @@ from deepchecks.tabular.checks import (
     PercentOfNulls,
 )
 
-from const import DATA_DYNAMIC_MODE, DATA_STATIC_MODE, DATASET_RAW_TYPE
 from pipeline.config.configurator import prepare_pipeline_config
+from src.const import DATA_DYNAMIC_MODE, DATA_STATIC_MODE, DATASET_RAW_TYPE
 from tests.const import (
     DATA_INTEGRITY_TESTS_RAW_DATA_SUITE_NAME,
     DATA_INTEGRITY_TESTS_RAW_DYNAMIC_DATA_RESULTS_SAVE_PATH,
@@ -34,7 +34,7 @@ from tests.data.integrity.helpers import (
 from tests.helpers.dc_helpers import run_dc_suite
 
 
-@pytest.mark.data.integrity.raw
+@pytest.mark.data_integrity_raw
 def test_raw_data_integrity() -> None:
     """Runs the Deepchecks test suite against the raw data.
 
@@ -66,14 +66,14 @@ def test_raw_data_integrity() -> None:
     suite = Suite(
         DATA_INTEGRITY_TESTS_RAW_DATA_SUITE_NAME,
         PercentOfNulls().add_condition_percent_of_nulls_not_greater_than(
-            threshold=tests_config.data.raw.integrity.percent_of_nulls.threshold,
+            threshold=tests_config.data.integrity.raw.nulls_perc.max,
         ),
         FeatureLabelCorrelation().add_condition_feature_pps_less_than(
-            threshold=tests_config.data.raw.integrity.feature_label_correlation.threshold,
+            threshold=tests_config.data.integrity.raw.feat_label_corr.max,
         ),
         FeatureFeatureCorrelation().add_condition_max_number_of_pairs_above_threshold(
-            threshold=tests_config.data.raw.integrity.feature_feature_correlation.threshold,
-            n_pairs=tests_config.data.raw.integrity.feature_feature_correlation.num_pairs,
+            threshold=tests_config.data.integrity.raw.feat_feat_corr.max,
+            n_pairs=tests_config.data.integrity.raw.feat_feat_corr.max_exceeding_pairs,
         ),
         IsSingleValue().add_condition_not_single_value(),
     )

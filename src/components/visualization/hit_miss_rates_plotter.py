@@ -38,7 +38,7 @@ from components.const import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import (
+from src.const import (
     SIMULATIONS_METRICS_POLICY_NAME,
     SIMULATIONS_METRICS_TIMELINE_NAME,
 )

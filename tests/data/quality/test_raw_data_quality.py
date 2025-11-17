@@ -20,7 +20,8 @@ Functions:
 
 import pytest
 
-from const import (
+from pipeline.config.configurator import prepare_pipeline_config
+from src.const import (
     DATA_DYNAMIC_MODE,
     DATA_STATIC_MODE,
     DATASET_COLUMN_REQUEST_NAME,
@@ -29,7 +30,6 @@ from const import (
     TIME_END_HOUR,
     TIME_START_HOUR,
 )
-from pipeline.config.configurator import prepare_pipeline_config
 from tests.const import (
     DATA_QUALITY_TESTS_RAW_DYNAMIC_DATA_RESULTS_SAVE_PATH,
     DATA_QUALITY_TESTS_RAW_REAL_DATA_RESULTS_SAVE_PATH,
@@ -50,7 +50,7 @@ from tests.data.quality.helpers import (
 )
 
 
-@pytest.mark.data.quality.raw
+@pytest.mark.data_quality_raw
 def test_raw_data_quality() -> None:
     """Tests the quality and schema of the raw data.
 

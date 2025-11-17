@@ -37,12 +37,6 @@ from components.validation.search_space.combinator import (
     get_parameters_combination,
 )
 from components.yaml.io.saver import save_yaml
-from const import (
-    DATASET_TRAINING_SPLIT_TYPE,
-    LOGS_LOGGER_NAME,
-    LOGS_PHASE_VALIDATION,
-    MLFLOW_NESTED,
-)
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     DAGS_HUB_DVC,
@@ -50,6 +44,12 @@ from pipeline.const import (
     DAGS_HUB_REPO_OWNER,
     DATASET_PROCESSED_TYPE,
     PIPELINE_CONFIG_FILE_PATH,
+)
+from src.const import (
+    DATASET_TRAINING_SPLIT_TYPE,
+    LOGS_LOGGER_NAME,
+    LOGS_PHASE_VALIDATION,
+    MLFLOW_NESTED,
 )
 
 
@@ -89,9 +89,9 @@ def validate_model() -> None:
 
         # Prepare configuration
         validation_batch_size = (
-            pipeline_config.data_loader.batch_size.validation
+            pipeline_config.data_loader.validation.batch_size
         )
-        validation_shuffle = pipeline_config.data_loader.shuffle.validation
+        validation_shuffle = pipeline_config.data_loader.validation.shuffle
         seed = pipeline_config.seed.value
 
         # Ensure reproducibility

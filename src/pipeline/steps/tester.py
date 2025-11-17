@@ -30,11 +30,6 @@ from components.model.best.initializer import (
     initialize_best_model,
 )
 from components.seed.setter import set_seed
-from const import (
-    DATASET_TESTING_SPLIT_TYPE,
-    LOGS_LOGGER_NAME,
-    MLFLOW_NESTED,
-)
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     DAGS_HUB_DVC,
@@ -43,6 +38,11 @@ from pipeline.const import (
     DATASET_PROCESSED_TYPE,
     LOGS_PHASE_TESTING,
     MODEL_COMPUTE_METRICS_TESTING,
+)
+from src.const import (
+    DATASET_TESTING_SPLIT_TYPE,
+    LOGS_LOGGER_NAME,
+    MLFLOW_NESTED,
 )
 
 
@@ -77,8 +77,8 @@ def test_model() -> None:
 
         # Prepare configuration
         data_mode = pipeline_config.data.general.mode
-        testing_batch_size = pipeline_config.data_loader.batch_size.testing
-        testing_shuffle = pipeline_config.data_loader.shuffle.testing
+        testing_batch_size = pipeline_config.data_loader.testing.batch_size
+        testing_shuffle = pipeline_config.data_loader.testing.shuffle
         testing_device = pipeline_config.resources.devices.testing
         qengine = pipeline_config.model.optimizations.quantization.engine
         num_workers = max(

@@ -22,7 +22,7 @@ from torch.utils.data import DataLoader, Dataset, Sampler
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import DATA_LOADER_SHUFFLE_DEFAULT
+from src.const import DATA_LOADER_SHUFFLE_DEFAULT
 
 
 def build_data_loader(

@@ -30,19 +30,19 @@ Functions:
     ]
         Pytest fixture that provides the initialized environment for
         training tests.
-    test_model_training_portability(model_training_tests_setup) -> None
+    test_model_training_portability(model_training_tests_setup: tuple) -> None
         Tests if the model training process runs successfully on
         different supported hardware devices.
-    test_model_training_end_to_end(model_training_tests_setup) -> None
+    test_model_training_end_to_end(model_training_tests_setup: tuple) -> None
         Tests the complete training pipeline execution and verifies
         the creation of the final model artifact.
-    test_model_training_learnability(model_training_tests_setup) -> None
+    test_model_training_learnability(model_training_tests_setup: tuple) -> None
         Tests if the model can learn and reduce loss effectively
         when trained on a single batch of data.
-    test_model_training_optimization_stability(model_training_tests_setup) -> None
+    test_model_training_optimization_stability(model_training_tests_setup: tuple) -> None
         Tests the stability of the optimization process by asserting
         that the average loss decreases over subsequent training epochs.
-    test_model_training_output_integrity(model_training_tests_setup) -> None
+    test_model_training_output_integrity(model_training_tests_setup: tuple) -> None
         Tests if the model's output tensor has the correct shape
         corresponding to the batch size and number of classes.
 """
@@ -71,16 +71,16 @@ from components.model.environment.initializer import (
 from components.model.io.locator import get_model_abs_path
 from components.optimizer.builder import build_optimizer
 from components.training.core.single_epoch_trainer import train_single_epoch
-from const import (
+from pipeline.config.configurator import prepare_pipeline_config
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
+from pipeline.const import DATASET_PROCESSED_TYPE
+from pipeline.steps.trainer import train_model
+from src.const import (
     DATASET_TRAINING_SPLIT_TYPE,
     RESOURCES_DEVICE_CPU_NAME,
     RESOURCES_DEVICE_CUDA_NAME,
     RESOURCES_DEVICE_NAMES,
 )
-from pipeline.config.configurator import prepare_pipeline_config
-from pipeline.config.pydantic.pipeline_config import PipelineConfig
-from pipeline.const import DATASET_PROCESSED_TYPE
-from pipeline.steps.trainer import train_model
 from tests.config.configurator import prepare_tests_config
 from tests.config.pydantic.tests_config import TestsConfig
 from tests.const import (
@@ -127,28 +127,21 @@ def initialize_model_training_tests() -> tuple[
     pipeline_config = prepare_pipeline_config()
     tests_config = prepare_tests_config()
     training_device = pipeline_config.resources.devices.training
-    training_batch_size = pipeline_config.data_loader.batch_size.training
-    training_shuffle = pipeline_config.data_loader.shuffle.training
+    training_batch_size = pipeline_config.data_loader.training.batch_size
+    training_shuffle = pipeline_config.data_loader.training.shuffle
     optimizer_type = pipeline_config.optimizer.type
     learning_rate = pipeline_config.optimizer.params.learning_rate
     weight_decay = pipeline_config.optimizer.params.weight_decay
     model_params = pipeline_config.model.params
 
     # Build training set
-    training_set, _ = initialize_data_loader(
+    _, training_loader = initialize_data_loader(
         DATASET_PROCESSED_TYPE,
         DATASET_TRAINING_SPLIT_TYPE,
         training_batch_size,
         training_shuffle,
         AccessLogsDataset,
         pipeline_config,
-    )
-
-    # Create a data loader for training set
-    training_loader = build_data_loader(
-        training_set,
-        training_batch_size,
-        training_shuffle,
     )
 
     # Extract targets from training loader
@@ -218,7 +211,7 @@ def model_training_tests_setup() -> tuple[
     return initialize_model_training_tests()
 
 
-@pytest.mark.model.training.portability
+@pytest.mark.model_training_portability
 def test_model_training_portability(model_training_tests_setup: tuple) -> None:
     """Tests if the model training process runs successfully on
     different supported hardware devices.
@@ -284,7 +277,7 @@ def test_model_training_portability(model_training_tests_setup: tuple) -> None:
 
 
 @pytest.mark.slow
-@pytest.mark.model.training.end_to_end
+@pytest.mark.model_training_end_to_end
 def test_model_training_end_to_end(model_training_tests_setup: tuple) -> None:
     """Tests the complete end-to-end model training pipeline execution.
 
@@ -320,7 +313,7 @@ def test_model_training_end_to_end(model_training_tests_setup: tuple) -> None:
         assert os.path.exists(model_path)
 
 
-@pytest.mark.model.training.learnability
+@pytest.mark.model_training_learnability
 def test_model_training_learnability(
     model_training_tests_setup: tuple,
 ) -> None:
@@ -374,13 +367,13 @@ def test_model_training_learnability(
     # Assert the average loss on training batches
     # is approximately equal to the expected one
     assert avg_loss == pytest.approx(
-        tests_config.model.training.learnability.target_avg_loss,
-        abs=tests_config.model.training.learnability.avg_loss_tolerance,
+        tests_config.model.training.learnability.loss.target_avg,
+        abs=tests_config.model.training.learnability.loss.tol,
     )
 
 
 @pytest.mark.slow
-@pytest.mark.model.training.optimization_stability
+@pytest.mark.model_training_optimization_stability
 def test_model_training_optimization_stability(
     model_training_tests_setup: tuple,
 ) -> None:
@@ -427,7 +420,7 @@ def test_model_training_optimization_stability(
         assert avg_loss < previous_loss
 
 
-@pytest.mark.model.training.output_integrity
+@pytest.mark.model_training_output_integrity
 def test_model_training_output_integrity(
     model_training_tests_setup: tuple,
 ) -> None:

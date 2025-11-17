@@ -25,7 +25,7 @@ from components.const import (
 )
 from components.logs.levels.error_logger import error
 from components.math.percentage_calculator import calculate_percentage
-from const import (
+from src.const import (
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
 )

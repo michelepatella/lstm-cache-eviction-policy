@@ -1,6 +1,6 @@
 data:
   general:
-    requests: 400000
+    requests: 200000
     keys:
       min: 1
       max: 200
@@ -72,14 +72,15 @@ dataset:
     training: 0.8
     validation: 0.2
 data_loader:
-  batch_size:
-    training: 128
-    validation: 128
-    testing: 128
-  shuffle:
-    training: true
-    validation: false
-    testing: false
+  training:
+    batch_size: 128
+    shuffle: true
+  validation:
+    batch_size: 128
+    shuffle: false
+  testing:
+    batch_size: 128
+    shuffle: false
 early_stopping:
   training:
     patience: 10
