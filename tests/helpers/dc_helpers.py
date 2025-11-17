@@ -338,13 +338,13 @@ def compute_dc_model_predictions(
     train_outputs = torch.cat(train_outputs, dim=TENSOR_BATCH_DIM)
     test_outputs = torch.cat(test_outputs, dim=TENSOR_BATCH_DIM)
     y_proba_train = (
-        torch.nn.functional.softmax(train_outputs, dim=TENSOR_CLASS_DIM)
+        torch.softmax(train_outputs, dim=TENSOR_CLASS_DIM)
         .detach()
         .cpu()
         .numpy()
     )
     y_proba_test = (
-        torch.nn.functional.softmax(test_outputs, dim=TENSOR_CLASS_DIM)
+        torch.softmax(test_outputs, dim=TENSOR_CLASS_DIM)
         .detach()
         .cpu()
         .numpy()
