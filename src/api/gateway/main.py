@@ -28,7 +28,7 @@ from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.yaml.io.loader import load_yaml
-from const import LOGS_LOGGER_NAME
+from src.const import LOGS_LOGGER_NAME
 
 app = FastAPI()
 

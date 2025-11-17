@@ -37,11 +37,6 @@ from components.logs.levels.info_logger import info
 from components.ray.initializer import initialize_ray
 from components.ray.tasks.features.builder import build_features_task
 from components.seed.setter import set_seed
-from const import (
-    DATASET_RAW_TYPE,
-    LOGS_LOGGER_NAME,
-    MLFLOW_NESTED,
-)
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     DAGS_HUB_DVC,
@@ -50,6 +45,11 @@ from pipeline.const import (
     DATASET_PROCESSED_TYPE,
     DATASET_RESET_INDEX_DROP,
     LOGS_PHASE_DATA_PREPROCESSING,
+)
+from src.const import (
+    DATASET_RAW_TYPE,
+    LOGS_LOGGER_NAME,
+    MLFLOW_NESTED,
 )
 
 

@@ -46,11 +46,6 @@ from components.model.optimizations.quantizer import quantize_model
 from components.optimizer.builder import build_optimizer
 from components.seed.setter import set_seed
 from components.training.core.epochs_trainer import train_epochs
-from const import (
-    DATASET_TRAINING_SPLIT_TYPE,
-    LOGS_LOGGER_NAME,
-    MLFLOW_NESTED,
-)
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     DAGS_HUB_DVC,
@@ -59,6 +54,11 @@ from pipeline.const import (
     DATASET_PROCESSED_TYPE,
     LOGS_PHASE_TRAINING,
     MLFLOW_ARTIFACT_PATH,
+)
+from src.const import (
+    DATASET_TRAINING_SPLIT_TYPE,
+    LOGS_LOGGER_NAME,
+    MLFLOW_NESTED,
 )
 
 
@@ -96,13 +96,13 @@ def train_model() -> None:
         data_mode = pipeline_config.data.general.mode
         min_key = pipeline_config.data.general.keys.min
         max_key = pipeline_config.data.general.keys.max
-        training_batch_size = pipeline_config.data_loader.batch_size.training
-        training_shuffle = pipeline_config.data_loader.shuffle.training
+        training_batch_size = pipeline_config.data_loader.training.batch_size
+        training_shuffle = pipeline_config.data_loader.training.shuffle
         training_device = pipeline_config.resources.devices.training
         validation_batch_size = (
-            pipeline_config.data_loader.batch_size.validation
+            pipeline_config.data_loader.validation.batch_size
         )
-        validation_shuffle = pipeline_config.data_loader.shuffle.validation
+        validation_shuffle = pipeline_config.data_loader.validation.shuffle
         validation_split = pipeline_config.dataset.splits.validation
         model_params = pipeline_config.model.params
         embedding_dim = pipeline_config.model.sequence.embedding.dimension

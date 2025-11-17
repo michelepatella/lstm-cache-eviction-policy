@@ -15,7 +15,7 @@ from typing import Literal
 import torch
 from dotenv import load_dotenv
 
-from const import DATASET_COLUMN_REQUEST_NAME
+from src.const import DATASET_COLUMN_REQUEST_NAME
 
 load_dotenv()
 

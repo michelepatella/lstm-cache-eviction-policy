@@ -31,8 +31,8 @@ from components.model.best.checks_updates.params_checker_updater import (
 from components.ray.tasks.time_series_cv.folds_runner import (
     compute_time_series_cv_folds_task,
 )
-from const import LOGS_PHASE_VALIDATION, MLFLOW_NESTED
 from pipeline.config.pydantic.pipeline_config import PipelineConfig
+from src.const import LOGS_PHASE_VALIDATION, MLFLOW_NESTED
 
 
 def compute_grid_search(

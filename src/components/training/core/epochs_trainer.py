@@ -79,12 +79,12 @@ from components.model.best.checks_updates.checker_updater import (
 from components.network.free_port_finder import find_free_port
 from components.training.callbacks.early_stopping import EarlyStopping
 from components.training.core.single_epoch_trainer import train_single_epoch
-from const import (
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
+from src.const import (
     LOGS_PHASE_VALIDATION,
     RESOURCES_DEVICE_CUDA_NAME,
     RESOURCES_DEVICE_MPS_NAME,
 )
-from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def _train_epochs_worker(
@@ -159,8 +159,8 @@ def _train_epochs_worker(
 
         # Prepare configuration
         device_type = device.type
-        training_shuffle = pipeline_config.data_loader.shuffle.training
-        training_batch_size = pipeline_config.data_loader.batch_size.training
+        training_shuffle = pipeline_config.data_loader.training.shuffle
+        training_batch_size = pipeline_config.data_loader.training.batch_size
 
         # Configuration for distributing training
         dist.init_process_group(

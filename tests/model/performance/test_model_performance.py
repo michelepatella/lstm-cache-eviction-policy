@@ -20,7 +20,7 @@ from deepchecks.tabular.checks import (
     TrainTestPerformance,
 )
 
-from const import (
+from src.const import (
     DATA_DYNAMIC_MODE,
     DATA_STATIC_MODE,
 )
@@ -39,7 +39,7 @@ from tests.helpers.dc_helpers import (
 )
 
 
-@pytest.mark.model.performance
+@pytest.mark.model_performance
 def test_model_performance() -> None:
     """Runs the Deepchecks test suite against the trained model.
 
@@ -79,23 +79,23 @@ def test_model_performance() -> None:
     suite = Suite(
         MODEL_PERFORMANCE_TESTS_SUITE_NAME,
         SimpleModelComparison(
-            strategy=tests_config.model.performance.simple_model_comparison.strategy,
-            scorers=tests_config.model.performance.simple_model_comparison.scorers,
+            strategy=tests_config.model.performance.baseline_comp.strategy,
+            scorers=tests_config.model.performance.baseline_comp.scorers,
         ).add_condition_gain_greater_than(
-            min_allowed_gain=tests_config.model.performance.simple_model_comparison.min_allowed_gain,
+            min_allowed_gain=tests_config.model.performance.baseline_comp.min_gain,
         ),
         TrainTestPerformance(
-            scorers=tests_config.model.performance.train_test_performance.scorers,
+            scorers=tests_config.model.performance.train_test.scorers,
         ).add_condition_test_performance_greater_than(
-            min_score=tests_config.model.performance.train_test_performance.test_min_score,
+            min_score=tests_config.model.performance.train_test.test_min_score,
         ),
         TrainTestPerformance(
-            scorers=tests_config.model.performance.train_test_performance.scorers,
+            scorers=tests_config.model.performance.train_test.scorers,
         ).add_condition_train_test_relative_degradation_less_than(
-            threshold=tests_config.model.performance.train_test_performance.degradation_threshold,
+            threshold=tests_config.model.performance.train_test.max_degradation,
         ),
         ConfusionMatrixReport().add_condition_misclassified_samples_lower_than_condition(
-            misclassified_samples_threshold=tests_config.model.performance.confusion_matrix_report.misclassified_samples_threshold,
+            misclassified_samples_threshold=tests_config.model.performance.conf_matrix.max_misclass,
         ),
     )
 

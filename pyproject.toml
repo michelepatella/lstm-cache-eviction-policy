@@ -11,3 +11,24 @@ extend-select = ["D"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.pytest.ini_options]
+python_files = ["test_*.py"]
+markers = [
+    "data_integrity_raw: Data Raw Integrity Tests with DeepChecks",
+    "data_integrity_processed: Data Processed Integrity Tests with DeepChecks",
+    "data_quality_raw: Data Raw Quality Tests with Great Expectations",
+    "data_quality_processed: Data Processed Quality Tests with Great Expectations",
+    "data_train_test_validation: Data Train-Test-Validation Tests with DeepChecks",
+    "model_inference: Model Inference Tests",
+    "model_inference_avg_latency: Model Inference Avg Latency Test",
+    "model_inference_throughput: Model Inference Throughput Test",
+    "model_performance: Model Performance Tests with DeepChecks",
+    "model_training: Model Training Tests",
+    "model_training_end_to_end: Model Training End-To-End Test",
+    "model_training_learnability: Model Training Learnability Test",
+    "model_training_optimization_stability: Model Training Optimization Stability Test",
+    "model_training_output_integrity: Model Training Output Integrity Test",
+    "model_training_portability: Model Training Portability Test",
+    "slow: Slow Tests"
+]

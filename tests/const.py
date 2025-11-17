@@ -8,7 +8,10 @@ used during testing.
 
 from pathlib import Path
 
-from const import DATASET_COLUMN_REQUEST_NAME, DATASET_COLUMN_TIMESTAMP_NAME
+from src.const import (
+    DATASET_COLUMN_REQUEST_NAME,
+    DATASET_COLUMN_TIMESTAMP_NAME,
+)
 
 PROJECT_ROOT = Path(__file__).parent.parent
 

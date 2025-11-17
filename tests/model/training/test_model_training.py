@@ -24,7 +24,7 @@ from tests.model.training.helpers import (
 )
 
 
-@pytest.mark.model.training
+@pytest.mark.model_training
 def test_model_training() -> None:
     """Runs a suite of tests to validate the model training process.
 
