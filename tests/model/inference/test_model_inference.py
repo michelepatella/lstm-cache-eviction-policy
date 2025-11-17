@@ -14,8 +14,8 @@ Functions:
 
 import pytest
 
+from tests.model.helpers import initialize_inference_environment
 from tests.model.inference.helpers import (
-    initialize_model_inference_tests,
     model_testing_tests_setup,  # noqa
     test_model_inference_avg_latency,
     test_model_inference_throughput,
@@ -40,7 +40,7 @@ def test_model_inference() -> None:
     # Setup
     # ----------------------------
     (testing_loader, model, device, tests_config) = (
-        initialize_model_inference_tests()
+        initialize_inference_environment()
     )
 
     # ----------------------------

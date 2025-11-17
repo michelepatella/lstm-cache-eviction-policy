@@ -57,6 +57,7 @@ from torch.nn import Module
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader, Subset
 
+from components.backpropagation.core.forward_runner import compute_forward
 from components.data_loader.builder import build_data_loader
 from components.data_loader.initializer import initialize_data_loader
 from components.data_loader.targets.extractor import (
@@ -438,7 +439,7 @@ def test_model_training_output_integrity(
         AssertionError: If the output shape does not match the expected dimensions.
     """
     # Setup
-    (training_loader, model, *_, pipeline_config, _) = (
+    (training_loader, model, device, *_, pipeline_config, _) = (
         model_training_tests_setup
     )
     num_classes = (
@@ -453,7 +454,7 @@ def test_model_training_output_integrity(
 
     # Calculate the outputs for the
     # current batch inputs
-    outputs = model(x_features, x_keys)
+    _, outputs = compute_forward(batch, model, device)
 
     # Assert the model outputs have the expected shapes
     assert outputs.shape == torch.Size([len(x_features), num_classes])
