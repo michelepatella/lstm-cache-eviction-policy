@@ -50,13 +50,13 @@ def test_model_inference() -> None:
     # inference (i.e., whether it is below
     # a predefined value)
     test_model_inference_avg_latency(
-        (testing_loader, model, device, tests_config),
+        (testing_loader, model, device, _, tests_config),
     )
 
     # Test the model throughput (i.e.,
     # whether it is above a predefined value)
     test_model_inference_throughput(
-        (testing_loader, model, device, tests_config),
+        (testing_loader, model, device, _, tests_config),
     )
 
 

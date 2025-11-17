@@ -20,6 +20,19 @@ from tests.model.helpers import initialize_inference_environment
 
 
 def test_model_invariance() -> None:
+    """Runs the behavioral invariance test suite on the trained model.
+
+    This function sets up the inference environment and executes specific checks
+    to ensure the model's predictions remain stable when faced with minor
+    perturbations applied to its input features.
+    The check performed is:
+        - Feature Perturbations: Asserts that prediction outcomes are invariant
+          (or change negligibly) after applying small, irrelevant modifications
+          to the feature values.
+
+    Returns:
+        None
+    """
     # ----------------------------
     # Setup
     # ----------------------------
