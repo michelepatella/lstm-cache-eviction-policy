@@ -72,6 +72,7 @@ def model_invariance_tests_setup() -> tuple[
     return initialize_inference_environment()
 
 
+@pytest.mark.model_behavioral_invariance_feature_perturbations
 def test_model_invariance_feature_perturbations(
     model_invariance_tests_setup: tuple,
 ):
@@ -123,7 +124,7 @@ def test_model_invariance_feature_perturbations(
             # current feature for all the sequence requests
             x_features_perturbed = x_features.clone()
             x_features_perturbed[:, timestep, features_idx] += (
-                tests_config.model.behavioral.invariance.feat_perturbation
+                tests_config.model.behavioral.invariance.feat_perturbations.level
             )
 
             # Calculate model probabilities over
@@ -145,8 +146,12 @@ def test_model_invariance_feature_perturbations(
             abs_diff = np.abs(original_probs - perturbed_probs)
             rel_diff = abs_diff / original_probs
             assert np.all(
-                (abs_diff < tests_config.model.behavioral.invariance.abs_tol)
+                (
+                    abs_diff
+                    < tests_config.model.behavioral.invariance.feat_perturbations.abs_tol
+                )
                 | (
-                    rel_diff < tests_config.model.behavioral.invariance.rel_tol
+                    rel_diff
+                    < tests_config.model.behavioral.invariance.feat_perturbations.rel_tol
                 ),
             )

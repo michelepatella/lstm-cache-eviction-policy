@@ -23,12 +23,57 @@ Classes:
     ModelTrainingLearnabilityTestsConfig (BaseModel): Configuration for model training
                                                       learnability check.
     ModelTrainingTestsConfig(BaseModel): Configuration for the model training tests.
+    ModelBehavioralInvarianceFeatPerturbationsTestsConfig(BaseModel): Configuration for
+                                                                    feature perturbation
+                                                                    parameters.
+    ModelBehavioralInvarianceTestsConfig(BaseModel): Configuration for the model invariance
+                                                     tests.
+    ModelBehavioralTestsConfig(BaseModel): Configuration for all model behavioral tests.
     ModelTestsConfig(BaseModel): Root configuration for all model-related tests.
 """
 
 from typing import Annotated
 
 from pydantic import BaseModel, Field
+
+
+class ModelBehavioralInvarianceFeatPerturbationsTestsConfig(BaseModel):
+    """Configuration model for the parameters of the feature perturbation check.
+
+    Attributes:
+        level (float): The magnitude of the small perturbation applied to features
+                       (>= 0.0).
+        abs_tol (float): The maximum allowed absolute difference in prediction
+                         probabilities (>= 0.0).
+        rel_tol (float): The maximum allowed relative difference in prediction
+                         probabilities (>= 0.0).
+    """
+
+    level: Annotated[float, Field(ge=0.0)]
+    abs_tol: Annotated[float, Field(ge=0.0)]
+    rel_tol: Annotated[float, Field(ge=0.0)]
+
+
+class ModelBehavioralInvarianceTestsConfig(BaseModel):
+    """Configuration model for the overall invariance checks.
+
+    Attributes:
+        feat_perturbation (ModelBehavioralInvarianceFeatPerturbationsTestsConfig):
+            Configuration detailing the perturbation magnitude and required tolerances.
+    """
+
+    feat_perturbation: ModelBehavioralInvarianceFeatPerturbationsTestsConfig
+
+
+class ModelBehavioralTestsConfig(BaseModel):
+    """Configuration model for all model behavioral tests.
+
+    Attributes:
+        invariance (ModelBehavioralInvarianceTestsConfig): Configuration for
+                                                           invariance tests.
+    """
+
+    invariance: ModelBehavioralInvarianceTestsConfig
 
 
 class ModelPerformanceBaselineCompTestsConfig(BaseModel):
@@ -168,6 +213,8 @@ class ModelTestsConfig(BaseModel):
     """Root configuration model for all model tests.
 
     Attributes:
+        behavioral (ModelBehavioralTestsConfig): Configuration for model behavioral
+                                                 tests.
         inference (ModelInferenceTestsConfig): Configuration for model inference tests
                                                (latency, throughput).
         performance (ModelPerformanceTestsConfig): Configuration for model performance
@@ -176,6 +223,7 @@ class ModelTestsConfig(BaseModel):
                                              (learnability).
     """
 
+    behavioral: ModelBehavioralTestsConfig
     inference: ModelInferenceTestsConfig
     performance: ModelPerformanceTestsConfig
     training: ModelTrainingTestsConfig

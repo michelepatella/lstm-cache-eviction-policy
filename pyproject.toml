@@ -20,6 +20,8 @@ markers = [
     "data_quality_raw: Data Raw Quality Tests with Great Expectations",
     "data_quality_processed: Data Processed Quality Tests with Great Expectations",
     "data_train_test_validation: Data Train-Test-Validation Tests with DeepChecks",
+    "model_behavioral_invariance: Model Behavioral Invariance Tests",
+    "model_behavioral_invariance_feature_perturbations: Model Behavioral Invariance Feature Perturbations Tests",
     "model_inference: Model Inference Tests",
     "model_inference_avg_latency: Model Inference Avg Latency Test",
     "model_inference_throughput: Model Inference Throughput Test",

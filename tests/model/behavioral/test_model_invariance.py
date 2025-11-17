@@ -12,6 +12,8 @@ Functions:
         Runs checks to validate the model's behavioral invariance.
 """
 
+import pytest
+
 from tests.model.behavioral.helpers import (
     model_invariance_tests_setup,  # noqa
     test_model_invariance_feature_perturbations,
@@ -19,6 +21,7 @@ from tests.model.behavioral.helpers import (
 from tests.model.helpers import initialize_inference_environment
 
 
+@pytest.mark.model_behavioral_invariance
 def test_model_invariance() -> None:
     """Runs the behavioral invariance test suite on the trained model.
 
