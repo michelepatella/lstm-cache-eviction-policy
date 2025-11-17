@@ -27,6 +27,7 @@ from torch.nn import Module
 from torch.utils.data import DataLoader
 
 from components.math.avg_calculator import calculate_average
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 from tests.config.pydantic.tests_config import TestsConfig
 from tests.model.helpers import initialize_inference_environment
 
@@ -36,6 +37,7 @@ def model_testing_tests_setup() -> tuple[
     DataLoader,
     Module,
     device,
+    PipelineConfig,
     TestsConfig,
 ]:
     """Pytest fixture that initializes the entire environment
@@ -44,6 +46,20 @@ def model_testing_tests_setup() -> tuple[
     This fixture ensures that the setup (`initialize_inference_environment`)
     runs once per module, providing the necessary components to all inference
     test functions.
+
+    Returns:
+        tuple[
+            DataLoader,
+            Module,
+            device,
+            PipelineConfig,
+            TestsConfig,
+        ]:
+            - testing_loader: DataLoader for the testing set.
+            - model: The loaded, best-performing model instance.
+            - device: The device selected for inference.
+            - pipeline_config: The pipeline configuration object.
+            - tests_config: The tests configuration object.
     """
     return initialize_inference_environment()
 
