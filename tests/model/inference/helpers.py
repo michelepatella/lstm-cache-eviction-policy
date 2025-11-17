@@ -83,7 +83,9 @@ def test_model_inference_avg_latency(model_testing_tests_setup: tuple) -> None:
                         value plus tolerance.
     """
     # Setup
-    (testing_loader, model, device, tests_config) = model_testing_tests_setup
+    (testing_loader, model, device, _, tests_config) = (
+        model_testing_tests_setup
+    )
 
     # Measure average latency over
     # all the batches inferred
@@ -127,7 +129,7 @@ def test_model_inference_throughput(model_testing_tests_setup: tuple) -> None:
                         required value.
     """
     # Setup
-    testing_loader, model, device, tests_config = model_testing_tests_setup
+    testing_loader, model, device, _, tests_config = model_testing_tests_setup
 
     # Infer all the batches while keeping
     # track of the number of model outputs
