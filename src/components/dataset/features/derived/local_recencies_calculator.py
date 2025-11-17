@@ -74,7 +74,7 @@ def calculate_local_recencies(requests: list[int], seq_len: int) -> np.ndarray:
             if not occurrences:
                 # Key not found in the window:
                 # assign max recency
-                recency = len(window)
+                recency = seq_len
             else:
                 # Distance from last occurrence
                 # as recency
