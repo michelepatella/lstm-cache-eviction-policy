@@ -1,20 +1,21 @@
 """local_recencies_calculator.py
 
-Module dedicated to calculating the local recency (distance from the last
-occurrence) of requested items within a rolling time window.
+Module dedicated to calculating the local recency (reverse distance from
+the last occurrence) of requested items within a rolling time window.
 
 The module processes a sequential list of requests and computes, for
 each request, how many steps have passed since the same key was last seen
 within the preceding sequence of a specified length. This calculation
 provides a measure of temporal distance and memory decay of item access
-at a specific point in the request stream.
+at a specific point in the request stream. The more a key has been recently
+requested, the higher the corresponding local recency value.
 
 Functions:
     calculate_local_recency(
         requests: list[int],
         seq_len: int
     ) -> np.ndarray
-        Calculates the distance from the last occurrence for each request.
+        Calculates the reverse distance from the last occurrence for each request.
 """
 
 import numpy as np
@@ -29,9 +30,9 @@ def calculate_local_recencies(requests: list[int], seq_len: int) -> np.ndarray:
     within a rolling window.
 
     This function, for every request, determines the number of steps elapsed
-    since the same key was last seen within the lookback window. If the key
-    is not found within the window, the maximum recency value (window size)
-    is assigned. The result is normalized by the sequence length.
+    since the same key was last seen within the lookback window. The result is
+    normalized by the sequence length and reversed according to the concept
+    of local recency.
 
     Args:
         requests (list[int]): A list of requested keys.
@@ -78,7 +79,9 @@ def calculate_local_recencies(requests: list[int], seq_len: int) -> np.ndarray:
                 # Distance from last occurrence
                 # as recency
                 recency = len(window) - 1 - occurrences[LIST_LAST_IDX]
-            recencies.append(recency / seq_len)
+
+            # Reverse and normalize
+            recencies.append(1.0 - (recency / seq_len))
 
         debug(
             "Local recency calculation completed",
