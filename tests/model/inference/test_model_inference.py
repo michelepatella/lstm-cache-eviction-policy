@@ -39,7 +39,7 @@ def test_model_inference() -> None:
     # ----------------------------
     # Setup
     # ----------------------------
-    (testing_loader, model, device, tests_config) = (
+    (testing_loader, model, device, _, tests_config) = (
         initialize_inference_environment()
     )
 
