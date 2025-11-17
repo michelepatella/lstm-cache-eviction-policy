@@ -58,11 +58,11 @@ class ModelBehavioralInvarianceTestsConfig(BaseModel):
     """Configuration model for the overall invariance checks.
 
     Attributes:
-        feat_perturbation (ModelBehavioralInvarianceFeatPerturbationsTestsConfig):
+        feat_perturbations (ModelBehavioralInvarianceFeatPerturbationsTestsConfig):
             Configuration detailing the perturbation magnitude and required tolerances.
     """
 
-    feat_perturbation: ModelBehavioralInvarianceFeatPerturbationsTestsConfig
+    feat_perturbations: ModelBehavioralInvarianceFeatPerturbationsTestsConfig
 
 
 class ModelBehavioralTestsConfig(BaseModel):

@@ -118,7 +118,7 @@ def test_model_invariance_feature_perturbations(
     # features of the sequence requests, the resulting model
     # probabilities should be similar to the original ones
     _, _, num_features = x_features.shape
-    for timestep in range(pipeline_config.model.sequence.lenght):
+    for timestep in range(pipeline_config.model.sequence.length):
         for features_idx in range(num_features):
             # Apply a small perturbation to the
             # current feature for all the sequence requests
