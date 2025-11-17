@@ -1,7 +1,3 @@
-# -------------------------------
-# Constants
-# -------------------------------
-
 ROOT_DIRECTORY := .
 SRC_DIRECTORY := src
 DOCS_OUTPUT_DIRECTORY := docs/_build/html
@@ -16,7 +12,41 @@ PYCACHE_NAME := "__pycache__"
 
 
 # -------------------------------
-# Dependencies
+# Clean
+# -------------------------------
+
+# Clean pycache
+clean_pycache:
+	find . -type d -name $(PYCACHE_NAME) -exec rm -rf {} +
+
+# Clean DVC cache
+clean_dvc_cache:
+	dvc gc -a
+
+
+# -------------------------------
+# Code
+# -------------------------------
+
+# Fix code
+code_fix:
+	ruff check $(ROOT_DIRECTORY) --fix
+
+# Format code
+code_format:
+	ruff format $(ROOT_DIRECTORY)
+
+# Lint code with Pylint
+code_lint:
+	pylint $(SRC_DIRECTORY)
+
+# Check type on code
+code_check_type:
+	mypy $(ROOT_DIRECTORY)
+
+
+# -------------------------------
+# Deps
 # -------------------------------
 
 # Install dependencies specified by requirements.txt
@@ -26,6 +56,15 @@ deps_install:
 # Update dependencies in requirements.txt
 deps_update:
 	pip freeze > $(REQUIREMENTS_PATH)
+
+
+# -------------------------------
+# Docs
+# -------------------------------
+
+# Generate documentation
+docs_generate:
+	PYTHONPATH=$(shell pwd)/$(SRC_DIRECTORY) pdoc --html $(SRC_DIRECTORY)/ --output-dir $(DOCS_OUTPUT_DIRECTORY) --force
 
 
 # -------------------------------
@@ -92,46 +131,3 @@ dvc_metrics_diff:
 # Show plots
 dvc_plots_show:
 	dvc plots show
-
-
-# -------------------------------
-# Quality Assurance
-# -------------------------------
-
-# Fix code
-code_fix:
-	ruff check $(ROOT_DIRECTORY) --fix
-
-# Format code
-code_format:
-	ruff format $(ROOT_DIRECTORY)
-
-# Lint code with Pylint
-code_lint:
-	pylint $(SRC_DIRECTORY)
-
-# Check type on code
-code_check_type:
-	mypy $(ROOT_DIRECTORY)
-
-
-# -------------------------------
-# Documentation
-# -------------------------------
-
-# Generate documentation
-docs_generate:
-	PYTHONPATH=$(shell pwd)/$(SRC_DIRECTORY) pdoc --html $(SRC_DIRECTORY)/ --output-dir $(DOCS_OUTPUT_DIRECTORY) --force
-
-
-# -------------------------------
-# Cleanup
-# -------------------------------
-
-# Clean pycache
-pycache_clean:
-	find . -type d -name $(PYCACHE_NAME) -exec rm -rf {} +
-
-# Clean DVC cache
-dvc_cache_clean:
-	dvc gc -a

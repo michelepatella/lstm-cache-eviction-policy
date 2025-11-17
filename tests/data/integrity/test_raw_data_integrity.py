@@ -11,6 +11,7 @@ Functions:
         Runs a Deepchecks Suite on the raw data based on configurations.
 """
 
+import pytest
 from deepchecks import Suite
 from deepchecks.tabular.checks import (
     FeatureFeatureCorrelation,
@@ -19,13 +20,13 @@ from deepchecks.tabular.checks import (
     PercentOfNulls,
 )
 
-from const import DATASET_RAW_TYPE, DATA_STATIC_MODE, DATA_DYNAMIC_MODE
+from const import DATA_DYNAMIC_MODE, DATA_STATIC_MODE, DATASET_RAW_TYPE
 from pipeline.config.configurator import prepare_pipeline_config
 from tests.const import (
     DATA_INTEGRITY_TESTS_RAW_DATA_SUITE_NAME,
-    DATA_INTEGRITY_TESTS_RAW_STATIC_DATA_RESULTS_SAVE_PATH,
     DATA_INTEGRITY_TESTS_RAW_DYNAMIC_DATA_RESULTS_SAVE_PATH,
     DATA_INTEGRITY_TESTS_RAW_REAL_DATA_RESULTS_SAVE_PATH,
+    DATA_INTEGRITY_TESTS_RAW_STATIC_DATA_RESULTS_SAVE_PATH,
 )
 from tests.data.integrity.helpers import (
     initialize_data_integrity_tests,
@@ -33,6 +34,7 @@ from tests.data.integrity.helpers import (
 from tests.helpers.dc_helpers import run_dc_suite
 
 
+@pytest.mark.data.integrity.raw
 def test_raw_data_integrity() -> None:
     """Runs the Deepchecks test suite against the raw data.
 
@@ -63,25 +65,17 @@ def test_raw_data_integrity() -> None:
     # ----------------------------
     suite = Suite(
         DATA_INTEGRITY_TESTS_RAW_DATA_SUITE_NAME,
-        PercentOfNulls(
-            random_state=tests_config.seed.value,
-        ).add_condition_percent_of_nulls_not_greater_than(
+        PercentOfNulls().add_condition_percent_of_nulls_not_greater_than(
             threshold=tests_config.data.raw.integrity.percent_of_nulls.threshold,
         ),
-        FeatureLabelCorrelation(
-            random_state=tests_config.seed.value,
-        ).add_condition_feature_pps_less_than(
+        FeatureLabelCorrelation().add_condition_feature_pps_less_than(
             threshold=tests_config.data.raw.integrity.feature_label_correlation.threshold,
         ),
-        FeatureFeatureCorrelation(
-            random_state=tests_config.seed.value,
-        ).add_condition_max_number_of_pairs_above_threshold(
+        FeatureFeatureCorrelation().add_condition_max_number_of_pairs_above_threshold(
             threshold=tests_config.data.raw.integrity.feature_feature_correlation.threshold,
             n_pairs=tests_config.data.raw.integrity.feature_feature_correlation.num_pairs,
         ),
-        IsSingleValue(
-            random_state=tests_config.seed.value,
-        ).add_condition_not_single_value(),
+        IsSingleValue().add_condition_not_single_value(),
     )
 
     # ----------------------------

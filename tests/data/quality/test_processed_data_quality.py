@@ -16,6 +16,35 @@ Functions:
         Executes the full suite of data quality expectations for the processed data.
 """
 
+import pytest
+
+from components.const import (
+    DATASET_COLUMN_COS_TIME_NAME,
+    DATASET_COLUMN_LOCAL_FREQUENCY_NAME,
+    DATASET_COLUMN_LOCAL_RECENCY_NAME,
+    DATASET_COLUMN_SIN_TIME_NAME,
+    DATASET_PROCESSED_COLUMNS,
+)
+from const import (
+    DATA_DYNAMIC_MODE,
+    DATA_STATIC_MODE,
+    DATASET_COLUMN_REQUEST_NAME,
+)
+from pipeline.config.configurator import prepare_pipeline_config
+from pipeline.const import DATASET_PROCESSED_TYPE
+from tests.const import (
+    DATA_QUALITY_TESTS_PROCESSED_DYNAMIC_DATA_RESULTS_SAVE_PATH,
+    DATA_QUALITY_TESTS_PROCESSED_REAL_DATA_RESULTS_SAVE_PATH,
+    DATA_QUALITY_TESTS_PROCESSED_STATIC_DATA_RESULTS_SAVE_PATH,
+    DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MAX_VALUE,
+    DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MIN_VALUE,
+    DATASET_COLUMN_LOCAL_FREQUENCY_TYPE,
+    DATASET_COLUMN_LOCAL_RECENCY_TYPE,
+    DATASET_COLUMN_REQUEST_TYPE,
+    DATASET_COLUMN_SIN_COS_TIME_MAX_VALUE,
+    DATASET_COLUMN_SIN_COS_TIME_MIN_VALUE,
+    DATASET_COLUMN_SIN_COS_TIME_TYPE,
+)
 from tests.data.quality.helpers import (
     add_column_count_expectation,
     add_column_existence_expectations,
@@ -27,35 +56,8 @@ from tests.data.quality.helpers import (
     run_data_quality_tests,
 )
 
-from components.const import (
-    DATASET_COLUMN_COS_TIME_NAME,
-    DATASET_COLUMN_LOCAL_FREQUENCY_NAME,
-    DATASET_COLUMN_LOCAL_RECENCY_NAME,
-    DATASET_COLUMN_SIN_TIME_NAME,
-    DATASET_PROCESSED_COLUMNS,
-)
-from const import (
-    DATASET_COLUMN_REQUEST_NAME,
-    DATA_STATIC_MODE,
-    DATA_DYNAMIC_MODE,
-)
-from pipeline.config.configurator import prepare_pipeline_config
-from pipeline.const import DATASET_PROCESSED_TYPE
-from tests.const import (
-    DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MAX_VALUE,
-    DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MIN_VALUE,
-    DATASET_COLUMN_LOCAL_FREQUENCY_TYPE,
-    DATASET_COLUMN_LOCAL_RECENCY_TYPE,
-    DATASET_COLUMN_REQUEST_TYPE,
-    DATASET_COLUMN_SIN_COS_TIME_MAX_VALUE,
-    DATASET_COLUMN_SIN_COS_TIME_MIN_VALUE,
-    DATASET_COLUMN_SIN_COS_TIME_TYPE,
-    DATA_QUALITY_TESTS_PROCESSED_STATIC_DATA_RESULTS_SAVE_PATH,
-    DATA_QUALITY_TESTS_PROCESSED_DYNAMIC_DATA_RESULTS_SAVE_PATH,
-    DATA_QUALITY_TESTS_PROCESSED_REAL_DATA_RESULTS_SAVE_PATH,
-)
 
-
+@pytest.mark.data.quality.processed
 def test_processed_data_quality() -> None:
     """Tests the quality and schema of the processed data.
 
