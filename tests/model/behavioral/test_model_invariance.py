@@ -1,11 +1,11 @@
 """test_model_invariance.py
 
 Module containing the test function for verifying the behavioral invariance
-of the trained model against small, irrelevant perturbations in its input features.
+of the trained model.
 
-This test ensures that minor, non-critical changes to input data (feature
-perturbations) do not lead to significant or unexpected changes in the model's
-predictions, thereby validating the model's robustness and stability.
+This test ensures that minor, non-critical changes to input data do not lead
+to significant or unexpected changes in the model's predictions, thereby
+validating the model's robustness and stability.
 
 Functions:
     test_model_invariance() -> None
@@ -24,7 +24,7 @@ def test_model_invariance() -> None:
 
     This function sets up the inference environment and executes specific checks
     to ensure the model's predictions remain stable when faced with minor
-    perturbations applied to its input features.
+    perturbations applied to its input.
     The check performed is:
         - Feature Perturbations: Asserts that prediction outcomes are invariant
           (or change negligibly) after applying small, irrelevant modifications
