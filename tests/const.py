@@ -286,6 +286,13 @@ MODEL_PERFORMANCE_TESTS_REMOVE_SEQ_LEN = True
 
 
 # -----------------------------------
+# Model Training Tests
+# -----------------------------------
+MODEL_TRAINING_TESTS_SUCCESSFUL_TRAINING = True
+MODEL_TRAINING_TESTS_NOT_SUCCESSFUL_TRAINING = False
+
+
+# -----------------------------------
 # Tests Config
 # -----------------------------------
 TESTS_CONFIG_FILE_PATH = (
