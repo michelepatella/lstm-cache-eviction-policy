@@ -1,10 +1,10 @@
 data:
   general:
-    requests: 200000
+    requests: 800000
     keys:
       min: 1
       max: 200
-    mode: real
+    mode: static
   synthetic:
     patterns:
       access:
