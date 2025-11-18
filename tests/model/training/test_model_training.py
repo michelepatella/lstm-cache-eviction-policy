@@ -13,6 +13,7 @@ Functions:
 
 import pytest
 
+from const import RESOURCES_DEVICE_NAMES
 from tests.model.training.helpers import (
     initialize_model_training_tests,
     model_training_tests_setup,  # noqa
@@ -62,17 +63,19 @@ def test_model_training() -> None:
     # Test model training portability
     # (i.e., training works well on different
     # devices)
-    test_model_training_portability(
-        (
-            training_loader,
-            model,
-            device,
-            criterion,
-            optimizer,
-            pipeline_config,
-            tests_config,
-        ),
-    )
+    for device_type in RESOURCES_DEVICE_NAMES:
+        test_model_training_portability(
+            device_type,
+            (
+                training_loader,
+                model,
+                device,
+                criterion,
+                optimizer,
+                pipeline_config,
+                tests_config,
+            ),
+        )
 
     # Test model training end-to-end
     # (i.e., the training process produces the

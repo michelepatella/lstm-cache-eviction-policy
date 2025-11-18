@@ -267,6 +267,12 @@ MODEL_BEHAVIORAL_DIRECTIONAL_TESTS_LOCAL_FEATURE_PERTURBATIONS_PARAM_FEATURE_NAM
 
 
 # -----------------------------------
+# Model Behavioral Invariance Tests
+# -----------------------------------
+MODEL_BEHAVIORAL_INVARIANCE_TESTS_FEATURE_PERTURBATIONS_PARAM_FEATURE_IDX_NAME = "feature_idx"
+
+
+# -----------------------------------
 # Model Performance Tests
 # -----------------------------------
 MODEL_PERFORMANCE_TESTS_SUITE_NAME = "Model Performance Tests"
@@ -306,8 +312,7 @@ MODEL_PERFORMANCE_TESTS_REMOVE_SEQ_LEN = True
 # -----------------------------------
 # Model Training Tests
 # -----------------------------------
-MODEL_TRAINING_TESTS_SUCCESSFUL_TRAINING = True
-MODEL_TRAINING_TESTS_NOT_SUCCESSFUL_TRAINING = False
+MODEL_TRAINING_TESTS_PORTABILITY_TEST_PARAM_DEVICE_TYPE_NAME = "device_type"
 
 
 # -----------------------------------
