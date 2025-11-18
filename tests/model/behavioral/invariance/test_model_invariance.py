@@ -16,7 +16,7 @@ import pytest
 
 from components.const import DATASET_PROCESSED_FEATURE_COLUMNS
 from tests.model.behavioral.invariance.helpers import (
-    test_model_invariance_feature_perturbations,
+    test_model_invariance_feature_perturbation,
 )
 from tests.model.helpers import initialize_inference_environment
 
@@ -51,7 +51,7 @@ def test_model_invariance() -> None:
     # small, irrelevant feature perturbations
     for feature in DATASET_PROCESSED_FEATURE_COLUMNS:
         feature_idx = DATASET_PROCESSED_FEATURE_COLUMNS.index(feature)
-        test_model_invariance_feature_perturbations(
+        test_model_invariance_feature_perturbation(
             feature_idx,
             (testing_loader, model, device, pipeline_config, tests_config),
         )

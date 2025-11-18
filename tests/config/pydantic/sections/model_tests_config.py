@@ -51,11 +51,13 @@ class ModelBehavioralInvarianceFeatPerturbationsTestsConfig(BaseModel):
                          probabilities (>= 0.0).
         rel_tol (float): The maximum allowed relative difference in prediction
                          probabilities (>= 0.0).
+        top_k_probs (int): Top-K probabilities for checking ranking invariance.
     """
 
     level: Annotated[float, Field(ge=0.0)]
     abs_tol: Annotated[float, Field(ge=0.0)]
     rel_tol: Annotated[float, Field(ge=0.0)]
+    top_k_probs: Annotated[int, Field(ge=1)]
 
 
 class ModelBehavioralInvarianceTestsConfig(BaseModel):

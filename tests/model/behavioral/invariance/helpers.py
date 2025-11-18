@@ -20,7 +20,7 @@ Functions:
     ]
         Pytest fixture initializing the inference environment for invariance
         tests.
-    test_model_invariance_feature_perturbations(
+    test_model_invariance_feature_perturbation(
         model_invariance_tests_setup: tuple
     ) -> None
         Tests the model's invariance against small perturbations applied to
@@ -78,12 +78,12 @@ def model_invariance_tests_setup() -> tuple[
     return initialize_inference_environment()
 
 
-@pytest.mark.model_behavioral_invariance_feature_perturbations
+@pytest.mark.model_behavioral_invariance_feature_perturbation
 @pytest.mark.parametrize(
     MODEL_BEHAVIORAL_INVARIANCE_TESTS_FEATURE_PERTURBATIONS_PARAM_FEATURE_IDX_NAME,
     range(len(DATASET_PROCESSED_FEATURE_COLUMNS)),
 )
-def test_model_invariance_feature_perturbations(
+def test_model_invariance_feature_perturbation(
     feature_idx: int,
     model_invariance_tests_setup: tuple,
 ):
@@ -165,3 +165,19 @@ def test_model_invariance_feature_perturbations(
                 < tests_config.model.behavioral.invariance.feat_perturbations.rel_tol
             ),
         )
+
+        # Assert that top-k probabilities obtained
+        # over perturbed features are the same as
+        # those obtained over original features
+        top_k_probs = tests_config.model.behavioral.invariance.feat_perturbations.top_k_probs
+        _, original_top_k_probs = torch.topk(
+            torch.from_numpy(original_probs),
+            k=top_k_probs,
+            dim=TENSOR_CLASS_DIM,
+        )
+        _, perturbed_top_k_probs = torch.topk(
+            torch.from_numpy(perturbed_probs),
+            k=top_k_probs,
+            dim=TENSOR_CLASS_DIM,
+        )
+        assert torch.equal(original_top_k_probs, perturbed_top_k_probs)
