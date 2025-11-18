@@ -14,8 +14,7 @@ Functions:
 
 import pytest
 
-from tests.model.behavioral.helpers import (
-    model_invariance_tests_setup,  # noqa
+from tests.model.behavioral.invariance.helpers import (
     test_model_invariance_feature_perturbations,
 )
 from tests.model.helpers import initialize_inference_environment
