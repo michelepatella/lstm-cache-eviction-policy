@@ -34,9 +34,10 @@ model:
   behavioral:
     invariance:
       feat_perturbations:
-        level: 0.0000001
         abs_tol: 0.0000001
+        level: 0.0000001
         rel_tol: 0.0001
+        top_k_probs: 10
     directional:
       local_feat_perturbations:
         level: 0.15
