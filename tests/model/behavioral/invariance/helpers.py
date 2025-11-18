@@ -34,9 +34,15 @@ from torch import device
 from torch.nn import Module
 from torch.utils.data import DataLoader
 
-from components.const import TENSOR_CLASS_DIM
+from components.const import (
+    DATASET_PROCESSED_FEATURE_COLUMNS,
+    TENSOR_CLASS_DIM,
+)
 from pipeline.config.pydantic.pipeline_config import PipelineConfig
 from tests.config.pydantic.tests_config import TestsConfig
+from tests.const import (
+    MODEL_BEHAVIORAL_INVARIANCE_TESTS_FEATURE_PERTURBATIONS_PARAM_FEATURE_IDX_NAME,
+)
 from tests.model.helpers import initialize_inference_environment
 
 
@@ -73,7 +79,12 @@ def model_invariance_tests_setup() -> tuple[
 
 
 @pytest.mark.model_behavioral_invariance_feature_perturbations
+@pytest.mark.parametrize(
+    MODEL_BEHAVIORAL_INVARIANCE_TESTS_FEATURE_PERTURBATIONS_PARAM_FEATURE_IDX_NAME,
+    range(len(DATASET_PROCESSED_FEATURE_COLUMNS)),
+)
 def test_model_invariance_feature_perturbations(
+    feature_idx: int,
     model_invariance_tests_setup: tuple,
 ):
     """Tests model invariance against small, irrelevant feature perturbations.
@@ -87,6 +98,7 @@ def test_model_invariance_feature_perturbations(
     the predefined tolerances for all predictions.
 
     Args:
+        feature_idx (int): The index of the feature being tested.
         model_invariance_tests_setup (tuple): Fixture containing the initialized
                                               inference environment and configurations.
 
@@ -117,41 +129,39 @@ def test_model_invariance_feature_perturbations(
     # Applying a small perturbation to all the
     # features of the sequence requests, the resulting model
     # probabilities should be similar to the original ones
-    _, _, num_features = x_features.shape
     for timestep in range(pipeline_config.model.sequence.length):
-        for features_idx in range(num_features):
-            # Apply a small perturbation to the
-            # current feature for all the sequence requests
-            x_features_perturbed = x_features.clone()
-            x_features_perturbed[:, timestep, features_idx] += (
-                tests_config.model.behavioral.invariance.feat_perturbations.level
-            )
+        # Apply a small perturbation to the
+        # current feature for all the sequence requests
+        x_features_perturbed = x_features.clone()
+        x_features_perturbed[:, timestep, feature_idx] += (
+            tests_config.model.behavioral.invariance.feat_perturbations.level
+        )
 
-            # Calculate model probabilities over
-            # perturbed features
-            perturbed_probs = (
-                torch.softmax(
-                    model(x_features_perturbed, x_keys),
-                    dim=TENSOR_CLASS_DIM,
-                )
-                .detach()
-                .cpu()
-                .numpy()
+        # Calculate model probabilities over
+        # perturbed features
+        perturbed_probs = (
+            torch.softmax(
+                model(x_features_perturbed, x_keys),
+                dim=TENSOR_CLASS_DIM,
             )
+            .detach()
+            .cpu()
+            .numpy()
+        )
 
-            # Assert that the probabilities obtained over
-            # the perturbed features are similar enough to
-            # the original ones, considering both the relative
-            # and absolute difference thereof
-            abs_diff = np.abs(original_probs - perturbed_probs)
-            rel_diff = abs_diff / original_probs
-            assert np.all(
-                (
-                    abs_diff
-                    < tests_config.model.behavioral.invariance.feat_perturbations.abs_tol
-                )
-                | (
-                    rel_diff
-                    < tests_config.model.behavioral.invariance.feat_perturbations.rel_tol
-                ),
+        # Assert that the probabilities obtained over
+        # the perturbed features are similar enough to
+        # the original ones, considering both the relative
+        # and absolute difference thereof
+        abs_diff = np.abs(original_probs - perturbed_probs)
+        rel_diff = abs_diff / original_probs
+        assert np.all(
+            (
+                abs_diff
+                < tests_config.model.behavioral.invariance.feat_perturbations.abs_tol
             )
+            | (
+                rel_diff
+                < tests_config.model.behavioral.invariance.feat_perturbations.rel_tol
+            ),
+        )

@@ -14,6 +14,7 @@ Functions:
 
 import pytest
 
+from components.const import DATASET_PROCESSED_FEATURE_COLUMNS
 from tests.model.behavioral.invariance.helpers import (
     test_model_invariance_feature_perturbations,
 )
@@ -48,6 +49,9 @@ def test_model_invariance() -> None:
     # ----------------------------
     # Tests model invariance against
     # small, irrelevant feature perturbations
-    test_model_invariance_feature_perturbations(
-        (testing_loader, model, device, pipeline_config, tests_config),
-    )
+    for feature in DATASET_PROCESSED_FEATURE_COLUMNS:
+        feature_idx = DATASET_PROCESSED_FEATURE_COLUMNS.index(feature)
+        test_model_invariance_feature_perturbations(
+            feature_idx,
+            (testing_loader, model, device, pipeline_config, tests_config),
+        )

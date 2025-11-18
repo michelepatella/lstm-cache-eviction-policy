@@ -30,7 +30,10 @@ Functions:
     ]
         Pytest fixture that provides the initialized environment for
         training tests.
-    test_model_training_portability(model_training_tests_setup: tuple) -> None
+    test_model_training_portability(
+        device_type: str,
+        model_training_tests_setup: tuple
+    ) -> None
         Tests if the model training process runs successfully on
         different supported hardware devices.
     test_model_training_end_to_end(model_training_tests_setup: tuple) -> None
@@ -85,8 +88,7 @@ from src.const import (
 from tests.config.configurator import prepare_tests_config
 from tests.config.pydantic.tests_config import TestsConfig
 from tests.const import (
-    MODEL_TRAINING_TESTS_NOT_SUCCESSFUL_TRAINING,
-    MODEL_TRAINING_TESTS_SUCCESSFUL_TRAINING,
+    MODEL_TRAINING_TESTS_PORTABILITY_TEST_PARAM_DEVICE_TYPE_NAME,
 )
 
 
@@ -213,17 +215,26 @@ def model_training_tests_setup() -> tuple[
 
 
 @pytest.mark.model_training_portability
-def test_model_training_portability(model_training_tests_setup: tuple) -> None:
+@pytest.mark.parametrize(
+    MODEL_TRAINING_TESTS_PORTABILITY_TEST_PARAM_DEVICE_TYPE_NAME,
+    RESOURCES_DEVICE_NAMES,
+)
+def test_model_training_portability(
+    device_type: str,
+    model_training_tests_setup: tuple,
+) -> None:
     """Tests if the model training process runs successfully on
     different supported hardware devices.
 
     This function iterates through all supported devices and attempts to run
     a single epoch of training after moving the model and criterion to the
-    respective device. The test passes if no exceptions are raised during this process.
+    respective device. The test passes if no exceptions are raised during
+    this process.
 
     Args:
         model_training_tests_setup (tuple): Fixture containing the initialized
                                             training environment.
+        device_type (str): Device type to test training process on.
 
     Raises:
         AssertionError: If an exception is caught during training on any device.
@@ -233,48 +244,33 @@ def test_model_training_portability(model_training_tests_setup: tuple) -> None:
         model_training_tests_setup
     )
 
-    successful_training = MODEL_TRAINING_TESTS_SUCCESSFUL_TRAINING
-    try:
-        # Check train on different devices
-        for device_name in RESOURCES_DEVICE_NAMES:
-            # Check the current device name
-            # availability before running training on,
-            # selecting it if available
-            # IMPORTANT: 'mps' is excluded as DDP is
-            # not supported for it
-            current_device = None
-            if (  # noqa
-                device_name == RESOURCES_DEVICE_CUDA_NAME
-                and torch.cuda.is_available()
-            ):
-                current_device = select_device(device_name)
-            elif (
-                device_name == RESOURCES_DEVICE_CPU_NAME
-                and torch.cpu.is_available()
-            ):
-                current_device = select_device(device_name)
+    # Check the current device name
+    # availability before running training on,
+    # selecting it if available
+    # IMPORTANT: 'mps' is excluded as DDP is
+    # not supported for it
+    if (  # noqa
+        device_type == RESOURCES_DEVICE_CUDA_NAME and torch.cuda.is_available()
+    ):
+        current_device = select_device(device_type)
+    elif device_type == RESOURCES_DEVICE_CPU_NAME and torch.cpu.is_available():
+        current_device = select_device(device_type)
+    else:
+        pytest.skip(f"{device_type} not available.")
 
-            if current_device is not None:
-                # Move everything to the selected device
-                model = move_to_device(model, current_device)
-                criterion = move_to_device(criterion, current_device)
+    # Move everything to the selected device
+    model = move_to_device(model, current_device)
+    criterion = move_to_device(criterion, current_device)
 
-                # Run training on the current device
-                # (one epoch)
-                train_single_epoch(
-                    model,
-                    training_loader,
-                    optimizer,
-                    criterion,
-                    current_device,
-                )
-    except Exception:
-        # Something went wrong, test failed
-        successful_training = MODEL_TRAINING_TESTS_NOT_SUCCESSFUL_TRAINING
-
-    # Check whether something went
-    # wrong during training process
-    assert successful_training
+    # Run training on the current device
+    # (one epoch)
+    train_single_epoch(
+        model,
+        training_loader,
+        optimizer,
+        criterion,
+        current_device,
+    )
 
 
 @pytest.mark.slow
@@ -297,21 +293,13 @@ def test_model_training_end_to_end(model_training_tests_setup: tuple) -> None:
     # Setup
     *_, pipeline_config, _ = model_training_tests_setup
 
-    successful_training = MODEL_TRAINING_TESTS_SUCCESSFUL_TRAINING
-    try:
-        # Train the model (full)
-        train_model()
-    except Exception:
-        # Something went wrong during
-        # the end-to-end training process
-        successful_training = MODEL_TRAINING_TESTS_NOT_SUCCESSFUL_TRAINING
-    finally:
-        model_path = get_model_abs_path(pipeline_config.data.general.mode)
+    # Train the model (full)
+    train_model()
 
-        # Assert the training process went well and
-        # it produced expected artifacts (trained model)
-        assert successful_training
-        assert os.path.exists(model_path)
+    # Assert the training process went well and
+    # it produced expected artifacts (trained model)
+    model_path = get_model_abs_path(pipeline_config.data.general.mode)
+    assert os.path.exists(model_path)
 
 
 @pytest.mark.model_training_learnability
