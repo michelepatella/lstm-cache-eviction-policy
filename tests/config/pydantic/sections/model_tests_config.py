@@ -28,6 +28,10 @@ Classes:
                                                                     parameters.
     ModelBehavioralInvarianceTestsConfig(BaseModel): Configuration for the model invariance
                                                      tests.
+    ModelBehavioralDirectionalLocalFeatPerturbationsTestsConfig(BaseModel):
+        Configuration for local feature perturbation parameters.
+    ModelBehavioralDirectionalTestsConfig(BaseModel): Configuration for all model directional
+                                                      behavioral tests.
     ModelBehavioralTestsConfig(BaseModel): Configuration for all model behavioral tests.
     ModelTestsConfig(BaseModel): Root configuration for all model-related tests.
 """
@@ -65,15 +69,45 @@ class ModelBehavioralInvarianceTestsConfig(BaseModel):
     feat_perturbations: ModelBehavioralInvarianceFeatPerturbationsTestsConfig
 
 
+class ModelBehavioralDirectionalLocalFeatPerturbationsTestsConfig(BaseModel):
+    """Configuration model for the parameters of the local feature
+     perturbation check.
+
+    Attributes:
+        level (float): The magnitude of the local perturbation applied to features (>= 0.0).
+        min_success_ratio (float): The minimum required ratio of successful directional
+                                   tests (in [0.0, 1.0]).
+    """
+
+    level: Annotated[float, Field(ge=0.0)]
+    min_success_ratio: Annotated[float, Field(ge=0.0, le=1.0)]
+
+
+class ModelBehavioralDirectionalTestsConfig(BaseModel):
+    """Configuration model for all model directional behavioral tests.
+
+    Attributes:
+        local_feat_perturbations (ModelBehavioralDirectionalLocalFeatPerturbationsTestsConfig):
+            Configuration detailing local feature perturbation magnitude and success ratio.
+    """
+
+    local_feat_perturbations: (
+        ModelBehavioralDirectionalLocalFeatPerturbationsTestsConfig
+    )
+
+
 class ModelBehavioralTestsConfig(BaseModel):
     """Configuration model for all model behavioral tests.
 
     Attributes:
         invariance (ModelBehavioralInvarianceTestsConfig): Configuration for
                                                            invariance tests.
+        directional (ModelBehavioralDirectionalTestsConfig): Configuration for
+                                                             directional tests.
     """
 
     invariance: ModelBehavioralInvarianceTestsConfig
+    directional: ModelBehavioralDirectionalTestsConfig
 
 
 class ModelPerformanceBaselineCompTestsConfig(BaseModel):
