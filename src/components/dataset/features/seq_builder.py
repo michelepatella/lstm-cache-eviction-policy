@@ -29,10 +29,10 @@ from components.const import (
     TORCH_DTYPE_FEATURES,
     TORCH_DTYPE_TARGET,
 )
-from components.dataset.features.derived.local_frequencies_calculator import (
+from components.dataset.features.local.local_frequencies_calculator import (
     calculate_local_frequencies,
 )
-from components.dataset.features.derived.local_recencies_calculator import (
+from components.dataset.features.local.local_recencies_calculator import (
     calculate_local_recencies,
 )
 from components.device.mover import move_to_device

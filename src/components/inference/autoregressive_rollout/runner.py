@@ -41,10 +41,10 @@ from components.const import (
     TENSOR_FEATURES_DIM,
     TORCH_DTYPE_FEATURES,
 )
-from components.dataset.features.derived.local_frequencies_calculator import (
+from components.dataset.features.local.local_frequencies_calculator import (
     calculate_local_frequencies,
 )
-from components.dataset.features.derived.local_recencies_calculator import (
+from components.dataset.features.local.local_recencies_calculator import (
     calculate_local_recencies,
 )
 from components.logs.levels.debug_logger import debug
