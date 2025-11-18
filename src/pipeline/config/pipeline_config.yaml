@@ -1,6 +1,6 @@
 data:
   general:
-    requests: 800000
+    requests: 200000
     keys:
       min: 1
       max: 200
@@ -16,13 +16,13 @@ data:
           steps: 5
         behavior:
           repetition:
-            interval: 7
-            offset: 3
+            interval: 3
+            offset: 1
             hours:
               start: 4
               end: 9
           toggle:
-            interval: 20
+            interval: 5
             hours:
               start: 9
               end: 14
@@ -35,12 +35,12 @@ data:
           cycle:
             base: 5
             mod: 2
-            divisor: 100
+            divisor: 10
             hours:
               start: 14
               end: 19
           distortion:
-            interval: 4
+            interval: 3
             hours:
               start: 19
               end: 23
@@ -51,18 +51,18 @@ data:
               min: 0
               max: 1
           memory:
-            interval: 5
-            offset: 3
+            interval: 3
+            offset: 1
       temporal:
         burstiness:
           high: 0.8
           low: 1.2
           hours:
-            start: 10
-            end: 18
+            start: 14
+            end: 17
         periodic:
-          scale: 90
-          amplitude: 50
+          scale: 20
+          amplitude: 10
 dataset:
   cleaning:
     missing_values_removal:
