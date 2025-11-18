@@ -252,6 +252,13 @@ DEEP_CHECKS_LABEL_TYPE = "multiclass"
 
 
 # -----------------------------------
+# Model Behavioral Directional Tests
+# -----------------------------------
+MODEL_BEHAVIORAL_DIRECTIONAL_TESTS_LOCAL_FEATURE_PERTURBATIONS_PARAM_DIRECTION_INCREASE_NAME = "increase"
+MODEL_BEHAVIORAL_DIRECTIONAL_TESTS_LOCAL_FEATURE_PERTURBATIONS_PARAM_DIRECTION_DECREASE_NAME = "decrease"
+
+
+# -----------------------------------
 # Model Performance Tests
 # -----------------------------------
 MODEL_PERFORMANCE_TESTS_SUITE_NAME = "Model Performance Tests"
