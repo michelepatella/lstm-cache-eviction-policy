@@ -30,6 +30,8 @@ Classes:
                                                      tests.
     ModelBehavioralDirectionalLocalFeatPerturbationsTestsConfig(BaseModel):
         Configuration for local feature perturbation parameters.
+    ModelBehavioralDirectionalTemporalFeatPerturbationsTestsConfig(BaseModel):
+        Configuration for temporal feature perturbation parameters.
     ModelBehavioralDirectionalTestsConfig(BaseModel): Configuration for all model directional
                                                       behavioral tests.
     ModelBehavioralTestsConfig(BaseModel): Configuration for all model behavioral tests.
@@ -76,13 +78,28 @@ class ModelBehavioralDirectionalLocalFeatPerturbationsTestsConfig(BaseModel):
      perturbation check.
 
     Attributes:
-        level (float): The magnitude of the local perturbation applied to features (>= 0.0).
-        min_success_ratio (float): The minimum required ratio of successful directional
-                                   tests (in [0.0, 1.0]).
+        level (float): The magnitude of the local perturbation applied to features
+                       (>= 0.0).
+        min_shift (float): The minimum required shift of successful directional
+                           tests (in [0.0, 1.0]).
     """
 
     level: Annotated[float, Field(ge=0.0)]
-    min_success_ratio: Annotated[float, Field(ge=0.0, le=1.0)]
+    min_shift: Annotated[float, Field(ge=0.0, le=1.0)]
+
+
+class ModelBehavioralDirectionalTemporalFeatPerturbationsTestsConfig(
+    BaseModel,
+):
+    """Configuration model for the parameters of the temporal feature
+     perturbation check.
+
+    Attributes:
+        min_shift (float): The minimum required average absolute probability shift
+                           after temporal inversion (>= 0.0).
+    """
+
+    min_shift: Annotated[float, Field(ge=0.0)]
 
 
 class ModelBehavioralDirectionalTestsConfig(BaseModel):
@@ -91,10 +108,15 @@ class ModelBehavioralDirectionalTestsConfig(BaseModel):
     Attributes:
         local_feat_perturbations (ModelBehavioralDirectionalLocalFeatPerturbationsTestsConfig):
             Configuration detailing local feature perturbation magnitude and success ratio.
+        temporal_feat_perturbations (ModelBehavioralDirectionalTemporalFeatPerturbationsTestsConfig):
+            Configuration detailing temporal feature perturbation shift requirement.
     """
 
     local_feat_perturbations: (
         ModelBehavioralDirectionalLocalFeatPerturbationsTestsConfig
+    )
+    temporal_feat_perturbations: (
+        ModelBehavioralDirectionalTemporalFeatPerturbationsTestsConfig
     )
 
 

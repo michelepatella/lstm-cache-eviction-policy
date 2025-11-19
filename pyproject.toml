@@ -22,6 +22,9 @@ markers = [
     "data_train_test_validation: Data Train-Test-Validation Tests with DeepChecks",
     "model_behavioral_invariance: Model Behavioral Invariance Tests",
     "model_behavioral_invariance_feature_perturbation: Model Behavioral Invariance Feature Perturbation Tests",
+    "model_behavioral_directional: Model Behavioral Directional Tests",
+    "model_behavioral_directional_local_feature_perturbations: Model Behavioral Directional Local Feature Perturbations Tests",
+    "model_behavioral_directional_temporal_feature_perturbations: Model Behavioral Directional Temporal Feature Perturbations Test",
     "model_inference: Model Inference Tests",
     "model_inference_avg_latency: Model Inference Avg Latency Test",
     "model_inference_throughput: Model Inference Throughput Test",
@@ -31,6 +34,6 @@ markers = [
     "model_training_learnability: Model Training Learnability Test",
     "model_training_optimization_stability: Model Training Optimization Stability Test",
     "model_training_output_integrity: Model Training Output Integrity Test",
-    "model_training_portability: Model Training Portability Test",
+    "model_training_portability: Model Training Portability Tests",
     "slow: Slow Tests"
 ]
