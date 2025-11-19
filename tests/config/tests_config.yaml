@@ -32,16 +32,18 @@ data:
       max: 0.25
 model:
   behavioral:
+    directional:
+      local_feat_perturbations:
+        level: 0.2
+        min_shift: 0.1
+      temporal_feat_perturbations:
+        min_shift: 0.1
     invariance:
       feat_perturbations:
         abs_tol: 0.0000001
         level: 0.0000001
         rel_tol: 0.0001
         top_k_probs: 10
-    directional:
-      local_feat_perturbations:
-        level: 0.15
-        min_success_ratio: 0.7
   inference:
     latency:
       target_avg: 0.01
