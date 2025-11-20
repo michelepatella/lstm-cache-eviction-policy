@@ -134,7 +134,7 @@ def test_model_invariance_feature_perturbation(
         # current feature for all the sequence requests
         x_features_perturbed = x_features.clone()
         x_features_perturbed[:, timestep, feature_idx] += (
-            tests_config.model.behavioral.invariance.feat_perturbations.level
+            tests_config.model.behavioral.invariance.feat_perturbation.level
         )
 
         # Calculate model probabilities over
@@ -158,18 +158,18 @@ def test_model_invariance_feature_perturbation(
         assert np.all(
             (
                 abs_diff
-                < tests_config.model.behavioral.invariance.feat_perturbations.abs_tol
+                < tests_config.model.behavioral.invariance.feat_perturbation.abs_tol
             )
             | (
                 rel_diff
-                < tests_config.model.behavioral.invariance.feat_perturbations.rel_tol
+                < tests_config.model.behavioral.invariance.feat_perturbation.rel_tol
             ),
         )
 
         # Assert that top-k probabilities obtained
         # over perturbed features are the same as
         # those obtained over original features
-        top_k_probs = tests_config.model.behavioral.invariance.feat_perturbations.top_k_probs
+        top_k_probs = tests_config.model.behavioral.invariance.feat_perturbation.top_k_probs
         _, original_top_k_probs = torch.topk(
             torch.from_numpy(original_probs),
             k=top_k_probs,

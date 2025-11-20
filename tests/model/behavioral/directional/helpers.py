@@ -4,9 +4,9 @@ Module containing tests for verifying the model's directional behavioral
 requirements.
 
 These tests ensure the model reacts in a predictable and expected manner when the
-features (those related to local recency/frequency or temporal encoding) are
-perturbed in a specific direction. This confirms the model is learning the intended
-directional semantics from the data.
+features (those related to local recency/frequency, temporal encoding, or sequence
+order) are perturbed in a specific direction or manner. This confirms the model is
+learning the intended directional semantics and is sensitive to event sequence.
 
 Functions:
     model_directional_tests_setup() -> tuple[
@@ -21,12 +21,18 @@ Functions:
         model_directional_tests_setup: tuple,
         feature: str
     ) -> None
-        Tests the model's directional sensitivity to local feature scaling.
+        Tests the model's directional sensitivity consistency to local feature
+        perturbations.
     test_model_directional_temporal_feature_perturbations(
         model_directional_tests_setup: tuple
     ) -> None
         Tests the model's directional sensitivity to temporal feature inversion
         (180° shift).
+    test_model_directional_request_swap_perturbations(
+        model_directional_tests_setup: tuple
+    ) -> None
+        Tests the model's sensitivity to sequence order by swapping the last two
+        elements (requests and features).
 """
 
 import numpy as np
@@ -49,6 +55,7 @@ from tests.const import (
     DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MAX_VALUE,
     DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MIN_VALUE,
     DATASET_PROCESSED_LOCAL_FEATURE_COLUMNS,
+    L1_MAX_DISTANCE,
     MODEL_BEHAVIORAL_DIRECTIONAL_TESTS_LOCAL_FEATURE_PERTURBATIONS_PARAM_FEATURE_NAME,
 )
 from tests.model.helpers import initialize_inference_environment
@@ -95,24 +102,24 @@ def test_model_directional_local_feature_perturbations(
     model_directional_tests_setup: tuple,
     feature: str,
 ):
-    """Tests the model's sensitivity to local feature scaling by measuring
-    probability shift.
+    """Tests the model's sensitivity consistency to local feature perturbations.
 
-    This test verifies that altering a local feature (recency or frequency)
-    in the last element of a sequence causes a significant shift in the
-    prediction probability for the originally predicted class. This ensures the
-    model is sensitive to recent, local context changes.
+    This test verifies that the model reacts consistently to the magnitude of
+    feature perturbations. It applies two different levels of perturbations
+    (small and large) to the selected local feature across all sequence elements.
+    It asserts that a larger perturbation in the input feature space results in
+    a larger (or at least equal) shift in the output probability distribution,
+    confirming that the model's sensitivity is monotonic with respect to
+    feature intensity.
     The check is parameterized over local feature columns and executes the
     following steps:
-    1.  Computes the original probabilities and identifies the predicted class
-        for each sequence.
-    2.  Applies a proportional perturbation to the selected local feature in the
-        last element of all sequences, clamping the result within bounds.
-    3.  Computes the new probabilities on the perturbed features.
-    4.  Calculates the average absolute shift between the original probability and
-        the perturbed probability for the originally predicted class.
-    5.  Asserts that this average shift meets or exceeds the minimum required shift
-        defined in the configuration.
+    1.  Computes the original prediction probabilities over a batch.
+    2.  Applies a "small" perturbation level to the feature and computes the
+        probability distribution shift.
+    3.  Applies a "large" perturbation level to the feature and computes the
+        probability distribution shift.
+    4.  Asserts that the average global shift caused by the large perturbation is
+        greater than the shift caused by the small perturbation.
 
     Args:
         model_directional_tests_setup (tuple): Fixture providing the testing loader,
@@ -121,9 +128,9 @@ def test_model_directional_local_feature_perturbations(
                        (injected via parametrization).
 
     Raises:
-        AssertionError: If the average absolute probability shift caused by the local
-                        feature perturbation is below the configured minimum required
-                        shift.
+        AssertionError: If the model's reaction is inconsistent (i.e., the larger
+                        perturbation causes a smaller output shift than the
+                        smaller perturbation).
     """
     # Setup
     testing_loader, model, _, _, tests_config = model_directional_tests_setup
@@ -149,59 +156,76 @@ def test_model_directional_local_feature_perturbations(
             .numpy()
         )
 
-    # Take the predicted classes over the original features
-    # and extract their probabilities
-    original_pred_classes = np.argmax(original_probs, axis=TENSOR_CLASS_DIM)
-    original_pred_class_probs = original_probs[
-        np.arange(len(x_features)),
-        original_pred_classes,
-    ]
+    # Retrieve perturbations to apply
+    small_perturb_level = tests_config.model.behavioral.directional.local_feat_perturbations.small_level
+    large_perturb_level = tests_config.model.behavioral.directional.local_feat_perturbations.large_level
 
-    # Clone features for perturbation
-    x_features_perturbed = x_features.clone()
-
-    # Alter the feature of the last element
-    # in all the batch sequences, ensuring
-    # it still lies within the predefined range
-    perturbed_values = (
-        x_features_perturbed[:, LIST_LAST_IDX, idx]
-        * tests_config.model.behavioral.directional.local_feat_perturbations.level
-    )
-    x_features_perturbed[:, LIST_LAST_IDX, idx] = torch.clamp(
-        perturbed_values,
+    # Apply small perturbation to all elements in all sequences
+    x_features_small = x_features.clone()
+    perturbed_values_small = x_features_small[:, :, idx] * small_perturb_level
+    x_features_small[:, :, idx] = torch.clamp(
+        perturbed_values_small,
         min=DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MIN_VALUE,
         max=DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MAX_VALUE,
     )
 
-    # Compute probabilities on perturbed features
+    # Compute probabilities on small perturbation
     with torch.no_grad():
-        perturbed_probs = (
+        probs_small = (
             torch.softmax(
-                model(x_features_perturbed, x_keys),
+                model(x_features_small, x_keys),
                 dim=TENSOR_CLASS_DIM,
             )
             .cpu()
             .numpy()
         )
 
-    # Extract the perturbed probabilities of the
-    # predicted classes over the original features
-    perturbed_pred_class_probs = perturbed_probs[
-        np.arange(len(x_features)),
-        original_pred_classes,
-    ]
+    # Calculate L1 distance
+    l1_dist_small = (
+        np.sum(
+            np.abs(original_probs - probs_small),
+            axis=TENSOR_CLASS_DIM,
+        )
+        / L1_MAX_DISTANCE
+    )
+    avg_shift_small = np.mean(l1_dist_small)
 
-    # Assert that the probabilities of the predicted
-    # classes over the original features have been
-    # significatively changed after altering the local
-    # feature of the last element in the sequence
-    avg_shift = np.mean(
-        abs(original_pred_class_probs - perturbed_pred_class_probs),
+    # Apply large perturbation to all elements in all sequences
+    x_features_large = x_features.clone()
+    perturbed_values_large = x_features_large[:, :, idx] * large_perturb_level
+    x_features_large[:, :, idx] = torch.clamp(
+        perturbed_values_large,
+        min=DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MIN_VALUE,
+        max=DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MAX_VALUE,
     )
-    assert (
-        avg_shift
-        >= tests_config.model.behavioral.directional.local_feat_perturbations.min_shift
+
+    # Compute probabilities on large perturbation
+    with torch.no_grad():
+        probs_large = (
+            torch.softmax(
+                model(x_features_large, x_keys),
+                dim=TENSOR_CLASS_DIM,
+            )
+            .cpu()
+            .numpy()
+        )
+
+    # Calculate L1 distance
+    l1_dist_large = (
+        np.sum(
+            np.abs(original_probs - probs_large),
+            axis=TENSOR_CLASS_DIM,
+        )
+        / L1_MAX_DISTANCE
     )
+    avg_shift_large = np.mean(l1_dist_large)
+
+    # Assert that the shift caused by the larger perturbation is greater
+    # than (or at least consistently equal to) the shift caused by the
+    # smaller perturbation
+    print(avg_shift_large)
+    print(avg_shift_small)
+    assert avg_shift_large > avg_shift_small
 
 
 @pytest.mark.model_behavioral_directional_temporal_feature_perturbations
@@ -213,28 +237,27 @@ def test_model_directional_temporal_feature_perturbations(
 
     This test verifies that inverting the temporal components of the input
     features, which corresponds to a 180-degree shift in time, causes a
-    significant and measurable change in the model's prediction probabilities,
-    thereby confirming the model's reliance on temporal directionality.
-
+    significant and measurable change in the entire model's prediction
+    probability distribution, thereby confirming the model's reliance on
+    temporal directionality.
     The test executes the following steps:
-    1.  Computes the original prediction probabilities over a batch.
-    2.  Identifies the class predicted with the highest probability for each
-        sequence.
-    3.  Applies a perturbation by inverting the sin and cos time feature values
-        across all timesteps and sequences (achieving a 180° phase shift).
-    4.  Computes the new probabilities on the altered features.
-    5.  Calculates the average absolute difference between the original probability
-        and the inverted probability for the originally predicted class.
-    6.  Assert that this average shift meets or exceeds the minimum required shift
-        defined in the configuration.
+        1.  Computes the original prediction probabilities over a batch.
+        2.  Applies a perturbation by inverting the sin and cos time feature values
+            across all timesteps and sequences (achieving a 180° phase shift).
+        3.  Computes the new probabilities on the altered features.
+        4.  Calculates the average L1 distance (sum of absolute differences) between
+            the original probability distribution and the inverted probability
+            distribution across the batch.
+        5.  Assert that this average global shift meets or exceeds the minimum
+            required shift defined in the configuration.
 
     Args:
         model_directional_tests_setup (tuple): Fixture providing the testing loader,
                                                model, device, and tests configuration.
 
     Raises:
-        AssertionError: If the average absolute probability shift caused by the temporal
-                        inversion is below the configured minimum required shift.
+        AssertionError: If the average L1 distance between the probability
+                        distributions is below the configured minimum required shift.
     """
     # Setup
     testing_loader, model, _, _, tests_config = model_directional_tests_setup
@@ -262,15 +285,6 @@ def test_model_directional_temporal_feature_perturbations(
             .cpu()
             .numpy()
         )
-
-    # Take the predicted classes (with the highest probabilities)
-    # over the original features and extract their probabilities
-    # from all the batch sequences
-    original_pred_classes = np.argmax(original_probs, axis=TENSOR_CLASS_DIM)
-    original_pred_class_probs = original_probs[
-        np.arange(len(x_features)),
-        original_pred_classes,
-    ]
 
     # Clone features for perturbation
     x_features_inverted = x_features.clone()
@@ -300,21 +314,127 @@ def test_model_directional_temporal_feature_perturbations(
             .numpy()
         )
 
-    # Extract the altered probabilities of the
-    # classes predicted over the original features
-    inverted_pred_class_probs = inverted_probs[
-        np.arange(len(x_features)),
-        original_pred_classes,
-    ]
-
-    # Assert that the altered probabilities of
-    # the predicted classes over the original
-    # features have been consistently altered
-    # after having shifted the time
-    avg_shift = np.mean(
-        abs(original_pred_class_probs - inverted_pred_class_probs),
+    # Calculate the L1 distance between the original
+    # and altered probability distributions for
+    # each sequence in the batch
+    l1_distances = (
+        np.sum(
+            np.abs(original_probs - inverted_probs),
+            axis=TENSOR_CLASS_DIM,
+        )
+        / L1_MAX_DISTANCE
     )
+
+    # Assert that the entire probability distribution has
+    # been consistently altered after having shifted the time,
+    # by checking the average L1 distance across the batch
+    avg_shift = np.mean(l1_distances)
     assert (
         avg_shift
         >= tests_config.model.behavioral.directional.temporal_feat_perturbations.min_shift
+    )
+
+
+@pytest.mark.model_behavioral_directional_request_swap_perturbations
+def test_model_directional_request_swap_perturbations(
+    model_directional_tests_setup: tuple,
+):
+    """Tests the model's sensitivity to sequence order by swapping the last two
+    elements.
+
+    This test verifies that swapping the position of the last and penultimate
+    keys (and their corresponding features) in the input sequence causes a
+    significant and measurable change in the entire model's prediction
+    probability distribution. This confirms the model relies on the specific
+    sequential order of recent events.
+    The test executes the following steps:
+        1.  Computes the original prediction probabilities over a batch.
+        2.  Applies a perturbation by swapping the features and keys of the last
+            time step with those of the penultimate time step for all sequences.
+        3.  Computes the new probabilities on the altered sequences.
+        4.  Calculates the average L1 distance (sum of absolute differences) between
+            the original probability distribution and the altered probability
+            distribution across the batch.
+        5.  Assert that this average global shift meets or exceeds the minimum
+            required shift defined in the configuration.
+
+    Args:
+        model_directional_tests_setup (tuple): Fixture providing the testing loader,
+                                               model, device, and tests configuration.
+
+    Raises:
+        AssertionError: If the average L1 distance between the probability
+                        distributions is below the configured minimum required shift.
+    """
+    # Setup
+    testing_loader, model, _, _, tests_config = model_directional_tests_setup
+
+    # Take the first batch
+    batch = next(iter(testing_loader))
+    x_features, x_keys, _ = batch
+
+    # Compute original probabilities
+    with torch.no_grad():
+        original_probs = (
+            torch.softmax(
+                model(x_features, x_keys),
+                dim=TENSOR_CLASS_DIM,
+            )
+            .cpu()
+            .numpy()
+        )
+
+    # Clone features and keys for perturbation
+    x_features_swapped = x_features.clone()
+    x_keys_swapped = x_keys.clone()
+
+    # Indices for the last and penultimate elements
+    last_idx = LIST_LAST_IDX
+    penultimate_idx = LIST_LAST_IDX - 1
+
+    # Apply perturbation: Swap the last and penultimate elements
+    # (features and keys) for all sequences in the batch
+    temp_features = x_features_swapped[:, penultimate_idx, :].clone()
+    temp_keys = x_keys_swapped[:, penultimate_idx].clone()
+    # Overwrite penultimate with last
+    x_features_swapped[:, penultimate_idx, :] = x_features_swapped[
+        :,
+        last_idx,
+        :,
+    ]
+    x_keys_swapped[:, penultimate_idx] = x_keys_swapped[:, last_idx]
+    # Overwrite last with stored penultimate
+    x_features_swapped[:, last_idx, :] = temp_features
+    x_keys_swapped[:, last_idx] = temp_keys
+
+    # Compute probabilities on altered sequences
+    with torch.no_grad():
+        swapped_probs = (
+            torch.softmax(
+                model(x_features_swapped, x_keys_swapped),
+                dim=TENSOR_CLASS_DIM,
+            )
+            .cpu()
+            .numpy()
+        )
+
+    # Calculate the L1 distance between the original
+    # and altered probability distributions for
+    # each sequence in the batch
+    l1_distances = (
+        np.sum(
+            np.abs(original_probs - swapped_probs),
+            axis=TENSOR_CLASS_DIM,
+        )
+        / L1_MAX_DISTANCE
+    )
+
+    # Assert that the entire probability distribution has
+    # been consistently altered after having swapped the
+    # order of the last two elements, by checking the
+    # average L1 distance across the batch
+    avg_shift = np.mean(l1_distances)
+    assert (
+        avg_shift
+        >= tests_config.model.behavioral.directional.request_swap_perturbations.min_shift
     )
