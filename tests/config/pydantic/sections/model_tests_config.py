@@ -23,15 +23,17 @@ Classes:
     ModelTrainingLearnabilityTestsConfig (BaseModel): Configuration for model training
                                                       learnability check.
     ModelTrainingTestsConfig(BaseModel): Configuration for the model training tests.
-    ModelBehavioralInvarianceFeatPerturbationsTestsConfig(BaseModel): Configuration for
-                                                                    feature perturbation
-                                                                    parameters.
+    ModelBehavioralInvarianceFeatPerturbationTestsConfig(BaseModel): Configuration for
+                                                                     feature perturbation
+                                                                     parameters.
     ModelBehavioralInvarianceTestsConfig(BaseModel): Configuration for the model invariance
                                                      tests.
     ModelBehavioralDirectionalLocalFeatPerturbationsTestsConfig(BaseModel):
         Configuration for local feature perturbation parameters.
     ModelBehavioralDirectionalTemporalFeatPerturbationsTestsConfig(BaseModel):
         Configuration for temporal feature perturbation parameters.
+    ModelBehavioralDirectionalRequestSwapPerturbationsTestsConfig(BaseModel):
+        Configuration for request swap perturbation parameters.
     ModelBehavioralDirectionalTestsConfig(BaseModel): Configuration for all model directional
                                                       behavioral tests.
     ModelBehavioralTestsConfig(BaseModel): Configuration for all model behavioral tests.
@@ -43,7 +45,7 @@ from typing import Annotated
 from pydantic import BaseModel, Field
 
 
-class ModelBehavioralInvarianceFeatPerturbationsTestsConfig(BaseModel):
+class ModelBehavioralInvarianceFeatPerturbationTestsConfig(BaseModel):
     """Configuration model for the parameters of the feature perturbation check.
 
     Attributes:
@@ -66,11 +68,11 @@ class ModelBehavioralInvarianceTestsConfig(BaseModel):
     """Configuration model for the overall invariance checks.
 
     Attributes:
-        feat_perturbations (ModelBehavioralInvarianceFeatPerturbationsTestsConfig):
+         (ModelBehavioralInvarianceFeatPerturbationTestsConfig):
             Configuration detailing the perturbation magnitude and required tolerances.
     """
 
-    feat_perturbations: ModelBehavioralInvarianceFeatPerturbationsTestsConfig
+    feat_perturbation: ModelBehavioralInvarianceFeatPerturbationTestsConfig
 
 
 class ModelBehavioralDirectionalLocalFeatPerturbationsTestsConfig(BaseModel):
@@ -78,13 +80,16 @@ class ModelBehavioralDirectionalLocalFeatPerturbationsTestsConfig(BaseModel):
      perturbation check.
 
     Attributes:
-        level (float): The magnitude of the local perturbation applied to features
-                       (>= 0.0).
+        large_level (float): The magnitude of the local large perturbation applied
+                             to features (>= 0.0).
+        small_level (float): The magnitude of the local small perturbation applied
+                             to features (>= 0.0).
         min_shift (float): The minimum required shift of successful directional
                            tests (in [0.0, 1.0]).
     """
 
-    level: Annotated[float, Field(ge=0.0)]
+    large_level: Annotated[float, Field(ge=0.0)]
+    small_level: Annotated[float, Field(ge=0.0)]
     min_shift: Annotated[float, Field(ge=0.0, le=1.0)]
 
 
@@ -102,18 +107,37 @@ class ModelBehavioralDirectionalTemporalFeatPerturbationsTestsConfig(
     min_shift: Annotated[float, Field(ge=0.0)]
 
 
+class ModelBehavioralDirectionalRequestSwapPerturbationsTestsConfig(
+    BaseModel,
+):
+    """Configuration model for the parameters of the request swap
+    perturbation check.
+
+    Attributes:
+        min_shift (float): The minimum required average absolute probability shift
+                           after swapping requests in the sequence (>= 0.0).
+    """
+
+    min_shift: Annotated[float, Field(ge=0.0)]
+
+
 class ModelBehavioralDirectionalTestsConfig(BaseModel):
     """Configuration model for all model directional behavioral tests.
 
     Attributes:
         local_feat_perturbations (ModelBehavioralDirectionalLocalFeatPerturbationsTestsConfig):
             Configuration detailing local feature perturbation magnitude and success ratio.
+        request_swap_perturbations (ModelBehavioralDirectionalRequestSwapPerturbationsTestsConfig):
+            Configuration detailing request swap perturbation shift requirement.
         temporal_feat_perturbations (ModelBehavioralDirectionalTemporalFeatPerturbationsTestsConfig):
             Configuration detailing temporal feature perturbation shift requirement.
     """
 
     local_feat_perturbations: (
         ModelBehavioralDirectionalLocalFeatPerturbationsTestsConfig
+    )
+    request_swap_perturbations: (
+        ModelBehavioralDirectionalRequestSwapPerturbationsTestsConfig
     )
     temporal_feat_perturbations: (
         ModelBehavioralDirectionalTemporalFeatPerturbationsTestsConfig

@@ -261,6 +261,12 @@ DEEP_CHECKS_LABEL_TYPE = "multiclass"
 
 
 # -----------------------------------
+# L1
+# -----------------------------------
+L1_MAX_DISTANCE = 2.0
+
+
+# -----------------------------------
 # Model Behavioral Directional Tests
 # -----------------------------------
 MODEL_BEHAVIORAL_DIRECTIONAL_TESTS_LOCAL_FEATURE_PERTURBATIONS_PARAM_FEATURE_NAME = "feature"

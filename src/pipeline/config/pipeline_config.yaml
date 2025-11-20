@@ -16,13 +16,13 @@ data:
           steps: 5
         behavior:
           repetition:
-            interval: 3
-            offset: 1
+            interval: 7
+            offset: 3
             hours:
               start: 4
               end: 9
           toggle:
-            interval: 5
+            interval: 20
             hours:
               start: 9
               end: 14
@@ -35,12 +35,12 @@ data:
           cycle:
             base: 5
             mod: 2
-            divisor: 10
+            divisor: 100
             hours:
               start: 14
               end: 19
           distortion:
-            interval: 3
+            interval: 4
             hours:
               start: 19
               end: 23
@@ -51,18 +51,18 @@ data:
               min: 0
               max: 1
           memory:
-            interval: 3
-            offset: 1
+            interval: 5
+            offset: 3
       temporal:
         burstiness:
           high: 0.8
           low: 1.2
           hours:
-            start: 14
-            end: 17
+            start: 10
+            end: 18
         periodic:
-          scale: 20
-          amplitude: 10
+          scale: 90
+          amplitude: 50
 dataset:
   cleaning:
     missing_values_removal:
