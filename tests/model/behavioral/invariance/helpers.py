@@ -7,8 +7,9 @@ This module focuses on robustness checks by assessing the stability of
 model predictions when small, irrelevant perturbations are intentionally
 introduced into the input features. It uses a Pytest fixture for setup and a
 test function to validate that prediction probabilities remain within defined
-absolute and relative tolerance thresholds, thereby confirming that the model's
-behavior is stable and invariant to minor feature changes.
+absolute and relative tolerance thresholds, as well as that the extreme-k
+probabilities rankings remain unchanged, confirming that the model's behavior
+is stable and invariant to minor feature changes.
 
 Functions:
     model_invariance_tests_setup() -> tuple[
@@ -27,7 +28,6 @@ Functions:
         input features.
 """
 
-import numpy as np
 import pytest
 import torch
 from torch import device
@@ -123,7 +123,6 @@ def test_model_invariance_feature_perturbation(
             torch.softmax(model(x_features, x_keys), dim=TENSOR_CLASS_DIM)
             .detach()
             .cpu()
-            .numpy()
         )
 
     # Applying a small perturbation to all the
@@ -146,16 +145,15 @@ def test_model_invariance_feature_perturbation(
             )
             .detach()
             .cpu()
-            .numpy()
         )
 
         # Assert that the probabilities obtained over
         # the perturbed features are similar enough to
         # the original ones, considering both the relative
         # and absolute difference thereof
-        abs_diff = np.abs(original_probs - perturbed_probs)
+        abs_diff = torch.abs(original_probs - perturbed_probs)
         rel_diff = abs_diff / original_probs
-        assert np.all(
+        assert torch.all(
             (
                 abs_diff
                 < tests_config.model.behavioral.invariance.feat_perturbation.abs_tol
@@ -166,18 +164,37 @@ def test_model_invariance_feature_perturbation(
             ),
         )
 
-        # Assert that top-k probabilities obtained
+        extreme_k = tests_config.model.behavioral.invariance.feat_perturbation.extreme_k
+        # Head probabilities
+        _, original_head = torch.topk(
+            original_probs,
+            k=extreme_k,
+            dim=TENSOR_CLASS_DIM,
+            largest=True,
+        )
+        _, perturbed_head = torch.topk(
+            perturbed_probs,
+            k=extreme_k,
+            dim=TENSOR_CLASS_DIM,
+            largest=True,
+        )
+
+        # Tail probabilities
+        _, original_tail = torch.topk(
+            original_probs,
+            k=extreme_k,
+            dim=TENSOR_CLASS_DIM,
+            largest=False,
+        )
+        _, perturbed_tail = torch.topk(
+            perturbed_probs,
+            k=extreme_k,
+            dim=TENSOR_CLASS_DIM,
+            largest=False,
+        )
+
+        # Assert that extreme-k probabilities obtained
         # over perturbed features are the same as
         # those obtained over original features
-        top_k_probs = tests_config.model.behavioral.invariance.feat_perturbation.top_k_probs
-        _, original_top_k_probs = torch.topk(
-            torch.from_numpy(original_probs),
-            k=top_k_probs,
-            dim=TENSOR_CLASS_DIM,
-        )
-        _, perturbed_top_k_probs = torch.topk(
-            torch.from_numpy(perturbed_probs),
-            k=top_k_probs,
-            dim=TENSOR_CLASS_DIM,
-        )
-        assert torch.equal(original_top_k_probs, perturbed_top_k_probs)
+        assert torch.equal(original_head, perturbed_head)
+        assert torch.equal(original_tail, perturbed_tail)

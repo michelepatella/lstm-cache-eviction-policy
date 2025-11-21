@@ -58,8 +58,7 @@ def test_model_directional() -> None:
     # Directional Tests
     # ----------------------------
     # Test model directional against local feature perturbations,
-    # including local frequency and recency (whether the probabilities
-    # change according to a large/small perturbation applied)
+    # including local frequency and recency
     for local_feature in DATASET_PROCESSED_LOCAL_FEATURE_COLUMNS:
         test_model_directional_local_feature_perturbations(
             (testing_loader, model, device, pipeline_config, tests_config),
@@ -67,16 +66,12 @@ def test_model_directional() -> None:
         )
 
     # Test model directional against temporal feature
-    # perturbations, including sin and cos time (whether
-    # the probabilities over the original probabilities
-    # significatively change when shifting the time)
+    # perturbations, including sin and cos time
     test_model_directional_temporal_feature_perturbations(
         (testing_loader, model, device, pipeline_config, tests_config),
     )
 
-    # Test model directional against requests swapping (
-    # whether swapping the last and the penultimate requests
-    # changes significatively the probabilities)
+    # Test model directional against requests swapping
     test_model_directional_request_swap_perturbations(
         (testing_loader, model, device, pipeline_config, tests_config),
     )
