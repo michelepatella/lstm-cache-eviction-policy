@@ -4,9 +4,10 @@ Module containing tests for verifying the model's directional behavioral
 requirements.
 
 These tests ensure the model reacts in a predictable and expected manner when the
-features (those related to local recency/frequency, temporal encoding, or sequence
-order) are perturbed in a specific direction or manner. This confirms the model is
-learning the intended directional semantics and is sensitive to event sequence.
+temporal encoding, or sequence order are perturbed in a specific manner, as well as
+the tests verify the consistency of the model with respect to the local features (recency
+and frequency). This confirms the model is learning the intended directional semantics
+and is sensitive to event sequence.
 
 Functions:
     model_directional_tests_setup() -> tuple[
@@ -17,12 +18,11 @@ Functions:
         TestsConfig,
     ]
         Pytest fixture initializing the environment for directional tests.
-    test_model_directional_local_feature_perturbations(
+    test_model_directional_local_feature_consistency(
         model_directional_tests_setup: tuple,
         feature: str
     ) -> None
-        Tests the model's directional sensitivity consistency to local feature
-        perturbations.
+        Tests the model's consistency with respect to local features.
     test_model_directional_temporal_feature_perturbations(
         model_directional_tests_setup: tuple
     ) -> None
@@ -48,15 +48,14 @@ from components.const import (
     DATASET_PROCESSED_FEATURE_COLUMNS,
     LIST_LAST_IDX,
     TENSOR_CLASS_DIM,
+    TENSOR_FEATURES_DIM,
 )
 from pipeline.config.pydantic.pipeline_config import PipelineConfig
 from tests.config.pydantic.tests_config import TestsConfig
 from tests.const import (
-    DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MAX_VALUE,
-    DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MIN_VALUE,
     DATASET_PROCESSED_LOCAL_FEATURE_COLUMNS,
     L1_MAX_DISTANCE,
-    MODEL_BEHAVIORAL_DIRECTIONAL_TESTS_LOCAL_FEATURE_PERTURBATIONS_PARAM_FEATURE_NAME,
+    MODEL_BEHAVIORAL_DIRECTIONAL_TESTS_LOCAL_FEATURE_CONSISTENCY_PARAM_FEATURE_NAME,
 )
 from tests.model.helpers import initialize_inference_environment
 
@@ -94,32 +93,28 @@ def model_directional_tests_setup() -> tuple[
 
 
 @pytest.mark.parametrize(
-    MODEL_BEHAVIORAL_DIRECTIONAL_TESTS_LOCAL_FEATURE_PERTURBATIONS_PARAM_FEATURE_NAME,
+    MODEL_BEHAVIORAL_DIRECTIONAL_TESTS_LOCAL_FEATURE_CONSISTENCY_PARAM_FEATURE_NAME,
     DATASET_PROCESSED_LOCAL_FEATURE_COLUMNS,
 )
-@pytest.mark.model_behavioral_directional_local_feature_perturbations
-def test_model_directional_local_feature_perturbations(
+@pytest.mark.model_behavioral_directional_local_feature_consistency
+def test_model_directional_local_feature_consistency(
     model_directional_tests_setup: tuple,
     feature: str,
 ):
-    """Tests the model's sensitivity consistency to local feature perturbations.
+    """Tests the model's directional consistency of local features.
 
-    This test verifies that the model reacts consistently to the magnitude of
-    feature perturbations. It applies two different levels of perturbations
-    (small and large) to the selected local feature across all sequence elements.
-    It asserts that a larger perturbation in the input feature space results in
-    a larger (or at least equal) shift in the output probability distribution,
-    confirming that the model's sensitivity is monotonic with respect to
-    feature intensity.
-    The check is parameterized over local feature columns and executes the
-    following steps:
-    1.  Computes the original prediction probabilities over a batch.
-    2.  Applies a "small" perturbation level to the feature and computes the
-        probability distribution shift.
-    3.  Applies a "large" perturbation level to the feature and computes the
-        probability distribution shift.
-    4.  Asserts that the average global shift caused by the large perturbation is
-        greater than the shift caused by the small perturbation.
+    This test verifies that the model naturally assigns higher (or equal)
+    prediction probability to keys associated with higher values of local
+    features (frequency/recency) compared to keys with lower values within
+    the same sequence. The check executes the following steps:
+        1.  Computes the prediction probabilities for the batch using
+            original inputs.
+        2.  Identifies the timestep where the feature value is maximized.
+        3.  Identifies the timestep where the feature value is minimized.
+        4.  Extracts the keys associated with these timestamps.
+        5.  Compares the predicted probabilities for these specific keys.
+        6.  Asserts that the average probability of the 'high-feature key' is
+            greater than or equal to the 'low-feature key' by a configured margin.
 
     Args:
         model_directional_tests_setup (tuple): Fixture providing the testing loader,
@@ -128,12 +123,14 @@ def test_model_directional_local_feature_perturbations(
                        (injected via parametrization).
 
     Raises:
-        AssertionError: If the model's reaction is inconsistent (i.e., the larger
-                        perturbation causes a smaller output shift than the
-                        smaller perturbation).
+        AssertionError: If the model assigns higher probability to low-feature
+                        keys on average, contradicting the expected directional
+                        behavior.
     """
     # Setup
-    testing_loader, model, _, _, tests_config = model_directional_tests_setup
+    testing_loader, model, device, _, tests_config = (
+        model_directional_tests_setup
+    )
 
     # Take the first batch
     batch = next(iter(testing_loader))
@@ -145,9 +142,10 @@ def test_model_directional_local_feature_perturbations(
     }
     idx = feature_to_idx[feature]
 
-    # Compute original probabilities
+    # Compute prediction probabilities on the original
+    # unaltered input sequence
     with torch.no_grad():
-        original_probs = (
+        prediction_probs = (
             torch.softmax(
                 model(x_features, x_keys),
                 dim=TENSOR_CLASS_DIM,
@@ -156,76 +154,52 @@ def test_model_directional_local_feature_perturbations(
             .numpy()
         )
 
-    # Retrieve perturbations to apply
-    small_perturb_level = tests_config.model.behavioral.directional.local_feat_perturbations.small_level
-    large_perturb_level = tests_config.model.behavioral.directional.local_feat_perturbations.large_level
+    # Extract the specific feature values
+    # for all timesteps
+    sequence_feature_values = x_features[:, :, idx]
 
-    # Apply small perturbation to all elements in all sequences
-    x_features_small = x_features.clone()
-    perturbed_values_small = x_features_small[:, :, idx] * small_perturb_level
-    x_features_small[:, :, idx] = torch.clamp(
-        perturbed_values_small,
-        min=DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MIN_VALUE,
-        max=DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MAX_VALUE,
+    # Identify the timestep indices with the maximum
+    # and minimum feature values for each sequence
+    t_high_indices = torch.argmax(
+        sequence_feature_values,
+        dim=TENSOR_FEATURES_DIM,
+    )
+    t_low_indices = torch.argmin(
+        sequence_feature_values,
+        dim=TENSOR_FEATURES_DIM,
     )
 
-    # Compute probabilities on small perturbation
-    with torch.no_grad():
-        probs_small = (
-            torch.softmax(
-                model(x_features_small, x_keys),
-                dim=TENSOR_CLASS_DIM,
-            )
-            .cpu()
-            .numpy()
-        )
+    # Create a range for batch indexing
+    batch_indices = torch.arange(len(x_features), device=device)
 
-    # Calculate L1 distance
-    l1_dist_small = (
-        np.sum(
-            np.abs(original_probs - probs_small),
-            axis=TENSOR_CLASS_DIM,
-        )
-        / L1_MAX_DISTANCE
-    )
-    avg_shift_small = np.mean(l1_dist_small)
+    # Extract the keys associated with the high
+    # and low timesteps
+    high_feature_keys = x_keys[batch_indices, t_high_indices]
+    low_feature_keys = x_keys[batch_indices, t_low_indices]
 
-    # Apply large perturbation to all elements in all sequences
-    x_features_large = x_features.clone()
-    perturbed_values_large = x_features_large[:, :, idx] * large_perturb_level
-    x_features_large[:, :, idx] = torch.clamp(
-        perturbed_values_large,
-        min=DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MIN_VALUE,
-        max=DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MAX_VALUE,
+    # Extract the predicted probabilities for
+    # the identified keys
+    high_feature_keys_probs = prediction_probs[
+        np.arange(len(x_features)),
+        high_feature_keys.cpu().numpy(),
+    ]
+    low_feature_keys_probs = prediction_probs[
+        np.arange(len(x_features)),
+        low_feature_keys.cpu().numpy(),
+    ]
+
+    # Calculate the average difference
+    avg_prob_difference = np.mean(
+        high_feature_keys_probs - low_feature_keys_probs,
     )
 
-    # Compute probabilities on large perturbation
-    with torch.no_grad():
-        probs_large = (
-            torch.softmax(
-                model(x_features_large, x_keys),
-                dim=TENSOR_CLASS_DIM,
-            )
-            .cpu()
-            .numpy()
-        )
-
-    # Calculate L1 distance
-    l1_dist_large = (
-        np.sum(
-            np.abs(original_probs - probs_large),
-            axis=TENSOR_CLASS_DIM,
-        )
-        / L1_MAX_DISTANCE
+    # Assert that the key with the higher feature value
+    # has, on average, a higher predicted probability than
+    # the key with the lower feature value
+    assert (
+        avg_prob_difference
+        >= tests_config.model.behavioral.directional.local_feat_perturbations.min_shift
     )
-    avg_shift_large = np.mean(l1_dist_large)
-
-    # Assert that the shift caused by the larger perturbation is greater
-    # than (or at least consistently equal to) the shift caused by the
-    # smaller perturbation
-    print(avg_shift_large)
-    print(avg_shift_small)
-    assert avg_shift_large > avg_shift_small
 
 
 @pytest.mark.model_behavioral_directional_temporal_feature_perturbations
