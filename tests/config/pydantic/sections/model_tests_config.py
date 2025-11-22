@@ -28,8 +28,8 @@ Classes:
                                                                      parameters.
     ModelBehavioralInvarianceTestsConfig(BaseModel): Configuration for the model invariance
                                                      tests.
-    ModelBehavioralDirectionalLocalFeatConsistencyTestsConfig(BaseModel):
-        Configuration for local feature consistency parameters.
+    ModelBehavioralDirectionalLocalFeatPerturbationsTestsConfig(BaseModel):
+        Configuration for local feature perturbations parameters.
     ModelBehavioralDirectionalTemporalFeatPerturbationsTestsConfig(BaseModel):
         Configuration for temporal feature perturbation parameters.
     ModelBehavioralDirectionalRequestSwapPerturbationsTestsConfig(BaseModel):
@@ -75,16 +75,16 @@ class ModelBehavioralInvarianceTestsConfig(BaseModel):
     feat_perturbation: ModelBehavioralInvarianceFeatPerturbationTestsConfig
 
 
-class ModelBehavioralDirectionalLocalFeatConsistencyTestsConfig(BaseModel):
+class ModelBehavioralDirectionalLocalFeatPerturbationsTestsConfig(BaseModel):
     """Configuration model for the parameters of the local feature
-     consistency check.
+     perturbations check.
 
     Attributes:
-        min_shift (float): The minimum required shift of successful directional
-                           tests (in [0.0, 1.0]).
+        min_success_ratio (float): The minimum required ratio of successful directional
+                                   tests (in [0.0, 1.0]).
     """
 
-    min_shift: Annotated[float, Field(ge=0.0, le=1.0)]
+    min_success_ratio: Annotated[float, Field(ge=0.0, le=1.0)]
 
 
 class ModelBehavioralDirectionalTemporalFeatPerturbationsTestsConfig(
@@ -119,16 +119,16 @@ class ModelBehavioralDirectionalTestsConfig(BaseModel):
     """Configuration model for all model directional behavioral tests.
 
     Attributes:
-        local_feat_consistency (ModelBehavioralDirectionalLocalFeatConsistencyTestsConfig):
-            Configuration detailing local feature consistency configuration.
+        local_feat_perturbations (ModelBehavioralDirectionalLocalFeatPerturbationsTestsConfig):
+            Configuration detailing local feature perturbations configuration.
         request_swap_perturbations (ModelBehavioralDirectionalRequestSwapPerturbationsTestsConfig):
             Configuration detailing request swap perturbation shift requirement.
         temporal_feat_perturbations (ModelBehavioralDirectionalTemporalFeatPerturbationsTestsConfig):
             Configuration detailing temporal feature perturbation shift requirement.
     """
 
-    local_feat_consistency: (
-        ModelBehavioralDirectionalLocalFeatConsistencyTestsConfig
+    local_feat_perturbations: (
+        ModelBehavioralDirectionalLocalFeatPerturbationsTestsConfig
     )
     request_swap_perturbations: (
         ModelBehavioralDirectionalRequestSwapPerturbationsTestsConfig

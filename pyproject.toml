@@ -23,7 +23,7 @@ markers = [
     "model_behavioral_invariance: Model Behavioral Invariance Tests",
     "model_behavioral_invariance_feature_perturbation: Model Behavioral Invariance Feature Perturbation Tests",
     "model_behavioral_directional: Model Behavioral Directional Tests",
-    "model_behavioral_directional_local_feature_consistency: Model Behavioral Directional Local Feature Consistency Tests",
+    "model_behavioral_directional_local_feature_perturbations: Model Behavioral Directional Local Feature Perturbations Tests",
     "model_behavioral_directional_temporal_feature_perturbations: Model Behavioral Directional Temporal Feature Perturbations Test",
     "model_behavioral_directional_request_swap_perturbations: Model Behavioral Directional Request Swap Perturbations Test",
     "model_inference: Model Inference Tests",

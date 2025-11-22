@@ -4,10 +4,9 @@ Module containing tests for verifying the model's directional behavioral
 requirements.
 
 These tests ensure the model reacts in a predictable and expected manner when the
-temporal encoding, or sequence order are perturbed in a specific manner, as well as
-the tests verify the consistency of the model with respect to the local features (recency
-and frequency). This confirms the model is learning the intended directional semantics
-and is sensitive to event sequence.
+local features, temporal features, or sequence order are perturbed in a specific manner.
+This confirms the model is learning the intended directional semantics and is sensitive
+to event sequence.
 
 Functions:
     model_directional_tests_setup() -> tuple[
@@ -18,11 +17,11 @@ Functions:
         TestsConfig,
     ]
         Pytest fixture initializing the environment for directional tests.
-    test_model_directional_local_feature_consistency(
+    test_model_directional_local_feature_perturbations(
         model_directional_tests_setup: tuple,
         feature: str
     ) -> None
-        Tests the model's consistency with respect to local features.
+        Tests the model's directional sensitivity to local features.
     test_model_directional_temporal_feature_perturbations(
         model_directional_tests_setup: tuple
     ) -> None
@@ -48,14 +47,15 @@ from components.const import (
     DATASET_PROCESSED_FEATURE_COLUMNS,
     LIST_LAST_IDX,
     TENSOR_CLASS_DIM,
-    TENSOR_FEATURES_DIM,
 )
 from pipeline.config.pydantic.pipeline_config import PipelineConfig
 from tests.config.pydantic.tests_config import TestsConfig
 from tests.const import (
+    DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MAX_VALUE,
+    DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MIN_VALUE,
     DATASET_PROCESSED_LOCAL_FEATURE_COLUMNS,
     L1_MAX_DISTANCE,
-    MODEL_BEHAVIORAL_DIRECTIONAL_TESTS_LOCAL_FEATURE_CONSISTENCY_PARAM_FEATURE_NAME,
+    MODEL_BEHAVIORAL_DIRECTIONAL_TESTS_LOCAL_FEATURE_PERTURBATIONS_PARAM_FEATURE_NAME,
 )
 from tests.model.helpers import initialize_inference_environment
 
@@ -93,44 +93,46 @@ def model_directional_tests_setup() -> tuple[
 
 
 @pytest.mark.parametrize(
-    MODEL_BEHAVIORAL_DIRECTIONAL_TESTS_LOCAL_FEATURE_CONSISTENCY_PARAM_FEATURE_NAME,
+    MODEL_BEHAVIORAL_DIRECTIONAL_TESTS_LOCAL_FEATURE_PERTURBATIONS_PARAM_FEATURE_NAME,
     DATASET_PROCESSED_LOCAL_FEATURE_COLUMNS,
 )
-@pytest.mark.model_behavioral_directional_local_feature_consistency
-def test_model_directional_local_feature_consistency(
+@pytest.mark.model_behavioral_directional_local_feature_perturbations
+def test_model_directional_local_feature_perturbations(
     model_directional_tests_setup: tuple,
     feature: str,
 ):
-    """Tests the model's directional consistency of local features.
+    """Tests the model's directional sensitivity to extreme
+    local feature perturbations.
 
-    This test verifies that the model naturally assigns higher (or equal)
-    prediction probability to keys associated with higher values of local
-    features (frequency/recency) compared to keys with lower values within
-    the same sequence. The check executes the following steps:
-        1.  Computes the prediction probabilities for the batch using
-            original inputs.
-        2.  Identifies the timestep where the feature value is maximized.
-        3.  Identifies the timestep where the feature value is minimized.
-        4.  Extracts the keys associated with these timestamps.
-        5.  Compares the predicted probabilities for these specific keys.
-        6.  Asserts that the average probability of the 'high-feature key' is
-            greater than or equal to the 'low-feature key' by a configured margin.
+    This test verifies that forcing a specific local feature to its maximum value
+    at the last timestep leads to a higher prediction probability for the target
+    class (the key at the last timestep) compared to forcing the same feature
+    to its minimum value.
+    The check executes the following steps:
+    1.  Identifies the target class for each sequence.
+    2.  Creates two perturbed feature sets:
+        * High scenario: Forces the feature at the last timestep to its maximum
+                         allowed value.
+        * Low scenario: Forces the feature at the last timestep to its minimum
+                        allowed value.
+    3.  Computes the probability of the target class for both the high and low
+        scenarios.
+    4.  Calculates the success ratio as the fraction of sequences where
+        P(high) > P(low).
+    5.  Asserts that the success ratio meets or exceeds the minimum required ratio
+        defined in the configuration.
 
     Args:
-        model_directional_tests_setup (tuple): Fixture providing the testing loader,
-                                               model, device, and tests configuration.
+        model_directional_tests_setup (tuple): Fixture providing the testing loader, model,
+                                               device, and tests configuration.
         feature (str): The specific local feature column being tested
                        (injected via parametrization).
 
     Raises:
-        AssertionError: If the model assigns higher probability to low-feature
-                        keys on average, contradicting the expected directional
-                        behavior.
+        AssertionError: If the success ratio is below the configured minimum required ratio.
     """
     # Setup
-    testing_loader, model, device, _, tests_config = (
-        model_directional_tests_setup
-    )
+    testing_loader, model, _, _, tests_config = model_directional_tests_setup
 
     # Take the first batch
     batch = next(iter(testing_loader))
@@ -142,63 +144,74 @@ def test_model_directional_local_feature_consistency(
     }
     idx = feature_to_idx[feature]
 
-    # Compute prediction probabilities on the original
-    # unaltered input sequence
+    # Target classes: the key at the last
+    # position of the sequence
+    target_classes = x_keys[:, LIST_LAST_IDX]
+
+    # Clone features before perturbation
+    x_features_high = x_features.clone()
+
+    # Force the feature to the maximum value
+    # only at the last timestep
+    x_features_high[:, LIST_LAST_IDX, idx] = (
+        DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MAX_VALUE
+    )
+
+    # Compute probabilities for high scenario
     with torch.no_grad():
-        prediction_probs = (
+        probs_high_full = (
             torch.softmax(
-                model(x_features, x_keys),
+                model(x_features_high, x_keys),
                 dim=TENSOR_CLASS_DIM,
             )
             .cpu()
             .numpy()
         )
 
-    # Extract the specific feature values
-    # for all timesteps
-    sequence_feature_values = x_features[:, :, idx]
-
-    # Identify the timestep indices with the maximum
-    # and minimum feature values for each sequence
-    t_high_indices = torch.argmax(
-        sequence_feature_values,
-        dim=TENSOR_FEATURES_DIM,
-    )
-    t_low_indices = torch.argmin(
-        sequence_feature_values,
-        dim=TENSOR_FEATURES_DIM,
-    )
-
-    # Create a range for batch indexing
-    batch_indices = torch.arange(len(x_features), device=device)
-
-    # Extract the keys associated with the high
-    # and low timesteps
-    high_feature_keys = x_keys[batch_indices, t_high_indices]
-    low_feature_keys = x_keys[batch_indices, t_low_indices]
-
-    # Extract the predicted probabilities for
-    # the identified keys
-    high_feature_keys_probs = prediction_probs[
+    # Extract probability of the target
+    # class in high scenario
+    probs_high = probs_high_full[
         np.arange(len(x_features)),
-        high_feature_keys.cpu().numpy(),
-    ]
-    low_feature_keys_probs = prediction_probs[
-        np.arange(len(x_features)),
-        low_feature_keys.cpu().numpy(),
+        target_classes,
     ]
 
-    # Calculate the average difference
-    avg_prob_difference = np.mean(
-        high_feature_keys_probs - low_feature_keys_probs,
+    # Clone features before perturbation
+    x_features_low = x_features.clone()
+
+    # Force the feature to the minimum value
+    # only at the last timestep
+    x_features_low[:, LIST_LAST_IDX, idx] = (
+        DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MIN_VALUE
     )
 
-    # Assert that the key with the higher feature value
-    # has, on average, a higher predicted probability than
-    # the key with the lower feature value
+    # Compute probabilities for low scenario
+    with torch.no_grad():
+        probs_low_full = (
+            torch.softmax(
+                model(x_features_low, x_keys),
+                dim=TENSOR_CLASS_DIM,
+            )
+            .cpu()
+            .numpy()
+        )
+
+    # Extract probability of the target
+    # class in low scenario
+    probs_low = probs_low_full[
+        np.arange(len(x_features)),
+        target_classes,
+    ]
+
+    # Check for each sequence if P(high) > P(low) and
+    # calculate the fraction of successful cases
+    success_mask = probs_high > probs_low
+    success_ratio = np.mean(success_mask)
+
+    # Assert that the model respects the feature direction
+    # in a sufficient percentage of cases
     assert (
-        avg_prob_difference
-        >= tests_config.model.behavioral.directional.local_feat_perturbations.min_shift
+        success_ratio
+        >= tests_config.model.behavioral.directional.local_feat_perturbations.min_success_ratio
     )
 
 
