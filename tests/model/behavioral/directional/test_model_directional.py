@@ -4,9 +4,10 @@ Module containing the main test function for verifying the directional behaviora
 requirements of the trained model.
 
 These tests ensure the model's predictions react predictably when specific input
-features (like local recency/frequency metrics, temporal encodings, or sequence order)
-are perturbed. This is necessary for validating that the model has learned the intended
-directional dependencies and sequence sensitivity.
+features (like temporal encodings or sequence order) are perturbed. As well as, ensure
+consistency of the model with respect to local input features. This is necessary for
+validating that the model has learned the intended directional dependencies and sequence
+sensitivity.
 
 Functions:
     test_model_directional() -> None
@@ -16,7 +17,7 @@ Functions:
 import pytest
 from helpers import (  # noqa
     model_directional_tests_setup,
-    test_model_directional_local_feature_perturbations,
+    test_model_directional_local_feature_consistency,
     test_model_directional_request_swap_perturbations,
     test_model_directional_temporal_feature_perturbations,
 )
@@ -31,9 +32,10 @@ def test_model_directional() -> None:
 
     This function initializes the environment and executes the following directional
     tests using helper functions:
-        1.  Local Feature Perturbations: Tests the model's sensitivity by checking
-            if perturbing local features (like frequency and recency) in specific
-            directions leads to an expected change in predicted class probabilities.
+        1.  Local Feature Consistency: Tests the model's directional behavior by
+            checking if elements with higher local feature values (frequency and recency)
+            naturally receive higher predicted probabilities than elements with lower
+            values, without altering the input features.
         2.  Temporal Feature Perturbations: Tests the model's reliance on time by
             inverting the temporal encoding features (sin/cos time components, equivalent
             to a 180° time shift) and verifying that this shift causes a significant and
@@ -57,10 +59,10 @@ def test_model_directional() -> None:
     # ----------------------------
     # Directional Tests
     # ----------------------------
-    # Test model directional against local feature perturbations,
-    # including local frequency and recency
+    # Test model directional consistency against
+    # local features, including frequency and recency
     for local_feature in DATASET_PROCESSED_LOCAL_FEATURE_COLUMNS:
-        test_model_directional_local_feature_perturbations(
+        test_model_directional_local_feature_consistency(
             (testing_loader, model, device, pipeline_config, tests_config),
             local_feature,
         )

@@ -33,12 +33,10 @@ data:
 model:
   behavioral:
     directional:
+      local_feat_consistency:
+        min_shift: 0.01
       request_swap_perturbations:
         min_shift: 0.4
-      local_feat_perturbations:
-        min_shift: 0.5
-        large_level: 1.5
-        small_level: 0.5
       temporal_feat_perturbations:
         min_shift: 0.4
     invariance:
