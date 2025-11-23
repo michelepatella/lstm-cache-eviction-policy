@@ -23,6 +23,9 @@ Classes:
     ModelTrainingLearnabilityTestsConfig (BaseModel): Configuration for model training
                                                       learnability check.
     ModelTrainingTestsConfig(BaseModel): Configuration for the model training tests.
+    ModelBehavioralInvarianceMaxProbsShiftTestsConfig(BaseModel): Configuration for
+                                                                  max probability shift
+                                                                  tolerances.
     ModelBehavioralInvarianceFeatPerturbationTestsConfig(BaseModel): Configuration for
                                                                      feature perturbation
                                                                      parameters.
@@ -32,6 +35,12 @@ Classes:
         Configuration for local feature perturbations parameters.
     ModelBehavioralDirectionalTestsConfig(BaseModel): Configuration for all model directional
                                                       behavioral tests.
+    ModelBehavioralMinimumFunctionalityFeatInfluenceTestsConfig(BaseModel):
+        Configuration for feature influence check.
+    ModelBehavioralMinimumFunctionalityMinMaxProbsGapTestsConfig(BaseModel):
+        Configuration for min-max probability gap check.
+    ModelBehavioralMinimumFunctionalityTestsConfig(BaseModel): Configuration for minimum
+                                                               functionality tests.
     ModelBehavioralTestsConfig(BaseModel): Configuration for all model behavioral tests.
     ModelTestsConfig(BaseModel): Root configuration for all model-related tests.
 """
@@ -41,30 +50,41 @@ from typing import Annotated
 from pydantic import BaseModel, Field
 
 
+class ModelBehavioralInvarianceMaxProbsShiftTestsConfig(BaseModel):
+    """Configuration model for the maximum allowed probability shifts.
+
+    Attributes:
+        abs (float): The maximum allowed absolute difference in prediction
+                     probabilities (>= 0.0).
+        rel (float): The maximum allowed relative difference in prediction
+                     probabilities (>= 0.0).
+    """
+
+    abs: Annotated[float, Field(ge=0.0)]
+    rel: Annotated[float, Field(ge=0.0)]
+
+
 class ModelBehavioralInvarianceFeatPerturbationTestsConfig(BaseModel):
     """Configuration model for the parameters of the feature perturbation check.
 
     Attributes:
+        extreme_k (int): Extreme-K probabilities for checking ranking invariance.
         level (float): The magnitude of the small perturbation applied to features
                        (>= 0.0).
-        abs_tol (float): The maximum allowed absolute difference in prediction
-                         probabilities (>= 0.0).
-        rel_tol (float): The maximum allowed relative difference in prediction
-                         probabilities (>= 0.0).
-        extreme_k (int): Extreme-K probabilities for checking ranking invariance.
+        max_probs_shift (ModelBehavioralInvarianceMaxProbsShiftTestsConfig):
+            Configuration for the maximum allowed probability shifts.
     """
 
-    level: Annotated[float, Field(ge=0.0)]
-    abs_tol: Annotated[float, Field(ge=0.0)]
-    rel_tol: Annotated[float, Field(ge=0.0)]
     extreme_k: Annotated[int, Field(ge=1)]
+    level: Annotated[float, Field(ge=0.0)]
+    max_probs_shift: ModelBehavioralInvarianceMaxProbsShiftTestsConfig
 
 
 class ModelBehavioralInvarianceTestsConfig(BaseModel):
     """Configuration model for the overall invariance checks.
 
     Attributes:
-         (ModelBehavioralInvarianceFeatPerturbationTestsConfig):
+        feat_perturbation (ModelBehavioralInvarianceFeatPerturbationTestsConfig):
             Configuration detailing the perturbation magnitude and required tolerances.
     """
 
@@ -96,18 +116,59 @@ class ModelBehavioralDirectionalTestsConfig(BaseModel):
     )
 
 
+class ModelBehavioralMinimumFunctionalityFeatInfluenceTestsConfig(BaseModel):
+    """Configuration model for the feature influence check.
+
+    Attributes:
+        min_probs_shift (float): The minimum required probability shift when
+                                 features are removed (>= 0.0).
+    """
+
+    min_probs_shift: Annotated[float, Field(ge=0.0)]
+
+
+class ModelBehavioralMinimumFunctionalityMinMaxProbsGapTestsConfig(BaseModel):
+    """Configuration model for the min-max probability gap check.
+
+    Attributes:
+        min (float): The minimum required gap between the maximum and minimum
+                     prediction probabilities (>= 0.0).
+    """
+
+    min: Annotated[float, Field(ge=0.0)]
+
+
+class ModelBehavioralMinimumFunctionalityTestsConfig(BaseModel):
+    """Configuration model for all model minimum functionality tests.
+
+    Attributes:
+        feat_influence (ModelBehavioralMinimumFunctionalityFeatInfluenceTestsConfig):
+            Configuration for feature influence check.
+        min_max_probs_gap (ModelBehavioralMinimumFunctionalityMinMaxProbsGapTestsConfig):
+            Configuration for min-max probability gap check.
+    """
+
+    feat_influence: ModelBehavioralMinimumFunctionalityFeatInfluenceTestsConfig
+    min_max_probs_gap: (
+        ModelBehavioralMinimumFunctionalityMinMaxProbsGapTestsConfig
+    )
+
+
 class ModelBehavioralTestsConfig(BaseModel):
     """Configuration model for all model behavioral tests.
 
     Attributes:
-        invariance (ModelBehavioralInvarianceTestsConfig): Configuration for
-                                                           invariance tests.
         directional (ModelBehavioralDirectionalTestsConfig): Configuration for
                                                              directional tests.
+        invariance (ModelBehavioralInvarianceTestsConfig): Configuration for
+                                                           invariance tests.
+        minimum_functionality (ModelBehavioralMinimumFunctionalityTestsConfig):
+            Configuration for minimum functionality tests.
     """
 
-    invariance: ModelBehavioralInvarianceTestsConfig
     directional: ModelBehavioralDirectionalTestsConfig
+    invariance: ModelBehavioralInvarianceTestsConfig
+    minimum_functionality: ModelBehavioralMinimumFunctionalityTestsConfig
 
 
 class ModelPerformanceBaselineCompTestsConfig(BaseModel):

@@ -327,3 +327,10 @@ MODEL_TRAINING_TESTS_PORTABILITY_TEST_PARAM_DEVICE_TYPE_NAME = "device_type"
 TESTS_CONFIG_FILE_PATH = (
     PROJECT_ROOT / "tests" / "config" / "tests_config.yaml"
 )
+
+
+# -----------------------------------
+# Torch
+# -----------------------------------
+TORCH_TOP_K_LARGEST = True
+TORCH_TOP_K_SMALLEST = False
