@@ -42,6 +42,8 @@ from pipeline.config.pydantic.pipeline_config import PipelineConfig
 from tests.config.pydantic.tests_config import TestsConfig
 from tests.const import (
     MODEL_BEHAVIORAL_INVARIANCE_TESTS_FEATURE_PERTURBATIONS_PARAM_FEATURE_IDX_NAME,
+    TORCH_TOP_K_LARGEST,
+    TORCH_TOP_K_SMALLEST,
 )
 from tests.model.helpers import initialize_inference_environment
 
@@ -156,11 +158,11 @@ def test_model_invariance_feature_perturbation(
         assert torch.all(
             (
                 abs_diff
-                < tests_config.model.behavioral.invariance.feat_perturbation.abs_tol
+                < tests_config.model.behavioral.invariance.feat_perturbation.max_probs_shift.abs
             )
             | (
                 rel_diff
-                < tests_config.model.behavioral.invariance.feat_perturbation.rel_tol
+                < tests_config.model.behavioral.invariance.feat_perturbation.max_probs_shift.rel
             ),
         )
 
@@ -170,13 +172,13 @@ def test_model_invariance_feature_perturbation(
             original_probs,
             k=extreme_k,
             dim=TENSOR_CLASS_DIM,
-            largest=True,
+            largest=TORCH_TOP_K_LARGEST,
         )
         _, perturbed_head = torch.topk(
             perturbed_probs,
             k=extreme_k,
             dim=TENSOR_CLASS_DIM,
-            largest=True,
+            largest=TORCH_TOP_K_LARGEST,
         )
 
         # Tail probabilities
@@ -184,13 +186,13 @@ def test_model_invariance_feature_perturbation(
             original_probs,
             k=extreme_k,
             dim=TENSOR_CLASS_DIM,
-            largest=False,
+            largest=TORCH_TOP_K_SMALLEST,
         )
         _, perturbed_tail = torch.topk(
             perturbed_probs,
             k=extreme_k,
             dim=TENSOR_CLASS_DIM,
-            largest=False,
+            largest=TORCH_TOP_K_SMALLEST,
         )
 
         # Assert that extreme-k probabilities obtained
