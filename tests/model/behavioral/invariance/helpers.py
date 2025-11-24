@@ -5,11 +5,7 @@ invariance of the trained model.
 
 This module focuses on robustness checks by assessing the stability of
 model predictions when small, irrelevant perturbations are intentionally
-introduced into the input features. It uses a Pytest fixture for setup and a
-test function to validate that prediction probabilities remain within defined
-absolute and relative tolerance thresholds, as well as that the extreme-k
-probabilities rankings remain unchanged, confirming that the model's behavior
-is stable and invariant to minor feature changes.
+introduced into the input features, and by verifying its deterministic behavior.
 
 Functions:
     model_invariance_tests_setup() -> tuple[
@@ -26,6 +22,11 @@ Functions:
     ) -> None
         Tests the model's invariance against small perturbations applied to
         input features.
+    test_model_invariance_identity_preservation(
+        model_invariance_tests_setup: tuple
+    ) -> None
+        Tests the model's deterministic behavior by verifying identity preservation
+        when presented with duplicate input data.
 """
 
 import pytest
@@ -200,3 +201,73 @@ def test_model_invariance_feature_perturbation(
         # those obtained over original features
         assert torch.equal(original_head, perturbed_head)
         assert torch.equal(original_tail, perturbed_tail)
+
+
+@pytest.mark.model_behavioral_invariance_identity
+def test_model_invariance_identity_preservation(
+    model_invariance_tests_setup: tuple,
+):
+    """Tests the model's deterministic behavior (identity preservation).
+
+    This test verifies that the model is not acting randomly and
+    preserves consistency when presented with the exact same input data.
+    Inputting a duplicate of the original sequence must yield the same
+    predictions.
+    The test executes the following steps:
+        1.  Computes probabilities for a standard batch.
+        2.  Creates a clone (duplicate) of the input batch features and keys.
+        3.  Computes probabilities for this cloned batch.
+        4.  Calculates the maximum absolute difference between the two
+            output distributions.
+        5.  Asserts that the difference is effectively near to zero.
+
+    Args:
+        model_invariance_tests_setup (tuple): Fixture providing the
+                                              testing loader, model,
+                                              device, and tests
+                                              configuration.
+
+    Raises:
+        AssertionError: If the outputs differ, indicating non-deterministic
+                        behavior or instability.
+    """
+    # Setup
+    testing_loader, model, _, _, tests_config = model_invariance_tests_setup
+
+    # Take the first batch
+    batch = next(iter(testing_loader))
+    x_features, x_keys, _ = batch
+
+    # Compute probabilities for the
+    # original batch
+    with torch.no_grad():
+        original_probs = torch.softmax(
+            model(x_features, x_keys),
+            dim=TENSOR_CLASS_DIM,
+        )
+
+    # Create a duplicate input set
+    # by cloning the tensors to ensure
+    # memory independence
+    x_features_clone = x_features.clone()
+    x_keys_clone = x_keys.clone()
+
+    # Compute probabilities for the
+    # duplicated batch
+    with torch.no_grad():
+        identity_probs = torch.softmax(
+            model(x_features_clone, x_keys_clone),
+            dim=TENSOR_CLASS_DIM,
+        )
+
+    # Calculate the maximum absolute difference
+    # between the original and identity probabilities
+    max_divergence = torch.max(
+        torch.abs(original_probs - identity_probs),
+    ).item()
+
+    # Assert that the model is deterministic
+    # and preserves identity
+    assert (
+        max_divergence < tests_config.model.behavioral.invariance.identity.tol
+    )

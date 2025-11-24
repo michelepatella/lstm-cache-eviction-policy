@@ -42,11 +42,8 @@ model:
         max_probs_shift:
           abs: 0.0000001
           rel: 0.0001
-    minimum_functionality:
-      feat_influence:
-        min_probs_shift: 0.01
-      min_max_probs_gap:
-        min: 0.05
+      identity:
+        tol: 0.0000000001
   inference:
     latency:
       target_avg: 0.01

@@ -5,7 +5,7 @@ of the trained model.
 
 This test ensures that minor, non-critical changes to input data do not lead
 to significant or unexpected changes in the model's predictions, thereby
-validating the model's robustness and stability.
+validating the model's robustness, stability, and deterministic behavior.
 
 Functions:
     test_model_invariance() -> None
@@ -17,6 +17,7 @@ import pytest
 from components.const import DATASET_PROCESSED_FEATURE_COLUMNS
 from tests.model.behavioral.invariance.helpers import (
     test_model_invariance_feature_perturbation,
+    test_model_invariance_identity_preservation,
 )
 from tests.model.helpers import initialize_inference_environment
 
@@ -27,11 +28,14 @@ def test_model_invariance() -> None:
 
     This function sets up the inference environment and executes specific checks
     to ensure the model's predictions remain stable when faced with minor
-    perturbations applied to its input.
-    The check performed is:
-        - Feature Perturbations: Asserts that prediction outcomes are invariant
+    perturbations or redundant input.
+    The checks performed are:
+        - Feature perturbations: Asserts that prediction outcomes are invariant
           (or change negligibly) after applying small, irrelevant modifications
           to the feature values.
+        - Identity preservation: Asserts that providing duplicated input data
+          yields identical predictions, validating the model's deterministic
+          behavior.
 
     Returns:
         None
@@ -47,7 +51,7 @@ def test_model_invariance() -> None:
     # ----------------------------
     # Invariance Tests
     # ----------------------------
-    # Tests model invariance against
+    # Test model invariance against
     # small, irrelevant feature perturbations
     for feature in DATASET_PROCESSED_FEATURE_COLUMNS:
         feature_idx = DATASET_PROCESSED_FEATURE_COLUMNS.index(feature)
@@ -55,3 +59,8 @@ def test_model_invariance() -> None:
             feature_idx,
             (testing_loader, model, device, pipeline_config, tests_config),
         )
+
+    # Test model invariance against duplicated inputs
+    test_model_invariance_identity_preservation(
+        (testing_loader, model, device, pipeline_config, tests_config),
+    )
