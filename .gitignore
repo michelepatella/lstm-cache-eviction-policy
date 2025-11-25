@@ -6,7 +6,6 @@ __pycache__/
 reports/
 models/
 data/
-docs/
 .Python
 .env/
 venv/
