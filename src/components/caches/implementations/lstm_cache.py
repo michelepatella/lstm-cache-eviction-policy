@@ -25,7 +25,6 @@ from components.caches.utils.cache_metrics_logger import (
     CacheMetricsLogger,
 )
 from components.const import (
-    API_ENDPOINT_FULL_URL,
     API_PARAM_KEYS_IN_CACHE_NAME,
     API_PARAM_LAST_ACCESSES_NAME,
     API_PARAM_USER_API_KWARGS_NAME,
@@ -36,6 +35,7 @@ from components.dataset.rows.extractions.lasts_extractor import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
+from const import GATEWAY_API_FULL_URL
 from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
@@ -77,7 +77,7 @@ class LSTMCache(BaseCache):
         super().__init__(cache_class, metrics_logger, pipeline_config)
 
         # Set API endpoint and kwargs to use
-        self.api_endpoint = API_ENDPOINT_FULL_URL
+        self.api_endpoint = GATEWAY_API_FULL_URL
         self.api_kwargs = pipeline_config.simulations.api_kwargs
 
         debug(

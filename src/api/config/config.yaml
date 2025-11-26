@@ -1,4 +1,4 @@
-hardware:
+resources:
   device:
     type: cpu
 kwargs:
@@ -24,11 +24,11 @@ kwargs:
   conf_weight:
     value: 0.2
   return_all_scores:
-    value: true
+    value: false
   return_prob_conf:
-    value: true
+    value: false
   return_api_kwargs:
-    value: true
+    value: false
 logs:
   level: INFO
 model:

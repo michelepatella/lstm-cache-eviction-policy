@@ -3,7 +3,7 @@
 Centralized module for defining static constants, network endpoints,
 and parameter names related to the API and its underlying microservices.
 
-This module organizes critical infrastructural data and magic strings
+This module organizes infrastructural data and magic strings
 to ensure consistency and maintainability across the entire application
 architecture, covering inter-service communication, configuration paths,
 and standardized naming conventions.
@@ -21,6 +21,13 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 # ----------------------------
+# API
+# ----------------------------
+API_TITLE = "LSTM Cache Eviction Policy"
+API_DESCRIPTION = "Smart cache eviction policy using LSTM predictions."
+
+
+# ----------------------------
 # API Configuration
 # ----------------------------
 API_CONFIG_FILE_PATH = PROJECT_ROOT / "src" / "api" / "config" / "config.yaml"
@@ -29,8 +36,6 @@ API_CONFIG_FILE_PATH = PROJECT_ROOT / "src" / "api" / "config" / "config.yaml"
 # ----------------------------
 # Gateway API
 # ----------------------------
-GATEWAY_API_ENDPOINT = "/evict"
-
 GATEWAY_API_RETURN_KEYS_TO_EVICT_NAME = "keys_to_evict"
 GATEWAY_API_RETURN_API_KWARGS_NAME = "api_kwargs"
 GATEWAY_API_RETURN_KEY_SCORES_NAME = "key_scores"
@@ -53,8 +58,12 @@ MODEL_FILE_PATH = PROJECT_ROOT / "models" / "real" / "trained_real_model.pt"
 # ----------------------------
 # Predictor service
 # ----------------------------
-PREDICTOR_SERVICE_ENDPOINT = "/predict"
-PREDICTOR_SERVICE_ENV_VAR_FULL_BASE_NAME = "API_PREDICTOR_SERVICE_BASE_URL"
+PREDICTOR_SERVICE_ENV_VAR_FULL_BASE_NAME = "PREDICTOR_SERVICE_BASE_URL"
+PREDICTOR_SERVICE_ENV_VAR_ENDPOINT_NAME = "PREDICTOR_SERVICE_ENDPOINT"
+PREDICTOR_SERVICE_ENDPOINT = os.getenv(
+    PREDICTOR_SERVICE_ENV_VAR_ENDPOINT_NAME,
+    "",
+)
 PREDICTOR_SERVICE_FULL_URL = (
     os.getenv(PREDICTOR_SERVICE_ENV_VAR_FULL_BASE_NAME, "")
     + PREDICTOR_SERVICE_ENDPOINT
@@ -83,8 +92,9 @@ PREDICTOR_SERVICE_RETURN_VARIANCES_NAME = "variances"
 # ----------------------------
 # Scorer service
 # ----------------------------
-SCORER_SERVICE_ENDPOINT = "/score"
-SCORER_SERVICE_ENV_VAR_BASE_URL_NAME = "API_SCORER_SERVICE_BASE_URL"
+SCORER_SERVICE_ENV_VAR_BASE_URL_NAME = "SCORER_SERVICE_BASE_URL"
+SCORER_SERVICE_ENV_VAR_ENDPOINT_NAME = "SCORER_SERVICE_ENDPOINT"
+SCORER_SERVICE_ENDPOINT = os.getenv(SCORER_SERVICE_ENV_VAR_ENDPOINT_NAME, "")
 SCORER_SERVICE_FULL_URL = (
     os.getenv(SCORER_SERVICE_ENV_VAR_BASE_URL_NAME, "")
     + SCORER_SERVICE_ENDPOINT
