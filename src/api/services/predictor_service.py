@@ -22,7 +22,7 @@ app = FastAPI()
 # Setup for predictor service: load model
 # to use for inference and select device to
 # run computations on
-device = select_device(api_config.hardware.device.type)
+device = select_device(api_config.resources.device.type)
 qengine = api_config.model.optimizations.quantization.engine
 model = load_model(MODEL_FILE_PATH, device, qengine)
 

@@ -1,4 +1,5 @@
 import logging
+from contextlib import asynccontextmanager
 from typing import Any
 
 from fastapi import FastAPI, HTTPException, status
@@ -6,7 +7,8 @@ from fastapi import FastAPI, HTTPException, status
 from api.config.pydantic.api_config import APIConfig
 from api.const import (
     API_CONFIG_FILE_PATH,
-    GATEWAY_API_ENDPOINT,
+    API_DESCRIPTION,
+    API_TITLE,
     GATEWAY_API_RETURN_API_KWARGS_NAME,
     GATEWAY_API_RETURN_CONF_MATRIX_NAME,
     GATEWAY_API_RETURN_KEY_SCORES_NAME,
@@ -28,20 +30,44 @@ from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.yaml.io.loader import load_yaml
-from src.const import LOGS_LOGGER_NAME
+from src.const import GATEWAY_API_ENDPOINT, LOGS_LOGGER_NAME
 
-app = FastAPI()
 
-# Setup for Gateway API: Load API configuration
-# and initialize logs with contextual variable
-api_config_file = load_yaml(API_CONFIG_FILE_PATH)
-api_config = APIConfig(**api_config_file)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Initializes the FastAPI application lifespan.
 
-initialize_logs(
-    logging.getLevelName(api_config.logs.level),
-    GrafanaLokiHandler(),
+    This function initializes the API, handling tasks
+    that occur before the application starts and after it shuts down.
+
+    Args:
+        app (FastAPI): The FastAPI application instance.
+    """
+    # Load API configuration
+    app.state.api_config_file = load_yaml(API_CONFIG_FILE_PATH)
+    app.state.api_config = APIConfig(**app.state.api_config_file)
+
+    # Initialize logs for API
+    initialize_logs(
+        logging.getLevelName(app.state.api_config.logs.level),
+        GrafanaLokiHandler(),
+    )
+    logs_phase.set(LOGS_PHASE_API)
+
+    yield
+
+    # Async flush logs
+    for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
+        if isinstance(handler, GrafanaLokiHandler):
+            handler.flush_buffer_async()
+
+
+# Define application
+app = FastAPI(
+    title=API_TITLE,
+    description=API_DESCRIPTION,
+    lifespan=lifespan,
 )
-logs_phase.set(LOGS_PHASE_API)
 
 
 @app.post(GATEWAY_API_ENDPOINT)
@@ -54,8 +80,7 @@ def gateway_api(
 
     This endpoint receives the current cache state, last access
     information, and optional user-defined API kwargs. It orchestrates
-    the predictor and scorer services and determines which keys
-    should be evicted.
+    the services and determines which keys should be evicted.
 
     Args:
         keys_in_cache (list[int]): List of keys currently in cache.
@@ -91,15 +116,17 @@ def gateway_api(
         # Merge user-provided API kwargs with
         # default ones
         if user_api_kwargs:
-            api_config.kwargs = api_config.merge_api_kwargs(
-                user_api_kwargs,
+            app.state.api_config.kwargs = (
+                app.state.api_config.merge_api_kwargs(
+                    user_api_kwargs,
+                )
             )
 
         # Invoke predictor service to run autoregressive rollout
         # and get outputs and corresponding variances
         outputs, variances = call_predictor_service(
             last_accesses,
-            api_config,
+            app.state.api_config,
         )
 
         # Invoke scorer service to calculate key scores
@@ -108,12 +135,12 @@ def gateway_api(
         key_scores, prob_matrix, conf_matrix = call_scorer_service(
             outputs,
             variances,
-            api_config,
+            app.state.api_config,
         )
 
         # Decide which keys to be evicted
-        excluded_keys = api_config.kwargs.excluded_keys.value
-        num_evictions = api_config.kwargs.num_evictions.value
+        excluded_keys = app.state.api_config.kwargs.excluded_keys.value
+        num_evictions = app.state.api_config.kwargs.num_evictions.value
         keys_to_evict = evict_score_based_items(
             keys_in_cache,
             key_scores,
@@ -125,15 +152,15 @@ def gateway_api(
         response: dict = {
             GATEWAY_API_RETURN_KEYS_TO_EVICT_NAME: keys_to_evict,
         }
-        if api_config.kwargs.return_api_kwargs.value:
+        if app.state.api_config.kwargs.return_api_kwargs.value:
             response[GATEWAY_API_RETURN_API_KWARGS_NAME] = (
-                api_config.kwargs.__dict__
+                app.state.api_config.kwargs.__dict__
             )
 
-        if api_config.kwargs.return_all_scores.value:
+        if app.state.api_config.kwargs.return_all_scores.value:
             response[GATEWAY_API_RETURN_KEY_SCORES_NAME] = key_scores
 
-        if api_config.kwargs.return_prob_conf.value:
+        if app.state.api_config.kwargs.return_prob_conf.value:
             response[GATEWAY_API_RETURN_PROB_MATRIX_NAME] = prob_matrix
             response[GATEWAY_API_RETURN_CONF_MATRIX_NAME] = conf_matrix
 
@@ -144,11 +171,6 @@ def gateway_api(
                 "context": "Gateway API",
             },
         )
-
-        # Async flush logs
-        for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
-            if isinstance(handler, GrafanaLokiHandler):
-                handler.flush_buffer_async()
 
         return response
     except Exception as e:

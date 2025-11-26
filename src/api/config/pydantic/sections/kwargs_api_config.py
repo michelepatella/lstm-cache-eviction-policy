@@ -3,8 +3,8 @@
 Module dedicated to defining Pydantic schemas for the complete set
 of keyword arguments (kwargs) for the API.
 
-These schemas enforce validation rules for various data types—including
-integers, floats, boolean flags, and lists—to ensure the functional
+These schemas enforce validation rules for various data types, including
+integers, floats, boolean flags, and lists, to ensure the functional
 and statistical integrity of the API calls. This includes specifying
 default values, boundary constraints, and required data types for
 parameters controlling autoregression, uncertainty quantification
@@ -15,9 +15,8 @@ Classes:
         Configuration for integer kwargs with boundary checks.
     KwargFloatAPIConfig(BaseModel):
         Configuration for float kwargs with boundary checks.
-    KwargConfidenceLevelAPIConfig(BaseModel):
-        Configuration for float kwargs constrained to be a probability/level
-        (0.0 < x <= 1.0).
+    KwargConfLevelAPIConfig(BaseModel):
+        Configuration for float kwargs constrained to be a probability/level.
     KwargListIntAPIConfig(BaseModel):
         Configuration for list-of-integer kwargs.
     KwargBoolAPIConfig(BaseModel):
@@ -46,9 +45,6 @@ class KwargIntAPIConfig(BaseModel):
 class KwargFloatAPIConfig(BaseModel):
     """Float API kwarg configuration.
 
-    Defines an API kwarg of float type, including its
-    value and optional maximum allowed value.
-
     Attributes:
         value (float): Float value (> 0.0).
         max (Optional[float]): Maximum allowed float value (> 0.0).
@@ -58,11 +54,8 @@ class KwargFloatAPIConfig(BaseModel):
     max: Annotated[float, Field(gt=0.0)] | None = None
 
 
-class KwargConfidenceLevelAPIConfig(BaseModel):
+class KwargConfLevelAPIConfig(BaseModel):
     """Confidence level API kwarg configuration.
-
-    Defines the confidence level used for confidence
-    intervals.
 
     Attributes:
         value (float):  Confidence level value (0.0–1.0].
@@ -74,9 +67,6 @@ class KwargConfidenceLevelAPIConfig(BaseModel):
 class KwargListIntAPIConfig(BaseModel):
     """List of integer API kwarg configuration.
 
-    Defines an API kwarg containing a list of integer
-    values.
-
     Attributes:
         value (list[int]): List of integer values.
     """
@@ -86,9 +76,6 @@ class KwargListIntAPIConfig(BaseModel):
 
 class KwargBoolAPIConfig(BaseModel):
     """Boolean API kwarg configuration.
-
-    Defines an API kwarg of boolean type with a
-    single value.
 
     Attributes:
         value (bool): Boolean value.
@@ -100,32 +87,29 @@ class KwargBoolAPIConfig(BaseModel):
 class KwargsAPIConfig(BaseModel):
     """Complete API kwargs configuration.
 
-    This class defines the full configuration for
-    API kwargs.
-
     Attributes:
         rollout_horizon (KwargIntAPIConfig): Number of future steps to predict
                                              in the autoregressive rollout.
         mc_dropout_samples (KwargIntAPIConfig): Number of Monte Carlo Dropout samples
-                                          for uncertainty estimation.
-        confidence_level (KwargConfidenceLevelAPIConfig): Confidence level for
+                                                for uncertainty estimation.
+        conf_level (KwargConfLevelAPIConfig): Confidence level for
                                                     prediction intervals.
         time_step_increment (KwargFloatAPIConfig): Time step increment in hours
-                                             for feature progression.
+                                                   for feature progression.
         num_evictions (KwargIntAPIConfig): Number of keys to evict per step.
         excluded_keys (KwargListIntAPIConfig): Keys that should not be evicted.
         prob_weight (KwargFloatAPIConfig): Weight applied to probability in key scoring.
         conf_weight (KwargFloatAPIConfig): Weight applied to confidence in key scoring.
         return_all_scores (KwargBoolAPIConfig): Whether to return all scores.
         return_prob_conf (KwargBoolAPIConfig): Whether to return probability and
-                                         confidence matrices.
+                                               confidence matrices.
         return_api_kwargs (KwargBoolAPIConfig): Whether to return all API kwargs in
-                                          responses.
+                                                responses.
     """
 
     rollout_horizon: KwargIntAPIConfig
     mc_dropout_samples: KwargIntAPIConfig
-    confidence_level: KwargConfidenceLevelAPIConfig
+    conf_level: KwargConfLevelAPIConfig
     time_step_increment: KwargFloatAPIConfig
     num_evictions: KwargIntAPIConfig
     excluded_keys: KwargListIntAPIConfig

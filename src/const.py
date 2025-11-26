@@ -9,6 +9,8 @@ including data distribution modes, key dataset identifiers, logger phase
 names, and the set of available optimizers and devices.
 """
 
+import os
+
 # ----------------------------
 # Cache
 # ----------------------------
@@ -44,6 +46,17 @@ DATASET_RAW_TYPE = "raw"
 
 DATASET_TRAINING_SPLIT_TYPE = "training"
 DATASET_TESTING_SPLIT_TYPE = "testing"
+
+
+# ----------------------------
+# Gateway API
+# ----------------------------
+GATEWAY_API_ENV_VAR_FULL_BASE_NAME = "GATEWAY_API_ENDPOINT_BASE_URL"
+GATEWAY_API_ENV_VAR_ENDPOINT_NAME = "GATEWAY_API_ENDPOINT"
+GATEWAY_API_ENDPOINT = os.getenv(GATEWAY_API_ENV_VAR_ENDPOINT_NAME, "")
+GATEWAY_API_FULL_URL = (
+    os.getenv(GATEWAY_API_ENV_VAR_FULL_BASE_NAME, "") + GATEWAY_API_ENDPOINT
+)
 
 
 # ----------------------------
