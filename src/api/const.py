@@ -34,6 +34,26 @@ API_CONFIG_FILE_PATH = PROJECT_ROOT / "src" / "api" / "config" / "config.yaml"
 
 
 # ----------------------------
+# Decider service
+# ----------------------------
+DECIDER_SERVICE_ENV_VAR_CHANNEL_NAME = "DECIDER_SERVICE_CHANNEL"
+DECIDER_SERVICE_CHANNEL = os.getenv(
+    DECIDER_SERVICE_ENV_VAR_CHANNEL_NAME,
+    "",
+)
+
+
+# ----------------------------
+# Featurizer service
+# ----------------------------
+FEATURIZER_SERVICE_ENV_VAR_CHANNEL_NAME = "FEATURIZER_SERVICE_CHANNEL"
+FEATURIZER_SERVICE_CHANNEL = os.getenv(
+    FEATURIZER_SERVICE_ENV_VAR_CHANNEL_NAME,
+    "",
+)
+
+
+# ----------------------------
 # Logs
 # ----------------------------
 LOGS_PHASE_API = "api"
