@@ -52,14 +52,13 @@ from components.seed.setter import set_seed
 from components.visualization.hit_miss_rates_plotter import (
     plot_hit_miss_rate,
 )
+from const import DAGS_HUB_REPO_NAME, DAGS_HUB_REPO_OWNER
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     CACHE_LFU_NAME,
     CACHE_LRU_NAME,
     CACHE_RANDOM_NAME,
     DAGS_HUB_DVC,
-    DAGS_HUB_REPO_NAME,
-    DAGS_HUB_REPO_OWNER,
     DATASET_PROCESSED_TYPE,
     LOGS_PHASE_SIMULATIONS,
     PLOT_DYNAMIC_HIT_MISS_RATES_FILE_PATH,
