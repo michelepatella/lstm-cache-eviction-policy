@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package decider_service;
+
+message DeciderServiceRequest {
+    repeated int32 keys_in_cache = 1;
+    repeated float key_scores = 2;
+    repeated int32 excluded_keys = 3;
+    int32 num_evictions = 4;
+}
+
+message DeciderServiceResponse {
+    repeated int32 keys_to_evict = 1;
+}
+
+service DeciderService {
+    rpc Decide(DeciderServiceRequest) returns (DeciderServiceResponse);
+}
