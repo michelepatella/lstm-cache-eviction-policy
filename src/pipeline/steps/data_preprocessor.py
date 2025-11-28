@@ -37,11 +37,10 @@ from components.logs.levels.info_logger import info
 from components.ray.initializer import initialize_ray
 from components.ray.tasks.features.builder import build_features_task
 from components.seed.setter import set_seed
+from const import DAGS_HUB_REPO_NAME, DAGS_HUB_REPO_OWNER
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     DAGS_HUB_DVC,
-    DAGS_HUB_REPO_NAME,
-    DAGS_HUB_REPO_OWNER,
     DATASET_PROCESSED_TYPE,
     DATASET_RESET_INDEX_DROP,
     LOGS_PHASE_DATA_PREPROCESSING,

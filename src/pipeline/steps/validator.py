@@ -37,11 +37,10 @@ from components.validation.search_space.combinator import (
     get_parameters_combination,
 )
 from components.yaml.io.saver import save_yaml
+from const import DAGS_HUB_REPO_NAME, DAGS_HUB_REPO_OWNER
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     DAGS_HUB_DVC,
-    DAGS_HUB_REPO_NAME,
-    DAGS_HUB_REPO_OWNER,
     DATASET_PROCESSED_TYPE,
     PIPELINE_CONFIG_FILE_PATH,
 )
