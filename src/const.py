@@ -11,10 +11,24 @@ names, and the set of available optimizers and devices.
 
 import os
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
 # ----------------------------
 # Cache
 # ----------------------------
 CACHE_LSTM_NAME = "LSTM"
+
+
+# ----------------------------
+# Dagshub
+# ----------------------------
+DAGS_HUB_ENV_VAR_REPO_NAME = "DAGS_HUB_REPO"
+DAGS_HUB_ENV_VAR_REPO_OWNER_NAME = "DAGS_HUB_REPO_OWNER"
+DAGS_HUB_REPO_OWNER = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME, "")
+DAGS_HUB_REPO_NAME = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME, "")
 
 
 # ----------------------------
@@ -71,6 +85,14 @@ LOGS_PHASE_VALIDATION = "validation"
 # MLFlow
 # ----------------------------
 MLFLOW_NESTED = True
+
+MLFLOW_ENV_VAR_MODEL_NAME = "MLFLOW_MODEL_NAME"
+MLFLOW_MODEL_NAME = os.getenv(MLFLOW_ENV_VAR_MODEL_NAME, "")
+
+MLFLOW_MODEL_TAG_ENVIRONMENT = "environment"
+MLFLOW_MODEL_TAG_DATA_MODE = "data_mode"
+MLFLOW_MODEL_TAG_ENVIRONMENT_PRODUCTION = "production"
+MLFLOW_MODEL_TAG_ENVIRONMENT_STAGING = "staging"
 
 
 # ----------------------------

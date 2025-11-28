@@ -46,11 +46,19 @@ from components.model.optimizations.quantizer import quantize_model
 from components.optimizer.builder import build_optimizer
 from components.seed.setter import set_seed
 from components.training.core.epochs_trainer import train_epochs
+from const import (
+    DAGS_HUB_REPO_NAME,
+    DAGS_HUB_REPO_OWNER,
+    DATA_REAL_MODE,
+    MLFLOW_MODEL_NAME,
+    MLFLOW_MODEL_TAG_DATA_MODE,
+    MLFLOW_MODEL_TAG_ENVIRONMENT,
+    MLFLOW_MODEL_TAG_ENVIRONMENT_PRODUCTION,
+    MLFLOW_MODEL_TAG_ENVIRONMENT_STAGING,
+)
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     DAGS_HUB_DVC,
-    DAGS_HUB_REPO_NAME,
-    DAGS_HUB_REPO_OWNER,
     DATASET_PROCESSED_TYPE,
     LOGS_PHASE_TRAINING,
     MLFLOW_ARTIFACT_PATH,
@@ -236,6 +244,8 @@ def train_model() -> None:
                 "epochs_run_num": num_epochs_run,
             },
         )
+
+        # Log model and save it to registry
         with (
             tempfile.TemporaryDirectory() as MLFLOW_PYTORCH_SAVE_MODEL_TEMP_PATH
         ):
@@ -246,6 +256,16 @@ def train_model() -> None:
             mlflow.log_artifacts(
                 local_dir=MLFLOW_PYTORCH_SAVE_MODEL_TEMP_PATH,
                 artifact_path=MLFLOW_ARTIFACT_PATH,
+            )
+            mlflow.register_model(
+                model_uri=f"runs:/{mlflow.active_run().info.run_id}/{MLFLOW_ARTIFACT_PATH}",
+                name=MLFLOW_MODEL_NAME,
+                tags={
+                    MLFLOW_MODEL_TAG_ENVIRONMENT: MLFLOW_MODEL_TAG_ENVIRONMENT_PRODUCTION
+                    if data_mode == DATA_REAL_MODE
+                    else MLFLOW_MODEL_TAG_ENVIRONMENT_STAGING,
+                    MLFLOW_MODEL_TAG_DATA_MODE: data_mode,
+                },
             )
 
     info(
