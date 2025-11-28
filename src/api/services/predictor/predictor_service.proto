@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package predictor_service;
+
+service PredictorService {
+  rpc Predict(PredictorServiceRequest) returns (PredictorServiceResponse);
+}
+
+message LastAccess {
+  float timestamp = 1;
+  int32 key = 2;
+}
+
+message PredictorServiceRequest {
+  repeated LastAccess last_accesses = 1;
+  int32 rollout_horizon = 2;
+  int32 mc_dropout_samples = 3;
+  float time_step_increment = 4;
+  bool unbiased_variance = 5;
+}
+
+message PredictorServiceResponse {
+  repeated FloatList outputs = 1;
+  repeated FloatList variances = 2;
+}
+
+message FloatList {
+  repeated float values = 1;
+}
