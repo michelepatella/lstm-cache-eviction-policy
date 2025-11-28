@@ -100,11 +100,6 @@ class KwargsAPIConfig(BaseModel):
         excluded_keys (KwargListIntAPIConfig): Keys that should not be evicted.
         prob_weight (KwargFloatAPIConfig): Weight applied to probability in key scoring.
         conf_weight (KwargFloatAPIConfig): Weight applied to confidence in key scoring.
-        return_all_scores (KwargBoolAPIConfig): Whether to return all scores.
-        return_prob_conf (KwargBoolAPIConfig): Whether to return probability and
-                                               confidence matrices.
-        return_api_kwargs (KwargBoolAPIConfig): Whether to return all API kwargs in
-                                                responses.
     """
 
     rollout_horizon: KwargIntAPIConfig
@@ -116,6 +111,3 @@ class KwargsAPIConfig(BaseModel):
     unbiased_variance: KwargBoolAPIConfig
     prob_weight: KwargFloatAPIConfig
     conf_weight: KwargFloatAPIConfig
-    return_all_scores: KwargBoolAPIConfig
-    return_prob_conf: KwargBoolAPIConfig
-    return_api_kwargs: KwargBoolAPIConfig

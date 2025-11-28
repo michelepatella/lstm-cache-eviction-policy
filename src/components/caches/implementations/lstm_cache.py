@@ -18,7 +18,6 @@ from typing import Any
 
 import pandas as pd
 import requests
-from box import Box
 
 from components.caches.implementations.utils.base_cache import BaseCache
 from components.caches.utils.cache_metrics_logger import (
@@ -221,10 +220,12 @@ class LSTMCache(BaseCache):
                 seq_len = pipeline_config.model.sequence.length
 
                 # Extract last accesses of
-                # sequence length
+                # sequence length * 2 (for each
+                # access a history of seq_len past accesses
+                # is needed for building features)
                 last_accesses = extract_last_rows_from_dataset(
                     current_idx,
-                    seq_len,
+                    seq_len + seq_len,
                     testing_set.data,
                 )
 
@@ -234,8 +235,8 @@ class LSTMCache(BaseCache):
                     # Eviction fallback policy: Random
                     key_to_evict = random.choice(list(self.store.keys()))
                 else:
-                    # Call API to get
-                    # the key to be evicted from the cache
+                    # Call API to get the key to be evicted
+                    # from the cache
                     response = requests.post(
                         self.api_endpoint,
                         json={
@@ -246,10 +247,8 @@ class LSTMCache(BaseCache):
                             API_PARAM_USER_API_KWARGS_NAME: self.api_kwargs.__dict__,
                         },
                     )
-                    data = Box(response.json())
-
-                    # Retrieve keys to evict
-                    key_to_evict = data.keys_to_evict[LIST_FIRST_IDX]
+                    keys_to_evict = response.json()
+                    key_to_evict = keys_to_evict[LIST_FIRST_IDX]
 
                 # Evict key
                 self.evict_key(key_to_evict)

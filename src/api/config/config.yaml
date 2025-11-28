@@ -23,12 +23,6 @@ kwargs:
     value: 0.8
   conf_weight:
     value: 0.2
-  return_all_scores:
-    value: false
-  return_prob_conf:
-    value: false
-  return_api_kwargs:
-    value: false
 logs:
   level: INFO
 model:

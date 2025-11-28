@@ -34,9 +34,6 @@ class SimulationsApiKwargsPipelineConfig(BaseModel):
         num_evictions (int): Number of items to evict simultaneously (>= 1).
         prob_weight (float): Weight applied to the prediction probability
                              score (in (0.0, 1.0]).
-        return_all_scores (bool): Flag to return all scores from the API.
-        return_api_kwargs (bool): Flag to return API arguments alongside results.
-        return_prob_conf (bool): Flag to return probability and confidence scores.
         rollout_horizon (int): Time horizon for autoregressive rollout
                                prediction (>= 1).
         time_step_increment (float): Time increment used in autoregressive
@@ -49,9 +46,6 @@ class SimulationsApiKwargsPipelineConfig(BaseModel):
     mc_dropout_samples: Annotated[int, Field(ge=1)]
     num_evictions: Annotated[int, Field(ge=1)]
     prob_weight: Annotated[float, Field(gt=0, le=1)]
-    return_all_scores: bool
-    return_api_kwargs: bool
-    return_prob_conf: bool
     rollout_horizon: Annotated[int, Field(ge=1)]
     time_step_increment: Annotated[float, Field(gt=0)]
 
