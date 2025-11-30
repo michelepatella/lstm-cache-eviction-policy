@@ -4,32 +4,46 @@ This module defines the central API Gateway for the cache eviction policy.
 
 It orchestrates the end-to-end inference pipeline by sequentially calling four
 distinct gRPC microservices: Featurizer, Predictor, Scorer, and Decider.
+It also includes a basic health check for the API and a decorator to standardize
+the response format.
 
 Functions:
     lifespan(app: FastAPI):
         Context manager for API startup/shutdown tasks.
+    construct_api_response(
+        f: Callable[..., Awaitable[dict[str, Any]] | dict[str, Any]]
+    ) -> Callable[..., Awaitable[dict[str, Any]]]:
+        Decorator for standardizing API responses.
     gateway_api(
         keys_in_cache: list[int],
         last_accesses: list[tuple[float, int]],
-        user_api_kwargs: dict[str, int | float | list[int] | str | bool] | None,
-    ) -> list[int]:
-        The main endpoint that executes the cache eviction policy.
+        user_api_kwargs: dict[str, int | float | list[int] | str | bool] | None
+    ) -> dict[str, Any]:
+        The main endpoint that executes the cache eviction policy pipeline.
     _index() -> dict[str, Any]:
         Provides a basic health check for the API.
 """
 
 import logging
+from collections.abc import Awaitable, Callable
 from contextlib import asynccontextmanager
 from copy import deepcopy
+from datetime import datetime
+from functools import wraps
 from http import HTTPStatus
 from typing import Any
 
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, Request, status
 
 from api.config.pydantic.api_config import APIConfig
 from api.const import (
     API_CONFIG_FILE_PATH,
     API_DESCRIPTION,
+    API_RESPONSE_FIELD_MESSAGE_NAME,
+    API_RESPONSE_FIELD_METHOD_NAME,
+    API_RESPONSE_FIELD_STATUS_CODE_NAME,
+    API_RESPONSE_FIELD_TIMESTAMP_NAME,
+    API_RESPONSE_FIELD_URL_NAME,
     API_TITLE,
     LOGS_PHASE_API,
 )
@@ -48,7 +62,12 @@ from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.yaml.io.loader import load_yaml
-from src.const import GATEWAY_API_ENDPOINT, LOGS_LOGGER_NAME
+from src.const import (
+    API_RESPONSE_FIELD_DATA_KEYS_TO_EVICT_NAME,
+    API_RESPONSE_FIELD_DATA_NAME,
+    GATEWAY_API_ENDPOINT,
+    LOGS_LOGGER_NAME,
+)
 
 
 @asynccontextmanager
@@ -91,12 +110,101 @@ app = FastAPI(
 )
 
 
+def construct_api_response(
+    f: Callable[..., Awaitable[dict[str, Any]] | dict[str, Any]],
+) -> Callable[..., Awaitable[dict[str, Any]]]:
+    """Decorator to standardize the API response format.
+
+    This function wraps an asynchronous/synchronous API endpoint function
+    (f) and ensures that the final output adheres to a consistent JSON
+    structure, including metadata (method, timestamp, URL) and centralized
+    handling for HTTPException and unexpected errors.
+
+    Args:
+        f (Callable[..., Awaitable[dict[str, Any]] | dict[str, Any]]):
+            The original API endpoint function to wrap.
+
+    Returns:
+        Callable[..., Awaitable[dict[str, Any]]]: The wrapped function that
+                                                  returns a standardized response
+                                                  dictionary.
+    """
+
+    @wraps(f)
+    async def wrap(
+        *args: Any,
+        request: Request,
+        **kwargs: Any,
+    ) -> dict[str, Any]:
+        """The wrapper function that executes the endpoint and formats
+        the response.
+
+        This function attempts to execute the decorated function. If successful,
+        it constructs the standard response using the result. If an exception occurs
+        (HTTPException or a general Exception), it catches it and formats the output
+        as an error response with appropriate status codes.
+
+        Args:
+            *args (Any): Positional arguments passed to the original function.
+            request (Request): The FastAPI Request object, implicitly passed by
+                               FastAPI.
+            **kwargs (Any): Keyword arguments passed to the original function.
+
+        Returns:
+            dict[str, Any]: The standardized API response dictionary,
+                            containing message, status code, data, and metadata.
+        """
+        # Construct a standard API response, also
+        # managing exceptions raising in the API
+        try:
+            result = (
+                await f(*args, request=request, **kwargs)
+                if callable(f)
+                else f(*args, **kwargs)
+            )
+        except HTTPException as e:
+            # Response for error-specific cases
+            result = {
+                API_RESPONSE_FIELD_MESSAGE_NAME: str(e.detail),
+                API_RESPONSE_FIELD_STATUS_CODE_NAME: e.status_code,
+                API_RESPONSE_FIELD_DATA_NAME: {},
+            }
+        except Exception as e:
+            # Response for general, unexpected error cases
+            result = {
+                API_RESPONSE_FIELD_MESSAGE_NAME: str(e),
+                API_RESPONSE_FIELD_STATUS_CODE_NAME: HTTPStatus.INTERNAL_SERVER_ERROR,
+                API_RESPONSE_FIELD_DATA_NAME: {},
+            }
+
+        # Construct final API response
+        response = {
+            API_RESPONSE_FIELD_MESSAGE_NAME: result.get(
+                API_RESPONSE_FIELD_MESSAGE_NAME,
+            ),
+            API_RESPONSE_FIELD_METHOD_NAME: request.method,
+            API_RESPONSE_FIELD_STATUS_CODE_NAME: result.get(
+                API_RESPONSE_FIELD_STATUS_CODE_NAME,
+            ),
+            API_RESPONSE_FIELD_TIMESTAMP_NAME: datetime.now().isoformat(),
+            API_RESPONSE_FIELD_URL_NAME: str(request.url),
+        }
+        if API_RESPONSE_FIELD_DATA_NAME in result:
+            response[API_RESPONSE_FIELD_DATA_NAME] = result[
+                API_RESPONSE_FIELD_DATA_NAME
+            ]
+        return response
+
+    return wrap
+
+
 @app.post(GATEWAY_API_ENDPOINT)
+@construct_api_response
 def gateway_api(
     keys_in_cache: list[int],
     last_accesses: list[tuple[float, int]],
     user_api_kwargs: dict[str, int | float | list[int] | str | bool] | None,
-) -> list[int]:
+) -> dict[str, Any]:
     """The main endpoint executing the cache eviction policy.
 
     This function orchestrates a sequential process by calling the
@@ -117,7 +225,7 @@ def gateway_api(
             default configurations.
 
     Returns:
-        list[int]: A list of keys that should be evicted from the cache.
+        dict[str, Any]: A dictionary containing the standard API response structure.
 
     Raises:
         HTTPException: If any API step fails.
@@ -186,7 +294,13 @@ def gateway_api(
         )
 
         # Final response to the client
-        return keys_to_evict
+        return {
+            API_RESPONSE_FIELD_MESSAGE_NAME: HTTPStatus.OK.phrase,
+            API_RESPONSE_FIELD_STATUS_CODE_NAME: HTTPStatus.OK,
+            API_RESPONSE_FIELD_DATA_NAME: {
+                API_RESPONSE_FIELD_DATA_KEYS_TO_EVICT_NAME: keys_to_evict,
+            },
+        }
 
     except Exception as e:
         error(
@@ -214,6 +328,7 @@ def gateway_api(
 
 
 @app.get("/")
+@construct_api_response
 def _index() -> dict[str, Any]:
     """Basic health check for the API.
 
@@ -225,7 +340,7 @@ def _index() -> dict[str, Any]:
                         indicating the API is operational.
     """
     return {
-        "message": HTTPStatus.OK.phrase,
-        "status-code": HTTPStatus.OK,
-        "data": {},
+        API_RESPONSE_FIELD_MESSAGE_NAME: HTTPStatus.OK.phrase,
+        API_RESPONSE_FIELD_STATUS_CODE_NAME: HTTPStatus.OK,
+        API_RESPONSE_FIELD_DATA_NAME: {},
     }
