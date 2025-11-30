@@ -26,6 +26,12 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 API_TITLE = "LSTM Cache Eviction Policy"
 API_DESCRIPTION = "Smart cache eviction policy using LSTM predictions."
 
+API_RESPONSE_FIELD_MESSAGE_NAME = "message"
+API_RESPONSE_FIELD_STATUS_CODE_NAME = "status-code"
+API_RESPONSE_FIELD_METHOD_NAME = "method"
+API_RESPONSE_FIELD_TIMESTAMP_NAME = "timestamp"
+API_RESPONSE_FIELD_URL_NAME = "url"
+
 
 # ----------------------------
 # API Configuration

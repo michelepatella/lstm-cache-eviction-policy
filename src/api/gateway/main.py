@@ -14,11 +14,7 @@ Functions:
         f: Callable[..., Awaitable[dict[str, Any]] | dict[str, Any]]
     ) -> Callable[..., Awaitable[dict[str, Any]]]:
         Decorator for standardizing API responses.
-    gateway_api(
-        keys_in_cache: list[int],
-        last_accesses: list[tuple[float, int]],
-        user_api_kwargs: dict[str, int | float | list[int] | str | bool] | None
-    ) -> dict[str, Any]:
+    gateway_api(payload: GatewayAPIInput) -> dict[str, Any]:
         The main endpoint that executes the cache eviction policy pipeline.
     _index() -> dict[str, Any]:
         Provides a basic health check for the API.
@@ -57,6 +53,7 @@ from api.gateway.callers.predictor_service_caller import (
 from api.gateway.callers.scorer_service_caller import (
     call_scorer_service,
 )
+from api.gateway.schemas import GatewayAPIInput
 from components.logs.handlers.grafana_loki_handler import GrafanaLokiHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.error_logger import error
@@ -158,9 +155,7 @@ def construct_api_response(
         # managing exceptions raising in the API
         try:
             result = (
-                await f(*args, request=request, **kwargs)
-                if callable(f)
-                else f(*args, **kwargs)
+                await f(*args, **kwargs) if callable(f) else f(*args, **kwargs)
             )
         except HTTPException as e:
             # Response for error-specific cases
@@ -200,11 +195,7 @@ def construct_api_response(
 
 @app.post(GATEWAY_API_ENDPOINT)
 @construct_api_response
-def gateway_api(
-    keys_in_cache: list[int],
-    last_accesses: list[tuple[float, int]],
-    user_api_kwargs: dict[str, int | float | list[int] | str | bool] | None,
-) -> dict[str, Any]:
+def gateway_api(payload: GatewayAPIInput) -> dict[str, Any]:
     """The main endpoint executing the cache eviction policy.
 
     This function orchestrates a sequential process by calling the
@@ -216,21 +207,27 @@ def gateway_api(
         4. Decider: Selects the keys to evict.
 
     Args:
-        keys_in_cache (list[int]): List of keys currently stored in the cache.
-        last_accesses (list[tuple[float, int]]): A sequence of (hours in day, key)
-                                                 tuples representing recent
-                                                 cache accesses.
-        user_api_kwargs (dict[str, int | float | list[int] | str | bool] | None):
-            Optional dictionary of runtime arguments to override API
-            default configurations.
+        payload (GatewayAPIInput):
+            The request body containing all input parameters, validated
+            by the Pydantic model. This includes:
+            - keys_in_cache (list[int]): Keys currently in the cache.
+            - last_accesses (list[tuple[float, int]]): Recent access history.
+            - user_api_kwargs (dict | None): Optional runtime configuration
+                                             overrides.
 
     Returns:
-        dict[str, Any]: A dictionary containing the standard API response structure.
+        dict[str, Any]: A dictionary containing the standard API response
+                        structure.
 
     Raises:
         HTTPException: If any API step fails.
     """
     try:
+        # Extract payload
+        keys_in_cache = payload.keys_in_cache
+        last_accesses = payload.last_accesses
+        user_api_kwargs = payload.user_api_kwargs
+
         info(
             "Gateway API started",
             extra={
@@ -307,11 +304,6 @@ def gateway_api(
             "Gateway API failed",
             extra={
                 "exception": str(e),
-                "keys_in_cache_num": len(keys_in_cache),
-                "last_accesses_num": len(last_accesses),
-                "api_kwargs_user": user_api_kwargs
-                if user_api_kwargs
-                else None,
                 "context": "Gateway API",
             },
         )
