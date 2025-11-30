@@ -9,13 +9,14 @@ confidence level.
 
 Functions:
     calculate_confidence_interval(
-        outputs: list[list[float]],
-        variances: list[list[float]],
+        outputs: list[np.ndarray],
+        variances: list[np.ndarray],
         confidence_level: float
     ) -> tuple[torch.Tensor, torch.Tensor]
         Computes the lower and upper boundaries of the confidence interval.
 """
 
+import numpy as np
 import torch
 from scipy.stats import norm
 
@@ -23,8 +24,8 @@ from components.logs.levels.error_logger import error
 
 
 def calculate_confidence_interval(
-    outputs: list[list[float]],
-    variances: list[list[float]],
+    outputs: list[np.ndarray],
+    variances: list[np.ndarray],
     confidence_level: float,
 ) -> tuple[torch.Tensor, torch.Tensor]:
     """Calculate confidence interval for a set of outputs.
@@ -34,9 +35,9 @@ def calculate_confidence_interval(
     specified confidence level.
 
     Args:
-        outputs (list[torch.Tensor]): List of output tensors.
-        variances (list[torch.Tensor]): List of variance tensors corresponding
-                                        to each output.
+        outputs (list[np.ndarray]): List of output tensors.
+        variances (list[np.ndarray]): List of variance tensors corresponding
+                                      to each output.
         confidence_level (float): Confidence level.
 
     Returns:
