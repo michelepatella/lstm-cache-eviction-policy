@@ -14,11 +14,15 @@ Functions:
         user_api_kwargs: dict[str, int | float | list[int] | str | bool] | None,
     ) -> list[int]:
         The main endpoint that executes the cache eviction policy.
+    _index() -> dict[str, Any]:
+        Provides a basic health check for the API.
 """
 
 import logging
 from contextlib import asynccontextmanager
 from copy import deepcopy
+from http import HTTPStatus
+from typing import Any
 
 from fastapi import FastAPI, HTTPException, status
 
@@ -207,3 +211,21 @@ def gateway_api(
         for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
             if isinstance(handler, GrafanaLokiHandler):
                 handler.flush_buffer_async()
+
+
+@app.get("/")
+def _index() -> dict[str, Any]:
+    """Basic health check for the API.
+
+    This function represents a basic health check for the API
+    status verification.
+
+    Returns:
+        dict[str, Any]: A dictionary containing the HTTP status and a message
+                        indicating the API is operational.
+    """
+    return {
+        "message": HTTPStatus.OK.phrase,
+        "status-code": HTTPStatus.OK,
+        "data": {},
+    }
