@@ -75,11 +75,11 @@ class ScorerService(pb2_grpc.ScorerServiceServicer):
             # Calculate confidence-aware
             # probabilistic key scores
             key_scores = calculate_prob_conf_item_scores(
-                outputs=outputs,
-                variances=variances,
-                conf_level=request.conf_level,
-                prob_weight=request.prob_weight,
-                conf_weight=request.conf_weight,
+                outputs,
+                variances,
+                request.conf_level,
+                request.prob_weight,
+                request.conf_weight,
             )
 
             debug(
