@@ -10,8 +10,8 @@ the confidence interval).
 
 Functions:
      calculate_prob_conf_item_scores(
-        outputs: list[list[float]],
-        variances: list[list[float]],
+        outputs: list[np.ndarray],
+        variances: list[np.ndarray],
         conf_level: float,
         prob_weight: float,
         conf_weight: float
@@ -33,8 +33,8 @@ from components.math.confidence_interval_calculator import (
 
 
 def calculate_prob_conf_item_scores(
-    outputs: list[list[float]],
-    variances: list[list[float]],
+    outputs: list[np.ndarray],
+    variances: list[np.ndarray],
     conf_level: float,
     prob_weight: float,
     conf_weight: float,
@@ -49,9 +49,9 @@ def calculate_prob_conf_item_scores(
     single, normalized score for each item.
 
     Args:
-        outputs (list[list[float]]): Model raw outputs (logits).
-        variances (list[list[float]]): Corresponding variance/uncertainty values
-                                       for the outputs.
+        outputs (list[np.ndarray]): Model raw outputs (logits).
+        variances (list[np.ndarray]): Corresponding variance/uncertainty values
+                                      for the outputs.
         conf_level (float): The confidence level used for calculating the confidence
                             interval.
         prob_weight (float): The weight assigned to the probability component
