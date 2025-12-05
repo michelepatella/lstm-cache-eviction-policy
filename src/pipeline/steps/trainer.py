@@ -50,11 +50,8 @@ from const import (
     DAGS_HUB_REPO_NAME,
     DAGS_HUB_REPO_OWNER,
     DATA_REAL_MODE,
-    MLFLOW_MODEL_NAME,
-    MLFLOW_MODEL_TAG_DATA_MODE,
-    MLFLOW_MODEL_TAG_ENVIRONMENT,
-    MLFLOW_MODEL_TAG_ENVIRONMENT_PRODUCTION,
-    MLFLOW_MODEL_TAG_ENVIRONMENT_STAGING,
+    MLFLOW_MODEL_PRODUCTION_NAME,
+    MLFLOW_MODEL_SIMULATION_NAME,
 )
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
@@ -62,6 +59,7 @@ from pipeline.const import (
     DATASET_PROCESSED_TYPE,
     LOGS_PHASE_TRAINING,
     MLFLOW_ARTIFACT_PATH,
+    MLFLOW_MODEL_TAG_DATA_MODE,
 )
 from src.const import (
     DATASET_TRAINING_SPLIT_TYPE,
@@ -259,13 +257,12 @@ def train_model() -> None:
             )
             mlflow.register_model(
                 model_uri=f"runs:/{mlflow.active_run().info.run_id}/{MLFLOW_ARTIFACT_PATH}",
-                name=MLFLOW_MODEL_NAME,
-                tags={
-                    MLFLOW_MODEL_TAG_ENVIRONMENT: MLFLOW_MODEL_TAG_ENVIRONMENT_PRODUCTION
+                name={
+                    MLFLOW_MODEL_PRODUCTION_NAME
                     if data_mode == DATA_REAL_MODE
-                    else MLFLOW_MODEL_TAG_ENVIRONMENT_STAGING,
-                    MLFLOW_MODEL_TAG_DATA_MODE: data_mode,
+                    else MLFLOW_MODEL_SIMULATION_NAME,
                 },
+                tags={MLFLOW_MODEL_TAG_DATA_MODE: data_mode},
             )
 
     info(

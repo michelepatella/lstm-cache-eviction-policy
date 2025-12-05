@@ -64,6 +64,8 @@ LOSS_CLASS_WEIGHT_TYPES = [None, "balanced"]
 # ----------------------------
 MLFLOW_ARTIFACT_PATH = "model"
 
+MLFLOW_MODEL_TAG_DATA_MODE = "data_mode"
+
 
 # ----------------------------
 # Model
