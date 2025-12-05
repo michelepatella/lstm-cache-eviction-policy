@@ -131,8 +131,8 @@ stages:
       - src/components/dataset/columns/reorderer.py
       - src/components/dataset/columns/setter.py
       - src/components/dataset/features/builder.py
-      - src/components/dataset/features/derived/local_frequencies_calculator.py
-      - src/components/dataset/features/derived/local_recencies_calculator.py
+      - src/components/dataset/features/local/local_frequencies_calculator.py
+      - src/components/dataset/features/local/local_recencies_calculator.py
       - src/components/dataset/io/loader.py
       - src/components/dataset/io/locator.py
       - src/components/dataset/io/saver.py

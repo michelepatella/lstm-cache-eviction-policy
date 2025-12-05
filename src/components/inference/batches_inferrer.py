@@ -26,7 +26,7 @@ Functions:
         variance tensors.
 """
 
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 
 import numpy as np
 import torch
@@ -122,8 +122,8 @@ def infer_batches(
             ]
 
             # Collect all the results
-            for f in as_completed(futures):
-                loss, preds, targets, outputs, variances = f.result()
+            results = [f.result() for f in futures]
+            for loss, preds, targets, outputs, variances in results:
                 total_loss += loss
                 all_predictions.extend(preds)
                 all_targets.extend(targets)

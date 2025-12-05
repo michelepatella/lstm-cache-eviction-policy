@@ -18,7 +18,27 @@ Functions:
         Executes the full suite of data quality expectations for the raw data.
 """
 
-from helpers import (
+import pytest
+
+from pipeline.config.configurator import prepare_pipeline_config
+from src.const import (
+    DATA_DYNAMIC_MODE,
+    DATA_STATIC_MODE,
+    DATASET_COLUMN_REQUEST_NAME,
+    DATASET_COLUMN_TIMESTAMP_NAME,
+    DATASET_RAW_TYPE,
+    TIME_END_HOUR,
+    TIME_START_HOUR,
+)
+from tests.const import (
+    DATA_QUALITY_TESTS_RAW_DYNAMIC_DATA_RESULTS_SAVE_PATH,
+    DATA_QUALITY_TESTS_RAW_REAL_DATA_RESULTS_SAVE_PATH,
+    DATA_QUALITY_TESTS_RAW_STATIC_DATA_RESULTS_SAVE_PATH,
+    DATASET_COLUMN_REQUEST_TYPE,
+    DATASET_COLUMN_TIMESTAMP_TYPE,
+    DATASET_RAW_COLUMNS,
+)
+from tests.data.quality.helpers import (
     add_column_count_expectation,
     add_column_existence_expectations,
     add_column_order_expectation,
@@ -29,22 +49,8 @@ from helpers import (
     run_data_quality_tests,
 )
 
-from const import (
-    DATASET_COLUMN_REQUEST_NAME,
-    DATASET_COLUMN_TIMESTAMP_NAME,
-    DATASET_RAW_TYPE,
-    TIME_END_HOUR,
-    TIME_START_HOUR,
-)
-from pipeline.config.configurator import prepare_pipeline_config
-from tests.const import (
-    DATA_QUALITY_TESTS_RAW_DATA_RESULTS_SAVE_PATH,
-    DATASET_COLUMN_REQUEST_TYPE,
-    DATASET_COLUMN_TIMESTAMP_TYPE,
-    DATASET_RAW_COLUMNS,
-)
 
-
+@pytest.mark.data_quality_raw
 def test_raw_data_quality() -> None:
     """Tests the quality and schema of the raw data.
 
@@ -59,7 +65,9 @@ def test_raw_data_quality() -> None:
     Returns:
         None
     """
-    # Setup for raw data testing
+    # ----------------------------
+    # Setup
+    # ----------------------------
     pipeline_config = prepare_pipeline_config()
     df, context, data_source, data_asset, batch_definition, suite = (
         initialize_data_quality_tests(
@@ -126,14 +134,24 @@ def test_raw_data_quality() -> None:
     add_row_count_expectation(suite, pipeline_config.data.general.requests)
 
     # ----------------------------
-    # Suite validation
+    # Suite running
     # ----------------------------
+    # Determine the save path based on
+    # the data mode
+    if pipeline_config.data.general.mode == DATA_STATIC_MODE:
+        save_path = DATA_QUALITY_TESTS_RAW_STATIC_DATA_RESULTS_SAVE_PATH
+    elif pipeline_config.data.general.mode == DATA_DYNAMIC_MODE:
+        save_path = DATA_QUALITY_TESTS_RAW_DYNAMIC_DATA_RESULTS_SAVE_PATH
+    else:
+        save_path = DATA_QUALITY_TESTS_RAW_REAL_DATA_RESULTS_SAVE_PATH
+
+    # Run tests suite
     run_data_quality_tests(
         context,
         batch_definition,
         suite,
         df,
-        DATA_QUALITY_TESTS_RAW_DATA_RESULTS_SAVE_PATH,
+        save_path,
     )
 
 

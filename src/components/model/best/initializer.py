@@ -18,8 +18,6 @@ Functions:
         Prepares the device, criterion, and best pre-trained model for inference.
 """
 
-from typing import Any
-
 import torch
 from torch import nn
 from torch.utils.data import DataLoader

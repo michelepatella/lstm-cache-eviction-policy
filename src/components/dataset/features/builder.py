@@ -33,10 +33,10 @@ from components.dataset.columns.reorderer import (
     reorder_dataset_columns,
 )
 from components.dataset.columns.setter import set_dataset_column
-from components.dataset.features.derived.local_frequencies_calculator import (
+from components.dataset.features.local.local_frequencies_calculator import (
     calculate_local_frequencies,
 )
-from components.dataset.features.derived.local_recencies_calculator import (
+from components.dataset.features.local.local_recencies_calculator import (
     calculate_local_recencies,
 )
 from components.logs.levels.debug_logger import debug
@@ -44,7 +44,7 @@ from components.logs.levels.error_logger import error
 from components.time.transforms.trig_encoder import (
     encode_time_trigonometrically,
 )
-from const import (
+from src.const import (
     DATASET_COLUMN_REQUEST_NAME,
     DATASET_COLUMN_TIMESTAMP_NAME,
 )

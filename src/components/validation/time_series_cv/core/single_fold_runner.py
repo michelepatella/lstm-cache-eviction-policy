@@ -20,8 +20,6 @@ Functions:
         returns the average loss for that fold.
 """
 
-from typing import Any
-
 import numpy as np
 
 from components.data_loader.builder import build_data_loader
@@ -67,10 +65,10 @@ def compute_single_time_series_cv_fold(
         float: Average loss for the current fold.
     """
     # Prepare configuration
-    training_batch_size = pipeline_config.data_loader.batch_size.training
-    training_shuffle = pipeline_config.data_loader.shuffle.training
-    validation_batch_size = pipeline_config.data_loader.batch_size.validation
-    validation_shuffle = pipeline_config.data_loader.shuffle.validation
+    training_batch_size = pipeline_config.data_loader.training.batch_size
+    training_shuffle = pipeline_config.data_loader.training.shuffle
+    validation_batch_size = pipeline_config.data_loader.validation.batch_size
+    validation_shuffle = pipeline_config.data_loader.validation.shuffle
     validation_device = pipeline_config.resources.devices.validation
     optimizer_type = pipeline_config.optimizer.type
     learning_rate = pipeline_config.optimizer.params.learning_rate
@@ -116,7 +114,7 @@ def compute_single_time_series_cv_fold(
     )
 
     # Train model
-    avg_loss, _ = train_epochs(
+    avg_loss, *_ = train_epochs(
         num_epochs,
         model,
         training_loader,

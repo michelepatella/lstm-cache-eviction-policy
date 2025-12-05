@@ -13,6 +13,7 @@ Functions:
 
 import torch
 
+from components.const import TORCH_DTYPE_TARGET
 from components.device.mover import (
     move_to_device,
 )
@@ -59,7 +60,7 @@ def compute_forward(
         # Move batch to device
         x_features = move_to_device(x_features, device)
         x_keys = move_to_device(x_keys, device)
-        y_key = move_to_device(y_key, device).long()
+        y_key = move_to_device(y_key, device).to(TORCH_DTYPE_TARGET)
 
         # Compute forward pass
         outputs = model(x_features, x_keys)

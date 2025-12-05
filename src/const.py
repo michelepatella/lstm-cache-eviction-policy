@@ -29,6 +29,12 @@ DATA_MODES = [
 
 
 # ----------------------------
+# Data Loader
+# ----------------------------
+DATA_LOADER_SHUFFLE_DEFAULT = False
+
+
+# ----------------------------
 # Dataset
 # ----------------------------
 DATASET_COLUMN_TIMESTAMP_NAME = "timestamp"

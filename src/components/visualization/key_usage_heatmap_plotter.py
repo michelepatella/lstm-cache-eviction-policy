@@ -37,7 +37,7 @@ from components.const import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import (
+from src.const import (
     TIME_END_HOUR,
     TIME_START_HOUR,
 )

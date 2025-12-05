@@ -12,8 +12,7 @@ Classes:
         PyTorch-compatible dataset class for sequential access logs.
 """
 
-from typing import Any
-
+import pandas as pd
 import torch
 from torch.utils.data import Dataset
 
@@ -22,7 +21,8 @@ from components.const import (
     DATASET_PROCESSED_FEATURE_COLUMNS,
     DATASET_TARGET_COLUMN_SHIFT,
     LIST_LAST_IDX,
-    TORCH_DTYPE,
+    TORCH_DTYPE_FEATURES,
+    TORCH_DTYPE_TARGET,
 )
 from components.dataset.columns.shifter import (
     shift_dataset_column,
@@ -41,8 +41,8 @@ from components.dataset.splits.index.calculator import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import DATASET_TRAINING_SPLIT_TYPE
 from pipeline.config.pydantic.pipeline_config import PipelineConfig
+from src.const import DATASET_TRAINING_SPLIT_TYPE
 
 
 class AccessLogsDataset(Dataset):
@@ -54,7 +54,6 @@ class AccessLogsDataset(Dataset):
 
     Attributes:
         data (pd.DataFrame): Full dataset stored internally.
-        columns (list[str]): List of column names in the dataset.
         features (list[str]): List of feature column names.
         target (str): Target column name (usually the last column).
         seq_len (int): Sequence length used for model sequences.
@@ -62,7 +61,7 @@ class AccessLogsDataset(Dataset):
 
     def _split_dataset(
         self: "AccessLogsDataset",
-        dataset_type: str,
+        split_type: str,
         split_perc: float,
     ) -> None:
         """Split the dataset based on the requested dataset type.
@@ -73,7 +72,7 @@ class AccessLogsDataset(Dataset):
 
         Args:
             self (AccessLogsDataset): Instance of AccessLogsDataset.
-            dataset_type (str): The dataset type to split.
+            split_type (str): The type of split to apply.
             split_perc (float): The split percentage.
 
         Returns:
@@ -91,7 +90,7 @@ class AccessLogsDataset(Dataset):
         self.data = split_dataset_data(
             self.data,
             dataset_split_idx,
-            (dataset_type == DATASET_TRAINING_SPLIT_TYPE),
+            (split_type == DATASET_TRAINING_SPLIT_TYPE),
         )
 
     def _set_fields(
@@ -131,8 +130,11 @@ class AccessLogsDataset(Dataset):
 
     def __init__(
         self: "AccessLogsDataset",
-        dataset_type: str,
-        pipeline_config: PipelineConfig,
+        dataset_type: str | None,
+        split_type: str | None,
+        pipeline_config: PipelineConfig | None,
+        parent: "AccessLogsDataset" = None,
+        data: pd.DataFrame = None,
     ) -> None:
         """Initialize the AccessLogsDataset class.
 
@@ -142,13 +144,26 @@ class AccessLogsDataset(Dataset):
 
         Args:
             self (AccessLogsDataset): AccessLogsDataset class.
-            dataset_type (str): The dataset type requested to
+            dataset_type (str | None): The dataset type requested to
                                 be created.
-            pipeline_config (PipelineConfig): Configuration object.
+            split_type (str | None): The split type requested.
+            pipeline_config (PipelineConfig | None): Configuration object.
+            parent (AccessLogsDataset): Parent class instance.
+            data (pd.DataFrame): Data already stored for a parent class instance.
 
         Returns:
             None
         """
+        # Check whether to create a new class instance
+        # starting from an already existing one
+        if isinstance(parent, AccessLogsDataset):
+            # Set data and fields
+            self.data = data.copy() if data is not None else parent.data.copy()
+            self.features = parent.features
+            self.target = parent.target
+            self.seq_len = parent.seq_len
+            return
+
         # Prepare configuration
         data_mode = pipeline_config.data.general.mode
         training_split = pipeline_config.dataset.splits.training
@@ -166,7 +181,7 @@ class AccessLogsDataset(Dataset):
         self.data = df.copy()
 
         # Split the dataset
-        self._split_dataset(dataset_type, training_split)
+        self._split_dataset(split_type, training_split)
 
         # Set the fields of the dataset
         self._set_fields(pipeline_config)
@@ -262,19 +277,19 @@ class AccessLogsDataset(Dataset):
             # Convert features to float tensor and keys
             # to long tensor
             x_features = torch.tensor(
-                seq_data[self.features].values.astype(float),
-                dtype=TORCH_DTYPE,
+                seq_data[self.features].values,
+                dtype=TORCH_DTYPE_FEATURES,
             )
             x_keys = torch.tensor(
-                seq_data[self.target].values.astype(int),
-                dtype=TORCH_DTYPE,
+                seq_data[self.target].values,
+                dtype=TORCH_DTYPE_TARGET,
             )
 
             # Get the next target key
             target_row = self.data.iloc[idx + self.seq_len]
             y_key = torch.tensor(
                 int(target_row[self.target]),
-                dtype=TORCH_DTYPE,
+                dtype=TORCH_DTYPE_TARGET,
             )
         except (
             IndexError,

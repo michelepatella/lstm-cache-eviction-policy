@@ -7,12 +7,10 @@ including batch sizing and shuffling settings for different phases (training,
 validation, testing).
 
 Classes:
-    DataLoaderBatchSizePipelineConfig(BaseModel):
-        Defines the batch size for each phase.
-    DataLoaderShufflePipelineConfig(BaseModel):
-        Defines whether to shuffle the dataset for each phase.
+    DataLoaderPhaseConfig(BaseModel):
+        Defines the batch size and shuffle setting for a single phase.
     DataLoaderPipelineConfig(BaseModel):
-        Aggregates all data loader configuration settings.
+        Aggregates all data loader configuration settings by phase.
 """
 
 from typing import Annotated
@@ -20,43 +18,28 @@ from typing import Annotated
 from pydantic import BaseModel, Field
 
 
-class DataLoaderBatchSizePipelineConfig(BaseModel):
-    """Batch size configuration for the data loader.
+class DataLoaderPhaseConfig(BaseModel):
+    """Configuration for a single data loading phase (training, validation,
+    or testing).
 
     Attributes:
-        training (int): Batch size used during the training phase (> 0).
-        validation (int): Batch size used during the validation phase (> 0).
-        testing (int): Batch size used during the inference (> 0).
+        batch_size (int): Batch size used during the phase (> 0).
+        shuffle (bool): Whether to shuffle the dataset during the phase.
     """
 
-    training: Annotated[int, Field(gt=0)]
-    validation: Annotated[int, Field(gt=0)]
-    testing: Annotated[int, Field(gt=0)]
-
-
-class DataLoaderShufflePipelineConfig(BaseModel):
-    """Shuffle configuration for data loader.
-
-    Attributes:
-        training (bool): Whether to shuffle the training dataset.
-        validation (bool): Whether to shuffle the validation dataset.
-        testing (bool): Whether to shuffle the testing dataset.
-    """
-
-    training: bool
-    validation: bool
-    testing: bool
+    batch_size: Annotated[int, Field(gt=0)]
+    shuffle: bool
 
 
 class DataLoaderPipelineConfig(BaseModel):
-    """Data loader configuration.
+    """Data loader configuration, structured by phase.
 
     Attributes:
-        batch_size (DataLoaderBatchSizePipelineConfig): Batch size settings for
-                                                        different phases.
-        shuffle (DataLoaderShufflePipelineConfig): Shuffle settings for different
-                                                   phases.
+        training (DataLoaderPhaseConfig): Configuration for the training phase.
+        validation (DataLoaderPhaseConfig): Configuration for the validation phase.
+        testing (DataLoaderPhaseConfig): Configuration for the testing phase (inference).
     """
 
-    batch_size: DataLoaderBatchSizePipelineConfig
-    shuffle: DataLoaderShufflePipelineConfig
+    training: DataLoaderPhaseConfig
+    validation: DataLoaderPhaseConfig
+    testing: DataLoaderPhaseConfig

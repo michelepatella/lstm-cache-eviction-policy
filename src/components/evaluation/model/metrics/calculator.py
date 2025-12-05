@@ -12,13 +12,10 @@ Functions:
     calculate_model_metrics(
         targets: list[int],
         predictions: list[int],
-        outputs: list[torch.Tensor]
     ) -> dict[str, int | float]
         Aggregates and computes the complete set of evaluation metrics
         for a model's performance.
 """
-
-import torch
 
 from components.const import (
     MODEL_METRICS_CLASS_REPORT_NAME,
@@ -36,7 +33,6 @@ from components.logs.levels.debug_logger import debug
 def calculate_model_metrics(
     targets: list[int],
     predictions: list[int],
-    outputs: list[torch.Tensor],
 ) -> dict[str, int | float]:
     """Calculate evaluation metrics for a model.
 
@@ -49,7 +45,6 @@ def calculate_model_metrics(
     Args:
         targets (list[int]): Ground truth class labels.
         predictions (list[int]): Predicted class labels.
-        outputs (list[torch.Tensor]): Model outputs.
 
     Returns:
         dict[str, int | float]: Dictionary containing class report with
@@ -61,7 +56,6 @@ def calculate_model_metrics(
         extra={
             "targets_num": len(targets),
             "predictions_num": len(predictions),
-            "outputs_num": len(outputs),
             "context": "Model metrics calculation",
         },
     )
@@ -83,7 +77,6 @@ def calculate_model_metrics(
         extra={
             "targets_num": len(targets),
             "predictions_num": len(predictions),
-            "outputs_num": len(outputs),
             "context": "Model metrics calculation",
         },
     )

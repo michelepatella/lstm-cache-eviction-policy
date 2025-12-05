@@ -21,9 +21,10 @@ Functions:
         device: torch.device,
         current_phase: str,
         pipeline_config: PipelineConfig,
-    ) -> tuple[float, tuple[float, Mapping[str, Any]]]
+    ) -> tuple[float, Mapping[str, Any], int]
         Spawns worker processes for distributed training, collects the results
-        from the master process, and returns the best model weights and loss.
+        from the master process, and returns the best model weights, loss and
+        effective number of epochs.
     _train_epochs_worker(
         rank: int,
         num_workers: int,
@@ -59,6 +60,8 @@ from torch.utils.data.distributed import DistributedSampler
 from tqdm import tqdm
 
 from components.const import (
+    EARLY_STOPPING_TRIGGERED_TENSOR,
+    EARLY_STOPPING_UNTRIGGERED_TENSOR,
     TRAINING_DDP_BACKEND_GLOO,
     TRAINING_DDP_BACKEND_NCCL,
     TRAINING_DDP_INIT_METHOD,
@@ -76,12 +79,12 @@ from components.model.best.checks_updates.checker_updater import (
 from components.network.free_port_finder import find_free_port
 from components.training.callbacks.early_stopping import EarlyStopping
 from components.training.core.single_epoch_trainer import train_single_epoch
-from const import (
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
+from src.const import (
     LOGS_PHASE_VALIDATION,
     RESOURCES_DEVICE_CUDA_NAME,
     RESOURCES_DEVICE_MPS_NAME,
 )
-from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def _train_epochs_worker(
@@ -109,8 +112,8 @@ def _train_epochs_worker(
     1. Evaluating the model after each epoch.
     2. Checking and updating the best model weights.
     3. Applying the Early Stopping mechanism.
-    4. Sending the final best model weights and average loss back to the
-       main thread via a Queue.
+    4. Sending the final best model weights, average loss, and effective
+       number of epochs run are back to the main thread via a Queue.
 
     Args:
         rank (int): The current process rank.
@@ -156,8 +159,8 @@ def _train_epochs_worker(
 
         # Prepare configuration
         device_type = device.type
-        training_shuffle = pipeline_config.data_loader.shuffle.training
-        training_batch_size = pipeline_config.data_loader.batch_size.training
+        training_shuffle = pipeline_config.data_loader.training.shuffle
+        training_batch_size = pipeline_config.data_loader.training.batch_size
 
         # Configuration for distributing training
         dist.init_process_group(
@@ -223,7 +226,12 @@ def _train_epochs_worker(
 
         # Train the model over each epoch
         epoch = None
-        for epoch in tqdm(range(1, num_epochs + 1), desc=TRAINING_EPOCHS_DESC):
+        for epoch in tqdm(
+            range(1, num_epochs + 1),
+            desc=TRAINING_EPOCHS_DESC,
+        ):
+            training_loader.sampler.set_epoch(epoch)
+
             # Train one epoch
             train_single_epoch(
                 model,
@@ -261,15 +269,31 @@ def _train_epochs_worker(
                 # as the number of epochs without improvement
                 # in average loss exceeds the patience)
                 es(avg_loss)
-                if es.early_stop:
-                    break
+                stop_training = torch.tensor(
+                    EARLY_STOPPING_TRIGGERED_TENSOR
+                    if es.early_stop
+                    else EARLY_STOPPING_UNTRIGGERED_TENSOR,
+                ).to(device)
+            else:
+                stop_training = torch.tensor(
+                    EARLY_STOPPING_UNTRIGGERED_TENSOR,
+                ).to(device)
+
+            # Communicate stop_training to all ranks
+            dist.all_reduce(stop_training, op=dist.ReduceOp.MAX)
+
+            # All the workers must stop
+            # if early stopping has been
+            # triggered for the master worker
+            if stop_training.item() == EARLY_STOPPING_TRIGGERED_TENSOR:
+                break
 
         # Keep track of results if and only if
         # the current process is the master
         if rank == TRAINING_DDP_MASTER_PROCESS_RANK:
             model.load_state_dict(best_model_weights)
             best_model_state_dict = copy.deepcopy(model.module.state_dict())
-            return_queue.put((best_avg_loss, best_model_state_dict))
+            return_queue.put((best_avg_loss, best_model_state_dict, epoch))
 
         info(
             "Epochs training completed",
@@ -320,7 +344,7 @@ def train_epochs(
     device: torch.device,
     current_phase: str,
     pipeline_config: PipelineConfig,
-) -> tuple[float, Mapping[str, Any]]:
+) -> tuple[float, Mapping[str, Any], int]:
     """Manages and executes the distributed training loop across multiple
      epochs.
 
@@ -344,6 +368,7 @@ def train_epochs(
         tuple[float, torch.nn.Module]:
             - best_avg_loss: The best average validation loss achieved during training.
             - best_weights_model: The best model weights corresponding to the lowest loss.
+            - num_epochs_run: The effective number of epochs for training process.
     """
     # Configuration for distributed training
     num_workers = max(
@@ -377,6 +402,6 @@ def train_epochs(
     )
 
     # Retrieve final results
-    best_avg_loss, best_weights_model = return_queue.get()
+    best_avg_loss, best_weights_model, num_epochs_run = return_queue.get()
 
-    return best_avg_loss, best_weights_model
+    return best_avg_loss, best_weights_model, num_epochs_run

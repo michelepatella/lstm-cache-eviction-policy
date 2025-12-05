@@ -13,8 +13,8 @@ Functions:
         feature_columns: list[str] = [DATASET_COLUMN_COS_TIME_NAME,
                                       DATASET_COLUMN_SIN_TIME_NAME],
         target_column: str = DATASET_COLUMN_REQUEST_NAME,
-        feature_dtype: torch.dtype = TORCH_DTYPE,
-        target_dtype: torch.dtype = TORCH_DTYPE
+        feature_dtype: torch.dtype = TORCH_DTYPE_FEATURES,
+        target_dtype: torch.dtype = TORCH_DTYPE_TARGET
     ) -> tuple[torch.Tensor, torch.Tensor]
         Extracts feature and target tensors from a dataset row.
 """
@@ -25,10 +25,11 @@ import torch
 from components.const import (
     DATASET_COLUMN_COS_TIME_NAME,
     DATASET_COLUMN_SIN_TIME_NAME,
-    TORCH_DTYPE,
+    TORCH_DTYPE_FEATURES,
+    TORCH_DTYPE_TARGET,
 )
 from components.logs.levels.error_logger import error
-from const import (
+from src.const import (
     DATASET_COLUMN_REQUEST_NAME,
 )
 
@@ -40,8 +41,8 @@ def extract_tuple_from_dataset_row(
         DATASET_COLUMN_SIN_TIME_NAME,
     ],
     target_column: str = DATASET_COLUMN_REQUEST_NAME,
-    feature_dtype: torch.dtype = TORCH_DTYPE,
-    target_dtype: torch.dtype = TORCH_DTYPE,
+    feature_dtype: torch.dtype = TORCH_DTYPE_FEATURES,
+    target_dtype: torch.dtype = TORCH_DTYPE_TARGET,
 ) -> tuple[torch.Tensor, torch.Tensor]:
     """Extract a tuple from a dataset row.
 

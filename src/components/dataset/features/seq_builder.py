@@ -24,14 +24,15 @@ import numpy as np
 import torch
 
 from components.const import (
+    TENSOR_BATCH_DIM,
     TENSOR_FEATURES_DIM,
-    TENSOR_OUTPUTS_BATCH_DIM,
-    TORCH_DTYPE,
+    TORCH_DTYPE_FEATURES,
+    TORCH_DTYPE_TARGET,
 )
-from components.dataset.features.derived.local_frequencies_calculator import (
+from components.dataset.features.local.local_frequencies_calculator import (
     calculate_local_frequencies,
 )
-from components.dataset.features.derived.local_recencies_calculator import (
+from components.dataset.features.local.local_recencies_calculator import (
     calculate_local_recencies,
 )
 from components.device.mover import move_to_device
@@ -98,14 +99,17 @@ def build_feature_seq(
         )
 
         # Convert to tensor and move to device
-        features_seq = torch.tensor(features, dtype=TORCH_DTYPE).unsqueeze(
-            TENSOR_OUTPUTS_BATCH_DIM,
+        features_seq = torch.tensor(
+            features,
+            dtype=TORCH_DTYPE_FEATURES,
+        ).unsqueeze(
+            TENSOR_BATCH_DIM,
         )
         features_seq = move_to_device(features_seq, device)
 
         # Build keys sequence and move to device
-        keys_seq = torch.tensor(keys, dtype=TORCH_DTYPE).unsqueeze(
-            TENSOR_OUTPUTS_BATCH_DIM,
+        keys_seq = torch.tensor(keys, dtype=TORCH_DTYPE_TARGET).unsqueeze(
+            TENSOR_BATCH_DIM,
         )
         keys_seq = move_to_device(keys_seq, device)
 

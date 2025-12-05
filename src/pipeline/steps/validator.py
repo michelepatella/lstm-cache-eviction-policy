@@ -37,18 +37,19 @@ from components.validation.search_space.combinator import (
     get_parameters_combination,
 )
 from components.yaml.io.saver import save_yaml
-from const import (
+from pipeline.config.configurator import prepare_pipeline_config
+from pipeline.const import (
+    DAGS_HUB_DVC,
+    DAGS_HUB_REPO_NAME,
+    DAGS_HUB_REPO_OWNER,
+    DATASET_PROCESSED_TYPE,
+    PIPELINE_CONFIG_FILE_PATH,
+)
+from src.const import (
     DATASET_TRAINING_SPLIT_TYPE,
     LOGS_LOGGER_NAME,
     LOGS_PHASE_VALIDATION,
     MLFLOW_NESTED,
-)
-from pipeline.config.configurator import prepare_pipeline_config
-from pipeline.const import (
-    PIPELINE_CONFIG_FILE_PATH,
-    DAGS_HUB_DVC,
-    DAGS_HUB_REPO_NAME,
-    DAGS_HUB_REPO_OWNER,
 )
 
 
@@ -88,9 +89,9 @@ def validate_model() -> None:
 
         # Prepare configuration
         validation_batch_size = (
-            pipeline_config.data_loader.batch_size.validation
+            pipeline_config.data_loader.validation.batch_size
         )
-        validation_shuffle = pipeline_config.data_loader.shuffle.validation
+        validation_shuffle = pipeline_config.data_loader.validation.shuffle
         seed = pipeline_config.seed.value
 
         # Ensure reproducibility
@@ -107,6 +108,7 @@ def validate_model() -> None:
 
         # Load the training set
         training_set, _ = initialize_data_loader(
+            DATASET_PROCESSED_TYPE,
             DATASET_TRAINING_SPLIT_TYPE,
             validation_batch_size,
             validation_shuffle,
@@ -137,12 +139,14 @@ def validate_model() -> None:
         # Merge original dictionary with the best
         # parameters dictionary
         updated_config_dict = merge_dicts(
-            pipeline_config.model_dump(), best_params
+            pipeline_config.model_dump(),
+            best_params,
         )
 
         # Save updated configuration dictionary as file
         save_yaml(
-            Box(updated_config_dict).to_dict(), PIPELINE_CONFIG_FILE_PATH
+            Box(updated_config_dict).to_dict(),
+            PIPELINE_CONFIG_FILE_PATH,
         )
 
         # Experiment tracking

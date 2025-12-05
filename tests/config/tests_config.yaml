@@ -1,21 +1,68 @@
 data:
-  processed:
-    integrity:
-      feature_feature_correlation:
-        num_pairs: 2
-        threshold: 0.8
-      feature_label_correlation:
-        threshold: 0.8
-      percent_of_nulls:
-        threshold: 0.0
-  raw:
-    integrity:
-      feature_feature_correlation:
-        num_pairs: 2
-        threshold: 0.8
-      feature_label_correlation:
-        threshold: 0.8
-      percent_of_nulls:
-        threshold: 0.2
-seed:
-  value: 42
+  integrity:
+    processed:
+      feat_feat_corr:
+        max: 0.8
+        max_exceeding_pairs: 1
+      feat_label_corr:
+        max: 0.8
+      nulls_perc:
+        max: 0.0
+    raw:
+      feat_feat_corr:
+        max: 0.8
+        max_exceeding_pairs: 1
+      feat_label_corr:
+        max: 0.8
+      nulls_perc:
+        max: 0.2
+  train_test_validation:
+    ratio:
+      min: 0.2
+    feat_drift:
+      max: 0.2
+      max_exceeding_feat: 1
+    feat_label_corr_change:
+      max: 0.2
+    index_leakage:
+      max: 0.0
+    label_drift:
+      max: 0.25
+    multivariate_drift:
+      max: 0.25
+model:
+  behavioral:
+    directional:
+      local_feat_perturbations:
+        min_success_ratio: 0.8
+    invariance:
+      feat_perturbation:
+        extreme_k: 10
+        level: 0.0000001
+        max_probs_shift:
+          abs: 0.0000001
+          rel: 0.0001
+      identity:
+        tol: 0.0000000001
+  inference:
+    latency:
+      target_avg: 0.01
+      tol: 0.005
+    throughput:
+      min: 1000
+  performance:
+    baseline_comp:
+      min_gain: 0.1
+      scorers: ["accuracy", "precision_macro", "recall_macro", "f1_macro", "precision_weighted", "recall_weighted", "f1_weighted"]
+      strategy: most_frequent
+    train_test:
+      max_degradation: 0.1
+      test_min_score: 0.7
+      scorers: ["accuracy", "precision_macro", "recall_macro", "f1_macro", "precision_weighted", "recall_weighted", "f1_weighted"]
+    conf_matrix:
+      max_misclass: 0.2
+  training:
+    learnability:
+      loss:
+        target_avg: 0.1
+        tol: 0.5

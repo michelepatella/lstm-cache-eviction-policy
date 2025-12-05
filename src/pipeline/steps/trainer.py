@@ -46,18 +46,19 @@ from components.model.optimizations.quantizer import quantize_model
 from components.optimizer.builder import build_optimizer
 from components.seed.setter import set_seed
 from components.training.core.epochs_trainer import train_epochs
-from const import (
-    DATASET_TRAINING_SPLIT_TYPE,
-    LOGS_LOGGER_NAME,
-    MLFLOW_NESTED,
-)
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     DAGS_HUB_DVC,
     DAGS_HUB_REPO_NAME,
     DAGS_HUB_REPO_OWNER,
+    DATASET_PROCESSED_TYPE,
     LOGS_PHASE_TRAINING,
     MLFLOW_ARTIFACT_PATH,
+)
+from src.const import (
+    DATASET_TRAINING_SPLIT_TYPE,
+    LOGS_LOGGER_NAME,
+    MLFLOW_NESTED,
 )
 
 
@@ -95,13 +96,13 @@ def train_model() -> None:
         data_mode = pipeline_config.data.general.mode
         min_key = pipeline_config.data.general.keys.min
         max_key = pipeline_config.data.general.keys.max
-        training_batch_size = pipeline_config.data_loader.batch_size.training
-        training_shuffle = pipeline_config.data_loader.shuffle.training
+        training_batch_size = pipeline_config.data_loader.training.batch_size
+        training_shuffle = pipeline_config.data_loader.training.shuffle
         training_device = pipeline_config.resources.devices.training
         validation_batch_size = (
-            pipeline_config.data_loader.batch_size.validation
+            pipeline_config.data_loader.validation.batch_size
         )
-        validation_shuffle = pipeline_config.data_loader.shuffle.validation
+        validation_shuffle = pipeline_config.data_loader.validation.shuffle
         validation_split = pipeline_config.dataset.splits.validation
         model_params = pipeline_config.model.params
         embedding_dim = pipeline_config.model.sequence.embedding.dimension
@@ -144,6 +145,7 @@ def train_model() -> None:
         # Load the training set and the
         # training loader
         training_set, training_loader = initialize_data_loader(
+            DATASET_PROCESSED_TYPE,
             DATASET_TRAINING_SPLIT_TYPE,
             training_batch_size,
             validation_shuffle,
@@ -191,7 +193,7 @@ def train_model() -> None:
         )
 
         # Train the model
-        best_avg_loss, best_model_weights = train_epochs(
+        best_avg_loss, best_model_weights, num_epochs_run = train_epochs(
             training_num_epochs,
             model,
             training_loader,
@@ -231,6 +233,7 @@ def train_model() -> None:
                 "loss_best_avg": None
                 if np.isinf(best_avg_loss) or np.isnan(best_avg_loss)
                 else float(best_avg_loss),
+                "epochs_run_num": num_epochs_run,
             },
         )
         with (
@@ -253,6 +256,7 @@ def train_model() -> None:
             "loss_best_avg": float(best_avg_loss)
             if not (np.isinf(best_avg_loss) or np.isnan(best_avg_loss))
             else None,
+            "epochs_run_num": num_epochs_run,
             "model_save_path": str(model_path),
             "context": "Training",
         },

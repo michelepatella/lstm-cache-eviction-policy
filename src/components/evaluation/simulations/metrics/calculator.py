@@ -32,7 +32,7 @@ from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.math.avg_calculator import calculate_average
-from const import (
+from src.const import (
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
 )

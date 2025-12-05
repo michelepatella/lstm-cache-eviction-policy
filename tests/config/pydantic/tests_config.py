@@ -13,7 +13,7 @@ Classes:
 from pydantic import BaseModel
 
 from tests.config.pydantic.sections.data_tests_config import DataTestsConfig
-from tests.config.pydantic.sections.seed_tests_config import SeedTestsConfig
+from tests.config.pydantic.sections.model_tests_config import ModelTestsConfig
 
 
 class TestsConfig(BaseModel):
@@ -21,9 +21,8 @@ class TestsConfig(BaseModel):
 
     Attributes:
         data (DataTestsConfig): Configuration for all data tests.
-        seed (SeedTestsConfig): Configuration for the global seed used during
-                                testing.
+        model (ModelTestsConfig): Configuration for all model tests
     """
 
     data: DataTestsConfig
-    seed: SeedTestsConfig
+    model: ModelTestsConfig

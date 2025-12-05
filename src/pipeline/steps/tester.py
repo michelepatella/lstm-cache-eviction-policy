@@ -30,18 +30,19 @@ from components.model.best.initializer import (
     initialize_best_model,
 )
 from components.seed.setter import set_seed
-from const import (
-    DATASET_TESTING_SPLIT_TYPE,
-    LOGS_LOGGER_NAME,
-    MLFLOW_NESTED,
-)
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     DAGS_HUB_DVC,
     DAGS_HUB_REPO_NAME,
     DAGS_HUB_REPO_OWNER,
+    DATASET_PROCESSED_TYPE,
     LOGS_PHASE_TESTING,
     MODEL_COMPUTE_METRICS_TESTING,
+)
+from src.const import (
+    DATASET_TESTING_SPLIT_TYPE,
+    LOGS_LOGGER_NAME,
+    MLFLOW_NESTED,
 )
 
 
@@ -76,8 +77,8 @@ def test_model() -> None:
 
         # Prepare configuration
         data_mode = pipeline_config.data.general.mode
-        testing_batch_size = pipeline_config.data_loader.batch_size.testing
-        testing_shuffle = pipeline_config.data_loader.shuffle.testing
+        testing_batch_size = pipeline_config.data_loader.testing.batch_size
+        testing_shuffle = pipeline_config.data_loader.testing.shuffle
         testing_device = pipeline_config.resources.devices.testing
         qengine = pipeline_config.model.optimizations.quantization.engine
         num_workers = max(
@@ -102,6 +103,7 @@ def test_model() -> None:
 
         # Setup testing data loader
         testing_set, testing_loader = initialize_data_loader(
+            DATASET_PROCESSED_TYPE,
             DATASET_TESTING_SPLIT_TYPE,
             testing_batch_size,
             testing_shuffle,
@@ -119,13 +121,7 @@ def test_model() -> None:
         )
 
         # Evaluate model
-        (
-            avg_loss,
-            metrics,
-            _,
-            _,
-            _,
-        ) = evaluate_model(
+        (avg_loss, metrics, *_) = evaluate_model(
             model,
             testing_loader,
             criterion,
@@ -133,7 +129,6 @@ def test_model() -> None:
             num_workers,
             compute_metrics=MODEL_COMPUTE_METRICS_TESTING,
         )
-
         # Experiment tracking
         metrics = Box(metrics, delimiter="_")
         mlflow.log_params(prepare_pipeline_config().model_dump())

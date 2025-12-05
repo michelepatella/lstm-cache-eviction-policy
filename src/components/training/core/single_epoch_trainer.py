@@ -14,8 +14,8 @@ Functions:
         optimizer: Optimizer,
         criterion: torch.nn.Module,
         device: torch.device,
-        epoch: int
-    ) -> None
+        epoch: int = None,
+    ) -> float
         Performs one full pass over the training set, computing loss,
         gradients, and updating model parameters for each batch.
 """
@@ -32,6 +32,7 @@ from components.backpropagation.core.forward_runner import compute_forward
 from components.const import MODEL_TRAIN_MODE, TRAINING_SINGLE_EPOCH_DESC
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
+from components.math.avg_calculator import calculate_average
 from components.model.mode.setter import set_model_mode
 
 
@@ -41,8 +42,8 @@ def train_single_epoch(
     optimizer: Optimizer,
     criterion: torch.nn.Module,
     device: torch.device,
-    epoch: int,
-) -> None:
+    epoch: int = None,
+) -> float:
     """Train the model for a single epoch.
 
     This function performs one full pass over the training set.
@@ -60,7 +61,7 @@ def train_single_epoch(
         epoch (int): Current epoch number for logging and progress display.
 
     Returns:
-        None
+        float: Average loss over all batches during training.
 
     Raises:
         RuntimeError: If training a single epoch fails:
@@ -98,6 +99,7 @@ def train_single_epoch(
 
         # For each batch in the training loader
         # run backpropagation algorithm
+        losses = []
         for batch in training_loader_tqdm:
             # Reset the gradients
             optimizer.zero_grad()
@@ -110,6 +112,10 @@ def train_single_epoch(
                 device,
                 criterion,
             )
+
+            # Keep track of current
+            # batch loss
+            losses.append(loss.item())
 
             # Compute backward pass to update model
             # weights according to gradients of loss
@@ -127,6 +133,12 @@ def train_single_epoch(
                 "context": "Single epoch training",
             },
         )
+
+        # Compute average of training loss
+        # over all the batches
+        avg_loss = calculate_average(losses)
+
+        return avg_loss
     except (TypeError, AttributeError) as e:
         msg = "Single epoch training failed"
         error(

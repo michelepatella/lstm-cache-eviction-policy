@@ -14,8 +14,6 @@ Functions:
         space configuration and returns them as a list of dictionaries.
 """
 
-from typing import Any
-
 from components.dict.combinations.nested_dict_lists_combinator import (
     combine_nested_dict_lists,
 )

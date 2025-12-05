@@ -15,8 +15,6 @@ Functions:
         fixed Zipfian alpha parameter.
 """
 
-from typing import Any
-
 import numpy as np
 
 from components.data.requests.utils.generation_helper import (

@@ -23,7 +23,7 @@ Functions:
 import torch
 from torch import nn
 
-from components.const import TORCH_DTYPE
+from components.const import TORCH_DTYPE_FEATURES
 from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -82,7 +82,10 @@ def build_loss(
 
         # Move class weight as tensor to
         # the specified device
-        class_weight_tensor = torch.tensor(class_weight, dtype=TORCH_DTYPE)
+        class_weight_tensor = torch.tensor(
+            class_weight,
+            dtype=TORCH_DTYPE_FEATURES,
+        )
         class_weight_tensor = move_to_device(class_weight_tensor, device)
 
         # Build loss with computed weight

@@ -35,12 +35,12 @@ from components.logs.levels.info_logger import info
 from components.time.transforms.trig_decoder import (
     decode_time_trigonometrically,
 )
-from const import (
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
+from src.const import (
     CACHE_LSTM_NAME,
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
 )
-from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def run_cache_simulation(
@@ -127,7 +127,11 @@ def run_cache_simulation(
                 if policy == CACHE_LSTM_NAME:
                     # Put the requested key into the LSTM cache
                     cache.put(
-                        key, current_time, idx, testing_set, pipeline_config
+                        key,
+                        current_time,
+                        idx,
+                        testing_set,
+                        pipeline_config,
                     )
                 else:
                     # Put the requested key into the baseline cache

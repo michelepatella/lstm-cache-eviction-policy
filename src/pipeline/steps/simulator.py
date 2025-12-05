@@ -43,7 +43,6 @@ from components.evaluation.simulations.metrics.calculations.belady_min_calculato
 from components.evaluation.simulations.metrics.calculator import (
     calculate_simulation_metrics,
 )
-
 from components.logs.handlers.grafana_loki_handler import GrafanaLokiHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
@@ -53,18 +52,6 @@ from components.seed.setter import set_seed
 from components.visualization.hit_miss_rates_plotter import (
     plot_hit_miss_rate,
 )
-from const import (
-    CACHE_LSTM_NAME,
-    DATA_DYNAMIC_MODE,
-    DATA_STATIC_MODE,
-    DATASET_TESTING_SPLIT_TYPE,
-    LOGS_LOGGER_NAME,
-    MLFLOW_NESTED,
-    SIMULATIONS_METRICS_HIT_COUNTER_NAME,
-    SIMULATIONS_METRICS_MISS_COUNTER_NAME,
-    SIMULATIONS_METRICS_POLICY_NAME,
-    SIMULATIONS_METRICS_TIMELINE_NAME,
-)
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     CACHE_LFU_NAME,
@@ -73,6 +60,7 @@ from pipeline.const import (
     DAGS_HUB_DVC,
     DAGS_HUB_REPO_NAME,
     DAGS_HUB_REPO_OWNER,
+    DATASET_PROCESSED_TYPE,
     LOGS_PHASE_SIMULATIONS,
     PLOT_DYNAMIC_HIT_MISS_RATES_FILE_PATH,
     PLOT_REAL_HIT_MISS_RATES_FILE_PATH,
@@ -83,6 +71,18 @@ from pipeline.const import (
     SIMULATIONS_METRICS_EVICTION_MISTAKE_RATE_NAME,
     SIMULATIONS_METRICS_HIT_RATE_NAME,
     SIMULATIONS_METRICS_MISS_RATE_NAME,
+)
+from src.const import (
+    CACHE_LSTM_NAME,
+    DATA_DYNAMIC_MODE,
+    DATA_STATIC_MODE,
+    DATASET_TESTING_SPLIT_TYPE,
+    LOGS_LOGGER_NAME,
+    MLFLOW_NESTED,
+    SIMULATIONS_METRICS_HIT_COUNTER_NAME,
+    SIMULATIONS_METRICS_MISS_COUNTER_NAME,
+    SIMULATIONS_METRICS_POLICY_NAME,
+    SIMULATIONS_METRICS_TIMELINE_NAME,
 )
 
 
@@ -126,8 +126,8 @@ def run_simulations() -> None:
         mistake_window = (
             pipeline_config.evaluation.simulations.metrics.mistake_rate.window
         )
-        testing_batch_size = pipeline_config.data_loader.batch_size.testing
-        testing_shuffle = pipeline_config.data_loader.shuffle.testing
+        testing_batch_size = pipeline_config.data_loader.testing.batch_size
+        testing_shuffle = pipeline_config.data_loader.testing.shuffle
         cache_size = pipeline_config.simulations.caches.dimension
         seed = pipeline_config.seed.value
 
@@ -160,6 +160,7 @@ def run_simulations() -> None:
 
         # Get testing set
         testing_set, _ = initialize_data_loader(
+            DATASET_PROCESSED_TYPE,
             DATASET_TESTING_SPLIT_TYPE,
             testing_batch_size,
             testing_shuffle,
