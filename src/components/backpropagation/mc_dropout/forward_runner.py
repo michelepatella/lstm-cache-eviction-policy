@@ -23,12 +23,12 @@ import torch
 
 from components.backpropagation.core.forward_runner import compute_forward
 from components.const import (
-    DATASET_PROCESSED_COLUMNS,
     MC_DROPOUT_FLAG_NAME,
     MC_DROPOUT_NUM_SAMPLES_DEFAULT,
     MODEL_EVAL_MODE,
     MODEL_MC_DROPOUT_MODE,
     TENSOR_OUTPUTS_BATCH_DIM,
+    BATCH_WITH_TARGET_DIMENSION,
 )
 from components.logs.levels.error_logger import error
 from components.model.mode.setter import set_model_mode
@@ -96,10 +96,11 @@ def compute_mc_dropout_forward(
             for _i in range(num_mc_dropout_samples):
                 # Compute forward pass and get the
                 # model outputs
-                if len(batch) == len(DATASET_PROCESSED_COLUMNS):
+                if len(batch) == BATCH_WITH_TARGET_DIMENSION:
                     _, outputs = compute_forward(batch, model, device)
                 else:
-                    outputs = model(*batch)
+                    x_features, x_keys = batch
+                    outputs = model(x_features, x_keys)
 
                 # Save the current model outputs
                 all_outputs.append(outputs.unsqueeze(TENSOR_OUTPUTS_BATCH_DIM))

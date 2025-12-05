@@ -18,7 +18,7 @@ Functions:
 """
 
 import logging
-from typing import Any
+from typing import Any, cast
 
 from components.const import (
     LOGS_FIELD_PHASE_DEFAULT,

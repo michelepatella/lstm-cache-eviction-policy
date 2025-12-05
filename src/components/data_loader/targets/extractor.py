@@ -9,7 +9,7 @@ concatenated tensor.
 Functions:
     extract_targets_from_data_loader(
         data_loader: DataLoader,
-        target_idx: int = DATASET_COLUMNS.index(DATASET_COLUMN_REQUEST_NAME)
+        target_idx: int = DATASET_COLUMN_TARGET_IDX
     ) -> Tensor
         Extracts and concatenates all target tensors from the given DataLoader.
 """
@@ -17,17 +17,14 @@ Functions:
 import torch
 from torch.utils.data import DataLoader
 
-from components.const import DATASET_PROCESSED_COLUMNS
+from components.const import DATASET_COLUMN_TARGET_IDX
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import DATASET_COLUMN_REQUEST_NAME
 
 
 def extract_targets_from_data_loader(
     data_loader: DataLoader,
-    target_idx: int = DATASET_PROCESSED_COLUMNS.index(
-        DATASET_COLUMN_REQUEST_NAME,
-    ),
+    target_idx: int = DATASET_COLUMN_TARGET_IDX,
 ) -> torch.Tensor:
     """Extract all target tensors from a data loader.
 

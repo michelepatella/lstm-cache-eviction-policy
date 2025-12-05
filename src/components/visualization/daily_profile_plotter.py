@@ -28,6 +28,7 @@ from components.const import (
     PLOT_LABEL_FONT_SIZE,
     PLOT_SIZE,
     PLOT_TITLE_FONT_SIZE,
+    LIST_LAST_IDX,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -85,7 +86,7 @@ def plot_daily_profile(timestamps_hours: np.ndarray, save_path: str) -> None:
         # Prepare, show, and save the plot
         plt.figure(figsize=(PLOT_SIZE, PLOT_SIZE))
         plt.bar(
-            bins[:-1],
+            bins[:LIST_LAST_IDX],
             bins_counts,
             width=PLOT_DAILY_PROFILE_BIN_SIZE,
         )

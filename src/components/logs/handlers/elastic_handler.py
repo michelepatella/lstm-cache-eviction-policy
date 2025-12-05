@@ -18,6 +18,7 @@ import logging
 import os
 import threading
 from datetime import datetime, timezone
+from typing import Any
 
 from dotenv import load_dotenv
 from elasticsearch import Elasticsearch, helpers
@@ -40,8 +41,8 @@ load_dotenv()
 
 # Configure Elasticsearch
 es = Elasticsearch(
-    hosts=[os.getenv(LOGS_ENV_VAR_ELASTIC_ENDPOINT_NAME)],
-    api_key=os.getenv(LOGS_ENV_VAR_ELASTIC_TOKEN_NAME),
+    hosts=[os.getenv(LOGS_ENV_VAR_ELASTIC_ENDPOINT_NAME, "")],
+    api_key=os.getenv(LOGS_ENV_VAR_ELASTIC_TOKEN_NAME, ""),
 )
 
 
@@ -71,7 +72,7 @@ class ElasticHandler(logging.Handler):
             self ("ElasticHandler"): Current class instance.
         """
         super().__init__()
-        self.buffer = []
+        self.buffer: list[dict[str, Any]] = []
         self.index = os.getenv(LOGS_ENV_VAR_ELASTIC_INDEX_NAME)
 
     def emit(

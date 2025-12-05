@@ -1,17 +1,13 @@
-"""data_generator.py
+"""data_preparer.py
 
-Pipeline step module responsible for generating synthetic dataset requests
-and temporal data based on specified distribution modes.
+Module responsible for the data preparation phase of the pipeline.
 
-This module provides the `generate_data` function, which orchestrates the
-creation of raw request data (static or dynamic), builds it into a DataFrame
-dataset, saves the raw dataset, and validates the generated data distribution
-through various plots (Zipf, daily profile, heatmap).
+This module orchestrates the workflow for generating, loading, saving, exploring,
+and tracking the raw dataset.
 
 Functions:
-    generate_data() -> None
-        Orchestrates the data generation process, saving the raw dataset
-        and related validation plots.
+    prepare_data() -> None
+        Main function to execute the data preparation pipeline step.
 """
 
 import logging
@@ -31,20 +27,13 @@ from components.data.requests.core.static_generator import (
     generate_static_requests,
 )
 from components.dataset.builder import build_dataset
+from components.data.exploration.explorer import explore_data
+from components.dataset.io.loader import load_dataset
 from components.dataset.io.locator import get_dataset_abs_path
 from components.dataset.io.saver import save_dataset
 from components.logs.handlers.elastic_handler import ElasticHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
-from components.visualization.daily_profile_plotter import (
-    plot_daily_profile,
-)
-from components.visualization.key_usage_heatmap_plotter import (
-    plot_key_usage_heatmap,
-)
-from components.visualization.zipf_loglog_plotter import (
-    plot_zipf_loglog,
-)
 from const import (
     DATA_REAL_MODE,
     DATA_STATIC_MODE,
@@ -59,13 +48,7 @@ from pipeline.const import (
     DAGS_HUB_DVC,
     DAGS_HUB_ENV_VAR_REPO_NAME,
     DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
-    LOGS_PHASE_DATA_GENERATION,
-    PLOT_DYNAMIC_DAILY_PROFILE_FILE_PATH,
-    PLOT_DYNAMIC_KEY_USAGE_HEATMAP_FILE_PATH,
-    PLOT_DYNAMIC_ZIPF_LOG_LOG_FILE_PATH,
-    PLOT_STATIC_DAILY_PROFILE_FILE_PATH,
-    PLOT_STATIC_KEY_USAGE_HEATMAP_FILE_PATH,
-    PLOT_STATIC_ZIPF_LOG_LOG_FILE_PATH,
+    LOGS_PHASE_DATA_PREPARATION,
 )
 
 # Load env variables
@@ -74,21 +57,21 @@ dabs_hub_repo_owner = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME)
 dags_hub_repo_name = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME)
 
 
-def generate_data() -> None:
-    """Generate data according to a specified data distribution mode.
+def prepare_data() -> None:
+    """Executes the data preparation phase of the pipeline.
 
-    This function generates data according to a specified data distribution mode,
-    by orchestrating the generation of both access and temporal data patterns of
-    requests. These patterns aim to reflect real-world data access patterns.
-    Data generated — including a requested key and the corresponding timestamp in
-    hours — is used to create a dataframe saved as CSV dataset next. Finally, data
-    generated is validated by proper plots.
+    This function first determines whether to generate synthetic requests
+    (using static or dynamic modes) or load an existing real dataset. It then
+    assembles the timestamps and requests into a raw DataFrame and saves it
+    to the designated location. Finally, it explores the data's characteristics,
+    calculating various statistical metrics and generating analytical plots (like
+    Zipf distribution and key usage heatmaps) to visualize the dataset properties.
 
     Returns:
         None
     """
     # Set the new pipeline step
-    logs_phase.set(LOGS_PHASE_DATA_GENERATION)
+    logs_phase.set(LOGS_PHASE_DATA_PREPARATION)
 
     dagshub.init(
         repo_owner=dabs_hub_repo_owner,
@@ -97,7 +80,7 @@ def generate_data() -> None:
     )
 
     with mlflow.start_run(
-        run_name=LOGS_PHASE_DATA_GENERATION,
+        run_name=LOGS_PHASE_DATA_PREPARATION,
         nested=MLFLOW_NESTED,
     ):
         # Setup
@@ -106,77 +89,66 @@ def generate_data() -> None:
 
         # Prepare configuration
         data_mode = config.data.general.mode
-
-        # Skip this step if data is real
-        if data_mode == DATA_REAL_MODE:
-            return
-
         min_key = config.data.general.keys.min
         max_key = config.data.general.keys.max
 
-        info(
-            "Data generation started",
-            extra={
-                "data_mode": data_mode,
-                "key_min": min_key,
-                "key_max": max_key,
-                "context": "Data generation",
-            },
-        )
-
-        # Generate requests with corresponding timestamps,
-        # based on the data distribution mode
-        if data_mode == DATA_STATIC_MODE:
-            # Static requests generation
-            requests, timestamps_hours = generate_static_requests(config)
-
-            # Prepare static save paths
-            zipf_log_log_plot_save_path = PLOT_STATIC_ZIPF_LOG_LOG_FILE_PATH
-            daily_profile_plot_save_path = PLOT_STATIC_DAILY_PROFILE_FILE_PATH
-            key_usage_heatmap_plot_save_path = (
-                PLOT_STATIC_KEY_USAGE_HEATMAP_FILE_PATH
-            )
-        else:
-            # Dynamic requests generation
-            requests, timestamps_hours = generate_dynamic_requests(config)
-
-            # Prepare dynamic save paths
-            zipf_log_log_plot_save_path = PLOT_DYNAMIC_ZIPF_LOG_LOG_FILE_PATH
-            daily_profile_plot_save_path = PLOT_DYNAMIC_DAILY_PROFILE_FILE_PATH
-            key_usage_heatmap_plot_save_path = (
-                PLOT_DYNAMIC_KEY_USAGE_HEATMAP_FILE_PATH
-            )
-
-        # Create a dataset where each row is composed of
-        # a timestamp and the corresponding request
-        df = build_dataset(
-            {
-                DATASET_COLUMN_TIMESTAMP_NAME: timestamps_hours[
-                    : len(requests)
-                ],
-                DATASET_COLUMN_REQUEST_NAME: requests,
-            },
-        )
-
-        # Retrieve path where
-        # to save dataset
+        # Retrieve dataset path for further usage
         dataset_path = get_dataset_abs_path(
             DATASET_RAW_TYPE,
             data_mode,
         )
 
-        # Save just created dataset
-        save_dataset(df, dataset_path)
+        info(
+            "Data preparation started",
+            extra={
+                "data_mode": data_mode,
+                "dataset_path": str(dataset_path),
+                "key_min": min_key,
+                "key_max": max_key,
+                "context": "Data preparation",
+            },
+        )
 
-        # Show data generation -related plots
-        plot_zipf_loglog(requests, zipf_log_log_plot_save_path)
-        plot_daily_profile(timestamps_hours, daily_profile_plot_save_path)
-        plot_key_usage_heatmap(
-            min_key,
-            max_key,
-            requests,
-            timestamps_hours,
+        # Check whether data needs to be
+        # synthetically generated
+        if data_mode is not DATA_REAL_MODE:
+            # Generate requests with corresponding timestamps,
+            # based on the data distribution mode
+            if data_mode == DATA_STATIC_MODE:
+                # Static requests generation
+                requests, timestamps_hours = generate_static_requests(config)
+            else:
+                # Dynamic requests generation
+                requests, timestamps_hours = generate_dynamic_requests(config)
+
+            # Create a dataset where each row is composed of
+            # a timestamp and the corresponding request
+            df = build_dataset(
+                {
+                    DATASET_COLUMN_TIMESTAMP_NAME: timestamps_hours[
+                        : len(requests)
+                    ],
+                    DATASET_COLUMN_REQUEST_NAME: requests,
+                },
+            )
+
+            # Save just created dataset
+            save_dataset(df, dataset_path)
+        else:
+            # Dataset already exists, just load it
+            df = load_dataset(dataset_path)
+
+            # Extract columns (timestamps and requests)
+            timestamps_hours = df[DATASET_COLUMN_TIMESTAMP_NAME]
+            requests = df[DATASET_COLUMN_REQUEST_NAME]
+
+        # Explore data
+        (
+            zipf_log_log_plot_save_path,
+            daily_profile_plot_save_path,
             key_usage_heatmap_plot_save_path,
+        ) = explore_data(
+            timestamps_hours, requests, min_key, max_key, data_mode
         )
 
         # Experiment tracking
@@ -221,7 +193,7 @@ def generate_data() -> None:
         mlflow.log_artifact(key_usage_heatmap_plot_save_path)
 
     info(
-        "Data generation completed",
+        "Data preparation completed",
         extra={
             "data_mode": data_mode,
             "dataset_raw_save_path": str(dataset_path),
@@ -233,13 +205,13 @@ def generate_data() -> None:
                 str(daily_profile_plot_save_path),
                 str(key_usage_heatmap_plot_save_path),
             ],
-            "context": "Data generation",
+            "context": "Data preparation",
         },
     )
 
 
 if __name__ == "__main__":
-    generate_data()
+    prepare_data()
 
     # Force logs flush
     for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:

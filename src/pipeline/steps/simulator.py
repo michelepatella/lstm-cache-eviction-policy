@@ -332,7 +332,7 @@ def run_simulations() -> None:
                 if SIMULATIONS_METRICS_POLICY_NAME in r
             ],
             "results_save_path": str(results_file_path),
-            "plot_save_paths": str(plot_save_path),
+            "plot_save_path": str(plot_save_path),
             "context": "Simulations",
         },
     )

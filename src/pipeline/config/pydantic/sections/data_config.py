@@ -1,6 +1,6 @@
 """data_config.py
 
-Configuration section for data generation parameters and patterns.
+Configuration section for data parameters.
 
 This module structures all parameters necessary for generating synthetic
 request data, covering core aspects like key ranges, total request count,
@@ -51,14 +51,16 @@ Classes:
     DataPatternsConfig(BaseModel):
         Aggregates access and temporal patterns.
     DataGeneralConfig(BaseModel):
-        General configuration for data generation.
+        General configuration for data.
     DataSyntheticConfig(BaseModel):
-        Synthetic data generation configuration, aggregating mode, patterns, and seed.
+        Synthetic data configuration, aggregating mode, patterns, and seed.
     DataConfig(BaseModel):
         Aggregates general settings and pattern configuration.
 """
 
-from pydantic import BaseModel, confloat, conint, model_validator
+from typing import Annotated
+
+from pydantic import BaseModel, Field, model_validator
 
 from components.assertions.choice_field_assertor import (
     assert_choice_field,
@@ -83,11 +85,8 @@ class DataPatternsAccessBehaviorHoursConfig(BaseModel):
                    and DATA_GENERATION_FINAL_HOUR).
     """
 
-    start: conint(
-        ge=TIME_START_HOUR,
-        le=TIME_END_HOUR,
-    )
-    end: conint(ge=TIME_START_HOUR, le=TIME_END_HOUR)
+    start: Annotated[int, Field(ge=TIME_START_HOUR, le=TIME_END_HOUR)]
+    end: Annotated[int, Field(ge=TIME_START_HOUR, le=TIME_END_HOUR)]
 
 
 class DataKeysConfig(BaseModel):
@@ -98,8 +97,8 @@ class DataKeysConfig(BaseModel):
         max (int): Maximum key (> 0).
     """
 
-    min: conint(gt=0)
-    max: conint(gt=0)
+    min: Annotated[int, Field(gt=0)]
+    max: Annotated[int, Field(gt=0)]
 
     @model_validator(mode="after")
     def check_min_max_keys(
@@ -133,9 +132,9 @@ class DataPatternsAccessZipfAlphaConfig(BaseModel):
         max (float): Maximum alpha (> 0).
     """
 
-    fixed: confloat(gt=0)
-    min: confloat(gt=0)
-    max: confloat(gt=0)
+    fixed: Annotated[float, Field(gt=0)]
+    min: Annotated[float, Field(gt=0)]
+    max: Annotated[float, Field(gt=0)]
 
 
 class DataPatternsAccessZipfConfig(BaseModel):
@@ -147,7 +146,7 @@ class DataPatternsAccessZipfConfig(BaseModel):
     """
 
     alpha: DataPatternsAccessZipfAlphaConfig
-    steps: conint(gt=0)
+    steps: Annotated[int, Field(gt=0)]
 
 
 class DataPatternsAccessBehaviorRepetitionConfig(BaseModel):
@@ -159,8 +158,8 @@ class DataPatternsAccessBehaviorRepetitionConfig(BaseModel):
         hours (DataPatternsAccessBehaviorHoursConfig): Hours during which repetitions occur.
     """
 
-    interval: conint(gt=0)
-    offset: conint(gt=0)
+    interval: Annotated[int, Field(gt=0)]
+    offset: Annotated[int, Field(gt=0)]
     hours: DataPatternsAccessBehaviorHoursConfig
 
 
@@ -184,8 +183,8 @@ class DataPatternsAccessBehaviorToggleBaseRequestsConfig(BaseModel):
         second (int): Second base request (> 0).
     """
 
-    first: conint(gt=0)
-    second: conint(gt=0)
+    first: Annotated[int, Field(gt=0)]
+    second: Annotated[int, Field(gt=0)]
 
 
 class DataPatternsAccessBehaviorToggleConfig(BaseModel):
@@ -198,7 +197,7 @@ class DataPatternsAccessBehaviorToggleConfig(BaseModel):
         offsets (DataPatternsAccessBehaviorToggleOffsetsConfig): Offsets for toggle behavior.
     """
 
-    interval: conint(gt=0)
+    interval: Annotated[int, Field(gt=0)]
     hours: DataPatternsAccessBehaviorHoursConfig
     base_requests: DataPatternsAccessBehaviorToggleBaseRequestsConfig
     offsets: DataPatternsAccessBehaviorToggleOffsetsConfig
@@ -259,7 +258,7 @@ class DataPatternsAccessBehaviorDistortionConfig(BaseModel):
         noise (DataPatternsAccessBehaviorDistortionNoiseConfig): Noise parameters for distortion.
     """
 
-    interval: conint(gt=0)
+    interval: Annotated[int, Field(gt=0)]
     hours: DataPatternsAccessBehaviorHoursConfig
     offsets: DataPatternsAccessBehaviorDistortionOffsetsConfig
     noise: DataPatternsAccessBehaviorDistortionNoiseConfig
@@ -273,8 +272,8 @@ class DataPatternsAccessBehaviorMemoryConfig(BaseModel):
         offset (int): Offset applied to memory (> 0).
     """
 
-    interval: conint(gt=0)
-    offset: conint(gt=0)
+    interval: Annotated[int, Field(gt=0)]
+    offset: Annotated[int, Field(gt=0)]
 
 
 class DataPatternsAccessBehaviorCycleConfig(BaseModel):
@@ -287,9 +286,9 @@ class DataPatternsAccessBehaviorCycleConfig(BaseModel):
         hours (DataPatternsAccessBehaviorHoursConfig): Hours during which cyclical behavior occurs.
     """
 
-    base: conint(gt=0)
-    mod: conint(gt=0)
-    divisor: conint(gt=0)
+    base: Annotated[int, Field(gt=0)]
+    mod: Annotated[int, Field(gt=0)]
+    divisor: Annotated[int, Field(gt=0)]
     hours: DataPatternsAccessBehaviorHoursConfig
 
 
@@ -333,11 +332,8 @@ class DataPatternsTemporalBurstinessHoursConfig(BaseModel):
             and DATA_GENERATION_FINAL_HOUR).
     """
 
-    start: conint(
-        ge=TIME_START_HOUR,
-        le=TIME_END_HOUR,
-    )
-    end: conint(ge=TIME_START_HOUR, le=TIME_END_HOUR)
+    start: Annotated[int, Field(ge=TIME_START_HOUR, le=TIME_END_HOUR)]
+    end: Annotated[int, Field(ge=TIME_START_HOUR, le=TIME_END_HOUR)]
 
 
 class DataPatternsTemporalBurstinessConfig(BaseModel):
@@ -349,8 +345,8 @@ class DataPatternsTemporalBurstinessConfig(BaseModel):
         hours (DataPatternsTemporalBurstinessHoursConfig): Hours during which burstiness occurs.
     """
 
-    high: confloat(gt=0)
-    low: confloat(gt=0)
+    high: Annotated[float, Field(gt=0.0)]
+    low: Annotated[float, Field(gt=0.0)]
     hours: DataPatternsTemporalBurstinessHoursConfig
 
     @model_validator(mode="after")
@@ -384,8 +380,8 @@ class DataPatternsTemporalPeriodicConfig(BaseModel):
         amplitude (int): Period amplitude (>= 0).
     """
 
-    scale: conint(gt=0)
-    amplitude: conint(ge=0)
+    scale: Annotated[int, Field(gt=0)]
+    amplitude: Annotated[int, Field(ge=0)]
 
 
 class DataPatternsTemporalConfig(BaseModel):
@@ -413,29 +409,17 @@ class DataPatternsConfig(BaseModel):
 
 
 class DataGeneralConfig(BaseModel):
-    """General configuration for data generation.
+    """General configuration for data.
 
     Attributes:
         requests (int): Number of requests (> 0).
         keys (DataKeysConfig): Key range configuration.
+        mode (str): Data distribution mode.
     """
 
-    requests: conint(gt=0)
+    requests: Annotated[int, Field(gt=0)]
     keys: DataKeysConfig
-
-
-class DataSyntheticConfig(BaseModel):
-    """Synthetic data generation configuration.
-
-    Attributes:
-        mode (str): Data distribution mode (e.g., 'static').
-        patterns (DataPatternsConfig): Access and temporal pattern configuration.
-        seed (int): Random seed for generation (>= 0).
-    """
-
     mode: str
-    patterns: DataPatternsConfig
-    seed: conint(ge=0)
 
     @model_validator(mode="after")
     def check_data_mode(
@@ -454,10 +438,22 @@ class DataSyntheticConfig(BaseModel):
         assert_choice_field(
             self.mode,
             DATA_MODES,
-            "data.synthetic.mode",
+            "data.general.mode",
         )
 
         return self
+
+
+class DataSyntheticConfig(BaseModel):
+    """Synthetic data configuration.
+
+    Attributes:
+        patterns (DataPatternsConfig): Access and temporal pattern configuration.
+        seed (int): Random seed for generation (>= 0).
+    """
+
+    patterns: DataPatternsConfig
+    seed: Annotated[int, Field(ge=0)]
 
 
 class DataConfig(BaseModel):

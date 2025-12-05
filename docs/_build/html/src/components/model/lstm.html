@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>src.components.model.lstm API documentation</title>
+<meta name="description" content="lstm.py …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>src.components.model.lstm</code></h1>
+</header>
+<section id="section-intro">
+<p>lstm.py</p>
+<p>This module provides the <code><a title="src.components.model.lstm.LSTM" href="#src.components.model.lstm.LSTM">LSTM</a></code> class, a PyTorch-based
+Long Short-Term Memory (LSTM) model with optional MC Dropout.</p>
+<p>The LSTM model:
+- Embeds key inputs.
+- Concatenates them with additional features.
+- Passes the concatenated input through an LSTM layer.
+- Optionally applies MC Dropout for uncertainty estimation.
+- Produces output logits through a fully connected layer.</p>
+<h2 id="class">Class</h2>
+<p>LSTM(torch.nn.Module)
+Implements the LSTM model for next-key prediction.</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="src.components.model.lstm.LSTM"><code class="flex name class">
+<span>class <span class="ident">LSTM</span></span>
+<span>(</span><span>params: typing.Any | dict[str, int | float | bool],<br>min_key: int,<br>max_key: int,<br>embedding_dim: int,<br>num_features: int,<br>config: typing.Any | None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LSTM(torch.nn.Module):
+    &#34;&#34;&#34;Long Short Term Memory (LSTM) model.
+
+    This class implements an LSTM model to predict the probability
+    of accessing a key next.
+
+    Attributes:
+        mc_dropout (bool): Flag indicating if MC dropout is enabled or not.
+        num_keys (int): Number of unique keys to embed.
+        input_size (int): Size of model input.
+        num_features (int): Number of features in input data.
+        embedding_dim (int): Dimensionality of key embeddings.
+        embedding (nn.Embedding): Embedding layer for keys.
+        lstm (nn.LSTM): PyTorch LSTM module.
+        mc_dropout_layer (nn.Dropout): Dropout layer for MC dropout.
+        fc (nn.Linear): Fully connected layer.
+    &#34;&#34;&#34;
+
+    def _set_params(
+        self: &#34;LSTM&#34;,
+        params: Any | dict[str, int | float | bool],
+        config: Any | None,
+    ) -&gt; None:
+        &#34;&#34;&#34;Set model parameters.
+
+        This function sets model parameters by using values provided directly,
+        or falling back to configuration values if not provided.
+
+        Args:
+            self (&#34;LSTM&#34;): Current model instance.
+            params (Any | dict[str, int | float | bool]):
+                Model parameters to be set.
+            config (Any | None): Configuration object.
+
+        Raises:
+            RuntimeError: If setting model parameters fails:
+                * Accessing parameter values in the configuration fails due to
+                  missing attributes (AttributeError).
+                * Setting a model attribute fails due to invalid type
+                  (TypeError).
+                * A provided or configuration value is invalid (ValueError).
+        &#34;&#34;&#34;
+        try:
+            # Prepare configuration model params
+            # if the configuration object is passed
+            model_params = None
+            if config is not None:
+                model_params = config.model.params
+
+            # For each required parameter
+            for param in MODEL_PARAM_NAMES:
+                # Check whether the required parameter
+                # has been directly passed to the model
+                if param in params and params[param] is not None:
+                    # Set the specified parameter value
+                    setattr(self, param, params[param])
+                else:
+                    # Otherwise, retrieve parameter value from
+                    # configuration
+                    config_value = getattr(model_params, param)
+
+                    # Set the value specified by configuration
+                    setattr(self, param, config_value)
+        except (AttributeError, TypeError, ValueError) as e:
+            msg = &#34;Model parameters setting failed&#34;
+            error(
+                msg,
+                extra={
+                    &#34;exception&#34;: str(e),
+                    &#34;model_type&#34;: type(self).__name__,
+                    &#34;param_names_attempted&#34;: MODEL_PARAM_NAMES,
+                    &#34;params_passed&#34;: params,
+                    &#34;context&#34;: &#34;LSTM model&#34;,
+                },
+            )
+            raise RuntimeError(msg) from e
+
+    def _set_fields(
+        self: &#34;LSTM&#34;,
+        params: Any | dict[str, int | float | bool],
+        min_key: int,
+        max_key: int,
+        embedding_dim: int,
+        num_features: int,
+        config: Any,
+    ) -&gt; None:
+        &#34;&#34;&#34;Set model fields.
+
+        This function sets model fields.
+
+        Args:
+            self (&#34;LSTM&#34;): Current class instance.
+            params (Any | dict[str, int | float | bool]):
+                Model parameters.
+            min_key (int): Maximum key.
+            max_key (int): Minimum key.
+            embedding_dim (int): Embedding dimension for keys.
+            num_features (int): Number of features for the model.
+            config (Any): Configuration object.
+
+        Returns:
+            None
+        &#34;&#34;&#34;
+        # Set model params
+        self._set_params(params, config)
+
+        # Disable MC Dropout by default
+        self.mc_dropout = MC_DROPOUT_DISABLED
+
+        # Set number of keys
+        self.num_keys = max_key - min_key + 1
+
+        # Set model input size
+        self.input_size = num_features + embedding_dim
+
+        # Set number of features
+        self.num_features = num_features
+
+        # Set embedding with specified dimension
+        self.embedding_dim = embedding_dim
+
+        debug(
+            &#34;Model fields setting executed&#34;,
+            extra={
+                &#34;model_type&#34;: type(self).__name__,
+                &#34;keys_num&#34;: self.num_keys,
+                &#34;input_size&#34;: self.input_size,
+                &#34;features_num&#34;: self.num_features,
+                &#34;embedding_dim&#34;: self.embedding_dim,
+                &#34;mc_dropout_enabled&#34;: self.mc_dropout,
+                &#34;context&#34;: &#34;LSTM model&#34;,
+            },
+        )
+
+    def _set_layers(self: &#34;LSTM&#34;) -&gt; None:
+        &#34;&#34;&#34;Instantiate all the layers of the model.
+
+        This function creates and assigns the following layers to the model:
+            - Embedding layer
+            - Dropout layer
+            - Fully connected (linear) layer
+
+        Args:
+            self (&#34;LSTM&#34;): Current class instance.
+
+        Returns:
+            None
+
+        Raises:
+            RuntimeError: If layer instantiation fails:
+                * Embedding layer creation fails due to invalid number of keys or
+                  embedding dimension (TypeError, ValueError, AttributeError).
+                * Dropout layer creation fails due to invalid dropout probability
+                  (TypeError, ValueError, AttributeError).
+                * Fully connected layer creation fails due to invalid hidden size
+                  or number of keys (TypeError, ValueError, AttributeError).
+        &#34;&#34;&#34;
+        try:
+            # Instantiate embedding layer
+            self.embedding = nn.Embedding(self.num_keys, self.embedding_dim)
+
+            # Instantiate dropout layer
+            self.mc_dropout_layer = nn.Dropout(p=self.dropout)
+
+            # Instantiate fully connected layer
+            self.fc = nn.Linear(self.hidden_size, self.num_keys)
+
+            debug(
+                &#34;Model layers setting executed&#34;,
+                extra={
+                    &#34;model_type&#34;: type(self).__name__,
+                    &#34;embedding_shape&#34;: (self.num_keys, self.embedding_dim),
+                    &#34;dropout_prob&#34;: self.dropout,
+                    &#34;fc_in_features&#34;: self.hidden_size,
+                    &#34;fc_out_features&#34;: self.num_keys,
+                    &#34;context&#34;: &#34;LSTM model&#34;,
+                },
+            )
+        except (TypeError, ValueError, AttributeError) as e:
+            msg = &#34;Model layers setting failed&#34;
+            error(
+                msg,
+                extra={
+                    &#34;exception&#34;: str(e),
+                    &#34;model_type&#34;: type(self).__name__,
+                    &#34;keys_num&#34;: getattr(self, &#34;num_keys&#34;, None),
+                    &#34;embedding_dim&#34;: getattr(self, &#34;embedding_dim&#34;, None),
+                    &#34;hidden_size&#34;: getattr(self, &#34;hidden_size&#34;, None),
+                    &#34;context&#34;: &#34;LSTM model&#34;,
+                },
+            )
+            raise RuntimeError(msg) from e
+
+    def __init__(
+        self: &#34;LSTM&#34;,
+        params: Any | dict[str, int | float | bool],
+        min_key: int,
+        max_key: int,
+        embedding_dim: int,
+        num_features: int,
+        config: Any | None,
+    ) -&gt; None:
+        &#34;&#34;&#34;Initialize the model.
+
+        This function initializes the model, specifically:
+        sets all fields, instantiates the class, as well as all its layers.
+
+        Args:
+            self (&#34;LSTM&#34;): Current class instance.
+            params (Any | dict[str, int | float | bool]):
+                Model parameters.
+            min_key (int): Maximum key.
+            max_key (int): Minimum key.
+            embedding_dim (int): Embedding dimension for keys.
+            num_features (int): Number of features for the model.
+            config (Any | None): Configuration object.
+
+        Returns:
+            None
+        &#34;&#34;&#34;
+        super().__init__()
+
+        # Set model fields
+        self._set_fields(
+            params,
+            min_key,
+            max_key,
+            embedding_dim,
+            num_features,
+            config,
+        )
+
+        # Instantiate the LSTM model
+        self.lstm = nn.LSTM(
+            input_size=self.input_size,
+            hidden_size=self.hidden_size,
+            num_layers=self.num_layers,
+            bias=self.bias,
+            batch_first=self.batch_first,
+            dropout=self.dropout,
+            bidirectional=self.bidirectional,
+            proj_size=self.proj_size,
+        )
+
+        # Set all model layers
+        self._set_layers()
+
+        debug(
+            &#34;LSTM model initialization executed&#34;,
+            extra={
+                &#34;model_type&#34;: type(self).__name__,
+                &#34;input_size&#34;: self.input_size,
+                &#34;hidden_size&#34;: self.hidden_size,
+                &#34;layers_num&#34;: self.num_layers,
+                &#34;bias&#34;: self.bias,
+                &#34;batch_first&#34;: self.batch_first,
+                &#34;dropout&#34;: self.dropout,
+                &#34;bidirectional&#34;: self.bidirectional,
+                &#34;proj_size&#34;: self.proj_size,
+                &#34;keys_num&#34;: getattr(self, &#34;num_keys&#34;, None),
+                &#34;embedding_dim&#34;: getattr(self, &#34;embedding_dim&#34;, None),
+                &#34;features_num&#34;: getattr(self, &#34;num_features&#34;, None),
+                &#34;mc_dropout_enabled&#34;: getattr(self, &#34;mc_dropout&#34;, None),
+                &#34;context&#34;: &#34;LSTM model&#34;,
+            },
+        )
+
+    def _build_model_input(
+        self: &#34;LSTM&#34;,
+        x_features: torch.Tensor,
+        x_keys: torch.Tensor,
+    ) -&gt; torch.Tensor:
+        &#34;&#34;&#34;Build and return the model input.
+
+        This function builds and returns the model input by concatenating
+        features with embedded keys.
+
+        Args:
+            self (&#34;LSTM&#34;): Current class instance.
+            x_features (torch.Tensor): Feature tensor for the current batch.
+            x_keys (torch.Tensor): Keys tensor for the current batch.
+
+        Returns:
+            torch.Tensor: Concatenated input tensor ready for model.
+
+        Raises:
+        RuntimeError: If building the model input fails:
+            * Device transfer fails (RuntimeError, AttributeError).
+            * Concatenation or embedding fails (TypeError, RuntimeError).
+        &#34;&#34;&#34;
+        try:
+            # Get the device of embedding layer
+            device = self.embedding.weight.device
+
+            # Ensure keys are on the same device
+            # as the embedding layer
+            x_features = move_to_device(x_features, device)
+            x_keys = move_to_device(x_keys, device)
+
+            # Perform embedding
+            x_keys = x_keys.long()
+            embedded_keys = self.embedding(x_keys)
+
+            # Concatenate features with embedded keys
+            x = torch.cat(
+                (x_features, embedded_keys),
+                dim=TENSOR_SEQUENCE_DIM,
+            )
+
+            return x
+        except (AttributeError, TypeError, RuntimeError) as e:
+            msg = &#34;Model input building failed&#34;
+            error(
+                msg,
+                extra={
+                    &#34;exception&#34;: str(e),
+                    &#34;x_features_shape&#34;: getattr(x_features, &#34;shape&#34;, None),
+                    &#34;x_keys_shape&#34;: getattr(x_keys, &#34;shape&#34;, None),
+                    &#34;embedding_device&#34;: getattr(
+                        self.embedding.weight,
+                        &#34;device&#34;,
+                        None,
+                    ),
+                    &#34;context&#34;: &#34;LSTM model&#34;,
+                },
+            )
+            raise RuntimeError(msg) from e
+
+    def forward(
+        self: &#34;LSTM&#34;,
+        x_features: torch.Tensor,
+        x_keys: torch.Tensor,
+    ) -&gt; torch.Tensor:
+        &#34;&#34;&#34;Perform a forward pass through the model.
+
+        This function builds the model input by concatenating features
+        with embedded keys, passes it through the model, optionally
+        applies MC dropout, and finally computes logits using a linear layer.
+
+        Args:
+            x_features (torch.Tensor): Input features tensor for
+                                       the current batch.
+            x_keys (torch.Tensor): Input keys tensor for the current batch.
+
+        Returns:
+            torch.Tensor: Logits computed by the model.
+
+        Raises:
+            RuntimeError: If the forward pass fails:
+                * Model input building fails (RuntimeError).
+                * LSTM forward computation fails (RuntimeError, IndexError).
+                * MC dropout or linear layer computation fails (RuntimeError, TypeError).
+        &#34;&#34;&#34;
+        try:
+            # Build model input for current batch
+            x = self._build_model_input(x_features, x_keys)
+
+            # Pass the input through the model
+            output, _ = self.lstm(x)
+
+            # Apply MC dropout if enabled
+            if self.mc_dropout:
+                output = self.mc_dropout_layer(output)
+
+            # Compute logits from last step
+            logits = self.fc(output[:, -1, :])
+
+            return logits
+        except (IndexError, RuntimeError) as e:
+            msg = &#34;Model forward pass failed&#34;
+            error(
+                msg,
+                extra={
+                    &#34;exception&#34;: str(e),
+                    &#34;x_features_shape&#34;: getattr(x_features, &#34;shape&#34;, None),
+                    &#34;x_keys_shape&#34;: getattr(x_keys, &#34;shape&#34;, None),
+                    &#34;mc_dropout_enabled&#34;: getattr(self, &#34;mc_dropout&#34;, None),
+                    &#34;lstm_input_size&#34;: getattr(self.lstm, &#34;input_size&#34;, None),
+                    &#34;fc_output_size&#34;: getattr(self.fc, &#34;out_features&#34;, None),
+                    &#34;context&#34;: &#34;LSTM model&#34;,
+                },
+            )
+            raise RuntimeError(msg) from e</code></pre>
+</details>
+<div class="desc"><p>Long Short Term Memory (LSTM) model.</p>
+<p>This class implements an LSTM model to predict the probability
+of accessing a key next.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>mc_dropout</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Flag indicating if MC dropout is enabled or not.</dd>
+<dt><strong><code>num_keys</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of unique keys to embed.</dd>
+<dt><strong><code>input_size</code></strong> :&ensp;<code>int</code></dt>
+<dd>Size of model input.</dd>
+<dt><strong><code>num_features</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of features in input data.</dd>
+<dt><strong><code>embedding_dim</code></strong> :&ensp;<code>int</code></dt>
+<dd>Dimensionality of key embeddings.</dd>
+<dt><strong><code>embedding</code></strong> :&ensp;<code>nn.Embedding</code></dt>
+<dd>Embedding layer for keys.</dd>
+<dt><strong><code>lstm</code></strong> :&ensp;<code>nn.LSTM</code></dt>
+<dd>PyTorch LSTM module.</dd>
+<dt><strong><code>mc_dropout_layer</code></strong> :&ensp;<code>nn.Dropout</code></dt>
+<dd>Dropout layer for MC dropout.</dd>
+<dt><strong><code>fc</code></strong> :&ensp;<code>nn.Linear</code></dt>
+<dd>Fully connected layer.</dd>
+</dl>
+<p>Initialize the model.</p>
+<p>This function initializes the model, specifically:
+sets all fields, instantiates the class, as well as all its layers.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt>self ("LSTM"): Current class instance.</dt>
+<dt>params (Any | dict[str, int | float | bool]):</dt>
+<dt>Model parameters.</dt>
+<dt><strong><code>min_key</code></strong> :&ensp;<code>int</code></dt>
+<dd>Maximum key.</dd>
+<dt><strong><code>max_key</code></strong> :&ensp;<code>int</code></dt>
+<dd>Minimum key.</dd>
+<dt><strong><code>embedding_dim</code></strong> :&ensp;<code>int</code></dt>
+<dd>Embedding dimension for keys.</dd>
+<dt><strong><code>num_features</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of features for the model.</dd>
+<dt><strong><code>config</code></strong> :&ensp;<code>Any | None</code></dt>
+<dd>Configuration object.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>None</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>torch.nn.modules.module.Module</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="src.components.model.lstm.LSTM.forward"><code class="name flex">
+<span>def <span class="ident">forward</span></span>(<span>self: <a title="src.components.model.lstm.LSTM" href="#src.components.model.lstm.LSTM">LSTM</a>,<br>x_features: torch.Tensor,<br>x_keys: torch.Tensor) ‑> torch.Tensor</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def forward(
+    self: &#34;LSTM&#34;,
+    x_features: torch.Tensor,
+    x_keys: torch.Tensor,
+) -&gt; torch.Tensor:
+    &#34;&#34;&#34;Perform a forward pass through the model.
+
+    This function builds the model input by concatenating features
+    with embedded keys, passes it through the model, optionally
+    applies MC dropout, and finally computes logits using a linear layer.
+
+    Args:
+        x_features (torch.Tensor): Input features tensor for
+                                   the current batch.
+        x_keys (torch.Tensor): Input keys tensor for the current batch.
+
+    Returns:
+        torch.Tensor: Logits computed by the model.
+
+    Raises:
+        RuntimeError: If the forward pass fails:
+            * Model input building fails (RuntimeError).
+            * LSTM forward computation fails (RuntimeError, IndexError).
+            * MC dropout or linear layer computation fails (RuntimeError, TypeError).
+    &#34;&#34;&#34;
+    try:
+        # Build model input for current batch
+        x = self._build_model_input(x_features, x_keys)
+
+        # Pass the input through the model
+        output, _ = self.lstm(x)
+
+        # Apply MC dropout if enabled
+        if self.mc_dropout:
+            output = self.mc_dropout_layer(output)
+
+        # Compute logits from last step
+        logits = self.fc(output[:, -1, :])
+
+        return logits
+    except (IndexError, RuntimeError) as e:
+        msg = &#34;Model forward pass failed&#34;
+        error(
+            msg,
+            extra={
+                &#34;exception&#34;: str(e),
+                &#34;x_features_shape&#34;: getattr(x_features, &#34;shape&#34;, None),
+                &#34;x_keys_shape&#34;: getattr(x_keys, &#34;shape&#34;, None),
+                &#34;mc_dropout_enabled&#34;: getattr(self, &#34;mc_dropout&#34;, None),
+                &#34;lstm_input_size&#34;: getattr(self.lstm, &#34;input_size&#34;, None),
+                &#34;fc_output_size&#34;: getattr(self.fc, &#34;out_features&#34;, None),
+                &#34;context&#34;: &#34;LSTM model&#34;,
+            },
+        )
+        raise RuntimeError(msg) from e</code></pre>
+</details>
+<div class="desc"><p>Perform a forward pass through the model.</p>
+<p>This function builds the model input by concatenating features
+with embedded keys, passes it through the model, optionally
+applies MC dropout, and finally computes logits using a linear layer.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>x_features</code></strong> :&ensp;<code>torch.Tensor</code></dt>
+<dd>Input features tensor for
+the current batch.</dd>
+<dt><strong><code>x_keys</code></strong> :&ensp;<code>torch.Tensor</code></dt>
+<dd>Input keys tensor for the current batch.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>torch.Tensor</code></dt>
+<dd>Logits computed by the model.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RuntimeError</code></dt>
+<dd>If the forward pass fails:
+* Model input building fails (RuntimeError).
+* LSTM forward computation fails (RuntimeError, IndexError).
+* MC dropout or linear layer computation fails (RuntimeError, TypeError).</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="src.components.model" href="index.html">src.components.model</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="src.components.model.lstm.LSTM" href="#src.components.model.lstm.LSTM">LSTM</a></code></h4>
+<ul class="">
+<li><code><a title="src.components.model.lstm.LSTM.forward" href="#src.components.model.lstm.LSTM.forward">forward</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

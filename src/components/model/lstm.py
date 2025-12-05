@@ -24,6 +24,7 @@ from components.const import (
     MC_DROPOUT_DISABLED,
     MODEL_PARAM_NAMES,
     TENSOR_SEQUENCE_DIM,
+    LIST_LAST_IDX,
 )
 from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug
@@ -395,7 +396,7 @@ class LSTM(torch.nn.Module):
                 output = self.mc_dropout_layer(output)
 
             # Compute logits from last step
-            logits = self.fc(output[:, -1, :])
+            logits = self.fc(output[:, LIST_LAST_IDX, :])
 
             return logits
         except (IndexError, RuntimeError) as e:

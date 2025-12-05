@@ -16,7 +16,9 @@ Classes:
         Aggregates all training configuration settings.
 """
 
-from pydantic import BaseModel, confloat, conint, model_validator
+from typing import Annotated
+
+from pydantic import BaseModel, Field, model_validator
 
 from components.assertions.choice_field_assertor import (
     assert_choice_field,
@@ -65,8 +67,8 @@ class TrainingGeneralConfig(BaseModel):
         shuffle (bool): Whether to shuffle the dataset during training.
     """
 
-    epochs: conint(gt=0)
-    batch_size: conint(gt=0)
+    epochs: Annotated[int, Field(gt=0)]
+    batch_size: Annotated[int, Field(gt=0)]
     shuffle: bool
 
 
@@ -79,8 +81,8 @@ class TrainingEarlyStoppingConfig(BaseModel):
         delta (float): Minimum change to qualify as an improvement (>= 0).
     """
 
-    patience: conint(ge=0)
-    delta: confloat(ge=0)
+    patience: Annotated[int, Field(ge=0)]
+    delta: Annotated[float, Field(ge=0)]
 
 
 class TrainingConfig(BaseModel):

@@ -26,7 +26,9 @@ Classes:
         The complete, top-level schema defining all supported API kwargs.
 """
 
-from pydantic import BaseModel, confloat, conint
+from typing import Annotated
+
+from pydantic import BaseModel, Field
 
 
 class KwargIntAPIConfig(BaseModel):
@@ -37,8 +39,8 @@ class KwargIntAPIConfig(BaseModel):
         max (Optional[int]): Maximum allowed integer value (> 0).
     """
 
-    value: conint(gt=0)
-    max: conint(gt=0) | None = None
+    value: Annotated[int, Field(gt=0)]
+    max: Annotated[int, Field(gt=0)] | None = None
 
 
 class KwargFloatAPIConfig(BaseModel):
@@ -52,8 +54,8 @@ class KwargFloatAPIConfig(BaseModel):
         max (Optional[float]): Maximum allowed float value (> 0.0).
     """
 
-    value: confloat(gt=0.0)
-    max: confloat(gt=0.0) | None = None
+    value: Annotated[float, Field(gt=0.0)]
+    max: Annotated[float, Field(gt=0.0)] | None = None
 
 
 class KwargConfidenceLevelAPIConfig(BaseModel):
@@ -66,7 +68,7 @@ class KwargConfidenceLevelAPIConfig(BaseModel):
         value (float):  Confidence level value (0.0–1.0].
     """
 
-    value: confloat(gt=0.0, le=1.0)
+    value: Annotated[float, Field(gt=0.0, le=1.0)]
 
 
 class KwargListIntAPIConfig(BaseModel):

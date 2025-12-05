@@ -19,7 +19,9 @@ Classes:
         Aggregates all dataset configuration settings.
 """
 
-from pydantic import BaseModel, confloat, model_validator
+from typing import Annotated
+
+from pydantic import BaseModel, Field, model_validator
 
 from components.assertions.choice_field_assertor import assert_choice_field
 from pipeline.const import MISSING_VALUES_REMOVAL_DROPNA_HOWS
@@ -33,8 +35,8 @@ class DatasetSplitsConfig(BaseModel):
         validation (float): Fraction of the dataset used for validation (in [0,1]).
     """
 
-    training: confloat(ge=0, le=1)
-    validation: confloat(ge=0, le=1)
+    training: Annotated[float, Field(ge=0, le=1)]
+    validation: Annotated[float, Field(ge=0, le=1)]
 
 
 class DatasetCleaningMissingValuesRemovalDropnaConfig(BaseModel):

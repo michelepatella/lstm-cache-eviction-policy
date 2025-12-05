@@ -31,10 +31,13 @@ API_PARAM_USER_API_KWARGS_NAME = "user_api_kwargs"
 # ----------------------------
 # Autoregressive Rollout
 # ----------------------------
-AUTOREGRESSIVE_ROLLOUT_LAST_TIME_IDX = -1
-AUTOREGRESSIVE_ROLLOUT_LAST_TIME_BATCH_IDX = 0
-AUTOREGRESSIVE_ROLLOUT_TIME_ARRAY_IDX = 0
 AUTOREGRESSIVE_ROLLOUT_SEQUENCE_SHIFT_IDX = 1
+
+
+# ----------------------------
+# Batch
+# ----------------------------
+BATCH_WITH_TARGET_DIMENSION = 3
 
 
 # ----------------------------
@@ -50,16 +53,24 @@ DATA_GENERATION_CURRENT_SECONDS_IN_DAY_START = 0.0
 # ----------------------------
 DATASET_COLUMN_SIN_TIME_NAME = "sin_time"
 DATASET_COLUMN_COS_TIME_NAME = "cos_time"
+DATASET_COLUMN_LOCAL_FREQUENCY_NAME = "local_frequency"
+DATASET_COLUMN_LOCAL_RECENCY_NAME = "local_recency"
+
+DATASET_COLUMN_TARGET_IDX = -1
 
 DATASET_PROCESSED_COLUMNS = [
     DATASET_COLUMN_SIN_TIME_NAME,
     DATASET_COLUMN_COS_TIME_NAME,
+    DATASET_COLUMN_LOCAL_FREQUENCY_NAME,
+    DATASET_COLUMN_LOCAL_RECENCY_NAME,
     DATASET_COLUMN_REQUEST_NAME,
 ]
 
 DATASET_PROCESSED_FEATURE_COLUMNS = [
     DATASET_COLUMN_SIN_TIME_NAME,
     DATASET_COLUMN_COS_TIME_NAME,
+    DATASET_COLUMN_LOCAL_FREQUENCY_NAME,
+    DATASET_COLUMN_LOCAL_RECENCY_NAME,
 ]
 
 DATASET_INDEX = False
@@ -110,6 +121,13 @@ GRID_SEARCH_DESC = "Grid Search"
 # ----------------------------
 JSON_WRAP_BOX = True
 JSON_INDENT = 4
+
+
+# ----------------------------
+# List
+# ----------------------------
+LIST_FIRST_IDX = 0
+LIST_LAST_IDX = -1
 
 
 # ----------------------------
