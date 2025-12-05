@@ -44,6 +44,7 @@ from components.model.io.saver import save_model
 from components.model.optimizations.pruner import prune_model
 from components.model.optimizations.quantizer import quantize_model
 from components.optimizer.builder import build_optimizer
+from components.seed.setter import set_seed
 from components.training.core.epochs_trainer import train_epochs
 from const import (
     DATASET_TRAINING_SPLIT_TYPE,
@@ -86,7 +87,8 @@ def train_model() -> None:
         # Setup
         config = prepare_config()
         initialize_logs(
-            logging.getLevelName(config.logs.level), GrafanaLokiHandler()
+            logging.getLevelName(config.logs.level),
+            GrafanaLokiHandler(),
         )
 
         # Prepare configuration
@@ -109,6 +111,10 @@ def train_model() -> None:
         quantization_dtype = config.model.optimizations.quantization.dtype
         quantization_engine = config.model.optimizations.quantization.engine
         num_features = len(DATASET_PROCESSED_FEATURE_COLUMNS)
+        seed = config.seed.value
+
+        # Ensure reproducibility
+        set_seed(seed)
 
         info(
             "Training started",

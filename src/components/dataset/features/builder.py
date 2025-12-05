@@ -26,13 +26,13 @@ from components.const import (
     DATASET_COLUMN_LOCAL_RECENCY_NAME,
     DATASET_COLUMN_SIN_TIME_NAME,
 )
-from components.dataset.columns.manipulations.dropper import (
+from components.dataset.columns.dropper import (
     drop_dataset_column,
 )
-from components.dataset.columns.manipulations.reorderer import (
+from components.dataset.columns.reorderer import (
     reorder_dataset_columns,
 )
-from components.dataset.columns.manipulations.setter import set_dataset_column
+from components.dataset.columns.setter import set_dataset_column
 from components.dataset.features.derived.local_frequencies_calculator import (
     calculate_local_frequencies,
 )

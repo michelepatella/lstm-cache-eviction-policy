@@ -3,7 +3,6 @@ stages:
     cmd: PYTHONPATH=src python -m pipeline.steps.data_preparer
     params:
       - src/pipeline/config/config.yaml:
-        - data.synthetic.seed
         - data.general.mode
         - data.general.requests
         - data.general.keys.min
@@ -44,6 +43,9 @@ stages:
         - data.synthetic.patterns.temporal.periodic.scale
         - data.synthetic.patterns.temporal.periodic.amplitude
         - logs.level
+        - resources.general.num_cpus
+        - resources.general.num_gpus
+        - seed.value
     deps:
       - src/components/assertions/choice_field_assertor.py
       - src/components/assertions/min_max_assertor.py
@@ -65,9 +67,10 @@ stages:
       - src/components/data/requests/utils/alpha_requests_generator.py
       - src/components/data/requests/utils/generation_helper.py
       - src/components/dataset/builder.py
+      - src/components/dataset/io/loader.py
       - src/components/dataset/io/locator.py
       - src/components/dataset/io/saver.py
-      - src/components/logs/handlers/elastic_handler.py
+      - src/components/logs/handlers/grafana_loki_handler.py
       - src/components/logs/initializer.py
       - src/components/logs/levels/debug_logger.py
       - src/components/logs/levels/error_logger.py
@@ -76,6 +79,7 @@ stages:
       - src/components/math/zipf_probs_calculator.py
       - src/components/ray/initializer.py
       - src/components/ray/tasks/data/explorer.py
+      - src/components/seed/setter.py
       - src/components/time/cyclics/seconds_to_hours_converter.py
       - src/components/time/cyclics/updater.py
       - src/components/visualization/daily_profile_plotter.py
@@ -85,16 +89,18 @@ stages:
       - src/const.py
       - src/pipeline/config/configurator.py
       - src/pipeline/config/pydantic/config.py
-      - src/pipeline/config/pydantic/sections/api_kwargs_config.py
-      - src/pipeline/config/pydantic/sections/caches_config.py
       - src/pipeline/config/pydantic/sections/data_config.py
+      - src/pipeline/config/pydantic/sections/data_loader_config.py
       - src/pipeline/config/pydantic/sections/dataset_config.py
+      - src/pipeline/config/pydantic/sections/early_stopping_config.py
       - src/pipeline/config/pydantic/sections/evaluation_config.py
       - src/pipeline/config/pydantic/sections/logs_config.py
       - src/pipeline/config/pydantic/sections/loss_config.py
       - src/pipeline/config/pydantic/sections/model_config.py
       - src/pipeline/config/pydantic/sections/optimizer_config.py
-      - src/pipeline/config/pydantic/sections/testing_config.py
+      - src/pipeline/config/pydantic/sections/resources_config.py
+      - src/pipeline/config/pydantic/sections/seed_config.py
+      - src/pipeline/config/pydantic/sections/simulations_config.py
       - src/pipeline/config/pydantic/sections/training_config.py
       - src/pipeline/config/pydantic/sections/validation_config.py
       - src/pipeline/const.py
@@ -113,21 +119,24 @@ stages:
         - dataset.cleaning.missing_values_removal.dropna.how
         - logs.level
         - model.sequence.length
+        - resources.general.num_cpus
+        - resources.general.num_gpus
+        - seed.value
     deps:
       - src/components/assertions/choice_field_assertor.py
       - src/components/assertions/min_max_assertor.py
       - src/components/const.py
       - src/components/dataset/cleans/missing_values_remover.py
-      - src/components/dataset/columns/manipulations/dropper.py
-      - src/components/dataset/columns/manipulations/reorderer.py
-      - src/components/dataset/columns/manipulations/setter.py
+      - src/components/dataset/columns/dropper.py
+      - src/components/dataset/columns/reorderer.py
+      - src/components/dataset/columns/setter.py
       - src/components/dataset/features/builder.py
       - src/components/dataset/features/derived/local_frequencies_calculator.py
       - src/components/dataset/features/derived/local_recencies_calculator.py
       - src/components/dataset/io/loader.py
       - src/components/dataset/io/locator.py
       - src/components/dataset/io/saver.py
-      - src/components/logs/handlers/elastic_handler.py
+      - src/components/logs/handlers/grafana_loki_handler.py
       - src/components/logs/initializer.py
       - src/components/logs/levels/debug_logger.py
       - src/components/logs/levels/error_logger.py
@@ -135,21 +144,24 @@ stages:
       - src/components/logs/levels/utils/logger.py
       - src/components/ray/initializer.py
       - src/components/ray/tasks/features/builder.py
+      - src/components/seed/setter.py
       - src/components/time/transforms/trig_encoder.py
       - src/components/yaml/io/loader.py
       - src/const.py
       - src/pipeline/config/configurator.py
       - src/pipeline/config/pydantic/config.py
-      - src/pipeline/config/pydantic/sections/api_kwargs_config.py
-      - src/pipeline/config/pydantic/sections/caches_config.py
       - src/pipeline/config/pydantic/sections/data_config.py
+      - src/pipeline/config/pydantic/sections/data_loader_config.py
       - src/pipeline/config/pydantic/sections/dataset_config.py
+      - src/pipeline/config/pydantic/sections/early_stopping_config.py
       - src/pipeline/config/pydantic/sections/evaluation_config.py
       - src/pipeline/config/pydantic/sections/logs_config.py
       - src/pipeline/config/pydantic/sections/loss_config.py
       - src/pipeline/config/pydantic/sections/model_config.py
       - src/pipeline/config/pydantic/sections/optimizer_config.py
-      - src/pipeline/config/pydantic/sections/testing_config.py
+      - src/pipeline/config/pydantic/sections/resources_config.py
+      - src/pipeline/config/pydantic/sections/seed_config.py
+      - src/pipeline/config/pydantic/sections/simulations_config.py
       - src/pipeline/config/pydantic/sections/training_config.py
       - src/pipeline/config/pydantic/sections/validation_config.py
       - src/pipeline/const.py
@@ -165,7 +177,15 @@ stages:
         - data.general.keys.max
         - data.general.keys.min
         - data.general.mode
+        - data_loader.batch_size.training
+        - data_loader.batch_size.validation
+        - data_loader.shuffle.training
+        - data_loader.shuffle.validation
         - dataset.splits.training
+        - early_stopping.training.delta
+        - early_stopping.training.patience
+        - early_stopping.validation.delta
+        - early_stopping.validation.patience
         - loss.class_weight.type
         - logs.level
         - model.params.batch_first
@@ -180,16 +200,10 @@ stages:
         - optimizer.params.learning_rate
         - optimizer.params.weight_decay
         - optimizer.type
-        - training.early_stopping.delta
-        - training.early_stopping.patience
-        - training.general.batch_size
-        - training.general.num_workers
-        - training.general.shuffle
-        - validation.device.type
-        - validation.early_stopping.delta
-        - validation.early_stopping.patience
-        - validation.general.batch_size
-        - validation.general.shuffle
+        - resources.devices.validation
+        - resources.general.num_cpus
+        - resources.general.num_gpus
+        - seed.value
         - validation.search_space.model.hidden_size
         - validation.search_space.model.num_layers
         - validation.search_space.model.dropout
@@ -207,9 +221,7 @@ stages:
       - src/components/data_loader/initializer.py
       - src/components/data_loader/targets/extractor.py
       - src/components/dataset/access_logs_dataset.py
-      - src/components/dataset/columns/extractions/extractor.py
-      - src/components/dataset/columns/extractions/features_target_extractor.py
-      - src/components/dataset/columns/manipulations/shifter.py
+      - src/components/dataset/columns/shifter.py
       - src/components/dataset/io/loader.py
       - src/components/dataset/io/locator.py
       - src/components/dataset/rows/calculations/effective_rows_calculator.py
@@ -232,7 +244,7 @@ stages:
       - src/components/inference/batches_inferrer.py
       - src/components/inference/single_batch_inferrer.py
       - src/components/json/io/saver.py
-      - src/components/logs/handlers/elastic_handler.py
+      - src/components/logs/handlers/grafana_loki_handler.py
       - src/components/logs/initializer.py
       - src/components/logs/levels/debug_logger.py
       - src/components/logs/levels/error_logger.py
@@ -252,6 +264,7 @@ stages:
       - src/components/optimizer/builder.py
       - src/components/ray/initializer.py
       - src/components/ray/tasks/time_series_cv/folds_runner.py
+      - src/components/seed/setter.py
       - src/components/training/callbacks/early_stopping.py
       - src/components/training/core/epochs_trainer.py
       - src/components/training/core/single_epoch_trainer.py
@@ -265,16 +278,18 @@ stages:
       - src/const.py
       - src/pipeline/config/configurator.py
       - src/pipeline/config/pydantic/config.py
-      - src/pipeline/config/pydantic/sections/api_kwargs_config.py
-      - src/pipeline/config/pydantic/sections/caches_config.py
       - src/pipeline/config/pydantic/sections/data_config.py
+      - src/pipeline/config/pydantic/sections/data_loader_config.py
       - src/pipeline/config/pydantic/sections/dataset_config.py
+      - src/pipeline/config/pydantic/sections/early_stopping_config.py
       - src/pipeline/config/pydantic/sections/evaluation_config.py
       - src/pipeline/config/pydantic/sections/logs_config.py
       - src/pipeline/config/pydantic/sections/loss_config.py
       - src/pipeline/config/pydantic/sections/model_config.py
       - src/pipeline/config/pydantic/sections/optimizer_config.py
-      - src/pipeline/config/pydantic/sections/testing_config.py
+      - src/pipeline/config/pydantic/sections/resources_config.py
+      - src/pipeline/config/pydantic/sections/seed_config.py
+      - src/pipeline/config/pydantic/sections/simulations_config.py
       - src/pipeline/config/pydantic/sections/training_config.py
       - src/pipeline/config/pydantic/sections/validation_config.py
       - src/pipeline/const.py
@@ -291,34 +306,36 @@ stages:
         - data.general.mode
         - dataset.splits.training
         - dataset.splits.validation
+        - data_loader.batch_size.training
+        - data_loader.batch_size.validation
+        - data_loader.shuffle.training
+        - data_loader.shuffle.validation
+        - early_stopping.training.delta
+        - early_stopping.training.patience
+        - early_stopping.validation.delta
+        - early_stopping.validation.patience
         - logs.level
         - loss.class_weight.type
         - model.optimizations.pruning.amount
         - model.optimizations.quantization.dtype
         - model.optimizations.quantization.engine
+        - model.params.batch_first
+        - model.params.bias
+        - model.params.bidirectional
+        - model.params.dropout
         - model.params.hidden_size
         - model.params.num_layers
-        - model.params.bias
-        - model.params.batch_first
-        - model.params.dropout
-        - model.params.bidirectional
         - model.params.proj_size
         - model.sequence.embedding.dimension
         - model.sequence.length
         - optimizer.params.learning_rate
         - optimizer.params.weight_decay
         - optimizer.type
-        - training.device.type
-        - training.general.batch_size
-        - training.general.epochs
-        - training.general.num_workers
-        - training.general.shuffle
-        - training.early_stopping.delta
-        - training.early_stopping.patience
-        - validation.early_stopping.delta
-        - validation.early_stopping.patience
-        - validation.general.batch_size
-        - validation.general.shuffle
+        - resources.devices.training
+        - resources.general.num_cpus
+        - resources.general.num_gpus
+        - seed.value
+        - training.epochs
     deps:
       - src/components/assertions/choice_field_assertor.py
       - src/components/assertions/min_max_assertor.py
@@ -330,9 +347,7 @@ stages:
       - src/components/data_loader/initializer.py
       - src/components/data_loader/targets/extractor.py
       - src/components/dataset/access_logs_dataset.py
-      - src/components/dataset/columns/extractions/extractor.py
-      - src/components/dataset/columns/extractions/features_target_extractor.py
-      - src/components/dataset/columns/manipulations/shifter.py
+      - src/components/dataset/columns/shifter.py
       - src/components/dataset/io/loader.py
       - src/components/dataset/io/locator.py
       - src/components/dataset/rows/calculations/effective_rows_calculator.py
@@ -350,7 +365,7 @@ stages:
       - src/components/inference/batches_inferrer.py
       - src/components/inference/single_batch_inferrer.py
       - src/components/json/io/saver.py
-      - src/components/logs/handlers/elastic_handler.py
+      - src/components/logs/handlers/grafana_loki_handler.py
       - src/components/logs/initializer.py
       - src/components/logs/levels/debug_logger.py
       - src/components/logs/levels/error_logger.py
@@ -371,6 +386,7 @@ stages:
       - src/components/model/optimizations/quantizer.py
       - src/components/network/free_port_finder.py
       - src/components/optimizer/builder.py
+      - src/components/seed/setter.py
       - src/components/training/callbacks/early_stopping.py
       - src/components/training/core/epochs_trainer.py
       - src/components/training/core/single_epoch_trainer.py
@@ -378,16 +394,18 @@ stages:
       - src/const.py
       - src/pipeline/config/configurator.py
       - src/pipeline/config/pydantic/config.py
-      - src/pipeline/config/pydantic/sections/api_kwargs_config.py
-      - src/pipeline/config/pydantic/sections/caches_config.py
       - src/pipeline/config/pydantic/sections/data_config.py
+      - src/pipeline/config/pydantic/sections/data_loader_config.py
       - src/pipeline/config/pydantic/sections/dataset_config.py
+      - src/pipeline/config/pydantic/sections/early_stopping_config.py
       - src/pipeline/config/pydantic/sections/evaluation_config.py
       - src/pipeline/config/pydantic/sections/logs_config.py
       - src/pipeline/config/pydantic/sections/loss_config.py
       - src/pipeline/config/pydantic/sections/model_config.py
       - src/pipeline/config/pydantic/sections/optimizer_config.py
-      - src/pipeline/config/pydantic/sections/testing_config.py
+      - src/pipeline/config/pydantic/sections/resources_config.py
+      - src/pipeline/config/pydantic/sections/seed_config.py
+      - src/pipeline/config/pydantic/sections/simulations_config.py
       - src/pipeline/config/pydantic/sections/training_config.py
       - src/pipeline/config/pydantic/sections/validation_config.py
       - src/pipeline/const.py
@@ -404,21 +422,24 @@ stages:
         - data.general.keys.min
         - data.general.mode
         - dataset.splits.training
+        - data_loader.batch_size.testing
+        - data_loader.shuffle.testing
         - logs.level
         - loss.class_weight.type
         - model.optimizations.quantization.engine
+        - model.params.batch_first
+        - model.params.bias
+        - model.params.bidirectional
+        - model.params.dropout
         - model.params.hidden_size
         - model.params.num_layers
-        - model.params.bias
-        - model.params.batch_first
-        - model.params.dropout
-        - model.params.bidirectional
         - model.params.proj_size
         - model.sequence.embedding.dimension
         - model.sequence.length
-        - testing.device.type
-        - testing.general.batch_size
-        - testing.general.shuffle
+        - resources.devices.testing
+        - resources.general.num_cpus
+        - resources.general.num_gpus
+        - seed.value
     deps:
       - src/components/assertions/choice_field_assertor.py
       - src/components/assertions/min_max_assertor.py
@@ -429,9 +450,8 @@ stages:
       - src/components/data_loader/initializer.py
       - src/components/data_loader/targets/extractor.py
       - src/components/dataset/access_logs_dataset.py
-      - src/components/dataset/columns/extractions/extractor.py
       - src/components/dataset/columns/extractions/features_target_extractor.py
-      - src/components/dataset/columns/manipulations/shifter.py
+      - src/components/dataset/columns/shifter.py
       - src/components/dataset/io/loader.py
       - src/components/dataset/io/locator.py
       - src/components/dataset/rows/calculations/effective_rows_calculator.py
@@ -448,7 +468,7 @@ stages:
       - src/components/inference/batches_inferrer.py
       - src/components/inference/single_batch_inferrer.py
       - src/components/json/io/saver.py
-      - src/components/logs/handlers/elastic_handler.py
+      - src/components/logs/handlers/grafana_loki_handler.py
       - src/components/logs/initializer.py
       - src/components/logs/levels/debug_logger.py
       - src/components/logs/levels/error_logger.py
@@ -465,20 +485,23 @@ stages:
       - src/components/model/io/locator.py
       - src/components/model/lstm.py
       - src/components/model/mode/setter.py
+      - src/components/seed/setter.py
       - src/components/yaml/io/loader.py
       - src/const.py
       - src/pipeline/config/configurator.py
       - src/pipeline/config/pydantic/config.py
-      - src/pipeline/config/pydantic/sections/api_kwargs_config.py
-      - src/pipeline/config/pydantic/sections/caches_config.py
       - src/pipeline/config/pydantic/sections/data_config.py
+      - src/pipeline/config/pydantic/sections/data_loader_config.py
       - src/pipeline/config/pydantic/sections/dataset_config.py
+      - src/pipeline/config/pydantic/sections/early_stopping_config.py
       - src/pipeline/config/pydantic/sections/evaluation_config.py
       - src/pipeline/config/pydantic/sections/logs_config.py
       - src/pipeline/config/pydantic/sections/loss_config.py
       - src/pipeline/config/pydantic/sections/model_config.py
       - src/pipeline/config/pydantic/sections/optimizer_config.py
-      - src/pipeline/config/pydantic/sections/testing_config.py
+      - src/pipeline/config/pydantic/sections/resources_config.py
+      - src/pipeline/config/pydantic/sections/seed_config.py
+      - src/pipeline/config/pydantic/sections/simulations_config.py
       - src/pipeline/config/pydantic/sections/training_config.py
       - src/pipeline/config/pydantic/sections/validation_config.py
       - src/pipeline/const.py
@@ -492,26 +515,29 @@ stages:
     cmd: PYTHONPATH=src python -m pipeline.steps.simulator
     params:
       - src/pipeline/config/config.yaml:
-        - api_kwargs.conf_weight
-        - api_kwargs.confidence_level
-        - api_kwargs.excluded_keys
-        - api_kwargs.mc_dropout_samples
-        - api_kwargs.num_evictions
-        - api_kwargs.prob_weight
-        - api_kwargs.return_all_scores
-        - api_kwargs.return_api_kwargs
-        - api_kwargs.return_prob_conf
-        - api_kwargs.rollout_horizon
-        - api_kwargs.time_step_increment
-        - caches.dimension
-        - caches.ttl
         - data.general.mode
         - dataset.splits.training
+        - data_loader.batch_size.testing
+        - data_loader.shuffle.testing
         - evaluation.simulations.metrics.mistake_rate.window
         - logs.level
         - model.sequence.length
-        - testing.general.batch_size
-        - testing.general.shuffle
+        - resources.general.num_cpus
+        - resources.general.num_gpus
+        - seed.value
+        - simulations.api_kwargs.conf_weight
+        - simulations.api_kwargs.conf_level
+        - simulations.api_kwargs.excluded_keys
+        - simulations.api_kwargs.mc_dropout_samples
+        - simulations.api_kwargs.num_evictions
+        - simulations.api_kwargs.prob_weight
+        - simulations.api_kwargs.return_all_scores
+        - simulations.api_kwargs.return_api_kwargs
+        - simulations.api_kwargs.return_prob_conf
+        - simulations.api_kwargs.rollout_horizon
+        - simulations.api_kwargs.time_step_increment
+        - simulations.caches.dimension
+        - simulations.caches.ttl
     deps:
       - src/components/assertions/choice_field_assertor.py
       - src/components/assertions/min_max_assertor.py
@@ -538,9 +564,7 @@ stages:
       - src/components/data_loader/builder.py
       - src/components/data_loader/initializer.py
       - src/components/dataset/access_logs_dataset.py
-      - src/components/dataset/columns/extractions/extractor.py
-      - src/components/dataset/columns/extractions/features_target_extractor.py
-      - src/components/dataset/columns/manipulations/shifter.py
+      - src/components/dataset/columns/shifter.py
       - src/components/dataset/io/loader.py
       - src/components/dataset/io/locator.py
       - src/components/dataset/rows/calculations/effective_rows_calculator.py
@@ -555,7 +579,7 @@ stages:
       - src/components/evaluation/simulations/metrics/calculator.py
       - src/components/evaluation/simulations/metrics/io/saver.py
       - src/components/json/io/saver.py
-      - src/components/logs/handlers/elastic_handler.py
+      - src/components/logs/handlers/grafana_loki_handler.py
       - src/components/logs/initializer.py
       - src/components/logs/levels/debug_logger.py
       - src/components/logs/levels/error_logger.py
@@ -563,22 +587,26 @@ stages:
       - src/components/logs/levels/utils/logger.py
       - src/components/math/avg_calculator.py
       - src/components/math/percentage_calculator.py
+      - src/components/ray/tasks/caches/simulator.py
+      - src/components/seed/setter.py
       - src/components/time/transforms/trig_decoder.py
       - src/components/visualization/hit_miss_rates_plotter.py
       - src/components/yaml/io/loader.py
       - src/const.py
       - src/pipeline/config/configurator.py
       - src/pipeline/config/pydantic/config.py
-      - src/pipeline/config/pydantic/sections/api_kwargs_config.py
-      - src/pipeline/config/pydantic/sections/caches_config.py
       - src/pipeline/config/pydantic/sections/data_config.py
+      - src/pipeline/config/pydantic/sections/data_loader_config.py
       - src/pipeline/config/pydantic/sections/dataset_config.py
+      - src/pipeline/config/pydantic/sections/early_stopping_config.py
       - src/pipeline/config/pydantic/sections/evaluation_config.py
       - src/pipeline/config/pydantic/sections/logs_config.py
       - src/pipeline/config/pydantic/sections/loss_config.py
       - src/pipeline/config/pydantic/sections/model_config.py
       - src/pipeline/config/pydantic/sections/optimizer_config.py
-      - src/pipeline/config/pydantic/sections/testing_config.py
+      - src/pipeline/config/pydantic/sections/resources_config.py
+      - src/pipeline/config/pydantic/sections/seed_config.py
+      - src/pipeline/config/pydantic/sections/simulations_config.py
       - src/pipeline/config/pydantic/sections/training_config.py
       - src/pipeline/config/pydantic/sections/validation_config.py
       - src/pipeline/const.py

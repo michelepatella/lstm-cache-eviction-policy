@@ -36,6 +36,7 @@ from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
 from components.ray.initializer import initialize_ray
 from components.ray.tasks.features.builder import build_features_task
+from components.seed.setter import set_seed
 from const import (
     DATASET_RAW_TYPE,
     LOGS_LOGGER_NAME,
@@ -47,7 +48,7 @@ from pipeline.const import (
     DAGS_HUB_REPO_NAME,
     DAGS_HUB_REPO_OWNER,
     DATASET_PROCESSED_TYPE,
-    DATASET_RESET_INDEX_DROP,
+    DATASET_CHUNK_RESET_INDEX_DROP,
     LOGS_PHASE_DATA_PREPROCESSING,
 )
 
@@ -78,7 +79,8 @@ def preprocess_data() -> None:
         # Setup
         config = prepare_config()
         initialize_logs(
-            logging.getLevelName(config.logs.level), GrafanaLokiHandler()
+            logging.getLevelName(config.logs.level),
+            GrafanaLokiHandler(),
         )
         initialize_ray(
             config.resources.general.num_cpus,
@@ -93,6 +95,10 @@ def preprocess_data() -> None:
         seq_len = config.model.sequence.length
         num_cpus = config.resources.general.num_cpus
         num_gpus = config.resources.general.num_gpus
+        seed = config.seed.value
+
+        # Ensure reproducibility
+        set_seed(seed)
 
         info(
             "Data preprocessing started",
@@ -143,7 +149,7 @@ def preprocess_data() -> None:
         # working on a dataset chunk
         futures = [
             build_features_task.remote(
-                chunk.reset_index(drop=DATASET_RESET_INDEX_DROP),
+                chunk.reset_index(drop=DATASET_CHUNK_RESET_INDEX_DROP),
                 seq_len,
             )
             for chunk in df_chunks

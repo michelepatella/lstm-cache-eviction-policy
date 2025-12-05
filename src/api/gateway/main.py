@@ -38,7 +38,8 @@ api_config_file = load_yaml(API_CONFIG_FILE_PATH)
 api_config = APIConfig(**api_config_file)
 
 initialize_logs(
-    logging.getLevelName(api_config.logs.level), GrafanaLokiHandler()
+    logging.getLevelName(api_config.logs.level),
+    GrafanaLokiHandler(),
 )
 logs_phase.set(LOGS_PHASE_API)
 

@@ -22,7 +22,7 @@ from pydantic import BaseModel, Field, model_validator
 from components.assertions.choice_field_assertor import (
     assert_choice_field,
 )
-from const import HW_DEVICE_NAMES
+from const import RESOURCES_DEVICE_NAMES
 
 
 class ResourcesGeneralConfig(BaseModel):
@@ -64,17 +64,17 @@ class ResourcesDevicesConfig(BaseModel):
         """
         assert_choice_field(
             self.training,
-            HW_DEVICE_NAMES,
+            RESOURCES_DEVICE_NAMES,
             "resources.devices.training",
         )
         assert_choice_field(
             self.testing,
-            HW_DEVICE_NAMES,
+            RESOURCES_DEVICE_NAMES,
             "resources.devices.testing",
         )
         assert_choice_field(
             self.validation,
-            HW_DEVICE_NAMES,
+            RESOURCES_DEVICE_NAMES,
             "resources.devices.validation",
         )
         return self

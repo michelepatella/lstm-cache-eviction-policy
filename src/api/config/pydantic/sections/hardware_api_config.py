@@ -19,7 +19,7 @@ Classes:
 from pydantic import BaseModel, model_validator
 
 from components.assertions.choice_field_assertor import assert_choice_field
-from const import HW_DEVICE_NAMES
+from const import RESOURCES_DEVICE_NAMES
 
 
 class HardwareDeviceAPIConfig(BaseModel):
@@ -47,7 +47,7 @@ class HardwareDeviceAPIConfig(BaseModel):
         """
         assert_choice_field(
             self.type,
-            HW_DEVICE_NAMES,
+            RESOURCES_DEVICE_NAMES,
             "hardware.device.type",
         )
 

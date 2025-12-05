@@ -29,6 +29,7 @@ from components.logs.handlers.grafana_loki_handler import GrafanaLokiHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
 from components.ray.initializer import initialize_ray
+from components.seed.setter import set_seed
 from components.validation.grid_search.runner import (
     compute_grid_search,
 )
@@ -77,7 +78,8 @@ def validate_model() -> None:
         # Setup
         config = prepare_config()
         initialize_logs(
-            logging.getLevelName(config.logs.level), GrafanaLokiHandler()
+            logging.getLevelName(config.logs.level),
+            GrafanaLokiHandler(),
         )
         initialize_ray(
             config.resources.general.num_cpus,
@@ -87,6 +89,10 @@ def validate_model() -> None:
         # Prepare configuration
         validation_batch_size = config.data_loader.batch_size.validation
         validation_shuffle = config.data_loader.shuffle.validation
+        seed = config.seed.value
+
+        # Ensure reproducibility
+        set_seed(seed)
 
         info(
             "Validation started",

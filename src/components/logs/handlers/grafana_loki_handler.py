@@ -21,18 +21,18 @@ import threading
 import requests
 
 from components.const import (
-    GRAFANA_LOKI_TOKEN,
-    GRAFANA_LOKI_URL,
-    GRAFANA_LOKI_USER_ID,
-    LOGS_FIELD_LEVEL_NAME,
-    LOGS_FIELD_MESSAGE_NAME,
-    LOGS_FIELD_PHASE_NAME,
     LOGS_FIELD_STANDARD_NAMES,
     LOGS_GRAFANA_LOKI_API_HEADERS,
     LOGS_GRAFANA_LOKI_API_PAYLOAD_STREAM_NAME,
     LOGS_GRAFANA_LOKI_API_PAYLOAD_STREAMS_NAME,
     LOGS_GRAFANA_LOKI_API_PAYLOAD_VALUES_NAME,
-    LOGS_THREAD_DAEMON,
+    LOGS_GRAFANA_LOKI_ASYNC_THREAD_DAEMON,
+    LOGS_GRAFANA_LOKI_FIELD_LEVEL_NAME,
+    LOGS_GRAFANA_LOKI_FIELD_MESSAGE_NAME,
+    LOGS_GRAFANA_LOKI_FIELD_PHASE_NAME,
+    LOGS_GRAFANA_LOKI_TOKEN,
+    LOGS_GRAFANA_LOKI_URL,
+    LOGS_GRAFANA_LOKI_USER_ID,
     TIME_NANOSECONDS_IN_SECOND,
 )
 from components.logs.initializer import logs_phase
@@ -71,10 +71,10 @@ class GrafanaLokiHandler(logging.Handler):
         self.labels = (
             labels
             if labels is not None
-            else {LOGS_FIELD_PHASE_NAME: logs_phase.get()}
+            else {LOGS_GRAFANA_LOKI_FIELD_PHASE_NAME: logs_phase.get()}
         )
-        self._url = GRAFANA_LOKI_URL
-        self._auth = (GRAFANA_LOKI_USER_ID, GRAFANA_LOKI_TOKEN)
+        self._url = LOGS_GRAFANA_LOKI_URL
+        self._auth = (LOGS_GRAFANA_LOKI_USER_ID, LOGS_GRAFANA_LOKI_TOKEN)
 
     def emit(
         self: "GrafanaLokiHandler",
@@ -94,8 +94,8 @@ class GrafanaLokiHandler(logging.Handler):
         """
         # Prepare the log data
         log_data = {
-            LOGS_FIELD_LEVEL_NAME: record.levelname,
-            LOGS_FIELD_MESSAGE_NAME: record.getMessage(),
+            LOGS_GRAFANA_LOKI_FIELD_LEVEL_NAME: record.levelname,
+            LOGS_GRAFANA_LOKI_FIELD_MESSAGE_NAME: record.getMessage(),
             **{
                 k: v
                 for k, v in record.__dict__.items()
@@ -167,6 +167,6 @@ class GrafanaLokiHandler(logging.Handler):
         # Create and run the thread
         thread = threading.Thread(
             target=self.flush_buffer_sync,
-            daemon=LOGS_THREAD_DAEMON,
+            daemon=LOGS_GRAFANA_LOKI_ASYNC_THREAD_DAEMON,
         )
         thread.start()

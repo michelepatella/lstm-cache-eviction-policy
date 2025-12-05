@@ -20,7 +20,7 @@ Functions:
 import pandas as pd
 
 from components.const import (
-    MISSING_VALUES_REMOVAL_DROPNA_AXIS,
+    DATASET_MISSING_VALUES_REMOVAL_DROPNA_AXIS,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -29,7 +29,7 @@ from components.logs.levels.error_logger import error
 def remove_dataset_missing_values(
     df: pd.DataFrame,
     dropna_how: str,
-    dropna_axis: int = MISSING_VALUES_REMOVAL_DROPNA_AXIS,
+    dropna_axis: int = DATASET_MISSING_VALUES_REMOVAL_DROPNA_AXIS,
 ) -> pd.DataFrame:
     """Remove missing values from dataset.
 

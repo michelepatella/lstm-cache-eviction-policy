@@ -92,11 +92,6 @@ def generate_pattern_requests(
             else config.data.general.requests
         )
 
-        # Define a seed to make the
-        # generation process deterministic
-        seed = config.seed.value
-        np.random.seed(seed)
-
         debug(
             "Pattern request generation started",
             extra={
@@ -110,7 +105,6 @@ def generate_pattern_requests(
                     if zipf_probs is not None
                     else None
                 ),
-                "seed": seed,
                 "context": "Pattern request generation",
             },
         )
