@@ -25,6 +25,8 @@ markers = [
     "model_behavioral_invariance_identity: Model Behavioral Invariance Identity Test",
     "model_behavioral_directional: Model Behavioral Directional Tests",
     "model_behavioral_directional_local_feature_perturbations: Model Behavioral Directional Local Feature Perturbations Tests",
+    "model_behavioral_minimum_functionality: Model Behavioral Minimum Functionality Tests",
+    "model_behavioral_minimum_functionality_on_sequence: Model Behavioral Minimum Functionality On Sequence Tests",
     "model_inference: Model Inference Tests",
     "model_inference_avg_latency: Model Inference Avg Latency Test",
     "model_inference_throughput: Model Inference Throughput Test",
