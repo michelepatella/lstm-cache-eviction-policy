@@ -27,7 +27,7 @@ stages:
       hash: md5
       md5: 07d5b57488a510f1f2efed337d75545e
       size: 4881
-    - path: 
+    - path:
         src/components/data/patterns/access/variants/memory_fallback_generator.py
       hash: md5
       md5: 59da4400dadcd207d41605ccf27df009
@@ -56,7 +56,7 @@ stages:
       hash: md5
       md5: 69c45dd862a04455ae5deaf2d2a16175
       size: 2694
-    - path: 
+    - path:
         src/components/data/patterns/temporal/variants/periodic_calculator.py
       hash: md5
       md5: d395b55d88871a56109aba48be80056d
@@ -215,42 +215,42 @@ stages:
         data.general.keys.min: 1
         data.general.mode: static
         data.general.requests: 200
-        data.general.seed: 42
-        data.patterns.access.behavior.cycle.base: 5
-        data.patterns.access.behavior.cycle.divisor: 100
-        data.patterns.access.behavior.cycle.hours.end: 19
-        data.patterns.access.behavior.cycle.hours.start: 14
-        data.patterns.access.behavior.cycle.mod: 2
-        data.patterns.access.behavior.distortion.hours.end: 23
-        data.patterns.access.behavior.distortion.hours.start: 19
-        data.patterns.access.behavior.distortion.interval: 4
-        data.patterns.access.behavior.distortion.noise.max: 1
-        data.patterns.access.behavior.distortion.noise.min: 0
-        data.patterns.access.behavior.distortion.offsets.correction: 1
-        data.patterns.access.behavior.distortion.offsets.history: 2
-        data.patterns.access.behavior.memory.interval: 5
-        data.patterns.access.behavior.memory.offset: 3
-        data.patterns.access.behavior.repetition.hours.end: 9
-        data.patterns.access.behavior.repetition.hours.start: 4
-        data.patterns.access.behavior.repetition.interval: 7
-        data.patterns.access.behavior.repetition.offset: 3
-        data.patterns.access.behavior.toggle.base_requests.first: 1
-        data.patterns.access.behavior.toggle.base_requests.second: 2
-        data.patterns.access.behavior.toggle.hours.end: 14
-        data.patterns.access.behavior.toggle.hours.start: 9
-        data.patterns.access.behavior.toggle.interval: 20
-        data.patterns.access.behavior.toggle.offsets.backward: 2
-        data.patterns.access.behavior.toggle.offsets.forward: 1
-        data.patterns.access.zipf.alpha.fixed: 1.2
-        data.patterns.access.zipf.alpha.max: 1.5
-        data.patterns.access.zipf.alpha.min: 0.5
-        data.patterns.access.zipf.steps: 5
-        data.patterns.temporal.burstiness.high: 0.8
-        data.patterns.temporal.burstiness.hours.end: 18
-        data.patterns.temporal.burstiness.hours.start: 10
-        data.patterns.temporal.burstiness.low: 1.2
-        data.patterns.temporal.periodic.amplitude: 50
-        data.patterns.temporal.periodic.scale: 90
+        data.synthetic.general.seed: 42
+        data.synthetic.patterns.access.behavior.cycle.base: 5
+        data.synthetic.patterns.access.behavior.cycle.divisor: 100
+        data.synthetic.patterns.access.behavior.cycle.hours.end: 19
+        data.synthetic.patterns.access.behavior.cycle.hours.start: 14
+        data.synthetic.patterns.access.behavior.cycle.mod: 2
+        data.synthetic.patterns.access.behavior.distortion.hours.end: 23
+        data.synthetic.patterns.access.behavior.distortion.hours.start: 19
+        data.synthetic.patterns.access.behavior.distortion.interval: 4
+        data.synthetic.patterns.access.behavior.distortion.noise.max: 1
+        data.synthetic.patterns.access.behavior.distortion.noise.min: 0
+        data.synthetic.patterns.access.behavior.distortion.offsets.correction: 1
+        data.synthetic.patterns.access.behavior.distortion.offsets.history: 2
+        data.synthetic.patterns.access.behavior.memory.interval: 5
+        data.synthetic.patterns.access.behavior.memory.offset: 3
+        data.synthetic.patterns.access.behavior.repetition.hours.end: 9
+        data.synthetic.patterns.access.behavior.repetition.hours.start: 4
+        data.synthetic.patterns.access.behavior.repetition.interval: 7
+        data.synthetic.patterns.access.behavior.repetition.offset: 3
+        data.synthetic.patterns.access.behavior.toggle.base_requests.first: 1
+        data.synthetic.patterns.access.behavior.toggle.base_requests.second: 2
+        data.synthetic.patterns.access.behavior.toggle.hours.end: 14
+        data.synthetic.patterns.access.behavior.toggle.hours.start: 9
+        data.synthetic.patterns.access.behavior.toggle.interval: 20
+        data.synthetic.patterns.access.behavior.toggle.offsets.backward: 2
+        data.synthetic.patterns.access.behavior.toggle.offsets.forward: 1
+        data.synthetic.patterns.access.zipf.alpha.fixed: 1.2
+        data.synthetic.patterns.access.zipf.alpha.max: 1.5
+        data.synthetic.patterns.access.zipf.alpha.min: 0.5
+        data.synthetic.patterns.access.zipf.steps: 5
+        data.synthetic.patterns.temporal.burstiness.high: 0.8
+        data.synthetic.patterns.temporal.burstiness.hours.end: 18
+        data.synthetic.patterns.temporal.burstiness.hours.start: 10
+        data.synthetic.patterns.temporal.burstiness.low: 1.2
+        data.synthetic.patterns.temporal.periodic.amplitude: 50
+        data.synthetic.patterns.temporal.periodic.scale: 90
         logs.level: DEBUG
     outs:
     - path: data/raw/static/static_raw_dataset.csv
@@ -288,10 +288,6 @@ stages:
       hash: md5
       md5: 4d46c07bc4f3b95ac665b00882666245
       size: 7866
-    - path: src/components/dataset/cleans/duplicates_remover.py
-      hash: md5
-      md5: fc97d2f6a04ef1b49d90195307e77d34
-      size: 2470
     - path: src/components/dataset/cleans/missing_values_remover.py
       hash: md5
       md5: 05b50a05c51ae7a1ad075d3dae0af769
@@ -485,7 +481,7 @@ stages:
       hash: md5
       md5: 414e94ba0605fa4f03ad75e76ea8b52f
       size: 1487
-    - path: 
+    - path:
         src/components/dataset/columns/extractions/features_target_extractor.py
       hash: md5
       md5: 56ca24e70f74cf1f3477a60c36416d84
@@ -502,7 +498,7 @@ stages:
       hash: md5
       md5: 289fb7a539a62c74bad70c456db3bab9
       size: 3439
-    - path: 
+    - path:
         src/components/dataset/rows/calculations/effective_rows_calculator.py
       hash: md5
       md5: 047694161cb632377fe74bf73d6b8286
@@ -555,12 +551,12 @@ stages:
       hash: md5
       md5: f5463d874dc54414fb8aa7fea4c70819
       size: 5242
-    - path: 
+    - path:
         src/components/evaluation/model/metrics/calculations/class_report_calculator.py
       hash: md5
       md5: b92aa69c6cd102191b1835ecd37e674e
       size: 2920
-    - path: 
+    - path:
         src/components/evaluation/model/metrics/calculations/cohen_kappa_score_calculator.py
       hash: md5
       md5: 87c50fe0926478683a3ebf2e28508184
@@ -855,7 +851,7 @@ stages:
       hash: md5
       md5: 414e94ba0605fa4f03ad75e76ea8b52f
       size: 1487
-    - path: 
+    - path:
         src/components/dataset/columns/extractions/features_target_extractor.py
       hash: md5
       md5: 56ca24e70f74cf1f3477a60c36416d84
@@ -872,7 +868,7 @@ stages:
       hash: md5
       md5: 289fb7a539a62c74bad70c456db3bab9
       size: 3439
-    - path: 
+    - path:
         src/components/dataset/rows/calculations/effective_rows_calculator.py
       hash: md5
       md5: 047694161cb632377fe74bf73d6b8286
@@ -905,12 +901,12 @@ stages:
       hash: md5
       md5: f5463d874dc54414fb8aa7fea4c70819
       size: 5242
-    - path: 
+    - path:
         src/components/evaluation/model/metrics/calculations/class_report_calculator.py
       hash: md5
       md5: b92aa69c6cd102191b1835ecd37e674e
       size: 2920
-    - path: 
+    - path:
         src/components/evaluation/model/metrics/calculations/cohen_kappa_score_calculator.py
       hash: md5
       md5: 87c50fe0926478683a3ebf2e28508184
@@ -1189,7 +1185,7 @@ stages:
       hash: md5
       md5: 414e94ba0605fa4f03ad75e76ea8b52f
       size: 1487
-    - path: 
+    - path:
         src/components/dataset/columns/extractions/features_target_extractor.py
       hash: md5
       md5: 56ca24e70f74cf1f3477a60c36416d84
@@ -1206,7 +1202,7 @@ stages:
       hash: md5
       md5: 289fb7a539a62c74bad70c456db3bab9
       size: 3439
-    - path: 
+    - path:
         src/components/dataset/rows/calculations/effective_rows_calculator.py
       hash: md5
       md5: 047694161cb632377fe74bf73d6b8286
@@ -1235,12 +1231,12 @@ stages:
       hash: md5
       md5: f5463d874dc54414fb8aa7fea4c70819
       size: 5242
-    - path: 
+    - path:
         src/components/evaluation/model/metrics/calculations/class_report_calculator.py
       hash: md5
       md5: b92aa69c6cd102191b1835ecd37e674e
       size: 2920
-    - path: 
+    - path:
         src/components/evaluation/model/metrics/calculations/cohen_kappa_score_calculator.py
       hash: md5
       md5: 87c50fe0926478683a3ebf2e28508184
@@ -1446,12 +1442,12 @@ stages:
       hash: md5
       md5: 849e7904a1d404826ce8b2c00a2abd94
       size: 2603
-    - path: 
+    - path:
         src/components/caches/implementations/items/evictions/least_frequent_item_evictor.py
       hash: md5
       md5: ae9cc1b0d8a68d2543e1335460f98395
       size: 3706
-    - path: 
+    - path:
         src/components/caches/implementations/items/evictions/oldest_item_evictor.py
       hash: md5
       md5: 6ee9549138b6be9b39a92611bc758a3c
@@ -1544,7 +1540,7 @@ stages:
       hash: md5
       md5: 9e1368fe7c2abb50dfbd9c3924c4e566
       size: 1131
-    - path: 
+    - path:
         src/components/dataset/columns/extractions/features_target_extractor.py
       hash: md5
       md5: f074a20bc6a684db3677128d8220eb7a
@@ -1561,7 +1557,7 @@ stages:
       hash: md5
       md5: 6b1c9efbd7654872049e867d9611ff58
       size: 2966
-    - path: 
+    - path:
         src/components/dataset/rows/calculations/effective_rows_calculator.py
       hash: md5
       md5: 9df7452c96a71826e434bceb42063b2c
@@ -1586,12 +1582,12 @@ stages:
       hash: md5
       md5: 12ab4b2da4d012f202df9b03ff186bb7
       size: 1138
-    - path: 
+    - path:
         src/components/evaluation/simulations/metrics/calculations/eviction_mistake_rate_calculator.py
       hash: md5
       md5: 03ad66957db1022a9578c39a98370e45
       size: 3926
-    - path: 
+    - path:
         src/components/evaluation/simulations/metrics/calculations/hit_miss_rates_calculator.py
       hash: md5
       md5: ce2820ff10b71b96b0be15543f7e4ed0

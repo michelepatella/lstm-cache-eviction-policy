@@ -9,17 +9,23 @@ settings, early stopping rules, and the full search space for
 hyperparameter optimization.
 
 Classes:
-    ValidationDeviceConfig: Configuration for the hardware device used
-                            during validation.
-    ValidationGeneralConfig: General configuration for validation runs.
-    ValidationTimeSeriesCVConfig: Time Series Cross-Validation (TSCV)
-                                  parameters.
-    ValidationEarlyStoppingConfig: Criteria for early termination during
-                                   validation.
-    ValidationSearchSpaceModelConfig: Search space for model hyperparameters.
-    ValidationSearchSpaceOptimizerConfig: Search space for optimizer.
-    ValidationSearchSpaceConfig: Aggregates all hyperparameter search spaces.
-    ValidationConfig: Root class aggregating all validation settings.
+    ValidationDeviceConfig(BaseModel):
+        Configuration for the hardware device used
+        during validation.
+    ValidationGeneralConfig(BaseModel):
+        General configuration for validation runs.
+    ValidationTimeSeriesCVConfig(BaseModel):
+        Time Series Cross-Validation (TSCV) parameters.
+    ValidationEarlyStoppingConfig(BaseModel):
+        Criteria for early termination during validation.
+    ValidationSearchSpaceModelConfig(BaseModel):
+        Search space for model hyperparameters.
+    ValidationSearchSpaceOptimizerConfig(BaseModel):
+        Search space for optimizer.
+    ValidationSearchSpaceConfig(BaseModel):
+        Aggregates all hyperparameter search spaces.
+    ValidationConfig(BaseModel):
+        Root class aggregating all validation settings.
 """
 
 from pydantic import BaseModel, confloat, conint, model_validator

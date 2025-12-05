@@ -7,13 +7,16 @@ fractions) and initial data cleaning procedures, such as handling missing
 values.
 
 Classes:
-    DatasetSplitsConfig: Configuration for dataset split.
-    DatasetCleaningMissingValuesRemovalDropnaConfig: Configuration for
-                                                     'dropna' method.
-    DatasetCleaningMissingValuesRemovalConfig: Configuration for missing values
-                                               removal.
-    DatasetCleaningConfig: Configuration for data cleaning steps.
-    DatasetConfig: Aggregates all dataset configuration settings.
+    DatasetSplitsConfig(BaseModel):
+        Configuration for dataset split.
+    DatasetCleaningMissingValuesRemovalDropnaConfig(BaseModel):
+        Configuration for 'dropna' method.
+    DatasetCleaningMissingValuesRemovalConfig(BaseModel):
+        Configuration for missing values removal.
+    DatasetCleaningConfig(BaseModel):
+        Configuration for data cleaning steps.
+    DatasetConfig(BaseModel):
+        Aggregates all dataset configuration settings.
 """
 
 from pydantic import BaseModel, confloat, model_validator

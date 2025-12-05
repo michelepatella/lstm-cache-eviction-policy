@@ -30,7 +30,7 @@ import torch
 from components.backpropagation.mc_dropout.forward_runner import (
     compute_mc_dropout_forward,
 )
-from components.const import DATASET_COLUMNS, TENSOR_TARGET_DIM
+from components.const import DATASET_PROCESSED_COLUMNS, TENSOR_TARGET_DIM
 from components.device.mover import move_to_device
 from components.logs.levels.error_logger import error
 from components.loss.calculator import calculate_loss
@@ -42,7 +42,9 @@ def infer_single_batch(
     model: torch.nn.Module,
     criterion: torch.nn.Module,
     device: torch.device,
-    target_idx: int = DATASET_COLUMNS.index(DATASET_COLUMN_REQUEST_NAME),
+    target_idx: int = DATASET_PROCESSED_COLUMNS.index(
+        DATASET_COLUMN_REQUEST_NAME,
+    ),
 ) -> tuple[
     float,
     list[int],

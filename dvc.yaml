@@ -3,46 +3,46 @@ stages:
     cmd: PYTHONPATH=src python -m pipeline.steps.data_generator
     params:
       - src/pipeline/config/config.yaml:
-        - data.general.seed
+        - data.synthetic.seed
         - data.general.mode
         - data.general.requests
         - data.general.keys.min
         - data.general.keys.max
-        - data.patterns.access.zipf.alpha.fixed
-        - data.patterns.access.zipf.alpha.min
-        - data.patterns.access.zipf.alpha.max
-        - data.patterns.access.zipf.steps
-        - data.patterns.access.behavior.repetition.interval
-        - data.patterns.access.behavior.repetition.offset
-        - data.patterns.access.behavior.repetition.hours.start
-        - data.patterns.access.behavior.repetition.hours.end
-        - data.patterns.access.behavior.toggle.interval
-        - data.patterns.access.behavior.toggle.hours.start
-        - data.patterns.access.behavior.toggle.hours.end
-        - data.patterns.access.behavior.toggle.base_requests.first
-        - data.patterns.access.behavior.toggle.base_requests.second
-        - data.patterns.access.behavior.toggle.offsets.forward
-        - data.patterns.access.behavior.toggle.offsets.backward
-        - data.patterns.access.behavior.cycle.base
-        - data.patterns.access.behavior.cycle.mod
-        - data.patterns.access.behavior.cycle.divisor
-        - data.patterns.access.behavior.cycle.hours.start
-        - data.patterns.access.behavior.cycle.hours.end
-        - data.patterns.access.behavior.distortion.interval
-        - data.patterns.access.behavior.distortion.hours.start
-        - data.patterns.access.behavior.distortion.hours.end
-        - data.patterns.access.behavior.distortion.offsets.history
-        - data.patterns.access.behavior.distortion.offsets.correction
-        - data.patterns.access.behavior.distortion.noise.min
-        - data.patterns.access.behavior.distortion.noise.max
-        - data.patterns.access.behavior.memory.interval
-        - data.patterns.access.behavior.memory.offset
-        - data.patterns.temporal.burstiness.high
-        - data.patterns.temporal.burstiness.low
-        - data.patterns.temporal.burstiness.hours.start
-        - data.patterns.temporal.burstiness.hours.end
-        - data.patterns.temporal.periodic.scale
-        - data.patterns.temporal.periodic.amplitude
+        - data.synthetic.patterns.access.zipf.alpha.fixed
+        - data.synthetic.patterns.access.zipf.alpha.min
+        - data.synthetic.patterns.access.zipf.alpha.max
+        - data.synthetic.patterns.access.zipf.steps
+        - data.synthetic.patterns.access.behavior.repetition.interval
+        - data.synthetic.patterns.access.behavior.repetition.offset
+        - data.synthetic.patterns.access.behavior.repetition.hours.start
+        - data.synthetic.patterns.access.behavior.repetition.hours.end
+        - data.synthetic.patterns.access.behavior.toggle.interval
+        - data.synthetic.patterns.access.behavior.toggle.hours.start
+        - data.synthetic.patterns.access.behavior.toggle.hours.end
+        - data.synthetic.patterns.access.behavior.toggle.base_requests.first
+        - data.synthetic.patterns.access.behavior.toggle.base_requests.second
+        - data.synthetic.patterns.access.behavior.toggle.offsets.forward
+        - data.synthetic.patterns.access.behavior.toggle.offsets.backward
+        - data.synthetic.patterns.access.behavior.cycle.base
+        - data.synthetic.patterns.access.behavior.cycle.mod
+        - data.synthetic.patterns.access.behavior.cycle.divisor
+        - data.synthetic.patterns.access.behavior.cycle.hours.start
+        - data.synthetic.patterns.access.behavior.cycle.hours.end
+        - data.synthetic.patterns.access.behavior.distortion.interval
+        - data.synthetic.patterns.access.behavior.distortion.hours.start
+        - data.synthetic.patterns.access.behavior.distortion.hours.end
+        - data.synthetic.patterns.access.behavior.distortion.offsets.history
+        - data.synthetic.patterns.access.behavior.distortion.offsets.correction
+        - data.synthetic.patterns.access.behavior.distortion.noise.min
+        - data.synthetic.patterns.access.behavior.distortion.noise.max
+        - data.synthetic.patterns.access.behavior.memory.interval
+        - data.synthetic.patterns.access.behavior.memory.offset
+        - data.synthetic.patterns.temporal.burstiness.high
+        - data.synthetic.patterns.temporal.burstiness.low
+        - data.synthetic.patterns.temporal.burstiness.hours.start
+        - data.synthetic.patterns.temporal.burstiness.hours.end
+        - data.synthetic.patterns.temporal.periodic.scale
+        - data.synthetic.patterns.temporal.periodic.amplitude
         - logs.level
     deps:
       - src/components/assertions/choice_field_assertor.py
@@ -97,10 +97,10 @@ stages:
       - src/pipeline/const.py
       - src/pipeline/steps/data_generator.py
     outs:
-      - data/raw/${data.mode}/${data.mode}_raw_dataset.csv
-      - reports/plots/${data.mode}/${data.mode}_daily_profile.png
-      - reports/plots/${data.mode}/${data.mode}_key_usage.png
-      - reports/plots/${data.mode}/${data.mode}_zipf_log_log.png
+      - data/raw/${data.general.mode}/${data.general.mode}_raw_dataset.csv
+      - reports/plots/${data.general.mode}/${data.general.mode}_daily_profile.png
+      - reports/plots/${data.general.mode}/${data.general.mode}_key_usage.png
+      - reports/plots/${data.general.mode}/${data.general.mode}_zipf_log_log.png
 
   data_preprocessing:
     cmd: PYTHONPATH=src python -m pipeline.steps.data_preprocessor
@@ -113,7 +113,6 @@ stages:
       - src/components/assertions/choice_field_assertor.py
       - src/components/assertions/min_max_assertor.py
       - src/components/const.py
-      - src/components/dataset/cleans/duplicates_remover.py
       - src/components/dataset/cleans/missing_values_remover.py
       - src/components/dataset/columns/manipulations/dropper.py
       - src/components/dataset/columns/manipulations/reorderer.py
@@ -147,9 +146,9 @@ stages:
       - src/pipeline/config/pydantic/sections/validation_config.py
       - src/pipeline/const.py
       - src/pipeline/steps/data_preprocessor.py
-      - data/raw/${data.mode}/${data.mode}_raw_dataset.csv
+      - data/raw/${data.general.mode}/${data.general.mode}_raw_dataset.csv
     outs:
-      - data/processed/${data.mode}/${data.mode}_processed_dataset.csv
+      - data/processed/${data.general.mode}/${data.general.mode}_processed_dataset.csv
 
   validation:
     cmd: PYTHONPATH=src python -m pipeline.steps.validator
@@ -268,7 +267,7 @@ stages:
       - src/pipeline/config/pydantic/sections/validation_config.py
       - src/pipeline/const.py
       - src/pipeline/steps/validator.py
-      - data/processed/${data.mode}/${data.mode}_processed_dataset.csv
+      - data/processed/${data.general.mode}/${data.general.mode}_processed_dataset.csv
     outs: []
 
   training:
@@ -379,9 +378,9 @@ stages:
       - src/pipeline/config/pydantic/sections/validation_config.py
       - src/pipeline/const.py
       - src/pipeline/steps/trainer.py
-      - data/processed/${data.mode}/${data.mode}_processed_dataset.csv
+      - data/processed/${data.general.mode}/${data.general.mode}_processed_dataset.csv
     outs:
-      - models/${data.mode}/trained_${data.mode}_model.pt
+      - models/${data.general.mode}/trained_${data.general.mode}_model.pt
 
   testing:
     cmd: PYTHONPATH=src python -m pipeline.steps.tester
@@ -470,10 +469,10 @@ stages:
       - src/pipeline/config/pydantic/sections/validation_config.py
       - src/pipeline/const.py
       - src/pipeline/steps/tester.py
-      - data/processed/${data.mode}/${data.mode}_processed_dataset.csv
-      - models/${data.mode}/trained_${data.mode}_model.pt
+      - data/processed/${data.general.mode}/${data.general.mode}_processed_dataset.csv
+      - models/${data.general.mode}/trained_${data.general.mode}_model.pt
     outs:
-      - reports/results/${data.mode}/${data.mode}_model_results.json
+      - reports/results/${data.general.mode}/${data.general.mode}_model_results.json
 
   simulations:
     cmd: PYTHONPATH=src python -m pipeline.steps.simulator
@@ -570,18 +569,19 @@ stages:
       - src/pipeline/config/pydantic/sections/validation_config.py
       - src/pipeline/const.py
       - src/pipeline/steps/simulator.py
-      - data/processed/${data.mode}/${data.mode}_processed_dataset.csv
+      - data/processed/${data.general.mode}/${data.general.mode}_processed_dataset.csv
     outs:
-      - reports/results/${data.mode}/${data.mode}_simulations_results.json
-      - reports/plots/${data.mode}/${data.mode}_hit_miss_rates.png
+      - reports/results/${data.general.mode}/${data.general.mode}_simulations_results.json
+      - reports/plots/${data.general.mode}/${data.general.mode}_hit_miss_rates.png
 
 artifacts:
   static-model:
     path: models/static/trained_static_model.pt
     type: model
-    desc: "LSTM model trained on static access data logs"
+    desc: "LSTM model trained on synthetic static access data logs"
     labels:
       - LSTM
+      - synthetic data
       - static data
     meta:
       framework: pytorch
@@ -589,18 +589,32 @@ artifacts:
   dynamic-model:
     path: models/dynamic/trained_dynamic_model.pt
     type: model
-    desc: "LSTM model trained on dynamic access data logs"
+    desc: "LSTM model trained on synthetic dynamic access data logs"
     labels:
       - LSTM
+      - synthetic data
+      - dynamic data
+    meta:
+      framework: pytorch
+
+  real-model:
+    path: models/real/trained_real_model.pt
+    type: model
+    desc: "LSTM model trained on real access data logs"
+    labels:
+      - LSTM
+      - real data
       - dynamic data
     meta:
       framework: pytorch
 
 metrics:
   - reports/results/static/static_model_results.json
-  - reports/results/dynamic/dynamic_model_results.json
   - reports/results/static/static_simulations_results.json
+  - reports/results/dynamic/dynamic_model_results.json
   - reports/results/dynamic/dynamic_simulations_results.json
+  - reports/results/real/real_model_results.json
+  - reports/results/real/real_simulations_results.json
 
 plots:
   - reports/plots/static/static_daily_profile.png
@@ -611,3 +625,4 @@ plots:
   - reports/plots/dynamic/dynamic_key_usage.png
   - reports/plots/dynamic/dynamic_hit_miss_rates.png
   - reports/plots/dynamic/dynamic_zipf_log_log.png
+  - reports/plots/real/real_hit_miss_rates.png

@@ -23,7 +23,8 @@ app = FastAPI()
 # to use for inference and select device to
 # run computations on
 device = select_device(api_config.hardware.device.type)
-model = load_model(MODEL_FILE_PATH, device)
+qengine = api_config.model.optimizations.quantization.engine
+model = load_model(MODEL_FILE_PATH, device, qengine)
 
 
 @app.post(PREDICTOR_SERVICE_ENDPOINT)
@@ -98,8 +99,8 @@ def predictor_service(
             device,
             rollout_horizon,
             mc_dropout_samples,
-            time_step_increment,
             unbiased_variance,
+            time_step_increment,
         )
 
         info(

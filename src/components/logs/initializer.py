@@ -10,7 +10,6 @@ log phase for contextual logging.
 Functions:
     initialize_logs(
         logger_level: int,
-        logger_name: str = LOGS_LOGGER_NAME,
     ) -> None
         Configures the root logger with the Elasticsearch handler and
         initializes structlog for structured JSON logging.
@@ -24,9 +23,9 @@ import structlog
 from components.const import (
     LOGS_FIELD_PHASE_DEFAULT,
     LOGS_FIELD_PHASE_NAME,
-    LOGS_LOGGER_NAME,
 )
 from components.logs.handlers.elastic_handler import ElasticHandler
+from const import LOGS_LOGGER_NAME
 
 # Contextual variable for logging messages
 logs_phase = contextvars.ContextVar(
@@ -37,7 +36,6 @@ logs_phase = contextvars.ContextVar(
 
 def initialize_logs(
     logger_level: int,
-    logger_name: str = LOGS_LOGGER_NAME,
 ) -> None:
     """Initialize logging configuration for the pipeline.
 
@@ -46,13 +44,12 @@ def initialize_logs(
 
     Args:
         logger_level (int): Logging level.
-        logger_name (str): Name of the logger to configure.
 
     Returns:
         None
     """
     # Retrieve logger and configure it
-    logger = logging.getLogger(logger_name)
+    logger = logging.getLogger(LOGS_LOGGER_NAME)
     logger.setLevel(logger_level)
 
     # Add handlers to logger

@@ -9,7 +9,7 @@ preprocessed) and the selected data distribution mode (static or dynamic).
 Functions:
     get_dataset_abs_path(
         dataset_type: str,
-        data_distribution_mode: str
+        data_mode: str
     ) -> str
         Retrieves the absolute path of the requested dataset file.
 """
@@ -17,17 +17,19 @@ Functions:
 from components.const import (
     DATASET_DYNAMIC_PROCESSED_FILE_PATH,
     DATASET_DYNAMIC_RAW_FILE_PATH,
+    DATASET_REAL_PROCESSED_FILE_PATH,
+    DATASET_REAL_RAW_FILE_PATH,
     DATASET_STATIC_PROCESSED_FILE_PATH,
     DATASET_STATIC_RAW_FILE_PATH,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import DATA_DISTRIBUTION_STATIC_MODE, DATASET_RAW_TYPE
+from const import DATA_DYNAMIC_MODE, DATA_STATIC_MODE, DATASET_RAW_TYPE
 
 
 def get_dataset_abs_path(
     dataset_type: str,
-    data_distribution_mode: str,
+    data_mode: str,
 ) -> str:
     """Retrieve the dataset absolute path.
 
@@ -36,7 +38,7 @@ def get_dataset_abs_path(
 
     Args:
         dataset_type (str): Type of dataset requested (raw or preprocessed).
-        data_distribution_mode (str): Data distribution mode selected.
+        data_mode (str): Data distribution mode selected.
 
     Returns:
         str: Dataset absolute path.
@@ -55,14 +57,14 @@ def get_dataset_abs_path(
             "Dataset absolute path retrieval started",
             extra={
                 "dataset_type": dataset_type,
-                "data_distribution_mode": data_distribution_mode,
+                "data_mode": data_mode,
                 "context": "Dataset absolute path retrieval",
             },
         )
 
         # Determine dataset path based on
         # data distribution mode
-        if data_distribution_mode == DATA_DISTRIBUTION_STATIC_MODE:
+        if data_mode == DATA_STATIC_MODE:
             # For static data distribution mode
             if dataset_type == DATASET_RAW_TYPE:
                 # For raw dataset
@@ -71,18 +73,26 @@ def get_dataset_abs_path(
                 # For preprocessed dataset
                 dataset_abs_path = DATASET_STATIC_PROCESSED_FILE_PATH
         # For dynamic data distribution mode
+        elif data_mode == DATA_DYNAMIC_MODE:
+            if dataset_type == DATASET_RAW_TYPE:
+                # For raw dataset
+                dataset_abs_path = DATASET_DYNAMIC_RAW_FILE_PATH
+            else:
+                # For preprocessed dataset
+                dataset_abs_path = DATASET_DYNAMIC_PROCESSED_FILE_PATH
+        # For real data
         elif dataset_type == DATASET_RAW_TYPE:
             # For raw dataset
-            dataset_abs_path = DATASET_DYNAMIC_RAW_FILE_PATH
+            dataset_abs_path = DATASET_REAL_RAW_FILE_PATH
         else:
             # For preprocessed dataset
-            dataset_abs_path = DATASET_DYNAMIC_PROCESSED_FILE_PATH
+            dataset_abs_path = DATASET_REAL_PROCESSED_FILE_PATH
 
         debug(
             "Dataset absolute path retrieval completed",
             extra={
                 "dataset_type": dataset_type,
-                "data_distribution_mode": data_distribution_mode,
+                "data_mode": data_mode,
                 "dataset_abs_path": str(dataset_abs_path),
                 "context": "Dataset absolute path retrieval",
             },
@@ -96,7 +106,7 @@ def get_dataset_abs_path(
             extra={
                 "exception": str(e),
                 "dataset_type": dataset_type,
-                "data_distribution_mode": data_distribution_mode,
+                "data_mode": data_mode,
                 "context": "Dataset absolute path retrieval",
             },
         )

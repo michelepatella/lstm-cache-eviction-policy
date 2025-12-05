@@ -9,7 +9,7 @@ of logs, thread-safe buffering, and preserves extra fields in
 the log records.
 
 Classes:
-    ElasticHandler(logging.Handler)
+    ElasticHandler(logging.Handler):
         Custom logging handler that accumulates logs and
         sends them to Elasticsearch using the bulk API.
 """
@@ -108,10 +108,11 @@ class ElasticHandler(logging.Handler):
         # Append document to buffer
         self.buffer.append(doc)
 
-    def _flush_buffer(
+    def flush_buffer_sync(
         self: "ElasticHandler",
     ) -> None:
-        """Send all buffered log records to Elasticsearch.
+        """Send all buffered log records to Elasticsearch
+        synchronously.
 
         This function takes all log documents currently stored
         in the internal buffer and indexes them into the
@@ -155,7 +156,7 @@ class ElasticHandler(logging.Handler):
             None
         """
         thread = threading.Thread(
-            target=self._flush_buffer,
+            target=self.flush_buffer_sync,
             daemon=LOGS_THREAD_DAEMON,
         )
         thread.start()

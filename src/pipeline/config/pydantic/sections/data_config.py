@@ -10,32 +10,52 @@ It defines parameters for Zipf distribution, burstiness, and various access
 behaviors (repetition, toggle, cycle, distortion, and memory effects).
 
 Classes:
-    DataPatternsAccessBehaviorHoursConfig: Hour range configuration.
-    DataKeysConfig: Configuration for key ID ranges.
-    DataPatternsAccessZipfAlphaConfig: Alpha parameters for Zipf distribution.
-    DataPatternsAccessZipfConfig: Configuration for Zipf distribution.
-    DataPatternsAccessBehaviorRepetitionConfig: Repetition behavior configuration.
-    DataPatternsAccessBehaviorToggleOffsetsConfig: Toggle offsets configuration.
-    DataPatternsAccessBehaviorToggleBaseRequestsConfig: Toggle base requests
-                                                       configuration.
-    DataPatternsAccessBehaviorToggleConfig: Toggle behavior configuration.
-    DataPatternsAccessBehaviorDistortionNoiseConfig: Noise parameters for
-                                                    distortion.
-    DataPatternsAccessBehaviorDistortionOffsetsConfig: Distortion offsets
-                                                      configuration.
-    DataPatternsAccessBehaviorDistortionConfig: Distortion behavior configuration.
-    DataPatternsAccessBehaviorMemoryConfig: Memory behavior configuration.
-    DataPatternsAccessBehaviorCycleConfig: Cyclical behavior configuration.
-    DataPatternsAccessBehaviorConfig: Aggregated access behavior configuration.
-    DataPatternsAccessConfig: Access pattern configuration.
-    DataPatternsTemporalBurstinessHoursConfig: Hour range configuration for
-                                              burstiness.
-    DataPatternsTemporalBurstinessConfig: Burstiness configuration.
-    DataPatternsTemporalPeriodicConfig: Periodic pattern configuration.
-    DataPatternsTemporalConfig: Temporal behavior configuration.
-    DataPatternsConfig: Aggregates access and temporal patterns.
-    DataGeneralConfig: General configuration for data generation.
-    DataConfig: Aggregates general settings and pattern configuration.
+    DataPatternsAccessBehaviorHoursConfig(BaseModel):
+        Hour range configuration.
+    DataKeysConfig(BaseModel):
+        Configuration for key ID ranges.
+    DataPatternsAccessZipfAlphaConfig(BaseModel):
+        Alpha parameters for Zipf distribution.
+    DataPatternsAccessZipfConfig(BaseModel):
+        Configuration for Zipf distribution.
+    DataPatternsAccessBehaviorRepetitionConfig(BaseModel):
+        Repetition behavior configuration.
+    DataPatternsAccessBehaviorToggleOffsetsConfig(BaseModel):
+        Toggle offsets configuration.
+    DataPatternsAccessBehaviorToggleBaseRequestsConfig(BaseModel):
+        Toggle base requests configuration.
+    DataPatternsAccessBehaviorToggleConfig(BaseModel):
+        Toggle behavior configuration.
+    DataPatternsAccessBehaviorDistortionNoiseConfig(BaseModel):
+        Noise parameters for distortion.
+    DataPatternsAccessBehaviorDistortionOffsetsConfig(BaseModel):
+        Distortion offsets configuration.
+    DataPatternsAccessBehaviorDistortionConfig(BaseModel):
+        Distortion behavior configuration.
+    DataPatternsAccessBehaviorMemoryConfig(BaseModel):
+        Memory behavior configuration.
+    DataPatternsAccessBehaviorCycleConfig(BaseModel):
+        Cyclical behavior configuration.
+    DataPatternsAccessBehaviorConfig(BaseModel):
+        Aggregated access behavior configuration.
+    DataPatternsAccessConfig(BaseModel):
+        Access pattern configuration.
+    DataPatternsTemporalBurstinessHoursConfig(BaseModel):
+        Hour range configuration for burstiness.
+    DataPatternsTemporalBurstinessConfig(BaseModel):
+        Burstiness configuration.
+    DataPatternsTemporalPeriodicConfig(BaseModel):
+        Periodic pattern configuration.
+    DataPatternsTemporalConfig(BaseModel):
+        Temporal behavior configuration.
+    DataPatternsConfig(BaseModel):
+        Aggregates access and temporal patterns.
+    DataGeneralConfig(BaseModel):
+        General configuration for data generation.
+    DataSyntheticConfig(BaseModel):
+        Synthetic data generation configuration, aggregating mode, patterns, and seed.
+    DataConfig(BaseModel):
+        Aggregates general settings and pattern configuration.
 """
 
 from pydantic import BaseModel, confloat, conint, model_validator
@@ -47,7 +67,7 @@ from components.assertions.min_max_assertor import (
     assert_min_less_than_max,
 )
 from const import (
-    DATA_DISTRIBUTION_MODES,
+    DATA_MODES,
     TIME_END_HOUR,
     TIME_START_HOUR,
 )
@@ -396,35 +416,45 @@ class DataGeneralConfig(BaseModel):
     """General configuration for data generation.
 
     Attributes:
-        seed (int): Random seed for generation (>= 0).
-        mode (str): Data distribution mode.
         requests (int): Number of requests (> 0).
         keys (DataKeysConfig): Key range configuration.
     """
 
-    seed: conint(ge=0)
-    mode: str
     requests: conint(gt=0)
     keys: DataKeysConfig
 
+
+class DataSyntheticConfig(BaseModel):
+    """Synthetic data generation configuration.
+
+    Attributes:
+        mode (str): Data distribution mode (e.g., 'static').
+        patterns (DataPatternsConfig): Access and temporal pattern configuration.
+        seed (int): Random seed for generation (>= 0).
+    """
+
+    mode: str
+    patterns: DataPatternsConfig
+    seed: conint(ge=0)
+
     @model_validator(mode="after")
-    def check_data_distribution_mode(
-        self: "DataGeneralConfig",
-    ) -> "DataGeneralConfig":
+    def check_data_mode(
+        self: "DataSyntheticConfig",
+    ) -> "DataSyntheticConfig":
         """Check whether data distribution mode is valid or not.
 
         This function validates the data distribution mode.
 
         Args:
-            self (DataGeneralConfig): Current model instance.
+            self (DataSyntheticConfig): Current model instance.
 
         Returns:
-            "DataGeneralConfig": Validated model instance.
+            "DataSyntheticConfig": Validated model instance.
         """
         assert_choice_field(
             self.mode,
-            DATA_DISTRIBUTION_MODES,
-            "data.general.mode",
+            DATA_MODES,
+            "data.synthetic.mode",
         )
 
         return self
@@ -435,8 +465,8 @@ class DataConfig(BaseModel):
 
     Attributes:
         general (DataGeneralConfig): General data configuration settings.
-        patterns (DataPatternsConfig): Pattern configuration.
+        synthetic (DataSyntheticConfig): Synthetic data generation settings and patterns.
     """
 
     general: DataGeneralConfig
-    patterns: DataPatternsConfig
+    synthetic: DataSyntheticConfig

@@ -6,8 +6,10 @@ This module defines the type of optimizer to use and its key
 hyperparameters, such as learning rate, momentum, and weight decay.
 
 Classes:
-    OptimizerParamsConfig: Configuration for optimizer hyperparameters.
-    OptimizerConfig: Aggregates the optimizer type and its parameters.
+    OptimizerParamsConfig(BaseModel):
+        Configuration for optimizer hyperparameters.
+    OptimizerConfig(BaseModel):
+        Aggregates the optimizer type and its parameters.
 """
 
 from pydantic import BaseModel, confloat, model_validator

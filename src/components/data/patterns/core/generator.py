@@ -94,7 +94,7 @@ def generate_pattern_requests(
 
         # Define a seed to make the
         # generation process deterministic
-        seed = config.data.general.seed
+        seed = config.data.synthetic.seed
         np.random.seed(seed)
 
         debug(
@@ -138,7 +138,7 @@ def generate_pattern_requests(
             "Pattern request generation completed",
             extra={
                 "requests_generated_num": len(requests),
-                "timestamps_generated_num": len(timestamps_seconds),
+                "timestamps_seconds_generated_num": len(timestamps_seconds),
                 "context": "Pattern request generation",
             },
         )

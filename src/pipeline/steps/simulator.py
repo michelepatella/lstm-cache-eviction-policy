@@ -19,6 +19,7 @@ import logging
 import os
 
 import dagshub
+import mlflow
 import numpy as np
 from dotenv import load_dotenv
 
@@ -57,8 +58,10 @@ from components.visualization.hit_miss_rates_plotter import (
 )
 from const import (
     CACHE_LSTM_NAME,
-    DATA_DISTRIBUTION_STATIC_MODE,
+    DATA_DYNAMIC_MODE,
+    DATA_STATIC_MODE,
     DATASET_TESTING_SPLIT_TYPE,
+    LOGS_LOGGER_NAME,
     MLFLOW_NESTED,
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
@@ -75,8 +78,10 @@ from pipeline.const import (
     DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
     LOGS_PHASE_SIMULATIONS,
     PLOT_DYNAMIC_HIT_MISS_RATES_FILE_PATH,
+    PLOT_REAL_HIT_MISS_RATES_FILE_PATH,
     PLOT_STATIC_HIT_MISS_RATES_FILE_PATH,
     RESULTS_DYNAMIC_SIMULATIONS_FILE_PATH,
+    RESULTS_REAL_SIMULATIONS_FILE_PATH,
     RESULTS_STATIC_SIMULATIONS_FILE_PATH,
     SIMULATIONS_METRICS_AVG_CACHE_LATENCY_NAME,
     SIMULATIONS_METRICS_BELADY_MIN_HIT_RATE_NAME,
@@ -112,8 +117,6 @@ def run_simulations() -> None:
         dvc=DAGS_HUB_DVC,
     )
 
-    import mlflow
-
     with mlflow.start_run(
         run_name=LOGS_PHASE_SIMULATIONS,
         nested=MLFLOW_NESTED,
@@ -123,7 +126,7 @@ def run_simulations() -> None:
         initialize_logs(logging.getLevelName(config.logs.level))
 
         # Prepare configuration
-        data_distribution_mode = config.data.general.mode
+        data_mode = config.data.general.mode
         mistake_window = (
             config.evaluation.simulations.metrics.mistake_rate.window
         )
@@ -167,7 +170,7 @@ def run_simulations() -> None:
         info(
             "Simulations started",
             extra={
-                "data_distribution_mode": data_distribution_mode,
+                "data_mode": data_mode,
                 "policies_simulated": list(cache_eviction_policies.keys()),
                 "mistake_window": mistake_window,
                 "context": "Simulations",
@@ -240,10 +243,10 @@ def run_simulations() -> None:
                         "hit_rate": hit_rate,
                         "miss_rate": miss_rate,
                         "eviction_mistake_rate": eviction_mistake_rate,
-                        "latency_min": min(cache_latencies),
-                        "latency_max": max(cache_latencies),
-                        "latency_avg": avg_cache_latency,
-                        "latency_std": np.std(cache_latencies),
+                        "latency_us_min": min(cache_latencies),
+                        "latency_us_max": max(cache_latencies),
+                        "latency_us_avg": avg_cache_latency,
+                        "latency_us_std": np.std(cache_latencies),
                     },
                 )
 
@@ -271,12 +274,15 @@ def run_simulations() -> None:
 
         # Determine results and plot file path according
         # to data distribution mode
-        if data_distribution_mode == DATA_DISTRIBUTION_STATIC_MODE:
+        if data_mode == DATA_STATIC_MODE:
             results_file_path = RESULTS_STATIC_SIMULATIONS_FILE_PATH
             plot_save_path = PLOT_STATIC_HIT_MISS_RATES_FILE_PATH
-        else:
+        elif data_mode == DATA_DYNAMIC_MODE:
             results_file_path = RESULTS_DYNAMIC_SIMULATIONS_FILE_PATH
             plot_save_path = PLOT_DYNAMIC_HIT_MISS_RATES_FILE_PATH
+        else:
+            results_file_path = RESULTS_REAL_SIMULATIONS_FILE_PATH
+            plot_save_path = PLOT_REAL_HIT_MISS_RATES_FILE_PATH
 
         # Save simulations results
         save_simulations_metrics(results, results_file_path)
@@ -299,10 +305,8 @@ def run_simulations() -> None:
         )
 
         # Experiment tracking
-        mlflow.log_params(prepare_config().model_dump())
-        mlflow.log_param(
-            "api_kwargs",
-            cache_eviction_policies[CACHE_LSTM_NAME].api_kwargs,
+        mlflow.log_params(
+            prepare_config().model_dump(),
         )
         mlflow.log_artifact(results_file_path)
         mlflow.log_artifact(plot_save_path)
@@ -338,6 +342,6 @@ if __name__ == "__main__":
     run_simulations()
 
     # Force logs flush
-    for handler in logging.getLogger().handlers:
+    for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
         if isinstance(handler, ElasticHandler):
-            handler.flush_buffer_async()
+            handler.flush_buffer_sync()

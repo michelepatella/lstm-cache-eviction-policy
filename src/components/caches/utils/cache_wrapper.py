@@ -8,7 +8,7 @@ expired key removal, and metrics logging. It serves as a base
 for simple cache use cases or testing of eviction strategies.
 
 Classes:
-    CacheWrapper
+    CacheWrapper(BaseCache):
         Generic cache wrapper implementing put method with TTL
         and metrics logging.
 """

@@ -1,8 +1,26 @@
+"""api_config.py
+
+Module defining the top-level Pydantic schema for the entire API configuration.
+
+This schema aggregates configuration sections related to hardware, logs and
+model settings, as well as the definition of all available API keyword arguments
+(kwargs). It provides core functional logic, notably a method to safely merge
+API kwargs values with user-supplied runtime values, ensuring Pydantic validation
+is applied to all merged parameters.
+
+Classes:
+    APIConfig(BaseModel):
+        The root configuration schema for the API, including merging functionality
+        for user-provided kwargs.
+"""
+
+from box import Box
 from pydantic import BaseModel
 
 from api.config.pydantic.sections.hardware_api_config import HardwareAPIConfig
 from api.config.pydantic.sections.kwargs_api_config import KwargsAPIConfig
-from api.const import API_CONFIG_USER_API_KWARG_FIELD_NAME
+from api.config.pydantic.sections.logs_api_config import LogsAPIConfig
+from api.config.pydantic.sections.model_api_config import ModelAPIConfig
 from components.logs.levels.error_logger import error
 
 
@@ -12,10 +30,14 @@ class APIConfig(BaseModel):
     Attributes:
         hardware (HardwareAPIConfig): Hardware configuration for the API.
         kwargs (KwargsAPIConfig): API kwargs configuration.
+        logs (LogsAPIConfig): Logs configuration for the API.
+        model (ModelAPIConfig): Model configuration for the API.
     """
 
     hardware: HardwareAPIConfig
     kwargs: KwargsAPIConfig
+    logs: LogsAPIConfig
+    model: ModelAPIConfig
 
     def merge_api_kwargs(
         self: "APIConfig",
@@ -39,15 +61,12 @@ class APIConfig(BaseModel):
             # user, merge its value with the default
             # one, giving precedence to the user-provided
             # value, provided that it is valid
-            merged = self.kwargs.model_dump()
+            merged = Box(self.kwargs.model_dump(), default_box=True)
             for key, value in user_kwargs.items():
                 if key in merged and value is not None:
-                    merged[key] = {
-                        **merged[key],
-                        API_CONFIG_USER_API_KWARG_FIELD_NAME: value,
-                    }
+                    merged[key].value = value
 
-            return KwargsAPIConfig(**merged)
+            return KwargsAPIConfig(**merged.to_dict())
         except (KeyError, TypeError, ValueError) as e:
             msg = "API kwargs merging failed"
             error(

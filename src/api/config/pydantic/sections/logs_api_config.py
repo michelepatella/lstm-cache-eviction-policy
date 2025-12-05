@@ -1,12 +1,12 @@
-"""logs_config.py
+"""logs_api_config.py
 
-Configuration section for logging settings within the pipeline.
+Configuration section for logging settings within the API.
 
-This module defines the desired logging level used by the system's loggers.
+This module defines the desired logging level for the API.
 
 Classes:
     LogsConfig(BaseModel):
-        Configuration for the logging system.
+        Configuration for the API logging system.
 """
 
 from pydantic import BaseModel, model_validator
@@ -15,8 +15,8 @@ from components.assertions.choice_field_assertor import assert_choice_field
 from pipeline.const import LOGS_LEVEL_NAMES
 
 
-class LogsConfig(BaseModel):
-    """Configuration for the logging system.
+class LogsAPIConfig(BaseModel):
+    """Configuration for API logging.
 
     Attributes:
         level (str): The minimum logging level to output.
@@ -26,14 +26,14 @@ class LogsConfig(BaseModel):
 
     @model_validator(mode="after")
     def check_logs_level(
-        self: "LogsConfig",
-    ) -> "LogsConfig":
+        self: "LogsAPIConfig",
+    ) -> "LogsAPIConfig":
         """Check whether logs level is valid or not.
 
         This function validates the logs level.
 
         Args:
-            self (LogsConfig): Current model instance.
+            self (LogsAPIConfig): Current model instance.
 
         Returns:
             "LogsConfig": Validated model instance.

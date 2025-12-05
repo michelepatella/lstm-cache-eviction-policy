@@ -20,6 +20,7 @@ import os
 import tempfile
 
 import dagshub
+import mlflow
 import numpy as np
 from dotenv import load_dotenv
 
@@ -46,6 +47,7 @@ from components.optimizer.builder import build_optimizer
 from components.training.core.epochs_trainer import train_epochs
 from const import (
     DATASET_TRAINING_SPLIT_TYPE,
+    LOGS_LOGGER_NAME,
     MLFLOW_NESTED,
 )
 from pipeline.config.configurator import prepare_config
@@ -82,8 +84,6 @@ def train_model() -> None:
         dvc=DAGS_HUB_DVC,
     )
 
-    import mlflow
-
     with mlflow.start_run(
         run_name=LOGS_PHASE_TRAINING,
         nested=MLFLOW_NESTED,
@@ -93,7 +93,7 @@ def train_model() -> None:
         initialize_logs(logging.getLevelName(config.logs.level))
 
         # Prepare configuration
-        data_distribution_mode = config.data.general.mode
+        data_mode = config.data.general.mode
         training_batch_size = config.training.general.batch_size
         training_shuffle = config.training.general.shuffle
         training_device = config.training.device.type
@@ -112,7 +112,7 @@ def train_model() -> None:
         info(
             "Training started",
             extra={
-                "data_distribution_mode": data_distribution_mode,
+                "data_mode": data_mode,
                 "training_batch_size": training_batch_size,
                 "training_shuffle": training_shuffle,
                 "validation_batch_size": validation_batch_size,
@@ -126,7 +126,7 @@ def train_model() -> None:
         )
 
         # Get the model path
-        model_path = get_model_abs_path(data_distribution_mode)
+        model_path = get_model_abs_path(data_mode)
 
         # Load the training set and the
         # training loader
@@ -239,6 +239,6 @@ if __name__ == "__main__":
     train_model()
 
     # Force logs flush
-    for handler in logging.getLogger().handlers:
+    for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
         if isinstance(handler, ElasticHandler):
-            handler.flush_buffer_async()
+            handler.flush_buffer_sync()

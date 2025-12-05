@@ -21,14 +21,13 @@ import torch
 from torch import nn
 
 from components.const import (
-    DATASET_COLUMNS,
     MC_DROPOUT_DISABLED,
     MODEL_PARAM_NAMES,
+    TENSOR_SEQUENCE_DIM,
 )
 from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import DATASET_COLUMN_REQUEST_NAME
 
 
 class LSTM(torch.nn.Module):
@@ -180,13 +179,13 @@ class LSTM(torch.nn.Module):
             None
 
         Raises:
-        RuntimeError: If layer instantiation fails:
-            * Embedding layer creation fails due to invalid number of keys or
-              embedding dimension (TypeError, ValueError, AttributeError).
-            * Dropout layer creation fails due to invalid dropout probability
-              (TypeError, ValueError, AttributeError).
-            * Fully connected layer creation fails due to invalid hidden size
-              or number of keys (TypeError, ValueError, AttributeError).
+            RuntimeError: If layer instantiation fails:
+                * Embedding layer creation fails due to invalid number of keys or
+                  embedding dimension (TypeError, ValueError, AttributeError).
+                * Dropout layer creation fails due to invalid dropout probability
+                  (TypeError, ValueError, AttributeError).
+                * Fully connected layer creation fails due to invalid hidden size
+                  or number of keys (TypeError, ValueError, AttributeError).
         """
         try:
             # Instantiate embedding layer
@@ -315,6 +314,11 @@ class LSTM(torch.nn.Module):
 
         Returns:
             torch.Tensor: Concatenated input tensor ready for model.
+
+        Raises:
+        RuntimeError: If building the model input fails:
+            * Device transfer fails (RuntimeError, AttributeError).
+            * Concatenation or embedding fails (TypeError, RuntimeError).
         """
         try:
             # Get the device of embedding layer
@@ -332,7 +336,7 @@ class LSTM(torch.nn.Module):
             # Concatenate features with embedded keys
             x = torch.cat(
                 (x_features, embedded_keys),
-                dim=DATASET_COLUMNS.index(DATASET_COLUMN_REQUEST_NAME),
+                dim=TENSOR_SEQUENCE_DIM,
             )
 
             return x
@@ -372,6 +376,12 @@ class LSTM(torch.nn.Module):
 
         Returns:
             torch.Tensor: Logits computed by the model.
+
+        Raises:
+            RuntimeError: If the forward pass fails:
+                * Model input building fails (RuntimeError).
+                * LSTM forward computation fails (RuntimeError, IndexError).
+                * MC dropout or linear layer computation fails (RuntimeError, TypeError).
         """
         try:
             # Build model input for current batch

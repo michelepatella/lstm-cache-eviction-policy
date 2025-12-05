@@ -6,13 +6,13 @@ from fastapi import FastAPI, HTTPException, status
 from api.config.pydantic.api_config import APIConfig
 from api.const import (
     API_CONFIG_FILE_PATH,
-    API_CONFIG_USER_API_KWARG_FIELD_NAME,
     GATEWAY_API_ENDPOINT,
     GATEWAY_API_RETURN_API_KWARGS_NAME,
     GATEWAY_API_RETURN_CONF_MATRIX_NAME,
     GATEWAY_API_RETURN_KEY_SCORES_NAME,
     GATEWAY_API_RETURN_KEYS_TO_EVICT_NAME,
     GATEWAY_API_RETURN_PROB_MATRIX_NAME,
+    LOGS_PHASE_API,
 )
 from api.gateway.callers.predictor_service_caller import (
     call_predictor_service,
@@ -24,15 +24,21 @@ from components.caches.implementations.items.evictions.score_based_evictor impor
     evict_score_based_items,
 )
 from components.logs.handlers.elastic_handler import ElasticHandler
+from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.yaml.io.loader import load_yaml
+from const import LOGS_LOGGER_NAME
 
 app = FastAPI()
 
 # Setup for Gateway API: Load API configuration
+# and initialize logs with contextual variable
 api_config_file = load_yaml(API_CONFIG_FILE_PATH)
 api_config = APIConfig(**api_config_file)
+
+initialize_logs(logging.getLevelName(api_config.logs.level))
+logs_phase.set(LOGS_PHASE_API)
 
 
 @app.post(GATEWAY_API_ENDPOINT)
@@ -53,7 +59,7 @@ def gateway_api(
         last_accesses (list[tuple[float, int]]): List of (timestamp, key)
                                                  tuples.
         user_api_kwargs (Optional[dict[str, int | float | list[int] | str | bool]]):
-            Optional user-defined API kwargs overriding default API settings.
+            Optional user-defined API kwargs overriding API settings.
 
     Returns:
         dict[str, Any]: Dictionary containing:
@@ -103,19 +109,8 @@ def gateway_api(
         )
 
         # Decide which keys to be evicted
-        excluded_keys = (
-            api_config.kwargs.excluded_keys.model_dump().get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME,
-            )
-            or api_config.kwargs.excluded_keys.default
-        )
-
-        num_evictions = (
-            api_config.kwargs.num_evictions.model_dump().get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME,
-            )
-            or api_config.kwargs.num_evictions.default
-        )
+        excluded_keys = api_config.kwargs.excluded_keys.value
+        num_evictions = api_config.kwargs.num_evictions.value
         keys_to_evict = evict_score_based_items(
             keys_in_cache,
             key_scores,
@@ -127,30 +122,15 @@ def gateway_api(
         response: dict = {
             GATEWAY_API_RETURN_KEYS_TO_EVICT_NAME: keys_to_evict,
         }
-        if (
-            api_config.kwargs.return_api_kwargs.model_dump().get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME,
-            )
-            or api_config.kwargs.return_api_kwargs.default
-        ):
+        if api_config.kwargs.return_api_kwargs.value:
             response[GATEWAY_API_RETURN_API_KWARGS_NAME] = (
                 api_config.kwargs.__dict__
             )
 
-        if (
-            api_config.kwargs.return_all_scores.model_dump().get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME,
-            )
-            or api_config.kwargs.return_all_scores.default
-        ):
+        if api_config.kwargs.return_all_scores.value:
             response[GATEWAY_API_RETURN_KEY_SCORES_NAME] = key_scores
 
-        if (
-            api_config.kwargs.return_prob_conf.model_dump().get(
-                API_CONFIG_USER_API_KWARG_FIELD_NAME,
-            )
-            or api_config.kwargs.return_prob_conf.default
-        ):
+        if api_config.kwargs.return_prob_conf.value:
             response[GATEWAY_API_RETURN_PROB_MATRIX_NAME] = prob_matrix
             response[GATEWAY_API_RETURN_CONF_MATRIX_NAME] = conf_matrix
 
@@ -158,13 +138,12 @@ def gateway_api(
             "Gateway API completed",
             extra={
                 "keys_to_evict_num": len(keys_to_evict),
-                "api_kwargs": api_config.kwargs.__dict__,
                 "context": "Gateway API",
             },
         )
 
         # Async flush logs
-        for handler in logging.getLogger().handlers:
+        for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
             if isinstance(handler, ElasticHandler):
                 handler.flush_buffer_async()
 

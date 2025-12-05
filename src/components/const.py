@@ -21,7 +21,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 # ----------------------------
 # API
 # ----------------------------
-API_ENDPOINT = "http://127.0.0.1:8000/evict"
+API_ENV_VAR_FULL_URL_NAME = "API_ENDPOINT_FULL_URL"
 
 API_PARAM_KEYS_IN_CACHE_NAME = "keys_in_cache"
 API_PARAM_LAST_ACCESSES_NAME = "last_accesses"
@@ -51,13 +51,13 @@ DATA_GENERATION_CURRENT_SECONDS_IN_DAY_START = 0.0
 DATASET_COLUMN_SIN_TIME_NAME = "sin_time"
 DATASET_COLUMN_COS_TIME_NAME = "cos_time"
 
-DATASET_COLUMNS = [
+DATASET_PROCESSED_COLUMNS = [
     DATASET_COLUMN_SIN_TIME_NAME,
     DATASET_COLUMN_COS_TIME_NAME,
     DATASET_COLUMN_REQUEST_NAME,
 ]
 
-DATASET_FEATURE_COLUMNS = [
+DATASET_PROCESSED_FEATURE_COLUMNS = [
     DATASET_COLUMN_SIN_TIME_NAME,
     DATASET_COLUMN_COS_TIME_NAME,
 ]
@@ -69,6 +69,9 @@ DATASET_STATIC_RAW_FILE_PATH = (
 )
 DATASET_DYNAMIC_RAW_FILE_PATH = (
     PROJECT_ROOT / "data" / "raw" / "dynamic" / "dynamic_raw_dataset.csv"
+)
+DATASET_REAL_RAW_FILE_PATH = (
+    PROJECT_ROOT / "data" / "raw" / "real" / "real_raw_dataset.csv"
 )
 DATASET_STATIC_PROCESSED_FILE_PATH = (
     PROJECT_ROOT
@@ -83,6 +86,9 @@ DATASET_DYNAMIC_PROCESSED_FILE_PATH = (
     / "processed"
     / "dynamic"
     / "dynamic_processed_dataset.csv"
+)
+DATASET_REAL_PROCESSED_FILE_PATH = (
+    PROJECT_ROOT / "data" / "processed" / "real" / "real_processed_dataset.csv"
 )
 
 
@@ -109,8 +115,6 @@ JSON_INDENT = 4
 # ----------------------------
 # Logs
 # ----------------------------
-LOGS_LOGGER_NAME = "logger"
-
 LOGS_FIELD_STANDARD_NAMES = {
     "name",
     "msg",
@@ -178,6 +182,9 @@ MODEL_TRAINED_STATIC_FILE_PATH = (
 )
 MODEL_TRAINED_DYNAMIC_FILE_PATH = (
     PROJECT_ROOT / "models" / "dynamic" / "trained_dynamic_model.pt"
+)
+MODEL_TRAINED_REAL_FILE_PATH = (
+    PROJECT_ROOT / "models" / "real" / "trained_real_model.pt"
 )
 
 MODEL_COMPUTE_METRICS_DEFAULT = False
@@ -277,6 +284,7 @@ SIMULATIONS_METRICS_TIMELINE_INSTANT_HIT_RATE_NAME = "instant_hit_rate"
 TENSOR_OUTPUTS_BATCH_DIM = 0
 TENSOR_FEATURES_DIM = 1
 TENSOR_TARGET_DIM = 1
+TENSOR_SEQUENCE_DIM = -1
 
 
 # ----------------------------

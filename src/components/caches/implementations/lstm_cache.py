@@ -8,10 +8,11 @@ external API for eviction decisions, tracks metrics via a logger, and handles
 expired keys automatically.
 
 Classes:
-    LSTMCache(cache_class, metrics_logger, config)
+    LSTMCache(cache_class, metrics_logger, config):
         LSTM cache implementation supporting put, eviction, and key operations.
 """
 
+import os
 import random
 from http.client import HTTPException
 from typing import Any
@@ -19,13 +20,14 @@ from typing import Any
 import pandas as pd
 import requests
 from box import Box
+from dotenv import load_dotenv
 
 from components.caches.implementations.utils.base_cache import BaseCache
 from components.caches.utils.cache_metrics_logger import (
     CacheMetricsLogger,
 )
 from components.const import (
-    API_ENDPOINT,
+    API_ENV_VAR_FULL_URL_NAME,
     API_PARAM_KEYS_IN_CACHE_NAME,
     API_PARAM_LAST_ACCESSES_NAME,
     API_PARAM_USER_API_KWARGS_NAME,
@@ -36,6 +38,9 @@ from components.dataset.rows.extractions.lasts_extractor import (
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
+# Load environment variables
+load_dotenv()
+
 
 class LSTMCache(BaseCache):
     """LSTM-based cache implementation.
@@ -44,6 +49,8 @@ class LSTMCache(BaseCache):
     eviction policy when the cache is full.
 
     Attributes:
+        api_endpoint (str): Endpoint of the API to used as
+                            eviction policy.
         api_kwargs (dict): Keyword arguments used by the eviction
                             policy API.
     """
@@ -72,7 +79,8 @@ class LSTMCache(BaseCache):
         # Cache class initialization
         super().__init__(cache_class, metrics_logger, config)
 
-        # Set API kwargs to use
+        # Set API endpoint and kwargs to use
+        self.api_endpoint = os.getenv(API_ENV_VAR_FULL_URL_NAME)
         self.api_kwargs = config.api_kwargs
 
         debug(
@@ -232,7 +240,7 @@ class LSTMCache(BaseCache):
                     # Call API to get
                     # the key to be evicted from the cache
                     response = requests.post(
-                        API_ENDPOINT,
+                        self.api_endpoint,
                         json={
                             API_PARAM_KEYS_IN_CACHE_NAME: list(
                                 self.store.keys(),
@@ -243,33 +251,17 @@ class LSTMCache(BaseCache):
                     )
                     data = Box(response.json())
 
-                    lstm_scores = {
-                        k: float(v) for k, v in data.key_scores.items()
-                    }
-
-                    max_freq = max(
-                        len(self.metrics_logger.access_events[k])
-                        for k in self.store.keys()
-                    )
-                    priorities = {}
-                    for k in self.store.keys():
-                        lfu_score = (
-                            len(self.metrics_logger.access_events[k])
-                            / max_freq
-                            if max_freq > 0
-                            else 0
-                        )
-                        priorities[k] = (
-                            0.7 * lstm_scores.get(k, 0) + (1 - 0.7) * lfu_score
-                        )
-
-                    key_to_evict = min(priorities, key=priorities.get)
+                    # Retrieve keys to evict
+                    key_to_evict = data.keys_to_evict[0]
 
                 # Evict key
                 self.evict_key(key_to_evict)
 
                 # Track eviction event
-                self.metrics_logger.log_eviction(key_to_evict, current_time)
+                self.metrics_logger.log_eviction(
+                    key_to_evict,
+                    current_time,
+                )
 
             # Insert the key
             self._put_key(key, current_time)

@@ -53,8 +53,8 @@ def calculate_percentage(
             msg,
             extra={
                 "exception": str(e),
-                "value": value,
-                "value_type": type(value).__name__,
+                "current_value": value,
+                "current_value_type": type(value).__name__,
                 "total": total,
                 "total_type": type(total).__name__,
                 "context": "Percentage calculation",

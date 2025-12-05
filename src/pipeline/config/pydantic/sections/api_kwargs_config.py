@@ -6,7 +6,8 @@ This module defines the structure for advanced settings used for API,
 including confidence levels, weights, rollout horizon, and control flags.
 
 Classes:
-    ApiKwargsConfig: Configuration for API-specific arguments.
+    ApiKwargsConfig(BaseModel):
+        Configuration for API-specific arguments.
 """
 
 from pydantic import BaseModel, confloat, conint

@@ -36,9 +36,10 @@ from components.const import (
     AUTOREGRESSIVE_ROLLOUT_TIME_ARRAY_IDX,
     DATASET_COLUMN_COS_TIME_NAME,
     DATASET_COLUMN_SIN_TIME_NAME,
-    DATASET_COLUMNS,
+    DATASET_PROCESSED_COLUMNS,
     TENSOR_FEATURES_DIM,
     TENSOR_OUTPUTS_BATCH_DIM,
+    TENSOR_SEQUENCE_DIM,
     TORCH_DTYPE,
 )
 from components.logs.levels.debug_logger import debug
@@ -49,7 +50,6 @@ from components.time.transforms.trig_decoder import (
 from components.time.transforms.trig_encoder import (
     encode_time_trigonometrically,
 )
-from const import DATASET_COLUMN_REQUEST_NAME
 
 
 def compute_autoregressive_rollout(
@@ -114,12 +114,12 @@ def compute_autoregressive_rollout(
             features_seq[
                 AUTOREGRESSIVE_ROLLOUT_LAST_TIME_BATCH_IDX,
                 AUTOREGRESSIVE_ROLLOUT_LAST_TIME_IDX,
-                DATASET_COLUMNS.index(DATASET_COLUMN_SIN_TIME_NAME),
+                DATASET_PROCESSED_COLUMNS.index(DATASET_COLUMN_SIN_TIME_NAME),
             ].item(),
             features_seq[
                 AUTOREGRESSIVE_ROLLOUT_LAST_TIME_BATCH_IDX,
                 AUTOREGRESSIVE_ROLLOUT_LAST_TIME_IDX,
-                DATASET_COLUMNS.index(DATASET_COLUMN_COS_TIME_NAME),
+                DATASET_PROCESSED_COLUMNS.index(DATASET_COLUMN_COS_TIME_NAME),
             ].item(),
         )
 
@@ -151,14 +151,14 @@ def compute_autoregressive_rollout(
             # Update the sequence of keys by appending
             # the predicted one at the current step
             pred_key = outputs_mean.argmax(
-                dim=DATASET_COLUMNS.index(DATASET_COLUMN_REQUEST_NAME),
+                dim=TENSOR_SEQUENCE_DIM,
             ).unsqueeze(TENSOR_FEATURES_DIM)
             keys_seq = torch.cat(
                 [
                     keys_seq[:, AUTOREGRESSIVE_ROLLOUT_SEQUENCE_SHIFT_IDX:],
                     pred_key,
                 ],
-                dim=DATASET_COLUMNS.index(DATASET_COLUMN_REQUEST_NAME),
+                dim=TENSOR_SEQUENCE_DIM,
             )
 
             # Calculate new sin and cos time obtained by adding

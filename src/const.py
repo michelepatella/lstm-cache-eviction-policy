@@ -18,11 +18,13 @@ CACHE_LSTM_NAME = "LSTM"
 # ----------------------------
 # Data
 # ----------------------------
-DATA_DISTRIBUTION_STATIC_MODE = "static"
-DATA_DISTRIBUTION_DYNAMIC_MODE = "dynamic"
-DATA_DISTRIBUTION_MODES = [
-    DATA_DISTRIBUTION_STATIC_MODE,
-    DATA_DISTRIBUTION_DYNAMIC_MODE,
+DATA_STATIC_MODE = "static"
+DATA_DYNAMIC_MODE = "dynamic"
+DATA_REAL_MODE = "real"
+DATA_MODES = [
+    DATA_STATIC_MODE,
+    DATA_DYNAMIC_MODE,
+    DATA_REAL_MODE,
 ]
 
 
@@ -50,6 +52,8 @@ HW_DEVICE_NAMES = [HW_DEVICE_CPU_NAME, HW_DEVICE_CUDA_NAME, HW_DEVICE_MPS_NAME]
 # ----------------------------
 # Logs
 # ----------------------------
+LOGS_LOGGER_NAME = "logger"
+
 LOGS_PHASE_VALIDATION = "validation"
 
 

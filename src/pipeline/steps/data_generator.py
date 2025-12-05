@@ -19,6 +19,7 @@ import os
 from collections import Counter
 
 import dagshub
+import mlflow
 import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
@@ -45,10 +46,12 @@ from components.visualization.zipf_loglog_plotter import (
     plot_zipf_loglog,
 )
 from const import (
-    DATA_DISTRIBUTION_STATIC_MODE,
+    DATA_REAL_MODE,
+    DATA_STATIC_MODE,
     DATASET_COLUMN_REQUEST_NAME,
     DATASET_COLUMN_TIMESTAMP_NAME,
     DATASET_RAW_TYPE,
+    LOGS_LOGGER_NAME,
     MLFLOW_NESTED,
 )
 from pipeline.config.configurator import prepare_config
@@ -93,8 +96,6 @@ def generate_data() -> None:
         mlflow=DAGS_HUB_DVC,
     )
 
-    import mlflow
-
     with mlflow.start_run(
         run_name=LOGS_PHASE_DATA_GENERATION,
         nested=MLFLOW_NESTED,
@@ -104,14 +105,19 @@ def generate_data() -> None:
         initialize_logs(logging.getLevelName(config.logs.level))
 
         # Prepare configuration
-        data_distribution_mode = config.data.general.mode
+        data_mode = config.data.general.mode
+
+        # Skip this step if data is real
+        if data_mode == DATA_REAL_MODE:
+            return
+
         min_key = config.data.general.keys.min
         max_key = config.data.general.keys.max
 
         info(
             "Data generation started",
             extra={
-                "data_distribution_mode": data_distribution_mode,
+                "data_mode": data_mode,
                 "key_min": min_key,
                 "key_max": max_key,
                 "context": "Data generation",
@@ -120,7 +126,7 @@ def generate_data() -> None:
 
         # Generate requests with corresponding timestamps,
         # based on the data distribution mode
-        if data_distribution_mode == DATA_DISTRIBUTION_STATIC_MODE:
+        if data_mode == DATA_STATIC_MODE:
             # Static requests generation
             requests, timestamps_hours = generate_static_requests(config)
 
@@ -156,7 +162,7 @@ def generate_data() -> None:
         # to save dataset
         dataset_path = get_dataset_abs_path(
             DATASET_RAW_TYPE,
-            data_distribution_mode,
+            data_mode,
         )
 
         # Save just created dataset
@@ -186,20 +192,20 @@ def generate_data() -> None:
                 "requests_std": float(np.std(requests)),
                 "requests_skew": float(pd.Series(requests).skew()),
                 "requests_kurt": float(pd.Series(requests).kurt()),
-                "timestamps_min": float(min(timestamps_hours)),
-                "timestamps_max": float(max(timestamps_hours)),
-                "timestamps_mean": float(np.mean(timestamps_hours)),
-                "timestamps_std": float(np.std(timestamps_hours)),
-                "timestamps_diff_mean": float(
+                "timestamps_hours_min": float(min(timestamps_hours)),
+                "timestamps_hours_max": float(max(timestamps_hours)),
+                "timestamps_hours_mean": float(np.mean(timestamps_hours)),
+                "timestamps_hours_std": float(np.std(timestamps_hours)),
+                "timestamps_hours_diff_mean": float(
                     np.mean(np.diff(timestamps_hours)),
                 ),
-                "timestamps_diff_std": float(
+                "timestamps_hours_diff_std": float(
                     np.std(np.diff(timestamps_hours)),
                 ),
-                "timestamps_diff_min": float(
+                "timestamps_hours_diff_min": float(
                     np.min(np.diff(timestamps_hours)),
                 ),
-                "timestamps_diff_max": float(
+                "timestamps_hours_diff_max": float(
                     np.max(np.diff(timestamps_hours)),
                 ),
                 "days_num": 1
@@ -217,7 +223,7 @@ def generate_data() -> None:
     info(
         "Data generation completed",
         extra={
-            "data_distribution_mode": data_distribution_mode,
+            "data_mode": data_mode,
             "dataset_raw_save_path": str(dataset_path),
             "rows_num": len(df),
             "columns_num": len(df.columns),
@@ -236,6 +242,6 @@ if __name__ == "__main__":
     generate_data()
 
     # Force logs flush
-    for handler in logging.getLogger().handlers:
+    for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
         if isinstance(handler, ElasticHandler):
-            handler.flush_buffer_async()
+            handler.flush_buffer_sync()
