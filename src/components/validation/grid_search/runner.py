@@ -12,7 +12,7 @@ Functions:
     compute_grid_search(
         training_set: AccessLogsDataset,
         params_combinations: list[dict[str, int | float | bool]],
-        config: Config
+        pipeline_config: PipelineConfig
     ) -> tuple[dict[str, int | float | bool], float]
         Executes the parallelized grid search, evaluates parameter combinations
         using TSCV, and determines the optimal hyperparameter set.
@@ -32,13 +32,13 @@ from components.ray.tasks.time_series_cv.folds_runner import (
     compute_time_series_cv_folds_task,
 )
 from const import LOGS_PHASE_VALIDATION, MLFLOW_NESTED
-from pipeline.config.pydantic.config import Config
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def compute_grid_search(
     training_set: AccessLogsDataset,
     params_combinations: list[dict[str, int | float | bool]],
-    config: Config,
+    pipeline_config: PipelineConfig,
 ) -> tuple[dict[str, int | float | bool], float]:
     """Perform grid search to find the best parameters.
 
@@ -51,7 +51,7 @@ def compute_grid_search(
                                           evaluation.
         params_combinations (list[dict[str, int | float | bool]]):
             Parameter combinations to be evaluated.
-        config (Config): Configuration object.
+        pipeline_config (PipelineConfig): Configuration object.
 
     Returns:
         tuple[dict[str, int | float | bool], float]:
@@ -75,7 +75,7 @@ def compute_grid_search(
     """
     try:
         # Prepare configuration
-        cv_num_folds = config.validation.time_series_cv.folds
+        cv_num_folds = pipeline_config.validation.time_series_cv.folds
 
         info(
             "Grid search started",
@@ -97,7 +97,7 @@ def compute_grid_search(
             compute_time_series_cv_folds_task.remote(
                 training_set,
                 params,
-                config,
+                pipeline_config,
             )
             for params in params_combinations
         ]
@@ -160,7 +160,7 @@ def compute_grid_search(
                     len(training_set) if training_set else None
                 ),
                 "folds_num": getattr(
-                    config.validation.time_series_cv.folds,
+                    pipeline_config.validation.time_series_cv.folds,
                     "folds",
                     None,
                 ),

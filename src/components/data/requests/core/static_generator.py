@@ -8,7 +8,9 @@ Unlike dynamic requests, static requests use a fixed Zipfian parameter, meaning
 the access distribution over keys remains constant throughout the simulation.
 
 Functions:
-    generate_static_requests(config: Any) -> tuple[list[int], ndarray]
+    generate_static_requests(
+        pipeline_config: PipelineConfig
+    ) -> tuple[list[int], ndarray]
         Generates a list of requested keys and their timestamps in hours with a
         fixed Zipfian alpha parameter.
 """
@@ -21,10 +23,11 @@ from components.data.requests.utils.generation_helper import (
     generate_requests_helper,
 )
 from components.logs.levels.info_logger import info
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def generate_static_requests(
-    config: Any,
+    pipeline_config: PipelineConfig,
 ) -> tuple[list[int], np.ndarray]:
     """Generate static requests and corresponding timestamps in hours.
 
@@ -33,14 +36,16 @@ def generate_static_requests(
     the access distribution over keys does not change over time.
 
     Args:
-        config (Any): Configuration object.
+        pipeline_config (PipelineConfig): Configuration object.
 
     Returns:
         tuple[list[int], np.ndarray]:
             - requests: List of generated keys requested.
             - timestamps_hours: Corresponding timestamps of requests in hours.
     """
-    alpha_fixed = config.data.synthetic.patterns.access.zipf.alpha.fixed
+    alpha_fixed = (
+        pipeline_config.data.synthetic.patterns.access.zipf.alpha.fixed
+    )
 
     info(
         "Static requests generation started",
@@ -54,7 +59,7 @@ def generate_static_requests(
     # requests based on a fixed alpha value
     requests, timestamps_hours = generate_requests_helper(
         [alpha_fixed],
-        config,
+        pipeline_config,
     )
 
     info(

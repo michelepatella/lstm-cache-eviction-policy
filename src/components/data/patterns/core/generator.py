@@ -11,7 +11,7 @@ Functions:
     generate_pattern_requests(
         keys_range: ndarray,
         zipf_probs: ndarray,
-        config: Any,
+        pipeline_config: PipelineConfig,
         time_step_duration: int | None = None,
         timestamps_start: float = DATA_GENERATION_TIMESTAMPS_START,
         current_day_start: int = DATA_GENERATION_CURRENT_DAY_START,
@@ -35,12 +35,13 @@ from components.data.patterns.core.single_generator import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def generate_pattern_requests(
     keys_range: np.ndarray,
     zipf_probs: np.ndarray,
-    config: Any,
+    pipeline_config: PipelineConfig,
     time_step_duration: int = None,
     timestamps_start: float = DATA_GENERATION_TIMESTAMPS_START,
     current_day_start: int = DATA_GENERATION_CURRENT_DAY_START,
@@ -57,7 +58,7 @@ def generate_pattern_requests(
         keys_range (np.ndarray): List of keys to generate requests for.
         zipf_probs (np.ndarray): List of Zipfian probabilities of the
                                  given keys.
-        config (Any): Configuration object.
+        pipeline_config (PipelineConfig): Configuration object.
         time_step_duration (int): Time step to generate requests for.
         timestamps_start (float): Initial timestamp in seconds.
         current_day_start (int): Initial current day.
@@ -89,7 +90,7 @@ def generate_pattern_requests(
         num_requests = (
             time_step_duration
             if time_step_duration is not None
-            else config.data.general.requests
+            else pipeline_config.data.general.requests
         )
 
         debug(
@@ -119,7 +120,7 @@ def generate_pattern_requests(
                     requests,
                     keys_range,
                     zipf_probs,
-                    config,
+                    pipeline_config,
                 )
             )
 

@@ -42,13 +42,13 @@ from const import (
     LOGS_LOGGER_NAME,
     MLFLOW_NESTED,
 )
-from pipeline.config.configurator import prepare_config
+from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     DAGS_HUB_DVC,
     DAGS_HUB_REPO_NAME,
     DAGS_HUB_REPO_OWNER,
-    DATASET_PROCESSED_TYPE,
     DATASET_CHUNK_RESET_INDEX_DROP,
+    DATASET_PROCESSED_TYPE,
     LOGS_PHASE_DATA_PREPROCESSING,
 )
 
@@ -77,25 +77,25 @@ def preprocess_data() -> None:
         nested=MLFLOW_NESTED,
     ):
         # Setup
-        config = prepare_config()
+        pipeline_config = prepare_pipeline_config()
         initialize_logs(
-            logging.getLevelName(config.logs.level),
+            logging.getLevelName(pipeline_config.logs.level),
             GrafanaLokiHandler(),
         )
         initialize_ray(
-            config.resources.general.num_cpus,
-            config.resources.general.num_gpus,
+            pipeline_config.resources.general.num_cpus,
+            pipeline_config.resources.general.num_gpus,
         )
 
         # Prepare configuration
-        data_mode = config.data.general.mode
+        data_mode = pipeline_config.data.general.mode
         missing_values_removal_dropna_how = (
-            config.dataset.cleaning.missing_values_removal.dropna.how
+            pipeline_config.dataset.cleaning.missing_values_removal.dropna.how
         )
-        seq_len = config.model.sequence.length
-        num_cpus = config.resources.general.num_cpus
-        num_gpus = config.resources.general.num_gpus
-        seed = config.seed.value
+        seq_len = pipeline_config.model.sequence.length
+        num_cpus = pipeline_config.resources.general.num_cpus
+        num_gpus = pipeline_config.resources.general.num_gpus
+        seed = pipeline_config.seed.value
 
         # Ensure reproducibility
         set_seed(seed)
@@ -174,7 +174,7 @@ def preprocess_data() -> None:
         save_dataset(final_df, dataset_processed_path)
 
         # Experiment tracking
-        mlflow.log_params(prepare_config().model_dump())
+        mlflow.log_params(prepare_pipeline_config().model_dump())
         mlflow.log_metrics(
             {
                 "dataset_rows_num": len(final_df),

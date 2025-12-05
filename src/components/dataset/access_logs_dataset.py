@@ -14,7 +14,6 @@ Classes:
 
 from typing import Any
 
-import pandas as pd
 import torch
 from torch.utils.data import Dataset
 
@@ -43,6 +42,7 @@ from components.dataset.splits.index.calculator import (
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from const import DATASET_TRAINING_SPLIT_TYPE
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 class AccessLogsDataset(Dataset):
@@ -96,7 +96,7 @@ class AccessLogsDataset(Dataset):
 
     def _set_fields(
         self: "AccessLogsDataset",
-        config: Any,
+        pipeline_config: PipelineConfig,
     ) -> None:
         """Set the feature, target, and sequence length fields of the dataset.
 
@@ -105,7 +105,7 @@ class AccessLogsDataset(Dataset):
 
         Args:
             self (AccessLogsDataset): Instance of AccessLogsDataset.
-            config (Any): Configuration object.
+            pipeline_config (PipelineConfig): Configuration object.
 
         Returns:
             None
@@ -117,7 +117,7 @@ class AccessLogsDataset(Dataset):
         )
 
         # Set sequence length
-        self.seq_len = config.model.sequence.length
+        self.seq_len = pipeline_config.model.sequence.length
 
         debug(
             "Dataset fields setting executed",
@@ -132,7 +132,7 @@ class AccessLogsDataset(Dataset):
     def __init__(
         self: "AccessLogsDataset",
         dataset_type: str,
-        config: Any,
+        pipeline_config: PipelineConfig,
     ) -> None:
         """Initialize the AccessLogsDataset class.
 
@@ -144,14 +144,14 @@ class AccessLogsDataset(Dataset):
             self (AccessLogsDataset): AccessLogsDataset class.
             dataset_type (str): The dataset type requested to
                                 be created.
-            config (Any): Configuration object.
+            pipeline_config (PipelineConfig): Configuration object.
 
         Returns:
             None
         """
         # Prepare configuration
-        data_mode = config.data.general.mode
-        training_split = config.dataset.splits.training
+        data_mode = pipeline_config.data.general.mode
+        training_split = pipeline_config.dataset.splits.training
 
         # Retrieve path to load dataset from
         dataset_path = get_dataset_abs_path(
@@ -169,7 +169,7 @@ class AccessLogsDataset(Dataset):
         self._split_dataset(dataset_type, training_split)
 
         # Set the fields of the dataset
-        self._set_fields(config)
+        self._set_fields(pipeline_config)
 
         # Shift target by -1
         shift_dataset_column(

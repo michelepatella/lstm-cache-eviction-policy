@@ -9,17 +9,17 @@ pipeline steps operate with consistent and correctly typed parameters
 defined by the Pydantic schema.
 
 Functions:
-    prepare_config() -> Config
+    prepare_pipeline_config() -> PipelineConfig
         Loads the YAML configuration file, validates it against the Config
         Pydantic model, and returns the configuration object.
 """
 
 from components.yaml.io.loader import load_yaml
-from pipeline.config.pydantic.config import Config
-from pipeline.const import CONFIG_FILE_PATH
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
+from pipeline.const import PIPELINE_CONFIG_FILE_PATH
 
 
-def prepare_config() -> Config:
+def prepare_pipeline_config() -> PipelineConfig:
     """Prepare configuration required to run the entire pipeline.
 
     This function prepares the pipeline's configuration by orchestrating
@@ -28,13 +28,13 @@ def prepare_config() -> Config:
     the configuration settings.
 
     Returns:
-        Config: Class representing the configuration settings of
-                the entire pipeline.
+        PipelineConfig: Class representing the configuration settings of
+                        the entire pipeline.
     """
     # Load the YAML configuration file
-    config_file = load_yaml(CONFIG_FILE_PATH)
+    pipeline_config_file = load_yaml(PIPELINE_CONFIG_FILE_PATH)
 
     # Validate and parse YAML configuration file
-    config = Config(**config_file)
+    pipeline_config = PipelineConfig(**pipeline_config_file)
 
-    return config
+    return pipeline_config

@@ -12,7 +12,7 @@ from seconds to hours.
 Functions:
     generate_requests_helper(
         alpha_range: list[float],
-        config: Any,
+        pipeline_config: PipelineConfig,
         time_step_duration: int | None = None
     ) -> tuple[list[int], ndarray]
         Generates a list of requested keys and their corresponding timestamps
@@ -31,11 +31,12 @@ from components.logs.levels.error_logger import error
 from components.time.cyclics.seconds_to_hours_converter import (
     convert_seconds_to_hours_cyclic,
 )
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def generate_requests_helper(
     alpha_range: list[float],
-    config: Any,
+    pipeline_config: PipelineConfig,
     time_step_duration: int | None = None,
 ) -> tuple[list[int], np.ndarray]:
     """Generate requests according to static or dynamic Zipfian distributions.
@@ -46,10 +47,10 @@ def generate_requests_helper(
 
     Args:
         alpha_range (list[float]): List of alpha parameters.
-        config (Any): Configuration object.
+        pipeline_config (PipelineConfig): Configuration object.
         time_step_duration (int | None): Duration of each time step
-                                            (None for static requests
-                                            generation).
+                                         (None for static requests
+                                         generation).
 
     Returns:
         tuple[list[int], np.ndarray]:
@@ -66,8 +67,8 @@ def generate_requests_helper(
     """
     try:
         # Retrieve keys range from configuration
-        min_key = config.data.general.keys.min
-        max_key = config.data.general.keys.max
+        min_key = pipeline_config.data.general.keys.min
+        max_key = pipeline_config.data.general.keys.max
         keys_range = np.arange(min_key, max_key + 1)
 
         debug(
@@ -91,7 +92,7 @@ def generate_requests_helper(
                 generate_requests_for_alpha(
                     alpha,
                     keys_range,
-                    config,
+                    pipeline_config,
                     time_step_duration,
                 )
             )

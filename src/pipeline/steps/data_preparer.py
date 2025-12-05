@@ -43,7 +43,7 @@ from const import (
     LOGS_LOGGER_NAME,
     MLFLOW_NESTED,
 )
-from pipeline.config.configurator import prepare_config
+from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     DAGS_HUB_DVC,
     DAGS_HUB_REPO_NAME,
@@ -79,21 +79,21 @@ def prepare_data() -> None:
         nested=MLFLOW_NESTED,
     ):
         # Setup
-        config = prepare_config()
+        pipeline_config = prepare_pipeline_config()
         initialize_logs(
-            logging.getLevelName(config.logs.level),
+            logging.getLevelName(pipeline_config.logs.level),
             GrafanaLokiHandler(),
         )
         initialize_ray(
-            config.resources.general.num_cpus,
-            config.resources.general.num_gpus,
+            pipeline_config.resources.general.num_cpus,
+            pipeline_config.resources.general.num_gpus,
         )
 
         # Prepare configuration
-        data_mode = config.data.general.mode
-        min_key = config.data.general.keys.min
-        max_key = config.data.general.keys.max
-        seed = config.seed.value
+        data_mode = pipeline_config.data.general.mode
+        min_key = pipeline_config.data.general.keys.min
+        max_key = pipeline_config.data.general.keys.max
+        seed = pipeline_config.seed.value
 
         # Ensure reproducibility
         set_seed(seed)
@@ -122,10 +122,14 @@ def prepare_data() -> None:
             # based on the data distribution mode
             if data_mode == DATA_STATIC_MODE:
                 # Static requests generation
-                requests, timestamps_hours = generate_static_requests(config)
+                requests, timestamps_hours = generate_static_requests(
+                    pipeline_config
+                )
             else:
                 # Dynamic requests generation
-                requests, timestamps_hours = generate_dynamic_requests(config)
+                requests, timestamps_hours = generate_dynamic_requests(
+                    pipeline_config
+                )
 
             # Create a dataset where each row is composed of
             # a timestamp and the corresponding request
@@ -162,7 +166,7 @@ def prepare_data() -> None:
         )
 
         # Experiment tracking
-        mlflow.log_params(prepare_config().model_dump())
+        mlflow.log_params(prepare_pipeline_config().model_dump())
         mlflow.log_metrics(
             {
                 "dataset_rows_num": len(df),

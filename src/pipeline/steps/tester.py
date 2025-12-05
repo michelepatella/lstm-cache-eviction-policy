@@ -5,8 +5,7 @@ trained model on the dedicated testing set.
 
 This module provides the `test_model` function, which orchestrates the
 loading of the best-trained model, initializes the testing data loader,
-runs the final evaluation, computes various performance metrics, and
-saves the results in a structured format.
+runs the final evaluation, and computes various performance metrics.
 
 Functions:
     test_model() -> None
@@ -32,22 +31,17 @@ from components.model.best.initializer import (
 )
 from components.seed.setter import set_seed
 from const import (
-    DATA_DYNAMIC_MODE,
-    DATA_STATIC_MODE,
     DATASET_TESTING_SPLIT_TYPE,
     LOGS_LOGGER_NAME,
     MLFLOW_NESTED,
 )
-from pipeline.config.configurator import prepare_config
+from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     DAGS_HUB_DVC,
     DAGS_HUB_REPO_NAME,
     DAGS_HUB_REPO_OWNER,
     LOGS_PHASE_TESTING,
     MODEL_COMPUTE_METRICS_TESTING,
-    RESULTS_DYNAMIC_MODEL_FILE_PATH,
-    RESULTS_REAL_MODEL_FILE_PATH,
-    RESULTS_STATIC_MODEL_FILE_PATH,
 )
 
 
@@ -74,23 +68,23 @@ def test_model() -> None:
         nested=MLFLOW_NESTED,
     ):
         # Setup
-        config = prepare_config()
+        pipeline_config = prepare_pipeline_config()
         initialize_logs(
-            logging.getLevelName(config.logs.level),
+            logging.getLevelName(pipeline_config.logs.level),
             GrafanaLokiHandler(),
         )
 
         # Prepare configuration
-        data_mode = config.data.general.mode
-        testing_batch_size = config.data_loader.batch_size.testing
-        testing_shuffle = config.data_loader.shuffle.testing
-        testing_device = config.resources.devices.testing
-        qengine = config.model.optimizations.quantization.engine
+        data_mode = pipeline_config.data.general.mode
+        testing_batch_size = pipeline_config.data_loader.batch_size.testing
+        testing_shuffle = pipeline_config.data_loader.shuffle.testing
+        testing_device = pipeline_config.resources.devices.testing
+        qengine = pipeline_config.model.optimizations.quantization.engine
         num_workers = max(
-            config.resources.general.num_cpus,
-            config.resources.general.num_gpus,
+            pipeline_config.resources.general.num_cpus,
+            pipeline_config.resources.general.num_gpus,
         )
-        seed = config.seed.value
+        seed = pipeline_config.seed.value
 
         # Ensure reproducibility
         set_seed(seed)
@@ -112,25 +106,17 @@ def test_model() -> None:
             testing_batch_size,
             testing_shuffle,
             AccessLogsDataset,
-            config,
+            pipeline_config,
         )
 
         # Trained model setup for testing
         device, criterion, model = initialize_best_model(
             data_mode,
             testing_device,
-            config,
+            pipeline_config,
             testing_loader,
             qengine=qengine,
         )
-
-        # Prepare file name where to save model results
-        if data_mode == DATA_STATIC_MODE:
-            model_results_save_path = RESULTS_STATIC_MODEL_FILE_PATH
-        elif data_mode == DATA_DYNAMIC_MODE:
-            model_results_save_path = RESULTS_DYNAMIC_MODEL_FILE_PATH
-        else:
-            model_results_save_path = RESULTS_REAL_MODEL_FILE_PATH
 
         # Evaluate model
         (
@@ -145,13 +131,12 @@ def test_model() -> None:
             criterion,
             device,
             num_workers,
-            model_results_save_path=model_results_save_path,
             compute_metrics=MODEL_COMPUTE_METRICS_TESTING,
         )
 
         # Experiment tracking
         metrics = Box(metrics, delimiter="_")
-        mlflow.log_params(prepare_config().model_dump())
+        mlflow.log_params(prepare_pipeline_config().model_dump())
         mlflow.log_metrics(
             {
                 "testing_samples_num": len(testing_set),
@@ -170,7 +155,6 @@ def test_model() -> None:
                 "cohen_kappa_score": metrics.cohen_kappa_score,
             },
         )
-        mlflow.log_artifact(model_results_save_path)
 
     info(
         "Testing completed",
@@ -180,7 +164,6 @@ def test_model() -> None:
             if np.isinf(avg_loss) or np.isnan(avg_loss)
             else float(avg_loss),
             "accuracy": metrics.class_report.accuracy,
-            "model_results_save_path": str(model_results_save_path),
             "context": "Testing",
         },
     )

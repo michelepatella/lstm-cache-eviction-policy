@@ -2,7 +2,7 @@ stages:
   data_preparation:
     cmd: PYTHONPATH=src python -m pipeline.steps.data_preparer
     params:
-      - src/pipeline/config/config.yaml:
+      - src/pipeline/config/pipeline_config.yaml:
         - data.general.mode
         - data.general.requests
         - data.general.keys.min
@@ -88,21 +88,21 @@ stages:
       - src/components/yaml/io/loader.py
       - src/const.py
       - src/pipeline/config/configurator.py
-      - src/pipeline/config/pydantic/config.py
-      - src/pipeline/config/pydantic/sections/data_config.py
-      - src/pipeline/config/pydantic/sections/data_loader_config.py
-      - src/pipeline/config/pydantic/sections/dataset_config.py
-      - src/pipeline/config/pydantic/sections/early_stopping_config.py
-      - src/pipeline/config/pydantic/sections/evaluation_config.py
-      - src/pipeline/config/pydantic/sections/logs_config.py
-      - src/pipeline/config/pydantic/sections/loss_config.py
-      - src/pipeline/config/pydantic/sections/model_config.py
-      - src/pipeline/config/pydantic/sections/optimizer_config.py
-      - src/pipeline/config/pydantic/sections/resources_config.py
-      - src/pipeline/config/pydantic/sections/seed_config.py
-      - src/pipeline/config/pydantic/sections/simulations_config.py
-      - src/pipeline/config/pydantic/sections/training_config.py
-      - src/pipeline/config/pydantic/sections/validation_config.py
+      - src/pipeline/config/pydantic/pipeline_config.py
+      - src/pipeline/config/pydantic/sections/data_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/data_loader_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/dataset_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/early_stopping_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/evaluation_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/logs_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/loss_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/model_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/optimizer_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/resources_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/seed_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/simulations_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/training_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/validation_pipeline_config.py
       - src/pipeline/const.py
       - src/pipeline/steps/data_preparer.py
     outs:
@@ -114,7 +114,7 @@ stages:
   data_preprocessing:
     cmd: PYTHONPATH=src python -m pipeline.steps.data_preprocessor
     params:
-      - src/pipeline/config/config.yaml:
+      - src/pipeline/config/pipeline_config.yaml:
         - data.general.mode
         - dataset.cleaning.missing_values_removal.dropna.how
         - logs.level
@@ -149,21 +149,21 @@ stages:
       - src/components/yaml/io/loader.py
       - src/const.py
       - src/pipeline/config/configurator.py
-      - src/pipeline/config/pydantic/config.py
-      - src/pipeline/config/pydantic/sections/data_config.py
-      - src/pipeline/config/pydantic/sections/data_loader_config.py
-      - src/pipeline/config/pydantic/sections/dataset_config.py
-      - src/pipeline/config/pydantic/sections/early_stopping_config.py
-      - src/pipeline/config/pydantic/sections/evaluation_config.py
-      - src/pipeline/config/pydantic/sections/logs_config.py
-      - src/pipeline/config/pydantic/sections/loss_config.py
-      - src/pipeline/config/pydantic/sections/model_config.py
-      - src/pipeline/config/pydantic/sections/optimizer_config.py
-      - src/pipeline/config/pydantic/sections/resources_config.py
-      - src/pipeline/config/pydantic/sections/seed_config.py
-      - src/pipeline/config/pydantic/sections/simulations_config.py
-      - src/pipeline/config/pydantic/sections/training_config.py
-      - src/pipeline/config/pydantic/sections/validation_config.py
+      - src/pipeline/config/pydantic/pipeline_config.py
+      - src/pipeline/config/pydantic/sections/data_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/data_loader_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/dataset_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/early_stopping_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/evaluation_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/logs_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/loss_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/model_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/optimizer_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/resources_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/seed_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/simulations_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/training_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/validation_pipeline_config.py
       - src/pipeline/const.py
       - src/pipeline/steps/data_preprocessor.py
       - data/raw/${data.general.mode}/${data.general.mode}_raw_dataset.csv
@@ -173,7 +173,7 @@ stages:
   validation:
     cmd: PYTHONPATH=src python -m pipeline.steps.validator
     params:
-      - src/pipeline/config/config.yaml:
+      - src/pipeline/config/pipeline_config.yaml:
         - data.general.keys.max
         - data.general.keys.min
         - data.general.mode
@@ -240,7 +240,6 @@ stages:
       - src/components/evaluation/model/metrics/calculations/class_report_calculator.py
       - src/components/evaluation/model/metrics/calculations/cohen_kappa_score_calculator.py
       - src/components/evaluation/model/metrics/calculator.py
-      - src/components/evaluation/model/metrics/io/saver.py
       - src/components/inference/batches_inferrer.py
       - src/components/inference/single_batch_inferrer.py
       - src/components/json/io/saver.py
@@ -277,21 +276,21 @@ stages:
       - src/components/yaml/io/saver.py
       - src/const.py
       - src/pipeline/config/configurator.py
-      - src/pipeline/config/pydantic/config.py
-      - src/pipeline/config/pydantic/sections/data_config.py
-      - src/pipeline/config/pydantic/sections/data_loader_config.py
-      - src/pipeline/config/pydantic/sections/dataset_config.py
-      - src/pipeline/config/pydantic/sections/early_stopping_config.py
-      - src/pipeline/config/pydantic/sections/evaluation_config.py
-      - src/pipeline/config/pydantic/sections/logs_config.py
-      - src/pipeline/config/pydantic/sections/loss_config.py
-      - src/pipeline/config/pydantic/sections/model_config.py
-      - src/pipeline/config/pydantic/sections/optimizer_config.py
-      - src/pipeline/config/pydantic/sections/resources_config.py
-      - src/pipeline/config/pydantic/sections/seed_config.py
-      - src/pipeline/config/pydantic/sections/simulations_config.py
-      - src/pipeline/config/pydantic/sections/training_config.py
-      - src/pipeline/config/pydantic/sections/validation_config.py
+      - src/pipeline/config/pydantic/pipeline_config.py
+      - src/pipeline/config/pydantic/sections/data_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/data_loader_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/dataset_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/early_stopping_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/evaluation_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/logs_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/loss_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/model_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/optimizer_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/resources_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/seed_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/simulations_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/training_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/validation_pipeline_config.py
       - src/pipeline/const.py
       - src/pipeline/steps/validator.py
       - data/processed/${data.general.mode}/${data.general.mode}_processed_dataset.csv
@@ -300,7 +299,7 @@ stages:
   training:
     cmd: PYTHONPATH=src python -m pipeline.steps.trainer
     params:
-      - src/pipeline/config/config.yaml:
+      - src/pipeline/config/pipeline_config.yaml:
         - data.general.keys.max
         - data.general.keys.min
         - data.general.mode
@@ -361,7 +360,6 @@ stages:
       - src/components/evaluation/model/metrics/calculations/class_report_calculator.py
       - src/components/evaluation/model/metrics/calculations/cohen_kappa_score_calculator.py
       - src/components/evaluation/model/metrics/calculator.py
-      - src/components/evaluation/model/metrics/io/saver.py
       - src/components/inference/batches_inferrer.py
       - src/components/inference/single_batch_inferrer.py
       - src/components/json/io/saver.py
@@ -393,21 +391,21 @@ stages:
       - src/components/yaml/io/loader.py
       - src/const.py
       - src/pipeline/config/configurator.py
-      - src/pipeline/config/pydantic/config.py
-      - src/pipeline/config/pydantic/sections/data_config.py
-      - src/pipeline/config/pydantic/sections/data_loader_config.py
-      - src/pipeline/config/pydantic/sections/dataset_config.py
-      - src/pipeline/config/pydantic/sections/early_stopping_config.py
-      - src/pipeline/config/pydantic/sections/evaluation_config.py
-      - src/pipeline/config/pydantic/sections/logs_config.py
-      - src/pipeline/config/pydantic/sections/loss_config.py
-      - src/pipeline/config/pydantic/sections/model_config.py
-      - src/pipeline/config/pydantic/sections/optimizer_config.py
-      - src/pipeline/config/pydantic/sections/resources_config.py
-      - src/pipeline/config/pydantic/sections/seed_config.py
-      - src/pipeline/config/pydantic/sections/simulations_config.py
-      - src/pipeline/config/pydantic/sections/training_config.py
-      - src/pipeline/config/pydantic/sections/validation_config.py
+      - src/pipeline/config/pydantic/pipeline_config.py
+      - src/pipeline/config/pydantic/sections/data_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/data_loader_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/dataset_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/early_stopping_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/evaluation_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/logs_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/loss_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/model_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/optimizer_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/resources_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/seed_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/simulations_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/training_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/validation_pipeline_config.py
       - src/pipeline/const.py
       - src/pipeline/steps/trainer.py
       - data/processed/${data.general.mode}/${data.general.mode}_processed_dataset.csv
@@ -417,7 +415,7 @@ stages:
   testing:
     cmd: PYTHONPATH=src python -m pipeline.steps.tester
     params:
-      - src/pipeline/config/config.yaml:
+      - src/pipeline/config/pipeline_config.yaml:
         - data.general.keys.max
         - data.general.keys.min
         - data.general.mode
@@ -464,7 +462,6 @@ stages:
       - src/components/evaluation/model/metrics/calculations/class_report_calculator.py
       - src/components/evaluation/model/metrics/calculations/cohen_kappa_score_calculator.py
       - src/components/evaluation/model/metrics/calculator.py
-      - src/components/evaluation/model/metrics/io/saver.py
       - src/components/inference/batches_inferrer.py
       - src/components/inference/single_batch_inferrer.py
       - src/components/json/io/saver.py
@@ -489,32 +486,31 @@ stages:
       - src/components/yaml/io/loader.py
       - src/const.py
       - src/pipeline/config/configurator.py
-      - src/pipeline/config/pydantic/config.py
-      - src/pipeline/config/pydantic/sections/data_config.py
-      - src/pipeline/config/pydantic/sections/data_loader_config.py
-      - src/pipeline/config/pydantic/sections/dataset_config.py
-      - src/pipeline/config/pydantic/sections/early_stopping_config.py
-      - src/pipeline/config/pydantic/sections/evaluation_config.py
-      - src/pipeline/config/pydantic/sections/logs_config.py
-      - src/pipeline/config/pydantic/sections/loss_config.py
-      - src/pipeline/config/pydantic/sections/model_config.py
-      - src/pipeline/config/pydantic/sections/optimizer_config.py
-      - src/pipeline/config/pydantic/sections/resources_config.py
-      - src/pipeline/config/pydantic/sections/seed_config.py
-      - src/pipeline/config/pydantic/sections/simulations_config.py
-      - src/pipeline/config/pydantic/sections/training_config.py
-      - src/pipeline/config/pydantic/sections/validation_config.py
+      - src/pipeline/config/pydantic/pipeline_config.py
+      - src/pipeline/config/pydantic/sections/data_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/data_loader_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/dataset_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/early_stopping_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/evaluation_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/logs_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/loss_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/model_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/optimizer_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/resources_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/seed_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/simulations_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/training_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/validation_pipeline_config.py
       - src/pipeline/const.py
       - src/pipeline/steps/tester.py
       - data/processed/${data.general.mode}/${data.general.mode}_processed_dataset.csv
       - models/${data.general.mode}/trained_${data.general.mode}_model.pt
-    outs:
-      - reports/results/${data.general.mode}/${data.general.mode}_model_results.json
+    outs: []
 
   simulations:
     cmd: PYTHONPATH=src python -m pipeline.steps.simulator
     params:
-      - src/pipeline/config/config.yaml:
+      - src/pipeline/config/pipeline_config.yaml:
         - data.general.mode
         - dataset.splits.training
         - data_loader.batch_size.testing
@@ -577,7 +573,6 @@ stages:
       - src/components/evaluation/simulations/metrics/calculations/eviction_mistake_rate_calculator.py
       - src/components/evaluation/simulations/metrics/calculations/hit_miss_rates_calculator.py
       - src/components/evaluation/simulations/metrics/calculator.py
-      - src/components/evaluation/simulations/metrics/io/saver.py
       - src/components/json/io/saver.py
       - src/components/logs/handlers/grafana_loki_handler.py
       - src/components/logs/initializer.py
@@ -594,26 +589,25 @@ stages:
       - src/components/yaml/io/loader.py
       - src/const.py
       - src/pipeline/config/configurator.py
-      - src/pipeline/config/pydantic/config.py
-      - src/pipeline/config/pydantic/sections/data_config.py
-      - src/pipeline/config/pydantic/sections/data_loader_config.py
-      - src/pipeline/config/pydantic/sections/dataset_config.py
-      - src/pipeline/config/pydantic/sections/early_stopping_config.py
-      - src/pipeline/config/pydantic/sections/evaluation_config.py
-      - src/pipeline/config/pydantic/sections/logs_config.py
-      - src/pipeline/config/pydantic/sections/loss_config.py
-      - src/pipeline/config/pydantic/sections/model_config.py
-      - src/pipeline/config/pydantic/sections/optimizer_config.py
-      - src/pipeline/config/pydantic/sections/resources_config.py
-      - src/pipeline/config/pydantic/sections/seed_config.py
-      - src/pipeline/config/pydantic/sections/simulations_config.py
-      - src/pipeline/config/pydantic/sections/training_config.py
-      - src/pipeline/config/pydantic/sections/validation_config.py
+      - src/pipeline/config/pydantic/pipeline_config.py
+      - src/pipeline/config/pydantic/sections/data_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/data_loader_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/dataset_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/early_stopping_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/evaluation_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/logs_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/loss_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/model_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/optimizer_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/resources_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/seed_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/simulations_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/training_pipeline_config.py
+      - src/pipeline/config/pydantic/sections/validation_pipeline_config.py
       - src/pipeline/const.py
       - src/pipeline/steps/simulator.py
       - data/processed/${data.general.mode}/${data.general.mode}_processed_dataset.csv
     outs:
-      - reports/results/${data.general.mode}/${data.general.mode}_simulations_results.json
       - reports/plots/${data.general.mode}/${data.general.mode}_hit_miss_rates.png
 
 artifacts:
@@ -649,14 +643,6 @@ artifacts:
       - dynamic data
     meta:
       framework: pytorch
-
-metrics:
-  - reports/results/static/static_model_results.json
-  - reports/results/static/static_simulations_results.json
-  - reports/results/dynamic/dynamic_model_results.json
-  - reports/results/dynamic/dynamic_simulations_results.json
-  - reports/results/real/real_model_results.json
-  - reports/results/real/real_simulations_results.json
 
 plots:
   - reports/plots/static/static_daily_profile.png

@@ -22,6 +22,7 @@ from components.caches.utils.cache_metrics_logger import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 class BaseCache(ABC):
@@ -46,7 +47,7 @@ class BaseCache(ABC):
         self: "BaseCache",
         cache_class: Any,
         metrics_logger: CacheMetricsLogger,
-        config: Any,
+        pipeline_config: PipelineConfig,
     ) -> None:
         """Initialize the BaseCache.
 
@@ -57,7 +58,7 @@ class BaseCache(ABC):
             self (BaseCache): Current class instance.
             cache_class (Any): Class implementing a cache.
             metrics_logger (CacheMetricsLogger): Object to log cache events.
-            config (Any): Configuration object.
+            pipeline_config (PipelineConfig): Configuration object.
 
         Returns:
             None
@@ -70,8 +71,8 @@ class BaseCache(ABC):
         """
         try:
             # Prepare configuration
-            cache_dimension = config.simulations.caches.dimension
-            ttl = config.simulations.caches.ttl
+            cache_dimension = pipeline_config.simulations.caches.dimension
+            ttl = pipeline_config.simulations.caches.ttl
 
             # Initialize cache and fields
             self.cache = (
@@ -103,12 +104,12 @@ class BaseCache(ABC):
                         getattr(self, "expiry", None),
                         dict,
                     ),
-                    "ttl": getattr(config.caches, "ttl", None),
+                    "ttl": getattr(pipeline_config.caches, "ttl", None),
                     "cache_class": (
                         str(cache_class) if cache_class is not None else None
                     ),
                     "cache_dimension": getattr(
-                        config.caches,
+                        pipeline_config.caches,
                         "dimension",
                         None,
                     ),

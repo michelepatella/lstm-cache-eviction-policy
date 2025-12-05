@@ -12,7 +12,7 @@ Functions:
     compute_time_series_cv_folds_task(
         training_set: AccessLogsDataset,
         params: dict[str, int | float | bool],
-        config: Config
+        pipeline_config: PipelineConfig
     ) -> tuple[dict[str, int | float | bool], float, list[float]]
         The remote function that performs TSCV across all folds for a given parameter set.
 """
@@ -23,14 +23,14 @@ from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.validation.time_series_cv.core.folds_runner import (
     compute_time_series_cv_folds,
 )
-from pipeline.config.pydantic.config import Config
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 @ray.remote
 def compute_time_series_cv_folds_task(
     training_set: AccessLogsDataset,
     params: dict[str, int | float | bool],
-    config: Config,
+    pipeline_config: PipelineConfig,
 ) -> tuple[dict[str, int | float | bool], float, list[float]]:
     """Computes the Time Series Cross-Validation for a given set
     of parameters.
@@ -43,7 +43,7 @@ def compute_time_series_cv_folds_task(
                                           used for training and validation.
         params (dict[str, int | float | bool]): The model parameters to be
                                                 evaluated in this run.
-        config (Config): The configuration object.
+        pipeline_config (PipelineConfig): The configuration object.
 
     Returns:
         tuple[dict[str, int | float | bool], float]:
@@ -54,10 +54,10 @@ def compute_time_series_cv_folds_task(
     # Compute a Time Series CV over the
     # given model parameters
     avg_loss, fold_losses = compute_time_series_cv_folds(
-        config.validation.time_series_cv.folds,
+        pipeline_config.validation.time_series_cv.folds,
         training_set,
         params,
-        config,
+        pipeline_config,
     )
 
     return params, avg_loss, fold_losses

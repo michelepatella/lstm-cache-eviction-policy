@@ -14,7 +14,7 @@ Functions:
         requests: list[int],
         keys_range: ndarray,
         zipf_probs: ndarray,
-        config: Any
+        pipeline_config: PipelineConfig
     ) -> tuple[int, float, float, int]
         Generates one request according to access/temporal patterns and
         returns the request along with updated temporal state.
@@ -34,6 +34,7 @@ from components.data.patterns.temporal.generator import (
 from components.time.cyclics.updater import (
     update_cyclic_time,
 )
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def generate_single_pattern_request(
@@ -42,7 +43,7 @@ def generate_single_pattern_request(
     requests: list[int],
     keys_range: np.ndarray,
     zipf_probs: np.ndarray,
-    config: Any,
+    pipeline_config: PipelineConfig,
 ) -> tuple[int, float, float, int]:
     """Generate a single request and update the temporal state.
 
@@ -56,7 +57,7 @@ def generate_single_pattern_request(
         requests (list[int]): List of requests generated so far.
         keys_range (np.ndarray): Array of keys available for requests.
         zipf_probs (np.ndarray): Zipfian probabilities of keys.
-        config (Any): Configuration object.
+        pipeline_config (PipelineConfig): Configuration object.
 
     Returns:
         tuple[int, float, float, int]:
@@ -67,7 +68,9 @@ def generate_single_pattern_request(
             - current_day: Updated day count in the simulation.
     """
     # Generate delta time (gap between consecutive requests)
-    delta_t = generate_temporal_pattern(current_seconds_in_day, config)
+    delta_t = generate_temporal_pattern(
+        current_seconds_in_day, pipeline_config
+    )
 
     # Update temporal state
     current_seconds_in_day, current_day = update_cyclic_time(
@@ -88,7 +91,7 @@ def generate_single_pattern_request(
         keys_range,
         absolute_seconds,
         requests,
-        config,
+        pipeline_config,
     )
 
     return request, absolute_seconds, current_seconds_in_day, current_day

@@ -43,9 +43,9 @@ from const import (
     LOGS_PHASE_VALIDATION,
     MLFLOW_NESTED,
 )
-from pipeline.config.configurator import prepare_config
+from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
-    CONFIG_FILE_PATH,
+    PIPELINE_CONFIG_FILE_PATH,
     DAGS_HUB_DVC,
     DAGS_HUB_REPO_NAME,
     DAGS_HUB_REPO_OWNER,
@@ -76,20 +76,22 @@ def validate_model() -> None:
         nested=MLFLOW_NESTED,
     ):
         # Setup
-        config = prepare_config()
+        pipeline_config = prepare_pipeline_config()
         initialize_logs(
-            logging.getLevelName(config.logs.level),
+            logging.getLevelName(pipeline_config.logs.level),
             GrafanaLokiHandler(),
         )
         initialize_ray(
-            config.resources.general.num_cpus,
-            config.resources.general.num_gpus,
+            pipeline_config.resources.general.num_cpus,
+            pipeline_config.resources.general.num_gpus,
         )
 
         # Prepare configuration
-        validation_batch_size = config.data_loader.batch_size.validation
-        validation_shuffle = config.data_loader.shuffle.validation
-        seed = config.seed.value
+        validation_batch_size = (
+            pipeline_config.data_loader.batch_size.validation
+        )
+        validation_shuffle = pipeline_config.data_loader.shuffle.validation
+        seed = pipeline_config.seed.value
 
         # Ensure reproducibility
         set_seed(seed)
@@ -109,22 +111,22 @@ def validate_model() -> None:
             validation_batch_size,
             validation_shuffle,
             AccessLogsDataset,
-            config,
+            pipeline_config,
         )
 
         # Get all parameter combinations
-        params_combinations = get_parameters_combination(config)
+        params_combinations = get_parameters_combination(pipeline_config)
 
         # Compute grid search for best parameters
         best_params_dict, best_avg_loss = compute_grid_search(
             training_set,
             params_combinations,
-            config,
+            pipeline_config,
         )
         best_params_dict = Box(best_params_dict)
 
         # Prepare the best parameters to be saved
-        best_params = Box(config.model_dump())
+        best_params = Box(pipeline_config.model_dump())
         best_params.model.params.hidden_size = best_params_dict.hidden_size
         best_params.model.params.num_layers = best_params_dict.num_layers
         best_params.model.params.dropout = best_params_dict.dropout
@@ -134,13 +136,17 @@ def validate_model() -> None:
 
         # Merge original dictionary with the best
         # parameters dictionary
-        updated_config_dict = merge_dicts(config.model_dump(), best_params)
+        updated_config_dict = merge_dicts(
+            pipeline_config.model_dump(), best_params
+        )
 
         # Save updated configuration dictionary as file
-        save_yaml(Box(updated_config_dict).to_dict(), CONFIG_FILE_PATH)
+        save_yaml(
+            Box(updated_config_dict).to_dict(), PIPELINE_CONFIG_FILE_PATH
+        )
 
         # Experiment tracking
-        mlflow.log_params(prepare_config().model_dump())
+        mlflow.log_params(prepare_pipeline_config().model_dump())
         mlflow.log_metrics(
             {
                 "training_samples_num": len(training_set),
@@ -149,7 +155,7 @@ def validate_model() -> None:
                 else float(best_avg_loss),
             },
         )
-        mlflow.log_artifact(CONFIG_FILE_PATH)
+        mlflow.log_artifact(PIPELINE_CONFIG_FILE_PATH)
 
     info(
         "Validation completed",
@@ -158,7 +164,7 @@ def validate_model() -> None:
             "loss_avg_best": None
             if np.isinf(best_avg_loss) or np.isnan(best_avg_loss)
             else float(best_avg_loss),
-            "config_save_path": str(CONFIG_FILE_PATH),
+            "config_save_path": str(PIPELINE_CONFIG_FILE_PATH),
             "context": "Validation",
         },
     )

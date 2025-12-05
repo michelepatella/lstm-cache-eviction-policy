@@ -17,7 +17,6 @@ from dotenv import load_dotenv
 
 from const import DATASET_COLUMN_REQUEST_NAME
 
-
 load_dotenv()
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent

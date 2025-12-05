@@ -3,8 +3,8 @@
 Utility module for evaluating PyTorch models.
 
 This module provides the `evaluate_model` function, which performs
-inference on a model over a given dataset, computes average loss,
-optionally calculates evaluation metrics, and can save the results.
+inference on a model over a given dataset, computes average loss, and
+optionally calculates evaluation metrics.
 
 Functions:
     evaluate_model(
@@ -13,7 +13,6 @@ Functions:
         criterion: torch.nn.Module,
         device: torch.device,
         num_workers: int,
-        model_results_save_path: str = None,
         compute_metrics: bool = True
     ) -> tuple[
         float,
@@ -35,7 +34,6 @@ from components.const import MODEL_COMPUTE_METRICS_DEFAULT
 from components.evaluation.model.metrics.calculator import (
     calculate_model_metrics,
 )
-from components.evaluation.model.metrics.io.saver import save_model_metrics
 from components.inference.batches_inferrer import infer_batches
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.info_logger import info
@@ -48,7 +46,6 @@ def evaluate_model(
     criterion: torch.nn.Module,
     device: torch.device,
     num_workers: int,
-    model_results_save_path: str = None,
     compute_metrics: bool = MODEL_COMPUTE_METRICS_DEFAULT,
 ) -> tuple[
     float,
@@ -70,7 +67,6 @@ def evaluate_model(
         criterion (torch.nn.Module): Loss function used for evaluation.
         device (torch.device): Device on which to perform computations.
         num_workers (int): Number of workers to use during inference.
-        model_results_save_path (str): Path to save metrics.
         compute_metrics (bool): Whether to compute evaluation metrics
                                 in addition to loss.
 
@@ -137,11 +133,6 @@ def evaluate_model(
             all_predictions,
             all_outputs,
         )
-
-        # Save metrics if requested (i.e., if the
-        # model results save path is specified)
-        if model_results_save_path is not None:
-            save_model_metrics(metrics, avg_loss, model_results_save_path)
 
     debug(
         "Model evaluation completed",

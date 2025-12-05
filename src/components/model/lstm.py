@@ -29,6 +29,7 @@ from components.const import (
 from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 class LSTM(torch.nn.Module):
@@ -52,7 +53,7 @@ class LSTM(torch.nn.Module):
     def _set_params(
         self: "LSTM",
         params: Any | dict[str, int | float | bool],
-        config: Any | None,
+        pipeline_config: PipelineConfig | None,
     ) -> None:
         """Set model parameters.
 
@@ -63,7 +64,7 @@ class LSTM(torch.nn.Module):
             self ("LSTM"): Current model instance.
             params (Any | dict[str, int | float | bool]):
                 Model parameters to be set.
-            config (Any | None): Configuration object.
+            pipeline_config (PipelineConfig | None): Configuration object.
 
         Raises:
             RuntimeError: If setting model parameters fails:
@@ -77,8 +78,8 @@ class LSTM(torch.nn.Module):
             # Prepare configuration model params
             # if the configuration object is passed
             model_params = None
-            if config is not None:
-                model_params = config.model.params
+            if pipeline_config is not None:
+                model_params = pipeline_config.model.params
 
             # For each required parameter
             for param in MODEL_PARAM_NAMES:
@@ -115,7 +116,7 @@ class LSTM(torch.nn.Module):
         max_key: int,
         embedding_dim: int,
         num_features: int,
-        config: Any,
+        pipeline_config: PipelineConfig,
     ) -> None:
         """Set model fields.
 
@@ -129,13 +130,13 @@ class LSTM(torch.nn.Module):
             max_key (int): Minimum key.
             embedding_dim (int): Embedding dimension for keys.
             num_features (int): Number of features for the model.
-            config (Any): Configuration object.
+            pipeline_config (PipelineConfig): Configuration object.
 
         Returns:
             None
         """
         # Set model params
-        self._set_params(params, config)
+        self._set_params(params, pipeline_config)
 
         # Disable MC Dropout by default
         self.mc_dropout = MC_DROPOUT_DISABLED
@@ -231,7 +232,7 @@ class LSTM(torch.nn.Module):
         max_key: int,
         embedding_dim: int,
         num_features: int,
-        config: Any | None,
+        pipeline_config: PipelineConfig | None,
     ) -> None:
         """Initialize the model.
 
@@ -246,7 +247,7 @@ class LSTM(torch.nn.Module):
             max_key (int): Minimum key.
             embedding_dim (int): Embedding dimension for keys.
             num_features (int): Number of features for the model.
-            config (Any | None): Configuration object.
+            pipeline_config (PipelineConfig | None): Configuration object.
 
         Returns:
             None
@@ -260,7 +261,7 @@ class LSTM(torch.nn.Module):
             max_key,
             embedding_dim,
             num_features,
-            config,
+            pipeline_config,
         )
 
         # Instantiate the LSTM model
