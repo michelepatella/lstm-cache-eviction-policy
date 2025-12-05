@@ -23,12 +23,12 @@ import torch
 
 from components.backpropagation.core.forward_runner import compute_forward
 from components.const import (
+    BATCH_WITH_TARGET_DIMENSION,
     MC_DROPOUT_FLAG_NAME,
     MC_DROPOUT_NUM_SAMPLES_DEFAULT,
     MODEL_EVAL_MODE,
     MODEL_MC_DROPOUT_MODE,
     TENSOR_OUTPUTS_BATCH_DIM,
-    BATCH_WITH_TARGET_DIMENSION,
 )
 from components.logs.levels.error_logger import error
 from components.model.mode.setter import set_model_mode

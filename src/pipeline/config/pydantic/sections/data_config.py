@@ -53,7 +53,7 @@ Classes:
     DataGeneralConfig(BaseModel):
         General configuration for data.
     DataSyntheticConfig(BaseModel):
-        Synthetic data configuration, aggregating mode, patterns, and seed.
+        Synthetic data configuration, aggregating mode, and patterns.
     DataConfig(BaseModel):
         Aggregates general settings and pattern configuration.
 """
@@ -79,10 +79,10 @@ class DataPatternsAccessBehaviorHoursConfig(BaseModel):
     """Configuration for a range of hours within the day.
 
     Attributes:
-        start (int): Start hour (between DATA_GENERATION_INITIAL_HOUR
-                     and DATA_GENERATION_FINAL_HOUR).
-        end (int): End hour (between DATA_GENERATION_INITIAL_HOUR
-                   and DATA_GENERATION_FINAL_HOUR).
+        start (int): Start hour (in [DATA_GENERATION_INITIAL_HOUR,
+                     DATA_GENERATION_FINAL_HOUR]).
+        end (int): End hour (in [DATA_GENERATION_INITIAL_HOUR,
+                   DATA_GENERATION_FINAL_HOUR]).
     """
 
     start: Annotated[int, Field(ge=TIME_START_HOUR, le=TIME_END_HOUR)]
@@ -117,7 +117,7 @@ class DataKeysConfig(BaseModel):
         assert_min_less_than_max(
             self.min,
             self.max,
-            values_context="data.keys",
+            values_context="data.general.keys",
         )
 
         return self
@@ -155,7 +155,8 @@ class DataPatternsAccessBehaviorRepetitionConfig(BaseModel):
     Attributes:
         interval (int): Interval between repetitions (> 0).
         offset (int): Offset applied to repetitions (> 0).
-        hours (DataPatternsAccessBehaviorHoursConfig): Hours during which repetitions occur.
+        hours (DataPatternsAccessBehaviorHoursConfig): Hours during which repetitions
+                                                       occur.
     """
 
     interval: Annotated[int, Field(gt=0)]
@@ -192,9 +193,12 @@ class DataPatternsAccessBehaviorToggleConfig(BaseModel):
 
     Attributes:
         interval (int): Toggle interval (> 0).
-        hours (DataPatternsAccessBehaviorHoursConfig): Hours during which toggle behavior occurs.
-        base_requests (DataPatternsAccessBehaviorToggleBaseRequestsConfig): Base request indices.
-        offsets (DataPatternsAccessBehaviorToggleOffsetsConfig): Offsets for toggle behavior.
+        hours (DataPatternsAccessBehaviorHoursConfig): Hours during which toggle
+                                                       behavior occurs.
+        base_requests (DataPatternsAccessBehaviorToggleBaseRequestsConfig):
+            Base request indices.
+        offsets (DataPatternsAccessBehaviorToggleOffsetsConfig): Offsets for toggle
+                                                                 behavior.
     """
 
     interval: Annotated[int, Field(gt=0)]
@@ -230,7 +234,7 @@ class DataPatternsAccessBehaviorDistortionNoiseConfig(BaseModel):
         assert_min_less_than_max(
             self.min,
             self.max,
-            values_context="data.pattern.access.behavior.distortion.noise",
+            values_context="data.synthetic.patterns.access.behavior.distortion.noise",
         )
 
         return self
@@ -253,9 +257,11 @@ class DataPatternsAccessBehaviorDistortionConfig(BaseModel):
 
     Attributes:
         interval (int): Interval at which distortion is applied (> 0).
-        hours (DataPatternsAccessBehaviorHoursConfig): Hours during which distortion occurs.
+        hours (DataPatternsAccessBehaviorHoursConfig): Hours during which
+                                                       distortion occurs.
         offsets (DataPatternsAccessBehaviorDistortionOffsetsConfig): Distortion offsets.
-        noise (DataPatternsAccessBehaviorDistortionNoiseConfig): Noise parameters for distortion.
+        noise (DataPatternsAccessBehaviorDistortionNoiseConfig): Noise parameters for
+                                                                 distortion.
     """
 
     interval: Annotated[int, Field(gt=0)]
@@ -283,7 +289,8 @@ class DataPatternsAccessBehaviorCycleConfig(BaseModel):
         base (int): Base value for cycle (> 0).
         mod (int): Modulus for cycle (> 0).
         divisor (int): Divisor for cycle (> 0).
-        hours (DataPatternsAccessBehaviorHoursConfig): Hours during which cyclical behavior occurs.
+        hours (DataPatternsAccessBehaviorHoursConfig): Hours during which cyclical
+                                                       behavior occurs.
     """
 
     base: Annotated[int, Field(gt=0)]
@@ -326,10 +333,10 @@ class DataPatternsTemporalBurstinessHoursConfig(BaseModel):
     """Hour range configuration for burstiness.
 
     Attributes:
-        start (int): Start hour of burstiness range (between
-            DATA_GENERATION_INITIAL_HOUR and DATA_GENERATION_FINAL_HOUR).
-        end (int): End hour of burstiness range (between DATA_GENERATION_INITIAL_HOUR
-            and DATA_GENERATION_FINAL_HOUR).
+        start (int): Start hour of burstiness range (in
+                     [DATA_GENERATION_INITIAL_HOUR, DATA_GENERATION_FINAL_HOUR]).
+        end (int): End hour of burstiness range (in [DATA_GENERATION_INITIAL_HOUR,
+                   DATA_GENERATION_FINAL_HOUR]).
     """
 
     start: Annotated[int, Field(ge=TIME_START_HOUR, le=TIME_END_HOUR)]
@@ -342,7 +349,8 @@ class DataPatternsTemporalBurstinessConfig(BaseModel):
     Attributes:
         high (float): High burstiness value (> 0).
         low (float): Low burstiness value (> 0).
-        hours (DataPatternsTemporalBurstinessHoursConfig): Hours during which burstiness occurs.
+        hours (DataPatternsTemporalBurstinessHoursConfig): Hours during which burstiness
+                                                           occurs.
     """
 
     high: Annotated[float, Field(gt=0.0)]
@@ -366,7 +374,7 @@ class DataPatternsTemporalBurstinessConfig(BaseModel):
         assert_min_less_than_max(
             self.high,
             self.low,
-            values_context="data.pattern.temporal.burstiness",
+            values_context="data.synthetic.patterns.temporal.burstiness",
         )
 
         return self
@@ -449,11 +457,9 @@ class DataSyntheticConfig(BaseModel):
 
     Attributes:
         patterns (DataPatternsConfig): Access and temporal pattern configuration.
-        seed (int): Random seed for generation (>= 0).
     """
 
     patterns: DataPatternsConfig
-    seed: Annotated[int, Field(ge=0)]
 
 
 class DataConfig(BaseModel):
@@ -461,7 +467,8 @@ class DataConfig(BaseModel):
 
     Attributes:
         general (DataGeneralConfig): General data configuration settings.
-        synthetic (DataSyntheticConfig): Synthetic data generation settings and patterns.
+        synthetic (DataSyntheticConfig): Synthetic data generation settings
+                                         and patterns.
     """
 
     general: DataGeneralConfig

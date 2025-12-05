@@ -24,7 +24,8 @@ from components.logs.levels.error_logger import error
 
 
 def calculate_local_frequencies(
-    requests: list[int], seq_len: int
+    requests: list[int],
+    seq_len: int,
 ) -> np.ndarray:
     """Calculates the normalized local frequency for each
     request key.

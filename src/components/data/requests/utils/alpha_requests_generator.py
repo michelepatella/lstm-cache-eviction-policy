@@ -23,7 +23,7 @@ from typing import Any
 
 import numpy as np
 
-from components.const import LIST_LAST_IDX, LIST_FIRST_IDX
+from components.const import LIST_FIRST_IDX, LIST_LAST_IDX
 from components.data.patterns.core.generator import (
     generate_pattern_requests,
 )

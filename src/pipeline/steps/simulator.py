@@ -16,12 +16,10 @@ Functions:
 """
 
 import logging
-import os
 
 import dagshub
 import mlflow
 import numpy as np
-from dotenv import load_dotenv
 
 from components.caches.implementations.lfu_cache import LFUCache
 from components.caches.implementations.lru_cache import LRUCache
@@ -50,7 +48,7 @@ from components.evaluation.simulations.metrics.calculator import (
 from components.evaluation.simulations.metrics.io.saver import (
     save_simulations_metrics,
 )
-from components.logs.handlers.elastic_handler import ElasticHandler
+from components.logs.handlers.grafana_loki_handler import GrafanaLokiHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
 from components.visualization.hit_miss_rates_plotter import (
@@ -74,8 +72,8 @@ from pipeline.const import (
     CACHE_LRU_NAME,
     CACHE_RANDOM_NAME,
     DAGS_HUB_DVC,
-    DAGS_HUB_ENV_VAR_REPO_NAME,
-    DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
+    DAGS_HUB_REPO_NAME,
+    DAGS_HUB_REPO_OWNER,
     LOGS_PHASE_SIMULATIONS,
     PLOT_DYNAMIC_HIT_MISS_RATES_FILE_PATH,
     PLOT_REAL_HIT_MISS_RATES_FILE_PATH,
@@ -90,11 +88,6 @@ from pipeline.const import (
     SIMULATIONS_METRICS_HIT_RATE_NAME,
     SIMULATIONS_METRICS_MISS_RATE_NAME,
 )
-
-# Load env variables
-load_dotenv()
-dabs_hub_repo_owner = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME)
-dags_hub_repo_name = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME)
 
 
 def run_simulations() -> None:
@@ -112,8 +105,8 @@ def run_simulations() -> None:
     logs_phase.set(LOGS_PHASE_SIMULATIONS)
 
     dagshub.init(
-        repo_owner=dabs_hub_repo_owner,
-        repo_name=dags_hub_repo_name,
+        repo_owner=DAGS_HUB_REPO_OWNER,
+        repo_name=DAGS_HUB_REPO_NAME,
         dvc=DAGS_HUB_DVC,
     )
 
@@ -123,16 +116,18 @@ def run_simulations() -> None:
     ):
         # Setup
         config = prepare_config()
-        initialize_logs(logging.getLevelName(config.logs.level))
+        initialize_logs(
+            logging.getLevelName(config.logs.level), GrafanaLokiHandler()
+        )
 
         # Prepare configuration
         data_mode = config.data.general.mode
         mistake_window = (
             config.evaluation.simulations.metrics.mistake_rate.window
         )
-        testing_batch_size = config.testing.general.batch_size
-        testing_shuffle = config.testing.general.shuffle
-        cache_size = config.caches.dimension
+        testing_batch_size = config.data_loader.batch_size.testing
+        testing_shuffle = config.data_loader.shuffle.testing
+        cache_size = config.simulations.caches.dimension
 
         # Define cache eviction policies to simulate
         cache_eviction_policies = {
@@ -343,5 +338,5 @@ if __name__ == "__main__":
 
     # Force logs flush
     for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
-        if isinstance(handler, ElasticHandler):
+        if isinstance(handler, GrafanaLokiHandler):
             handler.flush_buffer_sync()

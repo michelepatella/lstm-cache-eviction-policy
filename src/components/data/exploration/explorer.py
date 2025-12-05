@@ -4,7 +4,8 @@ Module dedicated to the visual exploration of the raw dataset's characteristics.
 
 This module acts as a dispatcher, selecting the appropriate file paths based on
 the data generation mode (static, dynamic, or real) and invoking specialized
-plotting functions to analyze and visualize the dataset's properties.
+plotting functions to analyze and visualize the dataset's properties. These
+functions are invoked remotely leveraging the Ray framework.
 
 Functions:
     explore_data(
@@ -20,26 +21,26 @@ Functions:
 import numpy as np
 
 from components.logs.levels.debug_logger import debug
-from components.visualization.daily_profile_plotter import plot_daily_profile
-from components.visualization.key_usage_heatmap_plotter import (
-    plot_key_usage_heatmap,
+from components.ray.tasks.data.explorer import (
+    plot_daily_profile_task,
+    plot_key_usage_heatmap_task,
+    plot_zipf_loglog_task,
 )
-from components.visualization.zipf_loglog_plotter import plot_zipf_loglog
 from const import (
-    DATA_STATIC_MODE,
     DATA_DYNAMIC_MODE,
     DATA_REAL_MODE,
+    DATA_STATIC_MODE,
 )
 from pipeline.const import (
-    PLOT_STATIC_ZIPF_LOG_LOG_FILE_PATH,
-    PLOT_STATIC_DAILY_PROFILE_FILE_PATH,
-    PLOT_STATIC_KEY_USAGE_HEATMAP_FILE_PATH,
-    PLOT_DYNAMIC_ZIPF_LOG_LOG_FILE_PATH,
     PLOT_DYNAMIC_DAILY_PROFILE_FILE_PATH,
     PLOT_DYNAMIC_KEY_USAGE_HEATMAP_FILE_PATH,
-    PLOT_REAL_ZIPF_LOG_LOG_FILE_PATH,
+    PLOT_DYNAMIC_ZIPF_LOG_LOG_FILE_PATH,
     PLOT_REAL_DAILY_PROFILE_FILE_PATH,
     PLOT_REAL_KEY_USAGE_HEATMAP_FILE_PATH,
+    PLOT_REAL_ZIPF_LOG_LOG_FILE_PATH,
+    PLOT_STATIC_DAILY_PROFILE_FILE_PATH,
+    PLOT_STATIC_KEY_USAGE_HEATMAP_FILE_PATH,
+    PLOT_STATIC_ZIPF_LOG_LOG_FILE_PATH,
 )
 
 
@@ -73,10 +74,10 @@ def explore_data(
     debug(
         "Data exploration completed",
         extra={
-            "num_timestamps": len(timestamps_hours),
-            "num_requests": len(requests),
-            "min_key": min_key,
-            "max_key": max_key,
+            "timestamps_num": len(timestamps_hours),
+            "requests_num": len(requests),
+            "key_min": min_key,
+            "key_max": max_key,
             "data_mode": data_mode,
             "context": "Data exploration",
         },
@@ -107,13 +108,17 @@ def explore_data(
     ) = SAVE_PATHS.get(data_mode)
 
     # Explore data through plots and save them
-    plot_zipf_loglog(requests, zipf_log_log_plot_save_path)
-    plot_daily_profile(timestamps_hours, daily_profile_plot_save_path)
-    plot_key_usage_heatmap(
-        min_key,
-        max_key,
+    # via remote tasks through Ray
+    plot_zipf_loglog_task.remote(requests, zipf_log_log_plot_save_path)
+    plot_daily_profile_task.remote(
+        timestamps_hours,
+        daily_profile_plot_save_path,
+    )
+    plot_key_usage_heatmap_task.remote(
         requests,
         timestamps_hours,
+        min_key,
+        max_key,
         key_usage_heatmap_plot_save_path,
     )
 

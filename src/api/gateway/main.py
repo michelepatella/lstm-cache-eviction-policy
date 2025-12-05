@@ -23,7 +23,7 @@ from api.gateway.callers.scorer_service_caller import (
 from components.caches.implementations.items.evictions.score_based_evictor import (
     evict_score_based_items,
 )
-from components.logs.handlers.elastic_handler import ElasticHandler
+from components.logs.handlers.grafana_loki_handler import GrafanaLokiHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
@@ -37,7 +37,9 @@ app = FastAPI()
 api_config_file = load_yaml(API_CONFIG_FILE_PATH)
 api_config = APIConfig(**api_config_file)
 
-initialize_logs(logging.getLevelName(api_config.logs.level))
+initialize_logs(
+    logging.getLevelName(api_config.logs.level), GrafanaLokiHandler()
+)
 logs_phase.set(LOGS_PHASE_API)
 
 
@@ -144,7 +146,7 @@ def gateway_api(
 
         # Async flush logs
         for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
-            if isinstance(handler, ElasticHandler):
+            if isinstance(handler, GrafanaLokiHandler):
                 handler.flush_buffer_async()
 
         return response

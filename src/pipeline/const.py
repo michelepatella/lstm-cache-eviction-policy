@@ -8,7 +8,12 @@ names of cache policies, logging phases, and specific simulation
 metrics used throughout the project.
 """
 
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
@@ -33,12 +38,16 @@ CONFIG_FILE_PATH = PROJECT_ROOT / "src" / "pipeline" / "config" / "config.yaml"
 DAGS_HUB_DVC = True
 DAGS_HUB_ENV_VAR_REPO_NAME = "DAGS_HUB_REPO"
 DAGS_HUB_ENV_VAR_REPO_OWNER_NAME = "DAGS_HUB_REPO_OWNER"
+DAGS_HUB_REPO_OWNER = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME, "")
+DAGS_HUB_REPO_NAME = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME, "")
 
 
 # ----------------------------
 # Dataset
 # ----------------------------
 DATASET_PROCESSED_TYPE = "processed"
+
+DATASET_RESET_INDEX_DROP = True
 
 
 # ----------------------------

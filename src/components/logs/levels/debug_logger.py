@@ -4,12 +4,11 @@ Debug-level logging utility.
 
 This module provides a convenience function `debug` for logging
 messages at the debug level. It integrates with the application's
-structured logging system, allowing contextual information
-via log phases and optional extra fields.
+structured logging system, allowing optional extra fields.
 
 Functions:
     debug(
-        msg: str, log_phase: str = LOGS_FIELD_PHASE_DEFAULT,
+        msg: str,
         extra: dict[str, Any] | None = None,
     ) -> None
         Logs a message at debug level with optional context.
@@ -18,13 +17,11 @@ Functions:
 import logging
 from typing import Any
 
-from components.const import LOGS_FIELD_PHASE_DEFAULT
 from components.logs.levels.utils.logger import log
 
 
 def debug(
     msg: str,
-    log_phase: str = LOGS_FIELD_PHASE_DEFAULT,
     extra: dict[str, Any] | None = None,
 ) -> None:
     """Log a debug-level message.
@@ -34,10 +31,9 @@ def debug(
 
     Args:
         msg (str): The message to log.
-        log_phase (str): Current log phase.
         extra (dict[str, Any] | None): Optional additional context.
 
     Returns:
         None
     """
-    log(logging.DEBUG, msg, log_phase, extra)
+    log(logging.DEBUG, msg, extra)

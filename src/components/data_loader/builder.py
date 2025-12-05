@@ -8,15 +8,16 @@ allowing configuration of batch size and shuffling.
 
 Functions:
     build_data_loader(
-        dataset: AccessLogsDataset | Subset,
+        dataset: AccessLogsDataset | Subset | Dataset,
         batch_size: int,
-        shuffle: bool
+        shuffle: bool = False,
+        sampler: Sampler = None
     ) -> DataLoader
         Builds a DataLoader for the provided dataset with specified
         batch size and shuffle options.
 """
 
-from torch.utils.data import DataLoader, Subset
+from torch.utils.data import DataLoader, Dataset, Sampler, Subset
 
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.debug_logger import debug
@@ -24,9 +25,10 @@ from components.logs.levels.error_logger import error
 
 
 def build_data_loader(
-    dataset: AccessLogsDataset | Subset,
+    dataset: AccessLogsDataset | Subset | Dataset,
     batch_size: int,
-    shuffle: bool,
+    shuffle: bool = False,
+    sampler: Sampler = None,
 ) -> DataLoader:
     """Create a data loader for the given dataset.
 
@@ -34,10 +36,11 @@ def build_data_loader(
     applying specified settings including batch size and shuffling.
 
     Args:
-        dataset (AccessLogsDataset | Subset):
+        dataset (AccessLogsDataset | Subset | Dataset):
             The dataset instance to create the data loader for.
         batch_size (int): The batch size to use for the data loader.
         shuffle (bool): Whether to shuffle the data loader.
+        sampler (Sampler): The sampler to use for the data loader.
 
     Returns:
         DataLoader: The data loader built.
@@ -68,6 +71,7 @@ def build_data_loader(
             dataset,
             batch_size=batch_size,
             shuffle=shuffle,
+            sampler=sampler,
         )
 
         debug(

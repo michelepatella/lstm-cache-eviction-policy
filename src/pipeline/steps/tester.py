@@ -15,18 +15,16 @@ Functions:
 """
 
 import logging
-import os
 
 import dagshub
 import mlflow
 import numpy as np
 from box import Box
-from dotenv import load_dotenv
 
 from components.data_loader.initializer import initialize_data_loader
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.evaluation.model.evaluator import evaluate_model
-from components.logs.handlers.elastic_handler import ElasticHandler
+from components.logs.handlers.grafana_loki_handler import GrafanaLokiHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
 from components.model.best.initializer import (
@@ -42,19 +40,14 @@ from const import (
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
     DAGS_HUB_DVC,
-    DAGS_HUB_ENV_VAR_REPO_NAME,
-    DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
+    DAGS_HUB_REPO_NAME,
+    DAGS_HUB_REPO_OWNER,
     LOGS_PHASE_TESTING,
     MODEL_COMPUTE_METRICS_TESTING,
     RESULTS_DYNAMIC_MODEL_FILE_PATH,
     RESULTS_REAL_MODEL_FILE_PATH,
     RESULTS_STATIC_MODEL_FILE_PATH,
 )
-
-# Load env variables
-load_dotenv()
-dabs_hub_repo_owner = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME)
-dags_hub_repo_name = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME)
 
 
 def test_model() -> None:
@@ -70,8 +63,8 @@ def test_model() -> None:
     logs_phase.set(LOGS_PHASE_TESTING)
 
     dagshub.init(
-        repo_owner=dabs_hub_repo_owner,
-        repo_name=dags_hub_repo_name,
+        repo_owner=DAGS_HUB_REPO_OWNER,
+        repo_name=DAGS_HUB_REPO_NAME,
         dvc=DAGS_HUB_DVC,
     )
 
@@ -81,14 +74,20 @@ def test_model() -> None:
     ):
         # Setup
         config = prepare_config()
-        initialize_logs(logging.getLevelName(config.logs.level))
+        initialize_logs(
+            logging.getLevelName(config.logs.level), GrafanaLokiHandler()
+        )
 
         # Prepare configuration
         data_mode = config.data.general.mode
-        testing_batch_size = config.testing.general.batch_size
-        testing_shuffle = config.testing.general.shuffle
-        testing_device = config.testing.device.type
+        testing_batch_size = config.data_loader.batch_size.testing
+        testing_shuffle = config.data_loader.shuffle.testing
+        testing_device = config.resources.devices.testing
         qengine = config.model.optimizations.quantization.engine
+        num_workers = max(
+            config.resources.general.num_cpus,
+            config.resources.general.num_gpus,
+        )
 
         info(
             "Testing started",
@@ -96,6 +95,7 @@ def test_model() -> None:
                 "data_mode": data_mode,
                 "testing_batch_size": testing_batch_size,
                 "testing_shuffle": testing_shuffle,
+                "workers_num": num_workers,
                 "context": "Testing",
             },
         )
@@ -138,7 +138,8 @@ def test_model() -> None:
             testing_loader,
             criterion,
             device,
-            model_results_save_path,
+            num_workers,
+            model_results_save_path=model_results_save_path,
             compute_metrics=MODEL_COMPUTE_METRICS_TESTING,
         )
 
@@ -184,5 +185,5 @@ if __name__ == "__main__":
 
     # Force logs flush
     for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
-        if isinstance(handler, ElasticHandler):
+        if isinstance(handler, GrafanaLokiHandler):
             handler.flush_buffer_sync()

@@ -11,15 +11,14 @@ Functions:
 """
 
 import logging
-import os
 from collections import Counter
 
 import dagshub
 import mlflow
 import numpy as np
 import pandas as pd
-from dotenv import load_dotenv
 
+from components.data.exploration.explorer import explore_data
 from components.data.requests.core.dynamic_generator import (
     generate_dynamic_requests,
 )
@@ -27,13 +26,13 @@ from components.data.requests.core.static_generator import (
     generate_static_requests,
 )
 from components.dataset.builder import build_dataset
-from components.data.exploration.explorer import explore_data
 from components.dataset.io.loader import load_dataset
 from components.dataset.io.locator import get_dataset_abs_path
 from components.dataset.io.saver import save_dataset
-from components.logs.handlers.elastic_handler import ElasticHandler
+from components.logs.handlers.grafana_loki_handler import GrafanaLokiHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
+from components.ray.initializer import initialize_ray
 from const import (
     DATA_REAL_MODE,
     DATA_STATIC_MODE,
@@ -46,15 +45,10 @@ from const import (
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
     DAGS_HUB_DVC,
-    DAGS_HUB_ENV_VAR_REPO_NAME,
-    DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
+    DAGS_HUB_REPO_NAME,
+    DAGS_HUB_REPO_OWNER,
     LOGS_PHASE_DATA_PREPARATION,
 )
-
-# Load env variables
-load_dotenv()
-dabs_hub_repo_owner = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME)
-dags_hub_repo_name = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME)
 
 
 def prepare_data() -> None:
@@ -74,8 +68,8 @@ def prepare_data() -> None:
     logs_phase.set(LOGS_PHASE_DATA_PREPARATION)
 
     dagshub.init(
-        repo_owner=dabs_hub_repo_owner,
-        repo_name=dags_hub_repo_name,
+        repo_owner=DAGS_HUB_REPO_OWNER,
+        repo_name=DAGS_HUB_REPO_NAME,
         mlflow=DAGS_HUB_DVC,
     )
 
@@ -85,7 +79,13 @@ def prepare_data() -> None:
     ):
         # Setup
         config = prepare_config()
-        initialize_logs(logging.getLevelName(config.logs.level))
+        initialize_logs(
+            logging.getLevelName(config.logs.level), GrafanaLokiHandler()
+        )
+        initialize_ray(
+            config.resources.general.num_cpus,
+            config.resources.general.num_gpus,
+        )
 
         # Prepare configuration
         data_mode = config.data.general.mode
@@ -148,7 +148,11 @@ def prepare_data() -> None:
             daily_profile_plot_save_path,
             key_usage_heatmap_plot_save_path,
         ) = explore_data(
-            timestamps_hours, requests, min_key, max_key, data_mode
+            timestamps_hours,
+            requests,
+            min_key,
+            max_key,
+            data_mode,
         )
 
         # Experiment tracking
@@ -215,5 +219,5 @@ if __name__ == "__main__":
 
     # Force logs flush
     for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
-        if isinstance(handler, ElasticHandler):
+        if isinstance(handler, GrafanaLokiHandler):
             handler.flush_buffer_sync()
