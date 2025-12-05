@@ -18,14 +18,12 @@ from typing import Any
 
 import pandas as pd
 import requests
-from box import Box
 
 from components.caches.implementations.utils.base_cache import BaseCache
 from components.caches.utils.cache_metrics_logger import (
     CacheMetricsLogger,
 )
 from components.const import (
-    API_ENDPOINT_FULL_URL,
     API_PARAM_KEYS_IN_CACHE_NAME,
     API_PARAM_LAST_ACCESSES_NAME,
     API_PARAM_USER_API_KWARGS_NAME,
@@ -36,6 +34,7 @@ from components.dataset.rows.extractions.lasts_extractor import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
+from const import GATEWAY_API_FULL_URL
 from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
@@ -77,7 +76,7 @@ class LSTMCache(BaseCache):
         super().__init__(cache_class, metrics_logger, pipeline_config)
 
         # Set API endpoint and kwargs to use
-        self.api_endpoint = API_ENDPOINT_FULL_URL
+        self.api_endpoint = GATEWAY_API_FULL_URL
         self.api_kwargs = pipeline_config.simulations.api_kwargs
 
         debug(
@@ -221,10 +220,12 @@ class LSTMCache(BaseCache):
                 seq_len = pipeline_config.model.sequence.length
 
                 # Extract last accesses of
-                # sequence length
+                # sequence length * 2 (for each
+                # access a history of seq_len past accesses
+                # is needed for building features)
                 last_accesses = extract_last_rows_from_dataset(
                     current_idx,
-                    seq_len,
+                    seq_len + seq_len,
                     testing_set.data,
                 )
 
@@ -234,8 +235,8 @@ class LSTMCache(BaseCache):
                     # Eviction fallback policy: Random
                     key_to_evict = random.choice(list(self.store.keys()))
                 else:
-                    # Call API to get
-                    # the key to be evicted from the cache
+                    # Call API to get the key to be evicted
+                    # from the cache
                     response = requests.post(
                         self.api_endpoint,
                         json={
@@ -246,10 +247,8 @@ class LSTMCache(BaseCache):
                             API_PARAM_USER_API_KWARGS_NAME: self.api_kwargs.__dict__,
                         },
                     )
-                    data = Box(response.json())
-
-                    # Retrieve keys to evict
-                    key_to_evict = data.keys_to_evict[LIST_FIRST_IDX]
+                    keys_to_evict = response.json()
+                    key_to_evict = keys_to_evict[LIST_FIRST_IDX]
 
                 # Evict key
                 self.evict_key(key_to_evict)

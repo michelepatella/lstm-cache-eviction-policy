@@ -9,10 +9,33 @@ including data distribution modes, key dataset identifiers, logger phase
 names, and the set of available optimizers and devices.
 """
 
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+# ----------------------------
+# API
+# ----------------------------
+API_RESPONSE_FIELD_DATA_NAME = "data"
+API_RESPONSE_FIELD_DATA_KEYS_TO_EVICT_NAME = "keys_to_evict"
+
+
 # ----------------------------
 # Cache
 # ----------------------------
 CACHE_LSTM_NAME = "LSTM"
+
+
+# ----------------------------
+# Dagshub
+# ----------------------------
+DAGS_HUB_ENV_VAR_REPO_NAME = "DAGS_HUB_REPO"
+DAGS_HUB_ENV_VAR_REPO_OWNER_NAME = "DAGS_HUB_REPO_OWNER"
+DAGS_HUB_REPO_OWNER = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME, "")
+DAGS_HUB_REPO_NAME = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME, "")
 
 
 # ----------------------------
@@ -47,6 +70,17 @@ DATASET_TESTING_SPLIT_TYPE = "testing"
 
 
 # ----------------------------
+# Gateway API
+# ----------------------------
+GATEWAY_API_ENV_VAR_FULL_BASE_NAME = "GATEWAY_API_ENDPOINT_BASE_URL"
+GATEWAY_API_ENV_VAR_ENDPOINT_NAME = "GATEWAY_API_ENDPOINT"
+GATEWAY_API_ENDPOINT = os.getenv(GATEWAY_API_ENV_VAR_ENDPOINT_NAME, "")
+GATEWAY_API_FULL_URL = (
+    os.getenv(GATEWAY_API_ENV_VAR_FULL_BASE_NAME, "") + GATEWAY_API_ENDPOINT
+)
+
+
+# ----------------------------
 # Logs
 # ----------------------------
 LOGS_LOGGER_NAME = "logger"
@@ -58,6 +92,18 @@ LOGS_PHASE_VALIDATION = "validation"
 # MLFlow
 # ----------------------------
 MLFLOW_NESTED = True
+
+MLFLOW_ENV_VAR_MODEL_PRODUCTION_NAME = "MLFLOW_MODEL_PRODUCTION_NAME"
+MLFLOW_MODEL_PRODUCTION_NAME = os.getenv(
+    MLFLOW_ENV_VAR_MODEL_PRODUCTION_NAME,
+    "",
+)
+
+MLFLOW_ENV_VAR_MODEL_SIMULATION_NAME = "MLFLOW_MODEL_SIMULATION_NAME"
+MLFLOW_MODEL_SIMULATION_NAME = os.getenv(
+    MLFLOW_ENV_VAR_MODEL_SIMULATION_NAME,
+    "",
+)
 
 
 # ----------------------------

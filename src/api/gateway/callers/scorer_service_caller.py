@@ -1,113 +1,105 @@
+"""scorer_service_caller.py
+
+Module containing the logic to call the gRPC Scorer Service.
+
+This module is responsible for communicating with the Scorer Service.
+It handles the serialization of model output data (predictions and variances)
+into the gRPC format, manages the gRPC channel connection, executes the
+remote procedure call, and processes the response.
+
+Functions:
+    call_scorer_service(
+        outputs: list[list[float]],
+        variances: list[list[float]],
+        api_config: APIConfig,
+    ) -> np.array:
+        Initiates the gRPC call to the Scorer Service to calculate key scores.
+"""
+
+import grpc
 import numpy as np
-import requests
-import torch
-from box import Box
 from fastapi import HTTPException, status
 
+import api.services.scorer.scorer_service_pb2 as pb2
+import api.services.scorer.scorer_service_pb2_grpc as pb2_grpc
 from api.config.pydantic.api_config import APIConfig
-from api.const import (
-    SCORER_SERVICE_FULL_URL,
-    SCORER_SERVICE_PARAM_CONF_WEIGHT_NAME,
-    SCORER_SERVICE_PARAM_CONFIDENCE_LEVEL_NAME,
-    SCORER_SERVICE_PARAM_OUTPUTS_NAME,
-    SCORER_SERVICE_PARAM_PROB_WEIGHT_NAME,
-    SCORER_SERVICE_PARAM_VARIANCES_NAME,
-    SCORER_SERVICE_PARAMS,
-    SCORER_SERVICE_RETURN_CONF_MATRIX_NAME,
-    SCORER_SERVICE_RETURN_KEY_SCORES_NAME,
-    SCORER_SERVICE_RETURN_PROB_MATRIX_NAME,
-)
+from api.const import SCORER_SERVICE_CHANNEL
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
 def call_scorer_service(
-    outputs: list[torch.Tensor],
-    variances: list[torch.Tensor],
+    outputs: list[list[float]],
+    variances: list[list[float]],
     api_config: APIConfig,
-) -> tuple[list[float], np.ndarray, np.ndarray]:
-    """Call scorer service.
+) -> np.array:
+    """Initiates the gRPC call to the Scorer Service to calculate key scores.
 
-    This function sends predicted outputs and variances
-    to the scorer service, which calculates key scores
-    based on probabilities and prediction confidence. It
-    returns the key scores along with probability and
-    confidence matrices.
+    This function opens a channel to the Scorer Service, serializes the
+    model outputs, variances, and configuration parameters into the
+    appropriate gRPC request format, and calls the remote gRPC method.
 
     Args:
-        outputs (list[torch.Tensor]): Predicted outputs from the
-                                      predictor service.
-        variances (list[torch.Tensor]): Corresponding variances for
-                                        predicted outputs.
+        outputs (list[list[float]]): A list of model output sequences (logits)
+                                     to be evaluated.
+        variances (list[list[float]]): A list of variance sequences corresponding
+                                       to the model outputs.
         api_config (APIConfig): API configuration object.
 
     Returns:
-        tuple[list[float], np.ndarray, np.ndarray]:
-            - key_scores: Mapping from key index to normalized score.
-            - prob_matrix: Probability matrix used for scoring.
-            - conf_matrix: Confidence matrix used for scoring.
+        np.array: An array containing the calculated scores for each key.
 
     Raises:
-        HTTPException: If scorer service call fails:
-            * Network or connection issues (requests.RequestException).
-            * Response parsing fails (ValueError, KeyError).
-            * Returned data does not contain expected fields (KeyError).
+        HTTPException: If a gRPC communication error occurs, converted into a 500
+                       Internal Server Error.
     """
     try:
-        # Prepare parameters for scorer service
-        params = Box(SCORER_SERVICE_PARAMS)
-        params[SCORER_SERVICE_PARAM_OUTPUTS_NAME] = outputs
-        params[SCORER_SERVICE_PARAM_VARIANCES_NAME] = variances
-        params[SCORER_SERVICE_PARAM_CONFIDENCE_LEVEL_NAME] = (
-            api_config.kwargs.confidence_level.value
-        )
-        params[SCORER_SERVICE_PARAM_CONFIDENCE_LEVEL_NAME] = (
-            api_config.kwargs.confidence_level.value
-        )
-        params[SCORER_SERVICE_PARAM_PROB_WEIGHT_NAME] = (
-            api_config.kwargs.prob_weight.value
-        )
-        params[SCORER_SERVICE_PARAM_CONF_WEIGHT_NAME] = (
-            api_config.kwargs.conf_weight.value
-        )
+        with grpc.insecure_channel(SCORER_SERVICE_CHANNEL) as ch:
+            debug(
+                "Scorer service call started",
+                extra={
+                    "outputs_num": len(outputs),
+                    "variances_num": len(variances),
+                    "conf_level": api_config.kwargs.conf_level.value,
+                    "prob_weight": api_config.kwargs.prob_weight.value,
+                    "conf_weight": api_config.kwargs.conf_weight.value,
+                    "context": "Scorer service call",
+                },
+            )
 
-        debug(
-            "Scorer service call started",
-            extra={
-                "params": params.to_dict(),
-                "context": "Scorer service",
-            },
-        )
+            # Create stub, build request for the service,
+            # and call it retrieving the response
+            stub = pb2_grpc.ScorerServiceStub(ch)
+            request = pb2.ScorerServiceRequest(
+                outputs=list(outputs),
+                variances=list(variances),
+                conf_level=api_config.kwargs.conf_level.value,
+                prob_weight=api_config.kwargs.prob_weight.value,
+                conf_weight=api_config.kwargs.conf_weight.value,
+            )
+            response = stub.Score(request)
 
-        # Call scorer service and box the response
-        response = requests.post(
-            SCORER_SERVICE_FULL_URL,
-            json=params.to_dict(),
-        )
-        data = Box(response.json())
+            debug(
+                "Scorer service call completed",
+                extra={
+                    "key_scores_num": len(response.key_scores),
+                    "context": "Scorer service call",
+                },
+            )
 
-        # Extract service responses
-        key_scores = data.get(SCORER_SERVICE_RETURN_KEY_SCORES_NAME)
-        prob_matrix = data.get(SCORER_SERVICE_RETURN_PROB_MATRIX_NAME)
-        conf_matrix = data.get(SCORER_SERVICE_RETURN_CONF_MATRIX_NAME)
+            return np.array(response.key_scores)
 
-        debug(
-            "Scorer service call completed",
-            extra={
-                "key_scores_num": len(key_scores) if key_scores else 0,
-                "context": "Scorer service",
-            },
-        )
-
-        return key_scores, prob_matrix, conf_matrix
-    except (requests.RequestException, ValueError, KeyError) as e:
+    except grpc.RpcError as e:
         error(
             "Scorer service call failed",
             extra={
                 "exception": str(e),
                 "outputs_num": len(outputs),
                 "variances_num": len(variances),
-                "context": "Scorer service",
+                "conf_level": api_config.kwargs.conf_level.value,
+                "prob_weight": api_config.kwargs.prob_weight.value,
+                "conf_weight": api_config.kwargs.conf_weight.value,
+                "context": "Scorer service call",
             },
         )
         raise HTTPException(

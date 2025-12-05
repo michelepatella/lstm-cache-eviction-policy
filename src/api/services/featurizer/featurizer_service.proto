@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package featurizer_service;
+
+message FeaturizerServiceInput {
+    repeated double timestamps = 1;
+    repeated int32 keys = 2;
+}
+
+message FeaturizerServiceRequest {
+    repeated FeaturizerServiceInput last_accesses = 1;
+}
+
+message FeaturizerServiceResponse {
+    repeated float features = 1;
+    repeated int32 keys_seq = 2;
+    repeated int32 features_shape = 3;
+    repeated int32 keys_shape = 4;
+}
+
+service FeaturizerService {
+    rpc Build(FeaturizerServiceRequest) returns (FeaturizerServiceResponse);
+}

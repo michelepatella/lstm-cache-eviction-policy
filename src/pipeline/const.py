@@ -8,7 +8,6 @@ names of cache policies, logging phases, and specific simulation
 metrics used throughout the project.
 """
 
-import os
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -30,11 +29,6 @@ CACHE_RANDOM_NAME = "RANDOM"
 # Dagshub
 # ----------------------------
 DAGS_HUB_DVC = True
-
-DAGS_HUB_ENV_VAR_REPO_NAME = "DAGS_HUB_REPO"
-DAGS_HUB_ENV_VAR_REPO_OWNER_NAME = "DAGS_HUB_REPO_OWNER"
-DAGS_HUB_REPO_OWNER = os.getenv(DAGS_HUB_ENV_VAR_REPO_OWNER_NAME, "")
-DAGS_HUB_REPO_NAME = os.getenv(DAGS_HUB_ENV_VAR_REPO_NAME, "")
 
 
 # ----------------------------
@@ -69,6 +63,8 @@ LOSS_CLASS_WEIGHT_TYPES = [None, "balanced"]
 # MLFlow
 # ----------------------------
 MLFLOW_ARTIFACT_PATH = "model"
+
+MLFLOW_MODEL_TAG_DATA_MODE = "data_mode"
 
 
 # ----------------------------

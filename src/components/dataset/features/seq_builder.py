@@ -88,7 +88,7 @@ def build_feature_seq(
 
         # Compute local frequencies and recencies
         # for the keys
-        seq_len = len(keys)
+        seq_len = int(len(keys) // 2)
         local_frequencies = calculate_local_frequencies(keys.tolist(), seq_len)
         local_recencies = calculate_local_recencies(keys.tolist(), seq_len)
 

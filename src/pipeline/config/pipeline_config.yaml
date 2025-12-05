@@ -4,7 +4,7 @@ data:
     keys:
       min: 1
       max: 200
-    mode: static
+    mode: real
   synthetic:
     patterns:
       access:
@@ -141,9 +141,6 @@ simulations:
     mc_dropout_samples: 5
     num_evictions: 1
     prob_weight: 0.8
-    return_all_scores: false
-    return_api_kwargs: false
-    return_prob_conf: false
     rollout_horizon: 3
     time_step_increment: 0.02
   caches:

@@ -30,11 +30,10 @@ from components.model.best.initializer import (
     initialize_best_model,
 )
 from components.seed.setter import set_seed
+from const import DAGS_HUB_REPO_NAME, DAGS_HUB_REPO_OWNER
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     DAGS_HUB_DVC,
-    DAGS_HUB_REPO_NAME,
-    DAGS_HUB_REPO_OWNER,
     DATASET_PROCESSED_TYPE,
     LOGS_PHASE_TESTING,
     MODEL_COMPUTE_METRICS_TESTING,

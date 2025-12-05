@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package predictor_service;
+
+message PredictorServiceRequest {
+    repeated float features = 1;
+    repeated int32 keys_seq = 2;
+    repeated int32 features_shape = 3;
+    repeated int32 keys_shape = 4;
+    int32 rollout_horizon = 5;
+    int32 mc_dropout_samples = 6;
+    bool unbiased_variance = 7;
+    float time_step_increment = 8;
+}
+
+message FloatList {
+    repeated float values = 1;
+}
+
+message PredictorServiceResponse {
+    repeated FloatList outputs = 1;
+    repeated FloatList variances = 2;
+}
+
+service PredictorService {
+    rpc Predict(PredictorServiceRequest) returns (PredictorServiceResponse);
+}

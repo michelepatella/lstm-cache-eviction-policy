@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package scorer_service;
+
+message ScorerServiceRequest {
+    repeated float outputs = 1;
+    repeated float variances = 2;
+    float conf_level = 3;
+    float prob_weight = 4;
+    float conf_weight = 5;
+}
+
+message ScorerServiceResponse {
+    repeated float key_scores = 1;
+}
+
+service ScorerService {
+    rpc Score(ScorerServiceRequest) returns (ScorerServiceResponse);
+}

@@ -1,106 +1,123 @@
-import requests
-import torch
-from box import Box
+"""predictor_service_caller.py
+
+Module containing the logic to call the gRPC Predictor Service.
+
+This module is responsible for communicating with the Predictor Service.
+It handles the serialization of features, keys, and hyperparameters into the
+gRPC request format, manages the gRPC channel connection, executes the remote
+procedure call, and processes the output predictions and variances.
+
+Functions:
+    call_predictor_service(
+        features: list[float],
+        keys_seq: list[int],
+        features_shape: list[int],
+        keys_shape: list[int],
+        api_config: APIConfig,
+    ) -> tuple[list[list[float]], list[list[float]]]:
+        Initiates the gRPC call to the Predictor Service for model inference.
+"""
+
+import grpc
 from fastapi import HTTPException, status
 
+import api.services.predictor.predictor_service_pb2 as pb2
+import api.services.predictor.predictor_service_pb2_grpc as pb2_grpc
 from api.config.pydantic.api_config import APIConfig
-from api.const import (
-    PREDICTOR_SERVICE_FULL_URL,
-    PREDICTOR_SERVICE_PARAM_LAST_ACCESSES_NAME,
-    PREDICTOR_SERVICE_PARAM_MC_DROPOUT_SAMPLES_NAME,
-    PREDICTOR_SERVICE_PARAM_ROLLOUT_HORIZON_NAME,
-    PREDICTOR_SERVICE_PARAM_TIME_STEP_INCREMENT_NAME,
-    PREDICTOR_SERVICE_PARAM_UNBIASED_VARIANCE_NAME,
-    PREDICTOR_SERVICE_PARAMS,
-    PREDICTOR_SERVICE_RETURN_OUTPUTS_NAME,
-    PREDICTOR_SERVICE_RETURN_VARIANCES_NAME,
-)
+from api.const import PREDICTOR_SERVICE_CHANNEL
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 
 
 def call_predictor_service(
-    last_accesses: list[tuple[float, int]],
+    features: list[float],
+    keys_seq: list[int],
+    features_shape: list[int],
+    keys_shape: list[int],
     api_config: APIConfig,
-) -> tuple[list[torch.Tensor], list[torch.Tensor]]:
-    """Call predictor service.
+) -> tuple[list[list[float]], list[list[float]]]:
+    """Initiates the gRPC call to the Predictor Service for model inference.
 
-    This function calls the predictor service to perform
-    autoregressive rollout and obtain predicted outputs
-    along with their variances.
+    This function opens a channel to the Predictor Service, serializes the
+    pre-processed feature and key data along with inference configuration,
+    and calls the remote gRPC prediction method.
 
     Args:
-        last_accesses (list[tuple[float, int]]): List of tuples
-                                                 representing the
-                                                 last access time
-                                                 and corresponding key.
+        features (list[float]): List of feature values.
+        keys_seq (list[int]): List of accessed keys in sequence.
+        features_shape (list[int]): Shape of the feature tensor.
+        keys_shape (list[int]): Shape of the keys sequence tensor.
         api_config (APIConfig): API configuration object.
 
     Returns:
-        tuple[list[torch.Tensor], list[torch.Tensor]]:
-            - outputs: Predicted outputs.
-            - variances: Variances corresponding to the
-                         predicted outputs.
+        tuple[list[list[float]], list[list[float]]]:
+            - outputs: List of lists containing the predicted values.
+            - variances: List of lists containing the associated variance values.
 
     Raises:
-        HTTPException: If predictor service call fails:
-            * Network or connection issues (requests.RequestException).
-            * Response parsing fails (ValueError, KeyError).
-            * Returned data does not contain expected fields (KeyError).
+        HTTPException: If a gRPC communication error occurs, converted into a 500
+                       Internal Server Error.
     """
     try:
-        # Prepare parameters for predictor service
-        params = Box(PREDICTOR_SERVICE_PARAMS)
-        params[PREDICTOR_SERVICE_PARAM_LAST_ACCESSES_NAME] = last_accesses
-        params[PREDICTOR_SERVICE_PARAM_ROLLOUT_HORIZON_NAME] = (
-            api_config.kwargs.rollout_horizon.value
-        )
-        params[PREDICTOR_SERVICE_PARAM_MC_DROPOUT_SAMPLES_NAME] = (
-            api_config.kwargs.mc_dropout_samples.value
-        )
-        params[PREDICTOR_SERVICE_PARAM_TIME_STEP_INCREMENT_NAME] = (
-            api_config.kwargs.time_step_increment.value
-        )
-        params[PREDICTOR_SERVICE_PARAM_UNBIASED_VARIANCE_NAME] = (
-            api_config.kwargs.unbiased_variance.value
-        )
+        with grpc.insecure_channel(PREDICTOR_SERVICE_CHANNEL) as channel:
+            debug(
+                "Predictor service call started",
+                extra={
+                    "features_len": len(features),
+                    "keys_seq_len": len(keys_seq),
+                    "features_shape": features_shape,
+                    "keys_shape": keys_shape,
+                    "rollout_horizon": api_config.kwargs.rollout_horizon.value,
+                    "mc_dropout_samples": api_config.kwargs.mc_dropout_samples.value,
+                    "unbiased_variance": api_config.kwargs.unbiased_variance.value,
+                    "time_step_increment": api_config.kwargs.time_step_increment.value,
+                    "context": "Predictor service call",
+                },
+            )
 
-        debug(
-            "Predictor service call started",
-            extra={
-                "params": params.to_dict(),
-                "context": "Predictor service",
-            },
-        )
+            # Create stub, build request for the service,
+            # and call it retrieving the response
+            stub = pb2_grpc.PredictorServiceStub(channel)
+            request = pb2.PredictorServiceRequest(
+                features=features,
+                keys_seq=keys_seq,
+                features_shape=features_shape,
+                keys_shape=keys_shape,
+                rollout_horizon=api_config.kwargs.rollout_horizon.value,
+                mc_dropout_samples=api_config.kwargs.mc_dropout_samples.value,
+                unbiased_variance=api_config.kwargs.unbiased_variance.value,
+                time_step_increment=api_config.kwargs.time_step_increment.value,
+            )
+            response = stub.Predict(request)
 
-        # Call predictor service and box the response
-        response = requests.post(
-            PREDICTOR_SERVICE_FULL_URL,
-            json=params.to_dict(),
-        )
-        data = Box(response.json())
+            # Prepare outputs to return
+            outputs = [fl.values for fl in response.outputs]
+            variances = [fl.values for fl in response.variances]
 
-        # Extract service responses
-        outputs = data.get(PREDICTOR_SERVICE_RETURN_OUTPUTS_NAME)
-        variances = data.get(PREDICTOR_SERVICE_RETURN_VARIANCES_NAME)
+            debug(
+                "Predictor service call completed",
+                extra={
+                    "outputs_num": len(outputs),
+                    "variances_num": len(variances),
+                    "context": "Predictor service call",
+                },
+            )
 
-        debug(
-            "Predictor service call completed",
-            extra={
-                "outputs_num": len(outputs) if outputs else 0,
-                "variances_num": len(variances) if variances else 0,
-                "context": "Predictor service",
-            },
-        )
-
-        return outputs, variances
-    except (requests.RequestException, ValueError, KeyError) as e:
+            return outputs, variances
+    except grpc.RpcError as e:
         error(
             "Predictor service call failed",
             extra={
                 "exception": str(e),
-                "last_accesses_num": len(last_accesses),
-                "context": "Predictor service",
+                "features_len": len(features),
+                "keys_seq_len": len(keys_seq),
+                "features_shape": features_shape,
+                "keys_shape": keys_shape,
+                "rollout_horizon": api_config.kwargs.rollout_horizon.value,
+                "mc_dropout_samples": api_config.kwargs.mc_dropout_samples.value,
+                "unbiased_variance": api_config.kwargs.unbiased_variance.value,
+                "time_step_increment": api_config.kwargs.time_step_increment.value,
+                "context": "Predictor service call",
             },
         )
         raise HTTPException(
