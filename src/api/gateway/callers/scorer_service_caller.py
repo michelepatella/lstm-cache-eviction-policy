@@ -60,6 +60,9 @@ def call_scorer_service(
                 extra={
                     "outputs_num": len(outputs),
                     "variances_num": len(variances),
+                    "conf_level": api_config.kwargs.conf_level.value,
+                    "prob_weight": api_config.kwargs.prob_weight.value,
+                    "conf_weight": api_config.kwargs.conf_weight.value,
                     "context": "Scorer service call",
                 },
             )
@@ -93,6 +96,9 @@ def call_scorer_service(
                 "exception": str(e),
                 "outputs_num": len(outputs),
                 "variances_num": len(variances),
+                "conf_level": api_config.kwargs.conf_level.value,
+                "prob_weight": api_config.kwargs.prob_weight.value,
+                "conf_weight": api_config.kwargs.conf_weight.value,
                 "context": "Scorer service call",
             },
         )
