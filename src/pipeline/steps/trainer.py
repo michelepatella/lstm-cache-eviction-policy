@@ -1,3 +1,20 @@
+"""trainer.py
+
+Pipeline step module responsible for setting up the environment, executing
+the training process, and saving the resulting best model.
+
+This module provides the `train_model` function, which orchestrates the
+initialization of the model, optimizer, data loaders, and the training
+loop over multiple epochs. It handles the splitting of the training set
+into training and validation sets, applies optimizations (pruning and
+quantization), and saves the final trained model.
+
+Functions:
+    train_model() -> None
+        Executes the full model training and optimization workflow,
+        saving the final, optimized model.
+"""
+
 import logging
 import os
 import tempfile
@@ -23,19 +40,21 @@ from components.model.environment.initializer import (
 )
 from components.model.io.locator import get_model_abs_path
 from components.model.io.saver import save_model
+from components.model.optimizations.pruner import prune_model
+from components.model.optimizations.quantizer import quantize_model
 from components.optimizer.builder import build_optimizer
 from components.training.core.epochs_trainer import train_epochs
-from pipeline.config.configurator import prepare_config
-from pipeline.const import (
-    DAGS_HUB_ENV_VAR_REPO_NAME,
-    DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
-    DAGS_HUB_MLFLOW,
-    LOGS_PHASE_TRAINING,
-    MLFLOW_ARTIFACT_PATH,
-)
-from src.const import (
+from const import (
     DATASET_TRAINING_SPLIT_TYPE,
     MLFLOW_NESTED,
+)
+from pipeline.config.configurator import prepare_config
+from pipeline.const import (
+    DAGS_HUB_DVC,
+    DAGS_HUB_ENV_VAR_REPO_NAME,
+    DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
+    LOGS_PHASE_TRAINING,
+    MLFLOW_ARTIFACT_PATH,
 )
 
 # Load env variables
@@ -60,7 +79,7 @@ def train_model() -> None:
     dagshub.init(
         repo_owner=dabs_hub_repo_owner,
         repo_name=dags_hub_repo_name,
-        mlflow=DAGS_HUB_MLFLOW,
+        dvc=DAGS_HUB_DVC,
     )
 
     import mlflow
@@ -71,20 +90,24 @@ def train_model() -> None:
     ):
         # Setup
         config = prepare_config()
-        initialize_logs()
+        initialize_logs(logging.getLevelName(config.logs.level))
 
         # Prepare configuration
-        data_distribution_mode = config.data.mode
+        data_distribution_mode = config.data.general.mode
         training_batch_size = config.training.general.batch_size
         training_shuffle = config.training.general.shuffle
+        training_device = config.training.device.type
         validation_batch_size = config.validation.general.batch_size
         validation_shuffle = config.validation.general.shuffle
-        validation_split = config.dataset.split.validation
+        validation_split = config.dataset.splits.validation
         model_params = config.model.params
         training_num_epochs = config.training.general.epochs
-        optimizer_type = config.training.optimizer.type
-        learning_rate = config.training.optimizer.params.learning_rate
-        weight_decay = config.training.optimizer.params.weight_decay
+        optimizer_type = config.optimizer.type
+        learning_rate = config.optimizer.params.learning_rate
+        weight_decay = config.optimizer.params.weight_decay
+        pruning_amount = config.model.optimizations.pruning.amount
+        quantization_dtype = config.model.optimizations.quantization.dtype
+        quantization_engine = config.model.optimizations.quantization.engine
 
         info(
             "Training started",
@@ -141,6 +164,7 @@ def train_model() -> None:
         # Model setup for training
         device, criterion, model = initialize_model_environment(
             targets,
+            training_device,
             config,
             model_params=model_params,
         )
@@ -165,6 +189,11 @@ def train_model() -> None:
             logs_phase.get(),
             config,
         )
+
+        # Optimize trained model before saving
+        # it, applying pruning and quantization before
+        model = prune_model(model, pruning_amount)
+        model = quantize_model(model, quantization_dtype, quantization_engine)
 
         # Save the best model trained
         save_model(model, model_path)
@@ -212,4 +241,4 @@ if __name__ == "__main__":
     # Force logs flush
     for handler in logging.getLogger().handlers:
         if isinstance(handler, ElasticHandler):
-            handler.flush_buffer()
+            handler.flush_buffer_async()

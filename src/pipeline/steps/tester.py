@@ -1,3 +1,19 @@
+"""tester.py
+
+Pipeline step module responsible for the final evaluation of the
+trained model on the dedicated testing set.
+
+This module provides the `test_model` function, which orchestrates the
+loading of the best-trained model, initializes the testing data loader,
+runs the final evaluation, computes various performance metrics, and
+saves the results in a structured format.
+
+Functions:
+    test_model() -> None
+        Initializes the model, evaluates its final performance on the
+        testing dataset, and logs all results.
+"""
+
 import logging
 import os
 
@@ -15,20 +31,20 @@ from components.logs.levels.info_logger import info
 from components.model.best.initializer import (
     initialize_best_model,
 )
+from const import (
+    DATA_DISTRIBUTION_STATIC_MODE,
+    DATASET_TESTING_SPLIT_TYPE,
+    MLFLOW_NESTED,
+)
 from pipeline.config.configurator import prepare_config
 from pipeline.const import (
+    DAGS_HUB_DVC,
     DAGS_HUB_ENV_VAR_REPO_NAME,
     DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
-    DAGS_HUB_MLFLOW,
     LOGS_PHASE_TESTING,
     MODEL_COMPUTE_METRICS_TESTING,
     RESULTS_DYNAMIC_MODEL_FILE_PATH,
     RESULTS_STATIC_MODEL_FILE_PATH,
-)
-from src.const import (
-    DATA_DISTRIBUTION_STATIC_MODE,
-    DATASET_TESTING_SPLIT_TYPE,
-    MLFLOW_NESTED,
 )
 
 # Load env variables
@@ -52,7 +68,7 @@ def test_model() -> None:
     dagshub.init(
         repo_owner=dabs_hub_repo_owner,
         repo_name=dags_hub_repo_name,
-        mlflow=DAGS_HUB_MLFLOW,
+        dvc=DAGS_HUB_DVC,
     )
 
     import mlflow
@@ -63,13 +79,14 @@ def test_model() -> None:
     ):
         # Setup
         config = prepare_config()
-        initialize_logs()
+        initialize_logs(logging.getLevelName(config.logs.level))
 
         # Prepare configuration
-        data_distribution_mode = config.data.mode
+        data_distribution_mode = config.data.general.mode
         testing_batch_size = config.testing.general.batch_size
         testing_shuffle = config.testing.general.shuffle
-        top_k = config.testing.metrics.top_k
+        testing_device = config.testing.device.type
+        qengine = config.model.optimizations.quantization.engine
 
         info(
             "Testing started",
@@ -77,7 +94,6 @@ def test_model() -> None:
                 "data_distribution_mode": data_distribution_mode,
                 "testing_batch_size": testing_batch_size,
                 "testing_shuffle": testing_shuffle,
-                "top_k": top_k,
                 "context": "Testing",
             },
         )
@@ -94,8 +110,10 @@ def test_model() -> None:
         # Trained model setup for testing
         device, criterion, model = initialize_best_model(
             data_distribution_mode,
+            testing_device,
             config,
             testing_loader,
+            qengine=qengine,
         )
 
         # Prepare file name where to save model results
@@ -108,15 +126,14 @@ def test_model() -> None:
         (
             avg_loss,
             metrics,
-            all_outputs,
-            all_targets,
+            _,
+            _,
             _,
         ) = evaluate_model(
             model,
             testing_loader,
             criterion,
             device,
-            top_k,
             model_results_save_path,
             compute_metrics=MODEL_COMPUTE_METRICS_TESTING,
         )
@@ -139,7 +156,6 @@ def test_model() -> None:
                 "weighted_recall": metrics.class_report.weighted_avg.recall,
                 "weighted_f1": metrics.class_report.weighted_avg.f1_score,
                 "weighted_support": metrics.class_report.weighted_avg.support,
-                "top_k_accuracy": metrics.top_k_accuracy,
                 "cohen_kappa_score": metrics.cohen_kappa_score,
             },
         )
@@ -153,7 +169,6 @@ def test_model() -> None:
             if np.isinf(avg_loss) or np.isnan(avg_loss)
             else float(avg_loss),
             "accuracy": metrics.class_report.accuracy,
-            "top_k_accuracy": metrics.top_k_accuracy,
             "model_results_save_path": str(model_results_save_path),
             "context": "Testing",
         },
@@ -166,4 +181,4 @@ if __name__ == "__main__":
     # Force logs flush
     for handler in logging.getLogger().handlers:
         if isinstance(handler, ElasticHandler):
-            handler.flush_buffer()
+            handler.flush_buffer_async()

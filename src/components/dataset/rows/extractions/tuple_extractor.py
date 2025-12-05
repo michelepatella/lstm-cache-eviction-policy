@@ -1,12 +1,34 @@
+"""tuple_extractor.py
+
+Utility module for extracting features and target from a dataset row.
+
+This module provides the `extract_tuple_from_dataset_row` function, which
+extracts specified feature columns and a target column from a pandas Series
+representing a dataset row. The extracted values are returned as PyTorch
+tensors with specified data types.
+
+Functions:
+    extract_tuple_from_dataset_row(
+        row: pd.Series,
+        feature_columns: list[str] = [DATASET_COLUMN_COS_TIME_NAME,
+                                      DATASET_COLUMN_SIN_TIME_NAME],
+        target_column: str = DATASET_COLUMN_REQUEST_NAME,
+        feature_dtype: torch.dtype = TORCH_DTYPE,
+        target_dtype: torch.dtype = TORCH_DTYPE
+    ) -> tuple[torch.Tensor, torch.Tensor]
+        Extracts feature and target tensors from a dataset row.
+"""
+
 import pandas as pd
 import torch
 
 from components.const import (
     DATASET_COLUMN_COS_TIME_NAME,
     DATASET_COLUMN_SIN_TIME_NAME,
+    TORCH_DTYPE,
 )
 from components.logs.levels.error_logger import error
-from src.const import (
+from const import (
     DATASET_COLUMN_REQUEST_NAME,
 )
 
@@ -18,8 +40,8 @@ def extract_tuple_from_dataset_row(
         DATASET_COLUMN_SIN_TIME_NAME,
     ],
     target_column: str = DATASET_COLUMN_REQUEST_NAME,
-    feature_dtype: torch.dtype = torch.float,
-    target_dtype: torch.dtype = torch.long,
+    feature_dtype: torch.dtype = TORCH_DTYPE,
+    target_dtype: torch.dtype = TORCH_DTYPE,
 ) -> tuple[torch.Tensor, torch.Tensor]:
     """Extract a tuple from a dataset row.
 

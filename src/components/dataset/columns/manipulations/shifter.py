@@ -1,3 +1,20 @@
+"""shifter.py
+
+Utility module for shifting values of a column in a pandas DataFrame.
+
+This module provides the `shift_dataset_column` function, which adds a specified
+shift value to all entries of a given column in a DataFrame, modifying the
+dataset in-place.
+
+Functions:
+    shift_dataset_column(
+        df: pd.DataFrame,
+        column_name: str,
+        shift: float
+    ) -> None
+        Adds a shift to the specified column values in-place.
+"""
+
 import pandas as pd
 
 from components.logs.levels.error_logger import error

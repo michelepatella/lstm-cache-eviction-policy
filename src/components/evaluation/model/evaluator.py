@@ -1,3 +1,30 @@
+"""evaluator.py
+
+Utility module for evaluating PyTorch models.
+
+This module provides the `evaluate_model` function, which performs
+inference on a model over a given dataset, computes average loss,
+optionally calculates evaluation metrics, and can save the results.
+
+Functions:
+    evaluate_model(
+        model: torch.nn.Module,
+        data_loader: DataLoader,
+        criterion: torch.nn.Module,
+        device: torch.device,
+        model_results_save_path: str = None,
+        compute_metrics: bool = True
+    ) -> tuple[
+        float,
+        dict[str, int | float] | None,
+        list[Tensor],
+        list[int],
+        list[Tensor]
+    ]
+        Performs model evaluation, returning average loss, optional metrics,
+        model outputs, ground truth targets, and variances if applicable.
+"""
+
 import numpy as np
 import torch
 from torch import Tensor
@@ -19,7 +46,6 @@ def evaluate_model(
     data_loader: DataLoader,
     criterion: torch.nn.Module,
     device: torch.device,
-    top_k: int = None,
     model_results_save_path: str = None,
     compute_metrics: bool = MODEL_COMPUTE_METRICS_DEFAULT,
 ) -> tuple[
@@ -41,7 +67,6 @@ def evaluate_model(
         data_loader (DataLoader): DataLoader containing the evaluation dataset.
         criterion (torch.nn.Module): Loss function used for evaluation.
         device (torch.device): Device on which to perform computations.
-        top_k (int): Top-k for accuracy computation.
         model_results_save_path (str): Path to save metrics.
         compute_metrics (bool): Whether to compute evaluation metrics
                                 in addition to loss.
@@ -70,7 +95,6 @@ def evaluate_model(
         "Model evaluation started",
         extra={
             "device": str(device),
-            "top_k": top_k,
             "compute_metrics": compute_metrics,
             "model_type": type(model).__name__,
             "context": "Model evaluation",
@@ -109,7 +133,6 @@ def evaluate_model(
             all_targets,
             all_predictions,
             all_outputs,
-            top_k,
         )
 
         # Save metrics if requested (i.e., if the

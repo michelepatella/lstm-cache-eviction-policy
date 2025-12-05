@@ -1,3 +1,18 @@
+"""mover.py
+
+Utility module for moving PyTorch models or tensors to a specific device.
+
+This module provides the `move_to_device` function to transfer a PyTorch
+model (`torch.nn.Module`) or tensor (`torch.Tensor`) to a given device.
+
+Functions:
+    move_to_device(
+        obj: torch.nn.Module | torch.Tensor,
+        device: torch.device
+    ) -> torch.nn.Module | torch.Tensor
+        Move a PyTorch model or tensor to the specified device.
+"""
+
 import torch
 
 from components.logs.levels.error_logger import error

@@ -1,3 +1,21 @@
+"""confidence_interval_calculator.py
+
+Utility module for computing confidence intervals.
+
+This module provides the `calculate_confidence_interval` function,
+which calculates the lower and upper bounds of a confidence interval
+for a set of model outputs given their variances and a specified
+confidence level.
+
+Functions:
+    calculate_confidence_interval(
+        outputs: list[list[float]],
+        variances: list[list[float]],
+        confidence_level: float
+    ) -> tuple[torch.Tensor, torch.Tensor]
+        Computes the lower and upper boundaries of the confidence interval.
+"""
+
 import torch
 from scipy.stats import norm
 

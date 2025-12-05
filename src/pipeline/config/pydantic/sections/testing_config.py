@@ -1,4 +1,54 @@
-from pydantic import BaseModel, conint
+"""testing_config.py
+
+Configuration section for defining the testing environment and procedures.
+
+This module structures parameters related to running the model evaluation
+on the testing dataset, including hardware selection and general test
+parameters.
+
+Classes:
+    TestingDeviceConfig: Configuration for the hardware device used
+                         during testing.
+    TestingGeneralConfig: General configuration parameters for the test run.
+    TestingConfig: Aggregates all testing configuration settings.
+"""
+
+from pydantic import BaseModel, conint, model_validator
+
+from components.assertions.choice_field_assertor import assert_choice_field
+from const import HW_DEVICE_NAMES
+
+
+class TestingDeviceConfig(BaseModel):
+    """Device configuration for testing.
+
+    Attributes:
+        type (str): The device type to use.
+    """
+
+    type: str
+
+    @model_validator(mode="after")
+    def check_testing_device_type(
+        self: "TestingDeviceConfig",
+    ) -> "TestingDeviceConfig":
+        """Check whether testing device type is valid or not.
+
+        This function validates the testing device type.
+
+        Args:
+            self (TestingDeviceConfig): Current model instance.
+
+        Returns:
+            "TestingDeviceConfig": Validated model instance.
+        """
+        assert_choice_field(
+            self.type,
+            HW_DEVICE_NAMES,
+            "testing.device.type",
+        )
+
+        return self
 
 
 class TestingGeneralConfig(BaseModel):
@@ -13,23 +63,13 @@ class TestingGeneralConfig(BaseModel):
     shuffle: bool
 
 
-class TestingMetricsConfig(BaseModel):
-    """Metrics configuration for testing.
-
-    Attributes:
-        top_k (int): Number of top predictions to consider for evaluation (> 0).
-    """
-
-    top_k: conint(gt=0)
-
-
 class TestingConfig(BaseModel):
     """Testing configuration.
 
     Attributes:
+        device (TestingDeviceConfig): Device configuration for testing.
         general (TestingGeneralConfig): General testing configuration.
-        metrics (TestingMetricsConfig): Testing metrics configuration.
     """
 
+    device: TestingDeviceConfig
     general: TestingGeneralConfig
-    metrics: TestingMetricsConfig

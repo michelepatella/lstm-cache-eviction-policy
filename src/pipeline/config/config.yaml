@@ -1,152 +1,166 @@
+api_kwargs:
+  conf_weight: 0.2
+  confidence_level: 0.95
+  excluded_keys: []
+  mc_dropout_samples: 25
+  num_evictions: 1
+  prob_weight: 0.8
+  return_all_scores: true
+  return_api_kwargs: false
+  return_prob_conf: false
+  rollout_horizon: 5
+  time_step_increment: 0.02
+caches:
+  dimension: 40
+  ttl: 1500
 data:
-  keys:
-    max: 200
-    min: 1
-  mode: static
-  pattern:
+  general:
+    seed: 42
+    mode: static
+    requests: 200
+    keys:
+      min: 1
+      max: 200
+  patterns:
     access:
-      behavior:
-        cycle:
-          base: 5
-          divisor: 100
-          hours:
-            end: 19
-            start: 14
-          mod: 2
-        distortion:
-          hours:
-            end: 23
-            start: 19
-          interval: 4
-          noise:
-            max: 1
-            min: 0
-          offsets:
-            correction: 1
-            history: 2
-        memory:
-          interval: 5
-          offset: 3
-        repetition:
-          hours:
-            end: 9
-            start: 4
-          interval: 7
-          offset: 3
-        toggle:
-          base_requests:
-            first: 1
-            second: 2
-          hours:
-            end: 14
-            start: 9
-          interval: 20
-          offsets:
-            backward: 2
-            forward: 1
       zipf:
         alpha:
           fixed: 1.2
-          max: 1.5
           min: 0.5
+          max: 1.5
         steps: 5
+      behavior:
+        repetition:
+          interval: 7
+          offset: 3
+          hours:
+            start: 4
+            end: 9
+        toggle:
+          interval: 20
+          hours:
+            start: 9
+            end: 14
+          base_requests:
+            first: 1
+            second: 2
+          offsets:
+            forward: 1
+            backward: 2
+        cycle:
+          base: 5
+          mod: 2
+          divisor: 100
+          hours:
+            start: 14
+            end: 19
+        distortion:
+          interval: 4
+          hours:
+            start: 19
+            end: 23
+          offsets:
+            history: 2
+            correction: 1
+          noise:
+            min: 0
+            max: 1
+        memory:
+          interval: 5
+          offset: 3
     temporal:
       burstiness:
         high: 0.8
-        hours:
-          end: 18
-          start: 10
         low: 1.2
+        hours:
+          start: 10
+          end: 18
       periodic:
-        amplitude: 50
         scale: 90
-  requests: 200000
-  seed: 42
+        amplitude: 50
 dataset:
-  split:
+  cleaning:
+    missing_values_removal:
+      dropna:
+        how: any
+  splits:
     training: 0.8
     validation: 0.2
-hardware:
-  device:
-    type: mps
+evaluation:
+  simulations:
+    metrics:
+      mistake_rate:
+        window: 200
+logs:
+  level: DEBUG
+loss:
+  class_weight:
+    type: balanced
 model:
   params:
-    batch_first: true
-    bias: true
-    bidirectional: false
-    dropout: 0.3
-    hidden_size: 128
+    hidden_size: 256
     num_layers: 2
+    bias: false
+    batch_first: true
+    dropout: 0.1
+    bidirectional: false
     proj_size: 0
   sequence:
+    length: 25
     embedding:
       dimension: 32
-    length: 25
-  optimization:
+  optimizations:
     pruning:
       amount: 0.2
-simulations:
-  cache:
-    dimension: 40
-    ttl: 1500
-  metrics:
-    mistake_rate:
-      window: 200
-  api_kwargs:
-    rollout_horizon: 5
-    mc_dropout_samples: 25
-    confidence_level: 0.95
-    time_step_increment: 0.02
-    num_evictions: 1
-    excluded_keys: []
-    prob_weight: 0.8
-    conf_weight: 0.2
-    return_all_scores: false
-    return_prob_conf: false
-    return_api_kwargs: false
+    quantization:
+      dtype: qint8
+      engine: qnnpack
+optimizer:
+  params:
+    learning_rate: 0.0005
+    momentum: 0.9
+    weight_decay: 0.05
+  type: adamw
 testing:
+  device:
+    type: cpu
   general:
     batch_size: 128
     shuffle: false
-  metrics:
-    top_k: 3
 training:
-  early_stopping:
-    delta: 0.0001
-    patience: 10
+  device:
+    type: mps
   general:
-    batch_size: 128
     epochs: 500
+    batch_size: 128
     shuffle: true
-  optimizer:
-    params:
-      learning_rate: 0.0005
-      momentum: 0.9
-      weight_decay: 0.05
-    type: adamw
-validation:
-  cross_validation:
-    epochs: 5
-    folds: 5
   early_stopping:
-    delta: 0.0005
-    patience: 5
+    patience: 10
+    delta: 0.0001
+validation:
+  device:
+    type: mps
   general:
     batch_size: 128
     shuffle: false
+  time_series_cv:
+    folds: 5
+    epochs: 5
+  early_stopping:
+    patience: 5
+    delta: 0.0005
   search_space:
     model:
-      dropout:
-      - 0.1
-      - 0.3
       hidden_size:
       - 128
       - 256
       num_layers:
       - 2
       - 3
-    training:
-      optimizer:
-        learning_rate:
-        - 0.001
-        - 0.0005
+      dropout:
+      - 0.1
+      - 0.3
+    optimizer:
+      learning_rate:
+      - 0.001
+      - 0.0005

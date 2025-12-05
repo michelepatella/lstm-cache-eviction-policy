@@ -1,12 +1,40 @@
+"""single_batch_inferrer.py
+
+Utility module for performing inference on a single data batch.
+
+This module provides the `infer_single_batch` function, which processes
+a single batch of data, moves the tensors to a specified device, performs
+a forward pass through the model with MC Dropout, computes the batch loss,
+and returns predictions, targets, outputs, and optional variance tensors.
+
+Functions:
+    infer_single_batch(
+        batch: tuple[torch.Tensor, torch.Tensor, torch.Tensor],
+        model: torch.nn.Module,
+        criterion: torch.nn.Module,
+        device: torch.device,
+        target_idx: int = DATASET_COLUMNS.index(DATASET_COLUMN_REQUEST_NAME),
+    ) -> tuple[
+        float,
+        list[int],
+        list[int],
+        list[torch.Tensor],
+        list[torch.Tensor] | None
+    ]
+        Performs inference on a single batch and returns loss, predictions,
+        targets, outputs, and MC Dropout variances.
+"""
+
 import torch
 
 from components.backpropagation.mc_dropout.forward_runner import (
     compute_mc_dropout_forward,
 )
-from components.const import DATASET_COLUMN_TARGET_IDX, TENSOR_CLASS_DIM
+from components.const import DATASET_COLUMNS, TENSOR_TARGET_DIM
 from components.device.mover import move_to_device
 from components.logs.levels.error_logger import error
 from components.loss.calculator import calculate_loss
+from const import DATASET_COLUMN_REQUEST_NAME
 
 
 def infer_single_batch(
@@ -14,7 +42,7 @@ def infer_single_batch(
     model: torch.nn.Module,
     criterion: torch.nn.Module,
     device: torch.device,
-    target_idx: int = DATASET_COLUMN_TARGET_IDX,
+    target_idx: int = DATASET_COLUMNS.index(DATASET_COLUMN_REQUEST_NAME),
 ) -> tuple[
     float,
     list[int],
@@ -78,13 +106,14 @@ def infer_single_batch(
 
         # Extract target from batch
         target = batch[target_idx]
+        target = target.long()
 
         # Compute batch loss
         loss = calculate_loss(outputs_mean, target, criterion).item()
 
         # Prepare data to be returned
         predictions = (
-            torch.argmax(outputs_mean, dim=TENSOR_CLASS_DIM)
+            torch.argmax(outputs_mean, dim=TENSOR_TARGET_DIM)
             .cpu()
             .numpy()
             .tolist()

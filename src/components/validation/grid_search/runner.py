@@ -1,3 +1,23 @@
+"""runner.py
+
+Module for performing grid search over model hyperparameters.
+
+This module provides the `compute_grid_search` function, which evaluates
+different combinations of hyperparameters using time-series cross-validation
+on a training dataset. It tracks the performance of each combination and
+selects the one that achieves the lowest average loss.
+
+Functions:
+    compute_grid_search(
+        training_set: AccessLogsDataset,
+        params_combinations: list[dict[str, int | float | bool]],
+        config: Any
+    ) -> tuple[dict[str, int | float | bool], float]
+        Iterates over hyperparameter combinations, evaluates each using
+        time-series cross-validation, and returns the best parameters
+        with the corresponding average loss.
+"""
+
 from typing import Any
 
 import mlflow
@@ -14,7 +34,7 @@ from components.model.best.checks_updates.params_checker_updater import (
 from components.validation.time_series_cv.core.folds_runner import (
     compute_time_series_cv_folds,
 )
-from src.const import LOGS_PHASE_VALIDATION, MLFLOW_NESTED
+from const import LOGS_PHASE_VALIDATION, MLFLOW_NESTED
 
 
 def compute_grid_search(
@@ -57,7 +77,7 @@ def compute_grid_search(
     """
     try:
         # Prepare configuration
-        cv_num_folds = config.validation.cross_validation.folds
+        cv_num_folds = config.validation.time_series_cv.folds
 
         info(
             "Grid search started",
@@ -147,7 +167,7 @@ def compute_grid_search(
                     len(training_set) if training_set else None
                 ),
                 "folds_num": getattr(
-                    config.validation.cross_validation,
+                    config.validation.time_series_cv.folds,
                     "folds",
                     None,
                 ),

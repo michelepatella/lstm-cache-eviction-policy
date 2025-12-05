@@ -1,6 +1,19 @@
-import logging
+"""const.py
+
+Centralized module for defining project-wide constants, configuration
+settings, and magic strings.
+
+This module organizes all static values, file paths, default parameters,
+logging field names, and plot configurations used across various
+components of the project.
+"""
+
 from pathlib import Path
 from typing import Literal
+
+import torch
+
+from const import DATASET_COLUMN_REQUEST_NAME
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
@@ -20,12 +33,8 @@ API_PARAM_USER_API_KWARGS_NAME = "user_api_kwargs"
 # ----------------------------
 AUTOREGRESSIVE_ROLLOUT_LAST_TIME_IDX = -1
 AUTOREGRESSIVE_ROLLOUT_LAST_TIME_BATCH_IDX = 0
-
-
-# ----------------------------
-# Criterion
-# ----------------------------
-CRITERION_CLASS_WEIGHT_TYPE = "balanced"
+AUTOREGRESSIVE_ROLLOUT_TIME_ARRAY_IDX = 0
+AUTOREGRESSIVE_ROLLOUT_SEQUENCE_SHIFT_IDX = 1
 
 
 # ----------------------------
@@ -42,14 +51,10 @@ DATA_GENERATION_CURRENT_SECONDS_IN_DAY_START = 0.0
 DATASET_COLUMN_SIN_TIME_NAME = "sin_time"
 DATASET_COLUMN_COS_TIME_NAME = "cos_time"
 
-DATASET_COLUMN_SIN_TIME_IDX = 0
-DATASET_COLUMN_COS_TIME_IDX = 1
-DATASET_COLUMN_TARGET_IDX = -1
-
 DATASET_COLUMNS = [
     DATASET_COLUMN_SIN_TIME_NAME,
     DATASET_COLUMN_COS_TIME_NAME,
-    DATASET_COLUMN_TARGET_IDX,
+    DATASET_COLUMN_REQUEST_NAME,
 ]
 
 DATASET_FEATURE_COLUMNS = [
@@ -106,8 +111,6 @@ JSON_INDENT = 4
 # ----------------------------
 LOGS_LOGGER_NAME = "logger"
 
-LOGS_LEVEL_DEFAULT = logging.DEBUG
-
 LOGS_FIELD_STANDARD_NAMES = {
     "name",
     "msg",
@@ -141,17 +144,16 @@ LOGS_ENV_VAR_ELASTIC_ENDPOINT_NAME = "ELASTIC_ENDPOINT"
 LOGS_ENV_VAR_ELASTIC_TOKEN_NAME = "ELASTIC_TOKEN"
 LOGS_ENV_VAR_ELASTIC_INDEX_NAME = "ELASTIC_INDEX"
 
-LOGS_BULK_SIZE = 1_000
-
 LOGS_ACTIONS_FIELD_INDEX_NAME = "_index"
 LOGS_ACTIONS_FIELD_SOURCE_NAME = "_source"
+
+LOGS_THREAD_DAEMON = True
 
 
 # ----------------------------
 # Missing Values Removal
 # ----------------------------
 MISSING_VALUES_REMOVAL_DROPNA_AXIS = 0
-MISSING_VALUES_REMOVAL_DROPNA_HOW: Literal["any", "all"] = "any"
 
 
 # ----------------------------
@@ -182,7 +184,6 @@ MODEL_COMPUTE_METRICS_DEFAULT = False
 
 MODEL_METRICS_AVG_LOSS_NAME = "avg_loss"
 MODEL_METRICS_CLASS_REPORT_NAME = "class_report"
-MODEL_METRICS_TOP_K_ACCURACY_NAME = "top_k_accuracy"
 MODEL_METRICS_COHEN_KAPPA_SCORE_NAME = "cohen_kappa_score"
 MODEL_METRICS_ACCURACY_NAME = "accuracy"
 MODEL_METRICS_MACRO_AVG_NAME = "macro avg"
@@ -191,6 +192,8 @@ MODEL_METRICS_CLASS_REPORT_OUTPUT_DICT = True
 MODEL_METRICS_CLASS_REPORT_ZERO_DIVISION = 0
 
 MODEL_LOADING_WEIGHTS_ONLY = False
+
+MODEL_OPTIMIZATION_PRUNING_PARAMS = ("weight",)
 
 
 # ----------------------------
@@ -202,8 +205,6 @@ MC_DROPOUT_DISABLED = False
 MC_DROPOUT_ENABLED = True
 
 MC_DROPOUT_NUM_SAMPLES_DEFAULT = 1
-
-MC_DROPOUT_UNBIASED_VARIANCE = False
 
 
 # ----------------------------
@@ -274,8 +275,8 @@ SIMULATIONS_METRICS_TIMELINE_INSTANT_HIT_RATE_NAME = "instant_hit_rate"
 # Tensor
 # ----------------------------
 TENSOR_OUTPUTS_BATCH_DIM = 0
-TENSOR_TEMPORAL_DIM = 1
-TENSOR_CLASS_DIM = 1
+TENSOR_FEATURES_DIM = 1
+TENSOR_TARGET_DIM = 1
 
 
 # ----------------------------
@@ -288,7 +289,19 @@ TIME_MICROSECONDS_IN_SECOND = 1_000_000
 
 
 # ----------------------------
+# Torch
+# ----------------------------
+TORCH_DTYPE = torch.float32
+
+
+# ----------------------------
 # Training
 # ----------------------------
 TRAINING_EPOCHS_DESC = "Training"
 TRAINING_SINGLE_EPOCH_DESC = "Epoch"
+
+
+# ----------------------------
+# YAML
+# ----------------------------
+YAML_DUMP_SORT_KEYS = False

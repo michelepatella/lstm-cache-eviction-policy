@@ -1,4 +1,3 @@
-
 from pydantic import BaseModel, confloat, conint
 
 
@@ -100,6 +99,7 @@ class KwargsAPIConfig(BaseModel):
     time_step_increment: KwargFloatAPIConfig
     num_evictions: KwargIntAPIConfig
     excluded_keys: KwargListIntAPIConfig
+    unbiased_variance: KwargBoolAPIConfig
     prob_weight: KwargFloatAPIConfig
     conf_weight: KwargFloatAPIConfig
     return_all_scores: KwargBoolAPIConfig

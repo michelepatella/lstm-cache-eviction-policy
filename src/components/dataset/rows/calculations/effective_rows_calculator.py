@@ -1,3 +1,20 @@
+"""effective_rows_calculator.py
+
+Utility module for computing the effective number of rows in a dataset.
+
+This module provides the `calculate_effective_dataset_rows` function, which
+calculates the number of usable rows in a DataFrame with respect to a
+specified sequence length. It ensures that the resulting number of rows
+is non-negative and suitable for sequence extraction.
+
+Functions:
+    calculate_effective_dataset_rows(
+        df: pd.DataFrame,
+        seq_len: int
+    ) -> int
+        Returns the effective number of dataset rows given a sequence length.
+"""
+
 import pandas as pd
 
 from components.logs.levels.error_logger import error

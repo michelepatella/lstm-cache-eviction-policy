@@ -1,3 +1,23 @@
+"""cycle_generator.py
+
+Module for generating cycle-based access patterns.
+
+This module provides the `generate_cycle_pattern` function, which
+simulates cyclic access to a subset of keys. The cycle length grows
+dynamically depending on the number of requests generated, and
+the function returns the index of the next key to access.
+
+Functions:
+    generate_cycle_pattern(
+        cycle_base: int,
+        cycle_divisor: int,
+        cycle_mod: int,
+        requests_count: int,
+        keys_range: ndarray
+    ) -> int
+        Returns the next key index according to a cycle-based pattern.
+"""
+
 import numpy as np
 
 from components.logs.levels.error_logger import error

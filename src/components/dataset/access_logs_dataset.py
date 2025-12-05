@@ -1,9 +1,24 @@
+"""access_logs_dataset.py
+
+Dataset class for access logs compatible with PyTorch.
+
+This module provides the `AccessLogsDataset` class, which manages sequential
+access logs for model training and evaluation. It handles loading, preprocessing,
+splitting, sequence extraction, and feature/target tensor conversion for PyTorch
+models.
+
+Classes:
+    AccessLogsDataset(Dataset):
+        PyTorch-compatible dataset class for sequential access logs.
+"""
+
 from typing import Any
 
 import pandas as pd
 import torch
 from torch.utils.data import Dataset
 
+from components.const import TORCH_DTYPE
 from components.dataset.columns.extractions.extractor import (
     extract_dataset_columns,
 )
@@ -27,7 +42,7 @@ from components.dataset.splits.index.calculator import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from src.const import DATASET_TRAINING_SPLIT_TYPE
+from const import DATASET_TRAINING_SPLIT_TYPE
 
 
 class AccessLogsDataset(Dataset):
@@ -140,8 +155,8 @@ class AccessLogsDataset(Dataset):
             None
         """
         # Prepare configuration
-        data_distribution_mode = config.data.mode
-        training_split = config.dataset.split.training
+        data_distribution_mode = config.data.general.mode
+        training_split = config.dataset.splits.training
 
         # Retrieve path to load dataset from
         dataset_path = get_dataset_abs_path(
@@ -249,18 +264,18 @@ class AccessLogsDataset(Dataset):
             # to long tensor
             x_features = torch.tensor(
                 seq_data[self.features].values.astype(float),
-                dtype=torch.float,
+                dtype=TORCH_DTYPE,
             )
             x_keys = torch.tensor(
                 seq_data[self.target].values.astype(int),
-                dtype=torch.long,
+                dtype=TORCH_DTYPE,
             )
 
             # Get the next target key
             target_row = self.data.iloc[idx + self.seq_len]
             y_key = torch.tensor(
                 int(target_row[self.target]),
-                dtype=torch.long,
+                dtype=TORCH_DTYPE,
             )
         except (
             IndexError,

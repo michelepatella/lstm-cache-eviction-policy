@@ -1,3 +1,15 @@
+"""selector.py
+
+Utility module for selecting a PyTorch computation device.
+
+This module provides the `select_device` function, which returns a
+PyTorch `torch.device` object according to the requested device type.
+
+Functions:
+    select_device(device_type: str) -> torch.device
+        Select and return the requested computation device.
+"""
+
 import torch
 
 from components.logs.levels.debug_logger import debug

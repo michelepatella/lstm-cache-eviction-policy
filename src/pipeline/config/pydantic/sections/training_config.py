@@ -1,9 +1,56 @@
+"""training_config.py
+
+Configuration section for the model training process.
+
+This module structures all parameters necessary to run the training loop,
+including general settings, hardware selection, and early stopping criteria.
+
+Classes:
+    TrainingDeviceConfig: Configuration for the hardware device used during
+                          training.
+    TrainingGeneralConfig: General configuration for training run parameters.
+    TrainingEarlyStoppingConfig: Criteria for early termination of training.
+    TrainingConfig: Aggregates all training configuration settings.
+"""
+
 from pydantic import BaseModel, confloat, conint, model_validator
 
 from components.assertions.choice_field_assertor import (
     assert_choice_field,
 )
-from src.const import OPTIMIZER_NAMES
+from const import HW_DEVICE_NAMES
+
+
+class TrainingDeviceConfig(BaseModel):
+    """Device configuration for training.
+
+    Attributes:
+        type (str): The device type to use.
+    """
+
+    type: str
+
+    @model_validator(mode="after")
+    def check_training_device_type(
+        self: "TrainingDeviceConfig",
+    ) -> "TrainingDeviceConfig":
+        """Check whether training device type is valid or not.
+
+        This function validates the training device type.
+
+        Args:
+            self (TrainingDeviceConfig): Current model instance.
+
+        Returns:
+            "TrainingDeviceConfig": Validated model instance.
+        """
+        assert_choice_field(
+            self.type,
+            HW_DEVICE_NAMES,
+            "training.device.type",
+        )
+
+        return self
 
 
 class TrainingGeneralConfig(BaseModel):
@@ -18,54 +65,6 @@ class TrainingGeneralConfig(BaseModel):
     epochs: conint(gt=0)
     batch_size: conint(gt=0)
     shuffle: bool
-
-
-class TrainingOptimizerParamsConfig(BaseModel):
-    """Configuration for the training optimizer.
-
-    Attributes:
-        learning_rate (float): Learning rate (> 0).
-        weight_decay (float): Weight decay (>= 0).
-        momentum (float): Momentum (in [0,1]).
-    """
-
-    learning_rate: confloat(gt=0)
-    weight_decay: confloat(ge=0)
-    momentum: confloat(ge=0, le=1)
-
-
-class TrainingOptimizerConfig(BaseModel):
-    """Optimizer configuration for training.
-
-    Attributes:
-        type (str): Optimizer type.
-        params (TrainingOptimizerParamsConfig): Configuration for the optimizer.
-    """
-
-    type: str
-    params: TrainingOptimizerParamsConfig
-
-    @model_validator(mode="after")
-    def check_data_distribution_mode(
-        self: "TrainingOptimizerConfig",
-    ) -> "TrainingOptimizerConfig":
-        """Check whether optimizer is valid or not.
-
-        This function validates the training optimizer specified.
-
-        Args:
-            self (TrainingOptimizerConfig): Current model instance.
-
-        Returns:
-            "OptimizerConfig": Validated model instance.
-        """
-        assert_choice_field(
-            self.type,
-            OPTIMIZER_NAMES,
-            "training.optimizer.type",
-        )
-
-        return self
 
 
 class TrainingEarlyStoppingConfig(BaseModel):
@@ -85,11 +84,11 @@ class TrainingConfig(BaseModel):
     """Training configuration.
 
     Attributes:
+        device (TrainingDeviceConfig): Device configuration for training.
         general (TrainingGeneralConfig): General training configuration.
-        optimizer (TrainingOptimizerConfig): Optimizer configuration.
         early_stopping (TrainingEarlyStoppingConfig): Early stopping configuration.
     """
 
+    device: TrainingDeviceConfig
     general: TrainingGeneralConfig
-    optimizer: TrainingOptimizerConfig
     early_stopping: TrainingEarlyStoppingConfig

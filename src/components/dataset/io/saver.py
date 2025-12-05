@@ -1,3 +1,20 @@
+"""saver.py
+
+Utility module for saving Pandas DataFrames to CSV.
+
+This module provides the `save_dataset` function, which saves a given
+Pandas DataFrame to a CSV file at a specified path, optionally including
+the DataFrame index.
+
+Functions:
+    save_dataset(
+        df: pd.DataFrame,
+        path: str,
+        index: bool = DATASET_INDEX
+    ) -> None
+        Saves the DataFrame to a CSV file and logs the operation.
+"""
+
 import pandas as pd
 
 from components.const import DATASET_INDEX

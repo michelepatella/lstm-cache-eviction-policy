@@ -1,3 +1,21 @@
+"""saver.py
+
+Utility module for saving model evaluation metrics.
+
+This module provides the `save_model_metrics` function, which filters
+and organizes a model's computed evaluation metrics, adds the average
+loss, and saves the results as a JSON file to a specified path.
+
+Functions:
+    save_model_metrics(
+        metrics: dict[str, int | float],
+        avg_loss: float,
+        path: str
+    ) -> None
+        Filters classification report, adds average loss, and saves
+        metrics to a JSON file.
+"""
+
 import numpy as np
 
 from components.const import (

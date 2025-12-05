@@ -1,3 +1,17 @@
+"""nested_dicts_combinator.py
+
+Utility module for generating all combinations from a nested dictionary.
+
+This module provides the `combine_nested_dicts` function, which computes
+the Cartesian product of all leaf values (or options) in a nested dictionary
+and reconstructs a list of nested dictionaries for each combination.
+
+Functions:
+    combine_nested_dicts(nested_dict: dict[str, Any]) -> list[dict[str, Any]]
+        Generate all possible nested dictionaries by combining the values
+        of a nested dictionary, handling lists of options at the leaves.
+"""
+
 import itertools
 from typing import Any
 

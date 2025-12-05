@@ -1,3 +1,20 @@
+"""validator.py
+
+Pipeline step module responsible for model validation and hyperparameter
+optimization using Grid Search and Time Series Cross-Validation.
+
+This module provides the `validate_model` function, which orchestrates the
+loading of the training dataset, generates all parameter combinations,
+runs the cross-validation and search process to find the optimal set of
+hyperparameters, and updates the project configuration file with the best
+parameters found.
+
+Functions:
+    validate_model() -> None
+        Executes the hyperparameter tuning workflow and saves the updated
+        configuration.
+"""
+
 import logging
 import os
 
@@ -19,17 +36,17 @@ from components.validation.search_space.combinator import (
     get_parameters_combination,
 )
 from components.yaml.io.saver import save_yaml
-from pipeline.config.configurator import prepare_config
-from pipeline.const import (
-    CONFIG_FILE_PATH,
-    DAGS_HUB_ENV_VAR_REPO_NAME,
-    DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
-    DAGS_HUB_MLFLOW,
-)
-from src.const import (
+from const import (
     DATASET_TRAINING_SPLIT_TYPE,
     LOGS_PHASE_VALIDATION,
     MLFLOW_NESTED,
+)
+from pipeline.config.configurator import prepare_config
+from pipeline.const import (
+    CONFIG_FILE_PATH,
+    DAGS_HUB_DVC,
+    DAGS_HUB_ENV_VAR_REPO_NAME,
+    DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
 )
 
 # Load env variables
@@ -54,7 +71,7 @@ def validate_model() -> None:
     dagshub.init(
         repo_owner=dabs_hub_repo_owner,
         repo_name=dags_hub_repo_name,
-        mlflow=DAGS_HUB_MLFLOW,
+        dvc=DAGS_HUB_DVC,
     )
 
     import mlflow
@@ -65,7 +82,7 @@ def validate_model() -> None:
     ):
         # Setup
         config = prepare_config()
-        initialize_logs()
+        initialize_logs(logging.getLevelName(config.logs.level))
 
         # Prepare configuration
         validation_batch_size = config.validation.general.batch_size
@@ -101,12 +118,13 @@ def validate_model() -> None:
         best_params_dict = Box(best_params_dict)
 
         # Prepare the best parameters to be saved
-        best_params = Box(default_box=True)
+        print(best_params_dict)
+        best_params = Box(config.model_dump())
         best_params.model.params.hidden_size = best_params_dict.hidden_size
         best_params.model.params.num_layers = best_params_dict.num_layers
         best_params.model.params.dropout = best_params_dict.dropout
-        best_params.training.optimizer.params.learning_rate = (
-            best_params_dict.optimizer.learning_rate
+        best_params.optimizer.params.learning_rate = (
+            best_params_dict.learning_rate
         )
 
         # Merge original dictionary with the best
@@ -114,7 +132,7 @@ def validate_model() -> None:
         updated_config_dict = merge_dicts(config.model_dump(), best_params)
 
         # Save updated configuration dictionary as file
-        save_yaml(updated_config_dict, CONFIG_FILE_PATH)
+        save_yaml(Box(updated_config_dict).to_dict(), CONFIG_FILE_PATH)
 
         # Experiment tracking
         mlflow.log_params(prepare_config().model_dump())
@@ -147,4 +165,4 @@ if __name__ == "__main__":
     # Force logs flush
     for handler in logging.getLogger().handlers:
         if isinstance(handler, ElasticHandler):
-            handler.flush_buffer()
+            handler.flush_buffer_async()

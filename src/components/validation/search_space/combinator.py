@@ -1,3 +1,19 @@
+"""combinator.py
+
+Module for generating all hyperparameter combinations from a configuration.
+
+This module provides the `get_parameters_combination` function, which
+processes a configuration search space, generates all possible combinations
+of hyperparameters, and returns them as a list of fully nested dictionaries.
+It supports complex nested configurations and ensures that every combination
+from the search space is represented.
+
+Functions:
+    get_parameters_combination(config: Any) -> list[dict[str, int | float | bool]]
+        Generates all nested parameter combinations from the provided search
+        space configuration and returns them as a list of dictionaries.
+"""
+
 from typing import Any
 
 from components.dict.combinations.nested_dict_lists_combinator import (
@@ -48,7 +64,7 @@ def get_parameters_combination(
         # Generate combinations per search
         # space section and save them
         section_combination_dicts = []
-        for section, params_dict in search_space.items():
+        for _, params_dict in search_space.items():
             section_values = combine_nested_dicts(params_dict)
             section_combination_dicts.append(section_values)
 
@@ -74,7 +90,6 @@ def get_parameters_combination(
             msg,
             extra={
                 "exception": str(e),
-                "search_space": search_space if not None else None,
                 "context": "Parameter combinations generation",
             },
         )

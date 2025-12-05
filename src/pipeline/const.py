@@ -1,3 +1,13 @@
+"""const.py
+
+Module dedicated to defining constants and magic strings specifically
+related to project structure, file paths, and high-level configuration.
+
+This module includes paths for configuration files, results, and plots,
+names of cache policies, logging phases, and specific simulation
+metrics used throughout the project.
+"""
+
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
@@ -20,7 +30,7 @@ CONFIG_FILE_PATH = PROJECT_ROOT / "src" / "pipeline" / "config" / "config.yaml"
 # ----------------------------
 # Dagshub
 # ----------------------------
-DAGS_HUB_MLFLOW = True
+DAGS_HUB_DVC = True
 DAGS_HUB_ENV_VAR_REPO_NAME = "DAGS_HUB_REPO"
 DAGS_HUB_ENV_VAR_REPO_OWNER_NAME = "DAGS_HUB_REPO_OWNER"
 
@@ -40,6 +50,20 @@ LOGS_PHASE_TRAINING = "training"
 LOGS_PHASE_TESTING = "testing"
 LOGS_PHASE_SIMULATIONS = "simulations"
 
+LOGS_LEVEL_NAMES = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+
+
+# ----------------------------
+# Loss
+# ----------------------------
+LOSS_CLASS_WEIGHT_TYPES = [None, "balanced"]
+
+
+# ----------------------------
+# Missing Values Removal
+# ----------------------------
+MISSING_VALUES_REMOVAL_DROPNA_HOWS = ["any", "all"]
+
 
 # ----------------------------
 # MLFlow
@@ -51,6 +75,21 @@ MLFLOW_ARTIFACT_PATH = "model"
 # Model
 # ----------------------------
 MODEL_COMPUTE_METRICS_TESTING = True
+
+MODEL_OPTIMIZATION_QUANTIZATION_DTYPES = [
+    "qint8",
+    "quint8",
+    "float16",
+    "bfloat16",
+]
+MODEL_OPTIMIZATION_QUANTIZATION_ENGINE_NAMES = [
+    "fbgemm",
+    "qnnpack",
+    "onednn",
+    "xnnpack",
+    "nnpi",
+    "acl",
+]
 
 
 # ----------------------------

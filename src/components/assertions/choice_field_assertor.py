@@ -1,3 +1,20 @@
+"""choice_field_assertor.py
+
+Module for validating choice fields with structured logging.
+
+This module provides the `assert_choice_field` function to ensure that
+a given field value is valid according to a list of allowed values.
+
+Functions:
+    assert_choice_field(
+        field_value: Any,
+        allowed_field_values: list,
+        field_context: str
+    ) -> None
+        Checks whether a field value is among allowed choices and raises
+        an exception if it is not.
+"""
+
 from typing import Any
 
 from components.logs.levels.debug_logger import debug

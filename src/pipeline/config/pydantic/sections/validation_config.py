@@ -1,4 +1,63 @@
-from pydantic import BaseModel, confloat, conint
+"""validation_config.py
+
+Configuration section for defining model validation and
+hyperparameter tuning procedures.
+
+This module structures all parameters necessary for validation runs,
+including hardware selection, general run parameters, cross-validation
+settings, early stopping rules, and the full search space for
+hyperparameter optimization.
+
+Classes:
+    ValidationDeviceConfig: Configuration for the hardware device used
+                            during validation.
+    ValidationGeneralConfig: General configuration for validation runs.
+    ValidationTimeSeriesCVConfig: Time Series Cross-Validation (TSCV)
+                                  parameters.
+    ValidationEarlyStoppingConfig: Criteria for early termination during
+                                   validation.
+    ValidationSearchSpaceModelConfig: Search space for model hyperparameters.
+    ValidationSearchSpaceOptimizerConfig: Search space for optimizer.
+    ValidationSearchSpaceConfig: Aggregates all hyperparameter search spaces.
+    ValidationConfig: Root class aggregating all validation settings.
+"""
+
+from pydantic import BaseModel, confloat, conint, model_validator
+
+from components.assertions.choice_field_assertor import assert_choice_field
+from const import HW_DEVICE_NAMES
+
+
+class ValidationDeviceConfig(BaseModel):
+    """Device configuration for validation.
+
+    Attributes:
+        type (str): The device type to use.
+    """
+
+    type: str
+
+    @model_validator(mode="after")
+    def check_validation_device_type(
+        self: "ValidationDeviceConfig",
+    ) -> "ValidationDeviceConfig":
+        """Check whether validation device type is valid or not.
+
+        This function validates the validation device type.
+
+        Args:
+            self (ValidationDeviceConfig): Current model instance.
+
+        Returns:
+            "ValidationDeviceConfig": Validated model instance.
+        """
+        assert_choice_field(
+            self.type,
+            HW_DEVICE_NAMES,
+            "validation.device.type",
+        )
+
+        return self
 
 
 class ValidationGeneralConfig(BaseModel):
@@ -13,8 +72,8 @@ class ValidationGeneralConfig(BaseModel):
     shuffle: bool
 
 
-class ValidationCrossValidationConfig(BaseModel):
-    """Cross-validation configuration.
+class ValidationTimeSeriesCVConfig(BaseModel):
+    """Time Series Cross-validation configuration.
 
     Attributes:
         folds (int): Number of folds for cross-validation (> 1).
@@ -52,7 +111,7 @@ class ValidationSearchSpaceModelConfig(BaseModel):
     dropout: list[confloat(ge=0, lt=1)]  # type: ignore[valid-type]
 
 
-class ValidationSearchSpaceTrainingOptimizerConfig(BaseModel):
+class ValidationSearchSpaceOptimizerConfig(BaseModel):
     """Optimizer search space configuration for hyperparameter tuning.
 
     Attributes:
@@ -62,43 +121,35 @@ class ValidationSearchSpaceTrainingOptimizerConfig(BaseModel):
     learning_rate: list[confloat(gt=0)]  # type: ignore[valid-type]
 
 
-class ValidationSearchSpaceTrainingConfig(BaseModel):
-    """Training search space configuration.
-
-    Attributes:
-        optimizer (ValidationSearchSpaceTrainingOptimizerConfig): Optimizer search space
-                                                        configuration.
-    """
-
-    optimizer: ValidationSearchSpaceTrainingOptimizerConfig
-
-
 class ValidationSearchSpaceConfig(BaseModel):
     """Search space configuration.
 
     Attributes:
         model (ValidationSearchSpaceModelConfig): Model hyperparameter search space
                                         configuration.
-        training (ValidationSearchSpaceTrainingConfig): Training hyperparameter search space
-                                              configuration.
+        training (ValidationSearchSpaceOptimizerConfig): Training hyperparameter search space
+                                                         configuration.
     """
 
     model: ValidationSearchSpaceModelConfig
-    training: ValidationSearchSpaceTrainingConfig
+    optimizer: ValidationSearchSpaceOptimizerConfig
 
 
 class ValidationConfig(BaseModel):
     """Validation configuration.
 
     Attributes:
+        device (ValidationDeviceConfig): Device configuration for validation.
         general (ValidationGeneralConfig): General validation configuration.
-        cross_validation (ValidationCrossValidationConfig): Cross-validation configuration.
+        time_series_cv (ValidationTimeSeriesCVConfig): Time series
+                                                       cross-validation configuration.
         early_stopping (ValidationEarlyStoppingConfig): Early stopping configuration.
-        search_space (ValidationSearchSpaceConfig): Hyperparameter search space configuration
-                                          for tuning.
+        search_space (ValidationSearchSpaceConfig): Hyperparameter search space
+                                                    configuration for tuning.
     """
 
+    device: ValidationDeviceConfig
     general: ValidationGeneralConfig
-    cross_validation: ValidationCrossValidationConfig
+    time_series_cv: ValidationTimeSeriesCVConfig
     early_stopping: ValidationEarlyStoppingConfig
     search_space: ValidationSearchSpaceConfig

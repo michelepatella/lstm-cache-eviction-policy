@@ -1,3 +1,25 @@
+"""single_fold_runner.py
+
+Core utility module for executing a single fold of time series
+cross-validation.
+
+This module provides the `compute_single_time_series_cv_fold` function,
+which orchestrates all steps for one CV fold: dataset splitting,
+DataLoader creation, model environment setup, optimizer building,
+and model training, returning the resulting average loss.
+
+Functions:
+    compute_single_time_series_cv_fold(
+        train_idx: np.ndarray,
+        val_idx: np.ndarray,
+        training_set: AccessLogsDataset,
+        params: dict[str, int | float | bool],
+        config: Any
+    ) -> float
+        Executes a single fold of time series cross-validation and
+        returns the average loss for that fold.
+"""
+
 from typing import Any
 
 import numpy as np
@@ -48,10 +70,11 @@ def compute_single_time_series_cv_fold(
     training_shuffle = config.training.general.shuffle
     validation_batch_size = config.validation.general.batch_size
     validation_shuffle = config.validation.general.shuffle
-    optimizer_type = config.training.optimizer.type
-    learning_rate = config.training.optimizer.params.learning_rate
-    weight_decay = config.training.optimizer.params.weight_decay
-    num_epochs = config.validation.cross_validation.epochs
+    validation_device = config.validation.device.type
+    optimizer_type = config.optimizer.type
+    learning_rate = config.optimizer.params.learning_rate
+    weight_decay = config.optimizer.params.weight_decay
+    num_epochs = config.validation.time_series_cv.epochs
 
     # Split training set into training and validation sets
     training_set, validation_set = split_training_validation_sets(
@@ -78,6 +101,7 @@ def compute_single_time_series_cv_fold(
     # Initialize model environment
     device, criterion, model = initialize_model_environment(
         targets,
+        validation_device,
         config,
         model_params=params,
     )

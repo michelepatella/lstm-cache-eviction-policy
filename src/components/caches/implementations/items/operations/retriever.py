@@ -1,3 +1,18 @@
+"""retriever.py
+
+Module for retrieving items from cache data structures.
+
+This module provides the `get_item_from_cache` function, which fetches
+an item from the cache given its key.
+
+Functions:
+    get_item_from_cache(
+        data: Any,
+        key: int
+    ) -> Any
+        Retrieves a cache item by key.
+"""
+
 from typing import Any
 
 from components.logs.levels.error_logger import error

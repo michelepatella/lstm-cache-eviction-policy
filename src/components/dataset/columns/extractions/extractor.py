@@ -1,3 +1,15 @@
+"""extractor.py
+
+Utility module for extracting column names from pandas DataFrames.
+
+This module provides the `extract_dataset_columns` function, which returns
+the list of column names from a given DataFrame.
+
+Functions:
+    extract_dataset_columns(df: pd.DataFrame) -> list[str]
+        Extracts and returns column names from the provided DataFrame.
+"""
+
 import pandas as pd
 
 from components.logs.levels.error_logger import error

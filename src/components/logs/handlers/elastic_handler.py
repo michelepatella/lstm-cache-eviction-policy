@@ -1,6 +1,22 @@
-import atexit
+"""elastic_handler.py
+
+Logging handler for Elasticsearch.
+
+This module provides the `ElasticHandler` class, a custom logging
+handler that buffers log records and sends them to an Elasticsearch
+index. It supports both synchronous and asynchronous flushing
+of logs, thread-safe buffering, and preserves extra fields in
+the log records.
+
+Classes:
+    ElasticHandler(logging.Handler)
+        Custom logging handler that accumulates logs and
+        sends them to Elasticsearch using the bulk API.
+"""
+
 import logging
 import os
+import threading
 from datetime import datetime, timezone
 
 from dotenv import load_dotenv
@@ -9,7 +25,6 @@ from elasticsearch import Elasticsearch, helpers
 from components.const import (
     LOGS_ACTIONS_FIELD_INDEX_NAME,
     LOGS_ACTIONS_FIELD_SOURCE_NAME,
-    LOGS_BULK_SIZE,
     LOGS_ENV_VAR_ELASTIC_ENDPOINT_NAME,
     LOGS_ENV_VAR_ELASTIC_INDEX_NAME,
     LOGS_ENV_VAR_ELASTIC_TOKEN_NAME,
@@ -17,6 +32,7 @@ from components.const import (
     LOGS_FIELD_MESSAGE_NAME,
     LOGS_FIELD_STANDARD_NAMES,
     LOGS_FIELD_TIMESTAMP_NAME,
+    LOGS_THREAD_DAEMON,
 )
 
 # Load environment variables
@@ -24,8 +40,8 @@ load_dotenv()
 
 # Configure Elasticsearch
 es = Elasticsearch(
-    hosts=[os.environ.get(LOGS_ENV_VAR_ELASTIC_ENDPOINT_NAME)],
-    api_key=os.environ.get(LOGS_ENV_VAR_ELASTIC_TOKEN_NAME),
+    hosts=[os.getenv(LOGS_ENV_VAR_ELASTIC_ENDPOINT_NAME)],
+    api_key=os.getenv(LOGS_ENV_VAR_ELASTIC_TOKEN_NAME),
 )
 
 
@@ -38,9 +54,6 @@ class ElasticHandler(logging.Handler):
     Attributes:
          buffer (list): Internal list used to temporarily store log
                         documents before sending them to Elasticsearch.
-                        When the number of logs in the buffer reaches
-                        the bulk size, all documents are indexed
-                        and the buffer is cleared.
          index (str): Elasticsearch index name where logs will be
                       sent to.
     """
@@ -50,25 +63,16 @@ class ElasticHandler(logging.Handler):
 
         This function creates an ElasticHandler instance,
         initializing an internal buffer to accumulate logs
-        before being sent to Elasticsearch as soon as the
-        buffer size reached the predefined (and initialized)
-        bulk size. Additionally, the function initializes
-        the Elasticsearch index to send logs to. Finally,
-        the function sets a listener to ensure that all
-        remaining logs in the buffer are sent at
-        the exit of the program.
+        before being sent to Elasticsearch. Additionally,
+        the function initializes the Elasticsearch index to
+        send logs to.
 
         Args:
             self ("ElasticHandler"): Current class instance.
         """
         super().__init__()
         self.buffer = []
-        self.bulk_size = LOGS_BULK_SIZE
-        self.index = os.environ.get(LOGS_ENV_VAR_ELASTIC_INDEX_NAME)
-
-        # Send all remaining logs in the buffer
-        # at the end of the program
-        atexit.register(self.flush_buffer)
+        self.index = os.getenv(LOGS_ENV_VAR_ELASTIC_INDEX_NAME)
 
     def emit(
         self: "ElasticHandler",
@@ -77,8 +81,8 @@ class ElasticHandler(logging.Handler):
         """Emit a log record to Elasticsearch.
 
         This function prepares each document from the given
-        record, appends it to the buffer and sends it to Elasticsearch
-        as soon as the buffer reaches predefined bulk size.
+        record, appending it to the buffer to be sent to Elasticsearch
+        later.
 
         Args:
             self ("ElasticHandler"): Current class instance.
@@ -104,13 +108,7 @@ class ElasticHandler(logging.Handler):
         # Append document to buffer
         self.buffer.append(doc)
 
-        # Each bulk size requests send
-        # all the documents in the buffer
-        # to Elasticsearch index
-        if len(self.buffer) >= self.bulk_size:
-            self.flush_buffer()
-
-    def flush_buffer(
+    def _flush_buffer(
         self: "ElasticHandler",
     ) -> None:
         """Send all buffered log records to Elasticsearch.
@@ -127,7 +125,7 @@ class ElasticHandler(logging.Handler):
             None
         """
         # Prepare documents to be sent
-        # by reading them from bulk
+        # by reading them from buffer
         actions = [
             {
                 LOGS_ACTIONS_FIELD_INDEX_NAME: self.index,
@@ -141,3 +139,23 @@ class ElasticHandler(logging.Handler):
 
         # Clear the buffer
         self.buffer.clear()
+
+    def flush_buffer_async(self: "ElasticHandler") -> None:
+        """Send all buffered log records to Elasticsearch
+           asynchronously.
+
+        This method launches a separate daemon thread to flush
+        all accumulated log records in the internal buffer to
+        the configured Elasticsearch index using the bulk API.
+
+        Args:
+            self ("ElasticHandler"): Current class instance.
+
+        Returns:
+            None
+        """
+        thread = threading.Thread(
+            target=self._flush_buffer,
+            daemon=LOGS_THREAD_DAEMON,
+        )
+        thread.start()

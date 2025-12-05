@@ -1,3 +1,20 @@
+"""min_max_assertor.py
+
+Module for validating that minimum values are less than maximum values.
+
+This module provides the `assert_min_less_than_max` function to ensure
+that a minimum value is strictly less than a corresponding maximum value.
+
+Functions:
+    assert_min_less_than_max(
+        min_val: float,
+        max_val: float,
+        values_context: str
+    ) -> None
+        Checks that `min_val` is strictly less than `max_val` and raises
+        an exception if it is not.
+"""
+
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 

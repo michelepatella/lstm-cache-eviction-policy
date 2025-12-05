@@ -1,7 +1,23 @@
+"""saver.py
+
+Utility module for saving cache simulation metrics.
+
+This module provides the `save_simulations_metrics` function, which
+filters and stores cache simulation metrics in JSON format. It ensures
+that only relevant metrics are saved, excluding detailed timelines.
+
+Functions:
+    save_simulations_metrics(
+        results: list[dict],
+        path: str
+    ) -> None
+        Saves the filtered simulation metrics to the specified JSON file.
+"""
+
 from components.json.io.saver import save_json
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from src.const import SIMULATIONS_METRICS_TIMELINE_NAME
+from const import SIMULATIONS_METRICS_TIMELINE_NAME
 
 
 def save_simulations_metrics(results: list[dict], path: str) -> None:

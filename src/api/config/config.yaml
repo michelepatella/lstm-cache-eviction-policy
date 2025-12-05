@@ -1,6 +1,6 @@
 hardware:
   device:
-    type: mps
+    type: cpu
 kwargs:
   rollout_horizon:
     default: 5
@@ -17,6 +17,8 @@ kwargs:
     default: 1
   excluded_keys:
     default: [ ]
+  unbiased_variance:
+    default: true
   prob_weight:
     default: 0.8
   conf_weight:

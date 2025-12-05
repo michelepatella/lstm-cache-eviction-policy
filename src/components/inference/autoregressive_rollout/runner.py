@@ -1,3 +1,28 @@
+"""runner.py
+
+Utility module for performing autoregressive model rollouts.
+
+This module provides the `compute_autoregressive_rollout` function, which
+executes an autoregressive rollout for a given PyTorch model. At each step
+of the rollout, the model predicts the next key based on the current
+feature and key sequences, updates the sequences with predicted values,
+and advances time using trigonometric encoding for cyclical features.
+
+Functions:
+    compute_autoregressive_rollout(
+        model: torch.nn.Module,
+        features_seq: torch.Tensor,
+        keys_seq: torch.Tensor,
+        device: torch.device,
+        rollout_horizon: int,
+        mc_dropout_samples: int,
+        mc_dropout_unbiased_variance: bool,
+        time_step_increment: float
+    ) -> tuple[list[torch.Tensor], list[torch.Tensor]]
+        Performs autoregressive rollout for a specified horizon, returning
+        the predicted outputs and corresponding variances at each step.
+"""
+
 import numpy as np
 import torch
 
@@ -7,11 +32,14 @@ from components.backpropagation.mc_dropout.forward_runner import (
 from components.const import (
     AUTOREGRESSIVE_ROLLOUT_LAST_TIME_BATCH_IDX,
     AUTOREGRESSIVE_ROLLOUT_LAST_TIME_IDX,
-    DATASET_COLUMN_COS_TIME_IDX,
-    DATASET_COLUMN_SIN_TIME_IDX,
-    DATASET_COLUMN_TARGET_IDX,
+    AUTOREGRESSIVE_ROLLOUT_SEQUENCE_SHIFT_IDX,
+    AUTOREGRESSIVE_ROLLOUT_TIME_ARRAY_IDX,
+    DATASET_COLUMN_COS_TIME_NAME,
+    DATASET_COLUMN_SIN_TIME_NAME,
+    DATASET_COLUMNS,
+    TENSOR_FEATURES_DIM,
     TENSOR_OUTPUTS_BATCH_DIM,
-    TENSOR_TEMPORAL_DIM,
+    TORCH_DTYPE,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -21,6 +49,7 @@ from components.time.transforms.trig_decoder import (
 from components.time.transforms.trig_encoder import (
     encode_time_trigonometrically,
 )
+from const import DATASET_COLUMN_REQUEST_NAME
 
 
 def compute_autoregressive_rollout(
@@ -30,6 +59,7 @@ def compute_autoregressive_rollout(
     device: torch.device,
     rollout_horizon: int,
     mc_dropout_samples: int,
+    mc_dropout_unbiased_variance: bool,
     time_step_increment: float,
 ) -> tuple[list[torch.Tensor], list[torch.Tensor]]:
     """Perform autoregressive rollout.
@@ -48,6 +78,8 @@ def compute_autoregressive_rollout(
         device (torch.device): Device for computation.
         rollout_horizon (int): Number of autoregressive steps.
         mc_dropout_samples (int): Number of MC dropout samples.
+        mc_dropout_unbiased_variance (bool): Whether to use unbiased variance
+                                             or not during calculation.
         time_step_increment (float): Increment per rollout step.
 
     Returns:
@@ -70,6 +102,7 @@ def compute_autoregressive_rollout(
                 "keys_seq_shape": keys_seq.shape,
                 "rollout_horizon": rollout_horizon,
                 "mc_dropout_samples": mc_dropout_samples,
+                "mc_dropout_unbiased_variance": mc_dropout_unbiased_variance,
                 "device": str(device),
                 "context": "Autoregressive rollout",
             },
@@ -81,12 +114,12 @@ def compute_autoregressive_rollout(
             features_seq[
                 AUTOREGRESSIVE_ROLLOUT_LAST_TIME_BATCH_IDX,
                 AUTOREGRESSIVE_ROLLOUT_LAST_TIME_IDX,
-                DATASET_COLUMN_SIN_TIME_IDX,
+                DATASET_COLUMNS.index(DATASET_COLUMN_SIN_TIME_NAME),
             ].item(),
             features_seq[
                 AUTOREGRESSIVE_ROLLOUT_LAST_TIME_BATCH_IDX,
                 AUTOREGRESSIVE_ROLLOUT_LAST_TIME_IDX,
-                DATASET_COLUMN_COS_TIME_IDX,
+                DATASET_COLUMNS.index(DATASET_COLUMN_COS_TIME_NAME),
             ].item(),
         )
 
@@ -103,7 +136,8 @@ def compute_autoregressive_rollout(
                 model,
                 batch,
                 device,
-                mc_dropout_samples,
+                num_mc_dropout_samples=mc_dropout_samples,
+                mc_dropout_unbiased_variance=mc_dropout_unbiased_variance,
             )
 
             # Save outputs and variances
@@ -117,11 +151,14 @@ def compute_autoregressive_rollout(
             # Update the sequence of keys by appending
             # the predicted one at the current step
             pred_key = outputs_mean.argmax(
-                dim=DATASET_COLUMN_TARGET_IDX,
-            ).unsqueeze(1)
+                dim=DATASET_COLUMNS.index(DATASET_COLUMN_REQUEST_NAME),
+            ).unsqueeze(TENSOR_FEATURES_DIM)
             keys_seq = torch.cat(
-                [keys_seq[:, 1:], pred_key],
-                dim=DATASET_COLUMN_TARGET_IDX,
+                [
+                    keys_seq[:, AUTOREGRESSIVE_ROLLOUT_SEQUENCE_SHIFT_IDX:],
+                    pred_key,
+                ],
+                dim=DATASET_COLUMNS.index(DATASET_COLUMN_REQUEST_NAME),
             )
 
             # Calculate new sin and cos time obtained by adding
@@ -131,16 +168,28 @@ def compute_autoregressive_rollout(
                 np.array([last_time + time_step_increment]),
             )
             new_features = torch.tensor(
-                [[new_sin_time[0], new_cos_time[0]]],
+                [
+                    [
+                        new_sin_time[AUTOREGRESSIVE_ROLLOUT_TIME_ARRAY_IDX],
+                        new_cos_time[AUTOREGRESSIVE_ROLLOUT_TIME_ARRAY_IDX],
+                    ],
+                ],
                 device=device,
-                dtype=torch.float32,
-            ).unsqueeze(0)
+                dtype=TORCH_DTYPE,
+            ).unsqueeze(TENSOR_OUTPUTS_BATCH_DIM)
 
             # Update the sequence of features by appending
             # the new features
             features_seq = torch.cat(
-                [features_seq[:, 1:, :], new_features],
-                dim=TENSOR_TEMPORAL_DIM,
+                [
+                    features_seq[
+                        :,
+                        AUTOREGRESSIVE_ROLLOUT_SEQUENCE_SHIFT_IDX:,
+                        :,
+                    ],
+                    new_features,
+                ],
+                dim=TENSOR_FEATURES_DIM,
             )
 
         debug(
@@ -166,6 +215,7 @@ def compute_autoregressive_rollout(
                 "keys_seq_shape": getattr(keys_seq, "shape", None),
                 "rollout_horizon": rollout_horizon,
                 "mc_dropout_samples": mc_dropout_samples,
+                "mc_dropout_unbiased_variance": mc_dropout_unbiased_variance,
                 "device": str(device),
                 "context": "Autoregressive rollout",
             },

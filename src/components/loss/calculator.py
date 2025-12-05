@@ -1,3 +1,22 @@
+"""calculator.py
+
+Loss calculation utility module.
+
+This module provides the `calculate_loss` function, which computes
+the loss between model outputs and targets using a provided PyTorch
+criterion. The function also handles cases where the criterion may be
+None.
+
+Functions:
+    calculate_loss(
+        outputs: torch.Tensor,
+        targets: torch.Tensor,
+        criterion: torch.nn.Module
+    ) -> torch.Tensor | None
+        Calculates the loss between model outputs and targets. Returns
+        None if the criterion is not provided.
+"""
+
 import torch
 
 from components.logs.levels.error_logger import error

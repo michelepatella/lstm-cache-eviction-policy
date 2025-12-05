@@ -1,3 +1,4 @@
+import logging
 from typing import Any
 
 from fastapi import FastAPI, HTTPException, status
@@ -22,6 +23,7 @@ from api.gateway.callers.scorer_service_caller import (
 from components.caches.implementations.items.evictions.score_based_evictor import (
     evict_score_based_items,
 )
+from components.logs.handlers.elastic_handler import ElasticHandler
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.yaml.io.loader import load_yaml
@@ -160,6 +162,11 @@ def gateway_api(
                 "context": "Gateway API",
             },
         )
+
+        # Async flush logs
+        for handler in logging.getLogger().handlers:
+            if isinstance(handler, ElasticHandler):
+                handler.flush_buffer_async()
 
         return response
     except Exception as e:

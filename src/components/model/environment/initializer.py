@@ -1,3 +1,23 @@
+"""initializer.py
+
+Utility module for setting up the PyTorch model environment.
+
+This module provides the `initialize_model_environment` function, which
+handles device selection, criterion definition based on target labels,
+model instantiation, and moving the model to the selected device.
+
+Functions:
+    initialize_model_environment(
+        targets: torch.Tensor | None,
+        device_type: str,
+        config: Any,
+        model: torch.nn.Module = None,
+        model_params: Any | dict[str, int | float | bool] = None
+    ) -> tuple[torch.device, torch.nn.Module | None, torch.nn.Module]
+        Prepares the device, criterion, and PyTorch model for training or
+        inference.
+"""
+
 from typing import Any
 
 import torch
@@ -18,6 +38,7 @@ from components.model.builder import (
 
 def initialize_model_environment(
     targets: torch.Tensor | None,
+    device_type: str,
     config: Any,
     model: torch.nn.Module = None,
     model_params: Any | dict[str, int | float | bool] = None,
@@ -33,6 +54,7 @@ def initialize_model_environment(
     Args:
         targets (torch.Tensor | None): Target labels for computing
                                          class weights.
+        device_type (str): Device type to use.
         config (Any): Configuration object.
         model (torch.nn.Module): A PyTorch model to configure environment for.
         model_params (Any | dict[str, int | float | bool]):
@@ -45,11 +67,11 @@ def initialize_model_environment(
                          (None if no targets provided).
             - model: PyTorch model.
     """
-    device_type = config.hardware.device_type
-    min_key = config.data.keys.min
-    max_key = config.data.keys.max
+    min_key = config.data.general.keys.min
+    max_key = config.data.general.keys.max
     num_keys = max_key - min_key + 1
     embedding_dim = config.model.sequence.embedding.dimension
+    class_weight_type = config.loss.class_weight.type
     num_features = len(DATASET_FEATURE_COLUMNS)
 
     # Define the device for computations
@@ -59,7 +81,7 @@ def initialize_model_environment(
     # have been provided
     criterion = None
     if targets is not None:
-        criterion = build_loss(targets, num_keys, device)
+        criterion = build_loss(targets, num_keys, class_weight_type, device)
 
     if model is None:
         # Instantiate model

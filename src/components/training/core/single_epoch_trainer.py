@@ -1,3 +1,25 @@
+"""single_epoch_trainer.py
+
+Module for training a PyTorch model for a single epoch.
+
+This module provides the `train_single_epoch` function, which handles
+the training of a model over a single epoch. It iterates over all
+batches in the training DataLoader, performs forward and backward
+passes, updates model weights using the provided optimizer.
+
+Functions:
+    train_single_epoch(
+        model: torch.nn.Module,
+        training_loader: DataLoader,
+        optimizer: Optimizer,
+        criterion: torch.nn.Module,
+        device: torch.device,
+        epoch: int
+    ) -> None
+        Performs one full pass over the training set, computing loss,
+        gradients, and updating model parameters for each batch.
+"""
+
 import torch
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
@@ -101,7 +123,6 @@ def train_single_epoch(
             "Single epoch training completed",
             extra={
                 "epoch": epoch,
-                "loss_final": loss.item() if "loss" in locals() else None,
                 "batches_num": len(training_loader),
                 "context": "Single epoch training",
             },

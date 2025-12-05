@@ -1,3 +1,20 @@
+"""zipf_probs_calculator.py
+
+Utility module for computing Zipf probabilities.
+
+This module provides the `calculate_zipf_probs` function, which calculates
+the Zipf probabilities for a given set of items and a Zipf parameter alpha.
+The probabilities are normalized to sum to 1, with earlier items receiving
+higher probability as per the Zipf distribution.
+
+Functions:
+    calculate_zipf_probs(
+        items: np.ndarray,
+        alpha: float
+    ) -> np.ndarray
+        Returns normalized Zipf probabilities for the given items.
+"""
+
 import numpy as np
 
 from components.logs.levels.debug_logger import debug

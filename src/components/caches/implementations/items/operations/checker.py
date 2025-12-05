@@ -1,3 +1,19 @@
+"""checker.py
+
+Module for verifying key existence in cache data structures.
+
+This module provides the `check_item_into_cache` function, which checks
+whether a given key exists in the provided cache. It handles exceptions
+for uninitialized caches and unhashable keys.
+
+Functions:
+    check_item_into_cache(
+        data: Any,
+        key: int
+    ) -> bool
+        Returns True if the key exists in the cache, False otherwise.
+"""
+
 from typing import Any
 
 from components.logs.levels.error_logger import error

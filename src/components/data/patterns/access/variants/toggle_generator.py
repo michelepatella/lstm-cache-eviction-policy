@@ -1,3 +1,27 @@
+"""toggle_generator.py
+
+Module for generating toggle-based access patterns.
+
+This module provides the `generate_toggle_pattern` function, which
+simulates key accesses according to a toggle pattern. The pattern alternates
+between two states (forward and backward) with configurable offsets and
+base requests, producing an oscillating sequence of key requests.
+
+Functions:
+    generate_toggle_pattern(
+        toggle_interval: int,
+        toggle_forward: int,
+        toggle_backward: int,
+        toggle_first_base_request: int,
+        toggle_second_base_request: int,
+        requests: list[int],
+        requests_count: int,
+        first_key: int,
+        keys_range_size: int
+    ) -> int
+        Returns the next key index according to a toggle access pattern.
+"""
+
 from components.logs.levels.error_logger import error
 
 

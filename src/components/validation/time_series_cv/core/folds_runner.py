@@ -1,3 +1,23 @@
+"""folds_runner.py
+
+Utility module for computing time series cross-validation (CV) losses.
+
+This module provides the `compute_time_series_cv_folds` function, which
+splits a given training dataset using time series cross-validation,
+trains and evaluates a model for each fold, and calculates the average
+loss across all folds.
+
+Functions:
+    compute_time_series_cv_folds(
+        cv_num_folds: int,
+        training_set: AccessLogsDataset,
+        params: dict[str, int | float | bool],
+        config: Any
+    ) -> tuple[float, list[float]]
+        Performs time series CV and returns the final average loss and
+        list of fold-specific losses.
+"""
+
 from typing import Any
 
 import numpy as np
@@ -69,7 +89,7 @@ def compute_time_series_cv_folds(
 
         # Iterate over all folds
         fold_losses = []
-        for fold_idx, (train_idx, val_idx) in enumerate(fold_indices):
+        for _, (train_idx, val_idx) in enumerate(fold_indices):
             # Compute single fold and get
             # its average loss
             avg_loss = compute_single_time_series_cv_fold(

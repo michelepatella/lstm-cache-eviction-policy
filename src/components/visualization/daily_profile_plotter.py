@@ -1,3 +1,21 @@
+"""daily_profile_plotter.py
+
+Utility module for plotting the daily profile of requests based on their
+timestamps in hours.
+
+This module provides the `plot_daily_profile` function, which computes a
+histogram of request timestamps binned by hour of the day and visualizes
+it as a bar plot.
+
+Functions:
+    plot_daily_profile(
+        timestamps_hours: np.ndarray,
+        save_path: str
+    ) -> None
+        Plots the daily profile of requests and saves the figure to the
+        specified path.
+"""
+
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -13,7 +31,7 @@ from components.const import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from src.const import (
+from const import (
     TIME_END_HOUR,
     TIME_START_HOUR,
 )

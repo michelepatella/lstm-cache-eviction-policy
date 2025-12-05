@@ -1,3 +1,24 @@
+"""generation_helper.py
+
+Helper module for generating key requests and corresponding timestamps
+for both static and dynamic Zipfian distributions.
+
+This module provides the `generate_requests_helper` function, which
+iterates over a list of alpha values (one for static, multiple for dynamic),
+generates requests and timestamps for each alpha using the
+`generate_requests_for_alpha` function, and converts the timestamps
+from seconds to hours.
+
+Functions:
+    generate_requests_helper(
+        alpha_range: list[float],
+        config: Any,
+        time_step_duration: int | None = None
+    ) -> tuple[list[int], ndarray]
+        Generates a list of requested keys and their corresponding timestamps
+        in hours, supporting both static and dynamic Zipfian request generation.
+"""
+
 from typing import Any
 
 import numpy as np
@@ -45,8 +66,8 @@ def generate_requests_helper(
     """
     try:
         # Retrieve keys range from configuration
-        min_key = config.data.keys.min
-        max_key = config.data.keys.max
+        min_key = config.data.general.keys.min
+        max_key = config.data.general.keys.max
         keys_range = np.arange(min_key, max_key + 1)
 
         debug(

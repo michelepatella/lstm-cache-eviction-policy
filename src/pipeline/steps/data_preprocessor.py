@@ -1,3 +1,18 @@
+"""data_preprocessor.py
+
+Pipeline step module responsible for cleaning and enriching the raw
+dataset generated in the previous step.
+
+This module provides the `preprocess_data` function, which handles data
+cleaning (removing missing values and duplicates) and feature engineering
+(building new temporal features). The final processed dataset is saved.
+
+Functions:
+    preprocess_data() -> None
+        Orchestrates the data preprocessing workflow, saving the cleaned
+        and enriched dataset.
+"""
+
 import logging
 import os
 
@@ -19,18 +34,18 @@ from components.dataset.io.saver import save_dataset
 from components.logs.handlers.elastic_handler import ElasticHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
-from pipeline.config.configurator import prepare_config
-from pipeline.const import (
-    DAGS_HUB_ENV_VAR_REPO_NAME,
-    DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
-    DAGS_HUB_MLFLOW,
-    DATASET_PROCESSED_TYPE,
-    LOGS_PHASE_DATA_PREPROCESSING,
-)
-from src.const import (
+from const import (
     DATASET_COLUMN_TIMESTAMP_NAME,
     DATASET_RAW_TYPE,
     MLFLOW_NESTED,
+)
+from pipeline.config.configurator import prepare_config
+from pipeline.const import (
+    DAGS_HUB_DVC,
+    DAGS_HUB_ENV_VAR_REPO_NAME,
+    DAGS_HUB_ENV_VAR_REPO_OWNER_NAME,
+    DATASET_PROCESSED_TYPE,
+    LOGS_PHASE_DATA_PREPROCESSING,
 )
 
 # Load env variables
@@ -56,7 +71,7 @@ def preprocess_data() -> None:
     dagshub.init(
         repo_owner=dabs_hub_repo_owner,
         repo_name=dags_hub_repo_name,
-        mlflow=DAGS_HUB_MLFLOW,
+        dvc=DAGS_HUB_DVC,
     )
 
     import mlflow
@@ -67,10 +82,13 @@ def preprocess_data() -> None:
     ):
         # Setup
         config = prepare_config()
-        initialize_logs()
+        initialize_logs(logging.getLevelName(config.logs.level))
 
         # Prepare configuration
-        data_distribution_mode = config.data.mode
+        data_distribution_mode = config.data.general.mode
+        missing_values_removal_dropna_how = (
+            config.dataset.cleaning.missing_values_removal.dropna.how
+        )
 
         info(
             "Data preprocessing started",
@@ -90,7 +108,10 @@ def preprocess_data() -> None:
         initial_df = load_dataset(dataset_raw_path)
 
         # Remove missing values
-        missing_values_removed_df = remove_dataset_missing_values(initial_df)
+        missing_values_removed_df = remove_dataset_missing_values(
+            initial_df,
+            missing_values_removal_dropna_how,
+        )
 
         # Remove duplicates
         duplicates_removed_df = remove_dataset_duplicates(
@@ -146,4 +167,4 @@ if __name__ == "__main__":
     # Force logs flush
     for handler in logging.getLogger().handlers:
         if isinstance(handler, ElasticHandler):
-            handler.flush_buffer()
+            handler.flush_buffer_async()

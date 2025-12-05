@@ -1,3 +1,22 @@
+"""initializer.py
+
+Helper module for initializing PyTorch DataLoaders with datasets.
+
+This module provides the `initialize_data_loader` function, which instantiates
+a dataset of the specified class and type, then builds a DataLoader with the
+given batch size and shuffle configuration.
+
+Functions:
+    initialize_data_loader(
+        data_loader_type: str,
+        batch_size: int,
+        shuffle: bool,
+        dataset_class: Type[AccessLogsDataset],
+        config: Any
+    ) -> tuple[AccessLogsDataset, DataLoader]
+        Instantiates the dataset and returns it along with a configured DataLoader.
+"""
+
 from typing import Any
 
 from torch.utils.data import DataLoader

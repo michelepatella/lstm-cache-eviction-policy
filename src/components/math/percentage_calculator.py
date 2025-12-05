@@ -1,3 +1,18 @@
+"""percentage_calculator.py
+
+Utility module for computing percentages.
+
+This module provides the `calculate_percentage` function, which computes
+the percentage of a given value relative to a total.
+
+Functions:
+    calculate_percentage(
+        value: float,
+        total: float
+    ) -> float
+        Returns the percentage representation of value with respect to total.
+"""
+
 from components.logs.levels.error_logger import error
 
 
