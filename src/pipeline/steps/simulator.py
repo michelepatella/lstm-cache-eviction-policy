@@ -193,55 +193,64 @@ def run_simulations() -> None:
 
         # Retrieve all the simulation results
         for policy, future in zip(cache_eviction_policies.keys(), futures):
-            counters, timeline, cache_latencies = ray.get(future)
+            with mlflow.start_run(
+                run_name=policy,
+                nested=MLFLOW_NESTED,
+            ):
+                counters, timeline, cache_latencies = ray.get(future)
 
-            # Calculate salient metrics
-            hit_rate, miss_rate, eviction_mistake_rate, avg_cache_latency = (
-                calculate_simulation_metrics(
+                # Calculate salient metrics
+                (
+                    hit_rate,
+                    miss_rate,
+                    eviction_mistake_rate,
+                    avg_cache_latency,
+                ) = calculate_simulation_metrics(
                     counters,
                     cache_latencies,
                     mistake_window,
                     cache_eviction_policies[policy].metrics_logger,
                 )
-            )
 
-            # Collect all metrics together
-            metrics = {
-                SIMULATIONS_METRICS_POLICY_NAME: policy,
-                SIMULATIONS_METRICS_HIT_RATE_NAME: hit_rate,
-                SIMULATIONS_METRICS_MISS_RATE_NAME: miss_rate,
-                SIMULATIONS_METRICS_HIT_COUNTER_NAME: counters[
-                    SIMULATIONS_METRICS_HIT_COUNTER_NAME
-                ],
-                SIMULATIONS_METRICS_MISS_COUNTER_NAME: counters[
-                    SIMULATIONS_METRICS_MISS_COUNTER_NAME
-                ],
-                SIMULATIONS_METRICS_TIMELINE_NAME: timeline,
-                SIMULATIONS_METRICS_EVICTION_MISTAKE_RATE_NAME: eviction_mistake_rate,
-                SIMULATIONS_METRICS_AVG_CACHE_LATENCY_NAME: avg_cache_latency,
-            }
-            results.append(metrics)
-
-            # Experiment tracking
-            mlflow.log_metrics(
-                {
-                    "requests_num": counters[
+                # Collect all metrics together
+                metrics = {
+                    SIMULATIONS_METRICS_POLICY_NAME: policy,
+                    SIMULATIONS_METRICS_HIT_RATE_NAME: hit_rate,
+                    SIMULATIONS_METRICS_MISS_RATE_NAME: miss_rate,
+                    SIMULATIONS_METRICS_HIT_COUNTER_NAME: counters[
                         SIMULATIONS_METRICS_HIT_COUNTER_NAME
-                    ]
-                    + counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME],
-                    "hits_num": counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME],
-                    "misses_num": counters[
+                    ],
+                    SIMULATIONS_METRICS_MISS_COUNTER_NAME: counters[
                         SIMULATIONS_METRICS_MISS_COUNTER_NAME
                     ],
-                    "hit_rate": hit_rate,
-                    "miss_rate": miss_rate,
-                    "eviction_mistake_rate": eviction_mistake_rate,
-                    "latency_us_min": min(cache_latencies),
-                    "latency_us_max": max(cache_latencies),
-                    "latency_us_avg": avg_cache_latency,
-                    "latency_us_std": np.std(cache_latencies),
-                },
-            )
+                    SIMULATIONS_METRICS_TIMELINE_NAME: timeline,
+                    SIMULATIONS_METRICS_EVICTION_MISTAKE_RATE_NAME: eviction_mistake_rate,
+                    SIMULATIONS_METRICS_AVG_CACHE_LATENCY_NAME: avg_cache_latency,
+                }
+                results.append(metrics)
+
+                # Experiment tracking
+                mlflow.log_metrics(
+                    {
+                        "requests_num": counters[
+                            SIMULATIONS_METRICS_HIT_COUNTER_NAME
+                        ]
+                        + counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME],
+                        "hits_num": counters[
+                            SIMULATIONS_METRICS_HIT_COUNTER_NAME
+                        ],
+                        "misses_num": counters[
+                            SIMULATIONS_METRICS_MISS_COUNTER_NAME
+                        ],
+                        "hit_rate": hit_rate,
+                        "miss_rate": miss_rate,
+                        "eviction_mistake_rate": eviction_mistake_rate,
+                        "latency_us_min": min(cache_latencies),
+                        "latency_us_max": max(cache_latencies),
+                        "latency_us_avg": avg_cache_latency,
+                        "latency_us_std": np.std(cache_latencies),
+                    },
+                )
 
         # Extract key access sequence
         # to pass to Belady MIN benchmark

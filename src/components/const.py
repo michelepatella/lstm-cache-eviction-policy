@@ -166,6 +166,7 @@ LOGS_FIELD_STANDARD_NAMES = {
     "threadName",
     "processName",
     "process",
+    "taskName",
 }
 
 LOGS_GRAFANA_LOKI_FIELD_PHASE_NAME = "phase"

@@ -130,7 +130,6 @@ def construct_api_response(
     @wraps(f)
     async def wrap(
         *args: Any,
-        request: Request,
         **kwargs: Any,
     ) -> dict[str, Any]:
         """The wrapper function that executes the endpoint and formats
@@ -143,8 +142,6 @@ def construct_api_response(
 
         Args:
             *args (Any): Positional arguments passed to the original function.
-            request (Request): The FastAPI Request object, implicitly passed by
-                               FastAPI.
             **kwargs (Any): Keyword arguments passed to the original function.
 
         Returns:
@@ -153,6 +150,14 @@ def construct_api_response(
         """
         # Construct a standard API response, also
         # managing exceptions raising in the API
+        request = next(
+            (
+                arg
+                for arg in list(args) + list(kwargs.values())
+                if isinstance(arg, Request)
+            ),
+            None,
+        )
         try:
             result = (
                 await f(*args, **kwargs) if callable(f) else f(*args, **kwargs)
@@ -195,7 +200,10 @@ def construct_api_response(
 
 @app.post(GATEWAY_API_ENDPOINT)
 @construct_api_response
-def gateway_api(payload: GatewayAPIInput) -> dict[str, Any]:
+async def gateway_api(
+    payload: GatewayAPIInput,
+    request: Request,
+) -> dict[str, Any]:
     """The main endpoint executing the cache eviction policy.
 
     This function orchestrates a sequential process by calling the
@@ -214,6 +222,7 @@ def gateway_api(payload: GatewayAPIInput) -> dict[str, Any]:
             - last_accesses (list[tuple[float, int]]): Recent access history.
             - user_api_kwargs (dict | None): Optional runtime configuration
                                              overrides.
+       request (Request): FastAPI request object, required by the decorator.
 
     Returns:
         dict[str, Any]: A dictionary containing the standard API response

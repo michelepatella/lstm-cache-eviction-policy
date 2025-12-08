@@ -67,8 +67,10 @@ def call_featurizer_service(
             stub = pb2_grpc.FeaturizerServiceStub(channel)
             request = pb2.FeaturizerServiceRequest(
                 last_accesses=[
-                    pb2.LastAccess(timestamp=ts, key=k)
-                    for ts, k in last_accesses
+                    pb2.FeaturizerServiceInput(
+                        timestamps=[ts for ts, _ in last_accesses],
+                        keys=[k for _, k in last_accesses],
+                    ),
                 ],
             )
             response = stub.Build(request)
@@ -76,19 +78,19 @@ def call_featurizer_service(
             debug(
                 "Featurizer service call completed",
                 extra={
-                    "features_num": len(response.features),
-                    "keys_seq_num": len(response.keys_seq),
-                    "features_shape": response.features_shape,
-                    "keys_shape": response.keys_shape,
+                    "features_num": len(list(response.features)),
+                    "keys_seq_num": len(list(response.keys_seq)),
+                    "features_shape": list(response.features_shape),
+                    "keys_shape": list(response.keys_shape),
                     "context": "Featurizer service call",
                 },
             )
 
             return (
-                response.features,
-                response.keys_seq,
-                response.features_shape,
-                response.keys_shape,
+                list(response.features),
+                list(response.keys_seq),
+                list(response.features_shape),
+                list(response.keys_shape),
             )
 
     except grpc.RpcError as e:

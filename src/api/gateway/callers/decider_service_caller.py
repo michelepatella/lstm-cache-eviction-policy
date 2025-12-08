@@ -81,7 +81,7 @@ def call_decider_service(
             debug(
                 "Decider service call completed",
                 extra={
-                    "keys_to_evict_num": len(response.keys_to_evict),
+                    "keys_to_evict_num": len(list(response.keys_to_evict)),
                     "context": "Decider service call",
                 },
             )

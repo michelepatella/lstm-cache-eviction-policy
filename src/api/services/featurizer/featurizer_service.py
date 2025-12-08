@@ -17,6 +17,7 @@ import numpy as np
 
 from api.config.pydantic.api_config import APIConfig
 from api.const import API_CONFIG_FILE_PATH
+from components.const import LIST_FIRST_IDX
 from components.dataset.features.seq_builder import build_feature_seq
 from components.device.selector import select_device
 from components.logs.levels.error_logger import error
@@ -78,9 +79,9 @@ class FeaturizerService(pb2_grpc.FeaturizerServiceServicer):
             # Extract timestamps and corresponding accessed keys
             # from last accesses data
             timestamps = np.array(
-                [la.timestamp for la in request.last_accesses],
+                request.last_accesses[LIST_FIRST_IDX].timestamps,
             )
-            keys = np.array([la.key for la in request.last_accesses])
+            keys = np.array(request.last_accesses[LIST_FIRST_IDX].keys)
 
             # Build model-ready features and keys sequence
             features_seq, keys_seq = build_feature_seq(
