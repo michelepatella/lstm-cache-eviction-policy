@@ -120,11 +120,11 @@ class PredictorService(pb2_grpc.PredictorServiceServicer):
             features_seq = torch.tensor(
                 request.features,
                 dtype=TORCH_DTYPE_FEATURES,
-            ).reshape(request.features_shape)
+            ).reshape(tuple(request.features_shape))
             keys_seq = torch.tensor(
                 request.keys_seq,
                 dtype=TORCH_DTYPE_TARGET,
-            ).reshape(request.keys_shape)
+            ).reshape(tuple(request.keys_shape))
             features_seq = move_to_device(features_seq, device)
             keys_seq = move_to_device(keys_seq, device)
 

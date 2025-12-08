@@ -91,8 +91,8 @@ def call_predictor_service(
             response = stub.Predict(request)
 
             # Prepare outputs to return
-            outputs = [fl.values for fl in response.outputs]
-            variances = [fl.values for fl in response.variances]
+            outputs = [list(fl.values) for fl in response.outputs]
+            variances = [list(fl.values) for fl in response.variances]
 
             debug(
                 "Predictor service call completed",

@@ -100,50 +100,62 @@ PIPELINE_CONFIG_FILE_PATH = (
 # Plot
 # ----------------------------
 PLOT_STATIC_ZIPF_LOG_LOG_FILE_PATH = (
-    PROJECT_ROOT / "reports" / "plots" / "static" / "static_zipf_log_log.png"
+    PROJECT_ROOT / "reports" / "figures" / "static" / "static_zipf_log_log.png"
 )
 PLOT_STATIC_DAILY_PROFILE_FILE_PATH = (
-    PROJECT_ROOT / "reports" / "plots" / "static" / "static_daily_profile.png"
+    PROJECT_ROOT
+    / "reports"
+    / "figures"
+    / "static"
+    / "static_daily_profile.png"
 )
 PLOT_STATIC_KEY_USAGE_HEATMAP_FILE_PATH = (
-    PROJECT_ROOT / "reports" / "plots" / "static" / "static_key_usage.png"
+    PROJECT_ROOT / "reports" / "figures" / "static" / "static_key_usage.png"
 )
 PLOT_STATIC_HIT_MISS_RATES_FILE_PATH = (
-    PROJECT_ROOT / "reports" / "plots" / "static" / "static_hit_miss_rates.png"
+    PROJECT_ROOT
+    / "reports"
+    / "figures"
+    / "static"
+    / "static_hit_miss_rates.png"
 )
 
 PLOT_DYNAMIC_ZIPF_LOG_LOG_FILE_PATH = (
-    PROJECT_ROOT / "reports" / "plots" / "dynamic" / "dynamic_zipf_log_log.png"
+    PROJECT_ROOT
+    / "reports"
+    / "figures"
+    / "dynamic"
+    / "dynamic_zipf_log_log.png"
 )
 PLOT_DYNAMIC_DAILY_PROFILE_FILE_PATH = (
     PROJECT_ROOT
     / "reports"
-    / "plots"
+    / "figures"
     / "dynamic"
     / "dynamic_daily_profile.png"
 )
 PLOT_DYNAMIC_KEY_USAGE_HEATMAP_FILE_PATH = (
-    PROJECT_ROOT / "reports" / "plots" / "dynamic" / "dynamic_key_usage.png"
+    PROJECT_ROOT / "reports" / "figures" / "dynamic" / "dynamic_key_usage.png"
 )
 PLOT_DYNAMIC_HIT_MISS_RATES_FILE_PATH = (
     PROJECT_ROOT
     / "reports"
-    / "plots"
+    / "figures"
     / "dynamic"
     / "dynamic_hit_miss_rates.png"
 )
 
 PLOT_REAL_ZIPF_LOG_LOG_FILE_PATH = (
-    PROJECT_ROOT / "reports" / "plots" / "real" / "real_zipf_log_log.png"
+    PROJECT_ROOT / "reports" / "figures" / "real" / "real_zipf_log_log.png"
 )
 PLOT_REAL_DAILY_PROFILE_FILE_PATH = (
-    PROJECT_ROOT / "reports" / "plots" / "real" / "real_daily_profile.png"
+    PROJECT_ROOT / "reports" / "figures" / "real" / "real_daily_profile.png"
 )
 PLOT_REAL_KEY_USAGE_HEATMAP_FILE_PATH = (
-    PROJECT_ROOT / "reports" / "plots" / "real" / "real_key_usage.png"
+    PROJECT_ROOT / "reports" / "figures" / "real" / "real_key_usage.png"
 )
 PLOT_REAL_HIT_MISS_RATES_FILE_PATH = (
-    PROJECT_ROOT / "reports" / "plots" / "real" / "real_hit_miss_rates.png"
+    PROJECT_ROOT / "reports" / "figures" / "real" / "real_hit_miss_rates.png"
 )
 
 

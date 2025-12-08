@@ -71,8 +71,8 @@ def call_scorer_service(
             # and call it retrieving the response
             stub = pb2_grpc.ScorerServiceStub(ch)
             request = pb2.ScorerServiceRequest(
-                outputs=list(outputs),
-                variances=list(variances),
+                outputs=[f for sublist in outputs for f in sublist],
+                variances=[v for sublist in variances for v in sublist],
                 conf_level=api_config.kwargs.conf_level.value,
                 prob_weight=api_config.kwargs.prob_weight.value,
                 conf_weight=api_config.kwargs.conf_weight.value,
@@ -82,7 +82,7 @@ def call_scorer_service(
             debug(
                 "Scorer service call completed",
                 extra={
-                    "key_scores_num": len(response.key_scores),
+                    "key_scores_num": len(np.array(response.key_scores)),
                     "context": "Scorer service call",
                 },
             )

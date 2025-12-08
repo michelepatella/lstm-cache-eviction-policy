@@ -34,7 +34,11 @@ from components.dataset.rows.extractions.lasts_extractor import (
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import GATEWAY_API_FULL_URL
+from const import (
+    API_RESPONSE_FIELD_DATA_KEYS_TO_EVICT_NAME,
+    API_RESPONSE_FIELD_DATA_NAME,
+    GATEWAY_API_FULL_URL,
+)
 from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
@@ -247,7 +251,12 @@ class LSTMCache(BaseCache):
                             API_PARAM_USER_API_KWARGS_NAME: self.api_kwargs.__dict__,
                         },
                     )
-                    keys_to_evict = response.json()
+
+                    # Extract data as response
+                    response = response.json()
+                    keys_to_evict = response[API_RESPONSE_FIELD_DATA_NAME][
+                        API_RESPONSE_FIELD_DATA_KEYS_TO_EVICT_NAME
+                    ]
                     key_to_evict = keys_to_evict[LIST_FIRST_IDX]
 
                 # Evict key
