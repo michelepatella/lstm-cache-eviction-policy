@@ -65,8 +65,6 @@ from pipeline.const import (
     PLOT_REAL_HIT_MISS_RATES_FILE_PATH,
     PLOT_STATIC_HIT_MISS_RATES_FILE_PATH,
     SIMULATIONS_METRICS_AVG_CACHE_LATENCY_NAME,
-    SIMULATIONS_METRICS_BELADY_MIN_HIT_RATE_NAME,
-    SIMULATIONS_METRICS_BELADY_MIN_MISS_RATE_NAME,
     SIMULATIONS_METRICS_EVICTION_MISTAKE_RATE_NAME,
     SIMULATIONS_METRICS_HIT_RATE_NAME,
     SIMULATIONS_METRICS_MISS_RATE_NAME,
@@ -267,12 +265,6 @@ def run_simulations() -> None:
             access_sequence,
             cache_size,
         )
-        results.append(
-            {
-                SIMULATIONS_METRICS_BELADY_MIN_HIT_RATE_NAME: belady_min_hit_rate,
-                SIMULATIONS_METRICS_BELADY_MIN_MISS_RATE_NAME: belady_min_miss_rate,
-            },
-        )
 
         # Determine plot file path according
         # to data distribution mode
@@ -301,6 +293,12 @@ def run_simulations() -> None:
         )
 
         # Experiment tracking
+        mlflow.log_metrics(
+            {
+                "belady_min_hit_rate": belady_min_hit_rate,
+                "belady_min_miss_rate": belady_min_miss_rate,
+            },
+        )
         mlflow.log_params(
             prepare_pipeline_config().model_dump(),
         )
