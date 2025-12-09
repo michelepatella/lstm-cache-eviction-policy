@@ -1,0 +1,63 @@
+version: "3.9"
+
+services:
+  api_gateway:
+    build:
+      context: ./
+      dockerfile: src/api/gateway/Dockerfile
+      args:
+        GATEWAY_API_PORT: ${GATEWAY_API_PORT}
+    environment:
+      - GATEWAY_API_ENDPOINT_BASE_URL=${GATEWAY_API_ENDPOINT_BASE_URL}
+      - GATEWAY_API_ENDPOINT=${GATEWAY_API_ENDPOINT}
+    ports:
+      - "${GATEWAY_API_PORT}:${GATEWAY_API_PORT}"
+    depends_on:
+      - featurizer_service
+      - predictor_service
+      - scorer_service
+      - decider_service
+
+  featurizer_service:
+    build:
+      context: ./
+      dockerfile: src/api/services/featurizer/Dockerfile
+      args:
+        FEATURIZER_SERVICE_PORT: ${FEATURIZER_SERVICE_PORT}
+    environment:
+      - FEATURIZER_SERVICE_CHANNEL=${FEATURIZER_SERVICE_CHANNEL}
+    ports:
+      - "${FEATURIZER_SERVICE_PORT}:${FEATURIZER_SERVICE_PORT}"
+
+  predictor_service:
+    build:
+      context: ./
+      dockerfile: src/api/services/predictor/Dockerfile
+      args:
+        PREDICTOR_SERVICE_PORT: ${PREDICTOR_SERVICE_PORT}
+    environment:
+      - PREDICTOR_SERVICE_CHANNEL=${PREDICTOR_SERVICE_CHANNEL}
+    ports:
+      - "${PREDICTOR_SERVICE_PORT}:${PREDICTOR_SERVICE_PORT}"
+
+  scorer_service:
+    build:
+      context: ./
+      dockerfile: src/api/services/scorer/Dockerfile
+      args:
+        SCORER_SERVICE_PORT: ${SCORER_SERVICE_PORT}
+    environment:
+      - SCORER_SERVICE_CHANNEL=${SCORER_SERVICE_CHANNEL}
+    ports:
+      - "${SCORER_SERVICE_PORT}:${SCORER_SERVICE_PORT}"
+
+  decider_service:
+    build:
+      context: ./
+      dockerfile: src/api/services/decider/Dockerfile
+      args:
+        DECIDER_SERVICE_PORT: ${DECIDER_SERVICE_PORT}
+    environment:
+      - DECIDER_SERVICE_CHANNEL=${DECIDER_SERVICE_CHANNEL}
+    ports:
+      - "${DECIDER_SERVICE_PORT}:${DECIDER_SERVICE_PORT}"
