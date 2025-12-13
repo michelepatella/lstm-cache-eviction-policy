@@ -10,7 +10,6 @@ Classes:
     PredictorService: gRPC Servicer class implementing the Predict method.
 """
 
-import dagshub
 import grpc
 import mlflow
 import torch
@@ -32,22 +31,12 @@ from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.yaml.io.loader import load_yaml
 from const import (
-    DAGS_HUB_REPO_NAME,
-    DAGS_HUB_REPO_OWNER,
     MLFLOW_MODEL_PRODUCTION_NAME,
 )
-from pipeline.const import DAGS_HUB_DVC
 
 # ----------------------------
 # Setup
 # ----------------------------
-dagshub.init(
-    repo_owner=DAGS_HUB_REPO_OWNER,
-    repo_name=DAGS_HUB_REPO_NAME,
-    dvc=DAGS_HUB_DVC,
-    root="/app",
-)
-
 # Load API configuration
 api_config_file = load_yaml(API_CONFIG_FILE_PATH)
 api_config = APIConfig(**api_config_file)
