@@ -40,10 +40,6 @@ code_format:
 code_lint:
 	pylint $(SRC_DIRECTORY)
 
-# Check type on code
-code_check_type:
-	mypy $(ROOT_DIRECTORY)
-
 
 # -------------------------------
 # Deps
@@ -56,6 +52,13 @@ deps_install:
 # Update dependencies in requirements.txt
 deps_update:
 	pip freeze > $(REQUIREMENTS_PATH)
+
+
+# -------------------------------
+# Docker
+# -------------------------------
+docker_compose_build_up:
+	docker-compose build --no-cache && docker-compose up
 
 
 # -------------------------------
