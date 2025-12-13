@@ -45,6 +45,7 @@ dagshub.init(
     repo_owner=DAGS_HUB_REPO_OWNER,
     repo_name=DAGS_HUB_REPO_NAME,
     dvc=DAGS_HUB_DVC,
+    root="/app",
 )
 
 # Load API configuration
