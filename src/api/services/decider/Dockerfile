@@ -7,8 +7,9 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy code
-COPY src/ .
+# Copy codes
+COPY src/ /app/src/
+ENV PYTHONPATH=/app/src
 
 # Set port
 ARG DECIDER_SERVICE_PORT

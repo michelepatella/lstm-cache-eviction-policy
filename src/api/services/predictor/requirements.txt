@@ -1,8 +1,9 @@
 dagshub==0.6.3
-django_pipeline==4.1.0
 grpcio==1.76.0
+grpcio-tools==1.76.0
 mlflow==3.4.0
-mlflow_skinny==3.4.0
-mlflow_tracing==3.4.0
-protobuf==6.33.2
+numpy==1.26.4
+protobuf==6.32.1
+pydantic==2.12.5
+PyYAML==6.0.3
 torch==2.8.0

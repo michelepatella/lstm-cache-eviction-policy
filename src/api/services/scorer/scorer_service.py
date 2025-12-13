@@ -12,9 +12,9 @@ Classes:
 
 import grpc
 import numpy as np
-import scorer_service_pb2 as pb2
-import scorer_service_pb2_grpc as pb2_grpc
 
+import api.services.scorer.scorer_service_pb2 as pb2
+import api.services.scorer.scorer_service_pb2_grpc as pb2_grpc
 from components.caches.implementations.items.scores.prob_conf_calculator import (
     calculate_prob_conf_item_scores,
 )

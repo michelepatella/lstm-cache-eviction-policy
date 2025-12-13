@@ -35,6 +35,7 @@ services:
       dockerfile: src/api/services/predictor/Dockerfile
       args:
         PREDICTOR_SERVICE_PORT: ${PREDICTOR_SERVICE_PORT}
+        GIT_HUB_TOKEN: ${GIT_HUB_TOKEN}
     environment:
       - PREDICTOR_SERVICE_CHANNEL=${PREDICTOR_SERVICE_CHANNEL}
     ports:

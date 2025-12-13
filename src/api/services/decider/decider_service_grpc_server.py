@@ -14,9 +14,9 @@ Functions:
 
 from concurrent import futures
 
-import decider_service_pb2_grpc as pb2_grpc
 import grpc
 
+import api.services.decider.decider_service_pb2_grpc as pb2_grpc
 from api.const import DECIDER_SERVICE_CHANNEL
 from api.services.decider.decider_service import DeciderService
 

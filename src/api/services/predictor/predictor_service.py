@@ -13,10 +13,10 @@ Classes:
 import dagshub
 import grpc
 import mlflow
-import predictor_service_pb2 as pb2
-import predictor_service_pb2_grpc as pb2_grpc
 import torch
 
+import api.services.predictor.predictor_service_pb2 as pb2
+import api.services.predictor.predictor_service_pb2_grpc as pb2_grpc
 from api.config.pydantic.api_config import APIConfig
 from api.const import (
     API_CONFIG_FILE_PATH,
