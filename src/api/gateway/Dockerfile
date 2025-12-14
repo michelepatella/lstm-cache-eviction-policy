@@ -1,5 +1,8 @@
 FROM python:3.12-slim
 
+# Create non-root user
+RUN useradd --create-home --shell /bin/bash appuser
+
 # Set the working directory
 WORKDIR /app
 
@@ -13,8 +16,10 @@ ENV PYTHONPATH=/app/src
 
 # Set port
 ARG GATEWAY_API_PORT
-ENV GATEWAY_API_PORT=${GATEWAY_API_PORT}
 EXPOSE ${GATEWAY_API_PORT}
 
+# Move to non-root user
+USER appuser
+
 # Run API Gateway
-CMD ["sh", "-c", "uvicorn api.gateway.main:app --host 0.0.0.0 --port ${GATEWAY_API_PORT}"]
+CMD sh -c "uvicorn api.gateway.main:app --host 0.0.0.0 --port ${GATEWAY_API_PORT}"

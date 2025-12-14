@@ -49,16 +49,15 @@ code_lint:
 deps_install:
 	pip install -r $(REQUIREMENTS_PATH)
 
-# Update dependencies in requirements.txt
-deps_update:
-	pip freeze > $(REQUIREMENTS_PATH)
-
 
 # -------------------------------
 # Docker
 # -------------------------------
 docker_compose_build_up:
 	docker-compose build --no-cache && docker-compose up
+
+docker_compose_down:
+	docker-compose down
 
 
 # -------------------------------

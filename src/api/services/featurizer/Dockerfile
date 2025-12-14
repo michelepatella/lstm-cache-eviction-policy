@@ -1,5 +1,8 @@
 FROM python:3.12-slim
 
+# Create non-root user
+RUN useradd --create-home --shell /bin/bash appuser
+
 # Set the working directory
 WORKDIR /app
 
@@ -13,8 +16,10 @@ ENV PYTHONPATH=/app/src
 
 # Set port
 ARG FEATURIZER_SERVICE_PORT
-ENV FEATURIZER_SERVICE_PORT=${FEATURIZER_SERVICE_PORT}
 EXPOSE ${FEATURIZER_SERVICE_PORT}
+
+# Move to non-root user
+USER appuser
 
 # Run microservice
 CMD ["python", "-m", "api.services.featurizer.featurizer_service_grpc_server"]
