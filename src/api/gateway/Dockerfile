@@ -17,4 +17,4 @@ ENV GATEWAY_API_PORT=${GATEWAY_API_PORT}
 EXPOSE ${GATEWAY_API_PORT}
 
 # Run API Gateway
-CMD ["python", "-m", "api.gateway.main"]
+CMD ["sh", "-c", "uvicorn api.gateway.main:app --host 0.0.0.0 --port ${GATEWAY_API_PORT}"]
