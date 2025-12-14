@@ -86,6 +86,8 @@ LOGS_LOGGER_NAME = "logger"
 
 LOGS_PHASE_VALIDATION = "validation"
 
+LOGS_LEVEL_NAMES = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+
 
 # ----------------------------
 # MLFlow
@@ -94,6 +96,19 @@ MLFLOW_NESTED = True
 
 MLFLOW_MODEL_PRODUCTION_NAME = "LSTM_production"
 MLFLOW_MODEL_SIMULATION_NAME = "LSTM_simulation"
+
+
+# ----------------------------
+# Model
+# ----------------------------
+MODEL_OPTIMIZATIONS_QUANTIZATION_ENGINE_NAMES = [
+    "fbgemm",
+    "qnnpack",
+    "onednn",
+    "xnnpack",
+    "nnpi",
+    "acl",
+]
 
 
 # ----------------------------

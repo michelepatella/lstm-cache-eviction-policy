@@ -50,9 +50,6 @@ LOGS_PHASE_TRAINING = "training"
 LOGS_PHASE_TESTING = "testing"
 LOGS_PHASE_SIMULATIONS = "simulations"
 
-LOGS_LEVEL_NAMES = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
-
-
 # ----------------------------
 # Loss
 # ----------------------------
@@ -78,15 +75,6 @@ MODEL_OPTIMIZATIONS_QUANTIZATION_DTYPES = [
     "float16",
     "bfloat16",
 ]
-MODEL_OPTIMIZATIONS_QUANTIZATION_ENGINE_NAMES = [
-    "fbgemm",
-    "qnnpack",
-    "onednn",
-    "xnnpack",
-    "nnpi",
-    "acl",
-]
-
 
 # ----------------------------
 # Pipeline Config
