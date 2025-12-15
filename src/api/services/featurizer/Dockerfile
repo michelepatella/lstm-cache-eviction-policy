@@ -33,6 +33,7 @@ COPY src/api/config/pydantic/sections/kwargs_api_config.py /app/src/api/config/p
 COPY src/api/config/pydantic/sections/logs_api_config.py /app/src/api/config/pydantic/sections/
 COPY src/api/config/pydantic/sections/model_api_config.py /app/src/api/config/pydantic/sections/
 COPY src/api/config/pydantic/sections/resources_api_config.py /app/src/api/config/pydantic/sections/
+COPY src/api/config/config.yaml /app/src/api/config/config.yaml
 COPY src/components/assertions/choice_field_assertor.py /app/src/components/assertions/
 COPY src/components/const.py /app/src/components/
 COPY src/components/dataset/features/local/local_frequencies_calculator.py /app/src/components/dataset/features/local/
@@ -47,7 +48,6 @@ COPY src/components/logs/levels/utils/logger.py /app/src/components/logs/levels/
 COPY src/components/time/transforms/trig_encoder.py /app/src/components/time/transforms/
 COPY src/components/yaml/io/loader.py /app/src/components/yaml/io/
 COPY src/const.py /app/src/
-COPY src/api/config/config.yaml /app/src/api/config/config.yaml
 
 # Set PYTHONPATH
 ENV PYTHONPATH=/app/src

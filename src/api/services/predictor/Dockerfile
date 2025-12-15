@@ -29,7 +29,6 @@ RUN mkdir -p /app/src/api/services/predictor \
     /app/src/components/model/mode \
     /app/src/components/time/transforms \
     /app/src/components/yaml/io \
-    /app/src/pipeline/config/pydantic \
     /app/src/api
 
 # Copy all needed files
@@ -43,6 +42,7 @@ COPY src/api/config/pydantic/sections/kwargs_api_config.py /app/src/api/config/p
 COPY src/api/config/pydantic/sections/logs_api_config.py /app/src/api/config/pydantic/sections/
 COPY src/api/config/pydantic/sections/model_api_config.py /app/src/api/config/pydantic/sections/
 COPY src/api/config/pydantic/sections/resources_api_config.py /app/src/api/config/pydantic/sections/
+COPY src/api/config/config.yaml /app/src/api/config/config.yaml
 COPY src/components/assertions/choice_field_assertor.py /app/src/components/assertions/
 COPY src/components/backpropagation/core/forward_runner.py /app/src/components/backpropagation/core/
 COPY src/components/backpropagation/mc_dropout/forward_runner.py /app/src/components/backpropagation/mc_dropout/
@@ -62,9 +62,7 @@ COPY src/components/model/lstm.py /app/src/components/model/
 COPY src/components/time/transforms/trig_decoder.py /app/src/components/time/transforms/
 COPY src/components/time/transforms/trig_encoder.py /app/src/components/time/transforms/
 COPY src/components/yaml/io/loader.py /app/src/components/yaml/io/
-COPY src/pipeline/config/pydantic/pipeline_config.py /app/src/pipeline/config/pydantic/
 COPY src/const.py /app/src/
-COPY src/api/config/config.yaml /app/src/api/config/config.yaml
 
 # Set PYTHONPATH
 ENV PYTHONPATH=/app/src
