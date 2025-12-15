@@ -14,8 +14,8 @@ Functions:
 from concurrent import futures
 
 import grpc
-import predictor_service_pb2_grpc as pb2_grpc
 
+import api.services.predictor.predictor_service_pb2_grpc as pb2_grpc
 from api.const import PREDICTOR_SERVICE_CHANNEL
 from api.services.predictor.predictor_service import PredictorService
 

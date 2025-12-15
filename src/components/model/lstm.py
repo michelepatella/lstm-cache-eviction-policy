@@ -30,7 +30,6 @@ from components.const import (
 from components.device.mover import move_to_device
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 class LSTM(torch.nn.Module):
@@ -54,7 +53,7 @@ class LSTM(torch.nn.Module):
     def _set_params(
         self: "LSTM",
         params: Any | dict[str, int | float | bool],
-        pipeline_config: PipelineConfig | None,
+        pipeline_config: "PipelineConfig | None",
     ) -> None:
         """Set model parameters.
 
@@ -65,7 +64,7 @@ class LSTM(torch.nn.Module):
             self ("LSTM"): Current model instance.
             params (Any | dict[str, int | float | bool]):
                 Model parameters to be set.
-            pipeline_config (PipelineConfig | None): Configuration object.
+            pipeline_config ("PipelineConfig | None"): Configuration object.
 
         Raises:
             RuntimeError: If setting model parameters fails:
@@ -117,7 +116,7 @@ class LSTM(torch.nn.Module):
         max_key: int,
         embedding_dim: int,
         num_features: int,
-        pipeline_config: PipelineConfig,
+        pipeline_config: "PipelineConfig",
     ) -> None:
         """Set model fields.
 
@@ -131,7 +130,7 @@ class LSTM(torch.nn.Module):
             max_key (int): Minimum key.
             embedding_dim (int): Embedding dimension for keys.
             num_features (int): Number of features for the model.
-            pipeline_config (PipelineConfig): Configuration object.
+            pipeline_config ("PipelineConfig"): Configuration object.
 
         Returns:
             None
@@ -233,7 +232,7 @@ class LSTM(torch.nn.Module):
         max_key: int,
         embedding_dim: int,
         num_features: int,
-        pipeline_config: PipelineConfig | None,
+        pipeline_config: "PipelineConfig | None",
     ) -> None:
         """Initialize the model.
 
@@ -248,7 +247,7 @@ class LSTM(torch.nn.Module):
             max_key (int): Minimum key.
             embedding_dim (int): Embedding dimension for keys.
             num_features (int): Number of features for the model.
-            pipeline_config (PipelineConfig | None): Configuration object.
+            pipeline_config ("PipelineConfig | None"): Configuration object.
 
         Returns:
             None

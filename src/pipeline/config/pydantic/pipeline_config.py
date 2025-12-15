@@ -12,15 +12,9 @@ Classes:
 
 from pydantic import BaseModel
 
-# Importazioni dei moduli Pydantic creati in precedenza:
 from pipeline.config.pydantic.sections.data_loader_pipeline_config import (
     DataLoaderPipelineConfig,
 )
-
-# Importazioni dei moduli Pydantic ancora da definire (placeholder):
-# In una configurazione reale, ogni chiave YAML deve avere la sua classe importata
-# Sostituiamo le classi generiche con i nomi che corrispondono al YAML:
-# (ASSUMENDO che i file esistano e contengano le classi con i nomi standard)
 from pipeline.config.pydantic.sections.data_pipeline_config import (
     DataPipelineConfig,
 )

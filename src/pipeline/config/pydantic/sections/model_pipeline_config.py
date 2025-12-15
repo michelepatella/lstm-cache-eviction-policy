@@ -28,9 +28,9 @@ from typing import Annotated
 from pydantic import BaseModel, Field, model_validator
 
 from components.assertions.choice_field_assertor import assert_choice_field
+from const import MODEL_OPTIMIZATIONS_QUANTIZATION_ENGINE_NAMES
 from pipeline.const import (
     MODEL_OPTIMIZATIONS_QUANTIZATION_DTYPES,
-    MODEL_OPTIMIZATIONS_QUANTIZATION_ENGINE_NAMES,
 )
 
 

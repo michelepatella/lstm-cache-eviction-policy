@@ -10,10 +10,10 @@ Classes:
     DeciderService: gRPC Servicer class implementing the Decide method.
 """
 
-import decider_service_pb2 as pb2
-import decider_service_pb2_grpc as pb2_grpc
 import grpc
 
+import api.services.decider.decider_service_pb2 as pb2
+import api.services.decider.decider_service_pb2_grpc as pb2_grpc
 from components.caches.implementations.items.evictions.score_based_evictor import (
     evict_score_based_items,
 )

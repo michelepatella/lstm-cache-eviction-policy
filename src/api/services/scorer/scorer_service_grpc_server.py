@@ -14,8 +14,8 @@ Functions:
 from concurrent import futures
 
 import grpc
-import scorer_service_pb2_grpc as pb2_grpc
 
+import api.services.scorer.scorer_service_pb2_grpc as pb2_grpc
 from api.const import SCORER_SERVICE_CHANNEL
 from api.services.scorer.scorer_service import ScorerService
 

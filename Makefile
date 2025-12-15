@@ -1,10 +1,10 @@
+include .env
+
 ROOT_DIRECTORY := .
 SRC_DIRECTORY := src
 DOCS_OUTPUT_DIRECTORY := docs/_build/html
 
-REQUIREMENTS_PATH := requirements.txt
 DVC_LOCK_PATH := dvc.lock
-
 VC_COMMIT_DVC_TARGET_DIRECTORY_PATTERNS := $(DVC_LOCK_PATH)
 VC_COMMIT_MESSAGE := "dvc: Update tracked files"
 
@@ -40,22 +40,37 @@ code_format:
 code_lint:
 	pylint $(SRC_DIRECTORY)
 
-# Check type on code
-code_check_type:
-	mypy $(ROOT_DIRECTORY)
-
 
 # -------------------------------
-# Deps
+# Docker
 # -------------------------------
 
-# Install dependencies specified by requirements.txt
-deps_install:
-	pip install -r $(REQUIREMENTS_PATH)
+# Build containers
+docker_compose_build:
+	docker-compose build --no-cache
 
-# Update dependencies in requirements.txt
-deps_update:
-	pip freeze > $(REQUIREMENTS_PATH)
+# Make up containers
+docker_compose_up:
+	docker-compose up --no-cache
+
+# Build and make up containers
+docker_compose_build_up:
+	docker-compose build --no-cache && docker-compose up
+
+# Shutdown containers
+docker_compose_down:
+	docker-compose down
+
+# Push all the images to DockerHub
+# and Github Packages
+docker_push:
+	@set -o allexport; . ./.env; set +o allexport; \
+	for svc in $$(echo $$API_MICROSERVICES | tr ',' ' '); do \
+		docker tag $$svc:latest $$DOCKER_HUB_USER/$$DOCKER_HUB_REPO:$$svc; \
+		docker tag $$svc:latest $$GIT_HUB_REGISTRY/$$GIT_HUB_USER/$$GIT_HUB_REPO:$$svc; \
+		docker push $$DOCKER_HUB_USER/$$DOCKER_HUB_REPO:$$svc; \
+		docker push $$GIT_HUB_REGISTRY/$$GIT_HUB_USER/$$GIT_HUB_REPO:$$svc; \
+	done
 
 
 # -------------------------------

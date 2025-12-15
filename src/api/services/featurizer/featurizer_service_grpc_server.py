@@ -14,9 +14,9 @@ Functions:
 
 from concurrent import futures
 
-import featurizer_service_pb2_grpc as pb2_grpc
 import grpc
 
+import api.services.featurizer.featurizer_service_pb2_grpc as pb2_grpc
 from api.const import FEATURIZER_SERVICE_CHANNEL
 from api.services.featurizer.featurizer_service import FeaturizerService
 

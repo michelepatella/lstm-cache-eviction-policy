@@ -12,7 +12,7 @@ Classes:
 from pydantic import BaseModel, model_validator
 
 from components.assertions.choice_field_assertor import assert_choice_field
-from pipeline.const import LOGS_LEVEL_NAMES
+from const import LOGS_LEVEL_NAMES
 
 
 class LogsPipelineConfig(BaseModel):

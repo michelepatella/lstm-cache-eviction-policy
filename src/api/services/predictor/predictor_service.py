@@ -10,13 +10,12 @@ Classes:
     PredictorService: gRPC Servicer class implementing the Predict method.
 """
 
-import dagshub
 import grpc
 import mlflow
-import predictor_service_pb2 as pb2
-import predictor_service_pb2_grpc as pb2_grpc
 import torch
 
+import api.services.predictor.predictor_service_pb2 as pb2
+import api.services.predictor.predictor_service_pb2_grpc as pb2_grpc
 from api.config.pydantic.api_config import APIConfig
 from api.const import (
     API_CONFIG_FILE_PATH,
@@ -32,21 +31,12 @@ from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.yaml.io.loader import load_yaml
 from const import (
-    DAGS_HUB_REPO_NAME,
-    DAGS_HUB_REPO_OWNER,
     MLFLOW_MODEL_PRODUCTION_NAME,
 )
-from pipeline.const import DAGS_HUB_DVC
 
 # ----------------------------
 # Setup
 # ----------------------------
-dagshub.init(
-    repo_owner=DAGS_HUB_REPO_OWNER,
-    repo_name=DAGS_HUB_REPO_NAME,
-    dvc=DAGS_HUB_DVC,
-)
-
 # Load API configuration
 api_config_file = load_yaml(API_CONFIG_FILE_PATH)
 api_config = APIConfig(**api_config_file)

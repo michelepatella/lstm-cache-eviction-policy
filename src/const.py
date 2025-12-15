@@ -73,8 +73,7 @@ DATASET_TESTING_SPLIT_TYPE = "testing"
 # Gateway API
 # ----------------------------
 GATEWAY_API_ENV_VAR_FULL_BASE_NAME = "GATEWAY_API_ENDPOINT_BASE_URL"
-GATEWAY_API_ENV_VAR_ENDPOINT_NAME = "GATEWAY_API_ENDPOINT"
-GATEWAY_API_ENDPOINT = os.getenv(GATEWAY_API_ENV_VAR_ENDPOINT_NAME, "")
+GATEWAY_API_ENDPOINT = "/evict"
 GATEWAY_API_FULL_URL = (
     os.getenv(GATEWAY_API_ENV_VAR_FULL_BASE_NAME, "") + GATEWAY_API_ENDPOINT
 )
@@ -87,23 +86,29 @@ LOGS_LOGGER_NAME = "logger"
 
 LOGS_PHASE_VALIDATION = "validation"
 
+LOGS_LEVEL_NAMES = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+
 
 # ----------------------------
 # MLFlow
 # ----------------------------
 MLFLOW_NESTED = True
 
-MLFLOW_ENV_VAR_MODEL_PRODUCTION_NAME = "MLFLOW_MODEL_PRODUCTION_NAME"
-MLFLOW_MODEL_PRODUCTION_NAME = os.getenv(
-    MLFLOW_ENV_VAR_MODEL_PRODUCTION_NAME,
-    "",
-)
+MLFLOW_MODEL_PRODUCTION_NAME = "LSTM_production"
+MLFLOW_MODEL_SIMULATION_NAME = "LSTM_simulation"
 
-MLFLOW_ENV_VAR_MODEL_SIMULATION_NAME = "MLFLOW_MODEL_SIMULATION_NAME"
-MLFLOW_MODEL_SIMULATION_NAME = os.getenv(
-    MLFLOW_ENV_VAR_MODEL_SIMULATION_NAME,
-    "",
-)
+
+# ----------------------------
+# Model
+# ----------------------------
+MODEL_OPTIMIZATIONS_QUANTIZATION_ENGINE_NAMES = [
+    "fbgemm",
+    "qnnpack",
+    "onednn",
+    "xnnpack",
+    "nnpi",
+    "acl",
+]
 
 
 # ----------------------------

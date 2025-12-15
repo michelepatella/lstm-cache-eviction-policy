@@ -10,11 +10,11 @@ Classes:
     FeaturizerService: gRPC Servicer class implementing the Build method.
 """
 
-import featurizer_service_pb2 as pb2
-import featurizer_service_pb2_grpc as pb2_grpc
 import grpc
 import numpy as np
 
+import api.services.featurizer.featurizer_service_pb2 as pb2
+import api.services.featurizer.featurizer_service_pb2_grpc as pb2_grpc
 from api.config.pydantic.api_config import APIConfig
 from api.const import API_CONFIG_FILE_PATH
 from components.const import LIST_FIRST_IDX

@@ -23,7 +23,7 @@ Classes:
 from pydantic import BaseModel, model_validator
 
 from components.assertions.choice_field_assertor import assert_choice_field
-from pipeline.const import MODEL_OPTIMIZATIONS_QUANTIZATION_ENGINE_NAMES
+from const import MODEL_OPTIMIZATIONS_QUANTIZATION_ENGINE_NAMES
 
 
 class ModelOptimizationsQuantizationAPIConfig(BaseModel):
