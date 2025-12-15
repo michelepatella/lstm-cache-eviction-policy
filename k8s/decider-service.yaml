@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: decider-service
+  labels:
+    app: decider-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: decider-service
+  template:
+    metadata:
+      labels:
+        app: decider-service
+    spec:
+      containers:
+      - name: decider-service
+        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-decider_service:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: decider-service
+spec:
+  selector:
+    app: decider-service
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
