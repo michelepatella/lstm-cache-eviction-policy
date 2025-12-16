@@ -14,7 +14,7 @@ Functions:
 import pytest
 
 from tests.model.behavioral.minimum_functionality.helpers import (
-    test_model_minimum_functionality_on_sequence,
+    model_minimum_functionality_on_sequence,
 )
 from tests.model.helpers import initialize_inference_environment
 
@@ -102,7 +102,7 @@ def test_model_minimum_functionality() -> None:
 
     # Test if the model predicts the expected class
     # over a simple input
-    test_model_minimum_functionality_on_sequence(
+    model_minimum_functionality_on_sequence(
         (testing_loader, model, device, pipeline_config, tests_config),
         features_sequence,
         keys_sequence,

@@ -39,3 +39,8 @@ jobs:
       - name: Notebook linting (pynblint)
         run: |
           pynblint notebooks/
+
+      - name: Run tests
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/src:$(pwd)/components
+          pytest -v -m "not slow" tests/
