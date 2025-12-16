@@ -18,12 +18,14 @@ spec:
       - name: predictor-service
         image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-predictor_service:latest
         ports:
-        - containerPort: 80
+        - containerPort: 8002
         envFrom:
-          - configMapRef:
-              name: predictor-service-config
-          - secretRef:
-              name: predictor-service-secrets
+        - configMapRef:
+            name: predictor-service-config
+        - secretRef:
+            name: predictor-service-secrets
+      imagePullSecrets:
+        - name: acr-secret
 ---
 apiVersion: v1
 kind: Service
@@ -36,4 +38,4 @@ spec:
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 80
+    targetPort: 8002

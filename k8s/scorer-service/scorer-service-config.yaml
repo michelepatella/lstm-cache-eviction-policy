@@ -4,4 +4,4 @@ metadata:
   name: scorer-service-config
 data:
   SCORER_SERVICE_PORT: "8003"
-  SCORER_SERVICE_CHANNEL: "scorer_service:8003"
+  SCORER_SERVICE_CHANNEL: "0.0.0.0:8003"

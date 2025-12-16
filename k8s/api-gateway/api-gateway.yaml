@@ -17,15 +17,15 @@ spec:
       containers:
       - name: api-gateway
         image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-api_gateway:latest
-
         ports:
         - containerPort: 8000
-
         envFrom:
         - configMapRef:
             name: api-gateway-config
         - secretRef:
             name: api-gateway-secrets
+      imagePullSecrets:
+        - name: acr-secret
 ---
 apiVersion: v1
 kind: Service
@@ -38,4 +38,4 @@ spec:
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 80
+    targetPort: 8000

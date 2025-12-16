@@ -18,10 +18,12 @@ spec:
       - name: scorer-service
         image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-scorer_service:latest
         ports:
-        - containerPort: 80
+        - containerPort: 8003
         envFrom:
-          - configMapRef:
-              name: scorer-service-config
+        - configMapRef:
+            name: scorer-service-config
+      imagePullSecrets:
+        - name: acr-secret
 ---
 apiVersion: v1
 kind: Service
@@ -34,4 +36,4 @@ spec:
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 80
+    targetPort: 8003
