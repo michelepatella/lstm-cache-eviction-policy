@@ -26,11 +26,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
 
-      - name: Code formatting (ruff)
-        run: ruff format .
-
-      - name: Code fixing (ruff)
-        run: ruff check . --fix
+      - name: Code checking (ruff)
+        run: ruff check . --diff
 
       - name: Code linting (pylint)
         run: |
