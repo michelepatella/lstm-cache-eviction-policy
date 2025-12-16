@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: featurizer-service
+  labels:
+    app: featurizer-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: featurizer-service
+  template:
+    metadata:
+      labels:
+        app: featurizer-service
+    spec:
+      containers:
+      - name: featurizer-service
+        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-featurizer_service:latest
+        ports:
+        - containerPort: 8001
+        envFrom:
+        - configMapRef:
+            name: featurizer-service-config
+      imagePullSecrets:
+        - name: acr-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: featurizer-service
+spec:
+  selector:
+    app: featurizer-service
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8001

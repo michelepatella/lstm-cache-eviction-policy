@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: predictor-service-config
+data:
+  PREDICTOR_SERVICE_PORT: "8002"
+  PREDICTOR_SERVICE_CHANNEL: "0.0.0.0:8002"

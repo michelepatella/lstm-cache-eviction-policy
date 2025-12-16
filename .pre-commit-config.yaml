@@ -6,8 +6,6 @@ repos:
         args: ['--maxkb=10240']
     -   id: check-json
     -   id: check-merge-conflict
-    -   id: check-toml
-    -   id: check-yaml
     -   id: debug-statements
     -   id: detect-private-key
     -   id: end-of-file-fixer

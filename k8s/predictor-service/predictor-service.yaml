@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: predictor-service
+  labels:
+    app: predictor-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: predictor-service
+  template:
+    metadata:
+      labels:
+        app: predictor-service
+    spec:
+      containers:
+      - name: predictor-service
+        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-predictor_service:latest
+        ports:
+        - containerPort: 8002
+        envFrom:
+        - configMapRef:
+            name: predictor-service-config
+        - secretRef:
+            name: predictor-service-secrets
+      imagePullSecrets:
+        - name: acr-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: predictor-service
+spec:
+  selector:
+    app: predictor-service
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8002

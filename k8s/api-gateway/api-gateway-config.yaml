@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-gateway-config
+data:
+  GATEWAY_API_PORT: "8000"
+  FEATURIZER_SERVICE_CHANNEL: "featurizer-service:80"
+  PREDICTOR_SERVICE_CHANNEL: "predictor-service:80"
+  SCORER_SERVICE_CHANNEL: "scorer-service:80"
+  DECIDER_SERVICE_CHANNEL: "decider-service:80"

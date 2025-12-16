@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: featurizer-service-config
+data:
+  FEATURIZER_SERVICE_PORT: "8001"
+  FEATURIZER_SERVICE_CHANNEL: "0.0.0.0:8001"
