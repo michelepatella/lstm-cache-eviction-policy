@@ -35,3 +35,7 @@ jobs:
           if (( $(echo "$SCORE < 8" | bc -l) )); then
             exit 1
           fi
+
+      - name: Notebook linting (pynblint)
+        run: |
+          pynblint notebooks/
