@@ -12,7 +12,7 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -32,7 +32,6 @@ jobs:
         run: |
           export PYTHONPATH=$PYTHONPATH:$(pwd)/src
           SCORE=$(pylint src --disable=import-error | tee pylint.log | grep "Your code has been rated at" | awk '{print $7}' | cut -d'/' -f1)
-          echo "Pylint score: $SCORE"
           if (( $(echo "$SCORE < 8" | bc -l) )); then
             exit 1
           fi
