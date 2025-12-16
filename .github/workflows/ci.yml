@@ -31,7 +31,7 @@ jobs:
 
       - name: Code linting (pylint)
         run: |
-          SCORE=$(pylint src | tee pylint.log | tail -1 | awk '{print $7}' | sed 's/\/10//')
+          SCORE=$(pylint src | tee pylint.log | grep "Your code has been rated at" | awk '{print $7}' | cut -d'/' -f1)
           if (( $(echo "$SCORE < 8" | bc -l) )); then
             exit 1
           fi
