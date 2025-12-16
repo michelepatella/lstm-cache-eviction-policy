@@ -27,16 +27,14 @@ jobs:
           pip install -r requirements-dev.txt
 
       - name: Code formatting (ruff)
-        run: make code_format
+        run: ruff format .
 
       - name: Code fixing (ruff)
-        run: make code_fix
+        run: ruff check . --fix
 
       - name: Code linting (pylint)
         run: |
           SCORE=$(pylint src | tee pylint.log | tail -1 | awk '{print $7}' | sed 's/\/10//')
-          echo "Pylint score: $SCORE"
           if (( $(echo "$SCORE < 8" | bc -l) )); then
-            echo "Pylint score too low! Failing CI."
             exit 1
           fi
