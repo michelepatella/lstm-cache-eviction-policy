@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: decider-service-config
+data:
+  DECIDER_SERVICE_PORT: "8004"
+  DECIDER_SERVICE_CHANNEL: "decider_service:8004"

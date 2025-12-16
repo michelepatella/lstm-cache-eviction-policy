@@ -19,6 +19,9 @@ spec:
         image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-scorer_service:latest
         ports:
         - containerPort: 80
+        envFrom:
+          - configMapRef:
+              name: scorer-service-config
 ---
 apiVersion: v1
 kind: Service

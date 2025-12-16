@@ -19,6 +19,11 @@ spec:
         image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-predictor_service:latest
         ports:
         - containerPort: 80
+        envFrom:
+          - configMapRef:
+              name: predictor-service-config
+          - secretRef:
+              name: predictor-service-secrets
 ---
 apiVersion: v1
 kind: Service
