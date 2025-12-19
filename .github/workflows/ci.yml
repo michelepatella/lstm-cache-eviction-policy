@@ -1,0 +1,60 @@
+name: Continuos Integration (CI)
+
+on:
+  push:
+    branches:
+      - main
+      - feature/*
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+
+      # Setup
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      # Dependency checks
+      - name: Check dependency conflicts
+        run: pip check
+      - name: Check dependency vulnerabilities
+        run: pip-audit --fail-on high
+
+      # Static analysis
+      - name: Check code quality
+        run: ruff check . --diff
+      - name: Check code security
+        run: bandit -r src -ll
+      - name: Lint code
+        run: pylint src --fail-under=8.0
+      - name: Lint notebooks
+        run: pynblint notebooks/
+
+      # Testing
+      - name: Run tests
+        run: |
+          export PYTHONPATH=$(pwd)/src:$(pwd)/components
+          pytest -v -m "ci and not slow" tests/
+
+      # Docker build
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+      - name: Build Docker containers
+        run: docker-compose build --no-cache
+
+      # Docs generation
+      - name: Generate docs
+        run: |
+          PYTHONPATH=$(pwd)/src pdoc --html src/ --output-dir docs/_build/html --force
