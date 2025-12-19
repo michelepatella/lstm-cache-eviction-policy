@@ -13,48 +13,142 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+      # ---------------------------
       # Setup
+      # ---------------------------
       - name: Checkout repository
         uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: 3.11
+          cache: 'pip'
+
+      - name: Microsoft Azure login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
 
-      # Dependency checks
-      - name: Check dependency conflicts
-        run: pip check
-      - name: Check dependency vulnerabilities
-        run: pip-audit --fail-on high
-
+      # ---------------------------
       # Static analysis
+      # ---------------------------
       - name: Check code quality
         run: ruff check . --diff
+
       - name: Check code security
         run: bandit -r src -ll
+
       - name: Lint code
         run: pylint src --fail-under=8.0
+
       - name: Lint notebooks
         run: pynblint notebooks/
 
+      - name: Lint Dockerfiles
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          recursive: true
+
+      # ---------------------------
+      # Dependency checks
+      # ---------------------------
+      - name: Check dependency conflicts
+        run: pip check
+
+      - name: Check dependency vulnerabilities
+        run: pip-audit --fail-on high
+
+      # ---------------------------
+      # K8s checks
+      # ---------------------------
+      - name: Check k8s manifests
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: ./k8s/*/*.yaml
+          framework: kubernetes,azure
+
+      - name: Check k8s readiness
+        uses: piraces/kube-score-ga@v0.1.3
+        with:
+          manifests-folders: './k8s/*.yaml'
+
+      # ---------------------------
       # Testing
+      # ---------------------------
       - name: Run tests
         run: |
           export PYTHONPATH=$(pwd)/src:$(pwd)/components
           pytest -v -m "ci and not slow" tests/
 
-      # Docker build
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v2
-      - name: Build Docker containers
-        run: docker-compose build --no-cache
+      # ---------------------------
+      # Docker image checks
+      # ---------------------------
+      - name: Check Docker images
+        run: |
+          # Setup and build docker images
+          docker buildx create --use
 
+          # Export variables
+          export ACR_NAME=${{ secrets.ACR_NAME }}
+          export TAG=${{ github.sha }}
+
+          # Build images
+          docker-compose build --no-cache
+
+          # Install Trivy
+          TRIVY_LATEST_URL=$(curl -s https://api.github.com/repos/aquasecurity/trivy/releases/latest \
+          | grep browser_download_url \
+          | grep Linux-64bit.deb \
+          | cut -d '"' -f 4)
+          wget $TRIVY_LATEST_URL -O trivy.deb
+          sudo dpkg -i trivy.deb
+
+          # Check images
+          images=(
+            "${ACR_NAME}.azurecr.io/lstm-cache-eviction-policy-api_gateway:${TAG}"
+            "${ACR_NAME}.azurecr.io/lstm-cache-eviction-policy-decider_service:${TAG}"
+            "${ACR_NAME}.azurecr.io/lstm-cache-eviction-policy-featurizer_service:${TAG}"
+            "${ACR_NAME}.azurecr.io/lstm-cache-eviction-policy-predictor_service:${TAG}"
+            "${ACR_NAME}.azurecr.io/lstm-cache-eviction-policy-scorer_service:${TAG}"
+          )
+          for img in "${images[@]}"; do
+            trivy image --exit-code 1 --severity CRITICAL,HIGH --format table $img
+          done
+
+      # ---------------------------
+      # Docker images push
+      # ---------------------------
+      - name: Push Docker images
+        run: |
+          # Microsoft Azure login
+          az acr login --name ${{ secrets.ACR_NAME }}
+
+          # Export variables
+          export ACR_NAME=${{ secrets.ACR_NAME }}
+          export TAG=${{ github.sha }}
+
+          # Push all the images
+          images=(
+            "${ACR_NAME}.azurecr.io/lstm-cache-eviction-policy-api_gateway:${TAG}"
+            "${ACR_NAME}.azurecr.io/lstm-cache-eviction-policy-decider_service:${TAG}"
+            "${ACR_NAME}.azurecr.io/lstm-cache-eviction-policy-featurizer_service:${TAG}"
+            "${ACR_NAME}.azurecr.io/lstm-cache-eviction-policy-predictor_service:${TAG}"
+            "${ACR_NAME}.azurecr.io/lstm-cache-eviction-policy-scorer_service:${TAG}"
+          )
+          for img in "${images[@]}"; do
+            docker push $img
+          done
+
+      # ---------------------------
       # Docs generation
+      # ---------------------------
       - name: Generate docs
         run: |
           PYTHONPATH=$(pwd)/src pdoc --html src/ --output-dir docs/_build/html --force
