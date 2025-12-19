@@ -25,10 +25,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
 
-      - name: Check code (ruff)
+      - name: Check code quality
         run: ruff check . --diff
 
-      - name: Lint code (pylint)
+      - name: Check code security
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/src:$(pwd)/components
+          bandit -r src -ll
+
+      - name: Lint code
         run: |
           export PYTHONPATH=$PYTHONPATH:$(pwd)/src
           SCORE=$(pylint src --disable=import-error | tee pylint.log | grep "Your code has been rated at" | awk '{print $7}' | cut -d'/' -f1)
@@ -36,6 +41,6 @@ jobs:
             exit 1
           fi
 
-      - name: Lint notebook (pynblint)
+      - name: Lint notebook
         run: |
           pynblint notebooks/
