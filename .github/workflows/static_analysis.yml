@@ -1,4 +1,4 @@
-name: CI
+name: Static Analysis
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
     branches: [main]
 
 jobs:
-  ci:
+  static_analysis:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -23,12 +23,12 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements-dev.txt
+          pip install ruff pylint pynblint
 
-      - name: Code checking (ruff)
+      - name: Check code (ruff)
         run: ruff check . --diff
 
-      - name: Code linting (pylint)
+      - name: Lint code (pylint)
         run: |
           export PYTHONPATH=$PYTHONPATH:$(pwd)/src
           SCORE=$(pylint src --disable=import-error | tee pylint.log | grep "Your code has been rated at" | awk '{print $7}' | cut -d'/' -f1)
@@ -36,11 +36,6 @@ jobs:
             exit 1
           fi
 
-      - name: Notebook linting (pynblint)
+      - name: Lint notebook (pynblint)
         run: |
           pynblint notebooks/
-
-      - name: Run tests
-        run: |
-          export PYTHONPATH=$PYTHONPATH:$(pwd)/src:$(pwd)/components
-          pytest -v -m "not slow" tests/

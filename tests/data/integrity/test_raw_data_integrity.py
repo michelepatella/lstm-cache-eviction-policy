@@ -35,6 +35,7 @@ from tests.helpers.dc_helpers import run_dc_suite
 
 
 @pytest.mark.data_integrity_raw
+@pytest.mark.after_data_exploration
 def test_raw_data_integrity() -> None:
     """Runs the Deepchecks test suite against the raw data.
 

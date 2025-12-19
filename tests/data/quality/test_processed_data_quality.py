@@ -58,6 +58,7 @@ from tests.data.quality.helpers import (
 
 
 @pytest.mark.data_quality_processed
+@pytest.mark.data_processing
 def test_processed_data_quality() -> None:
     """Tests the quality and schema of the processed data.
 

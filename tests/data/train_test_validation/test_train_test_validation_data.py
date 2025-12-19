@@ -40,6 +40,7 @@ from tests.helpers.dc_helpers import initialize_dc_tests, run_dc_suite
 
 
 @pytest.mark.data_train_test_validation
+@pytest.mark.validation
 def test_train_test_validation_data() -> None:
     """Runs the Deepchecks test suite comparing training vs.
     validation and training vs. testing sets.
