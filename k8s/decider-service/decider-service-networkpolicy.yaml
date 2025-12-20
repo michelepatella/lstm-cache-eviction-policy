@@ -4,7 +4,9 @@ metadata:
   name: default-deny
   namespace: decider-service
 spec:
-  podSelector: {}
+  podSelector:
+    matchLabels:
+      app: decider-service
   policyTypes:
     - Ingress
     - Egress

@@ -18,11 +18,13 @@ spec:
       automountServiceAccountToken: false
       securityContext:
         runAsUser: 10001
+        runAsGroup: 10001
         runAsNonRoot: true
         fsGroup: 2000
       containers:
       - name: featurizer-service
         image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-featurizer_service@sha256:e355f19ec9fef4f645d7f01b1de0c7c66a20e43f630714169acf088c3eff5a48
+        imagePullPolicy: Always
         ports:
         - containerPort: 8001
         readinessProbe:
@@ -47,6 +49,7 @@ spec:
         securityContext:
           readOnlyRootFilesystem: true
           runAsUser: 10001
+          runAsGroup: 10001
           runAsNonRoot: true
           allowPrivilegeEscalation: false
           capabilities:
@@ -58,9 +61,11 @@ spec:
           requests:
             cpu: "5m"
             memory: "50Mi"
+            ephemeral-storage: "50Mi"
           limits:
             cpu: "50m"
             memory: "250Mi"
+            ephemeral-storage: "500Mi"
       imagePullSecrets:
         - name: acr-secret
 ---

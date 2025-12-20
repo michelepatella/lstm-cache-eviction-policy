@@ -18,11 +18,13 @@ spec:
       automountServiceAccountToken: false
       securityContext:
         runAsUser: 10001
+        runAsGroup: 10001
         runAsNonRoot: true
         fsGroup: 2000
       containers:
       - name: decider-service
         image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-decider_service@sha256:fa1aa7e1cddc96ed67605c168b5f6bfd753d433352201af6997b5f3b1b5966d9
+        imagePullPolicy: Always
         ports:
         - containerPort: 8004
         readinessProbe:
@@ -47,6 +49,7 @@ spec:
         securityContext:
           readOnlyRootFilesystem: true
           runAsUser: 10001
+          runAsGroup: 10001
           runAsNonRoot: true
           allowPrivilegeEscalation: false
           capabilities:
@@ -58,9 +61,11 @@ spec:
           requests:
             cpu: "5m"
             memory: "50Mi"
+            ephemeral-storage: "50Mi"
           limits:
             cpu: "50m"
             memory: "250Mi"
+            ephemeral-storage: "500Mi"
       imagePullSecrets:
         - name: acr-secret
 ---

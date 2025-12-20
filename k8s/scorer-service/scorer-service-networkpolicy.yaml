@@ -4,7 +4,9 @@ metadata:
   name: default-deny
   namespace: scorer-service
 spec:
-  podSelector: {}
+  podSelector:
+    matchLabels:
+      app: scorer-service
   policyTypes:
     - Ingress
     - Egress

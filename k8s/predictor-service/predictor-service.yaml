@@ -18,11 +18,13 @@ spec:
       automountServiceAccountToken: false
       securityContext:
         runAsUser: 10001
+        runAsGroup: 10001
         runAsNonRoot: true
         fsGroup: 2000
       containers:
       - name: predictor-service
         image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-predictor_service@sha256:e13755d3766180b09c483faa5743b2700b85995bb0f82dd6b3d2f80a347c69cd
+        imagePullPolicy: Always
         ports:
         - containerPort: 8002
         readinessProbe:
@@ -51,6 +53,7 @@ spec:
         securityContext:
           readOnlyRootFilesystem: true
           runAsUser: 10001
+          runAsGroup: 10001
           runAsNonRoot: true
           allowPrivilegeEscalation: false
           capabilities:
@@ -62,9 +65,11 @@ spec:
           requests:
             cpu: "5m"
             memory: "50Mi"
+            ephemeral-storage: "50Mi"
           limits:
             cpu: "50m"
             memory: "250Mi"
+            ephemeral-storage: "500Mi"
       volumes:
       - name: predictor-service-secrets
         secret:

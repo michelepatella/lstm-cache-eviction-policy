@@ -4,7 +4,9 @@ metadata:
   name: default-deny
   namespace: featurizer-service
 spec:
-  podSelector: {}
+  podSelector:
+    matchLabels:
+      app: featurizer-service
   policyTypes:
     - Ingress
     - Egress
