@@ -5,15 +5,18 @@ metadata:
   namespace: decider-service
   labels:
     app: decider-service
+    role: decider-service
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: decider-service
+      role: decider-service
   template:
     metadata:
       labels:
         app: decider-service
+        role: decider-service
     spec:
       automountServiceAccountToken: false
       securityContext:
@@ -77,6 +80,7 @@ metadata:
 spec:
   selector:
     app: decider-service
+    role: decider-service
   type: ClusterIP
   ports:
   - protocol: TCP

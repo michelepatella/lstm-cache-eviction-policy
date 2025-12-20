@@ -5,15 +5,18 @@ metadata:
   namespace: predictor-service
   labels:
     app: predictor-service
+    role: predictor-service
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: predictor-service
+      role: predictor-service
   template:
     metadata:
       labels:
         app: predictor-service
+        role: predictor-service
     spec:
       automountServiceAccountToken: false
       securityContext:
@@ -85,6 +88,7 @@ metadata:
 spec:
   selector:
     app: predictor-service
+    role: predictor-service
   type: ClusterIP
   ports:
   - protocol: TCP

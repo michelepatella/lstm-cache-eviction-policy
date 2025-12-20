@@ -5,15 +5,18 @@ metadata:
   namespace: featurizer-service
   labels:
     app: featurizer-service
+    role: featurizer-service
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: featurizer-service
+      role: featurizer-service
   template:
     metadata:
       labels:
         app: featurizer-service
+        role: featurizer-service
     spec:
       automountServiceAccountToken: false
       securityContext:
@@ -77,6 +80,7 @@ metadata:
 spec:
   selector:
     app: featurizer-service
+    role: featurizer-service
   type: ClusterIP
   ports:
   - protocol: TCP

@@ -5,15 +5,18 @@ metadata:
   namespace: api-gateway
   labels:
     app: api-gateway
+    role: api-gateway
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: api-gateway
+      role: api-gateway
   template:
     metadata:
       labels:
         app: api-gateway
+        role: api-gateway
     spec:
       automountServiceAccountToken: false
       securityContext:
@@ -85,6 +88,7 @@ metadata:
 spec:
   selector:
     app: api-gateway
+    role: api-gateway
   type: LoadBalancer
   ports:
   - protocol: TCP

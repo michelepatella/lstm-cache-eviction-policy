@@ -5,15 +5,18 @@ metadata:
   namespace: scorer-service
   labels:
     app: scorer-service
+    role: scorer-service
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: scorer-service
+      role: scorer-service
   template:
     metadata:
       labels:
         app: scorer-service
+        role: scorer-service
     spec:
       automountServiceAccountToken: false
       securityContext:
@@ -77,6 +80,7 @@ metadata:
 spec:
   selector:
     app: scorer-service
+    role: scorer-service
   type: ClusterIP
   ports:
   - protocol: TCP
