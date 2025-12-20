@@ -45,11 +45,13 @@ jobs:
           ACR_NAME: ${{ secrets.ACR_NAME }}
         run: |
           readarray -t DOCKER_IMAGES_ARRAY <<< "$DOCKER_IMAGES"
+          cd ${K8S_OVERLAYS_CI_PATH}
           for svc in "${DOCKER_IMAGES_ARRAY[@]}"; do
               img_name=$(echo "$svc" | tr '_' '-')
               full_img="${ACR_NAME}.azurecr.io/${img_name}:${GITHUB_SHA}"
               kustomize edit set image "$svc=$full_img"
           done
+          cd -
           kustomize build ${K8S_OVERLAYS_CI_PATH} > ${K8S_RENDERED_FILE}
 
       # ---------------------------
