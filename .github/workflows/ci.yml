@@ -83,13 +83,13 @@ jobs:
       - name: Check k8s manifests
         uses: bridgecrewio/checkov-action@master
         with:
-          directory: ${{ vars.K8S_MANIFEST_FILES }}
-          framework: ${{ vars.K8S_FRAMEWORK }}
+          directory: ${{ vars.K8S_DIR }}
+          framework: ${{ vars.CHECKOV_FRAMEWORK }}
 
       - name: Check k8s readiness
         uses: piraces/kube-score-ga@v0.1.3
         with:
-          manifests-folders: ${{ vars.K8S_MANIFEST_FILES }}
+          manifests-folders: ${{ vars.K8S_DIR }}
 
       # ---------------------------
       # Testing
