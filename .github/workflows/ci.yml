@@ -68,7 +68,14 @@ jobs:
       # Dependency checks
       # ---------------------------
       - name: Check dependency vulnerabilities
-        run: pip-audit
+        env:
+          PIP_AUDIT_IGNORE_VULNS: ${{ vars.PIP_AUDIT_IGNORE_VULNS }}
+        run: |
+          IGNORE_ARGS=""
+          for v in $PIP_AUDIT_IGNORE_VULNS; do
+            IGNORE_ARGS="$IGNORE_ARGS --ignore-vuln $v"
+          done
+          pip-audit $IGNORE_ARGS
 
       # ---------------------------
       # K8s checks
