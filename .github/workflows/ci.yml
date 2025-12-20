@@ -87,7 +87,7 @@ jobs:
       - name: Check k8s readiness
         uses: piraces/kube-score-ga@v0.1.3
         with:
-          manifests-folders: ${{ vars.K8S_DIR }}
+          manifests-folders: ${{ vars.K8S_FILE_PATTERN }}
 
       # ---------------------------
       # Testing
