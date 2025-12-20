@@ -117,21 +117,6 @@ jobs:
           done
 
       # ---------------------------
-      # Docker images push
-      # ---------------------------
-      - name: Push Docker images
-        run: |
-          # Microsoft Azure login
-          az acr login --name ${{ secrets.ACR_NAME }}
-
-          # Push all the images
-          readarray -t DOCKER_IMAGES_ARRAY <<< "${{ vars.DOCKER_IMAGES }}"
-          for img_name in "${DOCKER_IMAGES_ARRAY[@]}"; do
-            img="${{ secrets.ACR_NAME }}.azurecr.io/${img_name}:${{ github.sha }}"
-            docker push $img
-          done
-
-      # ---------------------------
       # Docs generation
       # ---------------------------
       - name: Generate docs
