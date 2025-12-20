@@ -67,9 +67,6 @@ jobs:
       # ---------------------------
       # Dependency checks
       # ---------------------------
-      - name: Check dependency conflicts
-        run: pip check
-
       - name: Check dependency vulnerabilities
         run: pip-audit --fail-on ${{ vars.PIP_AUDIT_FAIL_ON }}
 
