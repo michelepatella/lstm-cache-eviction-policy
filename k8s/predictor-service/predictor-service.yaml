@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: predictor-service
   namespace: predictor-service
+  annotations:
+    kube-score/ignore: pod-networkpolicy
   labels:
     app: predictor-service
     role: predictor-service

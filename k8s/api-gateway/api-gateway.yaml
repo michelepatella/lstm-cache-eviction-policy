@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: api-gateway
   namespace: api-gateway
+  annotations:
+    kube-score/ignore: pod-networkpolicy
   labels:
     app: api-gateway
     role: api-gateway

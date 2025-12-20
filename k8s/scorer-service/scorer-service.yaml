@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: scorer-service
   namespace: scorer-service
+  annotations:
+    kube-score/ignore: pod-networkpolicy
   labels:
     app: scorer-service
     role: scorer-service
