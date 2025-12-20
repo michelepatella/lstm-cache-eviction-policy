@@ -69,7 +69,7 @@ def load_model(
         model = torch.load(
             path,
             weights_only=MODEL_LOADING_WEIGHTS_ONLY,
-        )
+        )  # nosec B614
 
         # Move model to device (optional)
         if device is not None:
