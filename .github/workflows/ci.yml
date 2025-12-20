@@ -10,7 +10,7 @@ on:
 
 jobs:
   ci:
-    runs-on: ${{ env.RUNNER_OS }}
+    runs-on: ubuntu-latest
     steps:
 
       # ---------------------------
