@@ -43,7 +43,7 @@ jobs:
         run: ruff check ${{ vars.CODE_DIR }} --diff
 
       - name: Check code security
-        run: bandit -r ${{ vars.SRC_DIR }} -ll
+        run: bandit -r ${{ vars.SRC_DIR }} --severity-level ${{ vars.BANDIT_SEVERITY }} -ll
 
       # ---------------------------
       # Linting
