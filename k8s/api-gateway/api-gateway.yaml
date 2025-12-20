@@ -30,7 +30,7 @@ spec:
         fsGroup: 2000
       containers:
       - name: api-gateway
-        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-api_gateway@sha256:adbdcbaf09981c66de5fb5ed14f1ee5336276a3f391c1c64e942006f9c6c108a
+        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-api_gateway:${GITHUB_SHA}
         imagePullPolicy: Always
         ports:
         - containerPort: 8000

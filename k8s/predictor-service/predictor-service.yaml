@@ -30,7 +30,7 @@ spec:
         fsGroup: 2000
       containers:
       - name: predictor-service
-        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-predictor_service@sha256:e13755d3766180b09c483faa5743b2700b85995bb0f82dd6b3d2f80a347c69cd
+        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-predictor_service:${GITHUB_SHA}
         imagePullPolicy: Always
         ports:
         - containerPort: 8002
