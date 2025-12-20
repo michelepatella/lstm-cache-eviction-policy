@@ -10,3 +10,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  ingress:
+    - from: [ ]
+      ports:
+        - protocol: TCP
+          port: 8000
+  egress:
+    - to: [ ]
