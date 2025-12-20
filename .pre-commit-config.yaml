@@ -6,7 +6,7 @@ repos:
         args: ['--maxkb=10240']
     -   id: check-json
     -   id: check-yaml
-        exclude: ./k8s
+        exclude: k8s
     -   id: check-toml
     -   id: check-merge-conflict
     -   id: debug-statements

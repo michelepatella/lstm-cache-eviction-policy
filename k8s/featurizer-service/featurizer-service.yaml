@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: featurizer-service
+  namespace: featurizer-service
   labels:
     app: featurizer-service
 spec:
@@ -22,6 +23,18 @@ spec:
         envFrom:
         - configMapRef:
             name: featurizer-service-config
+        securityContext:
+          runAsNonRoot: true
+          capabilities:
+            drop:
+              - ALL
+        resources:
+          requests:
+            cpu: "5m"
+            memory: "50Mi"
+          limits:
+            cpu: "50m"
+            memory: "250Mi"
       imagePullSecrets:
         - name: acr-secret
 ---
@@ -29,6 +42,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: featurizer-service
+  namespace: featurizer-service
 spec:
   selector:
     app: featurizer-service

@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: predictor-service
+  namespace: predictor-service
   labels:
     app: predictor-service
 spec:
@@ -24,6 +25,18 @@ spec:
             name: predictor-service-config
         - secretRef:
             name: predictor-service-secrets
+        securityContext:
+          runAsNonRoot: true
+          capabilities:
+            drop:
+              - ALL
+        resources:
+          requests:
+            cpu: "5m"
+            memory: "50Mi"
+          limits:
+            cpu: "50m"
+            memory: "250Mi"
       imagePullSecrets:
         - name: acr-secret
 ---
@@ -31,6 +44,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: predictor-service
+  namespace: predictor-service
 spec:
   selector:
     app: predictor-service
