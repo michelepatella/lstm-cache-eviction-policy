@@ -68,7 +68,7 @@ jobs:
       # Dependency checks
       # ---------------------------
       - name: Check dependency vulnerabilities
-        run: pip-audit --fail-on ${{ vars.PIP_AUDIT_FAIL_ON }}
+        run: pip-audit
 
       # ---------------------------
       # K8s checks
