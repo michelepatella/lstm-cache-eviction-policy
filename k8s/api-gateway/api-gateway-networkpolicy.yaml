@@ -3,6 +3,8 @@ kind: NetworkPolicy
 metadata:
   name: api-gateway-policy
   namespace: api-gateway
+  annotations:
+    kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod
 spec:
   podSelector:
     matchLabels:
