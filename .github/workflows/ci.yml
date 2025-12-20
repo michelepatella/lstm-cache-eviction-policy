@@ -52,7 +52,11 @@ jobs:
         run: pylint ${{ vars.SRC_DIR }} --fail-under=${{ vars.PYLINT_MIN_SCORE }}
 
       - name: Lint notebooks
-        run: pynblint ${{ vars.NOTEBOOKS_DIR }}/
+        run: |
+          files=$(find "${{ vars.NOTEBOOKS_DIR }}" -name '*.ipynb')
+          if [ -n "$files" ]; then
+            pynblint $files
+          fi
 
       - name: Lint Dockerfiles
         uses: hadolint/hadolint-action@v3.1.0
