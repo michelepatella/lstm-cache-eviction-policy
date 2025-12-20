@@ -44,8 +44,8 @@ jobs:
           DOCKER_IMAGES: ${{ vars.DOCKER_IMAGES }}
           ACR_NAME: ${{ secrets.ACR_NAME }}
         run: |
-          readarray -t IMAGES_ARRAY <<< "$DOCKER_IMAGES"
-          for svc in "${IMAGES_ARRAY[@]}"; do
+          readarray -t DOCKER_IMAGES_ARRAY <<< "$DOCKER_IMAGES"
+          for svc in "${DOCKER_IMAGES_ARRAY[@]}"; do
               img_name=$(echo "$svc" | tr '_' '-')
               full_img="${ACR_NAME}.azurecr.io/${img_name}:${GITHUB_SHA}"
               kustomize edit set image "$svc=$full_img"
