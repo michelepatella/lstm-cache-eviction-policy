@@ -22,8 +22,8 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: ${{ env.PIP_CACHE }}
+          python-version: ${{ vars.PYTHON_VERSION }}
+          cache: ${{ vars.PIP_CACHE }}
 
       - name: Microsoft Azure login
         uses: azure/login@v1
@@ -33,31 +33,31 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r ${{ env.REQUIREMENTS_FILE }}
-          pip install -r ${{ env.REQUIREMENTS_DEV_FILE }}
+          pip install -r ${{ vars.REQUIREMENTS_FILE }}
+          pip install -r ${{ vars.REQUIREMENTS_DEV_FILE }}
 
       # ---------------------------
       # Code checks
       # ---------------------------
       - name: Check code quality
-        run: ruff check ${{ env.CODE_DIR }} --diff
+        run: ruff check ${{ vars.CODE_DIR }} --diff
 
       - name: Check code security
-        run: bandit -r ${{ env.SRC_DIR }} -ll
+        run: bandit -r ${{ vars.SRC_DIR }} -ll
 
       # ---------------------------
       # Linting
       # ---------------------------
       - name: Lint code
-        run: pylint ${{ env.SRC_DIR }} --fail-under=${{ env.PYLINT_MIN_SCORE }}
+        run: pylint ${{ vars.SRC_DIR }} --fail-under=${{ vars.PYLINT_MIN_SCORE }}
 
       - name: Lint notebooks
-        run: pynblint ${{ env.NOTEBOOKS_DIR }}/
+        run: pynblint ${{ vars.NOTEBOOKS_DIR }}/
 
       - name: Lint Dockerfiles
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          recursive: ${{ env.HADOLINT_RECURSIVE }}
+          recursive: ${{ vars.HADOLINT_RECURSIVE }}
 
       # ---------------------------
       # Dependency checks
@@ -66,7 +66,7 @@ jobs:
         run: pip check
 
       - name: Check dependency vulnerabilities
-        run: pip-audit --fail-on ${{ env.PIP_AUDIT_FAIL_ON }}
+        run: pip-audit --fail-on ${{ vars.PIP_AUDIT_FAIL_ON }}
 
       # ---------------------------
       # K8s checks
@@ -74,21 +74,21 @@ jobs:
       - name: Check k8s manifests
         uses: bridgecrewio/checkov-action@master
         with:
-          directory: ${{ env.K8S_MANIFEST_FILES }}
-          framework: ${{ env.K8S_FRAMEWORK }}
+          directory: ${{ vars.K8S_MANIFEST_FILES }}
+          framework: ${{ vars.K8S_FRAMEWORK }}
 
       - name: Check k8s readiness
         uses: piraces/kube-score-ga@v0.1.3
         with:
-          manifests-folders: ${{ env.K8S_MANIFEST_FILES }}
+          manifests-folders: ${{ vars.K8S_MANIFEST_FILES }}
 
       # ---------------------------
       # Testing
       # ---------------------------
       - name: Run tests
         run: |
-          export PYTHONPATH=${{ env.SRC_DIR }}:${{ env.COMPONENTS_DIR }}
-          pytest -v -m "${{ env.PYTEST_MARKER }}" ${{ env.TESTS_DIR }}
+          export PYTHONPATH=${{ vars.SRC_DIR }}:${{ vars.COMPONENTS_DIR }}
+          pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.TESTS_DIR }}
 
       # ---------------------------
       # Docker image checks
@@ -102,18 +102,18 @@ jobs:
           docker-compose build --no-cache
 
           # Install Trivy dynamically
-          TRIVY_LATEST_URL=$(curl -s ${{ env.TRIVY_LATEST_RELEASE_URL }} \
-          | grep ${{ env.TRIVY_JSON_FIELD }} \
-          | grep ${{ env.TRIVY_PLATFORM }} \
+          TRIVY_LATEST_URL=$(curl -s ${{ vars.TRIVY_LATEST_RELEASE_URL }} \
+          | grep ${{ vars.TRIVY_JSON_FIELD }} \
+          | grep ${{ vars.TRIVY_PLATFORM }} \
           | cut -d '"' -f 4)
-          wget $TRIVY_LATEST_URL -O ${{ env.TRIVY_OUTPUT_FILE }}
-          sudo ${{ env.TRIVY_INSTALL_CMD }} ${{ env.TRIVY_OUTPUT_FILE }}
+          wget $TRIVY_LATEST_URL -O ${{ vars.TRIVY_OUTPUT_FILE }}
+          sudo ${{ vars.TRIVY_INSTALL_CMD }} ${{ vars.TRIVY_OUTPUT_FILE }}
 
           # Scan Docker images
-          readarray -t DOCKER_IMAGES_ARRAY <<< "${{ env.DOCKER_IMAGES }}"
+          readarray -t DOCKER_IMAGES_ARRAY <<< "${{ vars.DOCKER_IMAGES }}"
           for img_name in "${DOCKER_IMAGES_ARRAY[@]}"; do
               img="${{ secrets.ACR_NAME }}.azurecr.io/${img_name}:${{ github.sha }}"
-              trivy image --exit-code ${{ env.TRIVY_EXIT_CODE }} --severity ${{ env.TRIVY_SEVERITY }} $img
+              trivy image --exit-code ${{ vars.TRIVY_EXIT_CODE }} --severity ${{ vars.TRIVY_SEVERITY }} $img
           done
 
       # ---------------------------
@@ -125,7 +125,7 @@ jobs:
           az acr login --name ${{ secrets.ACR_NAME }}
 
           # Push all the images
-          readarray -t DOCKER_IMAGES_ARRAY <<< "${{ env.DOCKER_IMAGES }}"
+          readarray -t DOCKER_IMAGES_ARRAY <<< "${{ vars.DOCKER_IMAGES }}"
           for img_name in "${DOCKER_IMAGES_ARRAY[@]}"; do
             img="${{ secrets.ACR_NAME }}.azurecr.io/${img_name}:${{ github.sha }}"
             docker push $img
@@ -136,4 +136,4 @@ jobs:
       # ---------------------------
       - name: Generate docs
         run: |
-          PYTHONPATH=$(pwd)/${{ env.SRC_DIR }} pdoc --html ${{ env.SRC_DIR }}/ --output-dir ${{ env.DOCS_OUTPUT_DIR }} --force
+          PYTHONPATH=$(pwd)/${{ vars.SRC_DIR }} pdoc --html ${{ vars.SRC_DIR }}/ --output-dir ${{ vars.DOCS_OUTPUT_DIR }} --force
