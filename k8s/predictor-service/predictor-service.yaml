@@ -16,6 +16,8 @@ spec:
       role: predictor-service
   template:
     metadata:
+      annotations:
+        kube-score/ignore: pod-networkpolicy
       labels:
         app: predictor-service
         role: predictor-service

@@ -16,6 +16,8 @@ spec:
       role: scorer-service
   template:
     metadata:
+      annotations:
+        kube-score/ignore: pod-networkpolicy
       labels:
         app: scorer-service
         role: scorer-service

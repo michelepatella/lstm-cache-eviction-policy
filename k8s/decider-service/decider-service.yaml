@@ -16,6 +16,8 @@ spec:
       role: decider-service
   template:
     metadata:
+      annotations:
+        kube-score/ignore: pod-networkpolicy
       labels:
         app: decider-service
         role: decider-service

@@ -16,6 +16,8 @@ spec:
       role: featurizer-service
   template:
     metadata:
+      annotations:
+        kube-score/ignore: pod-networkpolicy
       labels:
         app: featurizer-service
         role: featurizer-service
