@@ -32,9 +32,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r ${{ vars.REQUIREMENTS_FILE }}
-          pip install -r ${{ vars.REQUIREMENTS_DEV_FILE }}
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install --no-cache-dir -r ${{ env.REQUIREMENTS_FILE }}
+          python -m pip install --no-cache-dir -r ${{ env.REQUIREMENTS_DEV_FILE }}
 
       # ---------------------------
       # Code checks
