@@ -15,19 +15,45 @@ spec:
       labels:
         app: scorer-service
     spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 10001
+        runAsNonRoot: true
+        fsGroup: 2000
       containers:
       - name: scorer-service
-        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-scorer_service:latest
+        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-scorer_service@sha256:adbdcbaf09981c66de5fb5ed14f1ee5336276a3f391c1c64e942006f9c6c108a
         ports:
         - containerPort: 8003
+        readinessProbe:
+          exec:
+            command:
+              - sh
+              - -c
+              - "echo ready"
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          exec:
+            command:
+              - sh
+              - -c
+              - "echo ok"
+          initialDelaySeconds: 10
+          periodSeconds: 15
         envFrom:
         - configMapRef:
             name: scorer-service-config
         securityContext:
+          readOnlyRootFilesystem: true
+          runAsUser: 10001
           runAsNonRoot: true
+          allowPrivilegeEscalation: false
           capabilities:
             drop:
               - ALL
+          seccompProfile:
+            type: RuntimeDefault
         resources:
           requests:
             cpu: "5m"

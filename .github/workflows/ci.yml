@@ -117,7 +117,7 @@ jobs:
           sudo ${{ vars.TRIVY_INSTALL_CMD }} ${{ vars.TRIVY_OUTPUT_FILE }}
 
           # Scan Docker images
-          readarray -t DOCKER_IMAGES_ARRAY <<< "${{ vars.DOCKER_IMAGES }}"
+             readarray -t DOCKER_IMAGES_ARRAY <<< "${{ vars.DOCKER_IMAGES }}"
           for img_name in "${DOCKER_IMAGES_ARRAY[@]}"; do
               img="${{ secrets.ACR_NAME }}.azurecr.io/${img_name}:${{ github.sha }}"
               trivy image --exit-code ${{ vars.TRIVY_EXIT_CODE }} --severity ${{ vars.TRIVY_SEVERITY }} $img

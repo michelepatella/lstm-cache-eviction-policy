@@ -15,19 +15,45 @@ spec:
       labels:
         app: featurizer-service
     spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 10001
+        runAsNonRoot: true
+        fsGroup: 2000
       containers:
       - name: featurizer-service
-        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-featurizer_service:latest
+        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-featurizer_service@sha256:e355f19ec9fef4f645d7f01b1de0c7c66a20e43f630714169acf088c3eff5a48
         ports:
         - containerPort: 8001
+        readinessProbe:
+          exec:
+            command:
+              - sh
+              - -c
+              - "echo ready"
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          exec:
+            command:
+              - sh
+              - -c
+              - "echo ok"
+          initialDelaySeconds: 10
+          periodSeconds: 15
         envFrom:
         - configMapRef:
             name: featurizer-service-config
         securityContext:
+          readOnlyRootFilesystem: true
+          runAsUser: 10001
           runAsNonRoot: true
+          allowPrivilegeEscalation: false
           capabilities:
             drop:
               - ALL
+          seccompProfile:
+            type: RuntimeDefault
         resources:
           requests:
             cpu: "5m"

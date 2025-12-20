@@ -9,6 +9,8 @@ VC_COMMIT_MESSAGE := "dvc: Update tracked files"
 
 PYCACHE_NAME := "__pycache__"
 
+DOCKER_IMAGES_TAG=1.0.0
+
 
 # -------------------------------
 # Clean
@@ -65,10 +67,10 @@ docker_build_up:
 docker_push:
 	@set -o allexport; . $(ROOT_DIRECTORY)/.env; set +o allexport; \
 	for svc in $$(echo $$API_MICROSERVICES | tr ',' ' '); do \
-		docker tag $$svc:latest $$DOCKER_HUB_USER/$$DOCKER_HUB_REPO:$$svc; \
-		docker tag $$svc:latest $$GIT_HUB_REGISTRY/$$GIT_HUB_USER/$$GIT_HUB_REPO:$$svc; \
-		docker push $$DOCKER_HUB_USER/$$DOCKER_HUB_REPO:$$svc; \
-		docker push $$GIT_HUB_REGISTRY/$$GIT_HUB_USER/$$GIT_HUB_REPO:$$svc; \
+		docker tag $$svc:latest $$DOCKER_HUB_USER/$$DOCKER_HUB_REPO:$$svc-$$DOCKER_IMAGES_TAG; \
+		docker tag $$svc:latest $$GIT_HUB_REGISTRY/$$GIT_HUB_USER/$$GIT_HUB_REPO:$$svc-$$DOCKER_IMAGES_TAG; \
+		docker push $$DOCKER_HUB_USER/$$DOCKER_HUB_REPO:$$svc-$$DOCKER_IMAGES_TAG; \
+		docker push $$GIT_HUB_REGISTRY/$$GIT_HUB_USER/$$GIT_HUB_REPO:$$svc-$$DOCKER_IMAGES_TAG; \
 	done
 
 

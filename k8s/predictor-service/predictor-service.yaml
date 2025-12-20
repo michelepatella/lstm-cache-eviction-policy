@@ -15,21 +15,49 @@ spec:
       labels:
         app: predictor-service
     spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 10001
+        runAsNonRoot: true
+        fsGroup: 2000
       containers:
       - name: predictor-service
-        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-predictor_service:latest
+        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-predictor_service@sha256:e13755d3766180b09c483faa5743b2700b85995bb0f82dd6b3d2f80a347c69cd
         ports:
         - containerPort: 8002
+        readinessProbe:
+          exec:
+            command:
+              - sh
+              - -c
+              - "echo ready"
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          exec:
+            command:
+              - sh
+              - -c
+              - "echo ok"
+          initialDelaySeconds: 10
+          periodSeconds: 15
+        volumeMounts:
+        - name: predictor-service-secrets
+          mountPath: /etc/secrets
+          readOnly: true
         envFrom:
         - configMapRef:
             name: predictor-service-config
-        - secretRef:
-            name: predictor-service-secrets
         securityContext:
+          readOnlyRootFilesystem: true
+          runAsUser: 10001
           runAsNonRoot: true
+          allowPrivilegeEscalation: false
           capabilities:
             drop:
               - ALL
+          seccompProfile:
+            type: RuntimeDefault
         resources:
           requests:
             cpu: "5m"
@@ -37,6 +65,10 @@ spec:
           limits:
             cpu: "50m"
             memory: "250Mi"
+      volumes:
+      - name: predictor-service-secrets
+        secret:
+          secretName: predictor-service-secrets
       imagePullSecrets:
         - name: acr-secret
 ---

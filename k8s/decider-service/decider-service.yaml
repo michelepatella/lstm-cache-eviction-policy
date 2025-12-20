@@ -15,19 +15,45 @@ spec:
       labels:
         app: decider-service
     spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 10001
+        runAsNonRoot: true
+        fsGroup: 2000
       containers:
       - name: decider-service
-        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-decider_service:latest
+        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-decider_service@sha256:fa1aa7e1cddc96ed67605c168b5f6bfd753d433352201af6997b5f3b1b5966d9
         ports:
         - containerPort: 8004
+        readinessProbe:
+          exec:
+            command:
+              - sh
+              - -c
+              - "echo ready"
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          exec:
+            command:
+              - sh
+              - -c
+              - "echo ok"
+          initialDelaySeconds: 10
+          periodSeconds: 15
         envFrom:
         - configMapRef:
             name: decider-service-config
         securityContext:
+          readOnlyRootFilesystem: true
+          runAsUser: 10001
           runAsNonRoot: true
+          allowPrivilegeEscalation: false
           capabilities:
             drop:
               - ALL
+          seccompProfile:
+            type: RuntimeDefault
         resources:
           requests:
             cpu: "5m"

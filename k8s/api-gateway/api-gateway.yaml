@@ -15,21 +15,49 @@ spec:
       labels:
         app: api-gateway
     spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 10001
+        runAsNonRoot: true
+        fsGroup: 2000
       containers:
       - name: api-gateway
-        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-api_gateway:latest
+        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-api_gateway@sha256:adbdcbaf09981c66de5fb5ed14f1ee5336276a3f391c1c64e942006f9c6c108a
         ports:
         - containerPort: 8000
+        readinessProbe:
+          exec:
+            command:
+              - sh
+              - -c
+              - "echo ready"
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          exec:
+            command:
+              - sh
+              - -c
+              - "echo ok"
+          initialDelaySeconds: 10
+          periodSeconds: 15
+        volumeMounts:
+        - name: api-gateway-secrets
+          mountPath: /etc/secrets
+          readOnly: true
         envFrom:
         - configMapRef:
             name: api-gateway-config
-        - secretRef:
-            name: api-gateway-secrets
         securityContext:
+          readOnlyRootFilesystem: true
+          runAsUser: 10001
           runAsNonRoot: true
+          allowPrivilegeEscalation: false
           capabilities:
             drop:
               - ALL
+          seccompProfile:
+            type: RuntimeDefault
         resources:
           requests:
             cpu: "5m"
@@ -37,6 +65,10 @@ spec:
           limits:
             cpu: "50m"
             memory: "250Mi"
+      volumes:
+      - name: api-gateway-secrets
+        secret:
+          secretName: api-gateway-secrets
       imagePullSecrets:
         - name: acr-secret
 ---
