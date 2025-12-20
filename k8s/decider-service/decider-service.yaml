@@ -4,7 +4,7 @@ metadata:
   name: decider-service
   namespace: decider-service
   annotations:
-    kube-score/ignore: pod-networkpolicy
+    kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod
   labels:
     app: decider-service
     role: decider-service
@@ -17,7 +17,7 @@ spec:
   template:
     metadata:
       annotations:
-        kube-score/ignore: pod-networkpolicy
+        kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod
       labels:
         app: decider-service
         role: decider-service

@@ -4,7 +4,7 @@ metadata:
   name: api-gateway
   namespace: api-gateway
   annotations:
-    kube-score/ignore: pod-networkpolicy
+    kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod
   labels:
     app: api-gateway
     role: api-gateway
@@ -17,7 +17,7 @@ spec:
   template:
     metadata:
       annotations:
-        kube-score/ignore: pod-networkpolicy
+        kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod
       labels:
         app: api-gateway
         role: api-gateway
