@@ -30,7 +30,7 @@ spec:
         fsGroup: 2000
       containers:
       - name: decider-service
-        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-decider_service:${GITHUB_SHA}
+        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-decider_service:later
         imagePullPolicy: Always
         ports:
         - containerPort: 8004

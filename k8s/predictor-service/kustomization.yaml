@@ -1,0 +1,5 @@
+resources:
+  - predictor-service.yaml
+  - predictor-service-config.yaml
+  - predictor-service-secrets.yaml
+  - predictor-service-networkpolicy.yaml

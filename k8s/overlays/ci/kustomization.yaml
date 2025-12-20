@@ -1,0 +1,18 @@
+resources:
+  - ../../api-gateway
+  - ../../decider-service
+  - ../../featurizer-service
+  - ../../predictor-service
+  - ../../scorer-service
+
+images:
+  - name: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-api_gateway
+    newTag: PLACEHOLDER_SHA
+  - name: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-decider
+    newTag: PLACEHOLDER_SHA
+  - name: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-featurizer
+    newTag: PLACEHOLDER_SHA
+  - name: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-predictor
+    newTag: PLACEHOLDER_SHA
+  - name: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-scorer
+    newTag: PLACEHOLDER_SHA

@@ -30,7 +30,7 @@ spec:
         fsGroup: 2000
       containers:
       - name: featurizer-service
-        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-featurizer_service:${GITHUB_SHA}
+        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-featurizer_service:later
         imagePullPolicy: Always
         ports:
         - containerPort: 8001

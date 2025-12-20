@@ -34,6 +34,22 @@ jobs:
           python -m pip install --no-cache-dir -r ${{ vars.REQUIREMENTS_FILE }}
           python -m pip install --no-cache-dir -r ${{ vars.REQUIREMENTS_DEV_FILE }}
 
+      - name: Set up k8s manifests
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          K8S_OVERLAYS_CI_PATH: ${{ vars.K8S_OVERLAYS_CI_PATH }}
+          K8S_RENDERED_FILE: ${{ vars.K8S_RENDERED_FILE }}
+          DOCKER_IMAGES: ${{ vars.DOCKER_IMAGES }}
+          ACR_NAME: ${{ secrets.ACR_NAME }}
+        run: |
+          readarray -t IMAGES_ARRAY <<< "$DOCKER_IMAGES"
+          for svc in "${IMAGES_ARRAY[@]}"; do
+              img_name=$(echo "$svc" | tr '_' '-')
+              full_img="${ACR_NAME}.azurecr.io/${img_name}:${GITHUB_SHA}"
+              kustomize edit set image "$svc=$full_img"
+          done
+          kustomize build ${K8S_OVERLAYS_CI_PATH} > ${K8S_RENDERED_FILE}
+
       # ---------------------------
       # Code checks
       # ---------------------------
@@ -80,14 +96,18 @@ jobs:
       # ---------------------------
       - name: Check k8s manifests
         uses: bridgecrewio/checkov-action@master
+        env:
+          K8S_RENDERED_FILE: ${{ vars.K8S_RENDERED_FILE }}
         with:
-          directory: ${{ vars.K8S_DIR }}
+          directory: ${{ env.K8S_RENDERED_FILE }}
           framework: ${{ vars.CHECKOV_FRAMEWORK }}
 
       - name: Check k8s readiness
         uses: piraces/kube-score-ga@v0.1.3
+        env:
+          K8S_RENDERED_FILE: ${{ vars.K8S_RENDERED_FILE }}
         with:
-          manifests-folders: ${{ vars.K8S_FILE_PATTERN }}
+          manifests-folders: ${{ env.K8S_RENDERED_FILE }}
 
       # ---------------------------
       # Testing
