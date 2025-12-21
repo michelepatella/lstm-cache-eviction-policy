@@ -19,22 +19,12 @@ jobs:
         with:
           ref: ${{ github.head_ref || github.ref }}
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ vars.PYTHON_VERSION }}
-          cache: ${{ vars.PIP_CACHE }}
-
-      - name: Microsoft Azure login
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Install dependencies
+      - name: Azure login
         run: |
-          python -m pip install --upgrade pip setuptools wheel
-          python -m pip install --no-cache-dir -r ${{ vars.REQUIREMENTS_FILE }}
-          python -m pip install --no-cache-dir -r ${{ vars.REQUIREMENTS_DEV_FILE }}
+          echo "${{ secrets.AZURE_CREDENTIALS }}" > azure-creds.json
+          az login --service-principal --username $(jq -r .clientId azure-creds.json) \
+                   --password $(jq -r .clientSecret azure-creds.json) \
+                   --tenant $(jq -r .tenantId azure-creds.json)
 
       - name: Set up k8s manifests
         env:
@@ -62,69 +52,59 @@ jobs:
       # ---------------------------
       # Code checks
       # ---------------------------
-      #- name: Check code quality
-      #  run: ruff check ${{ vars.CODE_DIR }} --diff
+      - name: Check code quality
+        run: ruff check ${{ vars.CODE_DIR }} --diff
 
-      #- name: Check code security
-      #  run: bandit -r ${{ vars.SRC_DIR }} --severity-level ${{ vars.BANDIT_SEVERITY }}
+      - name: Check code security
+        run: bandit -r ${{ vars.SRC_DIR }} --severity-level ${{ vars.BANDIT_SEVERITY }}
 
       # ---------------------------
       # Linting
       # ---------------------------
-      #- name: Lint code
-      #  run: pylint ${{ vars.SRC_DIR }} --fail-under=${{ vars.PYLINT_MIN_SCORE }}
+      - name: Lint code
+        run: pylint ${{ vars.SRC_DIR }} --fail-under=${{ vars.PYLINT_MIN_SCORE }}
 
-      #- name: Lint notebooks
-      #  run: |
-      #    files=$(find "${{ vars.NOTEBOOKS_DIR }}" -name '*.ipynb')
-      #    if [ -n "$files" ]; then
-      #      pynblint $files
-      #    fi
+      - name: Lint notebooks
+        run: |
+          files=$(find "${{ vars.NOTEBOOKS_DIR }}" -name '*.ipynb')
+          if [ -n "$files" ]; then
+            pynblint $files
+          fi
 
-      #- name: Lint Dockerfiles
-      #  uses: hadolint/hadolint-action@v3.1.0
-      #  with:
-      #    recursive: ${{ vars.HADOLINT_RECURSIVE }}
-      #    failure-threshold: ${{ vars.HADOLINT_FAILURE_THRESHOLD }}
+      - name: Lint Dockerfiles
+        run: |
+          hadolint $(find . -name 'Dockerfile') --failure-threshold \
+          "${{ vars.HADOLINT_FAILURE_THRESHOLD }}"
 
       # ---------------------------
       # Dependency checks
       # ---------------------------
-      #- name: Check dependency vulnerabilities
-      #  env:
-      #    PIP_AUDIT_IGNORE_VULNS: ${{ vars.PIP_AUDIT_IGNORE_VULNS }}
-      #  run: |
-      #    IGNORE_ARGS=""
-      #    for v in $PIP_AUDIT_IGNORE_VULNS; do
-      #      IGNORE_ARGS="$IGNORE_ARGS --ignore-vuln $v"
-      #    done
-      #    pip-audit $IGNORE_ARGS
+      - name: Check dependency vulnerabilities
+        env:
+          PIP_AUDIT_IGNORE_VULNS: ${{ vars.PIP_AUDIT_IGNORE_VULNS }}
+        run: |
+          IGNORE_ARGS=""
+          for v in $PIP_AUDIT_IGNORE_VULNS; do
+            IGNORE_ARGS="$IGNORE_ARGS --ignore-vuln $v"
+          done
+          pip-audit $IGNORE_ARGS
 
       # ---------------------------
       # K8s checks
       # ---------------------------
-      #- name: Check k8s manifests
-      #  uses: bridgecrewio/checkov-action@master
-      #  env:
-      #    K8S_RENDERED_FILE: ${{ vars.K8S_RENDERED_FILE }}
-      #  with:
-      #    directory: ${{ env.K8S_RENDERED_FILE }}
-      #    framework: ${{ vars.CHECKOV_FRAMEWORK }}
+      - name: Check k8s manifests
+        run: checkov -d ${{ vars.K8S_RENDERED_FILE }} --framework ${{ vars.CHECKOV_FRAMEWORK }}
 
-      #- name: Check k8s readiness
-      #  uses: piraces/kube-score-ga@v0.1.3
-      #  env:
-      #    K8S_RENDERED_FILE: ${{ vars.K8S_RENDERED_FILE }}
-      #  with:
-      #    manifests-folders: ${{ env.K8S_RENDERED_FILE }}
+      - name: Check k8s readiness
+        run: kube-score score ${{ vars.K8S_RENDERED_FILE }}
 
       # ---------------------------
       # Testing
       # ---------------------------
-      #- name: Run tests
-      #  run: |
-      #    export PYTHONPATH=${{ vars.SRC_DIR }}
-      #    pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.TESTS_DIR }}
+      - name: Run tests
+        run: |
+          export PYTHONPATH=${{ vars.SRC_DIR }}
+          pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.TESTS_DIR }}
 
       # ---------------------------
       # Docker image checks
@@ -152,15 +132,6 @@ jobs:
           # Clean up
           docker system prune -af || true
           sudo apt-get clean
-
-          # Install Trivy
-          TRIVY_LATEST_URL=$(curl -s ${{ vars.TRIVY_LATEST_RELEASE_URL }} \
-            | grep ${{ vars.TRIVY_JSON_FIELD }} \
-            | grep ${{ vars.TRIVY_PLATFORM }} \
-            | cut -d '"' -f 4)
-          wget $TRIVY_LATEST_URL -O ${{ vars.TRIVY_OUTPUT_FILE }}
-          sudo ${{ vars.TRIVY_INSTALL_CMD }} ${{ vars.TRIVY_OUTPUT_FILE }}
-          trivy image --download-db-only
 
           # Build and scan all the images
           readarray -t DOCKER_SERVICES_ARRAY <<< "$(echo "${{ vars.DOCKER_SERVICES }}" | tr -d '\r')"
