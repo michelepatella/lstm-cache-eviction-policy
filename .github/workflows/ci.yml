@@ -159,12 +159,16 @@ jobs:
           # Convert DOCKER_SERVICES to array
           readarray -t DOCKER_SERVICES_ARRAY <<< "${{ vars.DOCKER_SERVICES }}"
 
+          pwd
+          ls -l
+          docker compose config --services
+
           # Build and scan one image at a time
           for img_name in "${DOCKER_SERVICES_ARRAY[@]}"; do
             full_img="${{ secrets.ACR_NAME }}.azurecr.io/${img_name}:${{ github.sha }}"
 
             # Build
-            docker compose build --pull --no-cache "$img_name"
+            docker compose build "$img_name" --pull --no-cache
 
             # Scan
             trivy image \
