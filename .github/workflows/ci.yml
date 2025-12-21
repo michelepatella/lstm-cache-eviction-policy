@@ -44,13 +44,18 @@ jobs:
           DOCKER_IMAGES: ${{ vars.DOCKER_IMAGES }}
           ACR_NAME: ${{ secrets.ACR_NAME }}
         run: |
+          # Convert to array
           readarray -t DOCKER_IMAGES_ARRAY <<< "$DOCKER_IMAGES"
+
+          # Inject Github SHA to all images
           cd ${K8S_OVERLAYS_CI_PATH}
           for svc in "${DOCKER_IMAGES_ARRAY[@]}"; do
               img_name=$(echo "$svc" | tr '_' '-')
               full_img="${ACR_NAME}.azurecr.io/${img_name}:${GITHUB_SHA}"
               kustomize edit set image "$svc=$full_img"
           done
+
+          # Run Kustomize
           cd -
           kustomize build ${K8S_OVERLAYS_CI_PATH} > ${K8S_RENDERED_FILE}
 
@@ -143,8 +148,8 @@ jobs:
           DAGS_HUB_REPO_OWNER: ${{ vars.DAGS_HUB_REPO_OWNER }}
           DAGS_HUB_TOKEN: ${{ vars.DAGS_HUB_TOKEN }}
         run: |
-          # Setup Docker buildx
-          docker buildx create --use
+          # Clean
+          sudo docker system prune -af --volumes
 
           # Build Docker images
           docker compose build --no-cache
@@ -161,7 +166,12 @@ jobs:
              readarray -t DOCKER_IMAGES_ARRAY <<< "${{ vars.DOCKER_IMAGES }}"
           for img_name in "${DOCKER_IMAGES_ARRAY[@]}"; do
               img="${{ secrets.ACR_NAME }}.azurecr.io/${img_name}:${{ github.sha }}"
-              trivy image --exit-code ${{ vars.TRIVY_EXIT_CODE }} --severity ${{ vars.TRIVY_SEVERITY }} $img
+              trivy image \
+              --exit-code ${{ vars.TRIVY_EXIT_CODE }} \
+              --severity ${{ vars.TRIVY_SEVERITY }} \
+              --skip-db-update \
+              "$img"
+            docker rmi "$img" || true
           done
 
       # ---------------------------
@@ -169,4 +179,5 @@ jobs:
       # ---------------------------
       - name: Generate docs
         run: |
-          PYTHONPATH=$(pwd)/${{ vars.SRC_DIR }} pdoc --html ${{ vars.SRC_DIR }}/ --output-dir ${{ vars.DOCS_OUTPUT_DIR }} --force
+          PYTHONPATH=$(pwd)/${{ vars.SRC_DIR }} pdoc --html ${{ vars.SRC_DIR }}/ \
+          --output-dir ${{ vars.DOCS_OUTPUT_DIR }} --force
