@@ -20,7 +20,7 @@ jobs:
           ref: ${{ github.head_ref || github.ref }}
 
       - name: Azure login
-        shell: ${{ vars.AZURE_SHELL }}
+        shell: bash
         run: |
           # Read credentials from temp file
           echo '${{ secrets.AZURE_CREDENTIALS }}' > ${{ vars.AZURE_CREDENTIALS_TEMP_FILE }}
