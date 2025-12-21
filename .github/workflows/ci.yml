@@ -168,7 +168,7 @@ jobs:
             full_img="${{ secrets.ACR_NAME }}.azurecr.io/${img_name}:${{ github.sha }}"
 
             # Build
-            docker compose build "$img_name" --pull --no-cache
+            docker compose -f ${{ vars.DOCKER_COMPOSE_FILE }} build "$img_name" --pull --no-cache
 
             # Scan
             trivy image \
