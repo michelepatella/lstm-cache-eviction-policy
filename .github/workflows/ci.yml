@@ -166,6 +166,7 @@ jobs:
               "$full_img"
 
             # Save image as tar for artifact
+            mkdir -p ${DOCKER_ARTIFACTS_DIR}
             docker save "$full_img" -o "${DOCKER_ARTIFACTS_DIR}/${img_name_normalized}.tar"
           done
 
