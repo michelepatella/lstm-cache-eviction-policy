@@ -4,7 +4,8 @@ FROM ubuntu:22.04
 RUN apt-get update && apt-get install -y \
     python3.11 python3.11-venv python3.11-distutils \
     python3-pip \
-    bash jq curl wget git docker.io docker-compose unzip build-essential libicu-dev \
+    bash jq curl wget git docker.io docker-compose-plugin unzip \
+    build-essential libicu-dev \
     ca-certificates apt-transport-https lsb-release gnupg sudo \
     && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 \
     && curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 \
