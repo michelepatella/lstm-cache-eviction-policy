@@ -175,10 +175,9 @@ jobs:
 
             # Clean up
             docker rmi "$full_img" || true
+            docker builder prune -af || true
+            docker system prune -af --volumes || true
           done
-
-          # Clean up
-          docker system prune -af
 
       # ---------------------------
       # Docs generation
