@@ -38,7 +38,7 @@ jobs:
 
       - name: Set up k8s manifests
         env:
-          GITHUB_SHA: ${{ github.sha }}
+          GIT_HUB_SHA: ${{ github.sha }}
           K8S_OVERLAYS_CI_DIR: ${{ vars.K8S_OVERLAYS_CI_DIR }}
           K8S_RENDERED_FILE: ${{ vars.K8S_RENDERED_FILE }}
           DOCKER_IMAGES: ${{ vars.DOCKER_IMAGES }}
@@ -51,7 +51,7 @@ jobs:
           cd ${K8S_OVERLAYS_CI_DIR}
           for svc in "${DOCKER_IMAGES_ARRAY[@]}"; do
               img_name=$(echo "$svc" | tr '_' '-')
-              full_img="${ACR_NAME}.${{ vars.ACR_URL }}/${img_name}:${GITHUB_SHA}"
+              full_img="${ACR_NAME}.${{ vars.ACR_URL }}/${img_name}:${GIT_HUB_SHA}"
               kustomize edit set image "$svc=$full_img"
           done
 
@@ -111,10 +111,10 @@ jobs:
       # ---------------------------
       # Testing
       # ---------------------------
-      #- name: Run tests
-      #  run: |
-      #    export PYTHONPATH=${{ vars.SRC_DIR }}
-      #    pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.TESTS_DIR }}
+      - name: Run tests
+        run: |
+          export PYTHONPATH=${{ vars.SRC_DIR }}
+          pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.TESTS_DIR }}
 
       # ---------------------------
       # Docker image checks
@@ -122,8 +122,7 @@ jobs:
       - name: Check Docker images
         env:
           ACR_NAME: ${{ secrets.ACR_NAME }}
-          DOCKER_ARTIFACTS_DIR: ${{ vars.DOCKER_ARTIFACTS_DIR }}
-          GITHUB_SHA: ${{ github.sha }}
+          GIT_HUB_SHA: ${{ github.sha }}
           TRIVY_IGNORE_VULNS: ${{ vars.TRIVY_IGNORE_VULNS }}
           GATEWAY_API_PORT: ${{ vars.GATEWAY_API_PORT }}
           DECIDER_SERVICE_PORT: ${{ vars.DECIDER_SERVICE_PORT }}
@@ -164,17 +163,40 @@ jobs:
               --severity ${{ vars.TRIVY_SEVERITY }} \
               --ignorefile ${{ vars.TRIVY_IGNORE_FILE }} \
               "$full_img"
-
-            # Save image as tar for artifact
-            mkdir -p ${DOCKER_ARTIFACTS_DIR}
-            docker save "$full_img" -o "${DOCKER_ARTIFACTS_DIR}/${img_name_normalized}.tar"
           done
 
-      - name: Upload Docker images
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ vars.DOCKER_ARTIFACTS_NAME }}
-          path: ${{ vars.DOCKER_ARTIFACTS_DIR }}
+      # ---------------------------
+      # Docker image push
+      # ---------------------------
+      - name: Push Docker images
+        env:
+          GIT_HUB_SHA: ${{ github.sha }}
+          GIT_HUB_REGISTRY: ${{ vars.GIT_HUB_REGISTRY }}
+          GIT_HUB_USER: ${{ github.actor }}
+          GIT_HUB_REPO: ${{ github.repository }}
+          DOCKER_HUB_USER: ${{ vars.DOCKER_HUB_USER }}
+          DOCKER_HUB_REPO: ${{ vars.DOCKER_HUB_REPO }}
+        run: |
+          # Push all the Docker images
+          readarray -t DOCKER_SERVICES_ARRAY <<< "$(echo "${{ vars.DOCKER_SERVICES }}" | tr -d '\r')"
+          for svc in "${DOCKER_SERVICES_ARRAY[@]}"; do
+            img_name=$(echo "$svc" | tr '_' '-')
+            local_img="${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}/$img_name:${GIT_HUB_SHA}"
+
+            # Tag Docker Hub
+            docker tag "$local_img" "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
+
+            # Tag GitHub Container Registry
+            docker tag "$local_img" "$GIT_HUB_REGISTRY/$GIT_HUB_USER/$GIT_HUB_REPO:$img_name"
+
+            # Push Docker Hub
+            echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+            docker push "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
+
+            # Push GitHub Container Registry
+            echo "${{ secrets.GIT_HUB_TOKEN }}" | docker login "$GIT_HUB_REGISTRY" -u "$GIT_HUB_USER" --password-stdin
+            docker push "$GIT_HUB_REGISTRY/$GIT_HUB_USER/$GIT_HUB_REPO:$img_name"
+          done
 
       # ---------------------------
       # Docs generation
