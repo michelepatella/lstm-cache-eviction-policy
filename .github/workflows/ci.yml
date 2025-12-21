@@ -196,6 +196,11 @@ jobs:
             # Push GitHub Container Registry
             echo "${{ secrets.GIT_HUB_TOKEN }}" | docker login "$GIT_HUB_REGISTRY" -u "$GIT_HUB_USER" --password-stdin
             docker push "$GIT_HUB_REGISTRY/$GIT_HUB_USER/$GIT_HUB_REPO:$img_name"
+
+            # Remove local images
+            docker rmi -f "$local_img" \
+                  "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name" \
+                  "$GIT_HUB_REGISTRY/$GIT_HUB_USER/$GIT_HUB_REPO:$img_name" || true
           done
 
       # ---------------------------
