@@ -20,11 +20,18 @@ jobs:
           ref: ${{ github.head_ref || github.ref }}
 
       - name: Azure login
+        shell: bash
         run: |
-          echo "${{ secrets.AZURE_CREDENTIALS }}" > azure-creds.json
-          az login --service-principal --username $(jq -r .clientId azure-creds.json) \
-                   --password $(jq -r .clientSecret azure-creds.json) \
-                   --tenant $(jq -r .tenantId azure-creds.json)
+          # Read credentials from temp file
+          echo '${{ secrets.AZURE_CREDENTIALS }}' > azure-creds.json
+          CLIENT_ID=$(jq -r .clientId azure-creds.json)
+          CLIENT_SECRET=$(jq -r .clientSecret azure-creds.json)
+          TENANT_ID=$(jq -r .tenantId azure-creds.json)
+
+          # Login
+          az login --service-principal --username "$CLIENT_ID" \
+                   --password "$CLIENT_SECRET" \
+                   --tenant "$TENANT_ID"
 
       - name: Set up k8s manifests
         env:
