@@ -156,11 +156,11 @@ jobs:
           wget $TRIVY_LATEST_URL -O ${{ vars.TRIVY_OUTPUT_FILE }}
           sudo ${{ vars.TRIVY_INSTALL_CMD }} ${{ vars.TRIVY_OUTPUT_FILE }}
 
-          # Convert DOCKER_IMAGES to array
-          readarray -t DOCKER_IMAGES_ARRAY <<< "${{ vars.DOCKER_IMAGES }}"
+          # Convert DOCKER_SERVICES to array
+          readarray -t DOCKER_SERVICES_ARRAY <<< "${{ vars.DOCKER_SERVICES }}"
 
           # Build and scan one image at a time
-          for img_name in "${DOCKER_IMAGES_ARRAY[@]}"; do
+          for img_name in "${DOCKER_SERVICES_ARRAY[@]}"; do
             full_img="${{ secrets.ACR_NAME }}.azurecr.io/${img_name}:${{ github.sha }}"
 
             # Build
