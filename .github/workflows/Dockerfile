@@ -26,10 +26,12 @@ RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 # ----------------------------------------------
 # Kustomize
 # ----------------------------------------------
-ENV KUSTOMIZE_VERSION=5.0.1
-RUN curl -sLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v${KUSTOMIZE_VERSION}/kustomize_${KUSTOMIZE_VERSION}_linux_arm64 \
+ENV KUSTOMIZE_VERSION=5.8.0
+RUN curl -sLo kustomize.tar.gz https://sourceforge.net/projects/kustomize.mirror/files/kustomize_v${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_arm64.tar.gz \
+    && tar -xzf kustomize.tar.gz kustomize \
     && chmod +x kustomize \
-    && mv kustomize /usr/local/bin/
+    && mv kustomize /usr/local/bin/ \
+    && rm kustomize.tar.gz
 
 # ----------------------------------------------
 # Hadolint
