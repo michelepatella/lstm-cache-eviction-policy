@@ -219,4 +219,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ vars.DOCS_ARTIFACTS_NAME }}
-          path: ${{ vars.DOCS_ARTIFACTS_DIR }}
+          path: ${{ vars.DOCS_OUTPUT_DIR }}
