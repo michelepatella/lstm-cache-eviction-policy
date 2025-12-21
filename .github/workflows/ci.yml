@@ -148,31 +148,35 @@ jobs:
           DAGS_HUB_REPO_OWNER: ${{ vars.DAGS_HUB_REPO_OWNER }}
           DAGS_HUB_TOKEN: ${{ vars.DAGS_HUB_TOKEN }}
         run: |
-          # Clean
-          sudo docker system prune -af --volumes
-
-          # Build Docker images
-          docker compose build
-
           # Install Trivy dynamically
           TRIVY_LATEST_URL=$(curl -s ${{ vars.TRIVY_LATEST_RELEASE_URL }} \
-          | grep ${{ vars.TRIVY_JSON_FIELD }} \
-          | grep ${{ vars.TRIVY_PLATFORM }} \
-          | cut -d '"' -f 4)
+            | grep ${{ vars.TRIVY_JSON_FIELD }} \
+            | grep ${{ vars.TRIVY_PLATFORM }} \
+            | cut -d '"' -f 4)
           wget $TRIVY_LATEST_URL -O ${{ vars.TRIVY_OUTPUT_FILE }}
           sudo ${{ vars.TRIVY_INSTALL_CMD }} ${{ vars.TRIVY_OUTPUT_FILE }}
 
-          # Scan Docker images
-            readarray -t DOCKER_IMAGES_ARRAY <<< "${{ vars.DOCKER_IMAGES }}"
+          # Convert DOCKER_IMAGES to array
+          readarray -t DOCKER_IMAGES_ARRAY <<< "${{ vars.DOCKER_IMAGES }}"
+
+          # Build and scan one image at a time
           for img_name in "${DOCKER_IMAGES_ARRAY[@]}"; do
-            img="${{ secrets.ACR_NAME }}.azurecr.io/${img_name}:${{ github.sha }}"
+            full_img="${{ secrets.ACR_NAME }}.azurecr.io/${img_name}:${{ github.sha }}"
+
+            # Build
+            docker compose build --pull --no-cache "$img_name"
+
+            # Scan
             trivy image \
-            --exit-code ${{ vars.TRIVY_EXIT_CODE }} \
-            --severity ${{ vars.TRIVY_SEVERITY }} \
-            --skip-db-update \
-            "$img"
-            docker rmi "$img" || true
+              --exit-code ${{ vars.TRIVY_EXIT_CODE }} \
+              --severity ${{ vars.TRIVY_SEVERITY }} \
+              --skip-db-update \
+              "$full_img"
+
+            # Clean
+            docker rmi "$full_img" || true
             docker builder prune -af
+            docker system prune -af --volumes
           done
 
       # ---------------------------
