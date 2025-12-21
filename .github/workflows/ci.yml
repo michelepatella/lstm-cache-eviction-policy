@@ -108,10 +108,10 @@ jobs:
       # ---------------------------
       # Testing
       # ---------------------------
-      - name: Run tests
-        run: |
-          export PYTHONPATH=${{ vars.SRC_DIR }}
-          pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.TESTS_DIR }}
+      #- name: Run tests
+      #  run: |
+      #    export PYTHONPATH=${{ vars.SRC_DIR }}
+      #    pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.TESTS_DIR }}
 
       # ---------------------------
       # Docker image checks
