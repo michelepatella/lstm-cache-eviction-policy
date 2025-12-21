@@ -171,7 +171,6 @@ jobs:
             trivy image \
               --exit-code ${{ vars.TRIVY_EXIT_CODE }} \
               --severity ${{ vars.TRIVY_SEVERITY }} \
-              --skip-db-update \
               "$full_img"
 
             # Clean up
