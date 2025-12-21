@@ -112,8 +112,9 @@ jobs:
       # Testing
       # ---------------------------
       - name: Run tests
+        env:
+          PYTHONPATH: ${{ github.workspace }}
         run: |
-          export PYTHONPATH=$(pwd)/${{ vars.SRC_DIR }}
           pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.TESTS_DIR }}
 
       # ---------------------------
