@@ -4,7 +4,7 @@ FROM ubuntu:22.04
 RUN apt-get update && apt-get install -y \
     python3.11 python3.11-venv python3.11-distutils \
     python3-pip \
-    bash jq curl wget git docker.io docker-compose-plugin unzip \
+    bash jq curl wget git docker.io unzip \
     build-essential libicu-dev \
     ca-certificates apt-transport-https lsb-release gnupg sudo \
     && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 \
@@ -17,6 +17,9 @@ RUN groupadd -r runner && useradd -m -r -g runner runner \
     && usermod -aG docker runner \
     && echo "runner ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 WORKDIR /home/runner
+
+# Install Docker
+RUN curl -fsSL https://get.docker.com | sh
 
 # Install Azure CLI
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
