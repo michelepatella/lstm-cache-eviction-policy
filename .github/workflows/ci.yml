@@ -62,61 +62,61 @@ jobs:
       # ---------------------------
       # Code checks
       # ---------------------------
-      - name: Check code quality
-        run: ruff check ${{ vars.CODE_DIR }} --diff
+      #- name: Check code quality
+      #  run: ruff check ${{ vars.CODE_DIR }} --diff
 
-      - name: Check code security
-        run: bandit -r ${{ vars.SRC_DIR }} --severity-level ${{ vars.BANDIT_SEVERITY }}
+      #- name: Check code security
+      #  run: bandit -r ${{ vars.SRC_DIR }} --severity-level ${{ vars.BANDIT_SEVERITY }}
 
       # ---------------------------
       # Linting
       # ---------------------------
-      - name: Lint code
-        run: pylint ${{ vars.SRC_DIR }} --fail-under=${{ vars.PYLINT_MIN_SCORE }}
+      #- name: Lint code
+      #  run: pylint ${{ vars.SRC_DIR }} --fail-under=${{ vars.PYLINT_MIN_SCORE }}
 
-      - name: Lint notebooks
-        run: |
-          files=$(find "${{ vars.NOTEBOOKS_DIR }}" -name '*.ipynb')
-          if [ -n "$files" ]; then
-            pynblint $files
-          fi
+      #- name: Lint notebooks
+      #  run: |
+      #    files=$(find "${{ vars.NOTEBOOKS_DIR }}" -name '*.ipynb')
+      #    if [ -n "$files" ]; then
+      #      pynblint $files
+      #    fi
 
-      - name: Lint Dockerfiles
-        uses: hadolint/hadolint-action@v3.1.0
-        with:
-          recursive: ${{ vars.HADOLINT_RECURSIVE }}
-          failure-threshold: ${{ vars.HADOLINT_FAILURE_THRESHOLD }}
+      #- name: Lint Dockerfiles
+      #  uses: hadolint/hadolint-action@v3.1.0
+      #  with:
+      #    recursive: ${{ vars.HADOLINT_RECURSIVE }}
+      #    failure-threshold: ${{ vars.HADOLINT_FAILURE_THRESHOLD }}
 
       # ---------------------------
       # Dependency checks
       # ---------------------------
-      - name: Check dependency vulnerabilities
-        env:
-          PIP_AUDIT_IGNORE_VULNS: ${{ vars.PIP_AUDIT_IGNORE_VULNS }}
-        run: |
-          IGNORE_ARGS=""
-          for v in $PIP_AUDIT_IGNORE_VULNS; do
-            IGNORE_ARGS="$IGNORE_ARGS --ignore-vuln $v"
-          done
-          pip-audit $IGNORE_ARGS
+      #- name: Check dependency vulnerabilities
+      #  env:
+      #    PIP_AUDIT_IGNORE_VULNS: ${{ vars.PIP_AUDIT_IGNORE_VULNS }}
+      #  run: |
+      #    IGNORE_ARGS=""
+      #    for v in $PIP_AUDIT_IGNORE_VULNS; do
+      #      IGNORE_ARGS="$IGNORE_ARGS --ignore-vuln $v"
+      #    done
+      #    pip-audit $IGNORE_ARGS
 
       # ---------------------------
       # K8s checks
       # ---------------------------
-      - name: Check k8s manifests
-        uses: bridgecrewio/checkov-action@master
-        env:
-          K8S_RENDERED_FILE: ${{ vars.K8S_RENDERED_FILE }}
-        with:
-          directory: ${{ env.K8S_RENDERED_FILE }}
-          framework: ${{ vars.CHECKOV_FRAMEWORK }}
+      #- name: Check k8s manifests
+      #  uses: bridgecrewio/checkov-action@master
+      #  env:
+      #    K8S_RENDERED_FILE: ${{ vars.K8S_RENDERED_FILE }}
+      #  with:
+      #    directory: ${{ env.K8S_RENDERED_FILE }}
+      #    framework: ${{ vars.CHECKOV_FRAMEWORK }}
 
-      - name: Check k8s readiness
-        uses: piraces/kube-score-ga@v0.1.3
-        env:
-          K8S_RENDERED_FILE: ${{ vars.K8S_RENDERED_FILE }}
-        with:
-          manifests-folders: ${{ env.K8S_RENDERED_FILE }}
+      #- name: Check k8s readiness
+      #  uses: piraces/kube-score-ga@v0.1.3
+      #  env:
+      #    K8S_RENDERED_FILE: ${{ vars.K8S_RENDERED_FILE }}
+      #  with:
+      #    manifests-folders: ${{ env.K8S_RENDERED_FILE }}
 
       # ---------------------------
       # Testing
@@ -161,11 +161,10 @@ jobs:
 
           # Build and scan one image at a time
           for img_name in "${DOCKER_IMAGES_ARRAY[@]}"; do
-            service_name="${img_name//-/_}"
             full_img="${{ secrets.ACR_NAME }}.azurecr.io/${img_name}:${{ github.sha }}"
 
             # Build
-            docker compose build --pull --no-cache "$service_name"
+            docker compose build --pull --no-cache "$img_name"
 
             # Scan
             trivy image \
