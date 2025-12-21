@@ -152,7 +152,7 @@ jobs:
           sudo docker system prune -af --volumes
 
           # Build Docker images
-          docker compose build --no-cache
+          docker compose build
 
           # Install Trivy dynamically
           TRIVY_LATEST_URL=$(curl -s ${{ vars.TRIVY_LATEST_RELEASE_URL }} \
@@ -163,15 +163,16 @@ jobs:
           sudo ${{ vars.TRIVY_INSTALL_CMD }} ${{ vars.TRIVY_OUTPUT_FILE }}
 
           # Scan Docker images
-             readarray -t DOCKER_IMAGES_ARRAY <<< "${{ vars.DOCKER_IMAGES }}"
+            readarray -t DOCKER_IMAGES_ARRAY <<< "${{ vars.DOCKER_IMAGES }}"
           for img_name in "${DOCKER_IMAGES_ARRAY[@]}"; do
-              img="${{ secrets.ACR_NAME }}.azurecr.io/${img_name}:${{ github.sha }}"
-              trivy image \
-              --exit-code ${{ vars.TRIVY_EXIT_CODE }} \
-              --severity ${{ vars.TRIVY_SEVERITY }} \
-              --skip-db-update \
-              "$img"
+            img="${{ secrets.ACR_NAME }}.azurecr.io/${img_name}:${{ github.sha }}"
+            trivy image \
+            --exit-code ${{ vars.TRIVY_EXIT_CODE }} \
+            --severity ${{ vars.TRIVY_SEVERITY }} \
+            --skip-db-update \
+            "$img"
             docker rmi "$img" || true
+            docker builder prune -af
           done
 
       # ---------------------------
