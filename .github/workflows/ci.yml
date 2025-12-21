@@ -20,13 +20,16 @@ jobs:
           ref: ${{ github.head_ref || github.ref }}
 
       - name: Azure login
-        shell: bash
+        shell: ${{ vars.AZURE_SHELL }}
         run: |
           # Read credentials from temp file
-          echo '${{ secrets.AZURE_CREDENTIALS }}' > azure-creds.json
-          CLIENT_ID=$(jq -r .clientId azure-creds.json)
-          CLIENT_SECRET=$(jq -r .clientSecret azure-creds.json)
-          TENANT_ID=$(jq -r .tenantId azure-creds.json)
+          echo '${{ secrets.AZURE_CREDENTIALS }}' > ${{ vars.AZURE_CREDENTIALS_TEMP_FILE }}
+          CLIENT_ID=$(jq -r ${{ vars.AZURE_CREDENTIALS_CLIENT_ID_FIELD_NAME }} \
+          ${{ vars.AZURE_CREDENTIALS_TEMP_FILE }})
+          CLIENT_SECRET=$(jq -r ${{ vars.AZURE_CREDENTIALS_CLIENT_SECRET_FIELD_NAME }} \
+          ${{ vars.AZURE_CREDENTIALS_TEMP_FILE }})
+          TENANT_ID=$(jq -r ${{ vars.AZURE_CREDENTIALS_TENANT_ID_FIELD_NAME }} \
+          ${{ vars.AZURE_CREDENTIALS_TEMP_FILE }})
 
           # Login
           az login --service-principal --username "$CLIENT_ID" \
@@ -36,7 +39,7 @@ jobs:
       - name: Set up k8s manifests
         env:
           GITHUB_SHA: ${{ github.sha }}
-          K8S_OVERLAYS_CI_PATH: ${{ vars.K8S_OVERLAYS_CI_PATH }}
+          K8S_OVERLAYS_CI_DIR: ${{ vars.K8S_OVERLAYS_CI_DIR }}
           K8S_RENDERED_FILE: ${{ vars.K8S_RENDERED_FILE }}
           DOCKER_IMAGES: ${{ vars.DOCKER_IMAGES }}
           ACR_NAME: ${{ secrets.ACR_NAME }}
@@ -45,16 +48,16 @@ jobs:
           readarray -t DOCKER_IMAGES_ARRAY <<< "$DOCKER_IMAGES"
 
           # Inject Github SHA to all images
-          cd ${K8S_OVERLAYS_CI_PATH}
+          cd ${K8S_OVERLAYS_CI_DIR}
           for svc in "${DOCKER_IMAGES_ARRAY[@]}"; do
               img_name=$(echo "$svc" | tr '_' '-')
-              full_img="${ACR_NAME}.azurecr.io/${img_name}:${GITHUB_SHA}"
+              full_img="${ACR_NAME}.${{ vars.ACR_URL }}/${img_name}:${GITHUB_SHA}"
               kustomize edit set image "$svc=$full_img"
           done
 
           # Run Kustomize
           cd -
-          kustomize build ${K8S_OVERLAYS_CI_PATH} > ${K8S_RENDERED_FILE}
+          kustomize build ${K8S_OVERLAYS_CI_DIR} > ${K8S_RENDERED_FILE}
 
       # ---------------------------
       # Code checks
@@ -80,7 +83,7 @@ jobs:
 
       - name: Lint Dockerfiles
         run: |
-          hadolint $(find . -name 'Dockerfile') --failure-threshold \
+          hadolint $(find . -name ${{ vars.DOCKERFILE_NAME }}) --failure-threshold \
           "${{ vars.HADOLINT_FAILURE_THRESHOLD }}"
 
       # ---------------------------
@@ -119,6 +122,7 @@ jobs:
       - name: Check Docker images
         env:
           ACR_NAME: ${{ secrets.ACR_NAME }}
+          DOCKER_ARTIFACTS_DIR: ${{ vars.DOCKER_ARTIFACTS_DIR }}
           GITHUB_SHA: ${{ github.sha }}
           TRIVY_IGNORE_VULNS: ${{ vars.TRIVY_IGNORE_VULNS }}
           GATEWAY_API_PORT: ${{ vars.GATEWAY_API_PORT }}
@@ -139,9 +143,9 @@ jobs:
         run: |
           # Convert TRIVY_IGNORE_VULNS into a temporary .trivyignore file
           IFS=',' read -ra IGNORE_ARRAY <<< "$TRIVY_IGNORE_VULNS"
-          > .trivyignore
+          > ${{ vars.TRIVY_IGNORE_FILE }}
           for cve in "${IGNORE_ARRAY[@]}"; do
-            echo "$cve" >> .trivyignore
+            echo "$cve" >> ${{ vars.TRIVY_IGNORE_FILE }}
           done
 
           # Build and scan all the images
@@ -149,7 +153,7 @@ jobs:
           for img_name in "${DOCKER_SERVICES_ARRAY[@]}"; do
             # Get image
             img_name_normalized=$(echo "$img_name" | tr '_' '-')
-            full_img="${{ secrets.ACR_NAME }}.azurecr.io/${img_name_normalized}:${{ github.sha }}"
+            full_img="${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}/${img_name_normalized}:${{ github.sha }}"
 
             # Build image
             docker compose build "$img_name"
@@ -158,9 +162,18 @@ jobs:
             trivy image \
               --exit-code ${{ vars.TRIVY_EXIT_CODE }} \
               --severity ${{ vars.TRIVY_SEVERITY }} \
-              --ignorefile .trivyignore \
+              --ignorefile ${{ vars.TRIVY_IGNORE_FILE }} \
               "$full_img"
+
+            # Save image as tar for artifact
+            docker save "$full_img" -o "${DOCKER_ARTIFACTS_DIR}/${img_name_normalized}.tar"
           done
+
+      - name: Upload Docker images
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ vars.DOCKER_ARTIFACTS_NAME }}
+          path: ${{ vars.DOCKER_ARTIFACTS_DIR }}
 
       # ---------------------------
       # Docs generation
@@ -169,3 +182,9 @@ jobs:
         run: |
           PYTHONPATH=$(pwd)/${{ vars.SRC_DIR }} pdoc --html ${{ vars.SRC_DIR }}/ \
           --output-dir ${{ vars.DOCS_OUTPUT_DIR }} --force
+
+      - name: Upload docs
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ vars.DOCS_ARTIFACTS_NAME }}
+          path: ${{ vars.DOCS_ARTIFACTS_DIR }}
