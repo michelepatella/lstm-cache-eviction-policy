@@ -16,6 +16,9 @@ RUN curl -O -L https://github.com/actions/runner/releases/download/v2.330.0/acti
     && tar xzf actions-runner-linux-arm64-2.330.0.tar.gz \
     && rm actions-runner-linux-arm64-2.330.0.tar.gz
 
+# Download Azure CLI
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
 # Start runner
 COPY --chmod=755 entrypoint.sh /home/runner/entrypoint.sh
 USER runner
