@@ -172,10 +172,10 @@ jobs:
         env:
           GIT_HUB_SHA: ${{ github.sha }}
           GIT_HUB_REGISTRY: ${{ vars.GIT_HUB_REGISTRY }}
-          GIT_HUB_USER: ${{ github.actor }}
-          GIT_HUB_REPO: ${{ github.repository }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
           DOCKER_HUB_USER: ${{ vars.DOCKER_HUB_USER }}
           DOCKER_HUB_REPO: ${{ vars.DOCKER_HUB_REPO }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Push all the Docker images
           readarray -t DOCKER_SERVICES_ARRAY <<< "$(echo "${{ vars.DOCKER_SERVICES }}" | tr -d '\r')"
@@ -187,20 +187,24 @@ jobs:
             docker tag "$local_img" "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
 
             # Tag GitHub Container Registry
-            docker tag "$local_img" "$GIT_HUB_REGISTRY/$GIT_HUB_USER/$GIT_HUB_REPO:$img_name"
+            ghcr_img="${GIT_HUB_REGISTRY}/${GITHUB_REPOSITORY}/$img_name"
+            docker tag "$local_img" "$ghcr_img:${GIT_HUB_SHA}"
+            docker tag "$local_img" "$ghcr_img:latest"
 
             # Push Docker Hub
             echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "$DOCKER_HUB_USER" --password-stdin
             docker push "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
 
             # Push GitHub Container Registry
-            echo "${{ secrets.GIT_HUB_TOKEN }}" | docker login "$GIT_HUB_REGISTRY" -u "$GIT_HUB_USER" --password-stdin
-            docker push "$GIT_HUB_REGISTRY/$GIT_HUB_USER/$GIT_HUB_REPO:$img_name"
+            echo "${GITHUB_TOKEN}" | docker login "$GIT_HUB_REGISTRY" -u ${{ github.actor }} --password-stdin
+            docker push "$ghcr_img:${GIT_HUB_SHA}"
+            docker push "$ghcr_img:latest"
 
             # Remove local images
             docker rmi -f "$local_img" \
                   "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name" \
-                  "$GIT_HUB_REGISTRY/$GIT_HUB_USER/$GIT_HUB_REPO:$img_name" || true
+                  "$ghcr_img:${GIT_HUB_SHA}" \
+                  "$ghcr_img:latest" || true
           done
 
       # ---------------------------
