@@ -131,6 +131,7 @@ jobs:
       # ---------------------------
       - name: Check Docker images
         env:
+          ACR_NAME: ${{ secrets.ACR_NAME }}
           GITHUB_SHA: ${{ github.sha }}
           GATEWAY_API_PORT: ${{ vars.GATEWAY_API_PORT }}
           DECIDER_SERVICE_PORT: ${{ vars.DECIDER_SERVICE_PORT }}
@@ -164,7 +165,6 @@ jobs:
             full_img="${{ secrets.ACR_NAME }}.azurecr.io/${img_name}:${{ github.sha }}"
 
             # Build
-            cd $GITHUB_WORKSPACE
             docker compose build "$img_name" --pull --no-cache
 
             # Scan
