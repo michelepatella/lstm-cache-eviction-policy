@@ -136,10 +136,6 @@ jobs:
           DAGS_HUB_REPO_OWNER: ${{ vars.DAGS_HUB_REPO_OWNER }}
           DAGS_HUB_TOKEN: ${{ vars.DAGS_HUB_TOKEN }}
         run: |
-          # Clean up
-          docker system prune -af || true
-          sudo apt-get clean
-
           # Build and scan all the images
           readarray -t DOCKER_SERVICES_ARRAY <<< "$(echo "${{ vars.DOCKER_SERVICES }}" | tr -d '\r')"
           for img_name in "${DOCKER_SERVICES_ARRAY[@]}"; do

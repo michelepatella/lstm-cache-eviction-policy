@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-if [ -z "$RUNNER_TOKEN" ]; then
-  echo "RUNNER_TOKEN not set"
-  exit 1
+# Fix docker socket permissions
+if [ -S /var/run/docker.sock ]; then
+  sudo chmod 666 /var/run/docker.sock
 fi
 
 if [ ! -f .runner ]; then

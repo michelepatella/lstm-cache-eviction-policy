@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y \
     python3.11 python3.11-venv python3.11-distutils \
     python3-pip \
     bash jq curl wget git docker.io docker-compose unzip build-essential libicu-dev \
-    ca-certificates apt-transport-https lsb-release gnupg \
+    ca-certificates apt-transport-https lsb-release gnupg sudo \
     && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 \
     && curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 \
     && rm -rf /var/lib/apt/lists/*
@@ -13,7 +13,8 @@ RUN apt-get update && apt-get install -y \
 # Create runner user and Docker group
 RUN groupadd -r runner && useradd -m -r -g runner runner \
     && groupadd -g 999 docker || true \
-    && usermod -aG docker runner
+    && usermod -aG docker runner \
+    && echo "runner ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 WORKDIR /home/runner
 
 # Install Azure CLI
