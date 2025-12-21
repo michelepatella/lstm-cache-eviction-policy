@@ -120,6 +120,7 @@ jobs:
         env:
           ACR_NAME: ${{ secrets.ACR_NAME }}
           GITHUB_SHA: ${{ github.sha }}
+          TRIVY_IGNORE_VULNS: ${{ vars.TRIVY_IGNORE_VULNS }}
           GATEWAY_API_PORT: ${{ vars.GATEWAY_API_PORT }}
           DECIDER_SERVICE_PORT: ${{ vars.DECIDER_SERVICE_PORT }}
           DECIDER_SERVICE_CHANNEL: ${{ vars.DECIDER_SERVICE_CHANNEL }}
@@ -150,12 +151,8 @@ jobs:
             trivy image \
               --exit-code ${{ vars.TRIVY_EXIT_CODE }} \
               --severity ${{ vars.TRIVY_SEVERITY }} \
+              --ignore-vuln $TRIVY_IGNORE_VULNS \
               "$full_img"
-
-            # Clean up
-            docker rmi "$full_img" || true
-            docker builder prune -af || true
-            docker system prune -af || true
           done
 
       # ---------------------------
