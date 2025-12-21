@@ -149,6 +149,10 @@ jobs:
           DAGS_HUB_REPO_OWNER: ${{ vars.DAGS_HUB_REPO_OWNER }}
           DAGS_HUB_TOKEN: ${{ vars.DAGS_HUB_TOKEN }}
         run: |
+          # Clean up
+          docker system prune -af --volumes || true
+          sudo apt-get clean
+
           # Install Trivy
           TRIVY_LATEST_URL=$(curl -s ${{ vars.TRIVY_LATEST_RELEASE_URL }} \
             | grep ${{ vars.TRIVY_JSON_FIELD }} \
@@ -156,6 +160,7 @@ jobs:
             | cut -d '"' -f 4)
           wget $TRIVY_LATEST_URL -O ${{ vars.TRIVY_OUTPUT_FILE }}
           sudo ${{ vars.TRIVY_INSTALL_CMD }} ${{ vars.TRIVY_OUTPUT_FILE }}
+          trivy image --download-db-only
 
           # Build and scan all the images
           readarray -t DOCKER_SERVICES_ARRAY <<< "$(echo "${{ vars.DOCKER_SERVICES }}" | tr -d '\r')"
