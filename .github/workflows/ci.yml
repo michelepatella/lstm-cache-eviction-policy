@@ -137,6 +137,13 @@ jobs:
           DAGS_HUB_REPO_OWNER: ${{ vars.DAGS_HUB_REPO_OWNER }}
           DAGS_HUB_TOKEN: ${{ vars.DAGS_HUB_TOKEN }}
         run: |
+          # Convert TRIVY_IGNORE_VULNS into a temporary .trivyignore file
+          IFS=',' read -ra IGNORE_ARRAY <<< "$TRIVY_IGNORE_VULNS"
+          > .trivyignore
+          for cve in "${IGNORE_ARRAY[@]}"; do
+            echo "$cve" >> .trivyignore
+          done
+
           # Build and scan all the images
           readarray -t DOCKER_SERVICES_ARRAY <<< "$(echo "${{ vars.DOCKER_SERVICES }}" | tr -d '\r')"
           for img_name in "${DOCKER_SERVICES_ARRAY[@]}"; do
@@ -147,11 +154,11 @@ jobs:
             # Build image
             docker compose build "$img_name"
 
-            # Scan image with Trivy
+            # Scan image with Trivy using .trivyignore
             trivy image \
               --exit-code ${{ vars.TRIVY_EXIT_CODE }} \
               --severity ${{ vars.TRIVY_SEVERITY }} \
-              --ignore-vuln $TRIVY_IGNORE_VULNS \
+              --ignorefile .trivyignore \
               "$full_img"
           done
 
