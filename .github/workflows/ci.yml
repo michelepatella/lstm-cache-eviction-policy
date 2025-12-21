@@ -170,7 +170,7 @@ jobs:
           done
 
       - name: Upload Docker images
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ vars.DOCKER_ARTIFACTS_NAME }}
           path: ${{ vars.DOCKER_ARTIFACTS_DIR }}
@@ -184,7 +184,7 @@ jobs:
           --output-dir ${{ vars.DOCS_OUTPUT_DIR }} --force
 
       - name: Upload docs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ vars.DOCS_ARTIFACTS_NAME }}
           path: ${{ vars.DOCS_ARTIFACTS_DIR }}
