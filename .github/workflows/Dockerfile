@@ -1,8 +1,6 @@
 FROM ubuntu:22.04
 
-# ----------------------------------------------
 # Install essentials
-# ----------------------------------------------
 RUN apt-get update && apt-get install -y \
     python3.11 python3.11-venv python3.11-distutils \
     python3-pip \
@@ -12,20 +10,16 @@ RUN apt-get update && apt-get install -y \
     && curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 \
     && rm -rf /var/lib/apt/lists/*
 
-# ----------------------------------------------
-# Create working directory and non-root user
-# ----------------------------------------------
-RUN groupadd -r runner && useradd -m -r -g runner runner
+# Create runner user and Docker group
+RUN groupadd -r runner && useradd -m -r -g runner runner \
+    && groupadd -g 999 docker || true \
+    && usermod -aG docker runner
 WORKDIR /home/runner
 
-# ----------------------------------------------
-# Azure CLI
-# ----------------------------------------------
+# Install Azure CLI
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
-# ----------------------------------------------
-# Kustomize
-# ----------------------------------------------
+# Install Kustomize
 ENV KUSTOMIZE_VERSION=5.8.0
 RUN curl -sLo kustomize.tar.gz https://sourceforge.net/projects/kustomize.mirror/files/kustomize_v${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_arm64.tar.gz \
     && tar -xzf kustomize.tar.gz kustomize \
@@ -33,49 +27,37 @@ RUN curl -sLo kustomize.tar.gz https://sourceforge.net/projects/kustomize.mirror
     && mv kustomize /usr/local/bin/ \
     && rm kustomize.tar.gz
 
-# ----------------------------------------------
-# Hadolint
-# ----------------------------------------------
+# Install Hadolint
 ENV HADOLINT_VERSION=2.12.0
 RUN wget -O /usr/local/bin/hadolint https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-Linux-arm64 \
     && chmod +x /usr/local/bin/hadolint
 
-# ----------------------------------------------
-# Kube-score
-# ----------------------------------------------
+# Install Kube-score
 ENV KUBESCORE_VERSION=1.19.0
 RUN wget -O /usr/local/bin/kube-score https://github.com/zegl/kube-score/releases/download/v${KUBESCORE_VERSION}/kube-score_${KUBESCORE_VERSION}_linux_arm64 \
     && chmod +x /usr/local/bin/kube-score
 
-# ----------------------------------------------
-# Trivy
-# ----------------------------------------------
+# Install Trivy
 ENV TRIVY_VERSION=0.68.2
 RUN curl -sLo trivy.tar.gz https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-ARM64.tar.gz \
     && tar -xzf trivy.tar.gz trivy \
     && mv trivy /usr/local/bin/ \
     && rm trivy.tar.gz
 
-# ----------------------------------------------
-# GitHub Actions Runner
-# ----------------------------------------------
+# Install GitHub Actions Runner
 ENV RUNNER_VERSION=2.321.0
 RUN curl -O -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-arm64-${RUNNER_VERSION}.tar.gz \
     && tar xzf actions-runner-linux-arm64-${RUNNER_VERSION}.tar.gz \
     && rm actions-runner-linux-arm64-${RUNNER_VERSION}.tar.gz
 
-# ----------------------------------------------
 # Copy and install Python requirements
-# ----------------------------------------------
 COPY requirements.txt requirements-dev.txt /home/runner/
 RUN chown runner:runner /home/runner/requirements* \
-    && python3 -m pip install pip setuptools wheel \
+    && python3 -m pip install --upgrade pip setuptools wheel \
     && python3 -m pip install --no-cache-dir -r requirements.txt \
     && python3 -m pip install --no-cache-dir -r requirements-dev.txt
 
-# ----------------------------------------------
 # Start runner
-# ----------------------------------------------
 COPY --chmod=755 .github/workflows/entrypoint.sh /home/runner/entrypoint.sh
 RUN chown -R runner:runner /home/runner
 USER runner
