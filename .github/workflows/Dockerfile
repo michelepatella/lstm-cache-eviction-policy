@@ -59,7 +59,6 @@ RUN curl -O -L https://github.com/actions/runner/releases/download/v${RUNNER_VER
 COPY requirements.txt requirements-dev.txt /home/runner/
 RUN chown runner:runner /home/runner/requirements* \
     && python3 -m pip install --upgrade pip setuptools wheel \
-    && python3 -m pip install "dvc[s3]==3.63.0" \
     && python3 -m pip install --no-cache-dir -r requirements.txt \
     && python3 -m pip install --no-cache-dir -r requirements-dev.txt
 
