@@ -442,6 +442,9 @@ def run_data_quality_tests(
     )
 
     # Show and save the results at specified path
+    # (create the directory if it does not exist yet)
+    results_path = Path(results_save_path)
+    results_path.parent.mkdir(parents=True, exist_ok=True)
     with Path(results_save_path).open("w") as f:
         old_stdout = sys.stdout
         sys.stdout = f

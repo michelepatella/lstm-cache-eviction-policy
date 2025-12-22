@@ -409,11 +409,14 @@ def run_dc_suite(
         y_proba_test=y_proba_test,
     )
 
-    # Save the results
-    if Path(results_save_path).exists():
-        Path(results_save_path).unlink()
+    # Save the results (create the
+    # directory if it does not exist yet)
+    results_path = Path(results_save_path)
+    results_path.parent.mkdir(parents=True, exist_ok=True)
+    if results_path.exists():
+        results_path.unlink()
     result.save_as_html(
-        results_save_path,
+        str(results_path),
         as_widget=html_as_widget,
         requirejs=html_requirejs,
     )
