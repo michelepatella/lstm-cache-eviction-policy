@@ -107,9 +107,6 @@ stages:
       - src/pipeline/steps/data_preparer.py
     outs:
       - data/raw/${data.general.mode}/${data.general.mode}_raw_dataset.csv
-      - reports/plots/${data.general.mode}/${data.general.mode}_daily_profile.png
-      - reports/plots/${data.general.mode}/${data.general.mode}_key_usage.png
-      - reports/plots/${data.general.mode}/${data.general.mode}_zipf_log_log.png
 
   data_preprocessing:
     cmd: PYTHONPATH=src python -m pipeline.steps.data_preprocessor
@@ -607,8 +604,7 @@ stages:
       - src/pipeline/const.py
       - src/pipeline/steps/simulator.py
       - data/processed/${data.general.mode}/${data.general.mode}_processed_dataset.csv
-    outs:
-      - reports/plots/${data.general.mode}/${data.general.mode}_hit_miss_rates.png
+    outs: []
 
 artifacts:
   static-model:
@@ -643,14 +639,3 @@ artifacts:
       - dynamic data
     meta:
       framework: pytorch
-
-plots:
-  - reports/plots/static/static_daily_profile.png
-  - reports/plots/static/static_key_usage.png
-  - reports/plots/static/static_zipf_log_log.png
-  - reports/plots/static/static_hit_miss_rates.png
-  - reports/plots/dynamic/dynamic_daily_profile.png
-  - reports/plots/dynamic/dynamic_key_usage.png
-  - reports/plots/dynamic/dynamic_hit_miss_rates.png
-  - reports/plots/dynamic/dynamic_zipf_log_log.png
-  - reports/plots/real/real_hit_miss_rates.png
