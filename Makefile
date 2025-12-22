@@ -32,7 +32,7 @@ dvc_update:
 dvc_pipeline_run:
 	dvc repro
 	git add $(DVC_LOCK_PATH) .gitignore
-	git commit -m $(VC_COMMIT_MESSAGE)
+	git commit -m $(VC_COMMIT_MESSAGE) --no-verify
 	dvc status
 	dvc push
 	git push
@@ -41,7 +41,7 @@ dvc_pipeline_run:
 dvc_pipeline_stage_run:
 	dvc repro $(STAGE_NAME)
 	git add $(DVC_LOCK_PATH) .gitignore
-	git commit -m $(VC_COMMIT_MESSAGE)
+	git commit -m $(VC_COMMIT_MESSAGE) --no-verify
 	dvc status
 	dvc push
 	git push
@@ -50,7 +50,7 @@ dvc_pipeline_stage_run:
 dvc_pipeline_run_force:
 	dvc repro --force
 	git add $(DVC_LOCK_PATH) .gitignore
-	git commit -m $(VC_COMMIT_MESSAGE)
+	git commit -m $(VC_COMMIT_MESSAGE) --no-verify
 	dvc status
 	dvc push
 	git push
@@ -59,7 +59,7 @@ dvc_pipeline_run_force:
 dvc_pipeline_stage_run_force:
 	dvc repro $(STAGE_NAME) --force
 	git add $(DVC_LOCK_PATH) .gitignore
-	git commit -m $(VC_COMMIT_MESSAGE)
+	git commit -m $(VC_COMMIT_MESSAGE) --no-verify
 	dvc status
 	dvc push
 	git push
