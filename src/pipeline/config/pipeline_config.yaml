@@ -4,7 +4,7 @@ data:
     keys:
       min: 1
       max: 200
-    mode: static
+    mode: dynamic
   synthetic:
     patterns:
       access:
