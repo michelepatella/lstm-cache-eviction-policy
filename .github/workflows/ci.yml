@@ -21,7 +21,7 @@ jobs:
         with:
           ref: ${{ github.head_ref || github.ref }}
 
-      - name: Pull data from DVC remote
+      - name: Pull data from remote
         run: |
           # Configure DVC remote
           dvc remote modify origin endpointurl ${{ vars.DVC_REMOTE_URL }}
@@ -33,7 +33,7 @@ jobs:
           # Pull
           dvc pull
 
-      - name: Azure login
+      - name: Login to Azure
         shell: bash
         run: |
           # Read credentials from temp file
@@ -193,6 +193,13 @@ jobs:
           export PYTHONPATH=$(pwd):$(pwd)/src
           pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.MODEL_TESTS_DIR }}
 
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ vars.TEST_REPORT_ARTIFACTS_NAME }}
+          path: ${{ vars.TEST_REPORTS_DIR }}
+
   # -----------------------------
   # Build
   # -----------------------------
@@ -239,13 +246,6 @@ jobs:
         run: |
           PYTHONPATH=$(pwd)/${{ vars.SRC_DIR }} pdoc --html ${{ vars.SRC_DIR }}/ \
           --output-dir ${{ vars.DOCS_OUTPUT_DIR }} --force
-
-      - name: Upload test reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ vars.TEST_REPORT_ARTIFACTS_NAME }}
-          path: ${{ vars.TEST_REPORTS_DIR }}
 
       - name: Upload docs
         uses: actions/upload-artifact@v4
