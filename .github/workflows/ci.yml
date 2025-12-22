@@ -19,6 +19,9 @@ jobs:
         with:
           ref: ${{ github.head_ref || github.ref }}
 
+      - name: Pull data from DVC remote
+        run: dvc pull
+
       - name: Azure login
         shell: bash
         run: |
@@ -60,7 +63,7 @@ jobs:
           kustomize build ${K8S_OVERLAYS_CI_DIR} > ${K8S_RENDERED_FILE}
 
       # ---------------------------
-      # Code checks
+      # Code
       # ---------------------------
       - name: Check code quality
         run: ruff check ${{ vars.CODE_DIR }} --diff
@@ -87,7 +90,7 @@ jobs:
           "${{ vars.HADOLINT_FAILURE_THRESHOLD }}"
 
       # ---------------------------
-      # Dependency checks
+      # Dependencies
       # ---------------------------
       - name: Check dependency vulnerabilities
         env:
@@ -100,7 +103,7 @@ jobs:
           pip-audit $IGNORE_ARGS
 
       # ---------------------------
-      # K8s checks
+      # K8s
       # ---------------------------
       - name: Check k8s manifests
         run: checkov -d ${{ vars.K8S_RENDERED_FILE }} --framework ${{ vars.CHECKOV_FRAMEWORK }}
@@ -109,7 +112,7 @@ jobs:
         run: kube-score score ${{ vars.K8S_RENDERED_FILE }}
 
       # ---------------------------
-      # Testing
+      # Tests
       # ---------------------------
       - name: Run tests
         run: |
@@ -117,7 +120,7 @@ jobs:
           pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.TESTS_DIR }}
 
       # ---------------------------
-      # Docker image checks
+      # Docker
       # ---------------------------
       - name: Check Docker images
         env:
@@ -165,9 +168,6 @@ jobs:
               "$full_img"
           done
 
-      # ---------------------------
-      # Docker image push
-      # ---------------------------
       - name: Push Docker images
         env:
           GIT_HUB_SHA: ${{ github.sha }}
@@ -208,7 +208,7 @@ jobs:
           done
 
       # ---------------------------
-      # Docs generation
+      # Docs
       # ---------------------------
       - name: Generate docs
         run: |
