@@ -21,8 +21,15 @@ jobs:
 
       - name: Pull data from DVC remote
         run: |
+          # Configure DVC remote
+          dvc remote add origin ${{ vars.DVC_REMOTE_NAME }}
+          dvc remote modify origin endpointurl ${{ vars.DVC_REMOTE_URL }}
+
+          # Login
           dvc remote modify origin --local access_key_id ${{ secrets.DAGSHUB_TOKEN }}
           dvc remote modify origin --local secret_access_key ${{ secrets.DAGSHUB_TOKEN }}
+
+          # Pull
           dvc pull
 
       - name: Azure login
