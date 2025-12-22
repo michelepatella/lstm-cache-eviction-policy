@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: predictor-service
-  namespace: predictor-service
+  name: api-gateway
+  namespace: api-gateway
   annotations:
     kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod
   labels:
-    app: predictor-service
-    role: predictor-service
+    app: api-gateway
+    role: api-gateway
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: predictor-service
-      role: predictor-service
+      app: api-gateway
+      role: api-gateway
   template:
     metadata:
       annotations:
         kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod
       labels:
-        app: predictor-service
-        role: predictor-service
+        app: api-gateway
+        role: api-gateway
     spec:
       automountServiceAccountToken: false
       securityContext:
@@ -29,11 +29,11 @@ spec:
         runAsNonRoot: true
         fsGroup: 2000
       containers:
-      - name: predictor-service
-        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-predictor_service:later
+      - name: api-gateway
+        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-api_gateway:later
         imagePullPolicy: Always
         ports:
-        - containerPort: 8002
+        - containerPort: 8000
         readinessProbe:
           exec:
             command:
@@ -51,12 +51,12 @@ spec:
           initialDelaySeconds: 10
           periodSeconds: 15
         volumeMounts:
-        - name: predictor-service-secrets
+        - name: api-gateway-secrets
           mountPath: /etc/secrets
           readOnly: true
         envFrom:
         - configMapRef:
-            name: predictor-service-config
+            name: api-gateway-config
         securityContext:
           readOnlyRootFilesystem: true
           runAsUser: 10001
@@ -78,8 +78,23 @@ spec:
             memory: "250Mi"
             ephemeral-storage: "500Mi"
       volumes:
-      - name: predictor-service-secrets
+      - name: api-gateway-secrets
         secret:
-          secretName: predictor-service-secrets
+          secretName: api-gateway-secrets
       imagePullSecrets:
         - name: acr-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway
+  namespace: api-gateway
+spec:
+  selector:
+    app: api-gateway
+    role: api-gateway
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000

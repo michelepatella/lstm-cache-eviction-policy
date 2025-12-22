@@ -1,3 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: predictor-service
+  namespace: predictor-service
+  annotations:
+    kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod
+  labels:
+    app: predictor-service
+    role: predictor-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: predictor-service
+      role: predictor-service
+  template:
+    metadata:
+      annotations:
+        kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod
+      labels:
+        app: predictor-service
+        role: predictor-service
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 10001
+        runAsGroup: 10001
+        runAsNonRoot: true
+        fsGroup: 2000
+      containers:
+      - name: predictor-service
+        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-predictor_service:later
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8002
+        readinessProbe:
+          exec:
+            command:
+              - sh
+              - -c
+              - "echo ready"
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          exec:
+            command:
+              - sh
+              - -c
+              - "echo ok"
+          initialDelaySeconds: 10
+          periodSeconds: 15
+        volumeMounts:
+        - name: predictor-service-secrets
+          mountPath: /etc/secrets
+          readOnly: true
+        envFrom:
+        - configMapRef:
+            name: predictor-service-config
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsUser: 10001
+          runAsGroup: 10001
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          seccompProfile:
+            type: RuntimeDefault
+        resources:
+          requests:
+            cpu: "5m"
+            memory: "50Mi"
+            ephemeral-storage: "50Mi"
+          limits:
+            cpu: "50m"
+            memory: "250Mi"
+            ephemeral-storage: "500Mi"
+      volumes:
+      - name: predictor-service-secrets
+        secret:
+          secretName: predictor-service-secrets
+      imagePullSecrets:
+        - name: acr-secret
+---
 apiVersion: v1
 kind: Service
 metadata:
