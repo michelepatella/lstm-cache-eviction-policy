@@ -2,6 +2,8 @@ include .env
 
 
 DVC_LOCK_PATH := dvc.lock
+DVC_FILES := "*.dvc"
+
 VC_COMMIT_MESSAGE := "dvc: Update tracked files"
 
 PYCACHE_NAME := "__pycache__"
@@ -31,8 +33,9 @@ dvc_update:
 # Run the whole DVC pipeline
 dvc_pipeline_run:
 	dvc repro
+	git add $(shell find . -name $(DVC_FILES))
 	git add $(DVC_LOCK_PATH) .gitignore
-	git commit -m $(VC_COMMIT_MESSAGE) --no-verify
+	git commit -m $(VC_COMMIT_MESSAGE) --no-verify || true
 	dvc status
 	dvc push
 	git push
@@ -40,8 +43,9 @@ dvc_pipeline_run:
 # Run a specific DVC pipeline stage
 dvc_pipeline_stage_run:
 	dvc repro $(STAGE_NAME)
+	git add $(shell find . -name $(DVC_FILES))
 	git add $(DVC_LOCK_PATH) .gitignore
-	git commit -m $(VC_COMMIT_MESSAGE) --no-verify
+	git commit -m $(VC_COMMIT_MESSAGE) --no-verify || true
 	dvc status
 	dvc push
 	git push
@@ -49,8 +53,9 @@ dvc_pipeline_stage_run:
 # Run the whole DVC pipeline (Force)
 dvc_pipeline_run_force:
 	dvc repro --force
+	git add $(shell find . -name $(DVC_FILES))
 	git add $(DVC_LOCK_PATH) .gitignore
-	git commit -m $(VC_COMMIT_MESSAGE) --no-verify
+	git commit -m $(VC_COMMIT_MESSAGE) --no-verify || true
 	dvc status
 	dvc push
 	git push
@@ -58,8 +63,9 @@ dvc_pipeline_run_force:
 # Run a specific DVC pipeline stage (Force)
 dvc_pipeline_stage_run_force:
 	dvc repro $(STAGE_NAME) --force
+	git add $(shell find . -name $(DVC_FILES))
 	git add $(DVC_LOCK_PATH) .gitignore
-	git commit -m $(VC_COMMIT_MESSAGE) --no-verify
+	git commit -m $(VC_COMMIT_MESSAGE) --no-verify || true
 	dvc status
 	dvc push
 	git push
