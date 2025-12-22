@@ -33,7 +33,6 @@ markers = [
     "model_training_output_integrity: Model Training Output Integrity Test",
     "model_training_portability: Model Training Portability Tests",
     "slow: Slow Tests",
-    "ci: Tests to run in CI",
     "data_processing: Tests to run during data processing in the pipeline",
     "data_exploration: Tests to run during data exploration in the pipeline",
     "validation: Tests to run during validation in the pipeline",
