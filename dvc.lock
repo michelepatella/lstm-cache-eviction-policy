@@ -283,11 +283,6 @@ stages:
         resources.general.num_cpus: 2
         resources.general.num_gpus: 0
         seed.value: 42
-    outs:
-    - path: data/raw/static/static_raw_dataset.csv
-      hash: md5
-      md5: 145161d0425d5528ab13f3baeb65f9e2
-      size: 4279503
   data_preprocessing:
     cmd: PYTHONPATH=src python -m pipeline.steps.data_preprocessor
     deps:
