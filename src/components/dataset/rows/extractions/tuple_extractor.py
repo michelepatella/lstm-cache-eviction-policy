@@ -29,7 +29,7 @@ from components.const import (
     TORCH_DTYPE_TARGET,
 )
 from components.logs.levels.error_logger import error
-from src.const import (
+from const import (
     DATASET_COLUMN_REQUEST_NAME,
 )
 

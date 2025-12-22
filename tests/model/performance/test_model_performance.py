@@ -20,7 +20,7 @@ from deepchecks.tabular.checks import (
     TrainTestPerformance,
 )
 
-from src.const import (
+from const import (
     DATA_DYNAMIC_MODE,
     DATA_STATIC_MODE,
 )

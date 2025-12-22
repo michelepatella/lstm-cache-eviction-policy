@@ -21,7 +21,7 @@ Functions:
 from typing import Any
 
 from components.logs.levels.error_logger import error
-from src.const import (
+from const import (
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
 )

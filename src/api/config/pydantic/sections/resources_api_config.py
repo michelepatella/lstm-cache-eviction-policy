@@ -19,7 +19,7 @@ Classes:
 from pydantic import BaseModel, model_validator
 
 from components.assertions.choice_field_assertor import assert_choice_field
-from src.const import RESOURCES_DEVICE_NAMES
+from const import RESOURCES_DEVICE_NAMES
 
 
 class ResourcesDeviceAPIConfig(BaseModel):

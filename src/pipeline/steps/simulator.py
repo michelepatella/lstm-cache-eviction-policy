@@ -52,7 +52,20 @@ from components.seed.setter import set_seed
 from components.visualization.hit_miss_rates_plotter import (
     plot_hit_miss_rate,
 )
-from const import DAGS_HUB_REPO_NAME, DAGS_HUB_REPO_OWNER
+from const import (
+    CACHE_LSTM_NAME,
+    DAGS_HUB_REPO_NAME,
+    DAGS_HUB_REPO_OWNER,
+    DATA_DYNAMIC_MODE,
+    DATA_STATIC_MODE,
+    DATASET_TESTING_SPLIT_TYPE,
+    LOGS_LOGGER_NAME,
+    MLFLOW_NESTED,
+    SIMULATIONS_METRICS_HIT_COUNTER_NAME,
+    SIMULATIONS_METRICS_MISS_COUNTER_NAME,
+    SIMULATIONS_METRICS_POLICY_NAME,
+    SIMULATIONS_METRICS_TIMELINE_NAME,
+)
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     CACHE_LFU_NAME,
@@ -68,18 +81,6 @@ from pipeline.const import (
     SIMULATIONS_METRICS_EVICTION_MISTAKE_RATE_NAME,
     SIMULATIONS_METRICS_HIT_RATE_NAME,
     SIMULATIONS_METRICS_MISS_RATE_NAME,
-)
-from src.const import (
-    CACHE_LSTM_NAME,
-    DATA_DYNAMIC_MODE,
-    DATA_STATIC_MODE,
-    DATASET_TESTING_SPLIT_TYPE,
-    LOGS_LOGGER_NAME,
-    MLFLOW_NESTED,
-    SIMULATIONS_METRICS_HIT_COUNTER_NAME,
-    SIMULATIONS_METRICS_MISS_COUNTER_NAME,
-    SIMULATIONS_METRICS_POLICY_NAME,
-    SIMULATIONS_METRICS_TIMELINE_NAME,
 )
 
 

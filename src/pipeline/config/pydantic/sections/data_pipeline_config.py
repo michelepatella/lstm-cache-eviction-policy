@@ -68,7 +68,7 @@ from components.assertions.choice_field_assertor import (
 from components.assertions.min_max_assertor import (
     assert_min_less_than_max,
 )
-from src.const import (
+from const import (
     DATA_MODES,
     TIME_END_HOUR,
     TIME_START_HOUR,

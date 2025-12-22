@@ -25,13 +25,13 @@ from components.const import (
     DATASET_COLUMN_SIN_TIME_NAME,
     DATASET_PROCESSED_COLUMNS,
 )
-from pipeline.config.configurator import prepare_pipeline_config
-from pipeline.const import DATASET_PROCESSED_TYPE
-from src.const import (
+from const import (
     DATA_DYNAMIC_MODE,
     DATA_STATIC_MODE,
     DATASET_COLUMN_REQUEST_NAME,
 )
+from pipeline.config.configurator import prepare_pipeline_config
+from pipeline.const import DATASET_PROCESSED_TYPE
 from tests.const import (
     DATA_QUALITY_TESTS_PROCESSED_DYNAMIC_DATA_RESULTS_SAVE_PATH,
     DATA_QUALITY_TESTS_PROCESSED_REAL_DATA_RESULTS_SAVE_PATH,

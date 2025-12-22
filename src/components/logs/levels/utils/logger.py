@@ -19,7 +19,7 @@ Functions:
 import logging
 from typing import Any
 
-from src.const import LOGS_LOGGER_NAME
+from const import LOGS_LOGGER_NAME
 
 
 def log(

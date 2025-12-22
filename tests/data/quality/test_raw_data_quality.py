@@ -20,8 +20,7 @@ Functions:
 
 import pytest
 
-from pipeline.config.configurator import prepare_pipeline_config
-from src.const import (
+from const import (
     DATA_DYNAMIC_MODE,
     DATA_STATIC_MODE,
     DATASET_COLUMN_REQUEST_NAME,
@@ -30,6 +29,7 @@ from src.const import (
     TIME_END_HOUR,
     TIME_START_HOUR,
 )
+from pipeline.config.configurator import prepare_pipeline_config
 from tests.const import (
     DATA_QUALITY_TESTS_RAW_DYNAMIC_DATA_RESULTS_SAVE_PATH,
     DATA_QUALITY_TESTS_RAW_REAL_DATA_RESULTS_SAVE_PATH,

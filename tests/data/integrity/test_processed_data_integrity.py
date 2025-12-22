@@ -20,9 +20,9 @@ from deepchecks.tabular.checks import (
     PercentOfNulls,
 )
 
+from const import DATA_DYNAMIC_MODE, DATA_STATIC_MODE
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import DATASET_PROCESSED_TYPE
-from src.const import DATA_DYNAMIC_MODE, DATA_STATIC_MODE
 from tests.const import (
     DATA_INTEGRITY_TESTS_PROCESSED_DATA_SUITE_NAME,
     DATA_INTEGRITY_TESTS_PROCESSED_DYNAMIC_DATA_RESULTS_SAVE_PATH,

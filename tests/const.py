@@ -12,7 +12,7 @@ from components.const import (
     DATASET_COLUMN_LOCAL_FREQUENCY_NAME,
     DATASET_COLUMN_LOCAL_RECENCY_NAME,
 )
-from src.const import (
+from const import (
     DATASET_COLUMN_REQUEST_NAME,
     DATASET_COLUMN_TIMESTAMP_NAME,
 )

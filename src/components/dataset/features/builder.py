@@ -44,7 +44,7 @@ from components.logs.levels.error_logger import error
 from components.time.transforms.trig_encoder import (
     encode_time_trigonometrically,
 )
-from src.const import (
+from const import (
     DATASET_COLUMN_REQUEST_NAME,
     DATASET_COLUMN_TIMESTAMP_NAME,
 )

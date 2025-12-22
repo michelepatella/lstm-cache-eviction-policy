@@ -79,12 +79,12 @@ from components.model.best.checks_updates.checker_updater import (
 from components.network.free_port_finder import find_free_port
 from components.training.callbacks.early_stopping import EarlyStopping
 from components.training.core.single_epoch_trainer import train_single_epoch
-from pipeline.config.pydantic.pipeline_config import PipelineConfig
-from src.const import (
+from const import (
     LOGS_PHASE_VALIDATION,
     RESOURCES_DEVICE_CUDA_NAME,
     RESOURCES_DEVICE_MPS_NAME,
 )
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def _train_epochs_worker(

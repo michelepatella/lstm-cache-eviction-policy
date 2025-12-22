@@ -67,14 +67,14 @@ from components.dataset.splits.training_validation_splitter import (
 )
 from components.evaluation.model.evaluator import evaluate_model
 from components.model.best.initializer import initialize_best_model
-from pipeline.config.configurator import prepare_pipeline_config
-from pipeline.config.pydantic.pipeline_config import PipelineConfig
-from pipeline.const import DATASET_PROCESSED_TYPE
-from src.const import (
+from const import (
     DATASET_COLUMN_REQUEST_NAME,
     DATASET_TESTING_SPLIT_TYPE,
     DATASET_TRAINING_SPLIT_TYPE,
 )
+from pipeline.config.configurator import prepare_pipeline_config
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
+from pipeline.const import DATASET_PROCESSED_TYPE
 from tests.config.configurator import prepare_tests_config
 from tests.config.pydantic.tests_config import TestsConfig
 from tests.const import (
