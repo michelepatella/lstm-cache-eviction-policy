@@ -2,6 +2,7 @@ bandit==1.9.2
 checkov==3.2.495
 deepchecks==0.19.1
 dvc==3.63.0
+dvc_s3==3.2.2
 great_expectations==1.8.1
 pdoc3==0.11.6
 pip-audit==2.10.0
