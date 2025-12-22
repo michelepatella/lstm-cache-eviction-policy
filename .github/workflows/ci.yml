@@ -26,7 +26,7 @@ jobs:
 
           # Login
           dvc remote modify origin --local access_key_id ${{ secrets.DAGSHUB_TOKEN }}
-          dvc remote modify origin --local secret_access_key ${{ secrets.DAGSHUB_TOKEN }}
+          dvc remote modify origin --local secret_access_key ""
 
           # Pull
           dvc pull
