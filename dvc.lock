@@ -31,7 +31,7 @@ stages:
       hash: md5
       md5: 02c4c66a533ccd7d60dbcf0a9978dc18
       size: 4935
-    - path:
+    - path: 
         src/components/data/patterns/access/variants/memory_fallback_generator.py
       hash: md5
       md5: 59da4400dadcd207d41605ccf27df009
@@ -60,7 +60,7 @@ stages:
       hash: md5
       md5: 69c45dd862a04455ae5deaf2d2a16175
       size: 2694
-    - path:
+    - path: 
         src/components/data/patterns/temporal/variants/periodic_calculator.py
       hash: md5
       md5: d395b55d88871a56109aba48be80056d
@@ -185,7 +185,7 @@ stages:
       hash: md5
       md5: 4bcb714183e68b0168f856768c2df3ca
       size: 3546
-    - path:
+    - path: 
         src/pipeline/config/pydantic/sections/early_stopping_pipeline_config.py
       hash: md5
       md5: 85ea207e4620eaf3c09923d8c01922e3
