@@ -16,6 +16,7 @@ import pytest
 
 from components.const import DATASET_PROCESSED_FEATURE_COLUMNS
 from tests.model.behavioral.invariance.helpers import (
+    model_invariance_tests_setup,  # noqa
     test_model_invariance_feature_perturbation,
     test_model_invariance_identity_preservation,
 )
