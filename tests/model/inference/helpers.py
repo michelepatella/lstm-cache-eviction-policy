@@ -103,7 +103,7 @@ def test_model_inference_avg_latency(model_testing_tests_setup: tuple) -> None:
 
     # Compute average latency
     avg_latency = calculate_average(latencies)
-
+    print(avg_latency)
     # Assert the average latency is close
     # enough to the expected one
     assert avg_latency == pytest.approx(
