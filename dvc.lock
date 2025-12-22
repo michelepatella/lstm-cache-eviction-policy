@@ -242,7 +242,7 @@ stages:
       src/pipeline/config/pipeline_config.yaml:
         data.general.keys.max: 200
         data.general.keys.min: 1
-        data.general.mode: dynamic
+        data.general.mode: static
         data.general.requests: 200000
         data.synthetic.patterns.access.behavior.cycle.base: 5
         data.synthetic.patterns.access.behavior.cycle.divisor: 100
@@ -284,7 +284,7 @@ stages:
         resources.general.num_gpus: 0
         seed.value: 42
     outs:
-    - path: data/raw/dynamic/dynamic_raw_dataset.csv
+    - path: data/raw/static/static_raw_dataset.csv
       hash: md5
-      md5: 3a47a981ad4dbfad1f4a4a882dd1ff99
-      size: 4283906
+      md5: 145161d0425d5528ab13f3baeb65f9e2
+      size: 4279503
