@@ -20,7 +20,10 @@ jobs:
           ref: ${{ github.head_ref || github.ref }}
 
       - name: Pull data from DVC remote
-        run: dvc pull
+        run: |
+          dvc remote modify origin --local access_key_id ${{ secrets.DAGSHUB_TOKEN }}
+          dvc remote modify origin --local secret_access_key ${{ secrets.DAGSHUB_TOKEN }}
+          dvc pull
 
       - name: Azure login
         shell: bash
