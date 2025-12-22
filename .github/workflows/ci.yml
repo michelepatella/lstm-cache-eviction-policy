@@ -22,8 +22,8 @@ jobs:
       - name: Pull data from DVC remote
         run: |
           # Configure DVC remote
-          dvc remote add origin ${{ vars.DVC_REMOTE_NAME }}
-          dvc remote modify origin endpointurl ${{ vars.DVC_REMOTE_URL }}
+          dvc remote add origin ${{ vars.DVC_REMOTE_NAME }} --force
+          dvc remote modify origin endpointurl ${{ vars.DVC_REMOTE_URL }} --force
 
           # Login
           dvc remote modify origin --local access_key_id ${{ secrets.DAGSHUB_TOKEN }}
