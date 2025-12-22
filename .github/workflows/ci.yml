@@ -113,7 +113,7 @@ jobs:
       # ---------------------------
       - name: Run tests
         run: |
-          export PYTHONPATH=$(pwd)/src
+          export PYTHONPATH=$(pwd):$(pwd)/src
           pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.TESTS_DIR }}
 
       # ---------------------------
