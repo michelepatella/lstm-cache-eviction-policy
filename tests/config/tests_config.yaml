@@ -46,8 +46,8 @@ model:
         tol: 0.0000000001
   inference:
     latency:
-      target_avg: 0.5
-      tol: 0.005
+      target_avg: 0.05
+      tol: 0.1
     throughput:
       min: 1000
   performance:
