@@ -77,6 +77,12 @@ jobs:
           # Output path for downstream jobs
           echo "rendered_file=${K8S_RENDERED_FILE}" >> $GITHUB_OUTPUT
 
+      - name: Upload rendered k8s manifests
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ vars.K8S_RENDERED_ARTIFACTS_NAME }}
+          path: ${{ vars.K8S_RENDERED_FILE }}
+
   # -----------------------------
   # Static Analysis
   # -----------------------------
@@ -216,30 +222,41 @@ jobs:
           DOCKER_HUB_REPO: ${{ vars.DOCKER_HUB_REPO }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Push all the images to Docker Hub, GitHub Packages, and ACR
           readarray -t DOCKER_SERVICES_ARRAY <<< "$(echo "${{ vars.DOCKER_SERVICES }}" | tr -d '\r')"
           for svc in "${DOCKER_SERVICES_ARRAY[@]}"; do
+            # Prepare image
             img_name=$(echo "$svc" | tr '_' '-')
             local_img="${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}/$img_name:${GIT_HUB_SHA}"
 
+            # Push to Docker Hub
             docker tag "$local_img" "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
-
             ghcr_img="${GIT_HUB_REGISTRY}/${GITHUB_REPOSITORY}/$img_name"
             docker tag "$local_img" "$ghcr_img:${GIT_HUB_SHA}"
             docker tag "$local_img" "$ghcr_img:latest"
-
             echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "$DOCKER_HUB_USER" \
             --password-stdin
             docker push "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
 
+            # Push to GitHub Packages
             echo "${GITHUB_TOKEN}" | docker login "$GIT_HUB_REGISTRY" -u ${{ github.actor }} \
             --password-stdin
             docker push "$ghcr_img:${GIT_HUB_SHA}"
             docker push "$ghcr_img:latest"
 
+            # Push to ACR
+            echo "${{ secrets.ACR_PASSWORD }}" | docker login "${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}" \
+            --username "${{ secrets.ACR_USERNAME }}" --password-stdin
+            acr_img="${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}/$img_name:${GIT_HUB_SHA}"
+            docker tag "$local_img" "$acr_img"
+            docker push "$acr_img"
+
+            # Remove local images
             docker rmi -f "$local_img" \
                   "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name" \
                   "$ghcr_img:${GIT_HUB_SHA}" \
-                  "$ghcr_img:latest" || true
+                  "$ghcr_img:latest" \
+                  "$acr_img" || true
           done
 
       - name: Build docs

@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: featurizer-service
+  namespace: featurizer-service
+  annotations:
+    kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod
+  labels:
+    app: featurizer-service
+    role: featurizer-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: featurizer-service
+      role: featurizer-service
+  template:
+    metadata:
+      annotations:
+        kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod
+      labels:
+        app: featurizer-service
+        role: featurizer-service
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 10001
+        runAsGroup: 10001
+        runAsNonRoot: true
+        fsGroup: 2000
+      containers:
+      - name: featurizer-service
+        image: lstmcacheevictionpolicy.azurecr.io/lstm-cache-eviction-policy-featurizer_service:later
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8001
+        readinessProbe:
+          exec:
+            command:
+              - sh
+              - -c
+              - "echo ready"
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          exec:
+            command:
+              - sh
+              - -c
+              - "echo ok"
+          initialDelaySeconds: 10
+          periodSeconds: 15
+        envFrom:
+        - configMapRef:
+            name: featurizer-service-config
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsUser: 10001
+          runAsGroup: 10001
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          seccompProfile:
+            type: RuntimeDefault
+        resources:
+          requests:
+            cpu: "5m"
+            memory: "50Mi"
+            ephemeral-storage: "50Mi"
+          limits:
+            cpu: "50m"
+            memory: "250Mi"
+            ephemeral-storage: "500Mi"
+      imagePullSecrets:
+        - name: acr-secret

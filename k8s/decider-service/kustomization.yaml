@@ -1,4 +1,4 @@
 resources:
-  - decider-service.yaml
+  - decider-service-deployment.yaml
   - decider-service-config.yaml
   - decider-service-networkpolicy.yaml
