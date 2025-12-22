@@ -1,20 +1,20 @@
 #!/bin/bash
 set -e
 
-# Fix docker socket permissions
-if [ -S /var/run/docker.sock ]; then
-  sudo chmod 666 /var/run/docker.sock
+# Fix Docker socket permissions
+if [ -S "$DOCKER_SOCKET" ]; then
+  sudo chmod 666 "$DOCKER_SOCKET"
 fi
 
+# Configuration
 if [ ! -f .runner ]; then
-  echo "Configuring runner..."
-  ./config.sh --url "$RUNNER_REPO_URL" \
-              --token "$RUNNER_TOKEN" \
-              --name "${RUNNER_NAME:-docker-runner}" \
-              --labels "${RUNNER_LABELS:-self-hosted,docker}" \
+  ./config.sh --url "${RUNNER_REPO_URL}" \
+              --token "${RUNNER_TOKEN}" \
+              --name "${RUNNER_NAME}" \
+              --labels "${RUNNER_LABELS}" \
               --unattended \
               --replace
 fi
 
-echo "Starting runner..."
-exec ./run.sh
+# Run the runner
+exec "$RUNNER_SCRIPT"
