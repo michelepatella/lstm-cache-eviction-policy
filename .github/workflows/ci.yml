@@ -7,13 +7,14 @@ on:
     branches: [main]
 
 jobs:
-  ci:
+  # ---------------------------
+  # Setup
+  # ---------------------------
+  setup:
     runs-on: self-hosted
+    outputs:
+      k8s_rendered_file: ${{ steps.k8s.outputs.rendered_file }}
     steps:
-
-      # ---------------------------
-      # Setup
-      # ---------------------------
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
@@ -49,6 +50,7 @@ jobs:
                    --tenant "$TENANT_ID"
 
       - name: Set up k8s manifests
+        id: k8s
         env:
           GIT_HUB_SHA: ${{ github.sha }}
           K8S_OVERLAYS_CI_DIR: ${{ vars.K8S_OVERLAYS_CI_DIR }}
@@ -71,18 +73,29 @@ jobs:
           cd -
           kustomize build ${K8S_OVERLAYS_CI_DIR} > ${K8S_RENDERED_FILE}
 
-      # ---------------------------
-      # Code
-      # ---------------------------
+          # Output path for downstream jobs
+          echo "rendered_file=${K8S_RENDERED_FILE}" >> $GITHUB_OUTPUT
+
+  # ---------------------------
+  # Code
+  # ---------------------------
+  code:
+    runs-on: self-hosted
+    needs: setup
+    steps:
       - name: Check code quality
         run: ruff check ${{ vars.CODE_DIR }} --diff
 
       - name: Check code security
         run: bandit -r ${{ vars.SRC_DIR }} --severity-level ${{ vars.BANDIT_SEVERITY }}
 
-      # ---------------------------
-      # Linting
-      # ---------------------------
+  # ---------------------------
+  # Linting
+  # ---------------------------
+  linting:
+    runs-on: self-hosted
+    needs: setup
+    steps:
       - name: Lint code
         run: pylint ${{ vars.SRC_DIR }} --fail-under=${{ vars.PYLINT_MIN_SCORE }}
 
@@ -98,9 +111,13 @@ jobs:
           hadolint $(find . -name ${{ vars.DOCKERFILE_NAME }}) --failure-threshold \
           "${{ vars.HADOLINT_FAILURE_THRESHOLD }}"
 
-      # ---------------------------
-      # Dependencies
-      # ---------------------------
+  # ---------------------------
+  # Dependencies
+  # ---------------------------
+  dependencies:
+    runs-on: self-hosted
+    needs: setup
+    steps:
       - name: Check dependency vulnerabilities
         env:
           PIP_AUDIT_IGNORE_VULNS: ${{ vars.PIP_AUDIT_IGNORE_VULNS }}
@@ -111,26 +128,44 @@ jobs:
           done
           pip-audit $IGNORE_ARGS
 
-      # ---------------------------
-      # K8s
-      # ---------------------------
+  # ---------------------------
+  # K8s
+  # ---------------------------
+  k8s:
+    runs-on: self-hosted
+    needs: setup
+    steps:
       - name: Check k8s manifests
-        run: checkov -d ${{ vars.K8S_RENDERED_FILE }} --framework ${{ vars.CHECKOV_FRAMEWORK }}
+        run: checkov -d ${{ needs.setup.outputs.k8s_rendered_file }} --framework ${{ vars.CHECKOV_FRAMEWORK }}
 
       - name: Check k8s readiness
-        run: kube-score score ${{ vars.K8S_RENDERED_FILE }}
+        run: kube-score score ${{ needs.setup.outputs.k8s_rendered_file }}
 
-      # ---------------------------
-      # Tests
-      # ---------------------------
+  # ---------------------------
+  # Tests
+  # ---------------------------
+  tests:
+    runs-on: self-hosted
+    needs: setup
+    steps:
       - name: Run tests
         run: |
           export PYTHONPATH=$(pwd):$(pwd)/src
           pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.TESTS_DIR }}
 
-      # ---------------------------
-      # Docker
-      # ---------------------------
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ vars.TEST_REPORT_ARTIFACTS_NAME }}
+          path: ${{ vars.TEST_REPORTS_DIR }}
+
+  # ---------------------------
+  # Docker
+  # ---------------------------
+  docker:
+    runs-on: self-hosted
+    needs: setup
+    steps:
       - name: Check Docker images
         env:
           ACR_NAME: ${{ secrets.ACR_NAME }}
@@ -162,14 +197,9 @@ jobs:
           # Build and scan all the images
           readarray -t DOCKER_SERVICES_ARRAY <<< "$(echo "${{ vars.DOCKER_SERVICES }}" | tr -d '\r')"
           for img_name in "${DOCKER_SERVICES_ARRAY[@]}"; do
-            # Get image
             img_name_normalized=$(echo "$img_name" | tr '_' '-')
             full_img="${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}/${img_name_normalized}:${{ github.sha }}"
-
-            # Build image
             docker compose build "$img_name"
-
-            # Scan image with Trivy using .trivyignore
             trivy image \
               --exit-code ${{ vars.TRIVY_EXIT_CODE }} \
               --severity ${{ vars.TRIVY_SEVERITY }} \
@@ -186,39 +216,36 @@ jobs:
           DOCKER_HUB_REPO: ${{ vars.DOCKER_HUB_REPO }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Push all the Docker images
           readarray -t DOCKER_SERVICES_ARRAY <<< "$(echo "${{ vars.DOCKER_SERVICES }}" | tr -d '\r')"
           for svc in "${DOCKER_SERVICES_ARRAY[@]}"; do
             img_name=$(echo "$svc" | tr '_' '-')
             local_img="${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}/$img_name:${GIT_HUB_SHA}"
 
-            # Tag Docker Hub
             docker tag "$local_img" "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
 
-            # Tag GitHub Container Registry
             ghcr_img="${GIT_HUB_REGISTRY}/${GITHUB_REPOSITORY}/$img_name"
             docker tag "$local_img" "$ghcr_img:${GIT_HUB_SHA}"
             docker tag "$local_img" "$ghcr_img:latest"
 
-            # Push Docker Hub
             echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "$DOCKER_HUB_USER" --password-stdin
             docker push "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
 
-            # Push GitHub Container Registry
             echo "${GITHUB_TOKEN}" | docker login "$GIT_HUB_REGISTRY" -u ${{ github.actor }} --password-stdin
             docker push "$ghcr_img:${GIT_HUB_SHA}"
             docker push "$ghcr_img:latest"
 
-            # Remove local images
             docker rmi -f "$local_img" \
                   "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name" \
                   "$ghcr_img:${GIT_HUB_SHA}" \
                   "$ghcr_img:latest" || true
-          done
 
-      # ---------------------------
-      # Docs
-      # ---------------------------
+  # ---------------------------
+  # Docs
+  # ---------------------------
+  docs:
+    runs-on: self-hosted
+    needs: setup
+    steps:
       - name: Generate docs
         run: |
           PYTHONPATH=$(pwd)/${{ vars.SRC_DIR }} pdoc --html ${{ vars.SRC_DIR }}/ \
