@@ -58,9 +58,11 @@ RUN curl -O -L https://github.com/actions/runner/releases/download/v${RUNNER_VER
 # Copy and install Python requirements
 COPY requirements.txt requirements-dev.txt /home/runner/
 RUN chown runner:runner /home/runner/requirements* \
-    && python3 -m pip install --upgrade pip setuptools wheel \
-    && python3 -m pip install --no-cache-dir -r requirements.txt \
-    && python3 -m pip install --no-cache-dir -r requirements-dev.txt
+    && python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel \
+    && python3 -m pip install --no-cache-dir -r /home/runner/requirements.txt \
+    && python3 -m pip install --no-cache-dir -r /home/runner/requirements-dev.txt \
+    && python3 -m pip uninstall -y botocore boto3 \
+    && python3 -m pip install --no-cache-dir "dvc[s3]>=3.0.0" boto3 botocore
 
 # Start runner
 COPY --chmod=755 .github/workflows/entrypoint.sh /home/runner/entrypoint.sh
