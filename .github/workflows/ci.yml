@@ -154,6 +154,7 @@ jobs:
           pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.TESTS_DIR }}
 
       - name: Upload test reports
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ vars.TEST_REPORT_ARTIFACTS_NAME }}
@@ -238,6 +239,7 @@ jobs:
                   "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name" \
                   "$ghcr_img:${GIT_HUB_SHA}" \
                   "$ghcr_img:latest" || true
+          done
 
   # ---------------------------
   # Docs
