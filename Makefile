@@ -1,8 +1,7 @@
-include .env
-
-
 DVC_LOCK_PATH := dvc.lock
 DVC_FILES := "*.dvc"
+
+GIT_IGNORE_FILE := .gitignore
 
 VC_COMMIT_MESSAGE := "dvc: Update tracked files"
 
@@ -34,7 +33,7 @@ dvc_update:
 dvc_pipeline_run:
 	dvc repro
 	git add $(shell find . -name $(DVC_FILES))
-	git add $(DVC_LOCK_PATH) .gitignore
+	git add $(DVC_LOCK_PATH) $(GIT_IGNORE_FILE)
 	git commit -m $(VC_COMMIT_MESSAGE) --no-verify || true
 	dvc status
 	dvc push
@@ -44,7 +43,7 @@ dvc_pipeline_run:
 dvc_pipeline_stage_run:
 	dvc repro $(STAGE_NAME)
 	git add $(shell find . -name $(DVC_FILES))
-	git add $(DVC_LOCK_PATH) .gitignore
+	git add $(DVC_LOCK_PATH) $(GIT_IGNORE_FILE)
 	git commit -m $(VC_COMMIT_MESSAGE) --no-verify || true
 	dvc status
 	dvc push
@@ -54,7 +53,7 @@ dvc_pipeline_stage_run:
 dvc_pipeline_run_force:
 	dvc repro --force
 	git add $(shell find . -name $(DVC_FILES))
-	git add $(DVC_LOCK_PATH) .gitignore
+	git add $(DVC_LOCK_PATH) $(GIT_IGNORE_FILE)
 	git commit -m $(VC_COMMIT_MESSAGE) --no-verify || true
 	dvc status
 	dvc push
@@ -64,7 +63,7 @@ dvc_pipeline_run_force:
 dvc_pipeline_stage_run_force:
 	dvc repro $(STAGE_NAME) --force
 	git add $(shell find . -name $(DVC_FILES))
-	git add $(DVC_LOCK_PATH) .gitignore
+	git add $(DVC_LOCK_PATH) $(GIT_IGNORE_FILE)
 	git commit -m $(VC_COMMIT_MESSAGE) --no-verify || true
 	dvc status
 	dvc push
