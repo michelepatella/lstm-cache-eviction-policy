@@ -71,8 +71,9 @@ jobs:
           # Update image tags dynamically by
           # adding GitHub SHA
           readarray -t DOCKER_IMAGES_ARRAY <<< "$DOCKER_IMAGES"
-          for img_full in "${DOCKER_IMAGES_ARRAY[@]}"; do
-              kustomize edit set image "$img_full=${img_full}:${GIT_HUB_SHA}"
+          for svc in "${DOCKER_IMAGES_ARRAY[@]}"; do
+              full_img="${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}/$svc:${GIT_HUB_SHA}"
+              kustomize edit set image "$svc=$full_img"
           done
 
           # Build
