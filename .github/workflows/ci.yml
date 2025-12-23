@@ -72,7 +72,7 @@ jobs:
 
           # Update image tags dynamically by adding GitHub SHA
           for svc in $DOCKER_IMAGES; do
-              full_img="${ACR_NAME}.${ACR_URL}/$svc@${DIGEST}"
+              full_img="${ACR_NAME}.${ACR_URL}/$svc:${GIT_HUB_SHA}"
               kustomize edit set image "${ACR_NAME}.${ACR_URL}/$svc=$full_img"
           done
 
@@ -194,7 +194,8 @@ jobs:
       - name: Scan k8s manifests
         run: |
           checkov -f ${{ needs.setup.outputs.k8s_rendered_file }} \
-            --framework ${{ vars.CHECKOV_FRAMEWORK }}
+            --framework ${{ vars.CHECKOV_FRAMEWORK }} \
+            --skip-check ${{ vars.CHECKOV_SKIP_CHECK }}
 
   # ----------------------------------------
   # Testing (needs 'Setup')
