@@ -180,6 +180,7 @@ jobs:
           # Build and scan all the images
           readarray -t DOCKER_SERVICES_ARRAY <<< "$(echo "${{ vars.DOCKER_SERVICES }}" | tr -d '\r')"
           for img_name in "${DOCKER_SERVICES_ARRAY[@]}"; do
+            img_name_normalized=$(echo "$img_name" | tr '_' '-')
             full_img="${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}/${img_name_normalized}:${{ github.sha }}"
             docker compose build "$img_name"
             trivy image \
@@ -285,6 +286,7 @@ jobs:
           for svc in "${DOCKER_SERVICES_ARRAY[@]}"; do
 
             # Prepare image to push
+            img_name=$(echo "$svc" | tr '_' '-')
             local_img="${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}/$img_name:${GIT_HUB_SHA}"
 
             # Tag image for Docker Hub
