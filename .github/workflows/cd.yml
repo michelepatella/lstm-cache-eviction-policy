@@ -16,6 +16,7 @@ on:
     workflows: ["Continuos Integration (CI)"]
     types: [completed]
     branches: [main, feature/*]
+  workflow_dispatch:
 
 # The workflow is organized into three jobs:
 # - Setup:
@@ -32,7 +33,9 @@ jobs:
   # -----------------------------
   setup:
     runs-on: self-hosted
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
     steps:
       # Checkout the repository on
       # the current branch
