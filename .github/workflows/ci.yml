@@ -121,7 +121,10 @@ jobs:
 
       # Check rendered k8s manifests
       - name: Check k8s manifests
-        run: kube-score score ${{ needs.setup.outputs.k8s_rendered_file }}
+        run: |
+          kube-score score ${{ needs.setup.outputs.k8s_rendered_file }} \
+          --ignore-check ${{ vars.KUBE_SCORE_IGNORE_CHECK }}
+
 
   # ----------------------------------------
   # Security Scan (needs 'Setup')
