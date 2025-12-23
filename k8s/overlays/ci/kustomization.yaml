@@ -6,7 +6,7 @@ resources:
   - ../../scorer-service
 
 images:
-  - name: lstmcacheevictionpolicy.azurecr.io/api_gateway
+  - name: lstmcacheevictionpolicy.azurecr.io/api-gateway
     newTag: PLACEHOLDER_SHA
   - name: lstmcacheevictionpolicy.azurecr.io/decider-service
     newTag: PLACEHOLDER_SHA
