@@ -1,0 +1,107 @@
+name: Continuos Delivery (CD)
+
+on:
+  push:
+    branches: [main, feature/*]
+  pull_request:
+    branches: [main]
+
+jobs:
+
+  # -----------------------------
+  # Setup
+  # -----------------------------
+  setup:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+
+      - name: Download rendered k8s manifests
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ vars.K8S_RENDERED_ARTIFACTS_NAME }}
+          path: ${{ vars.K8S_RENDERED_ARTIFACTS_DIR }}
+
+      - name: Login to Azure
+        shell: bash
+        run: |
+          # Read credentials from temp file
+          echo '${{ secrets.AZURE_CREDENTIALS }}' > ${{ vars.AZURE_CREDENTIALS_TEMP_FILE }}
+          CLIENT_ID=$(jq -r ${{ vars.AZURE_CREDENTIALS_CLIENT_ID_FIELD_NAME }} \
+                            ${{ vars.AZURE_CREDENTIALS_TEMP_FILE }})
+          CLIENT_SECRET=$(jq -r ${{ vars.AZURE_CREDENTIALS_CLIENT_SECRET_FIELD_NAME }} \
+                                ${{ vars.AZURE_CREDENTIALS_TEMP_FILE }})
+          TENANT_ID=$(jq -r ${{ vars.AZURE_CREDENTIALS_TENANT_ID_FIELD_NAME }} \
+                            ${{ vars.AZURE_CREDENTIALS_TEMP_FILE }})
+
+          # Login
+          az login --service-principal --username "$CLIENT_ID" \
+                   --password "$CLIENT_SECRET" \
+                   --tenant "$TENANT_ID"
+
+      - name: Set k8s context
+        run: |
+          az aks get-credentials --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+                                 --name ${{ secrets.AKS_CLUSTER_NAME }}
+
+  # -----------------------------
+  # Deploy API
+  # -----------------------------
+  deploy_api:
+    runs-on: self-hosted
+    needs: setup
+    steps:
+      - name: Rollout k8s deployments
+        env:
+          K8S_ROLLOUT_TIMEOUT: ${{ vars.K8S_ROLLOUT_TIMEOUT }}
+          K8S_RENDERED_ARTIFACTS_DIR: ${{ vars.K8S_RENDERED_ARTIFACTS_DIR }}
+        run: |
+          DEPLOYMENTS_APPLIED=()
+
+          # Apply all k8s manifests
+          for file in $K8S_RENDERED_ARTIFACTS_DIR/*; do
+              kubectl apply -f "$file"
+
+              if grep -q "kind: Deployment" "$file"; then
+                  DEPLOYMENTS_APPLIED+=("$file")
+              fi
+          done
+
+          # Check rollout status for all deployments
+          for file in "${DEPLOYMENTS_APPLIED[@]}"; do
+              if ! kubectl rollout status -f "$file" --timeout=$K8S_ROLLOUT_TIMEOUT; then
+                  for rollback_file in "${DEPLOYMENTS_APPLIED[@]}"; do
+                      kubectl rollout undo -f "$rollback_file"
+                  done
+                  exit 1
+              fi
+          done
+
+      - name: Test API
+        env:
+          K8S_RENDERED_ARTIFACTS_DIR: ${{ vars.K8S_RENDERED_ARTIFACTS_DIR }}
+        run: |
+          export PYTHONPATH=$(pwd):$(pwd)/src
+
+          # Identify all deployments
+          DEPLOYMENTS=()
+          for file in $K8S_RENDERED_ARTIFACTS_DIR/*; do
+              if grep -q "kind: Deployment" "$file"; then
+                  DEPLOYMENTS+=("$file")
+              fi
+          done
+
+          # Run tests and capture exit code
+          pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.API_TESTS_DIR }}
+          TEST_EXIT_CODE=$?
+
+          # Rollback all deployments if any test failed
+          if [ $TEST_EXIT_CODE -ne 0 ]; then
+            for file in "${DEPLOYMENTS[@]}"; do
+                kubectl rollout undo -f "$file"
+            done
+            exit $TEST_EXIT_CODE
+          fi
