@@ -1,8 +1,8 @@
-# Continuos Integration (CI): Automate static analysis, security scans,
+# Continuous Integration (CI): Automate static analysis, security scans,
 # testing, and build, ensuring that every change is validated, vulnerabilities
 # are detected early, code quality is maintained, and reproducible artifacts
-# are produced for reliable deployment in the Continuos Delivery (CD) pipeline
-name: Continuos Integration (CI)
+# are produced for reliable deployment in the Continuous Delivery (CD) pipeline
+name: Continuous Integration (CI)
 
 # Kill the current workflow if a
 # new one is triggered

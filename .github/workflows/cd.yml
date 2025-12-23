@@ -1,7 +1,7 @@
-# Continuos Delivery (CD): Manage reliable deployment of
+# Continuous Delivery (CD): Manage reliable deployment of
 # the API and documentation, ensuring that changes are quickly
 # and safely delivered to production
-name: Continuos Delivery (CD)
+name: Continuous Delivery (CD)
 
 # Kill the current workflow if a
 # new one is triggered
@@ -13,7 +13,7 @@ concurrency:
 # CI run on main
 on:
   workflow_run:
-    workflows: ["Continuos Integration (CI)"]
+    workflows: ["Continuous Integration (CI)"]
     types: [completed]
     branches: [main, feature/*]
 
