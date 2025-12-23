@@ -79,7 +79,7 @@ jobs:
           # Build rendered k8s manifests
           cd -
           kustomize build ${K8S_OVERLAYS_CI_DIR} > ${K8S_RENDERED_FILE}
-          grep image: ${K8S_RENDERED_FILE}
+          echo "rendered_file=${K8S_RENDERED_FILE}" >> $GITHUB_OUTPUT
 
       # Upload setup, rendered k8s manifests as artifact
       - name: Upload rendered k8s manifests
