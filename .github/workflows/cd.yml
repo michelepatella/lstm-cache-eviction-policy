@@ -55,6 +55,8 @@ jobs:
         with:
           name: ${{ vars.K8S_RENDERED_ARTIFACTS_NAME }}
           path: ${{ vars.K8S_RENDERED_ARTIFACTS_DIR }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GIT_HUB_TOKEN }}
 
       # Login to Azure which hosts the API
       - name: Login to Azure
@@ -139,6 +141,8 @@ jobs:
         with:
           name: ${{ vars.DOCS_ARTIFACTS_NAME }}
           path: ${{ vars.DOCS_OUTPUT_DIR }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GIT_HUB_TOKEN }}
 
       # Deploy documentation to GitHub Pages
       - name: Deploy docs to GitHub Pages
