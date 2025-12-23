@@ -14,8 +14,8 @@ concurrency:
 on:
   workflow_run:
     workflows: ["Continuos Integration (CI)"]
-    types:
-      - completed
+    types: [completed]
+    branches: [main, feature/*]
 
 # The workflow is organized into three jobs:
 # - Setup:
