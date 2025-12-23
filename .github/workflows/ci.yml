@@ -72,7 +72,8 @@ jobs:
           # adding GitHub SHA
           readarray -t DOCKER_IMAGES_ARRAY <<< "$DOCKER_IMAGES"
           for svc in "${DOCKER_IMAGES_ARRAY[@]}"; do
-              full_img="${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}/$svc:${GIT_HUB_SHA}"
+              full_img="${ACR_NAME}.${ACR_URL}/$svc:${GIT_HUB_SHA}"
+              echo "Updating container $svc to image $full_img"
               kustomize edit set image "$svc=$full_img"
           done
 
