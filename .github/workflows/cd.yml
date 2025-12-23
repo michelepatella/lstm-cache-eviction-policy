@@ -4,17 +4,18 @@
 name: Continuos Delivery (CD)
 
 # Kill the current workflow if a
-# new one get started
+# new one is triggered
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Run the workflow on every push or PR to main
+# Run the workflow only after successful
+# CI run on main
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_run:
+    workflows: ["Continuos Integration (CI)"]
+    types:
+      - completed
 
 # The workflow is organized into three jobs:
 # - Setup:
@@ -31,6 +32,7 @@ jobs:
   # -----------------------------
   setup:
     runs-on: self-hosted
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       # Checkout the repository on
       # the current branch
