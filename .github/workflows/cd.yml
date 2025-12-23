@@ -25,6 +25,12 @@ jobs:
           name: ${{ vars.K8S_RENDERED_ARTIFACTS_NAME }}
           path: ${{ vars.K8S_RENDERED_ARTIFACTS_DIR }}
 
+      - name: Download docs
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ vars.DOCS_ARTIFACTS_NAME }}
+          path: ${{ vars.DOCS_OUTPUT_DIR }}
+
       - name: Login to Azure
         shell: bash
         run: |
@@ -54,7 +60,7 @@ jobs:
     runs-on: self-hosted
     needs: setup
     steps:
-      - name: Rollout k8s deployments
+      - name: Deploy API
         env:
           K8S_ROLLOUT_TIMEOUT: ${{ vars.K8S_ROLLOUT_TIMEOUT }}
           K8S_RENDERED_ARTIFACTS_DIR: ${{ vars.K8S_RENDERED_ARTIFACTS_DIR }}
@@ -105,3 +111,17 @@ jobs:
             done
             exit $TEST_EXIT_CODE
           fi
+
+  # -----------------------------
+  # Deploy Docs
+  # -----------------------------
+  deploy_docs:
+    runs-on: self-hosted
+    needs: setup
+    steps:
+      - name: Deploy docs
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ${{ vars.DOCS_OUTPUT_DIR }}
+          publish_branch: ${{ vars.DOCS_PUBLISH_BRANCH }}
