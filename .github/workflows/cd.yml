@@ -132,12 +132,15 @@ jobs:
     runs-on: self-hosted
     needs: setup
     steps:
+      # Download documentation generated
+      # during CI
       - name: Download docs
         uses: actions/download-artifact@v4
         with:
           name: ${{ vars.DOCS_ARTIFACTS_NAME }}
           path: ${{ vars.DOCS_OUTPUT_DIR }}
 
+      # Deploy documentation to GitHub Pages
       - name: Deploy docs to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
