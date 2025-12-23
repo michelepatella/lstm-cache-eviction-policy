@@ -72,7 +72,7 @@ jobs:
 
           # Update image tags dynamically by adding GitHub SHA
           for svc in $DOCKER_IMAGES; do
-              full_img="${ACR_NAME}.${ACR_URL}/$svc:${GIT_HUB_SHA}"
+              full_img="${ACR_NAME}.${ACR_URL}/$svc@${DIGEST}"
               kustomize edit set image "${ACR_NAME}.${ACR_URL}/$svc=$full_img"
           done
 
