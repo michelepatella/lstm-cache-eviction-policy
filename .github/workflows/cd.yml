@@ -16,7 +16,6 @@ on:
     workflows: ["Continuos Integration (CI)"]
     types: [completed]
     branches: [main, feature/*]
-  workflow_dispatch:
 
 # The workflow is organized into three jobs:
 # - Setup:
@@ -33,9 +32,7 @@ jobs:
   # -----------------------------
   setup:
     runs-on: self-hosted
-    if: |
-      github.event_name == 'workflow_dispatch' ||
-      github.event.workflow_run.conclusion == 'success'
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       # Checkout the repository on
       # the current branch
@@ -56,8 +53,6 @@ jobs:
       - name: Download rendered k8s manifests
         uses: actions/download-artifact@v4
         with:
-          run-id: 20461802453
-          github-token: ${{ secrets.GIT_HUB_TOKEN }}
           name: ${{ vars.K8S_RENDERED_ARTIFACTS_NAME }}
           path: ${{ vars.K8S_RENDERED_ARTIFACTS_DIR }}
 
@@ -142,8 +137,6 @@ jobs:
       - name: Download docs
         uses: actions/download-artifact@v4
         with:
-          run-id: 20461802453
-          github-token: ${{ secrets.GIT_HUB_TOKEN }}
           name: ${{ vars.DOCS_ARTIFACTS_NAME }}
           path: ${{ vars.DOCS_OUTPUT_DIR }}
 
@@ -151,6 +144,6 @@ jobs:
       - name: Deploy docs to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ${{ vars.DOCS_OUTPUT_DIR }}
+          github_token: ${{ secrets.GIT_HUB_TOKEN }}
+          publish_dir: ${{ vars.DOCS_OUTPUT_DIR }}/${{ vars.SRC_DIR }}
           publish_branch: ${{ vars.DOCS_PUBLISH_BRANCH }}

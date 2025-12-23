@@ -30,7 +30,7 @@ spec:
         fsGroup: 2000
       containers:
       - name: scorer-service
-        image: lstmcacheevictionpolicy.azurecr.io/scorer_service:later
+        image: lstmcacheevictionpolicy.azurecr.io/scorer-service:PLACEHOLDER_SHA
         imagePullPolicy: Always
         ports:
         - containerPort: 8003

@@ -30,7 +30,7 @@ spec:
         fsGroup: 2000
       containers:
       - name: decider-service
-        image: lstmcacheevictionpolicy.azurecr.io/decider_service:later
+        image: lstmcacheevictionpolicy.azurecr.io/decider-service:PLACEHOLDER_SHA
         imagePullPolicy: Always
         ports:
         - containerPort: 8004

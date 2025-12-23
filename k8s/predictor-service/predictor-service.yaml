@@ -30,7 +30,7 @@ spec:
         fsGroup: 2000
       containers:
       - name: predictor-service
-        image: lstmcacheevictionpolicy.azurecr.io/predictor_service:later
+        image: lstmcacheevictionpolicy.azurecr.io/predictor-service:PLACEHOLDER_SHA
         imagePullPolicy: Always
         ports:
         - containerPort: 8002

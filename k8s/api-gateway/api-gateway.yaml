@@ -30,7 +30,7 @@ spec:
         fsGroup: 2000
       containers:
       - name: api-gateway
-        image: lstmcacheevictionpolicy.azurecr.io/api_gateway:later
+        image: lstmcacheevictionpolicy.azurecr.io/api-gateway:PLACEHOLDER_SHA
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
