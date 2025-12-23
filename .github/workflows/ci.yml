@@ -71,8 +71,7 @@ jobs:
           cd ${K8S_OVERLAYS_CI_DIR}
 
           # Update image tags dynamically by adding GitHub SHA
-          readarray -t DOCKER_IMAGES_ARRAY <<< "$DOCKER_IMAGES"
-          for svc in "${DOCKER_IMAGES_ARRAY[@]}"; do
+          for svc in $DOCKER_IMAGES; do
               full_img="${ACR_NAME}.${ACR_URL}/$svc:${GIT_HUB_SHA}"
               kustomize edit set image "${ACR_NAME}.${ACR_URL}/$svc=$full_img"
           done
@@ -180,10 +179,9 @@ jobs:
           done
 
           # Build and scan all the images
-          readarray -t DOCKER_SERVICES_ARRAY <<< "$(echo "${{ vars.DOCKER_SERVICES }}" | tr -d '\r')"
-          for img_name in "${DOCKER_SERVICES_ARRAY[@]}"; do
+          for img_name in ${{ vars.DOCKER_SERVICES }}; do
             img_name_normalized=$(echo "$img_name" | tr '_' '-')
-            full_img="${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}/${img_name_normalized}:${{ github.sha }}"
+            full_img="${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}/$img_name_normalized:${{ github.sha }}"
             docker compose build "$img_name"
             trivy image \
               --exit-code ${{ vars.TRIVY_EXIT_CODE }} \
@@ -284,9 +282,7 @@ jobs:
           DOCKER_HUB_REPO: ${{ vars.DOCKER_HUB_REPO }}
         run: |
           # Push all the images
-          readarray -t DOCKER_SERVICES_ARRAY <<< "$(echo "${{ vars.DOCKER_SERVICES }}" | tr -d '\r')"
-          for svc in "${DOCKER_SERVICES_ARRAY[@]}"; do
-
+          for svc in ${{ vars.DOCKER_SERVICES }}; do
             # Prepare image to push
             img_name=$(echo "$svc" | tr '_' '-')
             local_img="${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}/$img_name:${GIT_HUB_SHA}"
