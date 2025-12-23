@@ -316,11 +316,8 @@ jobs:
       # Generate documentation
       - name: Build docs
         run: |
-          PYTHONPATH=$(pwd)/${{ vars.SRC_DIR }}
-          pdoc \
-            --html ${{ vars.SRC_DIR }}/ \
-            --output-dir ${{ vars.DOCS_OUTPUT_DIR }} \
-            --force
+          PYTHONPATH=$(pwd)/${{ vars.SRC_DIR }} pdoc --html ${{ vars.SRC_DIR }}/ \
+          --output-dir ${{ vars.DOCS_OUTPUT_DIR }} --force
 
       # Upload documentation generated as artifact
       - name: Upload docs
