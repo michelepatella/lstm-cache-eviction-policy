@@ -24,6 +24,12 @@ RUN curl -fsSL https://get.docker.com | sh
 # Install Azure CLI
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
+# Install kubectl
+ENV KUBECTL_VERSION=1.28.0
+RUN curl -LO "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/arm64/kubectl" \
+    && chmod +x kubectl \
+    && mv kubectl /usr/local/bin/
+
 # Install Kustomize
 ENV KUSTOMIZE_VERSION=5.8.0
 RUN curl -sLo kustomize.tar.gz https://sourceforge.net/projects/kustomize.mirror/files/kustomize_v${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_arm64.tar.gz \
