@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>src.components.data.patterns.core.generator API documentation</title>
+<meta name="description" content="generator.py …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>src.components.data.patterns.core.generator</code></h1>
+</header>
+<section id="section-intro">
+<p>generator.py</p>
+<p>Module for generating requests and timestamps according to access patterns.</p>
+<p>This module provides the <code><a title="src.components.data.patterns.core.generator.generate_pattern_requests" href="#src.components.data.patterns.core.generator.generate_pattern_requests">generate_pattern_requests()</a></code> function, which
+produces a sequence of key requests along with their corresponding timestamps
+in absolute seconds. The requests are generated based on specified access
+patterns, day/time behavior, and Zipfian distribution.</p>
+<h2 id="functions">Functions</h2>
+<p>generate_pattern_requests(
+keys_range: ndarray,
+zipf_probs: ndarray,
+pipeline_config: PipelineConfig,
+time_step_duration: int | None = None,
+timestamps_start: float = DATA_GENERATION_TIMESTAMPS_START,
+current_day_start: int = DATA_GENERATION_CURRENT_DAY_START,
+current_seconds_in_day_start: int = DATA_GENERATION_CURRENT_SECONDS_IN_DAY_START
+) -&gt; tuple[list[int], list[float]]
+Generates requests and timestamps according to the configured access
+patterns and Zipfian probabilities.</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="src.components.data.patterns.core.generator.generate_pattern_requests"><code class="name flex">
+<span>def <span class="ident">generate_pattern_requests</span></span>(<span>keys_range: numpy.ndarray,<br>zipf_probs: numpy.ndarray,<br>pipeline_config: pipeline.config.pydantic.pipeline_config.PipelineConfig,<br>time_step_duration: int = None,<br>timestamps_start: float = 0.0,<br>current_day_start: int = 0,<br>current_seconds_in_day_start: int = 0.0) ‑> tuple[list[int], list[float]]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_pattern_requests(
+    keys_range: np.ndarray,
+    zipf_probs: np.ndarray,
+    pipeline_config: PipelineConfig,
+    time_step_duration: int = None,
+    timestamps_start: float = DATA_GENERATION_TIMESTAMPS_START,
+    current_day_start: int = DATA_GENERATION_CURRENT_DAY_START,
+    current_seconds_in_day_start: int = DATA_GENERATION_CURRENT_SECONDS_IN_DAY_START,
+) -&gt; tuple[list[int], list[float]]:
+    &#34;&#34;&#34;Generate requests according to specific access and temporal patterns.
+
+    This function generates requests along with their corresponding timestamps
+    in seconds (i.e., absolute time of the requests), according to specific
+    access and temporal patterns involving given keys, strongly affected by
+    Zipfian distribution.
+
+    Args:
+        keys_range (np.ndarray): List of keys to generate requests for.
+        zipf_probs (np.ndarray): List of Zipfian probabilities of the
+                                 given keys.
+        pipeline_config (PipelineConfig): Configuration object.
+        time_step_duration (int): Time step to generate requests for.
+        timestamps_start (float): Initial timestamp in seconds.
+        current_day_start (int): Initial current day.
+        current_seconds_in_day_start (int): Initial seconds elapsed in
+                                              the current day.
+
+    Returns:
+        tuple[list[int], list[float]]:
+            - requests: List of generated requests (key indices).
+            - timestamps_seconds: Corresponding timestamps of the
+                                  requests in seconds.
+
+    Raises:
+        RuntimeError: If generating pattern requests fails:
+            * Invalid or empty keys range or Zipf probabilities
+              (IndexError, ValueError, TypeError).
+            * Invalid initial timestamp or current day/seconds values
+              (TypeError, ValueError).
+    &#34;&#34;&#34;
+    try:
+        # Initialize data
+        requests = []
+        timestamps_seconds = [timestamps_start]
+        current_day = current_day_start
+        current_seconds_in_day = current_seconds_in_day_start
+
+        # Get the number of requests
+        # to be generated
+        num_requests = (
+            time_step_duration
+            if time_step_duration is not None
+            else pipeline_config.data.general.requests
+        )
+
+        debug(
+            &#34;Pattern request generation started&#34;,
+            extra={
+                &#34;requests_num&#34;: num_requests,
+                &#34;timestamps_start&#34;: timestamps_start,
+                &#34;current_day_start&#34;: current_day_start,
+                &#34;current_seconds_in_day_start&#34;: current_seconds_in_day_start,
+                &#34;keys_range_len&#34;: len(keys_range),
+                &#34;zipf_probs_sum&#34;: (
+                    float(np.sum(zipf_probs))
+                    if zipf_probs is not None
+                    else None
+                ),
+                &#34;context&#34;: &#34;Pattern request generation&#34;,
+            },
+        )
+
+        # For each request to be generated
+        for _ in range(num_requests):
+            # Generate the single request
+            request, absolute_seconds, current_seconds_in_day, current_day = (
+                generate_single_pattern_request(
+                    current_day,
+                    current_seconds_in_day,
+                    requests,
+                    keys_range,
+                    zipf_probs,
+                    pipeline_config,
+                )
+            )
+
+            # Store new request and corresponding
+            # timestamp in seconds (absolute seconds)
+            requests.append(request)
+            timestamps_seconds.append(absolute_seconds)
+
+        debug(
+            &#34;Pattern request generation completed&#34;,
+            extra={
+                &#34;requests_generated_num&#34;: len(requests),
+                &#34;timestamps_seconds_generated_num&#34;: len(timestamps_seconds),
+                &#34;context&#34;: &#34;Pattern request generation&#34;,
+            },
+        )
+
+        return requests, timestamps_seconds
+    except (IndexError, ValueError, TypeError) as e:
+        msg = &#34;Pattern request generation failed&#34;
+        error(
+            msg,
+            extra={
+                &#34;exception&#34;: str(e),
+                &#34;keys_range_len&#34;: (
+                    len(keys_range) if keys_range is not None else 0
+                ),
+                &#34;zipf_probs_sum&#34;: (
+                    float(np.sum(zipf_probs))
+                    if zipf_probs is not None
+                    else None
+                ),
+                &#34;timestamps_start&#34;: timestamps_start,
+                &#34;current_day_start&#34;: current_day_start,
+                &#34;current_seconds_in_day_start&#34;: current_seconds_in_day_start,
+                &#34;context&#34;: &#34;Pattern request generation&#34;,
+            },
+        )
+        raise RuntimeError(msg) from e</code></pre>
+</details>
+<div class="desc"><p>Generate requests according to specific access and temporal patterns.</p>
+<p>This function generates requests along with their corresponding timestamps
+in seconds (i.e., absolute time of the requests), according to specific
+access and temporal patterns involving given keys, strongly affected by
+Zipfian distribution.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>keys_range</code></strong> :&ensp;<code>np.ndarray</code></dt>
+<dd>List of keys to generate requests for.</dd>
+<dt><strong><code>zipf_probs</code></strong> :&ensp;<code>np.ndarray</code></dt>
+<dd>List of Zipfian probabilities of the
+given keys.</dd>
+<dt><strong><code>pipeline_config</code></strong> :&ensp;<code>PipelineConfig</code></dt>
+<dd>Configuration object.</dd>
+<dt><strong><code>time_step_duration</code></strong> :&ensp;<code>int</code></dt>
+<dd>Time step to generate requests for.</dd>
+<dt><strong><code>timestamps_start</code></strong> :&ensp;<code>float</code></dt>
+<dd>Initial timestamp in seconds.</dd>
+<dt><strong><code>current_day_start</code></strong> :&ensp;<code>int</code></dt>
+<dd>Initial current day.</dd>
+<dt><strong><code>current_seconds_in_day_start</code></strong> :&ensp;<code>int</code></dt>
+<dd>Initial seconds elapsed in
+the current day.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>tuple[list[int], list[float]]:
+- requests: List of generated requests (key indices).
+- timestamps_seconds: Corresponding timestamps of the
+requests in seconds.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RuntimeError</code></dt>
+<dd>If generating pattern requests fails:
+* Invalid or empty keys range or Zipf probabilities
+(IndexError, ValueError, TypeError).
+* Invalid initial timestamp or current day/seconds values
+(TypeError, ValueError).</dd>
+</dl></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="src.components.data.patterns.core" href="index.html">src.components.data.patterns.core</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="src.components.data.patterns.core.generator.generate_pattern_requests" href="#src.components.data.patterns.core.generator.generate_pattern_requests">generate_pattern_requests</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

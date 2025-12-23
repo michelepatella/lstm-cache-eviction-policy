@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>src.pipeline.utils.data.AccessLogsDataset API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>src.pipeline.utils.data.AccessLogsDataset</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="src.pipeline.utils.data.AccessLogsDataset.AccessLogsDataset"><code class="flex name class">
+<span>class <span class="ident">AccessLogsDataset</span></span>
+<span>(</span><span>dataset_type: str, config: pipeline.config.classes.Config.Config)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AccessLogsDataset(Dataset):
+    &#34;&#34;&#34;
+    Dataset class for access logs, compatible with PyTorch.
+
+    This class manages sequential access logs for LSTM model. It handles
+    loading, preprocessing, and splitting of the dataset into training
+    and testing sets. Each dataset instance provides feature sequences
+    and target keys for sequence modeling.
+    &#34;&#34;&#34;
+
+    def _split_dataset(
+        self: &#34;AccessLogsDataset&#34;, dataset_type: str, config: Config
+    ) -&gt; None:
+        &#34;&#34;&#34;
+        Split the dataset based on the requested dataset type.
+
+        This function splits the dataset into either training
+        or testing portions according to the train percentage
+        defined in the configuration.
+
+        Parameters:
+            self (AccessLogsDataset): Instance of AccessLogsDataset.
+            dataset_type (str): The dataset type to split (e.g., &#34;training&#34;).
+            config (Config): Configuration object.
+
+        Returns:
+            None
+
+        Raises:
+            RuntimeError: If an error occurs during dataset splitting, e.g.:
+                * self.data is not a Pandas DataFrame.
+                * self.data length or train % is of wrong type.
+                * self.data length or train % cannot be converted to int.
+                * the split index is out of bounds for self.data.
+        &#34;&#34;&#34;
+        debug(f&#34;Dataset splitting type: {dataset_type}&#34;)
+
+        try:
+            # Calculate split index based on the train %
+            train_perc = config.data.dataset.split.training
+            dataset_split_idx = int(len(self.data) * train_perc)
+
+            debug(f&#34;Dataset split index calculated: {dataset_split_idx}&#34;)
+        except (AttributeError, TypeError, ValueError) as e:
+            msg = &#34;Failed to calculate dataset split index&#34;
+            error(&#34;%s: %s&#34;, msg, e)
+            raise RuntimeError(msg) from e
+
+        try:
+            # Perform dataset split
+            if dataset_type == TRAINING_SPLIT_TYPE:
+                # Training -&gt; Take the first dataset
+                # split index elements
+                self.data = self.data[:dataset_split_idx]
+            else:
+                # Testing (Otherwise) -&gt; Take the last dataset
+                # split index elements
+                self.data = self.data[dataset_split_idx:]
+
+            debug(f&#34;Dataset shape after splitting: {self.data.shape}&#34;)
+        except (TypeError, IndexError, AttributeError) as e:
+            msg = &#34;Failed to split dataset&#34;
+            error(&#34;%s: %s&#34;, msg, e)
+            raise RuntimeError(msg) from e
+
+        info(&#34;Dataset split&#34;)
+
+    def _set_fields(
+        self: &#34;AccessLogsDataset&#34;, data: &#34;pd.DataFrame&#34;, config: Config
+    ) -&gt; None:
+        &#34;&#34;&#34;
+        Set the feature, target, and sequence length fields of the dataset.
+
+        This function sets the dataset columns, identifies feature columns
+        and target column (assuming target is the last column), and retrieves
+        the sequence length from the configuration.
+
+        Parameters:
+            self (AccessLogsDataset): Instance of AccessLogsDataset.
+            data (pd.DataFrame): Dataset from which fields are extracted.
+            config (Config): Configuration object.
+
+        Returns:
+            None
+
+        Raises:
+            RuntimeError: If an error occurs while setting dataset fields, e.g.:
+                * data is not a Pandas DataFrame
+                * data columns or sequence length are of wrong type
+                * data does not contain any columns
+        &#34;&#34;&#34;
+        try:
+            # Extract column names
+            self.columns = data.columns.tolist()
+
+            debug(f&#34;Dataset columns extracted: {self.columns}&#34;)
+        except (AttributeError, TypeError) as e:
+            msg = &#34;Failed to extract dataset columns&#34;
+            error(&#34;%s: %s&#34;, msg, e)
+            raise RuntimeError(msg) from e
+
+        try:
+            # Identify features and target
+            self.features = self.columns[
+                :-1
+            ]  # All the columns except the last one
+            self.target = self.columns[-1]  # Only the last one
+
+            # Retrieve sequence length
+            self.seq_len = config.data.sequence.length
+
+            debug(f&#34;Feature dataset columns: {self.features}&#34;)
+            debug(f&#34;Target dataset column: {self.target}&#34;)
+            debug(f&#34;Sequence length: {self.seq_len}&#34;)
+        except (IndexError, AttributeError, TypeError) as e:
+            msg = &#34;Failed to set dataset fields&#34;
+            error(&#34;%s: %s&#34;, msg, e)
+            raise RuntimeError(msg) from e
+
+        info(&#34;Dataset fields set&#34;)
+
+    def __init__(
+        self: &#34;AccessLogsDataset&#34;, dataset_type: str, config: Config
+    ) -&gt; None:
+        &#34;&#34;&#34;
+        Initialize the AccessLogsDataset class.
+
+        This function initializes the AccessLogsDataset class,
+        for a given dataset type, by loading dataset, preparing
+        and setting data, and splitting the dataset.
+
+        Parameters:
+            self (AccessLogsDataset): AccessLogsDataset class.
+            dataset_type (str): The dataset type requested to
+                                be created (e.g. &#34;training&#34;).
+            config (Config): Configuration object.
+
+        Returns:
+            None
+
+        Raises:
+            RuntimeError: If an error occurs while initializing the dataset, e.g.:
+                * dataset loaded is empty
+                * a value on the target column cannot be converted to integer
+                * a value on the target column is not compatible with astype(int)
+                * dataset loaded is not a Pandas DataFrame or missing columns attribute
+        &#34;&#34;&#34;
+        debug(f&#34;AccessLogsDataset type to be initialized: {dataset_type}&#34;)
+
+        # Load the dataset
+        df = load_dataset(DATASET_PREPROCESSED_TYPE, config)
+
+        try:
+            # Shift target column (requests),
+            # ensuring requests keys are in range
+            # (min_key - 1, max_key - 1)
+            df[df.columns[-1]] = df[df.columns[-1]].astype(int) - 1
+        except (KeyError, ValueError, TypeError, AttributeError) as e:
+            msg = &#34;Failed to initialize AccessLogsDataset&#34;
+            error(&#34;%s: %s&#34;, msg, e)
+            raise RuntimeError(msg) from e
+
+        # Set data
+        self.data = df.copy()
+
+        # Split the dataset to assign data properly
+        self._split_dataset(dataset_type, config)
+
+        # Set the fields of the dataset
+        self._set_fields(self.data, config)
+
+        info(&#34;AccessLogsDataset initialized&#34;)
+
+    def __len__(self: &#34;AccessLogsDataset&#34;) -&gt; int:
+        &#34;&#34;&#34;
+        Return the effective length of the access logs dataset.
+
+        This method calculates the number of sequences
+        available in the dataset based on the sequence length.
+
+        Parameters:
+            self (AccessLogsDataset): AccessLogsDataset class.
+
+        Returns:
+            int: Number of available sequences in the dataset.
+
+        Raises:
+            RuntimeError: If an error occurs while calculating dataset length, e.g.:
+                * self.data or self.seq_len is not properly set
+                * self.data is not iterable or sequence length is not an integer
+                * calculated length is negative
+        &#34;&#34;&#34;
+        try:
+            # Calculate the dataset length by
+            # removing from available data the
+            # sequence length
+            dataset_length = len(self.data) - self.seq_len
+
+            debug(f&#34;Calculated dataset length: {dataset_length}&#34;)
+
+            # Check whether the dataset
+            # length is negative
+            if dataset_length &lt; 0:
+                msg = &#34;Calculated dataset length is negative&#34;
+                error(&#34;%s&#34;, msg)
+                raise RuntimeError(msg)
+
+            return dataset_length
+        except (AttributeError, TypeError, ValueError) as e:
+            msg = &#34;Failed to get dataset length&#34;
+            error(&#34;%s: %s&#34;, msg, e)
+            raise RuntimeError(msg) from e
+
+    def __getitem__(
+        self: &#34;AccessLogsDataset&#34;, idx: int
+    ) -&gt; Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        &#34;&#34;&#34;
+        Retrieve a sequence of features and the next target key.
+
+        This method extracts a feature sequence of length
+        equal to those of sequence and the corresponding
+        next key in the dataset.
+
+        Parameters:
+            self (AccessLogsDataset): AccessLogsDataset class.
+            idx (int): Index of the starting row for the sequence.
+
+        Returns:
+            Tuple[torch.Tensor, torch.Tensor, torch.Tensor]: Tuple containing a tensor of
+                                                             numerical features, a tensor
+                                                             of keys in the  sequence,
+                                                             and a tensor for the next key.
+
+        Raises:
+            RuntimeError: If an error occurs while retrieving a dataset item, e.g.:
+                * The requested index goes out of bounds
+                * Feature or target columns are missing
+                * Data types in features/target are invalid
+                * Conversion to int/float fails
+                * self.data, self.features, or self.target are not set properly
+        &#34;&#34;&#34;
+        debug(f&#34;Index of item to be retrieved: {idx}&#34;)
+
+        try:
+            # Extract feature sequence
+            seq_data = self.data.iloc[idx : idx + self.seq_len]
+
+            # Convert features to float tensor
+            x_features = torch.tensor(
+                seq_data[self.features].values.astype(float), dtype=torch.float
+            )
+
+            # Convert keys to long tensor
+            x_keys = torch.tensor(
+                seq_data[self.target].values.astype(int), dtype=torch.long
+            )
+
+            # Get next target key
+            target_row = self.data.iloc[idx + self.seq_len]
+            y_key = torch.tensor(
+                int(target_row[self.target]), dtype=torch.long
+            )
+
+            debug(f&#34;Feature tensor shape: {x_features.shape}&#34;)
+            debug(f&#34;Key tensor shape: {x_keys.shape}&#34;)
+            debug(f&#34;Target key: {y_key.item()}&#34;)
+        except (
+            IndexError,
+            KeyError,
+            TypeError,
+            ValueError,
+            AttributeError,
+        ) as e:
+            msg = &#34;Failed to retrieve dataset item&#34;
+            error(&#34;%s: %s&#34;, msg, e)
+            raise RuntimeError(msg) from e
+
+        return x_features, x_keys, y_key
+
+    @classmethod
+    def from_dataframe(
+        cls: &#34;Type[AccessLogsDataset]&#34;, df: &#34;pd.DataFrame&#34;, config: Config
+    ) -&gt; &#34;AccessLogsDataset&#34;:
+        &#34;&#34;&#34;
+        Instantiate AccessLogsDataset from an existing dataframe.
+
+        This method creates an instance of AccessLogsDataset using a
+        preloaded dataframe, copying its content and setting the
+        necessary fields (features, target, sequence length).
+
+        Parameters:
+            cls (AccessLogsDataset): AccessLogsDataset class.
+            df (pd.DataFrame): Preloaded dataframe containing dataset.
+            config (Config): Configuration object.
+
+        Returns:
+            AccessLogsDataset: Initialized dataset instance.
+
+        Raises:
+            RuntimeError: If an error occurs while instantiating from dataframe, e.g.:
+                * The dataframe does not have expected attributes
+                * The provided object is not a Pandas DataFrame
+                * The dataframe does not contain any columns
+        &#34;&#34;&#34;
+        debug(
+            f&#34;Dataframe shape to be instantiated as AccessLogsDataset: {df.shape}&#34;
+        )
+
+        try:
+            # Create a new dataset instance
+            instance = cls.__new__(cls)
+
+            # Copy the dataframe to the instance
+            instance.data = df.copy()
+
+            # Set dataset fields
+            instance._set_fields(df, config)
+        except (AttributeError, TypeError, IndexError) as e:
+            msg = &#34;Failed to instantiate AccessLogsDataset from dataframe&#34;
+            error(&#34;%s: %s&#34;, msg, e)
+            raise RuntimeError(msg) from e
+
+        info(&#34;AccessLogsDataset instantiated from dataframe&#34;)
+
+        return instance</code></pre>
+</details>
+<div class="desc"><p>Dataset class for access logs, compatible with PyTorch.</p>
+<p>This class manages sequential access logs for LSTM model. It handles
+loading, preprocessing, and splitting of the dataset into training
+and testing sets. Each dataset instance provides feature sequences
+and target keys for sequence modeling.</p>
+<p>Initialize the AccessLogsDataset class.</p>
+<p>This function initializes the AccessLogsDataset class,
+for a given dataset type, by loading dataset, preparing
+and setting data, and splitting the dataset.</p>
+<h2 id="parameters">Parameters</h2>
+<p>self (AccessLogsDataset): AccessLogsDataset class.
+dataset_type (str): The dataset type requested to
+be created (e.g. "training").
+config (Config): Configuration object.</p>
+<h2 id="returns">Returns</h2>
+<p>None</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RuntimeError</code></dt>
+<dd>If an error occurs while initializing the dataset, e.g.:
+* dataset loaded is empty
+* a value on the target column cannot be converted to integer
+* a value on the target column is not compatible with astype(int)
+* dataset loaded is not a Pandas DataFrame or missing columns attribute</dd>
+</dl></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>torch.utils.data.dataset.Dataset</li>
+<li>typing.Generic</li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="src.pipeline.utils.data.AccessLogsDataset.AccessLogsDataset.from_dataframe"><code class="name flex">
+<span>def <span class="ident">from_dataframe</span></span>(<span>df: pd.DataFrame, config: pipeline.config.classes.Config.Config) ‑> <a title="src.pipeline.utils.data.AccessLogsDataset.AccessLogsDataset" href="#src.pipeline.utils.data.AccessLogsDataset.AccessLogsDataset">AccessLogsDataset</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Instantiate AccessLogsDataset from an existing dataframe.</p>
+<p>This method creates an instance of AccessLogsDataset using a
+preloaded dataframe, copying its content and setting the
+necessary fields (features, target, sequence length).</p>
+<h2 id="parameters">Parameters</h2>
+<p>cls (AccessLogsDataset): AccessLogsDataset class.
+df (pd.DataFrame): Preloaded dataframe containing dataset.
+config (Config): Configuration object.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="src.pipeline.utils.data.AccessLogsDataset.AccessLogsDataset" href="#src.pipeline.utils.data.AccessLogsDataset.AccessLogsDataset">AccessLogsDataset</a></code></dt>
+<dd>Initialized dataset instance.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RuntimeError</code></dt>
+<dd>If an error occurs while instantiating from dataframe, e.g.:
+* The dataframe does not have expected attributes
+* The provided object is not a Pandas DataFrame
+* The dataframe does not contain any columns</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="src.pipeline.utils.data" href="index.html">src.pipeline.utils.data</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="src.pipeline.utils.data.AccessLogsDataset.AccessLogsDataset" href="#src.pipeline.utils.data.AccessLogsDataset.AccessLogsDataset">AccessLogsDataset</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.utils.data.AccessLogsDataset.AccessLogsDataset.from_dataframe" href="#src.pipeline.utils.data.AccessLogsDataset.AccessLogsDataset.from_dataframe">from_dataframe</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

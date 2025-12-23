@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>src.pipeline.config.classes.TrainingConfig API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>src.pipeline.config.classes.TrainingConfig</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="src.pipeline.config.classes.TrainingConfig.EarlyStoppingTrainingConfig"><code class="flex name class">
+<span>class <span class="ident">EarlyStoppingTrainingConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EarlyStoppingTrainingConfig(BaseModel):
+    patience: conint(ge=0)  # type: ignore[valid-type]
+    delta: confloat(ge=0)  # type: ignore[valid-type]</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.classes.TrainingConfig.EarlyStoppingTrainingConfig.delta"><code class="name">var <span class="ident">delta</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.classes.TrainingConfig.EarlyStoppingTrainingConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.classes.TrainingConfig.EarlyStoppingTrainingConfig.patience"><code class="name">var <span class="ident">patience</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.classes.TrainingConfig.OptimizerConfig"><code class="flex name class">
+<span>class <span class="ident">OptimizerConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class OptimizerConfig(BaseModel):
+    type: str
+    params: OptimizerParamsConfig
+
+    @model_validator(mode=&#34;after&#34;)
+    def check_data_distribution_mode(
+        self: &#34;OptimizerConfig&#34;,
+    ) -&gt; &#34;OptimizerConfig&#34;:
+        &#34;&#34;&#34;
+        Check whether optimizer is valid or not.
+
+        This function validates the training
+        optimizer specified.
+
+        Parameters:
+            self (OptimizerConfig): Current model instance.
+
+        Returns:
+            OptimizerConfig: Validated model instance.
+        &#34;&#34;&#34;
+        return validate_choice_field(
+            self,
+            self.type,
+            TRAINING_OPTIMIZERS,
+            &#34;training.optimizer.type&#34;,
+        )</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.classes.TrainingConfig.OptimizerConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.classes.TrainingConfig.OptimizerConfig.params"><code class="name">var <span class="ident">params</span> : <a title="src.pipeline.config.classes.TrainingConfig.OptimizerParamsConfig" href="#src.pipeline.config.classes.TrainingConfig.OptimizerParamsConfig">OptimizerParamsConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.classes.TrainingConfig.OptimizerConfig.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="src.pipeline.config.classes.TrainingConfig.OptimizerConfig.check_data_distribution_mode"><code class="name flex">
+<span>def <span class="ident">check_data_distribution_mode</span></span>(<span>self: <a title="src.pipeline.config.classes.TrainingConfig.OptimizerConfig" href="#src.pipeline.config.classes.TrainingConfig.OptimizerConfig">OptimizerConfig</a>) ‑> <a title="src.pipeline.config.classes.TrainingConfig.OptimizerConfig" href="#src.pipeline.config.classes.TrainingConfig.OptimizerConfig">OptimizerConfig</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@model_validator(mode=&#34;after&#34;)
+def check_data_distribution_mode(
+    self: &#34;OptimizerConfig&#34;,
+) -&gt; &#34;OptimizerConfig&#34;:
+    &#34;&#34;&#34;
+    Check whether optimizer is valid or not.
+
+    This function validates the training
+    optimizer specified.
+
+    Parameters:
+        self (OptimizerConfig): Current model instance.
+
+    Returns:
+        OptimizerConfig: Validated model instance.
+    &#34;&#34;&#34;
+    return validate_choice_field(
+        self,
+        self.type,
+        TRAINING_OPTIMIZERS,
+        &#34;training.optimizer.type&#34;,
+    )</code></pre>
+</details>
+<div class="desc"><p>Check whether optimizer is valid or not.</p>
+<p>This function validates the training
+optimizer specified.</p>
+<h2 id="parameters">Parameters</h2>
+<p>self (OptimizerConfig): Current model instance.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="src.pipeline.config.classes.TrainingConfig.OptimizerConfig" href="#src.pipeline.config.classes.TrainingConfig.OptimizerConfig">OptimizerConfig</a></code></dt>
+<dd>Validated model instance.</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.classes.TrainingConfig.OptimizerParamsConfig"><code class="flex name class">
+<span>class <span class="ident">OptimizerParamsConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class OptimizerParamsConfig(BaseModel):
+    learning_rate: confloat(gt=0)  # type: ignore[valid-type]
+    weight_decay: confloat(ge=0)  # type: ignore[valid-type]
+    momentum: confloat(ge=0, le=1)  # type: ignore[valid-type]</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.classes.TrainingConfig.OptimizerParamsConfig.learning_rate"><code class="name">var <span class="ident">learning_rate</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.classes.TrainingConfig.OptimizerParamsConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.classes.TrainingConfig.OptimizerParamsConfig.momentum"><code class="name">var <span class="ident">momentum</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.classes.TrainingConfig.OptimizerParamsConfig.weight_decay"><code class="name">var <span class="ident">weight_decay</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.classes.TrainingConfig.TrainingConfig"><code class="flex name class">
+<span>class <span class="ident">TrainingConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TrainingConfig(BaseModel):
+    &#34;&#34;&#34;
+    Class representing the training configuration
+    settings including general, optimizer, and
+    early stopping settings.
+    &#34;&#34;&#34;
+
+    general: TrainingGeneralConfig
+    optimizer: OptimizerConfig
+    early_stopping: EarlyStoppingTrainingConfig</code></pre>
+</details>
+<div class="desc"><p>Class representing the training configuration
+settings including general, optimizer, and
+early stopping settings.</p>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.classes.TrainingConfig.TrainingConfig.early_stopping"><code class="name">var <span class="ident">early_stopping</span> : <a title="src.pipeline.config.classes.TrainingConfig.EarlyStoppingTrainingConfig" href="#src.pipeline.config.classes.TrainingConfig.EarlyStoppingTrainingConfig">EarlyStoppingTrainingConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.classes.TrainingConfig.TrainingConfig.general"><code class="name">var <span class="ident">general</span> : <a title="src.pipeline.config.classes.TrainingConfig.TrainingGeneralConfig" href="#src.pipeline.config.classes.TrainingConfig.TrainingGeneralConfig">TrainingGeneralConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.classes.TrainingConfig.TrainingConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.classes.TrainingConfig.TrainingConfig.optimizer"><code class="name">var <span class="ident">optimizer</span> : <a title="src.pipeline.config.classes.TrainingConfig.OptimizerConfig" href="#src.pipeline.config.classes.TrainingConfig.OptimizerConfig">OptimizerConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.classes.TrainingConfig.TrainingGeneralConfig"><code class="flex name class">
+<span>class <span class="ident">TrainingGeneralConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TrainingGeneralConfig(BaseModel):
+    epochs: TrainingGeneralEpochsConfig
+    batch_size: conint(gt=0)  # type: ignore[valid-type]
+    shuffle: bool</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.classes.TrainingConfig.TrainingGeneralConfig.batch_size"><code class="name">var <span class="ident">batch_size</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.classes.TrainingConfig.TrainingGeneralConfig.epochs"><code class="name">var <span class="ident">epochs</span> : <a title="src.pipeline.config.classes.TrainingConfig.TrainingGeneralEpochsConfig" href="#src.pipeline.config.classes.TrainingConfig.TrainingGeneralEpochsConfig">TrainingGeneralEpochsConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.classes.TrainingConfig.TrainingGeneralConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.classes.TrainingConfig.TrainingGeneralConfig.shuffle"><code class="name">var <span class="ident">shuffle</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.classes.TrainingConfig.TrainingGeneralEpochsConfig"><code class="flex name class">
+<span>class <span class="ident">TrainingGeneralEpochsConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TrainingGeneralEpochsConfig(BaseModel):
+    count: conint(gt=0)  # type: ignore[valid-type]</code></pre>
+</details>
+<div class="desc"><div class="admonition abstract">
+<p class="admonition-title">Usage Documentation</p>
+<p><a href="../concepts/models.md">Models</a></p>
+</div>
+<p>A base class for creating Pydantic models.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__class_vars__</code></strong></dt>
+<dd>The names of the class variables defined on the model.</dd>
+<dt><strong><code>__private_attributes__</code></strong></dt>
+<dd>Metadata about the private attributes of the model.</dd>
+<dt><strong><code>__signature__</code></strong></dt>
+<dd>The synthesized <code>__init__</code> [<code>Signature</code>][inspect.Signature] of the model.</dd>
+<dt><strong><code>__pydantic_complete__</code></strong></dt>
+<dd>Whether model building is completed, or if there are still undefined fields.</dd>
+<dt><strong><code>__pydantic_core_schema__</code></strong></dt>
+<dd>The core schema of the model.</dd>
+<dt><strong><code>__pydantic_custom_init__</code></strong></dt>
+<dd>Whether the model has a custom <code>__init__</code> function.</dd>
+<dt><strong><code>__pydantic_decorators__</code></strong></dt>
+<dd>Metadata containing the decorators defined on the model.
+This replaces <code>Model.__validators__</code> and <code>Model.__root_validators__</code> from Pydantic V1.</dd>
+<dt><strong><code>__pydantic_generic_metadata__</code></strong></dt>
+<dd>Metadata for generic models; contains data used for a similar purpose to
+<strong>args</strong>, <strong>origin</strong>, <strong>parameters</strong> in typing-module generics. May eventually be replaced by these.</dd>
+<dt><strong><code>__pydantic_parent_namespace__</code></strong></dt>
+<dd>Parent namespace of the model, used for automatic rebuilding of models.</dd>
+<dt><strong><code>__pydantic_post_init__</code></strong></dt>
+<dd>The name of the post-init method for the model, if defined.</dd>
+<dt><strong><code>__pydantic_root_model__</code></strong></dt>
+<dd>Whether the model is a [<code>RootModel</code>][pydantic.root_model.RootModel].</dd>
+<dt><strong><code>__pydantic_serializer__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaSerializer</code> used to dump instances of the model.</dd>
+<dt><strong><code>__pydantic_validator__</code></strong></dt>
+<dd>The <code>pydantic-core</code> <code>SchemaValidator</code> used to validate instances of the model.</dd>
+<dt><strong><code>__pydantic_fields__</code></strong></dt>
+<dd>A dictionary of field names and their corresponding [<code>FieldInfo</code>][pydantic.fields.FieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_computed_fields__</code></strong></dt>
+<dd>A dictionary of computed field names and their corresponding [<code>ComputedFieldInfo</code>][pydantic.fields.ComputedFieldInfo] objects.</dd>
+<dt><strong><code>__pydantic_extra__</code></strong></dt>
+<dd>A dictionary containing extra values, if [<code>extra</code>][pydantic.config.ConfigDict.extra]
+is set to <code>'allow'</code>.</dd>
+<dt><strong><code>__pydantic_fields_set__</code></strong></dt>
+<dd>The names of fields explicitly set during instantiation.</dd>
+<dt><strong><code>__pydantic_private__</code></strong></dt>
+<dd>Values of private attributes set on the model instance.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.classes.TrainingConfig.TrainingGeneralEpochsConfig.count"><code class="name">var <span class="ident">count</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.classes.TrainingConfig.TrainingGeneralEpochsConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="src.pipeline.config.classes" href="index.html">src.pipeline.config.classes</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="src.pipeline.config.classes.TrainingConfig.EarlyStoppingTrainingConfig" href="#src.pipeline.config.classes.TrainingConfig.EarlyStoppingTrainingConfig">EarlyStoppingTrainingConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.EarlyStoppingTrainingConfig.delta" href="#src.pipeline.config.classes.TrainingConfig.EarlyStoppingTrainingConfig.delta">delta</a></code></li>
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.EarlyStoppingTrainingConfig.model_config" href="#src.pipeline.config.classes.TrainingConfig.EarlyStoppingTrainingConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.EarlyStoppingTrainingConfig.patience" href="#src.pipeline.config.classes.TrainingConfig.EarlyStoppingTrainingConfig.patience">patience</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.classes.TrainingConfig.OptimizerConfig" href="#src.pipeline.config.classes.TrainingConfig.OptimizerConfig">OptimizerConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.OptimizerConfig.check_data_distribution_mode" href="#src.pipeline.config.classes.TrainingConfig.OptimizerConfig.check_data_distribution_mode">check_data_distribution_mode</a></code></li>
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.OptimizerConfig.model_config" href="#src.pipeline.config.classes.TrainingConfig.OptimizerConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.OptimizerConfig.params" href="#src.pipeline.config.classes.TrainingConfig.OptimizerConfig.params">params</a></code></li>
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.OptimizerConfig.type" href="#src.pipeline.config.classes.TrainingConfig.OptimizerConfig.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.classes.TrainingConfig.OptimizerParamsConfig" href="#src.pipeline.config.classes.TrainingConfig.OptimizerParamsConfig">OptimizerParamsConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.OptimizerParamsConfig.learning_rate" href="#src.pipeline.config.classes.TrainingConfig.OptimizerParamsConfig.learning_rate">learning_rate</a></code></li>
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.OptimizerParamsConfig.model_config" href="#src.pipeline.config.classes.TrainingConfig.OptimizerParamsConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.OptimizerParamsConfig.momentum" href="#src.pipeline.config.classes.TrainingConfig.OptimizerParamsConfig.momentum">momentum</a></code></li>
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.OptimizerParamsConfig.weight_decay" href="#src.pipeline.config.classes.TrainingConfig.OptimizerParamsConfig.weight_decay">weight_decay</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.classes.TrainingConfig.TrainingConfig" href="#src.pipeline.config.classes.TrainingConfig.TrainingConfig">TrainingConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.TrainingConfig.early_stopping" href="#src.pipeline.config.classes.TrainingConfig.TrainingConfig.early_stopping">early_stopping</a></code></li>
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.TrainingConfig.general" href="#src.pipeline.config.classes.TrainingConfig.TrainingConfig.general">general</a></code></li>
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.TrainingConfig.model_config" href="#src.pipeline.config.classes.TrainingConfig.TrainingConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.TrainingConfig.optimizer" href="#src.pipeline.config.classes.TrainingConfig.TrainingConfig.optimizer">optimizer</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.classes.TrainingConfig.TrainingGeneralConfig" href="#src.pipeline.config.classes.TrainingConfig.TrainingGeneralConfig">TrainingGeneralConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.TrainingGeneralConfig.batch_size" href="#src.pipeline.config.classes.TrainingConfig.TrainingGeneralConfig.batch_size">batch_size</a></code></li>
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.TrainingGeneralConfig.epochs" href="#src.pipeline.config.classes.TrainingConfig.TrainingGeneralConfig.epochs">epochs</a></code></li>
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.TrainingGeneralConfig.model_config" href="#src.pipeline.config.classes.TrainingConfig.TrainingGeneralConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.TrainingGeneralConfig.shuffle" href="#src.pipeline.config.classes.TrainingConfig.TrainingGeneralConfig.shuffle">shuffle</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.classes.TrainingConfig.TrainingGeneralEpochsConfig" href="#src.pipeline.config.classes.TrainingConfig.TrainingGeneralEpochsConfig">TrainingGeneralEpochsConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.TrainingGeneralEpochsConfig.count" href="#src.pipeline.config.classes.TrainingConfig.TrainingGeneralEpochsConfig.count">count</a></code></li>
+<li><code><a title="src.pipeline.config.classes.TrainingConfig.TrainingGeneralEpochsConfig.model_config" href="#src.pipeline.config.classes.TrainingConfig.TrainingGeneralEpochsConfig.model_config">model_config</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

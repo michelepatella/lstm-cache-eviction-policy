@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>src.api.gateway.main API documentation</title>
+<meta name="description" content="main.py …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>src.api.gateway.main</code></h1>
+</header>
+<section id="section-intro">
+<p>main.py</p>
+<p>This module defines the central API Gateway for the cache eviction policy.</p>
+<p>It orchestrates the end-to-end inference pipeline by sequentially calling four
+distinct gRPC microservices: Featurizer, Predictor, Scorer, and Decider.
+It also includes a basic health check for the API and a decorator to standardize
+the response format.</p>
+<h2 id="functions">Functions</h2>
+<p>lifespan(app: FastAPI):
+Context manager for API startup/shutdown tasks.
+construct_api_response(
+f: Callable[&hellip;, Awaitable[dict[str, Any]] | dict[str, Any]]
+) -&gt; Callable[&hellip;, Awaitable[dict[str, Any]]]:
+Decorator for standardizing API responses.
+gateway_api(payload: GatewayAPIInput) -&gt; dict[str, Any]:
+The main endpoint that executes the cache eviction policy pipeline.
+_index() -&gt; dict[str, Any]:
+Provides a basic health check for the API.</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="src.api.gateway.main.construct_api_response"><code class="name flex">
+<span>def <span class="ident">construct_api_response</span></span>(<span>f: Callable[..., collections.abc.Awaitable[dict[str, typing.Any]] | dict[str, typing.Any]]) ‑> Callable[..., Awaitable[dict[str, typing.Any]]]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def construct_api_response(
+    f: Callable[..., Awaitable[dict[str, Any]] | dict[str, Any]],
+) -&gt; Callable[..., Awaitable[dict[str, Any]]]:
+    &#34;&#34;&#34;Decorator to standardize the API response format.
+
+    This function wraps an asynchronous/synchronous API endpoint function
+    (f) and ensures that the final output adheres to a consistent JSON
+    structure, including metadata (method, timestamp, URL) and centralized
+    handling for HTTPException and unexpected errors.
+
+    Args:
+        f (Callable[..., Awaitable[dict[str, Any]] | dict[str, Any]]):
+            The original API endpoint function to wrap.
+
+    Returns:
+        Callable[..., Awaitable[dict[str, Any]]]: The wrapped function that
+                                                  returns a standardized response
+                                                  dictionary.
+    &#34;&#34;&#34;
+
+    @wraps(f)
+    async def wrap(
+        *args: Any,
+        **kwargs: Any,
+    ) -&gt; dict[str, Any]:
+        &#34;&#34;&#34;The wrapper function that executes the endpoint and formats
+        the response.
+
+        This function attempts to execute the decorated function. If successful,
+        it constructs the standard response using the result. If an exception occurs
+        (HTTPException or a general Exception), it catches it and formats the output
+        as an error response with appropriate status codes.
+
+        Args:
+            *args (Any): Positional arguments passed to the original function.
+            **kwargs (Any): Keyword arguments passed to the original function.
+
+        Returns:
+            dict[str, Any]: The standardized API response dictionary,
+                            containing message, status code, data, and metadata.
+        &#34;&#34;&#34;
+        # Construct a standard API response, also
+        # managing exceptions raising in the API
+        request = next(
+            (
+                arg
+                for arg in list(args) + list(kwargs.values())
+                if isinstance(arg, Request)
+            ),
+            None,
+        )
+        try:
+            result = (
+                await f(*args, **kwargs) if callable(f) else f(*args, **kwargs)
+            )
+        except HTTPException as e:
+            # Response for error-specific cases
+            result = {
+                API_RESPONSE_FIELD_MESSAGE_NAME: str(e.detail),
+                API_RESPONSE_FIELD_STATUS_CODE_NAME: e.status_code,
+                API_RESPONSE_FIELD_DATA_NAME: {},
+            }
+        except Exception as e:
+            # Response for general, unexpected error cases
+            result = {
+                API_RESPONSE_FIELD_MESSAGE_NAME: str(e),
+                API_RESPONSE_FIELD_STATUS_CODE_NAME: HTTPStatus.INTERNAL_SERVER_ERROR,
+                API_RESPONSE_FIELD_DATA_NAME: {},
+            }
+
+        # Construct final API response
+        response = {
+            API_RESPONSE_FIELD_MESSAGE_NAME: result.get(
+                API_RESPONSE_FIELD_MESSAGE_NAME,
+            ),
+            API_RESPONSE_FIELD_METHOD_NAME: request.method,
+            API_RESPONSE_FIELD_STATUS_CODE_NAME: result.get(
+                API_RESPONSE_FIELD_STATUS_CODE_NAME,
+            ),
+            API_RESPONSE_FIELD_TIMESTAMP_NAME: datetime.now().isoformat(),
+            API_RESPONSE_FIELD_URL_NAME: str(request.url),
+        }
+        if API_RESPONSE_FIELD_DATA_NAME in result:
+            response[API_RESPONSE_FIELD_DATA_NAME] = result[
+                API_RESPONSE_FIELD_DATA_NAME
+            ]
+        return response
+
+    return wrap</code></pre>
+</details>
+<div class="desc"><p>Decorator to standardize the API response format.</p>
+<p>This function wraps an asynchronous/synchronous API endpoint function
+(f) and ensures that the final output adheres to a consistent JSON
+structure, including metadata (method, timestamp, URL) and centralized
+handling for HTTPException and unexpected errors.</p>
+<h2 id="args">Args</h2>
+<p>f (Callable[&hellip;, Awaitable[dict[str, Any]] | dict[str, Any]]):
+The original API endpoint function to wrap.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Callable[&hellip;, Awaitable[dict[str, Any]]]</code></dt>
+<dd>The wrapped function that
+returns a standardized response
+dictionary.</dd>
+</dl></div>
+</dd>
+<dt id="src.api.gateway.main.gateway_api"><code class="name flex">
+<span>async def <span class="ident">gateway_api</span></span>(<span>payload: api.gateway.schemas.GatewayAPIInput,<br>request: starlette.requests.Request) ‑> dict[str, typing.Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@app.post(GATEWAY_API_ENDPOINT)
+@construct_api_response
+async def gateway_api(
+    payload: GatewayAPIInput,
+    request: Request,
+) -&gt; dict[str, Any]:
+    &#34;&#34;&#34;The main endpoint executing the cache eviction policy.
+
+    This function orchestrates a sequential process by calling the
+    Featurizer, Predictor, Scorer, and Decider gRPC services.
+    The pipeline steps are:
+        1. Featurizer: Converts raw data into model-ready features.
+        2. Predictor: Generates model outputs.
+        3. Scorer: Calculates a score for each key based on model results.
+        4. Decider: Selects the keys to evict.
+
+    Args:
+        payload (GatewayAPIInput):
+            The request body containing all input parameters, validated
+            by the Pydantic model. This includes:
+            - keys_in_cache (list[int]): Keys currently in the cache.
+            - last_accesses (list[tuple[float, int]]): Recent access history.
+            - user_api_kwargs (dict | None): Optional runtime configuration
+                                             overrides.
+       request (Request): FastAPI request object, required by the decorator.
+
+    Returns:
+        dict[str, Any]: A dictionary containing the standard API response
+                        structure.
+
+    Raises:
+        HTTPException: If any API step fails.
+    &#34;&#34;&#34;
+    try:
+        # Extract payload
+        keys_in_cache = payload.keys_in_cache
+        last_accesses = payload.last_accesses
+        user_api_kwargs = payload.user_api_kwargs
+
+        info(
+            &#34;Gateway API started&#34;,
+            extra={
+                &#34;keys_in_cache_num&#34;: len(keys_in_cache),
+                &#34;last_accesses_num&#34;: len(last_accesses),
+                &#34;api_kwargs_user&#34;: user_api_kwargs
+                if user_api_kwargs
+                else None,
+                &#34;context&#34;: &#34;Gateway API&#34;,
+            },
+        )
+
+        # ---------------------------------------------------------------
+        # 0. Preparation: Merge user API kwargs with default ones
+        # ---------------------------------------------------------------
+        api_config = deepcopy(app.state.api_config)
+        if user_api_kwargs is not None:
+            api_config.kwargs = api_config.merge_api_kwargs(
+                user_api_kwargs,
+            )
+
+        # ---------------------------------------------------------------
+        # 1. Featurizer Service: Build features from raw data
+        # ---------------------------------------------------------------
+        features, keys_seq, features_shape, keys_shape = (
+            call_featurizer_service(last_accesses)
+        )
+
+        # ---------------------------------------------------------------
+        # 2. Predictor Service: Make confidence-aware model predictions
+        # ---------------------------------------------------------------
+        outputs, variances = call_predictor_service(
+            features,
+            keys_seq,
+            features_shape,
+            keys_shape,
+            api_config,
+        )
+
+        # ---------------------------------------------------------------
+        # 3. Scorer Service: Calculate key scores based on model results
+        # ---------------------------------------------------------------
+        key_scores = call_scorer_service(outputs, variances, api_config)
+
+        # ---------------------------------------------------------------
+        # 4. Decider Service: Determine key(s) to evict
+        # ---------------------------------------------------------------
+        keys_to_evict = call_decider_service(
+            keys_in_cache,
+            key_scores,
+            api_config.kwargs.excluded_keys.value,
+            api_config.kwargs.num_evictions.value,
+        )
+
+        info(
+            &#34;Gateway API completed&#34;,
+            extra={
+                &#34;keys_to_evict_num&#34;: len(keys_to_evict),
+                &#34;context&#34;: &#34;Gateway API&#34;,
+            },
+        )
+
+        # Final response to the client
+        return {
+            API_RESPONSE_FIELD_MESSAGE_NAME: HTTPStatus.OK.phrase,
+            API_RESPONSE_FIELD_STATUS_CODE_NAME: HTTPStatus.OK,
+            API_RESPONSE_FIELD_DATA_NAME: {
+                API_RESPONSE_FIELD_DATA_KEYS_TO_EVICT_NAME: keys_to_evict,
+            },
+        }
+
+    except Exception as e:
+        error(
+            &#34;Gateway API failed&#34;,
+            extra={
+                &#34;exception&#34;: str(e),
+                &#34;context&#34;: &#34;Gateway API&#34;,
+            },
+        )
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(e),
+        ) from e
+
+    finally:
+        # Async flush logs
+        for handler in logging.getLogger(LOGS_LOGGER_NAME).handlers:
+            if isinstance(handler, GrafanaLokiHandler):
+                handler.flush_buffer_async()</code></pre>
+</details>
+<div class="desc"><p>The main endpoint executing the cache eviction policy.</p>
+<p>This function orchestrates a sequential process by calling the
+Featurizer, Predictor, Scorer, and Decider gRPC services.
+The pipeline steps are:
+1. Featurizer: Converts raw data into model-ready features.
+2. Predictor: Generates model outputs.
+3. Scorer: Calculates a score for each key based on model results.
+4. Decider: Selects the keys to evict.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt>payload (GatewayAPIInput):</dt>
+<dt>The request body containing all input parameters, validated</dt>
+<dt>by the Pydantic model. This includes:</dt>
+<dt>- keys_in_cache (list[int]): Keys currently in the cache.</dt>
+<dt>- last_accesses (list[tuple[float, int]]): Recent access history.</dt>
+<dt>- user_api_kwargs (dict | None): Optional runtime configuration</dt>
+<dt>overrides.</dt>
+<dt><strong><code>request</code></strong> :&ensp;<code>Request</code></dt>
+<dd>FastAPI request object, required by the decorator.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict[str, Any]</code></dt>
+<dd>A dictionary containing the standard API response
+structure.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>HTTPException</code></dt>
+<dd>If any API step fails.</dd>
+</dl></div>
+</dd>
+<dt id="src.api.gateway.main.lifespan"><code class="name flex">
+<span>async def <span class="ident">lifespan</span></span>(<span>app: fastapi.applications.FastAPI)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@asynccontextmanager
+async def lifespan(app: FastAPI):
+    &#34;&#34;&#34;Handles the application lifespan events (startup and shutdown).
+
+    During startup:
+        1. Loads the API configuration from the specified YAML file path,
+           and validates and parses the configuration into the Pydantic model,
+           storing it.
+        2. Initializes the global logging system, setting the level defined
+           in the configuration and configuring the handler.
+
+    Args:
+        app (FastAPI): The FastAPI application instance.
+    &#34;&#34;&#34;
+    # -----------------------------------------------
+    # (Startup) 1. API configuration preparation
+    # -----------------------------------------------
+    app.state.api_config_file = load_yaml(API_CONFIG_FILE_PATH)
+    app.state.api_config = APIConfig(**app.state.api_config_file)
+
+    # -----------------------------------------------
+    # (Startup) 2. API logs initialization
+    # -----------------------------------------------
+    initialize_logs(
+        logging.getLevelName(app.state.api_config.logs.level),
+        GrafanaLokiHandler(),
+    )
+    logs_phase.set(LOGS_PHASE_API)
+
+    yield</code></pre>
+</details>
+<div class="desc"><p>Handles the application lifespan events (startup and shutdown).</p>
+<p>During startup:
+1. Loads the API configuration from the specified YAML file path,
+and validates and parses the configuration into the Pydantic model,
+storing it.
+2. Initializes the global logging system, setting the level defined
+in the configuration and configuring the handler.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>app</code></strong> :&ensp;<code>FastAPI</code></dt>
+<dd>The FastAPI application instance.</dd>
+</dl></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="src.api.gateway" href="index.html">src.api.gateway</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="src.api.gateway.main.construct_api_response" href="#src.api.gateway.main.construct_api_response">construct_api_response</a></code></li>
+<li><code><a title="src.api.gateway.main.gateway_api" href="#src.api.gateway.main.gateway_api">gateway_api</a></code></li>
+<li><code><a title="src.api.gateway.main.lifespan" href="#src.api.gateway.main.lifespan">lifespan</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>src.components.caches.implementations.lstm_cache API documentation</title>
+<meta name="description" content="lstm_cache.py …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>src.components.caches.implementations.lstm_cache</code></h1>
+</header>
+<section id="section-intro">
+<p>lstm_cache.py</p>
+<p>Module implementing an LSTM-based cache.</p>
+<p>This module provides the <code><a title="src.components.caches.implementations.lstm_cache.LSTMCache" href="#src.components.caches.implementations.lstm_cache.LSTMCache">LSTMCache</a></code> class, which manages key-value pairs in a
+cache using an LSTM eviction policy when the cache is full. It interacts with an
+external API for eviction decisions, tracks metrics via a logger, and handles
+expired keys automatically.</p>
+<h2 id="classes">Classes</h2>
+<p>LSTMCache(cache_class, metrics_logger, config):
+LSTM cache implementation supporting put, eviction, and key operations.</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="src.components.caches.implementations.lstm_cache.LSTMCache"><code class="flex name class">
+<span>class <span class="ident">LSTMCache</span></span>
+<span>(</span><span>cache_class: Any,<br>metrics_logger: components.caches.utils.cache_metrics_logger.CacheMetricsLogger,<br>pipeline_config: pipeline.config.pydantic.pipeline_config.PipelineConfig)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LSTMCache(BaseCache):
+    &#34;&#34;&#34;LSTM-based cache implementation.
+
+    Evicts keys from the cache based on an LSTM
+    eviction policy when the cache is full.
+
+    Attributes:
+        api_endpoint (str): Endpoint of the API to used as
+                            eviction policy.
+        api_kwargs (dict): Keyword arguments used by the eviction
+                            policy API.
+    &#34;&#34;&#34;
+
+    def __init__(
+        self: &#34;LSTMCache&#34;,
+        cache_class: Any,
+        metrics_logger: CacheMetricsLogger,
+        pipeline_config: PipelineConfig,
+    ) -&gt; None:
+        &#34;&#34;&#34;Initialize the LSTM cache.
+
+        This function initializes the LSTM cache by
+        calling the BaseCache constructor.
+
+        Args:
+            self (&#34;LSTMCache&#34;): Current class instance.
+            cache_class (Any): Underlying cache class
+                               to store items.
+            metrics_logger (CacheMetricsLogger): Logger for cache events.
+            pipeline_config (PipelineConfig): Configuration object.
+
+        Returns:
+            None
+        &#34;&#34;&#34;
+        # Cache class initialization
+        super().__init__(cache_class, metrics_logger, pipeline_config)
+
+        # Set API endpoint and kwargs to use
+        self.api_endpoint = GATEWAY_API_FULL_URL
+        self.api_kwargs = pipeline_config.simulations.api_kwargs
+
+        debug(
+            &#34;Cache initialization executed&#34;,
+            extra={
+                &#34;maxsize&#34;: self.maxsize,
+                &#34;api_kwargs&#34;: self.api_kwargs.__dict__,
+                &#34;context&#34;: &#34;LSTM cache&#34;,
+            },
+        )
+
+    def evict_key(self: &#34;LSTMCache&#34;, key: int) -&gt; None:
+        &#34;&#34;&#34;Evict a key from the cache.
+
+        This function evicts a provided key
+        from the LSTM cache, along with its
+        expiration time.
+
+        Args:
+            self (&#34;LSTMCache&#34;): Current class instance.
+            key (int): Key to remove from the cache.
+
+        Returns:
+            None
+
+        Raises:
+            RuntimeError: If key eviction from LSTM cache fails:
+                * The key is unhashable (TypeError).
+                * Cache store or expiry dict is misconfigured (AttributeError).
+        &#34;&#34;&#34;
+        try:
+            # Remove key from store and its
+            # expiration time
+            self.store.pop(key, None)
+            self.expiry.pop(key, None)
+        except (TypeError, AttributeError) as e:
+            msg = &#34;Key eviction from LSTM cache failed&#34;
+            error(
+                msg,
+                extra={
+                    &#34;exception&#34;: str(e),
+                    &#34;key&#34;: key,
+                    &#34;store_keys&#34;: list(self.store.keys())
+                    if hasattr(self.store, &#34;keys&#34;)
+                    else None,
+                    &#34;expiry_keys&#34;: list(self.expiry.keys())
+                    if hasattr(self.expiry, &#34;keys&#34;)
+                    else None,
+                    &#34;context&#34;: &#34;LSTM cache&#34;,
+                },
+            )
+            raise RuntimeError(msg) from e
+
+    def _put_key(self: &#34;LSTMCache&#34;, key: int, current_time: float) -&gt; None:
+        &#34;&#34;&#34;Put a key in the cache.
+
+        This function puts a key into the LSTM cache
+        along with its expiration time.
+
+        Args:
+            self (&#34;LSTMCache&#34;): Current class instance.
+            key (int): Key to insert in the cache.
+            current_time (float): Current time.
+
+        Returns:
+            None
+
+        Raises:
+            RuntimeError: If key insertion into LSTM cache fails:
+                * The key is unhashable (TypeError).
+                * Cache store or expiry dict is misconfigured (AttributeError).
+        &#34;&#34;&#34;
+        try:
+            # Insert key in the store along
+            # with its expiration time
+            self.store[key] = key
+            self.expiry[key] = current_time + self.ttl
+
+            # Track put event
+            self.metrics_logger.log_put(key, current_time, self.ttl)
+        except (TypeError, AttributeError) as e:
+            msg = &#34;Key insertion into LSTM cache failed&#34;
+            error(
+                msg,
+                extra={
+                    &#34;exception&#34;: str(e),
+                    &#34;key&#34;: key,
+                    &#34;current_time&#34;: current_time,
+                    &#34;store_keys&#34;: list(self.store.keys())
+                    if hasattr(self.store, &#34;keys&#34;)
+                    else None,
+                    &#34;expiry_keys&#34;: list(self.expiry.keys())
+                    if hasattr(self.expiry, &#34;keys&#34;)
+                    else None,
+                    &#34;context&#34;: &#34;LSTM cache&#34;,
+                },
+            )
+            raise RuntimeError(msg) from e
+
+    def put(
+        self: &#34;LSTMCache&#34;,
+        key: int,
+        current_time: float,
+        current_idx: int,
+        testing_set: pd.DataFrame,
+        pipeline_config: PipelineConfig,
+    ) -&gt; None:
+        &#34;&#34;&#34;Insert a key in the LSTM cache.
+
+        This function puts a key into the LSTM cache
+        along with its expiration time. If the cache is full,
+        extracts the last sequence of accesses and uses the
+        LSTM policy to decide which key to evict.
+
+        Args:
+            self (&#34;LSTMCache&#34;): Current class instance.
+            key (int): Key to insert.
+            current_time (float): Current time.
+            current_idx (int): Index of the current request.
+            testing_set (pd.DataFrame): Testing dataset for sequence extraction.
+            pipeline_config (PipelineConfig): Configuration object.
+
+        Returns:
+            None
+
+        Raises:
+            RuntimeError: If key insertion/eviction fails:
+                * Key is unhashable or cache store/expiry dict
+                  misconfigured (TypeError, AttributeError).
+                * API call fails (HTTPException).
+        &#34;&#34;&#34;
+        try:
+            # Remove all expired keys
+            # before insertion
+            self._remove_expired_keys(current_time)
+
+            # Check whether the cache is full
+            if key not in self.store and len(self.store) &gt;= self.maxsize:
+                # Get the sequence length
+                # of the LSTM model
+                seq_len = pipeline_config.model.sequence.length
+
+                # Extract last accesses of
+                # sequence length * 2 (for each
+                # access a history of seq_len past accesses
+                # is needed for building features)
+                last_accesses = extract_last_rows_from_dataset(
+                    current_idx,
+                    seq_len + seq_len,
+                    testing_set.data,
+                )
+
+                # Check whether last accesses
+                # are not available
+                if last_accesses is None:
+                    # Eviction fallback policy: Random
+                    key_to_evict = random.choice(list(self.store.keys()))
+                else:
+                    # Call API to get the key to be evicted
+                    # from the cache
+                    response = requests.post(
+                        self.api_endpoint,
+                        json={
+                            API_PARAM_KEYS_IN_CACHE_NAME: list(
+                                self.store.keys(),
+                            ),
+                            API_PARAM_LAST_ACCESSES_NAME: last_accesses,
+                            API_PARAM_USER_API_KWARGS_NAME: self.api_kwargs.__dict__,
+                        },
+                    )
+
+                    # Extract data as response
+                    response = response.json()
+                    keys_to_evict = response[API_RESPONSE_FIELD_DATA_NAME][
+                        API_RESPONSE_FIELD_DATA_KEYS_TO_EVICT_NAME
+                    ]
+                    key_to_evict = keys_to_evict[LIST_FIRST_IDX]
+
+                # Evict key
+                self.evict_key(key_to_evict)
+
+                # Track eviction event
+                self.metrics_logger.log_eviction(
+                    key_to_evict,
+                    current_time,
+                )
+
+            # Insert the key
+            self._put_key(key, current_time)
+
+        except (TypeError, AttributeError, HTTPException) as e:
+            msg = &#34;Key insertion/eviction in/from LSTM cache failed&#34;
+            error(
+                msg,
+                extra={
+                    &#34;exception&#34;: str(e),
+                    &#34;key&#34;: key,
+                    &#34;current_time&#34;: current_time,
+                    &#34;store_keys&#34;: list(self.store.keys())
+                    if hasattr(self.store, &#34;keys&#34;)
+                    else None,
+                    &#34;expiry_keys&#34;: list(self.expiry.keys())
+                    if hasattr(self.expiry, &#34;keys&#34;)
+                    else None,
+                    &#34;context&#34;: &#34;LSTM cache&#34;,
+                },
+            )
+            raise RuntimeError(msg) from e</code></pre>
+</details>
+<div class="desc"><p>LSTM-based cache implementation.</p>
+<p>Evicts keys from the cache based on an LSTM
+eviction policy when the cache is full.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>api_endpoint</code></strong> :&ensp;<code>str</code></dt>
+<dd>Endpoint of the API to used as
+eviction policy.</dd>
+<dt><strong><code>api_kwargs</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Keyword arguments used by the eviction
+policy API.</dd>
+</dl>
+<p>Initialize the LSTM cache.</p>
+<p>This function initializes the LSTM cache by
+calling the BaseCache constructor.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt>self ("LSTMCache"): Current class instance.</dt>
+<dt><strong><code>cache_class</code></strong> :&ensp;<code>Any</code></dt>
+<dd>Underlying cache class
+to store items.</dd>
+<dt><strong><code>metrics_logger</code></strong> :&ensp;<code>CacheMetricsLogger</code></dt>
+<dd>Logger for cache events.</dd>
+<dt><strong><code>pipeline_config</code></strong> :&ensp;<code>PipelineConfig</code></dt>
+<dd>Configuration object.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>None</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>components.caches.implementations.utils.base_cache.BaseCache</li>
+<li>abc.ABC</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="src.components.caches.implementations.lstm_cache.LSTMCache.evict_key"><code class="name flex">
+<span>def <span class="ident">evict_key</span></span>(<span>self: <a title="src.components.caches.implementations.lstm_cache.LSTMCache" href="#src.components.caches.implementations.lstm_cache.LSTMCache">LSTMCache</a>,<br>key: int) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def evict_key(self: &#34;LSTMCache&#34;, key: int) -&gt; None:
+    &#34;&#34;&#34;Evict a key from the cache.
+
+    This function evicts a provided key
+    from the LSTM cache, along with its
+    expiration time.
+
+    Args:
+        self (&#34;LSTMCache&#34;): Current class instance.
+        key (int): Key to remove from the cache.
+
+    Returns:
+        None
+
+    Raises:
+        RuntimeError: If key eviction from LSTM cache fails:
+            * The key is unhashable (TypeError).
+            * Cache store or expiry dict is misconfigured (AttributeError).
+    &#34;&#34;&#34;
+    try:
+        # Remove key from store and its
+        # expiration time
+        self.store.pop(key, None)
+        self.expiry.pop(key, None)
+    except (TypeError, AttributeError) as e:
+        msg = &#34;Key eviction from LSTM cache failed&#34;
+        error(
+            msg,
+            extra={
+                &#34;exception&#34;: str(e),
+                &#34;key&#34;: key,
+                &#34;store_keys&#34;: list(self.store.keys())
+                if hasattr(self.store, &#34;keys&#34;)
+                else None,
+                &#34;expiry_keys&#34;: list(self.expiry.keys())
+                if hasattr(self.expiry, &#34;keys&#34;)
+                else None,
+                &#34;context&#34;: &#34;LSTM cache&#34;,
+            },
+        )
+        raise RuntimeError(msg) from e</code></pre>
+</details>
+<div class="desc"><p>Evict a key from the cache.</p>
+<p>This function evicts a provided key
+from the LSTM cache, along with its
+expiration time.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt>self ("LSTMCache"): Current class instance.</dt>
+<dt><strong><code>key</code></strong> :&ensp;<code>int</code></dt>
+<dd>Key to remove from the cache.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>None</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RuntimeError</code></dt>
+<dd>If key eviction from LSTM cache fails:
+* The key is unhashable (TypeError).
+* Cache store or expiry dict is misconfigured (AttributeError).</dd>
+</dl></div>
+</dd>
+<dt id="src.components.caches.implementations.lstm_cache.LSTMCache.put"><code class="name flex">
+<span>def <span class="ident">put</span></span>(<span>self: <a title="src.components.caches.implementations.lstm_cache.LSTMCache" href="#src.components.caches.implementations.lstm_cache.LSTMCache">LSTMCache</a>,<br>key: int,<br>current_time: float,<br>current_idx: int,<br>testing_set: pandas.core.frame.DataFrame,<br>pipeline_config: pipeline.config.pydantic.pipeline_config.PipelineConfig) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def put(
+    self: &#34;LSTMCache&#34;,
+    key: int,
+    current_time: float,
+    current_idx: int,
+    testing_set: pd.DataFrame,
+    pipeline_config: PipelineConfig,
+) -&gt; None:
+    &#34;&#34;&#34;Insert a key in the LSTM cache.
+
+    This function puts a key into the LSTM cache
+    along with its expiration time. If the cache is full,
+    extracts the last sequence of accesses and uses the
+    LSTM policy to decide which key to evict.
+
+    Args:
+        self (&#34;LSTMCache&#34;): Current class instance.
+        key (int): Key to insert.
+        current_time (float): Current time.
+        current_idx (int): Index of the current request.
+        testing_set (pd.DataFrame): Testing dataset for sequence extraction.
+        pipeline_config (PipelineConfig): Configuration object.
+
+    Returns:
+        None
+
+    Raises:
+        RuntimeError: If key insertion/eviction fails:
+            * Key is unhashable or cache store/expiry dict
+              misconfigured (TypeError, AttributeError).
+            * API call fails (HTTPException).
+    &#34;&#34;&#34;
+    try:
+        # Remove all expired keys
+        # before insertion
+        self._remove_expired_keys(current_time)
+
+        # Check whether the cache is full
+        if key not in self.store and len(self.store) &gt;= self.maxsize:
+            # Get the sequence length
+            # of the LSTM model
+            seq_len = pipeline_config.model.sequence.length
+
+            # Extract last accesses of
+            # sequence length * 2 (for each
+            # access a history of seq_len past accesses
+            # is needed for building features)
+            last_accesses = extract_last_rows_from_dataset(
+                current_idx,
+                seq_len + seq_len,
+                testing_set.data,
+            )
+
+            # Check whether last accesses
+            # are not available
+            if last_accesses is None:
+                # Eviction fallback policy: Random
+                key_to_evict = random.choice(list(self.store.keys()))
+            else:
+                # Call API to get the key to be evicted
+                # from the cache
+                response = requests.post(
+                    self.api_endpoint,
+                    json={
+                        API_PARAM_KEYS_IN_CACHE_NAME: list(
+                            self.store.keys(),
+                        ),
+                        API_PARAM_LAST_ACCESSES_NAME: last_accesses,
+                        API_PARAM_USER_API_KWARGS_NAME: self.api_kwargs.__dict__,
+                    },
+                )
+
+                # Extract data as response
+                response = response.json()
+                keys_to_evict = response[API_RESPONSE_FIELD_DATA_NAME][
+                    API_RESPONSE_FIELD_DATA_KEYS_TO_EVICT_NAME
+                ]
+                key_to_evict = keys_to_evict[LIST_FIRST_IDX]
+
+            # Evict key
+            self.evict_key(key_to_evict)
+
+            # Track eviction event
+            self.metrics_logger.log_eviction(
+                key_to_evict,
+                current_time,
+            )
+
+        # Insert the key
+        self._put_key(key, current_time)
+
+    except (TypeError, AttributeError, HTTPException) as e:
+        msg = &#34;Key insertion/eviction in/from LSTM cache failed&#34;
+        error(
+            msg,
+            extra={
+                &#34;exception&#34;: str(e),
+                &#34;key&#34;: key,
+                &#34;current_time&#34;: current_time,
+                &#34;store_keys&#34;: list(self.store.keys())
+                if hasattr(self.store, &#34;keys&#34;)
+                else None,
+                &#34;expiry_keys&#34;: list(self.expiry.keys())
+                if hasattr(self.expiry, &#34;keys&#34;)
+                else None,
+                &#34;context&#34;: &#34;LSTM cache&#34;,
+            },
+        )
+        raise RuntimeError(msg) from e</code></pre>
+</details>
+<div class="desc"><p>Insert a key in the LSTM cache.</p>
+<p>This function puts a key into the LSTM cache
+along with its expiration time. If the cache is full,
+extracts the last sequence of accesses and uses the
+LSTM policy to decide which key to evict.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt>self ("LSTMCache"): Current class instance.</dt>
+<dt><strong><code>key</code></strong> :&ensp;<code>int</code></dt>
+<dd>Key to insert.</dd>
+<dt><strong><code>current_time</code></strong> :&ensp;<code>float</code></dt>
+<dd>Current time.</dd>
+<dt><strong><code>current_idx</code></strong> :&ensp;<code>int</code></dt>
+<dd>Index of the current request.</dd>
+<dt><strong><code>testing_set</code></strong> :&ensp;<code>pd.DataFrame</code></dt>
+<dd>Testing dataset for sequence extraction.</dd>
+<dt><strong><code>pipeline_config</code></strong> :&ensp;<code>PipelineConfig</code></dt>
+<dd>Configuration object.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>None</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RuntimeError</code></dt>
+<dd>If key insertion/eviction fails:
+* Key is unhashable or cache store/expiry dict
+misconfigured (TypeError, AttributeError).
+* API call fails (HTTPException).</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="src.components.caches.implementations" href="index.html">src.components.caches.implementations</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="src.components.caches.implementations.lstm_cache.LSTMCache" href="#src.components.caches.implementations.lstm_cache.LSTMCache">LSTMCache</a></code></h4>
+<ul class="">
+<li><code><a title="src.components.caches.implementations.lstm_cache.LSTMCache.evict_key" href="#src.components.caches.implementations.lstm_cache.LSTMCache.evict_key">evict_key</a></code></li>
+<li><code><a title="src.components.caches.implementations.lstm_cache.LSTMCache.put" href="#src.components.caches.implementations.lstm_cache.LSTMCache.put">put</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

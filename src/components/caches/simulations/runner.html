@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>src.components.caches.simulations.runner API documentation</title>
+<meta name="description" content="runner.py …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>src.components.caches.simulations.runner</code></h1>
+</header>
+<section id="section-intro">
+<p>runner.py</p>
+<p>Module for running cache simulations with different eviction policies.</p>
+<p>This module provides the <code><a title="src.components.caches.simulations.runner.run_cache_simulation" href="#src.components.caches.simulations.runner.run_cache_simulation">run_cache_simulation()</a></code> function, which
+simulates cache behavior over a testing dataset, tracks hit/miss
+counters, maintains a timeline of hits/misses, and measures
+cache access latencies for analysis.</p>
+<h2 id="functions">Functions</h2>
+<p>run_cache_simulation(
+cache: Any,
+policy: str,
+testing_set: AccessLogsDataset,
+pipeline_config: PipelineConfig
+) -&gt; tuple[dict[str, int], list[dict[str, float]], list[float]]
+Executes the cache simulation for the given cache and policy.</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="src.components.caches.simulations.runner.run_cache_simulation"><code class="name flex">
+<span>def <span class="ident">run_cache_simulation</span></span>(<span>cache: Any,<br>policy: str,<br>testing_set: components.dataset.access_logs_dataset.AccessLogsDataset,<br>pipeline_config: pipeline.config.pydantic.pipeline_config.PipelineConfig) ‑> tuple[dict[str, int], list[dict[str, float]], list[float]]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run_cache_simulation(
+    cache: Any,
+    policy: str,
+    testing_set: AccessLogsDataset,
+    pipeline_config: PipelineConfig,
+) -&gt; tuple[dict[str, int], list[dict[str, float]], list[float]]:
+    &#34;&#34;&#34;Run a full cache simulation for a given cache eviction policy.
+
+    This function runs a cache simulation over the testing dataset, managing
+    requests one by one according to the provided eviction policy (either
+    LSTM-based or baseline). It collects key metrics such as hit/miss counters,
+    timeline evolution, and cache access latencies.
+
+    Args:
+        cache (Any): Cache object implementing the eviction policy.
+        policy (str): Cache eviction policy name.
+        testing_set (AccessLogsDataset): Access logs dataset.
+        pipeline_config (PipelineConfig): Configuration object.
+
+    Returns:
+        tuple[dict[str, int], list[dict[str, float]], list[float]]:
+            - counters: Dictionary containing hit and miss counts.
+            - timeline: List of dictionaries showing the evolution of hits
+                        and misses over time.
+            - cache_latencies: List of cache access latencies in microseconds.
+
+    Raises:
+    RuntimeError: If simulating the cache policy fails:
+        * Accessing the testing set by index fails due to an invalid
+          index or data structure (IndexError, TypeError).
+        * Unpacking the dataset row fails due to unexpected row format or
+          type (ValueError, TypeError).
+        * Extracting features or target from the dataset row fails due to
+          missing or malformed elements (ValueError, TypeError,
+          AttributeError).
+    &#34;&#34;&#34;
+    try:
+        info(
+            &#34;Cache simulation started&#34;,
+            extra={
+                &#34;policy&#34;: policy,
+                &#34;cache_type&#34;: type(cache).__name__ if cache else None,
+                &#34;context&#34;: f&#34;{policy} cache simulation&#34;,
+            },
+        )
+
+        # Initialize data
+        counters = {
+            SIMULATIONS_METRICS_HIT_COUNTER_NAME: 0,
+            SIMULATIONS_METRICS_MISS_COUNTER_NAME: 0,
+        }
+        timeline = []
+        cache_latencies = []
+
+        # Iterate over testing set, assuming each
+        # row represents a request to be satisfied
+        tqdm_bar = tqdm(range(len(testing_set)), desc=f&#34;{policy}&#34;)
+        for idx in tqdm_bar:
+            # Extract the current row from the dataset
+            row = testing_set[idx]
+
+            # Extrapolate current time and requested
+            # key from the current row
+            features, _, target = row
+
+            # Decode time
+            sin_time, cos_time, _, _ = features[LIST_FIRST_IDX]
+            current_time = decode_time_trigonometrically(sin_time, cos_time)
+
+            # Decode key
+            key = target.item()
+
+            # Start timer to keep track of cache latency
+            start_time = time.perf_counter()
+
+            # Check whether the requested key
+            # is into the baseline cache
+            is_hit = check_update_hit_miss(cache, key, current_time, counters)
+
+            # If the requested key is not into the cache
+            if not is_hit:
+                if policy == CACHE_LSTM_NAME:
+                    # Put the requested key into the LSTM cache
+                    cache.put(
+                        key,
+                        current_time,
+                        idx,
+                        testing_set,
+                        pipeline_config,
+                    )
+                else:
+                    # Put the requested key into the baseline cache
+                    cache.put(key, current_time)
+
+            # Stop timer to keep track of cache latency
+            end_time = time.perf_counter()
+
+            # Store cache latency
+            cache_latency = (
+                end_time - start_time
+            ) * TIME_MICROSECONDS_IN_SECOND
+            cache_latencies.append(cache_latency)
+
+            # Update number of hits and misses
+            timeline = update_hit_miss_timeline(idx, counters, timeline)
+
+            # To update bar real-time
+            hit_rate = (
+                counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME]
+                / max(
+                    1,
+                    counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME]
+                    + counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME],
+                )
+            ) * 100
+
+            miss_rate = (
+                counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME]
+                / max(
+                    1,
+                    counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME]
+                    + counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME],
+                )
+            ) * 100
+
+            tqdm_bar.set_postfix(
+                hit_rate=f&#34;{hit_rate:.2f}%&#34;,
+                miss_rate=f&#34;{miss_rate:.2f}%&#34;,
+            )
+
+        info(
+            &#34;Cache simulation completed&#34;,
+            extra={
+                &#34;policy&#34;: policy,
+                &#34;cache_type&#34;: type(cache).__name__ if cache else None,
+                &#34;requests_num&#34;: len(testing_set),
+                &#34;hits_num&#34;: counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME],
+                &#34;misses_num&#34;: counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME],
+                &#34;context&#34;: f&#34;{policy} cache simulation&#34;,
+            },
+        )
+
+        return counters, timeline, cache_latencies
+    except (TypeError, IndexError, ValueError, AttributeError) as e:
+        msg = &#34;Cache simulation failed&#34;
+        error(
+            msg,
+            extra={
+                &#34;exception&#34;: str(e),
+                &#34;policy&#34;: policy,
+                &#34;cache_type&#34;: type(cache).__name__ if cache else None,
+                &#34;context&#34;: f&#34;{policy} cache simulation&#34;,
+            },
+        )
+        raise RuntimeError(msg) from e</code></pre>
+</details>
+<div class="desc"><p>Run a full cache simulation for a given cache eviction policy.</p>
+<p>This function runs a cache simulation over the testing dataset, managing
+requests one by one according to the provided eviction policy (either
+LSTM-based or baseline). It collects key metrics such as hit/miss counters,
+timeline evolution, and cache access latencies.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>cache</code></strong> :&ensp;<code>Any</code></dt>
+<dd>Cache object implementing the eviction policy.</dd>
+<dt><strong><code>policy</code></strong> :&ensp;<code>str</code></dt>
+<dd>Cache eviction policy name.</dd>
+<dt><strong><code>testing_set</code></strong> :&ensp;<code>AccessLogsDataset</code></dt>
+<dd>Access logs dataset.</dd>
+<dt><strong><code>pipeline_config</code></strong> :&ensp;<code>PipelineConfig</code></dt>
+<dd>Configuration object.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>tuple[dict[str, int], list[dict[str, float]], list[float]]:
+- counters: Dictionary containing hit and miss counts.
+- timeline: List of dictionaries showing the evolution of hits
+and misses over time.
+- cache_latencies: List of cache access latencies in microseconds.
+Raises:
+RuntimeError: If simulating the cache policy fails:
+* Accessing the testing set by index fails due to an invalid
+index or data structure (IndexError, TypeError).
+* Unpacking the dataset row fails due to unexpected row format or
+type (ValueError, TypeError).
+* Extracting features or target from the dataset row fails due to
+missing or malformed elements (ValueError, TypeError,
+AttributeError).</p></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="src.components.caches.simulations" href="index.html">src.components.caches.simulations</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="src.components.caches.simulations.runner.run_cache_simulation" href="#src.components.caches.simulations.runner.run_cache_simulation">run_cache_simulation</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>
