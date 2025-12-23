@@ -4,7 +4,7 @@ metadata:
   name: default-deny
   namespace: predictor-service
   annotations:
-    kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod,container-readonly-root-filesystem
+    kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod,container-security-context-readonlyrootfilesystem
 spec:
   podSelector:
     matchLabels:
