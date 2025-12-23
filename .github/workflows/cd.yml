@@ -93,7 +93,7 @@ jobs:
           for file in "${DEPLOYMENTS_APPLIED[@]}"; do
               if ! kubectl rollout status -f "$file" --timeout=$K8S_ROLLOUT_TIMEOUT; then
                   for rollback_file in "${DEPLOYMENTS_APPLIED[@]}"; do
-                      kubectl rollout undo -f "$rollback_file"
+                      kubectl rollout undo -f "$rollback_file" || true
                   done
                   exit 1
               fi
@@ -122,7 +122,7 @@ jobs:
           # Rollback all deployments if any test failed
           if [ $TEST_EXIT_CODE -ne 0 ]; then
             for file in "${DEPLOYMENTS[@]}"; do
-                kubectl rollout undo -f "$file"
+                kubectl rollout undo -f "$file" || true
             done
             exit $TEST_EXIT_CODE
           fi

@@ -58,7 +58,7 @@ spec:
         - configMapRef:
             name: predictor-service-config
         securityContext:
-          readOnlyRootFilesystem: true
+          readOnlyRootFilesystem: false
           runAsUser: 10001
           runAsGroup: 10001
           runAsNonRoot: true
