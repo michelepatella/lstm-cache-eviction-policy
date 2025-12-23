@@ -65,21 +65,19 @@ jobs:
           K8S_OVERLAYS_CI_DIR: ${{ vars.K8S_OVERLAYS_CI_DIR }}
           K8S_RENDERED_FILE: ${{ vars.K8S_RENDERED_FILE }}
           DOCKER_IMAGES: ${{ vars.DOCKER_IMAGES }}
-          ACR_NAME: ${{ secrets.ACR_NAME }}
         run: |
-          # Inject Github SHA to all images
           cd ${K8S_OVERLAYS_CI_DIR}
+
+          # Update image tags dynamically by
+          # adding GitHub SHA
           readarray -t DOCKER_IMAGES_ARRAY <<< "$DOCKER_IMAGES"
-          for svc in "${DOCKER_IMAGES_ARRAY[@]}"; do
-              full_img="${ACR_NAME}.${{ vars.ACR_URL }}/${svc}:${GIT_HUB_SHA}"
-              kustomize edit set image "$svc=$full_img"
+          for img_full in "${DOCKER_IMAGES_ARRAY[@]}"; do
+              kustomize edit set image "$img_full=${img_full}:${GIT_HUB_SHA}"
           done
 
-          # Run Kustomize
-          cd -
-          kustomize build ${K8S_OVERLAYS_CI_DIR} > ${K8S_RENDERED_FILE}
-          echo "rendered_file=${K8S_RENDERED_FILE}" >> $GITHUB_OUTPUT
-          cat ${K8S_RENDERED_FILE} | grep image:
+          # Build
+          kustomize build . > ${K8S_RENDERED_FILE}
+          grep image: ${K8S_RENDERED_FILE}
 
       # Upload setup, rendered k8s manifests as artifact
       - name: Upload rendered k8s manifests
