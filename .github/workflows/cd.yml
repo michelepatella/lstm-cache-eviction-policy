@@ -56,6 +56,7 @@ jobs:
       - name: Download rendered k8s manifests
         uses: actions/download-artifact@v4
         with:
+          run-id: 20461802453
           name: ${{ vars.K8S_RENDERED_ARTIFACTS_NAME }}
           path: ${{ vars.K8S_RENDERED_ARTIFACTS_DIR }}
 
@@ -140,6 +141,7 @@ jobs:
       - name: Download docs
         uses: actions/download-artifact@v4
         with:
+          run-id: 20461802453
           name: ${{ vars.DOCS_ARTIFACTS_NAME }}
           path: ${{ vars.DOCS_OUTPUT_DIR }}
 
