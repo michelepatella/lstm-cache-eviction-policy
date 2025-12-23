@@ -193,7 +193,7 @@ jobs:
       # Scan rendered k8s manifests
       - name: Scan k8s manifests
         run: |
-          checkov -d ${{ needs.setup.outputs.k8s_rendered_file }} \
+          checkov -f ${{ needs.setup.outputs.k8s_rendered_file }} \
             --framework ${{ vars.CHECKOV_FRAMEWORK }}
 
   # ----------------------------------------
