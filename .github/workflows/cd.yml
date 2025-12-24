@@ -83,21 +83,23 @@ jobs:
           # Apply the rendered k8s file
           kubectl apply -f "$K8S_RENDERED_ARTIFACTS_DIR"/"$K8S_RENDERED_FILE"
 
-          # Extract and export the deployment names from the
-          # rendered k8s file
-          DEPLOYMENTS_DATA=$(yq eval-all 'select(.kind == "Deployment") | .metadata.name + ":" + .metadata.namespace' "$K8S_RENDERED_ARTIFACTS_DIR"/"$K8S_RENDERED_FILE" | grep -vE '^null|^--' | sort | uniq | tr '\n' ' ')
-          echo "DEPLOYMENTS_DATA=$DEPLOYMENTS_DATA" >> $GITHUB_ENV
+          # Extract and export the deployment names and
+          # namespaces from the rendered k8s file
+          mapfile -t DEPLOYMENTS < <(yq eval-all '. | select(.kind == "Deployment") | .metadata.name + ":" + .metadata.namespace' "$K8S_RENDERED_ARTIFACTS_DIR/$K8S_RENDERED_FILE" | grep -vE '^null|^--|^$')
+          echo "DEPLOYMENTS_DATA=${DEPLOYMENTS[*]}" >> $GITHUB_ENV
 
           # Check rollout status for all deployments with
           # automatic rollback if one or more rollout failed
-          for item in $DEPLOYMENTS_DATA; do
-            [ -z "$item" ] && continue
+          for item in "${DEPLOYMENTS[@]}"; do
             dep_name="${item%%:*}"
             dep_ns="${item##*:}"
-            if ! kubectl rollout status deployment "$dep_name" -n "$dep_ns" \
-            --timeout=$K8S_ROLLOUT_TIMEOUT; then
-                for r_item in $DEPLOYMENTS_DATA; do
-                    kubectl rollout undo deployment "${r_item%%:*}" -n "${r_item##*:}" || true
+            [ -z "$dep_name" ] && continue
+            [ -z "$dep_ns" ] && continue
+            if ! kubectl rollout status deployment "$dep_name" -n "$dep_ns" --timeout=$K8S_ROLLOUT_TIMEOUT; then
+                for r_item in "${DEPLOYMENTS[@]}"; do
+                    r_name="${r_item%%:*}"
+                    r_ns="${r_item##*:}"
+                    kubectl rollout undo deployment "$r_name" -n "$r_ns" || true
                 done
                 exit 1
             fi
@@ -114,12 +116,12 @@ jobs:
           TEST_EXIT_CODE=$?
 
           # Rollback all deployments if any test failed
+          IFS=' ' read -r -a DEPLOYMENTS_ARRAY <<< "${{ env.DEPLOYMENTS_DATA }}"
           if [ $TEST_EXIT_CODE -ne 0 ]; then
-            for item in ${{ env.DEPLOYMENTS_DATA }}; do
-              [ -z "$item" ] && continue
-              dep_name="${item%%:*}"
-              dep_ns="${item##*:}"
-              kubectl rollout undo deployment "$dep_name" -n "$dep_ns" || true
+            for item in "${DEPLOYMENTS_ARRAY[@]}"; do
+                dep_name="${item%%:*}"
+                dep_ns="${item##*:}"
+                kubectl rollout undo deployment "$dep_name" -n "$dep_ns" || true
             done
             exit $TEST_EXIT_CODE
           fi
