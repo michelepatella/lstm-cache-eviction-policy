@@ -319,7 +319,7 @@ jobs:
           PYTHONPATH=$(pwd)/${{ vars.SRC_DIR }} pdoc --html ${{ vars.SRC_DIR }}/ \
           --output-dir ${{ vars.DOCS_OUTPUT_DIR }} --force
 
-      # Upload documentation generated as artifact
+      # Upload documentation generated as artifacts
       - name: Upload docs
         uses: actions/upload-artifact@v4
         with:
