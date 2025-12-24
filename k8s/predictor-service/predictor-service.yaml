@@ -54,6 +54,15 @@ spec:
         - name: predictor-service-secrets
           mountPath: /etc/secrets
           readOnly: true
+        - name: tmp
+          mountPath: /tmp
+        env:
+          - name: TMPDIR
+            value: /tmp
+          - name: TEMP
+            value: /tmp
+          - name: TMP
+            value: /tmp
         envFrom:
         - configMapRef:
             name: predictor-service-config
@@ -83,6 +92,8 @@ spec:
       - name: predictor-service-secrets
         secret:
           secretName: predictor-service-secrets
+      - name: tmp
+        emptyDir: { }
       imagePullSecrets:
         - name: acr-secret
 ---
