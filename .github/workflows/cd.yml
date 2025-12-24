@@ -85,7 +85,7 @@ jobs:
 
           # Extract and export the deployment names from the
           # rendered k8s file
-          DEPLOYMENTS_DATA=$(yq eval-all 'select(.kind == "Deployment") | .metadata.name + ":" + .metadata.namespace' "$K8S_RENDERED_ARTIFACTS_DIR/$K8S_RENDERED_FILE")
+          DEPLOYMENTS_DATA=$(yq eval-all 'select(.kind == "Deployment") | .metadata.name + ":" + .metadata.namespace' "$K8S_RENDERED_ARTIFACTS_DIR"/"$K8S_RENDERED_FILE" | xargs)
           echo "DEPLOYMENTS_DATA=$DEPLOYMENTS_DATA" >> $GITHUB_ENV
 
           # Check rollout status for all deployments with
@@ -95,10 +95,8 @@ jobs:
               dep_ns="${item##*:}"
               if ! kubectl rollout status deployment "$dep_name" -n "$dep_ns" \
               --timeout=$K8S_ROLLOUT_TIMEOUT; then
-                  for rollback_item in $DEPLOYMENTS_DATA; do
-                      r_name="${rollback_item%%:*}"
-                      r_ns="${rollback_item##*:}"
-                      kubectl rollout undo deployment "$r_name" -n "$r_ns" || true
+                  for r_item in $DEPLOYMENTS_DATA; do
+                      kubectl rollout undo deployment "${r_item%%:*}" -n "${r_item##*:}" || true
                   done
                   exit 1
               fi
@@ -107,8 +105,6 @@ jobs:
       # Test the API with automatic rollback
       # if any error occurred
       - name: Test API
-        env:
-          K8S_RENDERED_ARTIFACTS_DIR: ${{ vars.K8S_RENDERED_ARTIFACTS_DIR }}
         run: |
           export PYTHONPATH=$(pwd):$(pwd)/${{ vars.SRC_DIR }}
 
