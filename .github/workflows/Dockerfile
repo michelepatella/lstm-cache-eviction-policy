@@ -55,6 +55,11 @@ RUN curl -sLo trivy.tar.gz https://github.com/aquasecurity/trivy/releases/downlo
     && mv trivy /usr/local/bin/ \
     && rm trivy.tar.gz
 
+# Install yq
+ENV YQ_VERSION=4.45.1
+RUN wget https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64 -O /usr/local/bin/yq \
+    && chmod +x /usr/local/bin/yq
+
 # Install GitHub Actions Runner
 ENV RUNNER_VERSION=2.321.0
 RUN curl -O -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-arm64-${RUNNER_VERSION}.tar.gz \
