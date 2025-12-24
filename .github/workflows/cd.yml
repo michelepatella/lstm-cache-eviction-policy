@@ -85,15 +85,8 @@ jobs:
 
           # Extract and export the deployment names and
           # namespaces from the rendered k8s file
-          mapfile -t DEPLOYMENTS < <(yq eval-all '. | select(.kind == "Deployment") | .metadata.name + ":" + .metadata.namespace' "$K8S_RENDERED_ARTIFACTS_DIR/$K8S_RENDERED_FILE" | grep -vE '^null|^--|^$')
+          mapfile -t DEPLOYMENTS < <(yq eval-all 'select(.kind == "Deployment") | ( .metadata.name + ":" + .metadata.namespace )' "$K8S_RENDERED_ARTIFACTS_DIR/$K8S_RENDERED_FILE" | grep -vE '^null|^--|^$' | sort | uniq)
           echo "DEPLOYMENTS_DATA=${DEPLOYMENTS[*]}" >> $GITHUB_ENV
-
-          # Debug
-          echo "Number of elements in the array: ${#DEPLOYMENTS[@]}"
-          for i in "${!DEPLOYMENTS[@]}"; do
-            echo "Element [$i]: >${DEPLOYMENTS[$i]}<"
-          done
-          echo "String for GITHUB_ENV: >${DEPLOYMENTS[*]}<"
 
           # Check rollout status for all deployments with
           # automatic rollback if one or more rollout failed
