@@ -85,7 +85,7 @@ jobs:
 
           # Extract and export the deployment names and
           # namespaces from the rendered k8s file
-          mapfile -t DEPLOYMENTS < <(yq eval-all 'select(.kind == "Deployment") | [ .metadata.name, .metadata.namespace ] | join(":")' "$K8S_RENDERED_ARTIFACTS_DIR/$K8S_RENDERED_FILE" | grep -vE '^null|^--|^$' | sort | uniq)
+          mapfile -t DEPLOYMENTS < <(yq eval-all '. | select(.kind == "Deployment") | .metadata.name + ":" + .metadata.namespace' "$K8S_RENDERED_ARTIFACTS_DIR/$K8S_RENDERED_FILE" | grep -vE '^null|^--|^$' | sort | uniq)
           echo "DEPLOYMENTS_DATA=${DEPLOYMENTS[*]}" >> $GITHUB_ENV
 
           echo "################################################"
