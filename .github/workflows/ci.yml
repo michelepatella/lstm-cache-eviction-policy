@@ -112,7 +112,7 @@ jobs:
       # against a predefined failure threshold
       - name: Lint Dockerfiles
         run: |
-          hadolint $(find . -name ${{ vars.DOCKERFILE_NAME }}) \
+          hadolint $(find ${{ vars.CODE_DIR }} -name ${{ vars.DOCKERFILE_NAME }}) \
             --failure-threshold "${{ vars.HADOLINT_FAILURE_THRESHOLD }}"
 
       # Check code files changed
@@ -214,37 +214,37 @@ jobs:
           dvc remote modify origin endpointurl ${{ vars.DVC_REMOTE_URL }}
 
           # Login
-  #        dvc remote modify origin --local access_key_id ${{ secrets.DAGS_HUB_TOKEN }}
-  #        dvc remote modify origin --local secret_access_key ""
+          dvc remote modify origin --local access_key_id ${{ secrets.DAGS_HUB_TOKEN }}
+          dvc remote modify origin --local secret_access_key ""
 
           # Pull
-  #        dvc pull
+          dvc pull
 
       # Test code
-  #    - name: Test code
-  #      run: |
-  #        export PYTHONPATH=$(pwd):$(pwd)/${{ vars.SRC_DIR }}
-  #        pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.CODE_TESTS_DIR }}
+      - name: Test code
+        run: |
+          export PYTHONPATH=$(pwd):$(pwd)/${{ vars.SRC_DIR }}
+          pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.CODE_TESTS_DIR }}
 
       # Test data
-  #    - name: Test data
-  #      run: |
-  #        export PYTHONPATH=$(pwd):$(pwd)/${{ vars.SRC_DIR }}
-  #        pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.DATA_TESTS_DIR }}
+      - name: Test data
+        run: |
+          export PYTHONPATH=$(pwd):$(pwd)/${{ vars.SRC_DIR }}
+          pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.DATA_TESTS_DIR }}
 
       # Test model
-  #    - name: Test model
-  #      run: |
-  #        export PYTHONPATH=$(pwd):$(pwd)/${{ vars.SRC_DIR }}
-  #        pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.MODEL_TESTS_DIR }}
+      - name: Test model
+        run: |
+          export PYTHONPATH=$(pwd):$(pwd)/${{ vars.SRC_DIR }}
+          pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.MODEL_TESTS_DIR }}
 
       # Upload test reports as artifact
-  #    - name: Upload test reports
-  #      if: always()
-  #      uses: actions/upload-artifact@v4
-  #      with:
-  #        name: ${{ vars.TEST_REPORT_ARTIFACTS_NAME }}
-  #        path: ${{ vars.TEST_REPORTS_DIR }}
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ vars.TEST_REPORT_ARTIFACTS_NAME }}
+          path: ${{ vars.TEST_REPORTS_DIR }}
 
   # ----------------------------------------
   # Build (needs all the previous jobs)

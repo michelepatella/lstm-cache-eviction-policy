@@ -3,12 +3,6 @@
 # and safely delivered to production
 name: Continuous Delivery (CD)
 
-# Kill the current workflow if a
-# new one is triggered
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 # Run the workflow only after successful
 # CI run on main
 on:
@@ -97,20 +91,6 @@ jobs:
           )
           echo "DEPLOYMENTS_DATA=${DEPLOYMENTS[*]}" >> $GITHUB_ENV
 
-          echo "################################################"
-          echo "DEBUG"
-          echo "Tot. elements: ${#DEPLOYMENTS[@]}"
-          echo "------------------------------------------------"
-
-          for i in "${!DEPLOYMENTS[@]}"; do
-            printf "Element [%d]: >>>%s<<<\n" "$i" "${DEPLOYMENTS[$i]}"
-          done
-
-          echo "------------------------------------------------"
-          echo "GITHUB_ENV:"
-          echo ">>>${DEPLOYMENTS[*]}<<<"
-          echo "################################################"
-
           # Check rollout status for all deployments with
           # automatic rollback if one or more rollout failed
           for item in "${DEPLOYMENTS[@]}"; do
@@ -118,7 +98,8 @@ jobs:
             dep_ns="${item##*:}"
             [ -z "$dep_name" ] && continue
             [ -z "$dep_ns" ] && continue
-            if ! kubectl rollout status deployment "$dep_name" -n "$dep_ns" --timeout=$K8S_ROLLOUT_TIMEOUT; then
+            if ! kubectl rollout status deployment "$dep_name" -n "$dep_ns" \
+            --timeout=$K8S_ROLLOUT_TIMEOUT; then
                 for r_item in "${DEPLOYMENTS[@]}"; do
                     r_name="${r_item%%:*}"
                     r_ns="${r_item##*:}"
@@ -154,7 +135,7 @@ jobs:
   # -----------------------------
   deploy_docs:
     runs-on: self-hosted
-    needs: setup
+    needs: [setup, deploy_api]
     steps:
       # Download documentation generated
       # during CI
