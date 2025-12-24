@@ -1,0 +1,4 @@
+resources:
+  - api-gateway.yaml
+  - api-gateway-config.yaml
+  - api-gateway-networkpolicy.yaml

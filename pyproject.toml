@@ -1,7 +1,3 @@
-[tool.mypy]
-ignore_missing_imports = true
-disable_error_code = ["import-untyped"]
-
 [tool.ruff]
 line-length = 79
 
@@ -26,7 +22,6 @@ markers = [
     "model_behavioral_directional: Model Behavioral Directional Tests",
     "model_behavioral_directional_local_feature_perturbations: Model Behavioral Directional Local Feature Perturbations Tests",
     "model_behavioral_minimum_functionality: Model Behavioral Minimum Functionality Tests",
-    "model_behavioral_minimum_functionality_on_sequence: Model Behavioral Minimum Functionality On Sequence Tests",
     "model_inference: Model Inference Tests",
     "model_inference_avg_latency: Model Inference Avg Latency Test",
     "model_inference_throughput: Model Inference Throughput Test",
@@ -37,5 +32,10 @@ markers = [
     "model_training_optimization_stability: Model Training Optimization Stability Test",
     "model_training_output_integrity: Model Training Output Integrity Test",
     "model_training_portability: Model Training Portability Tests",
-    "slow: Slow Tests"
+    "slow: Slow Tests",
+    "data_processing: Tests to run during data processing in the pipeline",
+    "data_exploration: Tests to run during data exploration in the pipeline",
+    "validation: Tests to run during validation in the pipeline",
+    "training: Tests to run during training in the pipeline",
+    "testing: Tests to run during testing in the pipeline",
 ]

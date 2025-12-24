@@ -50,8 +50,11 @@ from const import (
     DAGS_HUB_REPO_NAME,
     DAGS_HUB_REPO_OWNER,
     DATA_REAL_MODE,
+    DATASET_TRAINING_SPLIT_TYPE,
+    LOGS_LOGGER_NAME,
     MLFLOW_MODEL_PRODUCTION_NAME,
     MLFLOW_MODEL_SIMULATION_NAME,
+    MLFLOW_NESTED,
 )
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
@@ -60,11 +63,6 @@ from pipeline.const import (
     LOGS_PHASE_TRAINING,
     MLFLOW_ARTIFACT_PATH,
     MLFLOW_MODEL_TAG_DATA_MODE,
-)
-from src.const import (
-    DATASET_TRAINING_SPLIT_TYPE,
-    LOGS_LOGGER_NAME,
-    MLFLOW_NESTED,
 )
 
 

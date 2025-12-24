@@ -1,0 +1,5 @@
+outs:
+- md5: 672f5cb315c476bf6e14f8bb92270f24
+  size: 918048
+  hash: md5
+  path: trained_real_model.pt

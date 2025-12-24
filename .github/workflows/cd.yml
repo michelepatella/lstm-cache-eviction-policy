@@ -1,0 +1,156 @@
+# Continuous Delivery (CD): Manage reliable deployment of
+# the API and documentation, ensuring that changes are quickly
+# and safely delivered to production
+name: Continuous Delivery (CD)
+
+# Run the workflow only after successful
+# CI run on main
+on:
+  workflow_run:
+    workflows: ["Continuous Integration (CI)"]
+    types: [completed]
+    branches: [main]
+
+# The workflow is organized into three jobs:
+# - Setup:
+#     Checkout the repository on the current branch.
+# - Deploy API (needs 'Setup'):
+#     Deploy the API to k8s on Azure and test it (automatic
+#     rollback if any of these two steps failed).
+# - Deploy docs (needs 'Setup'):
+#     Deploy documentation to GitHub Pages.
+jobs:
+
+  # -----------------------------
+  # Setup
+  # -----------------------------
+  setup:
+    runs-on: self-hosted
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      # Checkout the repository on
+      # the current branch
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+
+  # -----------------------------
+  # Deploy API (needs 'Setup')
+  # -----------------------------
+  deploy_api:
+    runs-on: self-hosted
+    needs: setup
+    steps:
+      # Download the rendered k8s manifests
+      # produced during CI
+      - name: Download rendered k8s manifests
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ vars.K8S_RENDERED_ARTIFACTS_NAME }}
+          path: ${{ vars.K8S_RENDERED_ARTIFACTS_DIR }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GIT_HUB_TOKEN }}
+
+      # Login to Azure which hosts the API
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Set the AKS context where the
+      # API is deployed
+      - name: Set AKS context
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          cluster-name: ${{ secrets.AKS_CLUSTER_NAME }}
+
+      # Deploy the API to k8s with automatic
+      # rollback if any error occurred
+      - name: Deploy API to k8s
+        env:
+          K8S_ROLLOUT_TIMEOUT: ${{ vars.K8S_ROLLOUT_TIMEOUT }}
+          K8S_RENDERED_ARTIFACTS_DIR: ${{ vars.K8S_RENDERED_ARTIFACTS_DIR }}
+          K8S_RENDERED_FILE: ${{ vars.K8S_RENDERED_FILE }}
+        run: |
+          # Apply the rendered k8s file
+          kubectl apply -f "$K8S_RENDERED_ARTIFACTS_DIR"/"$K8S_RENDERED_FILE"
+
+          # Extract and export the deployment names and
+          # namespaces from the rendered k8s file
+          mapfile -t DEPLOYMENTS < <(
+            yq eval '
+              select(.kind == "Deployment")
+              | [ .metadata.name, .metadata.namespace ]
+              | join(":")
+            ' "$K8S_RENDERED_ARTIFACTS_DIR/$K8S_RENDERED_FILE" \
+            | grep -vE '^null|^--|^$' \
+            | sort -u \
+            | tr ' ' '\n'
+          )
+          echo "DEPLOYMENTS_DATA=${DEPLOYMENTS[*]}" >> $GITHUB_ENV
+
+          # Check rollout status for all deployments with
+          # automatic rollback if one or more rollout failed
+          for item in "${DEPLOYMENTS[@]}"; do
+            dep_name="${item%%:*}"
+            dep_ns="${item##*:}"
+            [ -z "$dep_name" ] && continue
+            [ -z "$dep_ns" ] && continue
+            if ! kubectl rollout status deployment "$dep_name" -n "$dep_ns" \
+            --timeout=$K8S_ROLLOUT_TIMEOUT; then
+                for r_item in "${DEPLOYMENTS[@]}"; do
+                    r_name="${r_item%%:*}"
+                    r_ns="${r_item##*:}"
+                    kubectl rollout undo deployment "$r_name" -n "$r_ns" || true
+                done
+                exit 1
+            fi
+          done
+
+      # Test the API with automatic rollback
+      # if any error occurred
+      - name: Test API
+        run: |
+          export PYTHONPATH=$(pwd):$(pwd)/${{ vars.SRC_DIR }}
+
+          # Run tests and capture exit code
+          pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.API_TESTS_DIR }}
+          TEST_EXIT_CODE=$?
+
+          # Rollback all deployments if any test failed
+          IFS=' ' read -r -a DEPLOYMENTS_ARRAY <<< "${{ env.DEPLOYMENTS_DATA }}"
+          if [ $TEST_EXIT_CODE -ne 0 ]; then
+            for item in "${DEPLOYMENTS_ARRAY[@]}"; do
+                dep_name="${item%%:*}"
+                dep_ns="${item##*:}"
+                kubectl rollout undo deployment "$dep_name" -n "$dep_ns" || true
+            done
+            exit $TEST_EXIT_CODE
+          fi
+
+  # -----------------------------
+  # Deploy docs (needs 'Setup')
+  # -----------------------------
+  deploy_docs:
+    runs-on: self-hosted
+    needs: [setup, deploy_api]
+    steps:
+      # Download documentation generated
+      # during CI
+      - name: Download docs
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ vars.DOCS_ARTIFACTS_NAME }}
+          path: ${{ vars.DOCS_OUTPUT_DIR }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GIT_HUB_TOKEN }}
+
+      # Deploy documentation to GitHub Pages
+      - name: Deploy docs to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GIT_HUB_TOKEN }}
+          publish_dir: ${{ vars.DOCS_OUTPUT_DIR }}/${{ vars.SRC_DIR }}
+          publish_branch: ${{ vars.DOCS_PUBLISH_BRANCH }}

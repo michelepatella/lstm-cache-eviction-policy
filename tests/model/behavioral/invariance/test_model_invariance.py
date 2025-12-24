@@ -16,6 +16,7 @@ import pytest
 
 from components.const import DATASET_PROCESSED_FEATURE_COLUMNS
 from tests.model.behavioral.invariance.helpers import (
+    model_invariance_tests_setup,  # noqa
     test_model_invariance_feature_perturbation,
     test_model_invariance_identity_preservation,
 )
@@ -23,6 +24,7 @@ from tests.model.helpers import initialize_inference_environment
 
 
 @pytest.mark.model_behavioral_invariance
+@pytest.mark.training
 def test_model_invariance() -> None:
     """Runs the behavioral invariance test suite on the trained model.
 

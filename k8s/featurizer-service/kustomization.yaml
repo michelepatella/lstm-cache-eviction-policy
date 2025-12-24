@@ -1,0 +1,4 @@
+resources:
+  - featurizer-service.yaml
+  - featurizer-service-config.yaml
+  - featurizer-service-networkpolicy.yaml

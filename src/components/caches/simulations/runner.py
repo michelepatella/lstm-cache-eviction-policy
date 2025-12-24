@@ -35,12 +35,12 @@ from components.logs.levels.info_logger import info
 from components.time.transforms.trig_decoder import (
     decode_time_trigonometrically,
 )
-from pipeline.config.pydantic.pipeline_config import PipelineConfig
-from src.const import (
+from const import (
     CACHE_LSTM_NAME,
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
 )
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
 def run_cache_simulation(
@@ -150,29 +150,27 @@ def run_cache_simulation(
             timeline = update_hit_miss_timeline(idx, counters, timeline)
 
             # To update bar real-time
+            hit_rate = (
+                counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME]
+                / max(
+                    1,
+                    counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME]
+                    + counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME],
+                )
+            ) * 100
+
+            miss_rate = (
+                counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME]
+                / max(
+                    1,
+                    counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME]
+                    + counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME],
+                )
+            ) * 100
+
             tqdm_bar.set_postfix(
-                hit_rate=f"{
-                    (
-                        counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME]
-                        / max(
-                            1,
-                            counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME]
-                            + counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME],
-                        )
-                    )
-                    * 100
-                }%",
-                miss_rate=f"{
-                    (
-                        counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME]
-                        / max(
-                            1,
-                            counters[SIMULATIONS_METRICS_HIT_COUNTER_NAME]
-                            + counters[SIMULATIONS_METRICS_MISS_COUNTER_NAME],
-                        )
-                    )
-                    * 100
-                }%",
+                hit_rate=f"{hit_rate:.2f}%",
+                miss_rate=f"{miss_rate:.2f}%",
             )
 
         info(

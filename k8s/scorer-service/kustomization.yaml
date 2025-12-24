@@ -1,0 +1,4 @@
+resources:
+  - scorer-service.yaml
+  - scorer-service-config.yaml
+  - scorer-service-networkpolicy.yaml

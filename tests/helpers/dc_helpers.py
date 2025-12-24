@@ -67,14 +67,14 @@ from components.dataset.splits.training_validation_splitter import (
 )
 from components.evaluation.model.evaluator import evaluate_model
 from components.model.best.initializer import initialize_best_model
-from pipeline.config.configurator import prepare_pipeline_config
-from pipeline.config.pydantic.pipeline_config import PipelineConfig
-from pipeline.const import DATASET_PROCESSED_TYPE
-from src.const import (
+from const import (
     DATASET_COLUMN_REQUEST_NAME,
     DATASET_TESTING_SPLIT_TYPE,
     DATASET_TRAINING_SPLIT_TYPE,
 )
+from pipeline.config.configurator import prepare_pipeline_config
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
+from pipeline.const import DATASET_PROCESSED_TYPE
 from tests.config.configurator import prepare_tests_config
 from tests.config.pydantic.tests_config import TestsConfig
 from tests.const import (
@@ -409,11 +409,14 @@ def run_dc_suite(
         y_proba_test=y_proba_test,
     )
 
-    # Save the results
-    if Path(results_save_path).exists():
-        Path(results_save_path).unlink()
+    # Save the results (create the
+    # directory if it does not exist yet)
+    results_path = Path(results_save_path)
+    results_path.parent.mkdir(parents=True, exist_ok=True)
+    if results_path.exists():
+        results_path.unlink()
     result.save_as_html(
-        results_save_path,
+        str(results_path),
         as_widget=html_as_widget,
         requirejs=html_requirejs,
     )

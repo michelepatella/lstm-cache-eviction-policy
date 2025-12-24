@@ -20,8 +20,8 @@ from deepchecks.tabular.checks import (
     PercentOfNulls,
 )
 
+from const import DATA_DYNAMIC_MODE, DATA_STATIC_MODE, DATASET_RAW_TYPE
 from pipeline.config.configurator import prepare_pipeline_config
-from src.const import DATA_DYNAMIC_MODE, DATA_STATIC_MODE, DATASET_RAW_TYPE
 from tests.const import (
     DATA_INTEGRITY_TESTS_RAW_DATA_SUITE_NAME,
     DATA_INTEGRITY_TESTS_RAW_DYNAMIC_DATA_RESULTS_SAVE_PATH,
@@ -35,6 +35,7 @@ from tests.helpers.dc_helpers import run_dc_suite
 
 
 @pytest.mark.data_integrity_raw
+@pytest.mark.after_data_exploration
 def test_raw_data_integrity() -> None:
     """Runs the Deepchecks test suite against the raw data.
 

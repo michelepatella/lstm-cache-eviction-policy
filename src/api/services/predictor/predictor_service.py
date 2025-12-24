@@ -54,12 +54,14 @@ model_versions = mlflow_client.search_model_versions(
     f"name='{MLFLOW_MODEL_PRODUCTION_NAME}'",
 )
 last_model_version = max(
-    [v for v in model_versions],
+    (v for v in model_versions),
     key=lambda v: int(v.version),
+    default=None,
 )
-model = mlflow.pytorch.load_model(
-    model_uri=f"models:/{MLFLOW_MODEL_PRODUCTION_NAME}/{last_model_version.version}",
-)
+if last_model_version is not None:
+    model = mlflow.pytorch.load_model(
+        model_uri=f"models:/{MLFLOW_MODEL_PRODUCTION_NAME}/{last_model_version.version}",
+    )
 
 
 class PredictorService(pb2_grpc.PredictorServiceServicer):

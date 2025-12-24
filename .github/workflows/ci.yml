@@ -1,0 +1,327 @@
+# Continuous Integration (CI): Automate static analysis, security scans,
+# testing, and build, ensuring that every change is validated, vulnerabilities
+# are detected early, code quality is maintained, and reproducible artifacts
+# are produced for reliable deployment in the Continuous Delivery (CD) pipeline
+name: Continuous Integration (CI)
+
+# Kill the current workflow if a
+# new one is triggered
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Run the workflow on every push or PR to main
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# The workflow is organized into five jobs:
+# - Setup:
+#     Checkout the repository on the current branch, login to
+#     Azure, and set up rendered k8s manifests.
+# - Static analysis (needs 'Setup'):
+#     Linting and checking activities over code, notebooks,
+#     Dockerfiles, and k8s manifests.
+# - Security scan (needs 'Setup'):
+#     Scan code, dependencies, Dockerfiles, and k8s manifests
+#     to find vulnerabilities.
+# - Testing (needs 'Setup'):
+#     Test code, data, and model.
+# - Build (needs all the previous jobs):
+#     Build and push Docker images to Docker Hub, GitHub Container
+#     Registry, and Azure Container Registry, and generate documentation.
+jobs:
+
+  # ----------------------------------------
+  # Setup
+  # ----------------------------------------
+  setup:
+    runs-on: self-hosted
+    outputs:
+      k8s_rendered_file: ${{ steps.k8s.outputs.rendered_file }}
+    steps:
+      # Checkout the repository on
+      # the current branch
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+
+      # Login to Azure which hosts images
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Set up k8s manifests by injecting GitHub SHA
+      # to all images via Kustomize, producing rendered
+      # k8s manifests
+      - name: Set up k8s manifests
+        id: k8s
+        env:
+          GIT_HUB_SHA: ${{ github.sha }}
+          K8S_OVERLAYS_CI_DIR: ${{ vars.K8S_OVERLAYS_CI_DIR }}
+          K8S_RENDERED_FILE: ${{ vars.K8S_RENDERED_FILE }}
+          DOCKER_IMAGES: ${{ vars.DOCKER_IMAGES }}
+          ACR_NAME: ${{ secrets.ACR_NAME }}
+          ACR_URL: ${{ vars.ACR_URL }}
+        run: |
+          cd ${K8S_OVERLAYS_CI_DIR}
+
+          # Update image tags dynamically by adding GitHub SHA
+          for svc in $DOCKER_IMAGES; do
+              full_img="${ACR_NAME}.${ACR_URL}/$svc:${GIT_HUB_SHA}"
+              kustomize edit set image "${ACR_NAME}.${ACR_URL}/$svc=$full_img"
+          done
+
+          # Build rendered k8s manifests
+          cd -
+          kustomize build ${K8S_OVERLAYS_CI_DIR} > ${K8S_RENDERED_FILE}
+          echo "rendered_file=${K8S_RENDERED_FILE}" >> $GITHUB_OUTPUT
+
+      # Upload setup, rendered k8s manifests as artifact
+      - name: Upload rendered k8s manifests
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ vars.K8S_RENDERED_ARTIFACTS_NAME }}
+          path: ${{ vars.K8S_RENDERED_FILE }}
+
+  # ----------------------------------------
+  # Static Analysis (needs 'Setup')
+  # ----------------------------------------
+  static_analysis:
+    runs-on: self-hosted
+    needs: setup
+    steps:
+      # Lint code producing an overall score
+      # to check against a predefined threshold
+      - name: Lint code
+        run: pylint ${{ vars.SRC_DIR }} --fail-under=${{ vars.PYLINT_MIN_SCORE }}
+
+      # Lint notebooks
+      - name: Lint notebooks
+        run: |
+          files=$(find "${{ vars.NOTEBOOKS_DIR }}" -name '*.ipynb')
+          if [ -n "$files" ]; then
+            pynblint $files
+          fi
+
+      # Lint Docker files checking results
+      # against a predefined failure threshold
+      - name: Lint Dockerfiles
+        run: |
+          hadolint $(find ${{ vars.CODE_DIR }} -name ${{ vars.DOCKERFILE_NAME }}) \
+            --failure-threshold "${{ vars.HADOLINT_FAILURE_THRESHOLD }}"
+
+      # Check code files changed
+      - name: Check code
+        run: ruff check ${{ vars.CODE_DIR }} --diff
+
+      # Check rendered k8s manifests
+      - name: Check k8s manifests
+        run: |
+          kube-score score ${{ needs.setup.outputs.k8s_rendered_file }}
+
+
+  # ----------------------------------------
+  # Security Scan (needs 'Setup')
+  # ----------------------------------------
+  security_scan:
+    runs-on: self-hosted
+    needs: setup
+    steps:
+      # Scan code to find vulnerabilities
+      # with a level higher than or equal to
+      # a predefined threshold
+      - name: Scan code
+        run: bandit -r ${{ vars.SRC_DIR }} --severity-level ${{ vars.BANDIT_SEVERITY }}
+
+      # Scan dependencies to find vulnerabilities
+      - name: Scan dependencies
+        env:
+          PIP_AUDIT_IGNORE_VULNS: ${{ vars.PIP_AUDIT_IGNORE_VULNS }}
+        run: |
+          IGNORE_ARGS=""
+          for v in $PIP_AUDIT_IGNORE_VULNS; do
+            IGNORE_ARGS="$IGNORE_ARGS --ignore-vuln $v"
+          done
+          pip-audit $IGNORE_ARGS
+
+      # Scan Docker images to find vulnerabilities
+      # with a level higher than or equal to
+      # a predefined threshold
+      - name: Scan Docker images
+        env:
+          ACR_NAME: ${{ secrets.ACR_NAME }}
+          GIT_HUB_SHA: ${{ github.sha }}
+          TRIVY_IGNORE_VULNS: ${{ vars.TRIVY_IGNORE_VULNS }}
+          GATEWAY_API_PORT: ${{ vars.GATEWAY_API_PORT }}
+          DECIDER_SERVICE_PORT: ${{ vars.DECIDER_SERVICE_PORT }}
+          DECIDER_SERVICE_CHANNEL: ${{ vars.DECIDER_SERVICE_CHANNEL }}
+          FEATURIZER_SERVICE_PORT: ${{ vars.FEATURIZER_SERVICE_PORT }}
+          FEATURIZER_SERVICE_CHANNEL: ${{ vars.FEATURIZER_SERVICE_CHANNEL }}
+          PREDICTOR_SERVICE_PORT: ${{ vars.PREDICTOR_SERVICE_PORT }}
+          PREDICTOR_SERVICE_CHANNEL: ${{ vars.PREDICTOR_SERVICE_CHANNEL }}
+          SCORER_SERVICE_PORT: ${{ vars.SCORER_SERVICE_PORT }}
+          SCORER_SERVICE_CHANNEL: ${{ vars.SCORER_SERVICE_CHANNEL }}
+          GRAFANA_LOKI_URL: ${{ vars.GRAFANA_LOKI_URL }}
+          GRAFANA_LOKI_USER_ID: ${{ vars.GRAFANA_LOKI_USER_ID }}
+          GRAFANA_LOKI_TOKEN: ${{ vars.GRAFANA_LOKI_TOKEN }}
+          MLFLOW_TRACKING_URI: ${{ vars.MLFLOW_TRACKING_URI }}
+          DAGS_HUB_REPO_OWNER: ${{ vars.DAGS_HUB_REPO_OWNER }}
+          DAGS_HUB_TOKEN: ${{ vars.DAGS_HUB_TOKEN }}
+        run: |
+          # Convert TRIVY_IGNORE_VULNS into a temporary .trivyignore file
+          IFS=',' read -ra IGNORE_ARRAY <<< "$TRIVY_IGNORE_VULNS"
+          > ${{ vars.TRIVY_IGNORE_FILE }}
+          for cve in "${IGNORE_ARRAY[@]}"; do
+            echo "$cve" >> ${{ vars.TRIVY_IGNORE_FILE }}
+          done
+
+          # Build and scan all the images
+          for img_name in ${{ vars.DOCKER_SERVICES }}; do
+            img_name_normalized=$(echo "$img_name" | tr '_' '-')
+            full_img="${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}/$img_name_normalized:${{ github.sha }}"
+            docker compose build "$img_name"
+            trivy image \
+              --exit-code ${{ vars.TRIVY_EXIT_CODE }} \
+              --severity ${{ vars.TRIVY_SEVERITY }} \
+              --ignorefile ${{ vars.TRIVY_IGNORE_FILE }} \
+              "$full_img"
+          done
+
+      # Scan rendered k8s manifests
+      - name: Scan k8s manifests
+        run: |
+          checkov -f ${{ needs.setup.outputs.k8s_rendered_file }} \
+            --framework ${{ vars.CHECKOV_FRAMEWORK }} \
+            --skip-check ${{ vars.CHECKOV_SKIP_CHECK }}
+
+  # ----------------------------------------
+  # Testing (needs 'Setup')
+  # ----------------------------------------
+  testing:
+    runs-on: self-hosted
+    needs: setup
+    steps:
+      # Pull data and model (artifacts) to be tested
+      # from DVC remote
+      - name: Pull artifacts from DVC remote
+        run: |
+          # Configure DVC remote
+          dvc remote modify origin endpointurl ${{ vars.DVC_REMOTE_URL }}
+
+          # Login
+          dvc remote modify origin --local access_key_id ${{ secrets.DAGS_HUB_TOKEN }}
+          dvc remote modify origin --local secret_access_key ""
+
+          # Pull
+          dvc pull
+
+      # Test code
+      - name: Test code
+        run: |
+          export PYTHONPATH=$(pwd):$(pwd)/${{ vars.SRC_DIR }}
+          pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.CODE_TESTS_DIR }}
+
+      # Test data
+      - name: Test data
+        run: |
+          export PYTHONPATH=$(pwd):$(pwd)/${{ vars.SRC_DIR }}
+          pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.DATA_TESTS_DIR }}
+
+      # Test model
+      - name: Test model
+        run: |
+          export PYTHONPATH=$(pwd):$(pwd)/${{ vars.SRC_DIR }}
+          pytest -v -m "${{ vars.PYTEST_MARKER }}" ${{ vars.MODEL_TESTS_DIR }}
+
+      # Upload test reports as artifact
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ vars.TEST_REPORT_ARTIFACTS_NAME }}
+          path: ${{ vars.TEST_REPORTS_DIR }}
+
+  # ----------------------------------------
+  # Build (needs all the previous jobs)
+  # ----------------------------------------
+  build:
+    runs-on: self-hosted
+    needs: [setup, static_analysis, security_scan, testing]
+    steps:
+      # Login to all registries storing the containers
+      - name: Login to Azure Container Registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.GIT_HUB_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GIT_HUB_TOKEN }}
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKER_HUB_USER }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      # Build and push all Docker images to Docker Hub,
+      # GitHub Container Registry, and Azure Container Registry
+      - name: Build and push Docker images
+        env:
+          GIT_HUB_SHA: ${{ github.sha }}
+          GIT_HUB_REGISTRY: ${{ vars.GIT_HUB_REGISTRY }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          DOCKER_HUB_USER: ${{ vars.DOCKER_HUB_USER }}
+          DOCKER_HUB_REPO: ${{ vars.DOCKER_HUB_REPO }}
+        run: |
+          # Push all the images
+          for svc in ${{ vars.DOCKER_SERVICES }}; do
+            # Prepare image to push
+            img_name=$(echo "$svc" | tr '_' '-')
+            local_img="${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}/$img_name:${GIT_HUB_SHA}"
+
+            # Tag image for Docker Hub
+            docker tag "$local_img" "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
+
+            # Tag image for GitHub Container Registry
+            ghcr_img="${GIT_HUB_REGISTRY}/${GITHUB_REPOSITORY}/$img_name"
+            docker tag "$local_img" "$ghcr_img:${GIT_HUB_SHA}"
+            docker tag "$local_img" "$ghcr_img:latest"
+
+            # Tag image for Azure Container Registry
+            acr_img="${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}/$img_name:${GIT_HUB_SHA}"
+            docker tag "$local_img" "$acr_img"
+
+            # Push image to all registries
+            docker push "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
+            docker push "$ghcr_img:${GIT_HUB_SHA}"
+            docker push "$ghcr_img:latest"
+            docker push "$acr_img"
+
+            # Clean up local image
+            docker rmi -f "$local_img" "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name" \
+              "$ghcr_img:${GIT_HUB_SHA}" "$ghcr_img:latest" "$acr_img" || true
+          done
+
+      # Generate documentation
+      - name: Build docs
+        run: |
+          PYTHONPATH=$(pwd)/${{ vars.SRC_DIR }} pdoc --html ${{ vars.SRC_DIR }}/ \
+          --output-dir ${{ vars.DOCS_OUTPUT_DIR }} --force
+
+      # Upload documentation generated as artifact
+      - name: Upload docs
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ vars.DOCS_ARTIFACTS_NAME }}
+          path: ${{ vars.DOCS_OUTPUT_DIR }}

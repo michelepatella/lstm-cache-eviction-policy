@@ -4,8 +4,6 @@ __pycache__/
 *.so
 *.db
 reports/
-models/
-data/
 .Python
 .env/
 venv/

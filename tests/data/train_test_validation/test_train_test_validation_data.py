@@ -24,7 +24,7 @@ from deepchecks.tabular.checks import (
     MultivariateDrift,
 )
 
-from src.const import DATA_DYNAMIC_MODE, DATA_STATIC_MODE
+from const import DATA_DYNAMIC_MODE, DATA_STATIC_MODE
 from tests.const import (
     DATA_TRAIN_TEST_TESTS_DYNAMIC_DATA_RESULTS_SAVE_PATH,
     DATA_TRAIN_TEST_TESTS_REAL_DATA_RESULTS_SAVE_PATH,
@@ -40,6 +40,7 @@ from tests.helpers.dc_helpers import initialize_dc_tests, run_dc_suite
 
 
 @pytest.mark.data_train_test_validation
+@pytest.mark.validation
 def test_train_test_validation_data() -> None:
     """Runs the Deepchecks test suite comparing training vs.
     validation and training vs. testing sets.

@@ -59,7 +59,7 @@ from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.yaml.io.loader import load_yaml
-from src.const import (
+from const import (
     API_RESPONSE_FIELD_DATA_KEYS_TO_EVICT_NAME,
     API_RESPONSE_FIELD_DATA_NAME,
     GATEWAY_API_ENDPOINT,

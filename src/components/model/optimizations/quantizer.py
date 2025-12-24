@@ -27,7 +27,7 @@ from components.device.mover import move_to_device
 from components.device.selector import select_device
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from src.const import RESOURCES_DEVICE_CPU_NAME
+from const import RESOURCES_DEVICE_CPU_NAME
 
 
 def quantize_model(

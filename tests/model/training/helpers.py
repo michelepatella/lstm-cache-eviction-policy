@@ -75,16 +75,16 @@ from components.model.environment.initializer import (
 from components.model.io.locator import get_model_abs_path
 from components.optimizer.builder import build_optimizer
 from components.training.core.single_epoch_trainer import train_single_epoch
-from pipeline.config.configurator import prepare_pipeline_config
-from pipeline.config.pydantic.pipeline_config import PipelineConfig
-from pipeline.const import DATASET_PROCESSED_TYPE
-from pipeline.steps.trainer import train_model
-from src.const import (
+from const import (
     DATASET_TRAINING_SPLIT_TYPE,
     RESOURCES_DEVICE_CPU_NAME,
     RESOURCES_DEVICE_CUDA_NAME,
     RESOURCES_DEVICE_NAMES,
 )
+from pipeline.config.configurator import prepare_pipeline_config
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
+from pipeline.const import DATASET_PROCESSED_TYPE
+from pipeline.steps.trainer import train_model
 from tests.config.configurator import prepare_tests_config
 from tests.config.pydantic.tests_config import TestsConfig
 from tests.const import (
@@ -219,6 +219,7 @@ def model_training_tests_setup() -> tuple[
     MODEL_TRAINING_TESTS_PORTABILITY_TEST_PARAM_DEVICE_TYPE_NAME,
     RESOURCES_DEVICE_NAMES,
 )
+@pytest.mark.training
 def test_model_training_portability(
     device_type: str,
     model_training_tests_setup: tuple,
@@ -275,6 +276,7 @@ def test_model_training_portability(
 
 @pytest.mark.slow
 @pytest.mark.model_training_end_to_end
+@pytest.mark.training
 def test_model_training_end_to_end(model_training_tests_setup: tuple) -> None:
     """Tests the complete end-to-end model training pipeline execution.
 
@@ -303,6 +305,7 @@ def test_model_training_end_to_end(model_training_tests_setup: tuple) -> None:
 
 
 @pytest.mark.model_training_learnability
+@pytest.mark.training
 def test_model_training_learnability(
     model_training_tests_setup: tuple,
 ) -> None:
@@ -363,6 +366,7 @@ def test_model_training_learnability(
 
 @pytest.mark.slow
 @pytest.mark.model_training_optimization_stability
+@pytest.mark.training
 def test_model_training_optimization_stability(
     model_training_tests_setup: tuple,
 ) -> None:
@@ -410,6 +414,7 @@ def test_model_training_optimization_stability(
 
 
 @pytest.mark.model_training_output_integrity
+@pytest.mark.training
 def test_model_training_output_integrity(
     model_training_tests_setup: tuple,
 ) -> None:

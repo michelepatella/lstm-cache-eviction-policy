@@ -7,7 +7,7 @@ RUN useradd --create-home --shell /bin/bash appuser
 WORKDIR /app
 
 # Copy requirements and install dependencies
-COPY requirements.txt .
+COPY src/api/services/scorer/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Create necessary directories

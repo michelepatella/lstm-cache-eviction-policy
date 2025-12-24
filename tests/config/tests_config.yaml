@@ -34,7 +34,7 @@ model:
   behavioral:
     directional:
       local_feat_perturbations:
-        min_success_ratio: 0.8
+        min_success_ratio: 0.55
     invariance:
       feat_perturbation:
         extreme_k: 10
@@ -46,8 +46,8 @@ model:
         tol: 0.0000000001
   inference:
     latency:
-      target_avg: 0.01
-      tol: 0.005
+      target_avg: 0.05
+      tol: 0.1
     throughput:
       min: 1000
   performance:

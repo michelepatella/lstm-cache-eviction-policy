@@ -23,6 +23,7 @@ from tests.model.helpers import initialize_inference_environment
 
 
 @pytest.mark.model_behavioral_directional
+@pytest.mark.training
 def test_model_directional() -> None:
     """Runs the directional behavioral tests suite on the trained model.
 

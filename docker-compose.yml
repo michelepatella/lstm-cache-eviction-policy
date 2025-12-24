@@ -1,7 +1,6 @@
-version: "3.9"
-
 services:
   api_gateway:
+    image: ${ACR_NAME:-local}.azurecr.io/api-gateway:${GITHUB_SHA:-latest}
     build:
       context: ./
       dockerfile: src/api/gateway/Dockerfile
@@ -24,6 +23,7 @@ services:
       - decider_service
 
   featurizer_service:
+    image: ${ACR_NAME:-local}.azurecr.io/featurizer-service:${GITHUB_SHA:-latest}
     build:
       context: ./
       dockerfile: src/api/services/featurizer/Dockerfile
@@ -35,6 +35,7 @@ services:
       - "${FEATURIZER_SERVICE_PORT}:${FEATURIZER_SERVICE_PORT}"
 
   predictor_service:
+    image: ${ACR_NAME:-local}.azurecr.io/predictor-service:${GITHUB_SHA:-latest}
     build:
       context: ./
       dockerfile: src/api/services/predictor/Dockerfile
@@ -49,6 +50,7 @@ services:
       - "${PREDICTOR_SERVICE_PORT}:${PREDICTOR_SERVICE_PORT}"
 
   scorer_service:
+    image: ${ACR_NAME:-local}.azurecr.io/scorer-service:${GITHUB_SHA:-latest}
     build:
       context: ./
       dockerfile: src/api/services/scorer/Dockerfile
@@ -60,6 +62,7 @@ services:
       - "${SCORER_SERVICE_PORT}:${SCORER_SERVICE_PORT}"
 
   decider_service:
+    image: ${ACR_NAME:-local}.azurecr.io/decider-service:${GITHUB_SHA:-latest}
     build:
       context: ./
       dockerfile: src/api/services/decider/Dockerfile

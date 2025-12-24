@@ -15,9 +15,8 @@ Functions:
         Removes a cache item and optionally updates frequency tracking.
 """
 
+from collections import defaultdict
 from typing import Any
-
-from mypy.checkexpr import defaultdict
 
 from components.logs.levels.error_logger import error
 

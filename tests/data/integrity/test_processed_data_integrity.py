@@ -20,9 +20,9 @@ from deepchecks.tabular.checks import (
     PercentOfNulls,
 )
 
+from const import DATA_DYNAMIC_MODE, DATA_STATIC_MODE
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import DATASET_PROCESSED_TYPE
-from src.const import DATA_DYNAMIC_MODE, DATA_STATIC_MODE
 from tests.const import (
     DATA_INTEGRITY_TESTS_PROCESSED_DATA_SUITE_NAME,
     DATA_INTEGRITY_TESTS_PROCESSED_DYNAMIC_DATA_RESULTS_SAVE_PATH,
@@ -36,6 +36,7 @@ from tests.helpers.dc_helpers import run_dc_suite
 
 
 @pytest.mark.data_integrity_processed
+@pytest.mark.after_data_processing
 def test_processed_data_integrity() -> None:
     """Runs the Deepchecks test suite against the processed data.
 

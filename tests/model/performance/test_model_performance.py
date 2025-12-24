@@ -20,7 +20,7 @@ from deepchecks.tabular.checks import (
     TrainTestPerformance,
 )
 
-from src.const import (
+from const import (
     DATA_DYNAMIC_MODE,
     DATA_STATIC_MODE,
 )
@@ -40,6 +40,7 @@ from tests.helpers.dc_helpers import (
 
 
 @pytest.mark.model_performance
+@pytest.mark.testing
 def test_model_performance() -> None:
     """Runs the Deepchecks test suite against the trained model.
 

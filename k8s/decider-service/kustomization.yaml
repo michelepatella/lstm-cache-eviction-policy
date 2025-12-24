@@ -1,0 +1,4 @@
+resources:
+  - decider-service.yaml
+  - decider-service-config.yaml
+  - decider-service-networkpolicy.yaml

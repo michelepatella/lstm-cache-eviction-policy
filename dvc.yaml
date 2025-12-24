@@ -105,11 +105,6 @@ stages:
       - src/pipeline/config/pydantic/sections/validation_pipeline_config.py
       - src/pipeline/const.py
       - src/pipeline/steps/data_preparer.py
-    outs:
-      - data/raw/${data.general.mode}/${data.general.mode}_raw_dataset.csv
-      - reports/plots/${data.general.mode}/${data.general.mode}_daily_profile.png
-      - reports/plots/${data.general.mode}/${data.general.mode}_key_usage.png
-      - reports/plots/${data.general.mode}/${data.general.mode}_zipf_log_log.png
 
   data_preprocessing:
     cmd: PYTHONPATH=src python -m pipeline.steps.data_preprocessor
@@ -167,8 +162,6 @@ stages:
       - src/pipeline/const.py
       - src/pipeline/steps/data_preprocessor.py
       - data/raw/${data.general.mode}/${data.general.mode}_raw_dataset.csv
-    outs:
-      - data/processed/${data.general.mode}/${data.general.mode}_processed_dataset.csv
 
   validation:
     cmd: PYTHONPATH=src python -m pipeline.steps.validator
@@ -294,7 +287,6 @@ stages:
       - src/pipeline/const.py
       - src/pipeline/steps/validator.py
       - data/processed/${data.general.mode}/${data.general.mode}_processed_dataset.csv
-    outs: []
 
   training:
     cmd: PYTHONPATH=src python -m pipeline.steps.trainer
@@ -409,8 +401,6 @@ stages:
       - src/pipeline/const.py
       - src/pipeline/steps/trainer.py
       - data/processed/${data.general.mode}/${data.general.mode}_processed_dataset.csv
-    outs:
-      - models/${data.general.mode}/trained_${data.general.mode}_model.pt
 
   testing:
     cmd: PYTHONPATH=src python -m pipeline.steps.tester
@@ -505,7 +495,6 @@ stages:
       - src/pipeline/steps/tester.py
       - data/processed/${data.general.mode}/${data.general.mode}_processed_dataset.csv
       - models/${data.general.mode}/trained_${data.general.mode}_model.pt
-    outs: []
 
   simulations:
     cmd: PYTHONPATH=src python -m pipeline.steps.simulator
@@ -607,8 +596,6 @@ stages:
       - src/pipeline/const.py
       - src/pipeline/steps/simulator.py
       - data/processed/${data.general.mode}/${data.general.mode}_processed_dataset.csv
-    outs:
-      - reports/plots/${data.general.mode}/${data.general.mode}_hit_miss_rates.png
 
 artifacts:
   static-model:
@@ -643,14 +630,3 @@ artifacts:
       - dynamic data
     meta:
       framework: pytorch
-
-plots:
-  - reports/plots/static/static_daily_profile.png
-  - reports/plots/static/static_key_usage.png
-  - reports/plots/static/static_zipf_log_log.png
-  - reports/plots/static/static_hit_miss_rates.png
-  - reports/plots/dynamic/dynamic_daily_profile.png
-  - reports/plots/dynamic/dynamic_key_usage.png
-  - reports/plots/dynamic/dynamic_hit_miss_rates.png
-  - reports/plots/dynamic/dynamic_zipf_log_log.png
-  - reports/plots/real/real_hit_miss_rates.png
