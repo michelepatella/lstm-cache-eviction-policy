@@ -4,7 +4,7 @@ metadata:
   name: predictor-service
   namespace: predictor-service
   annotations:
-    kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod,container-security-context-readonlyrootfilesystem
+    kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod
   labels:
     app: predictor-service
     role: predictor-service
@@ -17,7 +17,7 @@ spec:
   template:
     metadata:
       annotations:
-        kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod,container-security-context-readonlyrootfilesystem
+        kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod
       labels:
         app: predictor-service
         role: predictor-service
@@ -57,6 +57,8 @@ spec:
         envFrom:
         - configMapRef:
             name: predictor-service-config
+        - secretRef:
+            name: predictor-service-secrets
         securityContext:
           readOnlyRootFilesystem: false
           runAsUser: 10001
