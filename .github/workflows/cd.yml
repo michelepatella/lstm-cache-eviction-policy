@@ -85,7 +85,7 @@ jobs:
 
           # Extract and export the deployment names from the
           # rendered k8s file
-          DEPLOYMENTS_DATA=$(yq eval-all 'select(.kind == "Deployment") | .metadata.name + ":" + .metadata.namespace' "$K8S_RENDERED_ARTIFACTS_DIR"/"$K8S_RENDERED_FILE" | grep -vE '^null|^--' | xargs)
+          DEPLOYMENTS_DATA=$(yq eval-all 'select(.kind == "Deployment") | .metadata.name + ":" + .metadata.namespace' "$K8S_RENDERED_ARTIFACTS_DIR"/"$K8S_RENDERED_FILE" | grep -vE '^null|^--' | sort | uniq | tr '\n' ' ')
           echo "DEPLOYMENTS_DATA=$DEPLOYMENTS_DATA" >> $GITHUB_ENV
 
           # Check rollout status for all deployments with
