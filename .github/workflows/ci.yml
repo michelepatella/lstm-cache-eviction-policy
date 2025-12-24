@@ -13,7 +13,7 @@ concurrency:
 # Run the workflow on every push or PR to main
 on:
   push:
-    branches: [main, feature/*]
+    branches: [main]
   pull_request:
     branches: [main]
 
@@ -319,7 +319,7 @@ jobs:
           PYTHONPATH=$(pwd)/${{ vars.SRC_DIR }} pdoc --html ${{ vars.SRC_DIR }}/ \
           --output-dir ${{ vars.DOCS_OUTPUT_DIR }} --force
 
-      # Upload documentation generated as artifacts
+      # Upload documentation generated as artifact
       - name: Upload docs
         uses: actions/upload-artifact@v4
         with:
