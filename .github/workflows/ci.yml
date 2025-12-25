@@ -10,11 +10,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Run the workflow on every push or PR to main
+# Run the workflow on every push to main
 on:
   push:
-    branches: [main]
-  pull_request:
     branches: [main]
 
 # The workflow is organized into five jobs:

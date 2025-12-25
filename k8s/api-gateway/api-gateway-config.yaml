@@ -5,7 +5,7 @@ metadata:
   namespace: api-gateway
 data:
   GATEWAY_API_PORT: "8000"
-  FEATURIZER_SERVICE_CHANNEL: "featurizer-service:80"
-  PREDICTOR_SERVICE_CHANNEL: "predictor-service:80"
-  SCORER_SERVICE_CHANNEL: "scorer-service:80"
-  DECIDER_SERVICE_CHANNEL: "decider-service:80"
+  FEATURIZER_SERVICE_CHANNEL: "featurizer-service.featurizer-service.svc.cluster.local:80"
+  PREDICTOR_SERVICE_CHANNEL: "predictor-service.predictor-service.svc.cluster.local:80"
+  SCORER_SERVICE_CHANNEL: "scorer-service.scorer-service.svc.cluster.local:80"
+  DECIDER_SERVICE_CHANNEL: "decider-service.decider-service.svc.cluster.local:80"
