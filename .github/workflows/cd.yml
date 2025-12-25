@@ -9,7 +9,7 @@ on:
   workflow_run:
     workflows: ["Continuous Integration (CI)"]
     types: [completed]
-    branches: [main, bugfix/*]
+    branches: [main]
 
 # The workflow is organized into three jobs:
 # - Setup:

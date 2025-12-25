@@ -13,7 +13,7 @@ concurrency:
 # Run the workflow on every push to main
 on:
   push:
-    branches: [main, bugfix/*]
+    branches: [main]
 
 # The workflow is organized into five jobs:
 # - Setup:
