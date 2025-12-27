@@ -86,7 +86,7 @@ early_stopping:
     patience: 10
     delta: 0.0001
   validation:
-    patience: 5
+    patience: 3
     delta: 0.0005
 evaluation:
   simulations:
@@ -151,7 +151,7 @@ training:
 validation:
   time_series_cv:
     folds: 5
-    epochs: 10
+    epochs: 5
   search_space:
     model:
       hidden_size:
