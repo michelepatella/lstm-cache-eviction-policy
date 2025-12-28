@@ -27,6 +27,7 @@ API_RESPONSE_FIELD_DATA_KEYS_TO_EVICT_NAME = "keys_to_evict"
 # Cache
 # ----------------------------
 CACHE_LSTM_NAME = "LSTM"
+CACHE_LR_NAME = "LogisticRegression"
 
 
 # ----------------------------

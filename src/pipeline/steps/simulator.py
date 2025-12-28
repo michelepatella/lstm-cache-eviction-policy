@@ -23,8 +23,10 @@ import numpy as np
 import ray
 
 from components.caches.implementations.lfu_cache import LFUCache
+from components.caches.implementations.logistic_regression_cache import (
+    LogisticRegressionCache,
+)
 from components.caches.implementations.lru_cache import LRUCache
-from components.caches.implementations.lstm_cache import LSTMCache
 from components.caches.implementations.random_cache import RandomCache
 from components.caches.utils.cache_metrics_logger import (
     CacheMetricsLogger,
@@ -53,7 +55,7 @@ from components.visualization.hit_miss_rates_plotter import (
     plot_hit_miss_rate,
 )
 from const import (
-    CACHE_LSTM_NAME,
+    CACHE_LR_NAME,
     DAGS_HUB_REPO_NAME,
     DAGS_HUB_REPO_OWNER,
     DATA_DYNAMIC_MODE,
@@ -149,12 +151,20 @@ def run_simulations() -> None:
                 CacheMetricsLogger(),
                 pipeline_config,
             ),
-            CACHE_LSTM_NAME: LSTMCache(
+            CACHE_LR_NAME: LogisticRegressionCache(
                 None,
                 CacheMetricsLogger(),
                 pipeline_config,
             ),
         }
+
+        """
+                    CACHE_LSTM_NAME: LSTMCache(
+                        None,
+                        CacheMetricsLogger(),
+                        pipeline_config,
+                    ),
+                    """
 
         # Get testing set
         testing_set, _ = initialize_data_loader(
