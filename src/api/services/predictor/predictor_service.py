@@ -31,7 +31,7 @@ from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.yaml.io.loader import load_yaml
 from const import (
-    MLFLOW_MODEL_PRODUCTION_NAME,
+    MLFLOW_MODEL_SIMULATION_NAME,
 )
 
 # ----------------------------
@@ -51,7 +51,7 @@ torch.backends.quantized.engine = (
 # Load the last version of the production model
 mlflow_client = mlflow.MlflowClient(tracking_uri=MLFLOW_TRACKING_URI)
 model_versions = mlflow_client.search_model_versions(
-    f"name='{MLFLOW_MODEL_PRODUCTION_NAME}'",
+    f"name='{MLFLOW_MODEL_SIMULATION_NAME}'",
 )
 last_model_version = max(
     (v for v in model_versions),
@@ -60,7 +60,7 @@ last_model_version = max(
 )
 if last_model_version is not None:
     model = mlflow.pytorch.load_model(
-        model_uri=f"models:/{MLFLOW_MODEL_PRODUCTION_NAME}/{last_model_version.version}",
+        model_uri=f"models:/{MLFLOW_MODEL_SIMULATION_NAME}/{last_model_version.version}",
     )
 
 

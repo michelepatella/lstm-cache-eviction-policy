@@ -3,10 +3,10 @@ resources:
     type: cpu
 kwargs:
   rollout_horizon:
-    value: 5
+    value: 3
     max: 50
   mc_dropout_samples:
-    value: 25
+    value: 5
     max: 100
   conf_level:
     value: 0.95
@@ -20,9 +20,9 @@ kwargs:
   unbiased_variance:
     value: true
   prob_weight:
-    value: 0.8
+    value: 0.6
   conf_weight:
-    value: 0.2
+    value: 0.4
 logs:
   level: INFO
 model:
