@@ -98,7 +98,7 @@ logs:
 loss:
   class_weight:
     type: balanced
-  reduction: none
+  reduction: null
 model:
   params:
     hidden_size: 128
