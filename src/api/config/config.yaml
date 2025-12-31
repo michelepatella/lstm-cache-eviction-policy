@@ -19,8 +19,6 @@ kwargs:
     value: [ ]
   unbiased_variance:
     value: true
-  prob_weight:
-    value: 0.3
   conf_weight:
     value: 0.7
 logs:

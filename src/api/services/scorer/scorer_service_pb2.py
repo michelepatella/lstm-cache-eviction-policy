@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
-    b'\n\x14scorer_service.proto\x12\x0escorer_service"x\n\x14ScorerServiceRequest\x12\x0f\n\x07outputs\x18\x01 \x03(\x02\x12\x11\n\tvariances\x18\x02 \x03(\x02\x12\x12\n\nconf_level\x18\x03 \x01(\x02\x12\x13\n\x0bprob_weight\x18\x04 \x01(\x02\x12\x13\n\x0b\x63onf_weight\x18\x05 \x01(\x02"+\n\x15ScorerServiceResponse\x12\x12\n\nkey_scores\x18\x01 \x03(\x02\x32\x65\n\rScorerService\x12T\n\x05Score\x12$.scorer_service.ScorerServiceRequest\x1a%.scorer_service.ScorerServiceResponseb\x06proto3',
+    b'\n\x14scorer_service.proto\x12\x0escorer_service"c\n\x14ScorerServiceRequest\x12\x0f\n\x07outputs\x18\x01 \x03(\x02\x12\x11\n\tvariances\x18\x02 \x03(\x02\x12\x12\n\nconf_level\x18\x03 \x01(\x02\x12\x13\n\x0b\x63onf_weight\x18\x04 \x01(\x02"+\n\x15ScorerServiceResponse\x12\x12\n\nkey_scores\x18\x01 \x03(\x02\x32\x65\n\rScorerService\x12T\n\x05Score\x12$.scorer_service.ScorerServiceRequest\x1a%.scorer_service.ScorerServiceResponseb\x06proto3',
 )
 
 _globals = globals()
@@ -37,9 +37,9 @@ _builder.BuildTopDescriptorsAndMessages(
 if not _descriptor._USE_C_DESCRIPTORS:
     DESCRIPTOR._loaded_options = None
     _globals["_SCORERSERVICEREQUEST"]._serialized_start = 40
-    _globals["_SCORERSERVICEREQUEST"]._serialized_end = 160
-    _globals["_SCORERSERVICERESPONSE"]._serialized_start = 162
-    _globals["_SCORERSERVICERESPONSE"]._serialized_end = 205
-    _globals["_SCORERSERVICE"]._serialized_start = 207
-    _globals["_SCORERSERVICE"]._serialized_end = 308
+    _globals["_SCORERSERVICEREQUEST"]._serialized_end = 139
+    _globals["_SCORERSERVICERESPONSE"]._serialized_start = 141
+    _globals["_SCORERSERVICERESPONSE"]._serialized_end = 184
+    _globals["_SCORERSERVICE"]._serialized_start = 186
+    _globals["_SCORERSERVICE"]._serialized_end = 287
 # @@protoc_insertion_point(module_scope)

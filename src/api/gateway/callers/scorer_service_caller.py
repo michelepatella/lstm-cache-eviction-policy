@@ -61,7 +61,6 @@ def call_scorer_service(
                     "outputs_num": len(outputs),
                     "variances_num": len(variances),
                     "conf_level": api_config.kwargs.conf_level.value,
-                    "prob_weight": api_config.kwargs.prob_weight.value,
                     "conf_weight": api_config.kwargs.conf_weight.value,
                     "context": "Scorer service call",
                 },
@@ -74,7 +73,6 @@ def call_scorer_service(
                 outputs=[f for sublist in outputs for f in sublist],
                 variances=[v for sublist in variances for v in sublist],
                 conf_level=api_config.kwargs.conf_level.value,
-                prob_weight=api_config.kwargs.prob_weight.value,
                 conf_weight=api_config.kwargs.conf_weight.value,
             )
             response = stub.Score(request)
@@ -97,7 +95,6 @@ def call_scorer_service(
                 "outputs_num": len(outputs),
                 "variances_num": len(variances),
                 "conf_level": api_config.kwargs.conf_level.value,
-                "prob_weight": api_config.kwargs.prob_weight.value,
                 "conf_weight": api_config.kwargs.conf_weight.value,
                 "context": "Scorer service call",
             },

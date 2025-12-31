@@ -141,7 +141,6 @@ simulations:
     excluded_keys: []
     mc_dropout_samples: 10
     num_evictions: 1
-    prob_weight: 0.3
     rollout_horizon: 3
     time_step_increment: 0.02
   caches:

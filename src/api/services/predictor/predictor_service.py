@@ -3,8 +3,7 @@
 This module implements the gRPC servicer for the Predictor Service.
 
 The Predictor Service is responsible for executing the loaded PyTorch model
-to generate outputs and associated uncertainty estimates (variances) for the
-cache key access probabilities.
+to generate outputs and associated uncertainty estimates (variances).
 
 Classes:
     PredictorService: gRPC Servicer class implementing the Predict method.
@@ -76,7 +75,7 @@ class PredictorService(pb2_grpc.PredictorServiceServicer):
         request: pb2.PredictorServiceRequest,
         context: grpc.ServicerContext,
     ) -> pb2.PredictorServiceResponse:
-        """Generates future access probability predictions and variances.
+        """Generates future access predictions and variances.
 
         This method receives features, keys, and hyperparameters via gRPC,
         converts them to tensors, moves them to the appropriate device,

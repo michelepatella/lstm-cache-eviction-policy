@@ -518,7 +518,6 @@ stages:
         - simulations.api_kwargs.excluded_keys
         - simulations.api_kwargs.mc_dropout_samples
         - simulations.api_kwargs.num_evictions
-        - simulations.api_kwargs.prob_weight
         - simulations.api_kwargs.return_all_scores
         - simulations.api_kwargs.return_api_kwargs
         - simulations.api_kwargs.return_prob_conf

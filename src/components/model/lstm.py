@@ -35,8 +35,7 @@ from components.logs.levels.error_logger import error
 class LSTM(torch.nn.Module):
     """Long Short Term Memory (LSTM) model.
 
-    This class implements an LSTM model to predict the probability
-    of accessing a key next.
+    This class implements a LSTM model.
 
     Attributes:
         mc_dropout (bool): Flag indicating if MC dropout is enabled or not.
