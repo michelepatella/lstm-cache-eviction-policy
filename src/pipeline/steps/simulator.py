@@ -28,7 +28,6 @@ from components.caches.implementations.logistic_regression_cache import (
 )
 from components.caches.implementations.lru_cache import LRUCache
 from components.caches.implementations.lstm_cache import LSTMCache
-from components.caches.implementations.random_cache import RandomCache
 from components.caches.utils.cache_metrics_logger import (
     CacheMetricsLogger,
 )
@@ -74,7 +73,6 @@ from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import (
     CACHE_LFU_NAME,
     CACHE_LRU_NAME,
-    CACHE_RANDOM_NAME,
     DAGS_HUB_DVC,
     DATASET_PROCESSED_TYPE,
     LOGS_PHASE_SIMULATIONS,
@@ -145,11 +143,6 @@ def run_simulations() -> None:
             ),
             CACHE_LFU_NAME: CacheWrapper(
                 LFUCache,
-                CacheMetricsLogger(),
-                pipeline_config,
-            ),
-            CACHE_RANDOM_NAME: RandomCache(
-                None,
                 CacheMetricsLogger(),
                 pipeline_config,
             ),

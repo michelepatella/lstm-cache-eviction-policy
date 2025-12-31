@@ -22,7 +22,6 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 # ----------------------------
 CACHE_LFU_NAME = "LFU"
 CACHE_LRU_NAME = "LRU"
-CACHE_RANDOM_NAME = "RANDOM"
 
 
 # ----------------------------
