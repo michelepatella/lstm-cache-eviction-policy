@@ -1,12 +1,12 @@
-"""logistic_regression_cache.py
+"""lr_cache.py
 
 Module implementing a Logistic Regression-based cache.
 
-This module provides the `LogisticRegression` class, which manages key-value pairs in a
+This module provides the `LRCache` class, which manages key-value pairs in a
 cache using a Logistic Regression-based eviction policy when the cache is full.
 
 Classes:
-    LogisticRegression(cache_class, metrics_logger, config):
+    LRCache(cache_class, metrics_logger, config):
         Logistic Regression cache implementation supporting put, eviction, and
         key operations.
 """
@@ -26,21 +26,21 @@ from components.const import (
     DATASET_PROCESSED_FEATURE_COLUMNS,
     LIST_FIRST_IDX,
     MODEL_LR_TRAINED_DYNAMIC_FILE_PATH,
-    MODEL_LR_TRAINED_REAL_FILE_PATH,
     MODEL_LR_TRAINED_STATIC_FILE_PATH,
+    TENSOR_FEATURES_DIM,
 )
 from components.dataset.builder import build_dataset
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from const import (
-    DATA_DYNAMIC_MODE,
     DATA_STATIC_MODE,
+    DATASET_COLUMN_LR_PREVIOUS_REQUEST_PREFIX_NAME,
     DATASET_COLUMN_REQUEST_NAME,
 )
 from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
-class LogisticRegressionCache(BaseCache):
+class LRCache(BaseCache):
     """Logistic Regression-based cache implementation.
 
     Evicts keys from the cache based on a Logistic Regression-based
@@ -48,7 +48,7 @@ class LogisticRegressionCache(BaseCache):
     """
 
     def __init__(
-        self: "LogisticRegressionCache",
+        self: "LRCache",
         cache_class: Any,
         metrics_logger: CacheMetricsLogger,
         pipeline_config: PipelineConfig,
@@ -59,7 +59,7 @@ class LogisticRegressionCache(BaseCache):
         calling the BaseCache constructor.
 
         Args:
-            self ("LogisticRegressionCache"): Current class instance.
+            self ("LRCache"): Current class instance.
             cache_class (Any): Underlying cache class to store items.
             metrics_logger (CacheMetricsLogger): Logger for cache events.
             pipeline_config (PipelineConfig): Configuration object.
@@ -74,10 +74,8 @@ class LogisticRegressionCache(BaseCache):
         data_mode = pipeline_config.data.general.mode
         if data_mode == DATA_STATIC_MODE:
             model_save_path = MODEL_LR_TRAINED_STATIC_FILE_PATH
-        elif data_mode == DATA_DYNAMIC_MODE:
-            model_save_path = MODEL_LR_TRAINED_DYNAMIC_FILE_PATH
         else:
-            model_save_path = MODEL_LR_TRAINED_REAL_FILE_PATH
+            model_save_path = MODEL_LR_TRAINED_DYNAMIC_FILE_PATH
 
         # Load model
         self.model = joblib.load(model_save_path)
@@ -86,18 +84,18 @@ class LogisticRegressionCache(BaseCache):
             "Cache initialization executed",
             extra={
                 "maxsize": self.maxsize,
-                "context": "LogisticRegression cache",
+                "context": "LR Cache",
             },
         )
 
-    def evict_key(self: "LogisticRegressionCache", key: int) -> None:
+    def evict_key(self: "LRCache", key: int) -> None:
         """Evict a key from the cache.
 
         This function evicts a provided key from the Logistic Regression
         cache, along with its expiration time.
 
         Args:
-            self ("LogisticRegressionCache"): Current class instance.
+            self ("LRCache"): Current class instance.
             key (int): Key to remove from the cache.
 
         Returns:
@@ -126,13 +124,13 @@ class LogisticRegressionCache(BaseCache):
                     "expiry_keys": list(self.expiry.keys())
                     if hasattr(self.expiry, "keys")
                     else None,
-                    "context": "LogisticRegression cache",
+                    "context": "LR Cache",
                 },
             )
             raise RuntimeError(msg) from e
 
     def _put_key(
-        self: "LogisticRegressionCache",
+        self: "LRCache",
         key: int,
         current_time: float,
     ) -> None:
@@ -142,7 +140,7 @@ class LogisticRegressionCache(BaseCache):
         along with its expiration time.
 
         Args:
-            self ("LogisticRegressionCache"): Current class instance.
+            self ("LRCache"): Current class instance.
             key (int): Key to insert in the cache.
             current_time (float): Current time.
 
@@ -176,13 +174,13 @@ class LogisticRegressionCache(BaseCache):
                     "expiry_keys": list(self.expiry.keys())
                     if hasattr(self.expiry, "keys")
                     else None,
-                    "context": "LogisticRegression cache",
+                    "context": "LR Cache",
                 },
             )
             raise RuntimeError(msg) from e
 
     def put(
-        self: "LogisticRegressionCache",
+        self: "LRCache",
         key: int,
         current_time: float,
         current_idx: int,
@@ -196,7 +194,7 @@ class LogisticRegressionCache(BaseCache):
         Logistic Regression model is exploited for getting an eviction decision.
 
         Args:
-            self ("LogisticRegressionCache"): Current class instance.
+            self ("LRCache"): Current class instance.
             key (int): Key to insert.
             current_time (float): Current time.
             current_idx (int): Index of the current request.
@@ -236,7 +234,7 @@ class LogisticRegressionCache(BaseCache):
                     last_accesses_df = pd.DataFrame(
                         last_accesses,
                         columns=[
-                            f"prev_request_{i}"
+                            f"{DATASET_COLUMN_LR_PREVIOUS_REQUEST_PREFIX_NAME}{i}"
                             for i in range(1, self.model.seq_len + 1)
                         ],
                     )
@@ -257,7 +255,7 @@ class LogisticRegressionCache(BaseCache):
                     # of the encoded last accesses and the current features
                     X = np.concatenate(
                         [current_features, last_accesses_encoded],
-                        axis=1,
+                        axis=TENSOR_FEATURES_DIM,
                     )
 
                     # For each key, predict the probability
@@ -273,6 +271,7 @@ class LogisticRegressionCache(BaseCache):
                         ],
                     )
                 else:
+                    # No enough data available, random as fallback
                     key_to_evict = random.choice(list(self.store.keys()))
 
                 # Evict key
@@ -301,7 +300,7 @@ class LogisticRegressionCache(BaseCache):
                     "expiry_keys": list(self.expiry.keys())
                     if hasattr(self.expiry, "keys")
                     else None,
-                    "context": "LogisticRegression cache",
+                    "context": "LR Cache",
                 },
             )
             raise RuntimeError(msg) from e

@@ -23,8 +23,8 @@ import numpy as np
 import ray
 
 from components.caches.implementations.lfu_cache import LFUCache
-from components.caches.implementations.logistic_regression_cache import (
-    LogisticRegressionCache,
+from components.caches.implementations.lr_cache import (
+    LRCache,
 )
 from components.caches.implementations.lru_cache import LRUCache
 from components.caches.implementations.lstm_cache import LSTMCache
@@ -151,7 +151,7 @@ def run_simulations() -> None:
                 CacheMetricsLogger(),
                 pipeline_config,
             ),
-            CACHE_LR_NAME: LogisticRegressionCache(
+            CACHE_LR_NAME: LRCache(
                 None,
                 CacheMetricsLogger(),
                 pipeline_config,

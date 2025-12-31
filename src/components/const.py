@@ -230,16 +230,17 @@ MODEL_OPTIMIZATIONS_PRUNING_PARAMS = ("weight",)
 
 
 # ----------------------------
-# Model (Logistic Regression)
+# Model (Extra)
 # ----------------------------
 MODEL_LR_TRAINED_STATIC_FILE_PATH = (
-    PROJECT_ROOT / "models" / "static" / "trained_static_lr_model.pt"
+    PROJECT_ROOT / "models" / "extra" / "static" / "trained_static_lr_model.pt"
 )
 MODEL_LR_TRAINED_DYNAMIC_FILE_PATH = (
-    PROJECT_ROOT / "models" / "dynamic" / "trained_dynamic_lr_model.pt"
-)
-MODEL_LR_TRAINED_REAL_FILE_PATH = (
-    PROJECT_ROOT / "models" / "real" / "trained_real_lr_model.pt"
+    PROJECT_ROOT
+    / "models"
+    / "extra"
+    / "dynamic"
+    / "trained_dynamic_lr_model.pt"
 )
 
 
