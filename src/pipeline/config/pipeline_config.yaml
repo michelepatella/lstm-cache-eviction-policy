@@ -10,9 +10,9 @@ data:
       access:
         zipf:
           alpha:
-            fixed: 0.7
+            fixed: 1.0
             min: 0.5
-            max: 1.0
+            max: 1.5
           steps: 5
         behavior:
           repetition:
@@ -22,47 +22,47 @@ data:
               start: 4
               end: 9
           toggle:
-            interval: 5
+            interval: 2
             hours:
               start: 9
               end: 14
             base_requests:
-              first: 1
-              second: 2
+              first: 2
+              second: 3
             offsets:
               forward: 1
               backward: 2
           cycle:
-            base: 15
-            mod: 5
+            base: 20
+            mod: 7
             divisor: 100
             hours:
               start: 14
               end: 19
           distortion:
-            interval: 2
+            interval: 1
             hours:
               start: 19
               end: 23
             offsets:
-              history: 10
-              correction: 5
+              history: 15
+              correction: 10
             noise:
-              min: 4
-              max: 8
+              min: 5
+              max: 10
           memory:
-            interval: 40
-            offset: 5
+            interval: 80
+            offset: 10
       temporal:
         burstiness:
-          high: 0.5
-          low: 1.5
+          high: 0.3
+          low: 2.0
           hours:
             start: 10
             end: 18
         periodic:
-          scale: 90
-          amplitude: 50
+          scale: 120
+          amplitude: 60
 dataset:
   cleaning:
     missing_values_removal:
@@ -73,13 +73,13 @@ dataset:
     validation: 0.2
 data_loader:
   training:
-    batch_size: 128
-    shuffle: true
+    batch_size: 512
+    shuffle: false
   validation:
-    batch_size: 128
+    batch_size: 512
     shuffle: false
   testing:
-    batch_size: 128
+    batch_size: 512
     shuffle: false
 early_stopping:
   training:
@@ -104,7 +104,7 @@ model:
     num_layers: 2
     bias: false
     batch_first: true
-    dropout: 0.3
+    dropout: 0.1
     bidirectional: false
     proj_size: 0
   sequence:
@@ -125,7 +125,7 @@ optimizer:
   type: adamw
 resources:
   general:
-    num_cpus: 2
+    num_cpus: 4
     num_gpus: 0
   devices:
     training: cpu
@@ -135,17 +135,17 @@ seed:
   value: 42
 simulations:
   api_kwargs:
-    conf_weight: 0.4
+    conf_weight: 0.7
     conf_level: 0.95
     excluded_keys: []
-    mc_dropout_samples: 5
+    mc_dropout_samples: 10
     num_evictions: 1
-    prob_weight: 0.6
+    prob_weight: 0.3
     rollout_horizon: 3
     time_step_increment: 0.02
   caches:
     dimension: 10
-    ttl: 10000
+    ttl: 100000
 training:
   epochs: 500
 validation:
