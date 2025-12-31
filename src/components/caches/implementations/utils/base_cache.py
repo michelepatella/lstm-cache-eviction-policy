@@ -272,6 +272,10 @@ class BaseCache(ABC):
         try:
             # Trace the get event
             self.metrics_logger.log_get(key, current_time)
+
+            # Set the current key as the
+            # last accessed one and increase
+            # its access counter
             self.last_accessed_key = key
             self.key_access_counter[key] = (
                 self.key_access_counter.get(key, 0) + 1

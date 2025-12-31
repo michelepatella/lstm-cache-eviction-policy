@@ -20,7 +20,7 @@ kwargs:
   unbiased_variance:
     value: true
   conf_weight:
-    value: 0.7
+    value: 2.0
 logs:
   level: INFO
 model:
