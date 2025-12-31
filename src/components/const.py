@@ -34,6 +34,7 @@ API_PARAM_USER_API_KWARGS_NAME = "user_api_kwargs"
 # Autoregressive Rollout
 # ----------------------------
 AUTOREGRESSIVE_ROLLOUT_SEQUENCE_SHIFT_IDX = 1
+AUTOREGRESSIVE_ROLLOUT_DIM = 0
 
 
 # ----------------------------

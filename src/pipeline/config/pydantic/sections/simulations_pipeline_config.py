@@ -25,7 +25,7 @@ class SimulationsApiKwargsPipelineConfig(BaseModel):
 
     Attributes:
         conf_weight (float): Weight applied to the confidence score
-                             in decision-making (in (0.0, 1.0]).
+                             in decision-making (in (0.0, 5.0]).
         conf_level (float): Minimum confidence level required
                             for certain decisions (in (0.0, 1.0]).
         excluded_keys (list[int]): List of keys to exclude from cache operations.
@@ -38,7 +38,7 @@ class SimulationsApiKwargsPipelineConfig(BaseModel):
                                      rollout (> 0).
     """
 
-    conf_weight: Annotated[float, Field(gt=0, le=1)]
+    conf_weight: Annotated[float, Field(gt=0.0, le=5.0)]
     conf_level: Annotated[float, Field(gt=0, le=1)]
     excluded_keys: list[int]
     mc_dropout_samples: Annotated[int, Field(ge=1)]

@@ -58,10 +58,10 @@ class KwargConfLevelAPIConfig(BaseModel):
     """Confidence level API kwarg configuration.
 
     Attributes:
-        value (float):  Confidence level value (0.0–1.0].
+        value (float):  Confidence level value (0.0–5.0].
     """
 
-    value: Annotated[float, Field(gt=0.0, le=1.0)]
+    value: Annotated[float, Field(gt=0.0, le=5.0)]
 
 
 class KwargListIntAPIConfig(BaseModel):

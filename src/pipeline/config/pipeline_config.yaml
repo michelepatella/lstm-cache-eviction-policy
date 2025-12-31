@@ -136,7 +136,7 @@ seed:
   value: 42
 simulations:
   api_kwargs:
-    conf_weight: 0.7
+    conf_weight: 2.0
     conf_level: 0.95
     excluded_keys: []
     mc_dropout_samples: 10
@@ -144,7 +144,7 @@ simulations:
     rollout_horizon: 3
     time_step_increment: 0.02
   caches:
-    dimension: 10
+    dimension: 15
     ttl: 100000
 training:
   epochs: 500
