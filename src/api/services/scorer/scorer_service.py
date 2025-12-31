@@ -15,8 +15,8 @@ import numpy as np
 
 import api.services.scorer.scorer_service_pb2 as pb2
 import api.services.scorer.scorer_service_pb2_grpc as pb2_grpc
-from components.caches.implementations.items.scores.expected_survival_calculator import (
-    calculate_expected_survival_item_scores,
+from components.caches.implementations.items.scores.survival_uncertainty_calculator import (
+    calculate_survival_uncertainty_scores,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -72,7 +72,7 @@ class ScorerService(pb2_grpc.ScorerServiceServicer):
             variances = [np.array(request.variances)]
 
             # Calculate key scores
-            key_scores = calculate_expected_survival_item_scores(
+            key_scores = calculate_survival_uncertainty_scores(
                 outputs,
                 variances,
                 request.conf_level,
