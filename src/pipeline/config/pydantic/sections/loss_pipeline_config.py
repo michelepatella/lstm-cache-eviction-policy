@@ -55,10 +55,11 @@ class LossPipelineConfig(BaseModel):
     Attributes:
         class_weight (LossClassWeightPipelineConfig): Configuration for class
                                                       weight calculation.
+        reduction (str | None): Reduction strategy to use.
     """
 
     class_weight: LossClassWeightPipelineConfig
-    reduction: str
+    reduction: str | None
 
     @model_validator(mode="after")
     def check_loss_reduction(
