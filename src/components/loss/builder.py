@@ -95,7 +95,7 @@ def build_loss(
         # Build loss with computed weight
         loss = nn.CrossEntropyLoss(
             weight=class_weight_tensor,
-            reduction=reduction,
+            reduction=str(reduction).lower(),
         )
 
         debug(
