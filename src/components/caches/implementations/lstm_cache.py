@@ -239,6 +239,18 @@ class LSTMCache(BaseCache):
                     # Eviction fallback policy: Random
                     key_to_evict = random.choice(list(self.store.keys()))
                 else:
+                    # Protect the last accessed key and
+                    # the most frequently accessed one
+                    self.api_kwargs.excluded_keys = list(
+                        {
+                            self.last_accessed_key,
+                            max(
+                                self.key_access_counter,
+                                key=self.key_access_counter.get,
+                            ),
+                        },
+                    )
+
                     # Call API to get the key to be evicted
                     # from the cache
                     response = requests.post(
