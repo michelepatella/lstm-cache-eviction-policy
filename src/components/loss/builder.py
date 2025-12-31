@@ -13,6 +13,7 @@ Functions:
         targets: torch.Tensor,
         num_classes: int,
         class_weight_type: str,
+        reduction: str,
         device: torch.device
     ) -> nn.CrossEntropyLoss
         Computes class weights from target labels and returns a
@@ -34,6 +35,7 @@ def build_loss(
     targets: torch.Tensor,
     num_classes: int,
     class_weight_type: str,
+    reduction: str,
     device: torch.device,
 ) -> nn.CrossEntropyLoss:
     """Build a PyTorch loss.
@@ -46,6 +48,7 @@ def build_loss(
         targets (torch.Tensor): Targets for computing class weight.
         num_classes (int): Number of classes.
         class_weight_type (str): Type of class weight to apply.
+        reduction (str): Type of reduction to apply.
         device (torch.device): Device to move the loss weight onto.
 
     Returns:
@@ -68,6 +71,7 @@ def build_loss(
                     len(targets) if hasattr(targets, "__len__") else None
                 ),
                 "classes_num": num_classes,
+                "reduction": reduction,
                 "device": str(device),
                 "context": "Loss building",
             },
@@ -89,7 +93,10 @@ def build_loss(
         class_weight_tensor = move_to_device(class_weight_tensor, device)
 
         # Build loss with computed weight
-        loss = nn.CrossEntropyLoss(weight=class_weight_tensor)
+        loss = nn.CrossEntropyLoss(
+            weight=class_weight_tensor,
+            reduction=reduction,
+        )
 
         debug(
             "Loss building completed",
@@ -99,6 +106,7 @@ def build_loss(
                 ),
                 "classes_num": num_classes,
                 "class_weight_shape": tuple(class_weight_tensor.shape),
+                "reduction": reduction,
                 "device": str(device),
                 "context": "Loss building",
             },
@@ -115,6 +123,7 @@ def build_loss(
                     len(targets) if hasattr(targets, "__len__") else None
                 ),
                 "classes_num": num_classes,
+                "reduction": reduction,
                 "targets_dtype": str(getattr(targets, "dtype", None)),
                 "targets_shape": tuple(getattr(targets, "shape", ())),
                 "device": str(device),

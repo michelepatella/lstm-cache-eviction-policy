@@ -180,6 +180,7 @@ stages:
         - early_stopping.validation.delta
         - early_stopping.validation.patience
         - loss.class_weight.type
+        - loss.reduction
         - logs.level
         - model.params.batch_first
         - model.params.bias
@@ -307,6 +308,7 @@ stages:
         - early_stopping.validation.patience
         - logs.level
         - loss.class_weight.type
+        - loss.reduction
         - model.optimizations.pruning.amount
         - model.optimizations.quantization.dtype
         - model.optimizations.quantization.engine
@@ -414,6 +416,7 @@ stages:
         - data_loader.shuffle.testing
         - logs.level
         - loss.class_weight.type
+        - loss.reduction
         - model.optimizations.quantization.engine
         - model.params.batch_first
         - model.params.bias
@@ -536,7 +539,7 @@ stages:
       - src/components/caches/implementations/lfu_cache.py
       - src/components/caches/implementations/lru_cache.py
       - src/components/caches/implementations/lstm_cache.py
-      - src/components/caches/implementations/random_cache.py
+      - src/components/caches/implementations/lr_cache.py
       - src/components/caches/implementations/utils/base_cache.py
       - src/components/caches/implementations/utils/cache_cleaner.py
       - src/components/caches/implementations/utils/cache_size_calculator.py

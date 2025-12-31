@@ -53,6 +53,7 @@ LOGS_PHASE_SIMULATIONS = "simulations"
 # Loss
 # ----------------------------
 LOSS_CLASS_WEIGHT_TYPES = [None, "balanced"]
+LOSS_REDUCTIONS = [None, "mean", "sum"]
 
 
 # ----------------------------
