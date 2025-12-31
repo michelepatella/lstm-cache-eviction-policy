@@ -22,7 +22,6 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 # ----------------------------
 CACHE_LFU_NAME = "LFU"
 CACHE_LRU_NAME = "LRU"
-CACHE_RANDOM_NAME = "RANDOM"
 
 
 # ----------------------------
@@ -54,6 +53,7 @@ LOGS_PHASE_SIMULATIONS = "simulations"
 # Loss
 # ----------------------------
 LOSS_CLASS_WEIGHT_TYPES = [None, "balanced"]
+LOSS_REDUCTIONS = [None, "mean", "sum"]
 
 
 # ----------------------------

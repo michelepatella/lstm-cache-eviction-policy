@@ -16,7 +16,7 @@ Classes:
     KwargFloatAPIConfig(BaseModel):
         Configuration for float kwargs with boundary checks.
     KwargConfLevelAPIConfig(BaseModel):
-        Configuration for float kwargs constrained to be a probability/level.
+        Configuration for float kwargs constrained to be a level.
     KwargListIntAPIConfig(BaseModel):
         Configuration for list-of-integer kwargs.
     KwargBoolAPIConfig(BaseModel):
@@ -58,10 +58,10 @@ class KwargConfLevelAPIConfig(BaseModel):
     """Confidence level API kwarg configuration.
 
     Attributes:
-        value (float):  Confidence level value (0.0–1.0].
+        value (float):  Confidence level value (0.0–5.0].
     """
 
-    value: Annotated[float, Field(gt=0.0, le=1.0)]
+    value: Annotated[float, Field(gt=0.0, le=5.0)]
 
 
 class KwargListIntAPIConfig(BaseModel):
@@ -98,7 +98,6 @@ class KwargsAPIConfig(BaseModel):
                                                    for feature progression.
         num_evictions (KwargIntAPIConfig): Number of keys to evict per step.
         excluded_keys (KwargListIntAPIConfig): Keys that should not be evicted.
-        prob_weight (KwargFloatAPIConfig): Weight applied to probability in key scoring.
         conf_weight (KwargFloatAPIConfig): Weight applied to confidence in key scoring.
     """
 
@@ -109,5 +108,4 @@ class KwargsAPIConfig(BaseModel):
     num_evictions: KwargIntAPIConfig
     excluded_keys: KwargListIntAPIConfig
     unbiased_variance: KwargBoolAPIConfig
-    prob_weight: KwargFloatAPIConfig
     conf_weight: KwargFloatAPIConfig

@@ -25,27 +25,24 @@ class SimulationsApiKwargsPipelineConfig(BaseModel):
 
     Attributes:
         conf_weight (float): Weight applied to the confidence score
-                             in decision-making (in (0.0, 1.0]).
+                             in decision-making (in (0.0, 5.0]).
         conf_level (float): Minimum confidence level required
                             for certain decisions (in (0.0, 1.0]).
         excluded_keys (list[int]): List of keys to exclude from cache operations.
         mc_dropout_samples (int): Number of Monte Carlo Dropout samples
                                   to use for uncertainty estimation (>= 1).
         num_evictions (int): Number of items to evict simultaneously (>= 1).
-        prob_weight (float): Weight applied to the prediction probability
-                             score (in (0.0, 1.0]).
         rollout_horizon (int): Time horizon for autoregressive rollout
                                prediction (>= 1).
         time_step_increment (float): Time increment used in autoregressive
                                      rollout (> 0).
     """
 
-    conf_weight: Annotated[float, Field(gt=0, le=1)]
+    conf_weight: Annotated[float, Field(gt=0.0, le=5.0)]
     conf_level: Annotated[float, Field(gt=0, le=1)]
     excluded_keys: list[int]
     mc_dropout_samples: Annotated[int, Field(ge=1)]
     num_evictions: Annotated[int, Field(ge=1)]
-    prob_weight: Annotated[float, Field(gt=0, le=1)]
     rollout_horizon: Annotated[int, Field(ge=1)]
     time_step_increment: Annotated[float, Field(gt=0)]
 

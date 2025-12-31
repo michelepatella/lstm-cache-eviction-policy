@@ -73,6 +73,7 @@ def initialize_model_environment(
     num_keys = max_key - min_key + 1
     embedding_dim = pipeline_config.model.sequence.embedding.dimension
     class_weight_type = pipeline_config.loss.class_weight.type
+    reduction = pipeline_config.loss.reduction
     num_features = len(DATASET_PROCESSED_FEATURE_COLUMNS)
 
     # Define the device for computations
@@ -82,7 +83,13 @@ def initialize_model_environment(
     # have been provided
     criterion = None
     if targets is not None:
-        criterion = build_loss(targets, num_keys, class_weight_type, device)
+        criterion = build_loss(
+            targets,
+            num_keys,
+            class_weight_type,
+            reduction,
+            device,
+        )
 
     if model is None:
         # Instantiate model

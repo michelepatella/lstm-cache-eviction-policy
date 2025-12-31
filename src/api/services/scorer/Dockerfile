@@ -24,7 +24,7 @@ COPY src/api/services/scorer/scorer_service.py /app/src/api/services/scorer/
 COPY src/api/services/scorer/scorer_service_pb2.py /app/src/api/services/scorer/
 COPY src/api/services/scorer/scorer_service_pb2_grpc.py /app/src/api/services/scorer/
 COPY src/api/const.py /app/src/api/
-COPY src/components/caches/implementations/items/scores/prob_conf_calculator.py /app/src/components/caches/implementations/items/scores/
+COPY src/components/caches/implementations/items/scores/survival_uncertainty_calculator.py /app/src/components/caches/implementations/items/scores/
 COPY src/components/const.py /app/src/components/
 COPY src/components/logs/levels/debug_logger.py /app/src/components/logs/levels/
 COPY src/components/logs/levels/error_logger.py /app/src/components/logs/levels/

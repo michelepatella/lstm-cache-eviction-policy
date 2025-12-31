@@ -89,6 +89,8 @@ class BaseCache(ABC):
             self.store = {}
             self.expiry = {}
             self._last_put_time = None
+            self.last_accessed_key = None
+            self.key_access_counter = {}
 
             debug(
                 "BaseCache initialization executed",
@@ -270,6 +272,10 @@ class BaseCache(ABC):
         try:
             # Trace the get event
             self.metrics_logger.log_get(key, current_time)
+            self.last_accessed_key = key
+            self.key_access_counter[key] = (
+                self.key_access_counter.get(key, 0) + 1
+            )
 
             # Check whether the key is
             # in the cache/store and is not expired

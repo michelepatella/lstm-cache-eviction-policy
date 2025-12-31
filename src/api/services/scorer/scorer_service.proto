@@ -6,8 +6,7 @@ message ScorerServiceRequest {
     repeated float outputs = 1;
     repeated float variances = 2;
     float conf_level = 3;
-    float prob_weight = 4;
-    float conf_weight = 5;
+    float conf_weight = 4;
 }
 
 message ScorerServiceResponse {

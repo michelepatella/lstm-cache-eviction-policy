@@ -27,6 +27,7 @@ API_RESPONSE_FIELD_DATA_KEYS_TO_EVICT_NAME = "keys_to_evict"
 # Cache
 # ----------------------------
 CACHE_LSTM_NAME = "LSTM"
+CACHE_LR_NAME = "LR"
 
 
 # ----------------------------
@@ -62,6 +63,7 @@ DATA_LOADER_SHUFFLE_DEFAULT = False
 # ----------------------------
 DATASET_COLUMN_TIMESTAMP_NAME = "timestamp"
 DATASET_COLUMN_REQUEST_NAME = "request"
+DATASET_COLUMN_LR_PREVIOUS_REQUEST_PREFIX_NAME = "prev_request_"
 
 DATASET_RAW_TYPE = "raw"
 

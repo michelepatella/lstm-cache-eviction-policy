@@ -15,8 +15,8 @@ import numpy as np
 
 import api.services.scorer.scorer_service_pb2 as pb2
 import api.services.scorer.scorer_service_pb2_grpc as pb2_grpc
-from components.caches.implementations.items.scores.prob_conf_calculator import (
-    calculate_prob_conf_item_scores,
+from components.caches.implementations.items.scores.survival_uncertainty_calculator import (
+    calculate_survival_uncertainty_scores,
 )
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
@@ -61,7 +61,6 @@ class ScorerService(pb2_grpc.ScorerServiceServicer):
                     "outputs_num": len(request.outputs),
                     "variances_num": len(request.variances),
                     "conf_level": request.conf_level,
-                    "prob_weight": request.prob_weight,
                     "conf_weight": request.conf_weight,
                     "context": "Scorer service",
                 },
@@ -72,13 +71,11 @@ class ScorerService(pb2_grpc.ScorerServiceServicer):
             outputs = [np.array(request.outputs)]
             variances = [np.array(request.variances)]
 
-            # Calculate confidence-aware
-            # probabilistic key scores
-            key_scores = calculate_prob_conf_item_scores(
+            # Calculate key scores
+            key_scores = calculate_survival_uncertainty_scores(
                 outputs,
                 variances,
                 request.conf_level,
-                request.prob_weight,
                 request.conf_weight,
             )
 
@@ -101,7 +98,6 @@ class ScorerService(pb2_grpc.ScorerServiceServicer):
                     "outputs_num": len(request.outputs),
                     "variances_num": len(request.variances),
                     "conf_level": request.conf_level,
-                    "prob_weight": request.prob_weight,
                     "conf_weight": request.conf_weight,
                     "context": "Scorer service",
                 },

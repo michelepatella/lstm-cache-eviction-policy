@@ -14,7 +14,7 @@ Classes:
 from pydantic import BaseModel, model_validator
 
 from components.assertions.choice_field_assertor import assert_choice_field
-from pipeline.const import LOSS_CLASS_WEIGHT_TYPES
+from pipeline.const import LOSS_CLASS_WEIGHT_TYPES, LOSS_REDUCTIONS
 
 
 class LossClassWeightPipelineConfig(BaseModel):
@@ -55,6 +55,30 @@ class LossPipelineConfig(BaseModel):
     Attributes:
         class_weight (LossClassWeightPipelineConfig): Configuration for class
                                                       weight calculation.
+        reduction (str | None): Reduction strategy to use.
     """
 
     class_weight: LossClassWeightPipelineConfig
+    reduction: str | None
+
+    @model_validator(mode="after")
+    def check_loss_reduction(
+        self: "LossPipelineConfig",
+    ) -> "LossPipelineConfig":
+        """Check whether loss reduction is valid or not.
+
+        This function validates the loss reduction.
+
+        Args:
+            self (LossPipelineConfig): Current model instance.
+
+        Returns:
+            "LossPipelineConfig": Validated model instance.
+        """
+        assert_choice_field(
+            self.reduction,
+            LOSS_REDUCTIONS,
+            "loss.reduction",
+        )
+
+        return self

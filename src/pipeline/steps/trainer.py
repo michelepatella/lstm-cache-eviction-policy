@@ -255,11 +255,9 @@ def train_model() -> None:
             )
             mlflow.register_model(
                 model_uri=f"runs:/{mlflow.active_run().info.run_id}/{MLFLOW_ARTIFACT_PATH}",
-                name={
-                    MLFLOW_MODEL_PRODUCTION_NAME
-                    if data_mode == DATA_REAL_MODE
-                    else MLFLOW_MODEL_SIMULATION_NAME,
-                },
+                name=MLFLOW_MODEL_PRODUCTION_NAME
+                if data_mode == DATA_REAL_MODE
+                else MLFLOW_MODEL_SIMULATION_NAME,
                 tags={MLFLOW_MODEL_TAG_DATA_MODE: data_mode},
             )
 

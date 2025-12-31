@@ -34,6 +34,7 @@ API_PARAM_USER_API_KWARGS_NAME = "user_api_kwargs"
 # Autoregressive Rollout
 # ----------------------------
 AUTOREGRESSIVE_ROLLOUT_SEQUENCE_SHIFT_IDX = 1
+AUTOREGRESSIVE_ROLLOUT_DIM = 0
 
 
 # ----------------------------
@@ -230,6 +231,21 @@ MODEL_OPTIMIZATIONS_PRUNING_PARAMS = ("weight",)
 
 
 # ----------------------------
+# Model (Extra)
+# ----------------------------
+MODEL_LR_TRAINED_STATIC_FILE_PATH = (
+    PROJECT_ROOT / "models" / "extra" / "static" / "trained_static_lr_model.pt"
+)
+MODEL_LR_TRAINED_DYNAMIC_FILE_PATH = (
+    PROJECT_ROOT
+    / "models"
+    / "extra"
+    / "dynamic"
+    / "trained_dynamic_lr_model.pt"
+)
+
+
+# ----------------------------
 # Monte Carlo (MC) Dropout
 # ----------------------------
 MC_DROPOUT_FLAG_NAME = "mc_dropout"
@@ -318,6 +334,9 @@ TENSOR_BATCH_DIM = 0
 TENSOR_FEATURES_DIM = 1
 TENSOR_CLASS_DIM = -1
 
+TENSOR_BROADCAST_ROW_DIM = 0
+TENSOR_BROADCAST_COL_DIM = 1
+
 
 # ----------------------------
 # Time
@@ -327,6 +346,7 @@ TIME_SECONDS_IN_DAY = 86_400
 TIME_SECONDS_IN_HOUR = 3_600
 TIME_MICROSECONDS_IN_SECOND = 1_000_000
 TIME_NANOSECONDS_IN_SECOND = 1_000_000_000
+TIME_MICROSECONDS_IN_MILLISECOND = 1_000
 
 
 # ----------------------------

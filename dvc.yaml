@@ -180,6 +180,7 @@ stages:
         - early_stopping.validation.delta
         - early_stopping.validation.patience
         - loss.class_weight.type
+        - loss.reduction
         - logs.level
         - model.params.batch_first
         - model.params.bias
@@ -307,6 +308,7 @@ stages:
         - early_stopping.validation.patience
         - logs.level
         - loss.class_weight.type
+        - loss.reduction
         - model.optimizations.pruning.amount
         - model.optimizations.quantization.dtype
         - model.optimizations.quantization.engine
@@ -414,6 +416,7 @@ stages:
         - data_loader.shuffle.testing
         - logs.level
         - loss.class_weight.type
+        - loss.reduction
         - model.optimizations.quantization.engine
         - model.params.batch_first
         - model.params.bias
@@ -515,10 +518,6 @@ stages:
         - simulations.api_kwargs.excluded_keys
         - simulations.api_kwargs.mc_dropout_samples
         - simulations.api_kwargs.num_evictions
-        - simulations.api_kwargs.prob_weight
-        - simulations.api_kwargs.return_all_scores
-        - simulations.api_kwargs.return_api_kwargs
-        - simulations.api_kwargs.return_prob_conf
         - simulations.api_kwargs.rollout_horizon
         - simulations.api_kwargs.time_step_increment
         - simulations.caches.dimension
@@ -536,7 +535,7 @@ stages:
       - src/components/caches/implementations/lfu_cache.py
       - src/components/caches/implementations/lru_cache.py
       - src/components/caches/implementations/lstm_cache.py
-      - src/components/caches/implementations/random_cache.py
+      - src/components/caches/implementations/lr_cache.py
       - src/components/caches/implementations/utils/base_cache.py
       - src/components/caches/implementations/utils/cache_cleaner.py
       - src/components/caches/implementations/utils/cache_size_calculator.py
