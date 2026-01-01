@@ -17,6 +17,7 @@ Functions:
 import torch
 
 from components.const import (
+    EPSILON,
     LIST_FIRST_IDX,
     TENSOR_BROADCAST_COL_DIM,
     TENSOR_BROADCAST_ROW_DIM,
@@ -81,6 +82,7 @@ def calculate_loss(
             for i in range(batch_size):
                 # Get indices of future accesses for key i
                 future_accesses = torch.where(mask[i])[LIST_FIRST_IDX]
+                future_accesses = future_accesses[future_accesses > i]
 
                 # If there is a future access, store its
                 # distance from current index
@@ -93,7 +95,9 @@ def calculate_loss(
             # which assign higher values to keys that will
             # be accessed earlier than others
             temporal_weights = 1.0 / torch.log1p(distances)
-            temporal_weights = temporal_weights / temporal_weights.mean()
+            temporal_weights = temporal_weights / (
+                temporal_weights.mean() + EPSILON
+            )
 
             # Select logits of the target class for each batch
             # element and convert to probability via sigmoid
@@ -101,7 +105,10 @@ def calculate_loss(
                 TENSOR_BROADCAST_COL_DIM,
                 targets.unsqueeze(TENSOR_BROADCAST_COL_DIM),
             ).squeeze(TENSOR_BROADCAST_COL_DIM)
-            target_probs = torch.sigmoid(target_logits)
+            target_probs = torch.sigmoid(target_logits).clamp(
+                min=EPSILON,
+                max=1 - EPSILON,
+            )
 
             # Penalize the model when assigning low
             # probabilities to keys that will be accessed

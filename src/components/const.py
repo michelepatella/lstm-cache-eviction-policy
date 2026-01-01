@@ -121,6 +121,12 @@ EARLY_STOPPING_UNTRIGGERED_TENSOR = 0
 
 
 # ----------------------------
+# Epsilon
+# ----------------------------
+EPSILON = 1e-6
+
+
+# ----------------------------
 # Grid Search
 # ----------------------------
 GRID_SEARCH_DESC = "Grid Search"
