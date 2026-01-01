@@ -101,13 +101,14 @@ def calculate_loss(
 
             # Select logits of the target class for each batch
             # element and convert to probability via sigmoid
-            target_logits = outputs.gather(
-                TENSOR_BROADCAST_COL_DIM,
-                targets.unsqueeze(TENSOR_BROADCAST_COL_DIM),
-            ).squeeze(TENSOR_BROADCAST_COL_DIM)
-            target_probs = torch.sigmoid(target_logits).clamp(
-                min=EPSILON,
-                max=1 - EPSILON,
+            target_probs = (
+                torch.softmax(outputs, dim=TENSOR_BROADCAST_COL_DIM)
+                .gather(
+                    TENSOR_BROADCAST_COL_DIM,
+                    targets.unsqueeze(TENSOR_BROADCAST_COL_DIM),
+                )
+                .squeeze(TENSOR_BROADCAST_COL_DIM)
+                .clamp(min=EPSILON, max=1 - EPSILON)
             )
 
             # Penalize the model when assigning low
