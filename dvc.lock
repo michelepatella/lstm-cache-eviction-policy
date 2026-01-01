@@ -242,7 +242,7 @@ stages:
       src/pipeline/config/pipeline_config.yaml:
         data.general.keys.max: 100
         data.general.keys.min: 1
-        data.general.mode: static
+        data.general.mode: dynamic
         data.general.requests: 100000
         data.synthetic.patterns.access.behavior.cycle.base: 20
         data.synthetic.patterns.access.behavior.cycle.divisor: 100
