@@ -170,10 +170,10 @@ stages:
         - data.general.keys.max
         - data.general.keys.min
         - data.general.mode
-        - data_loader.batch_size.training
-        - data_loader.batch_size.validation
-        - data_loader.shuffle.training
-        - data_loader.shuffle.validation
+        - data_loader.training.batch_size
+        - data_loader.validation.batch_size
+        - data_loader.training.shuffle
+        - data_loader.validation.shuffle
         - dataset.splits.training
         - early_stopping.training.delta
         - early_stopping.training.patience
@@ -298,10 +298,10 @@ stages:
         - data.general.mode
         - dataset.splits.training
         - dataset.splits.validation
-        - data_loader.batch_size.training
-        - data_loader.batch_size.validation
-        - data_loader.shuffle.training
-        - data_loader.shuffle.validation
+        - data_loader.training.batch_size
+        - data_loader.validation.batch_size
+        - data_loader.training.shuffle
+        - data_loader.validation.shuffle
         - early_stopping.training.delta
         - early_stopping.training.patience
         - early_stopping.validation.delta
@@ -412,8 +412,8 @@ stages:
         - data.general.keys.min
         - data.general.mode
         - dataset.splits.training
-        - data_loader.batch_size.testing
-        - data_loader.shuffle.testing
+        - data_loader.testing.batch_size
+        - data_loader.testing.shuffle
         - logs.level
         - loss.class_weight.type
         - loss.reduction
@@ -441,7 +441,6 @@ stages:
       - src/components/data_loader/initializer.py
       - src/components/data_loader/targets/extractor.py
       - src/components/dataset/access_logs_dataset.py
-      - src/components/dataset/columns/extractions/features_target_extractor.py
       - src/components/dataset/columns/shifter.py
       - src/components/dataset/io/loader.py
       - src/components/dataset/io/locator.py
@@ -505,8 +504,8 @@ stages:
       - src/pipeline/config/pipeline_config.yaml:
         - data.general.mode
         - dataset.splits.training
-        - data_loader.batch_size.testing
-        - data_loader.shuffle.testing
+        - data_loader.testing.batch_size
+        - data_loader.testing.shuffle
         - evaluation.simulations.metrics.mistake_rate.window
         - logs.level
         - model.sequence.length

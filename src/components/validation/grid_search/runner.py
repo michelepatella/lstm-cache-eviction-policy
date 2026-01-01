@@ -21,7 +21,9 @@ Functions:
 import mlflow
 import numpy as np
 import ray
+from tqdm import tqdm
 
+from components.const import GRID_SEARCH_DESC
 from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
@@ -101,7 +103,11 @@ def compute_grid_search(
             )
             for params in params_combinations
         ]
-        results = ray.get(futures)
+        results = []
+        futures_pending = futures.copy()
+        for _ in tqdm(range(len(futures)), desc=GRID_SEARCH_DESC):
+            done, futures_pending = ray.wait(futures_pending, num_returns=1)
+            results.extend(ray.get(done))
 
         for idx, (params, avg_loss, fold_losses) in enumerate(
             results,

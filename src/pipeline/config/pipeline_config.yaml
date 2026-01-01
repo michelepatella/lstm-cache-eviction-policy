@@ -101,7 +101,7 @@ loss:
   reduction: null
 model:
   params:
-    hidden_size: 128
+    hidden_size: 256
     num_layers: 2
     bias: false
     batch_first: true
