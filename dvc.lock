@@ -13,8 +13,8 @@ stages:
       size: 3090
     - path: src/components/const.py
       hash: md5
-      md5: 9156de625cf9c4a0e1c19bbe3c455263
-      size: 9654
+      md5: 3c6a7677d4b801d83887b1c0d730ae0e
+      size: 10124
     - path: src/components/data/exploration/explorer.py
       hash: md5
       md5: a634f1afb824ebc4581a0e92932f9bc4
@@ -163,8 +163,8 @@ stages:
       size: 2035
     - path: src/const.py
       hash: md5
-      md5: b7b60280c9dfdc2084c94e859407239b
-      size: 3475
+      md5: 957e272371e97d53f579136843e66e48
+      size: 3561
     - path: src/pipeline/config/configurator.py
       hash: md5
       md5: 206c94894f9fd7eae42c1f4cbcd7ea4b
@@ -200,8 +200,8 @@ stages:
       size: 1139
     - path: src/pipeline/config/pydantic/sections/loss_pipeline_config.py
       hash: md5
-      md5: b6574690987dcbea9000330a7eaa7af7
-      size: 1646
+      md5: 95fb0fb44e204304b5fc790e03fe51df
+      size: 2306
     - path: src/pipeline/config/pydantic/sections/model_pipeline_config.py
       hash: md5
       md5: 48fb14bd8c9ca6f1908d82522cb5069a
@@ -220,8 +220,8 @@ stages:
       size: 572
     - path: src/pipeline/config/pydantic/sections/simulations_pipeline_config.py
       hash: md5
-      md5: 9dd8ee8bfb243de017c4104f0a234653
-      size: 3168
+      md5: c6aa4f289946c73c35fb206667e55253
+      size: 2993
     - path: src/pipeline/config/pydantic/sections/training_pipeline_config.py
       hash: md5
       md5: e84bb508a4c181f98adab61623e9dce6
@@ -232,54 +232,55 @@ stages:
       size: 3102
     - path: src/pipeline/const.py
       hash: md5
-      md5: 400976e4e0f60aaca16f9571bfef0a39
-      size: 3782
+      md5: 45d98b388205da83ed0084f406f5d434
+      size: 3793
     - path: src/pipeline/steps/data_preparer.py
       hash: md5
       md5: b839385c88c92366ac39836f1d09e51f
       size: 8035
     params:
       src/pipeline/config/pipeline_config.yaml:
-        data.general.keys.max: 200
+        data.general.keys.max: 100
         data.general.keys.min: 1
         data.general.mode: static
-        data.general.requests: 200000
-        data.synthetic.patterns.access.behavior.cycle.base: 5
+        data.general.requests: 100000
+        data.synthetic.patterns.access.behavior.cycle.base: 20
         data.synthetic.patterns.access.behavior.cycle.divisor: 100
         data.synthetic.patterns.access.behavior.cycle.hours.end: 19
         data.synthetic.patterns.access.behavior.cycle.hours.start: 14
-        data.synthetic.patterns.access.behavior.cycle.mod: 2
+        data.synthetic.patterns.access.behavior.cycle.mod: 7
         data.synthetic.patterns.access.behavior.distortion.hours.end: 23
         data.synthetic.patterns.access.behavior.distortion.hours.start: 19
-        data.synthetic.patterns.access.behavior.distortion.interval: 4
-        data.synthetic.patterns.access.behavior.distortion.noise.max: 1
-        data.synthetic.patterns.access.behavior.distortion.noise.min: 0
-        data.synthetic.patterns.access.behavior.distortion.offsets.correction: 1
-        data.synthetic.patterns.access.behavior.distortion.offsets.history: 2
-        data.synthetic.patterns.access.behavior.memory.interval: 5
-        data.synthetic.patterns.access.behavior.memory.offset: 3
+        data.synthetic.patterns.access.behavior.distortion.interval: 1
+        data.synthetic.patterns.access.behavior.distortion.noise.max: 10
+        data.synthetic.patterns.access.behavior.distortion.noise.min: 5
+        data.synthetic.patterns.access.behavior.distortion.offsets.correction: 
+          10
+        data.synthetic.patterns.access.behavior.distortion.offsets.history: 15
+        data.synthetic.patterns.access.behavior.memory.interval: 80
+        data.synthetic.patterns.access.behavior.memory.offset: 10
         data.synthetic.patterns.access.behavior.repetition.hours.end: 9
         data.synthetic.patterns.access.behavior.repetition.hours.start: 4
-        data.synthetic.patterns.access.behavior.repetition.interval: 7
-        data.synthetic.patterns.access.behavior.repetition.offset: 3
-        data.synthetic.patterns.access.behavior.toggle.base_requests.first: 1
-        data.synthetic.patterns.access.behavior.toggle.base_requests.second: 2
+        data.synthetic.patterns.access.behavior.repetition.interval: 40
+        data.synthetic.patterns.access.behavior.repetition.offset: 10
+        data.synthetic.patterns.access.behavior.toggle.base_requests.first: 2
+        data.synthetic.patterns.access.behavior.toggle.base_requests.second: 3
         data.synthetic.patterns.access.behavior.toggle.hours.end: 14
         data.synthetic.patterns.access.behavior.toggle.hours.start: 9
-        data.synthetic.patterns.access.behavior.toggle.interval: 20
+        data.synthetic.patterns.access.behavior.toggle.interval: 2
         data.synthetic.patterns.access.behavior.toggle.offsets.backward: 2
         data.synthetic.patterns.access.behavior.toggle.offsets.forward: 1
-        data.synthetic.patterns.access.zipf.alpha.fixed: 1.2
+        data.synthetic.patterns.access.zipf.alpha.fixed: 1.0
         data.synthetic.patterns.access.zipf.alpha.max: 1.5
         data.synthetic.patterns.access.zipf.alpha.min: 0.5
         data.synthetic.patterns.access.zipf.steps: 5
-        data.synthetic.patterns.temporal.burstiness.high: 0.8
+        data.synthetic.patterns.temporal.burstiness.high: 0.3
         data.synthetic.patterns.temporal.burstiness.hours.end: 18
         data.synthetic.patterns.temporal.burstiness.hours.start: 10
-        data.synthetic.patterns.temporal.burstiness.low: 1.2
-        data.synthetic.patterns.temporal.periodic.amplitude: 50
-        data.synthetic.patterns.temporal.periodic.scale: 90
+        data.synthetic.patterns.temporal.burstiness.low: 2.0
+        data.synthetic.patterns.temporal.periodic.amplitude: 60
+        data.synthetic.patterns.temporal.periodic.scale: 120
         logs.level: DEBUG
-        resources.general.num_cpus: 2
+        resources.general.num_cpus: 4
         resources.general.num_gpus: 0
         seed.value: 42
