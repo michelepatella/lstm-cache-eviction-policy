@@ -287,10 +287,10 @@ stages:
   data_preprocessing:
     cmd: PYTHONPATH=src python -m pipeline.steps.data_preprocessor
     deps:
-    - path: data/raw/static/static_raw_dataset.csv
+    - path: data/raw/dynamic/dynamic_raw_dataset.csv
       hash: md5
-      md5: 039ff3fbf75cecb3d26baef843566488
-      size: 2145078
+      md5: 549cd0bf0f7bdb245ba99f7ee18dc006
+      size: 2144571
     - path: src/components/assertions/choice_field_assertor.py
       hash: md5
       md5: 14c153425aa8ef36316b3148a5613197
@@ -467,7 +467,7 @@ stages:
       size: 6485
     params:
       src/pipeline/config/pipeline_config.yaml:
-        data.general.mode: static
+        data.general.mode: dynamic
         dataset.cleaning.missing_values_removal.dropna.how: any
         logs.level: DEBUG
         model.sequence.length: 25
