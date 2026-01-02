@@ -1,0 +1,5 @@
+outs:
+- md5: bd8858bb4b6dc945a8468be20eef795d
+  size: 2028894
+  hash: md5
+  path: trained_static_lr_model.pt
