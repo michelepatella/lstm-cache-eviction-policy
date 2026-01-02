@@ -1806,5 +1806,5 @@ stages:
         simulations.api_kwargs.num_evictions: 1
         simulations.api_kwargs.rollout_horizon: 3
         simulations.api_kwargs.time_step_increment: 0.02
-        simulations.caches.dimension: 15
+        simulations.caches.dimension: 20
         simulations.caches.ttl: 100000

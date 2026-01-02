@@ -144,7 +144,7 @@ simulations:
     rollout_horizon: 3
     time_step_increment: 0.02
   caches:
-    dimension: 15
+    dimension: 20
     ttl: 100000
 training:
   epochs: 500
