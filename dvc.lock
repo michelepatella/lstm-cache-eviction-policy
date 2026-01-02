@@ -1785,14 +1785,14 @@ stages:
       size: 3793
     - path: src/pipeline/steps/simulator.py
       hash: md5
-      md5: 4c901d2ce383a930ed400e28c3552c29
-      size: 11934
+      md5: 1d5667ff3a5fad5730c8d81c7161e8cf
+      size: 11921
     params:
       src/pipeline/config/pipeline_config.yaml:
         data.general.mode: static
         data_loader.testing.batch_size: 512
         data_loader.testing.shuffle: false
-        dataset.splits.training: 0.9995
+        dataset.splits.training: 0.8
         evaluation.simulations.metrics.mistake_rate.window: 200
         logs.level: DEBUG
         model.sequence.length: 25
