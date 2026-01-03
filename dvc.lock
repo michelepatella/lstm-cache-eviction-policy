@@ -477,10 +477,10 @@ stages:
   validation:
     cmd: PYTHONPATH=src python -m pipeline.steps.validator
     deps:
-    - path: data/processed/static/static_processed_dataset.csv
+    - path: data/processed/dynamic/dynamic_processed_dataset.csv
       hash: md5
-      md5: 6fcfc54cec80e0ea9b3d1b1c0c531f45
-      size: 5436327
+      md5: 43b62c2db8f2423d819977a486fc9d56
+      size: 5434735
     - path: src/components/assertions/choice_field_assertor.py
       hash: md5
       md5: 14c153425aa8ef36316b3148a5613197
@@ -690,8 +690,8 @@ stages:
       size: 1825
     - path: src/components/ray/tasks/time_series_cv/folds_runner.py
       hash: md5
-      md5: 764d12822bca2fd265d700c09fcf1c2f
-      size: 2460
+      md5: 8e2b446107ca2a8313d82761afb9fd68
+      size: 2449
     - path: src/components/seed/setter.py
       hash: md5
       md5: 3273f2ae0475009ba5a6da1b6cb3d57f
@@ -710,8 +710,8 @@ stages:
       size: 5534
     - path: src/components/validation/grid_search/runner.py
       hash: md5
-      md5: 1bb86107690a9971ad08b1a4b65d1b4f
-      size: 6782
+      md5: 4c344ae84818b354a85523aca0325f35
+      size: 6757
     - path: src/components/validation/search_space/combinator.py
       hash: md5
       md5: 8b32a7d137aeeb50e58b93c2a6969161
@@ -811,13 +811,13 @@ stages:
       size: 3793
     - path: src/pipeline/steps/validator.py
       hash: md5
-      md5: 4f65e9040fab410c57ec99a3416d021d
-      size: 5819
+      md5: 94dfcb26be72d106dccffb6613d97250
+      size: 5804
     params:
       src/pipeline/config/pipeline_config.yaml:
         data.general.keys.max: 100
         data.general.keys.min: 1
-        data.general.mode: static
+        data.general.mode: dynamic
         data_loader.training.batch_size: 512
         data_loader.training.shuffle: false
         data_loader.validation.batch_size: 512
@@ -839,7 +839,7 @@ stages:
         model.params.proj_size: 0
         model.sequence.embedding.dimension: 32
         model.sequence.length: 25
-        optimizer.params.learning_rate: 0.001
+        optimizer.params.learning_rate: 0.0005
         optimizer.params.weight_decay: 0.05
         optimizer.type: adamw
         resources.devices.validation: cpu
