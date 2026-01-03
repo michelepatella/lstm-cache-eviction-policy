@@ -1492,10 +1492,10 @@ stages:
   simulations:
     cmd: PYTHONPATH=src python -m pipeline.steps.simulator
     deps:
-    - path: data/processed/static/static_processed_dataset.csv
+    - path: data/processed/dynamic/dynamic_processed_dataset.csv
       hash: md5
-      md5: 6fcfc54cec80e0ea9b3d1b1c0c531f45
-      size: 5436327
+      md5: 43b62c2db8f2423d819977a486fc9d56
+      size: 5434735
     - path: src/components/assertions/choice_field_assertor.py
       hash: md5
       md5: 14c153425aa8ef36316b3148a5613197
@@ -1789,7 +1789,7 @@ stages:
       size: 11921
     params:
       src/pipeline/config/pipeline_config.yaml:
-        data.general.mode: static
+        data.general.mode: dynamic
         data_loader.testing.batch_size: 512
         data_loader.testing.shuffle: false
         dataset.splits.training: 0.8
