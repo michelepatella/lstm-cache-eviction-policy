@@ -863,10 +863,10 @@ stages:
   training:
     cmd: PYTHONPATH=src python -m pipeline.steps.trainer
     deps:
-    - path: data/processed/static/static_processed_dataset.csv
+    - path: data/processed/dynamic/dynamic_processed_dataset.csv
       hash: md5
-      md5: 6fcfc54cec80e0ea9b3d1b1c0c531f45
-      size: 5436327
+      md5: 43b62c2db8f2423d819977a486fc9d56
+      size: 5434735
     - path: src/components/assertions/choice_field_assertor.py
       hash: md5
       md5: 14c153425aa8ef36316b3148a5613197
@@ -1163,7 +1163,7 @@ stages:
       src/pipeline/config/pipeline_config.yaml:
         data.general.keys.max: 100
         data.general.keys.min: 1
-        data.general.mode: static
+        data.general.mode: dynamic
         data_loader.training.batch_size: 512
         data_loader.training.shuffle: false
         data_loader.validation.batch_size: 512
@@ -1189,7 +1189,7 @@ stages:
         model.params.proj_size: 0
         model.sequence.embedding.dimension: 32
         model.sequence.length: 25
-        optimizer.params.learning_rate: 0.001
+        optimizer.params.learning_rate: 0.0005
         optimizer.params.weight_decay: 0.05
         optimizer.type: adamw
         resources.devices.training: cpu
