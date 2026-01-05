@@ -4,7 +4,7 @@ This module implements the logic for calculating item scores using a hybrid
 approach that combines survival analysis concepts with prediction uncertainty.
 
 The scoring mechanism evaluates how likely an item is to be "survived" (not
-accessed) over a rollout horizon while penalizing items with high prediction
+accessed) over a rollout horizon while protecting items with high prediction
 variance. This combined score is used to rank items for cache eviction
 decisions.
 
@@ -92,9 +92,8 @@ def calculate_survival_uncertainty_scores(
         # of confidence intervals
         uncertainty = upper_ci.cpu().numpy() - lower_ci.cpu().numpy()
 
-        # Convert the mean uncertainty into a positive
-        # score contribution where higher uncertainty
-        # decreases this term
+        # Convert the mean uncertainty into a
+        # score contribution
         uncertainty_score = conf_weight * np.exp(
             uncertainty.mean(AUTOREGRESSIVE_ROLLOUT_DIM),
         )
