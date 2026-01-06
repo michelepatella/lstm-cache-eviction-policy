@@ -39,7 +39,7 @@ This collection provides synthetic data accesses designed for benchmarking, mode
 
 ## Dataset Structure
 
-The collection consists of CSV files, each containing 100,000 rows representing single data access events. The (raw) dataset's columns are the following ones:  
+The collection consists of CSV files, each containing 100,000 rows representing single data access events. The (raw) dataset's columns are the following ones:
 - `timestamp`: Time of the data access event as the hour of the day (float in [0.0, 23.9])
 - `request`: Unique identifier of the requested key (integer in [1, 100])
 
@@ -58,8 +58,8 @@ This collection was created to provide a controlled environment for analyzing, m
 Each dataset is synthetically generated to simulate realistic data access workloads. Two dataset variants are created:
   - _Static_: Fixed Zipf parameter, representing a moderate skew in key popularity
   - _Dynamic_: Zipf parameter varies linearly over time, introducing temporal variability in access distributions
-  
-Multiple time-dependent access patterns are applied to simulate realistic workloads, inspired by common usage behaviors:  
+
+Multiple time-dependent access patterns are applied to simulate realistic workloads, inspired by common usage behaviors:
 
 - _Short-term repetition_: Repeated access to the same keys over short intervals to simulate local temporal locality
 - _Oscillating toggles_: Alternating key requests between two base keys to simulate sudden demand shifts
@@ -68,17 +68,17 @@ Multiple time-dependent access patterns are applied to simulate realistic worklo
 - _Zipfian accesses_: Keys are sampled according to a Zipf distribution to capture popularity of hot keys
 - _Memory effect_: Long-term repeated accesses with fallback to Zipf selection, simulating persistent popularity of some keys
 
-Inter-request times are generated using an exponential distribution where the mean interval is determined by a hybrid model combining a cosine-based periodic function, and a burstiness component to simulate diurnal peaks in request rates.  
+Inter-request times are generated using an exponential distribution where the mean interval is determined by a hybrid model combining a cosine-based periodic function, and a burstiness component to simulate diurnal peaks in request rates.
 
 Each raw dataset is preprocessed by removing missing values and constructing the following features:
 - `sin_time`: Sine component of cyclical time (built from `timestamp`)
 - `cos_time`: Cosine component of cyclical time (built from `timestamp`)
 - `local_frequency`: Normalized short-term popularity of each key [0,1] (built from a fixed-length rolling window)
-- `local_recency`: Normalized recency of each key [0,1] (built from a fixed-length rolling window) 
+- `local_recency`: Normalized recency of each key [0,1] (built from a fixed-length rolling window)
 
 While these four features are appended to each dataset, the `timestamp` column is replaced by its trigonometric representation and the `request` column is placed as the last one.
 
-Main libraries and tools:  
+Main libraries and tools:
 - _NumPy_: Numerical computation
 - _Pandas_: Dataset construction and manipulation
 - _MLflow_ _(integrated with DagsHub)_: Experiment tracking and metric logging
