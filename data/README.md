@@ -11,7 +11,7 @@ multilinguality:
 - monolingual
 pretty_name: Synthetic Data Accesses
 size_categories:
-- 10K<n<100K
+- 100K<n<1M
 source_datasets:
 - original
 tags:
