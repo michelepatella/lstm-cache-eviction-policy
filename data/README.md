@@ -1,23 +1,72 @@
+---
+annotations_creators:
+- no-annotation
+language:
+- en
+language_creators:
+- machine-generated
+license:
+- mit
+multilinguality:
+- monolingual
+pretty_name: Synthetic Data Accesses
+size_categories:
+- 10K<n<100K
+source_datasets:
+- original
+tags:
+- synthetic
+- time-series
+- data-access-patterns
+- workload-simulation
+task_categories:
+- tabular-classification
+- time-series-forecasting
+task_ids:
+- tabular-multi-class-classification
+- multivariate-time-series-forecasting
+---
+
 # Dataset Card for Synthetic Data Accesses
 
-Dataset collection which provides synthetic data accesses to emulate realistic workload behaviors.
+## Table of Contents
+- [Table of Contents](#table-of-contents)
+- [Dataset Description](#dataset-description)
+  - [Dataset Summary](#dataset-summary)
+  - [Supported Tasks and Leaderboards](#supported-tasks-and-leaderboards)
+  - [Languages](#languages)
+- [Dataset Structure](#dataset-structure)
+  - [Data Instances](#data-instances)
+  - [Data Fields](#data-fields)
+  - [Data Splits](#data-splits)
+- [Dataset Creation](#dataset-creation)
+  - [Curation Rationale](#curation-rationale)
+  - [Source Data](#source-data)
+  - [Annotations](#annotations)
+  - [Personal and Sensitive Information](#personal-and-sensitive-information)
+- [Considerations for Using the Data](#considerations-for-using-the-data)
+  - [Social Impact of Dataset](#social-impact-of-dataset)
+  - [Discussion of Biases](#discussion-of-biases)
+  - [Other Known Limitations](#other-known-limitations)
+- [Additional Information](#additional-information)
+  - [Dataset Curators](#dataset-curators)
+  - [Licensing Information](#licensing-information)
+  - [Citation Information](#citation-information)
+  - [Contributions](#contributions)
 
-## Dataset Details
+## Dataset Description
 
-### Dataset Description
-
-This collection provides synthetic data accesses designed for benchmarking, modeling, and analysis of realistic workload behaviors. Each dataset contains 100,000 time-ordered events across a 100-key space, simulating complex data access behaviors. The collection includes both static (fixed key popularity) and dynamic (time-varying key popularity) variants.
-
-- **Curated by:** Michele Patella
-- **License:** MIT
-
-### Dataset Sources
-
+- **Homepage**: -
 - **Repository:** https://github.com/michelepatella/lstm-cache-eviction-policy
+- **Paper**: -
+- **Leaderboard**: -
+- **Point of Contact:** m.patella9@studenti.uniba.it
 
-## Uses
+### Dataset Summary
 
-### Direct Use
+The dataset collection provides synthetic data accesses designed for benchmarking, modeling, and analysis of realistic workload behaviors. Each dataset contains 100,000 time-ordered events across a 100-key space, simulating complex data access behaviors. The dataset collection includes both static (fixed key popularity) and dynamic (time-varying key popularity) variants.
+
+### Supported Tasks and Leaderboards
 
 - Analysis and study of temporal patterns in sequences of data accesses
 - Modeling and simulation of data access behaviors
@@ -28,32 +77,57 @@ This collection provides synthetic data accesses designed for benchmarking, mode
 - Support for research on short- and long-term memory effects in access patterns
 - Development and validation of optimization techniques on temporally ordered data
 
-### Out-of-Scope Use
+### Languages
 
-- Studying real-world user behavior, system workloads, or data access patterns
-- Making operational or production decisions
-- Inferring personal, sensitive, or proprietary information
-- Benchmarking models that require real-world distributions or production traffic characteristics
-- Performing privacy-sensitive, security, or compliance evaluations
-- Drawing conclusions about actual system performance or user preferences
+Each dataset contains numeric values, while column names and documentation are in English.
 
 ## Dataset Structure
 
-The collection consists of CSV files, each containing 100,000 rows representing single data access events. The (raw) dataset's columns are the following ones:
-- `timestamp`: Time of the data access event as the hour of the day (float in [0.0, 23.9])
-- `request`: Unique identifier of the requested key (integer in [1, 100])
+### Data Instances
 
-The rows are sorted by `timestamp` with respect to the current day to preserve the temporal order.
+Each dataset is a CSV file which consists of 100,000 time-ordered rows, each representing a single synthetic data access event.
+
+Example:
+| timestamp          | request |
+|--------------------|---------|
+|       ...          | ...     |
+| 11.977070545671724 | 58      |
+| 11.980916337369722 | 54      |
+| 11.993804355974053 | 59      |
+| 11.995151057904133 | 55      |
+| 12.002285716536916 | 56      |
+| 12.006074313768924 | 61      |
+| 12.012448374092424 | 57      |
+| 12.012770222412232 | 62      |
+|       ...          | ...     |
+
+### Data Fields
+
+Fields in raw datasets:
+- `timestamp`:  Float, time of the data access event as the hour of the day [0.0,23.9]
+- `request`: Integer, unique identifier of the requested key [1,100]
+
+Additional fields in processed datasets:
+- `sin_time`: Float, sine component of cyclical time [-1,1]
+- `cos_time`: Float, cosine component of cyclical time [-1,1]
+- `local_frequency`: Float, normalized short-term popularity of each key [0,1]
+- `local_recency`: Float, normalized recency of each key [0,1]
+
+where the `timestamp` column is so replaced by its trigonometrical representation, while the target `request` column is preserved.
+
+### Data Splits
+
+No data splits are applied.
 
 ## Dataset Creation
 
 ### Curation Rationale
 
-This collection was created to provide a controlled environment for analyzing, modeling, and evaluating synthetic yet realistic data access patterns through simulation and experimentation, without relying on sensitive or proprietary real-world data.
+The dataset collection is created to provide a controlled environment for analyzing, modeling, and evaluating synthetic yet realistic data access patterns through simulation and experimentation, without relying on sensitive or proprietary real-world data.
 
 ### Source Data
 
-#### Data Collection and Processing
+#### Initial Data Collection and Normalization
 
 Each dataset is synthetically generated to simulate realistic data access workloads. Two dataset variants are created:
   - _Static_: Fixed Zipf parameter, representing a moderate skew in key popularity
@@ -70,56 +144,64 @@ Multiple time-dependent access patterns are applied to simulate realistic worklo
 
 Inter-request times are generated using an exponential distribution where the mean interval is determined by a hybrid model combining a cosine-based periodic function, and a burstiness component to simulate diurnal peaks in request rates.
 
-Each raw dataset is preprocessed by removing missing values and constructing the following features:
-- `sin_time`: Sine component of cyclical time (built from `timestamp`)
-- `cos_time`: Cosine component of cyclical time (built from `timestamp`)
-- `local_frequency`: Normalized short-term popularity of each key [0,1] (built from a fixed-length rolling window)
-- `local_recency`: Normalized recency of each key [0,1] (built from a fixed-length rolling window)
+Each raw dataset is preprocessed by removing missing values and engineering input features to capture temporal (`sin_time`, `cos_time`) and locality-aware (`local_frequency`, `local_recency`) access patterns.
 
-While these four features are appended to each dataset, the `timestamp` column is replaced by its trigonometric representation and the `request` column is placed as the last one.
+#### Who are the source language producers?
 
-Main libraries and tools:
-- _NumPy_: Numerical computation
-- _Pandas_: Dataset construction and manipulation
-- _MLflow_ _(integrated with DagsHub)_: Experiment tracking and metric logging
-- _DVC (integrated with DagsHub)_: Dataset storage
-- _Ray_: Parallel and distributed task execution
-- _Grafana Loki_: Logging
+No source language producers are involved.
 
-#### Who are the source data producers?
+### Annotations
 
-Each dataset was synthetically generated by the project team. Since all the data is programmatically created, no human subject data was involved, and no demographic or personal identity information applies.
+#### Annotation process
 
-## Bias, Risks, and Limitations
+No annotation processes are performed.
 
-_Biases_:
+#### Who are the annotators?
+
+No annotators are involved.
+
+### Personal and Sensitive Information
+
+No personal and sensitive information is contained.
+
+## Considerations for Using the Data
+
+### Social Impact of Dataset
+
+This dataset collection is intended for research, benchmarking, and simulation. Since it is fully synthetic, it does not reflect real user behavior or contain personal information, and its use poses minimal social impacts.
+
+### Discussion of Biases
+
 - Data accesses follow a Zipf distribution, overrepresenting “hot” keys relative to less frequent ones
 - Some data access patterns span longer time intervals, which may dominate a dataset relative to shorter patterns
 - The collection favors regular, idealized data accesses over truly random or emergent behaviors
 
-_Limitations_:
-- The collection may not capture all nuances of real-world data access patterns, with rare behaviors potentially missing
+### Other Known Limitations
+
+- The dataset collection may not capture all nuances of real-world data access patterns, with rare behaviors potentially missing
 - The limited key space (100 unique keys) may not reflect larger or more dynamic systems
 - Inter-request times may not fully represent the complexity of real workloads
 - Human behavior is only abstractly simulated and not directly represented
 
-_Risks_:
-- Certain keys or patterns may be overrepresented, potentially skewing analysis or experiments
-- Some behaviors and temporal dynamics may be underrepresented or absent
-- Findings from this collection may not fully generalize to larger or more complex systems
-- The synthetic nature of the collection may limit its realism in simulating human or system behavior
+## Additional Information
 
-
-### Recommendations
-- Treat findings and experiments as indicative rather than fully representative of real-world systems
-- Be cautious when extrapolating results to larger key spaces or more complex access patterns
-- Consider supplementing this collection with real-world or more diverse workloads for validation
-- Document assumptions and limitations when reporting results derived from this collection
-
-## Dataset Card Authors
+### Dataset Curators
 
 Michele Patella
 
-## Dataset Card Contact
+### Licensing Information
 
-m.patella9@studenti.uniba.it
+MIT License
+
+### Citation Information
+
+@misc{synthetic_data_accesses_2026,
+  author = {Michele Patella},
+  title = {Synthetic Data Accesses},
+  year = {2026},
+  howpublished = {\url{https://github.com/michelepatella/lstm-cache-eviction-policy}}
+}
+
+### Contributions
+
+Thanks to [@michelepatella](https://github.com/michelepatella) for adding this dataset collection.
