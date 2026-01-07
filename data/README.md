@@ -64,42 +64,28 @@ task_ids:
 
 ### Dataset Summary
 
-The dataset collection provides synthetic data accesses designed for benchmarking, modeling, and analysis of realistic workload behaviors. Each dataset contains 100,000 time-ordered events across a 100-key space, simulating complex data access behaviors. The dataset collection includes both static (fixed key popularity) and dynamic (time-varying key popularity) variants.
+This dataset collection provides synthetic data accesses. Each dataset contains 100,000 time-ordered events across a 100-key space, simulating complex data access behaviors. The collection includes both static (fixed key popularity) and dynamic (time-varying key popularity) variants.
 
 ### Supported Tasks and Leaderboards
 
-- Analysis and study of temporal patterns in sequences of data accesses
-- Modeling and simulation of data access behaviors
-- Evaluation of algorithms operating on time-ordered sequences
-- Study of frequency and popularity of data in request series
-- Generation of synthetic scenarios for controlled experiments
-- Experimentation with time series prediction and analysis methods
-- Support for research on short- and long-term memory effects in access patterns
-- Development and validation of optimization techniques on temporally ordered data
+`tabular-classification`, `time-series-forecasting`: This dataset collection can be used to train a model to predict which key will be accessed next in a synthetic workload sequence or to predict future sequences of accesses over time, capturing temporal patterns and trends. For classification tasks, each access event can be treated as a discrete class corresponding to the key. For forecasting tasks, sequences of past accesses can be used to predict future access patterns, such as the probability distribution over keys or aggregated counts over time.
 
 ### Languages
 
-Each dataset contains numeric values, while column names and documentation are in English.
+Each dataset contains numeric values, while column names and documentation are in English (the associated BCP-47 code is `en`).
 
 ## Dataset Structure
 
 ### Data Instances
 
-Each dataset is a CSV file which consists of 100,000 time-ordered rows, each representing a single synthetic data access event.
+Each dataset row represents a single synthetic data access event, with a `timestamp` containing the hour of the day as a float and a `request` corresponding to the accessed key.
 
-Example:
-| timestamp          | request |
-|--------------------|---------|
-|       ...          | ...     |
-| 11.977070545671724 | 58      |
-| 11.980916337369722 | 54      |
-| 11.993804355974053 | 59      |
-| 11.995151057904133 | 55      |
-| 12.002285716536916 | 56      |
-| 12.006074313768924 | 61      |
-| 12.012448374092424 | 57      |
-| 12.012770222412232 | 62      |
-|       ...          | ...     |
+An example from this dataset collection looks as follows:
+`{
+  'timestamp': 11.977070545671724,
+  'request': 58
+}`
+
 
 ### Data Fields
 
@@ -110,8 +96,8 @@ Fields in raw datasets:
 Additional fields in processed datasets:
 - `sin_time`: Float, sine component of cyclical time [-1,1]
 - `cos_time`: Float, cosine component of cyclical time [-1,1]
-- `local_frequency`: Float, normalized short-term popularity of each key [0,1]
-- `local_recency`: Float, normalized recency of each key [0,1]
+- `local_frequency`: Float, normalized short-term popularity of the current key [0,1]
+- `local_recency`: Float, normalized short-term recency of the current key [0,1]
 
 where the `timestamp` column is so replaced by its trigonometrical representation, while the target `request` column is preserved.
 
@@ -123,7 +109,7 @@ No data splits are applied.
 
 ### Curation Rationale
 
-The dataset collection is created to provide a controlled environment for analyzing, modeling, and evaluating synthetic yet realistic data access patterns through simulation and experimentation, without relying on sensitive or proprietary real-world data.
+This dataset collection is created to provide a controlled environment for analyzing, modeling, and evaluating synthetic yet realistic data access patterns through simulation and experimentation, without relying on sensitive or proprietary real-world data.
 
 ### Source Data
 
@@ -158,7 +144,7 @@ No annotation processes are performed.
 
 #### Who are the annotators?
 
-No annotators are involved.
+[N/A]
 
 ### Personal and Sensitive Information
 
@@ -168,7 +154,11 @@ No personal and sensitive information is contained.
 
 ### Social Impact of Dataset
 
-This dataset collection is intended for research, benchmarking, and simulation. Since it is fully synthetic, it does not reflect real user behavior or contain personal information, and its use poses minimal social impacts.
+The purpose of this dataset collection is to help develop and evaluate models for predicting data access patterns in synthetic workloads.
+
+A system that succeeds at the supported tasks would be able to accurately anticipate which key will be accessed next or forecast future sequences of accesses. The collection also serves as a controlled test-bed to benchmark models under various synthetic scenarios, enabling reproducible experiments and comparisons.
+
+It should be noted, however, that all data is synthetically generated. This means the access sequences do not represent real user behavior or operational workloads, and any biases or limitations in the synthetic generation process may influence model performance.
 
 ### Discussion of Biases
 
