@@ -55,10 +55,10 @@ task_ids:
 
 ## Dataset Description
 
-- **Homepage**: -
+- **Homepage**: [N/A]
 - **Repository:** https://github.com/michelepatella/lstm-cache-eviction-policy
-- **Paper**: -
-- **Leaderboard**: -
+- **Paper**: [N/A]
+- **Leaderboard**: [N/A]
 - **Point of Contact:** m.patella9@studenti.uniba.it
 
 ### Dataset Summary
@@ -79,7 +79,7 @@ Each dataset contains numeric values, while column names and documentation are i
 
 Each dataset row represents a single synthetic data access event, with a `timestamp` containing the hour of the day and a `request` corresponding to the accessed key.
 
-An example from this dataset collection looks as follows:
+An example from this dataset collection looks as follows:  
 `{
   'timestamp': 11.977070545671724,
   'request': 58
@@ -102,7 +102,7 @@ where the `timestamp` column is so replaced by its trigonometrical representatio
 
 ### Data Splits
 
-No data splits are applied.
+No data splits are applied by default.
 
 ## Dataset Creation
 
