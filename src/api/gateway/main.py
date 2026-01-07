@@ -330,7 +330,7 @@ async def gateway_api(
 
 @app.get("/")
 @construct_api_response
-def _index(request: Request) -> dict[str, Any]:
+async def _index(request: Request) -> dict[str, Any]:
     """Basic health check for the API.
 
     This function represents a basic health check for the API
