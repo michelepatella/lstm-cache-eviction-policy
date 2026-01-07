@@ -198,7 +198,6 @@ jobs:
   # Testing (needs 'Setup')
   # ----------------------------------------
   testing:
-    if: false
     runs-on: self-hosted
     needs: setup
     steps:
@@ -247,7 +246,7 @@ jobs:
   # ----------------------------------------
   build:
     runs-on: self-hosted
-    needs: [setup, static_analysis, security_scan]
+    needs: [setup, static_analysis, security_scan, testing]
     steps:
       # Login to all registries storing the containers
       - name: Login to Azure Container Registry
