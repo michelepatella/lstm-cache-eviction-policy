@@ -46,17 +46,13 @@ model-index:
 
 # Model Card for LSTM-Based Data Access Predictor
 
-<!-- Provide a quick summary of what the model is/does. -->
-
-{{ model_summary | default("", true) }}
+LSTM-based models for predicting next-key accesses in synthetic workload sequences.
 
 ## Model Details
 
 ### Model Description
 
-<!-- Provide a longer summary of what this model is. -->
-
-{{ model_description | default("", true) }}
+This collection of LSTM models captures temporal dependencies in synthetic key access sequences to predict future accesses. Each model is trained on either static or dynamic datasets, leveraging temporal-aware loss and class-balanced weighting. The models are optimized with pruning and quantization for efficient inference and are intended for research, benchmarking, and educational purposes in sequence modeling and time-series prediction.
 
 - **Developed by:** Michele Patella
 - **Model type:** Recurrent Neural Network (RNN)
@@ -245,50 +241,51 @@ The synthetic workload sequences are preprocessed before being fed to each LSTM 
 
 - **Training regime:** fp32
 
-| **Hyperparameter**    | **Static**   | **Dynamic ** |
-|-----------------------|--------------|--------------|
+| **Hyperparameter**    | **Static** | **Dynamic ** |
+|-----------------------|------------|--------------|
 | _**Dataset**_         |
-| Size (validation set) | 0.2          | 0.2          |
-| Size (training set)   | 0.8          | 0.8          |
+| Size (validation set) | 0.2        | 0.2          |
+| Size (training set)   | 0.8        | 0.8          |
 | _**Data Loader**_     |
-| Batch size            | 512          | 512          |
-| Shuffle               | False        | False        |
+| Batch size            | 512        | 512          |
+| Shuffle               | False      | False        |
 | _**Early Stopping**_  |
-| Delta (training)      | 0.0001       | 0.0001       |
-| Delta (validation)    | 0.0005       | 0.0005       |
-| Patience (training)   | 10           | 10           |
-| Patience (validation) | 3            | 3            |
+| Delta (training)      | 0.0001     | 0.0001       |
+| Delta (validation)    | 0.0005     | 0.0005       |
+| Patience (training)   | 10         | 10           |
+| Patience (validation) | 3          | 3            |
 | _**Loss**_            |
-| Class weights         | Balanced     | Balanced     |
-| Reduction             | None         | None         |
+| Class weights         | Balanced   | Balanced     |
+| Reduction             | None       | None         |
 | _**Model**_           |
-| Batch first           | True         | True         |
-| Bias                  | False        | False        |
-| Bidirectional         | False        | False        |
-| Dropout               | 0.1          | 0.1          |
-| Embedding dimension   | 32           | 32           |
-| Hidden layers         | 2            | 2            |
-| Hidden size           | 256          | 256          |
-| Projection size       | 0            | 0            |
-| Sequence length       | 25           | 25           |
+| Batch first           | True       | True         |
+| Bias                  | False      | False        |
+| Bidirectional         | False      | False        |
+| Dropout               | 0.1        | 0.1          |
+| Embedding dimension   | 32         | 32           |
+| Hidden layers         | 2          | 2            |
+| Hidden size           | 256        | 256          |
+| Projection size       | 0          | 0            |
+| Sequence length       | 25         | 25           |
 | _**Optimizer**_       |
-| Learning rate         | 0.001        | 0.005        |
-| Type                  | AdamW        | AdamW        |
+| Learning rate         | 0.001      | 0.005        |
+| Type                  | AdamW      | AdamW        |
+| Weight decay          | 0.05       | 0.05         |
 | _**Pruning**_         |
-| Amount                | 0.2          | 0.2          |
+| Amount                | 0.2        | 0.2          |
 | _**Quantization**_    |
-| Engine                | QNNPACK      | QNNPACK      |
-| Type                  | qint8        | qint8        |
+| Engine                | QNNPACK    | QNNPACK      |
+| Type                  | qint8      | qint8        |
 | _**Resources**_       |
-| Cores                 | 4            | 4            |
-| Device                | CPU          | CPU          |
+| Cores                 | 4          | 4            |
+| Device                | CPU        | CPU          |
 | _**Seed**_            |
-| Value                 | 42           | 42           |
+| Value                 | 42         | 42           |
 | _**Training**_        |
-| Epochs                | 500          | 500          |
+| Epochs                | 500        | 500          |
 | _**Validation**_      |
-| Epochs                | 5            | 5            |
-| Folds                 | 5            | 5            |
+| Epochs                | 5          | 5            |
+| Folds                 | 5          | 5            |
 
 #### Speeds, Sizes, Times
 
@@ -302,7 +299,7 @@ The synthetic workload sequences are preprocessed before being fed to each LSTM 
 | _**Sizes**_            |
 | Dataset size           | 5.44 MB           | 5.43 MB           |
 | Model parameters       | ~269,824          | ~269,824          |
-| Model size             | 3,3 MB            | 3,3 MB            |
+| Model size             | 3.3 MB            | 3.3 MB            |
 | _**Times**_            |
 | Epochs                 | 35                | 45                |
 | Training time          | ~15min            | ~20min            |
@@ -324,86 +321,105 @@ For full details, refer to the [Dataset Card](../data/README.md).
 
 #### Factors
 
-<!-- These are the things the evaluation is disaggregating by, e.g., subpopulations or domains. -->
-
-{{ testing_factors | default("[More Information Needed]", true)}}
+The evaluation of this LSTM collection is disaggregated by dataset variant (static vs dynamic).
 
 #### Metrics
 
-<!-- These are the evaluation metrics being used, ideally with a description of why. -->
+The evaluation of this LSTM collection uses the following metrics:
 
-{{ testing_metrics | default("[More Information Needed]", true)}}
+- _Accuracy_: Fraction of correct predictions over all samples
+- _Precision (macro & weighted)_: Measures the correctness of positive predictions, averaged across classes
+- _Recall (macro & weighted)_: Measures the coverage of true positives, averaged across classes
+- _F1 score (macro & weighted)_: Harmonic mean of precision and recall, balancing both metrics
+- _Cohen’s Kappa_: Measures agreement between predicted and true labels, accounting for chance agreement
 
 ### Results
 
-{{ results | default("[More Information Needed]", true)}}
+| **Dataset** | **Macro (Precision, Recall, F1)** | **Weighted (Precision, Recall, F1)** | **Accuracy** | **Cohen’s Kappa** |
+|-------------|-----------------------------------|--------------------------------------|--------------|-------------------|
+| Static      | 0.93, 0.92, 0.92                  | 0.89, 0.88, 0.88                     | 0.88         | 0.88              |
+| Dynamic     | 0.88, 0.88, 0.88                  | 0.86, 0.85, 0.85                     | 0.85         | 0.84              |
 
 #### Summary
 
-{{ results_summary | default("", true) }}
+The LSTM models achieve high performance on next-key prediction in synthetic workloads. The static model slightly outperforms the dynamic model across all metrics, reflecting the greater stability of static access patterns. Overall, macro and weighted precision, recall, and F1 scores are consistently above 0.85, with Cohen’s Kappa and accuracy closely matching, indicating reliable predictive performance in controlled synthetic workloads.
 
-## Model Examination [optional]
+## Model Examination
 
-<!-- Relevant interpretability work for the model goes here -->
-
-{{ model_examination | default("[More Information Needed]", true)}}
+Analysis of models behavior reveals the following patterns:
+- Fewer errors occur on frequent keys; rare keys (tail of the Zipf distribution) have higher error rates
+- Simple patterns (e.g., short-term repetition) are predicted more accurately; complex patterns (e.g., toggles) cause more mistakes
+- The sequence of recently accessed keys strongly influences predictions
+- In autoregressive rollout, errors tend to accumulate for steps further in the future; recent steps are predicted better
+- Dynamic Zipf distributions increase difficulty, producing more errors
 
 ## Environmental Impact
 
-<!-- Total emissions (in grams of CO2eq) and additional considerations, such as electricity usage, go here. Edit the suggested text below accordingly -->
+- **Hardware Type:** Apple M2 Chip
+- **Hours used:** 6.6h
+- **Cloud Provider:** -
+- **Compute Region:** Italy
+- **Carbon Emitted:** 163.92 gCO₂e
 
-Carbon emissions can be estimated using the [Machine Learning Impact calculator](https://mlco2.github.io/impact#compute) presented in [Lacoste et al. (2019)](https://arxiv.org/abs/1910.09700).
-
-- **Hardware Type:** {{ hardware_type | default("[More Information Needed]", true)}}
-- **Hours used:** {{ hours_used | default("[More Information Needed]", true)}}
-- **Cloud Provider:** {{ cloud_provider | default("[More Information Needed]", true)}}
-- **Compute Region:** {{ cloud_region | default("[More Information Needed]", true)}}
-- **Carbon Emitted:** {{ co2_emitted | default("[More Information Needed]", true)}}
-
-## Technical Specifications [optional]
+## Technical Specifications
 
 ### Model Architecture and Objective
 
-{{ model_specs | default("[More Information Needed]", true)}}
+This model collection implement LSTM networks to predict future key accesses, capturing mid- and long-term temporal dependencies while mitigating exploding/vanishing gradients.
+
+Architecture highlights:
+- Two unidirectional hidden layers, 256 units each, with dropout 0.1
+- Input sequences of length 25, combining target key embeddings (32-dimensional) with engineered temporal and locality features
+  - Resulting input tensor shape: [512, 25, 36] (batch size, sequence length, embedded keys + features concatenated)
+- Sigmoid activations for input, forget, and output gates; tanh for cell and hidden states
+- Output logits for 100 keys via fully connected layer from the last hidden state
+  - Resulting output tensor shape: [512, 100] (batch size, number of classes)
+
+Training objective:
+- Temporal-aware Cross-Entropy loss, prioritizing accurate predictions for imminently accessed data items
+- Class-balanced weighting to handle Zipf-distributed access skew
 
 ### Compute Infrastructure
 
-{{ compute_infrastructure | default("[More Information Needed]", true)}}
+The LSTM models were trained and evaluated using a dedicated local Apple Silicon environment. The pipeline leverages Python Multiprocessing, CPU parallelization (via Ray), and PyTorch Distributed Data Processing (DDP) to speed up computations.
 
 #### Hardware
 
-{{ hardware_requirements | default("[More Information Needed]", true)}}
+- **CPU:** Apple M2 Chip (4 cores utilized)
+- **Memory:** 8 GB
+- **Architecture:** ARM64
 
 #### Software
 
-{{ software | default("[More Information Needed]", true)}}
+- **OS:** macOS 26.1
+- **Programming Language:** Python (3.12.11)
+- **Model Framework:** PyTorch (2.8.0)
+- **Parallelization Frameworks**: Ray (2.52.1), PyTorch DDP, and Multiprocessing library
 
-## Citation [optional]
+## Citation
 
-<!-- If there is a paper or blog post introducing the model, the APA and Bibtex information for that should go in this section. -->
+No papers or posts introducing the model collection to cite.
 
 **BibTeX:**
 
-{{ citation_bibtex | default("[More Information Needed]", true)}}
+[N/A]
 
 **APA:**
 
-{{ citation_apa | default("[More Information Needed]", true)}}
+[N/A]
 
-## Glossary [optional]
+## Glossary
 
-<!-- If relevant, include terms and calculations in this section that can help readers understand the model or model card. -->
+No additional terms or calculations.
 
-{{ glossary | default("[More Information Needed]", true)}}
+## More Information
 
-## More Information [optional]
+No additional information.
 
-{{ more_information | default("[More Information Needed]", true)}}
+## Model Card Authors
 
-## Model Card Authors [optional]
-
-{{ model_card_authors | default("[More Information Needed]", true)}}
+Michele Patella
 
 ## Model Card Contact
 
-{{ model_card_contact | default("[More Information Needed]", true)}}
+m.patella9@studenti.uniba.it
