@@ -114,15 +114,15 @@ This collection of LSTM models captures temporal dependencies in synthetic key a
 
 - **Developed by:** Michele Patella
 - **Model type:** Recurrent Neural Network (RNN)
-- **Language(s) (NLP):** -
+- **Language(s) (NLP):** [N/A]
 - **License:** MIT
-- **Finetuned from model:** -
+- **Finetuned from model:** [N/A]
 
 ### Model Sources
 
 - **Repository:** https://github.com/michelepatella/lstm-cache-eviction-policy
-- **Paper:** -
-- **Demo:** -
+- **Paper:** [N/A]
+- **Demo:** [N/A]
 
 ## Uses
 
@@ -297,13 +297,11 @@ The synthetic workload sequences are preprocessed before being fed to each LSTM 
 
 #### Training Hyperparameters
 
-- **Training regime:** fp32
-
-| **Hyperparameter**    | **Static** | **Dynamic ** |
+| **Hyperparameter**    | **Static** | **Dynamic** |
 |-----------------------|------------|--------------|
 | _**Dataset**_         |
-| Size (validation set) | 0.2        | 0.2          |
 | Size (training set)   | 0.8        | 0.8          |
+| Size (validation set) | 0.2        | 0.2          |
 | _**Data Loader**_     |
 | Batch size            | 512        | 512          |
 | Shuffle               | False      | False        |
@@ -341,6 +339,7 @@ The synthetic workload sequences are preprocessed before being fed to each LSTM 
 | Value                 | 42         | 42           |
 | _**Training**_        |
 | Epochs                | 500        | 500          |
+| Regime                | fp32       | fp32         |
 | _**Validation**_      |
 | Epochs                | 5          | 5            |
 | Folds                 | 5          | 5            |
@@ -415,7 +414,7 @@ Analysis of models behavior reveals the following patterns:
 
 - **Hardware Type:** Apple M2 Chip
 - **Hours used:** 6.6h
-- **Cloud Provider:** -
+- **Cloud Provider:** [N/A]
 - **Compute Region:** Italy
 - **Carbon Emitted:** 163.92 gCO₂e
 
@@ -428,7 +427,7 @@ This model collection implement LSTM networks to predict future key accesses, ca
 Architecture highlights:
 - Two unidirectional hidden layers, 256 units each, with dropout 0.1
 - Input sequences of length 25, combining target key embeddings (32-dimensional) with engineered temporal and locality features
-  - Resulting input tensor shape: [512, 25, 36] (batch size, sequence length, embedded keys + features concatenated)
+  - Resulting input tensor shape: [512, 25, 36] (batch size, sequence length, embedded keys and features concatenated)
 - Sigmoid activations for input, forget, and output gates; tanh for cell and hidden states
 - Output logits for 100 keys via fully connected layer from the last hidden state
   - Resulting output tensor shape: [512, 100] (batch size, number of classes)
