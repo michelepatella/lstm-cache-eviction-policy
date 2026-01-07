@@ -4,7 +4,7 @@ annotations_creators:
 language:
 - en
 language_creators:
-- machine-generated
+- other-none
 license:
 - mit
 multilinguality:
@@ -67,7 +67,7 @@ This dataset collection provides synthetic data accesses. Each dataset contains 
 
 ### Supported Tasks and Leaderboards
 
-`tabular-classification`, `time-series-forecasting`: This dataset collection can be used to train a model to predict which key will be accessed next in a synthetic workload sequence or to predict future sequences of accesses over time, capturing temporal patterns and trends. For classification tasks, each access event can be treated as a discrete class corresponding to the key. For forecasting tasks, sequences of past accesses can be used to predict future access patterns, such as the probability distribution over keys or aggregated counts over time.
+`tabular-classification`, `time-series-forecasting`: This dataset collection can be used to train a model to predict which key will be accessed next in a synthetic workload sequence or to predict future sequences of accesses over time, capturing temporal patterns and trends. For classification tasks, each access event can be treated as a discrete class corresponding to the key. For forecasting tasks, sequences of past accesses can be used to predict future access patterns.
 
 ### Languages
 
@@ -77,7 +77,7 @@ Each dataset contains numeric values, while column names and documentation are i
 
 ### Data Instances
 
-Each dataset row represents a single synthetic data access event, with a `timestamp` containing the hour of the day as a float and a `request` corresponding to the accessed key.
+Each dataset row represents a single synthetic data access event, with a `timestamp` containing the hour of the day and a `request` corresponding to the accessed key.
 
 An example from this dataset collection looks as follows:
 `{
@@ -161,13 +161,13 @@ It should be noted, however, that all data is synthetically generated. This mean
 
 ### Discussion of Biases
 
-- Data accesses follow a Zipf distribution, overrepresenting “hot” keys relative to less frequent ones
+- Data accesses follow a Zipf distribution, overrepresenting hot keys relative to less frequent ones
 - Some data access patterns span longer time intervals, which may dominate a dataset relative to shorter patterns
 - The collection favors regular, idealized data accesses over truly random or emergent behaviors
 
 ### Other Known Limitations
 
-- The dataset collection may not capture all nuances of real-world data access patterns, with rare behaviors potentially missing
+- The collection may not capture all nuances of real-world data access patterns, with rare behaviors potentially missing
 - The limited key space (100 unique keys) may not reflect larger or more dynamic systems
 - Inter-request times may not fully represent the complexity of real workloads
 - Human behavior is only abstractly simulated and not directly represented
