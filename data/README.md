@@ -55,10 +55,10 @@ task_ids:
 
 ## Dataset Description
 
-- **Homepage**: -
+- **Homepage**: [N/A]
 - **Repository:** https://github.com/michelepatella/lstm-cache-eviction-policy
-- **Paper**: -
-- **Leaderboard**: -
+- **Paper**: [N/A]
+- **Leaderboard**: [N/A]
 - **Point of Contact:** m.patella9@studenti.uniba.it
 
 ### Dataset Summary
