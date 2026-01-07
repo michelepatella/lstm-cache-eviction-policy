@@ -62,13 +62,13 @@ model-index:
 - **Model type:** Recurrent Neural Network (RNN)
 - **Language(s) (NLP):** -
 - **License:** MIT
-- **Finetuned from model [optional]:** -
+- **Finetuned from model:** -
 
-### Model Sources [optional]
+### Model Sources
 
 - **Repository:** https://github.com/michelepatella/lstm-cache-eviction-policy
-- **Paper [optional]:** -
-- **Demo [optional]:** -
+- **Paper:** -
+- **Demo:** -
 
 ## Uses
 
@@ -76,82 +76,251 @@ model-index:
 
 This LSTM collection is intended for research and experimentation on synthetic workload sequences. It can be used to:
 
-- Predict which key will be accessed next in a sequence of synthetic data accesses.
-- Forecast future sequences of key accesses over time, capturing temporal patterns and trends.
-- Evaluate caching or data prefetching strategies in simulation environments.
-- Benchmark sequence modeling approaches on controlled synthetic workloads.
-- Support educational or proof-of-concept experiments in time-series prediction and sequential modeling.
+- Make predictions for all possible keys in a sequence of synthetic data accesses
+- Generate future sequences of predictions for key accesses using an autoregressive rollout
+- Benchmark sequence modeling approaches on controlled synthetic workloads
+- Support educational or proof-of-concept experiments in sequential modeling and time-series prediction
 
-This model is **not intended for direct deployment** in production systems without careful validation, as it is trained exclusively on synthetic data and may not generalize to real-world workloads.
+### Downstream Use
 
-### Downstream Use [optional]
+This LSTM collection can serve as a base for downstream tasks in sequence modeling and time-series prediction, specifically in synthetic or simulated environments. Potential uses include:
 
-<!-- This section is for the model use when fine-tuned for a task, or when plugged into a larger ecosystem/app -->
-
-{{ downstream_use | default("[More Information Needed]", true)}}
+- Fine-tuning on specific synthetic workloads with different settings
+- Using predictions in simulators for synthetic workload scenarios
+- Integrating into educational tools to demonstrate sequence modeling and probabilistic predictions
+- Experimenting with extensions
 
 ### Out-of-Scope Use
 
-<!-- This section addresses misuse, malicious use, and uses that the model will not work well for. -->
+This LSTM collection is not intended for production workloads or real-world key access prediction. Specifically, it should not be used for:
 
-{{ out_of_scope_use | default("[More Information Needed]", true)}}
+- Predicting access patterns in real databases, caches, or systems
+- Making high-stakes operational decisions in production environments
+- Security-critical applications or any domain requiring high reliability
+- Any use outside synthetic or controlled experimental settings
 
 ## Bias, Risks, and Limitations
 
-<!-- This section is meant to convey both technical and sociotechnical limitations. -->
+_Bias_:
+- Some keys are more frequent, and longer patterns may dominate, biasing predictions
+- Sociotechnical biases don’t apply to synthetic data, but real-world use may amplify unrepresentative patterns
 
-{{ bias_risks_limitations | default("[More Information Needed]", true)}}
+_Risks_:
+- Using this model collection for production workloads can lead to poor predictions
+- Autoregressive sequence generation may accumulate errors over long sequences
+- The collection is not safety-critical; it is unsuitable for decisions requiring high reliability
+- The collection is not trained on real data; it may behave unpredictably on sensitive or operational inputs
+
+_Limitations_:
+- The collection does not generalize to real-world key access patterns
+- Limited vocabulary of 100 keys restricts the diversity of predictions
+- Autoregressive rollout must be implemented separately for multistep predictions
+- Evaluation on downstream tasks is limited to synthetic or simulated environments
 
 ### Recommendations
 
-<!-- This section is meant to convey recommendations with respect to the bias, risk, and technical limitations. -->
-
-{{ bias_recommendations | default("Users (both direct and downstream) should be made aware of the risks, biases and limitations of the model. More information needed for further recommendations.", true)}}
+- Do not use this model collection for production workloads or operational decision-making
+- When generating sequences autoregressively, validate results carefully
+- Avoid applying a model to real-world or sensitive data without proper evaluation
+- Use this model collection primarily for research, educational purposes, and controlled experiments with synthetic data
 
 ## How to Get Started with the Model
 
 Use the code below to get started with the model.
 
-{{ get_started_code | default("[More Information Needed]", true)}}
+```python
+import torch
+
+# Set QNNPACK as quantization engine
+torch.backends.quantized.engine = "qnnpack"
+
+# Define a device to run computations on
+device = "cpu"
+
+# Load pretrained model (full class)
+model = torch.load(
+    "path/to/pretrained_model.pt",
+    weights_only=False,
+)
+
+# Prepare model for inference: set it to
+# evaluation mode and move it to specified device
+model.eval()
+model.to(device)
+
+# Prepare an example input of length 25
+x_features = torch.tensor(
+    [
+        [0.6223982138696689, -0.7827007495664265, 0.04, 0.0],
+        [0.6124288405323478, -0.7905257208239362, 0.04, 0.0],
+        [0.6104719796770406, -0.7920378539117906, 0.04, 0.0],
+        [0.6097757808312311, -0.7925739694890708, 0.04, 0.0],
+        [0.6066941192900404, -0.7949353719761649, 0.04, 0.0],
+        [0.6006270322950682, -0.7995293415981799, 0.04, 0.0],
+        [0.6002082961660248, -0.7998437354968015, 0.04, 0.0],
+        [0.5998344491575055, -0.8001241363712958, 0.04, 0.0],
+        [0.5938129235087608, -0.8046031393637354, 0.04, 0.0],
+        [0.5925081773685348, -0.8055644355055763, 0.04, 0.0],
+        [0.5911324085641365, -0.8065745319219815, 0.04, 0.0],
+        [0.5902152470971341, -0.8072459117852929, 0.04, 0.0],
+        [0.5897141331658644, -0.8076120610444306, 0.04, 0.0],
+        [0.5868317927790053, -0.8097088655706936, 0.04, 0.0],
+        [0.5788425550794389, -0.8154393272519462, 0.04, 0.0],
+        [0.5700334592950794, -0.8216214793224953, 0.04, 0.0],
+        [0.5631242943025839, -0.8263722098220734, 0.04, 0.0],
+        [0.5578902298076331, -0.8299147495286406, 0.04, 0.0],
+        [0.5509957413432837, -0.8345080544977174, 0.04, 0.0],
+        [0.5502643809076128, -0.8349904856370292, 0.04, 0.0],
+        [0.5491437378353997, -0.8357279193590255, 0.04, 0.0],
+        [0.5490740116917225, -0.8357737311526117, 0.04, 0.0],
+        [0.5412869715427089, -0.8408379240008877, 0.04, 0.0],
+        [0.5380683934051343, -0.8429011828313077, 0.04, 0.0],
+        [0.5360692407649906, -0.8441740158910641, 0.04, 0.0],
+    ],
+    dtype=torch.float,
+    device=device,
+)
+x_keys = torch.tensor(
+    [
+        [
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+        ]
+    ],
+    dtype=torch.long,
+    device=device
+)
+
+# Compute logits for all keys for the next step
+# 1) These logits can be used for downstream tasks
+# 2) Multistep predictions can be obtained via autoregressive rollout by feeding
+# the model’s outputs back as inputs iteratively
+predictions = model(x_features, x_keys)
+
+print("Model predictions:", predictions)
+```
 
 ## Training Details
 
 ### Training Data
 
-<!-- This should link to a Dataset Card, perhaps with a short stub of information on what the training data is all about as well as documentation related to data pre-processing or additional filtering. -->
+This LSTM collection is trained on a collection of synthetic workload datasets, each containing 100,000 sequences of key accesses over a 100-key space.
 
-{{ training_data | default("[More Information Needed]", true)}}
+Each model is trained exclusively on its corresponding processed variant:
+- _Static model_: Trained on 80% of the static dataset
+- _Dynamic model_: Trained on 80% of the dynamic dataset
+
+For full details, refer to the [Dataset Card](../data/README.md).
 
 ### Training Procedure
 
-<!-- This relates heavily to the Technical Specifications. Content here should link to that section when it is relevant to the training procedure. -->
+#### Preprocessing
 
-#### Preprocessing [optional]
-
-{{ preprocessing | default("[More Information Needed]", true)}}
-
+The synthetic workload sequences are preprocessed before being fed to each LSTM model. Missing values are removed, and timestamps are encoded trigonometrically as sine and cosine values in [-1,1] to preserve cyclical time. Two locality-based features are computed over a fixed-length rolling window: local frequency, which captures short-term key popularity, and local recency, which reflects recent accesses; both are normalized to [0,1]. Target keys are embedded into 32-dimensional vectors and concatenated with the feature tensor, producing a model-ready input. Finally, sequences are truncated or padded to a fixed length of 25.
 
 #### Training Hyperparameters
 
-- **Training regime:** {{ training_regime | default("[More Information Needed]", true)}} <!--fp32, fp16 mixed precision, bf16 mixed precision, bf16 non-mixed precision, fp16 non-mixed precision, fp8 mixed precision -->
+- **Training regime:** fp32
 
-#### Speeds, Sizes, Times [optional]
+| **Hyperparameter**    | **Static**   | **Dynamic ** |
+|-----------------------|--------------|--------------|
+| _**Dataset**_         |
+| Size (validation set) | 0.2          | 0.2          |
+| Size (training set)   | 0.8          | 0.8          |
+| _**Data Loader**_     |
+| Batch size            | 512          | 512          |
+| Shuffle               | False        | False        |
+| _**Early Stopping**_  |
+| Delta (training)      | 0.0001       | 0.0001       |
+| Delta (validation)    | 0.0005       | 0.0005       |
+| Patience (training)   | 10           | 10           |
+| Patience (validation) | 3            | 3            |
+| _**Loss**_            |
+| Class weights         | Balanced     | Balanced     |
+| Reduction             | None         | None         |
+| _**Model**_           |
+| Batch first           | True         | True         |
+| Bias                  | False        | False        |
+| Bidirectional         | False        | False        |
+| Dropout               | 0.1          | 0.1          |
+| Embedding dimension   | 32           | 32           |
+| Hidden layers         | 2            | 2            |
+| Hidden size           | 256          | 256          |
+| Projection size       | 0            | 0            |
+| Sequence length       | 25           | 25           |
+| _**Optimizer**_       |
+| Learning rate         | 0.001        | 0.005        |
+| Type                  | AdamW        | AdamW        |
+| _**Pruning**_         |
+| Amount                | 0.2          | 0.2          |
+| _**Quantization**_    |
+| Engine                | QNNPACK      | QNNPACK      |
+| Type                  | qint8        | qint8        |
+| _**Resources**_       |
+| Cores                 | 4            | 4            |
+| Device                | CPU          | CPU          |
+| _**Seed**_            |
+| Value                 | 42           | 42           |
+| _**Training**_        |
+| Epochs                | 500          | 500          |
+| _**Validation**_      |
+| Epochs                | 5            | 5            |
+| Folds                 | 5            | 5            |
 
-<!-- This section provides information about throughput, start/end time, checkpoint size if relevant, etc. -->
+#### Speeds, Sizes, Times
 
-{{ speeds_sizes_times | default("[More Information Needed]", true)}}
+| **Metric**             | **Static**        | **Dynamic**       |
+|------------------------|-------------------|-------------------|
+| _**Speeds**_           |
+| Batches per epoch      | ~195              | ~195              |
+| Inference throughput   | ~25,000 seq/h     | ~25,000 seq/h     |
+| Sequences per epoch    | 100,000           | 100,000           |
+| Training throughput    | ~14,000,000 seq/h | ~13,600,000 seq/h |
+| _**Sizes**_            |
+| Dataset size           | 5.44 MB           | 5.43 MB           |
+| Model parameters       | ~269,824          | ~269,824          |
+| Model size             | 3,3 MB            | 3,3 MB            |
+| _**Times**_            |
+| Epochs                 | 35                | 45                |
+| Training time          | ~15min            | ~20min            |
+| Validation time        | ~3h               | ~3h               |
 
 ## Evaluation
-
-<!-- This section describes the evaluation protocols and provides the results. -->
 
 ### Testing Data, Factors & Metrics
 
 #### Testing Data
 
-<!-- This should link to a Dataset Card if possible. -->
+This LSTM collection is tested on a collection of synthetic workload datasets, each containing 100,000 sequences of key accesses over a 100-key space.
 
-{{ testing_data | default("[More Information Needed]", true)}}
+Each model is tested exclusively on its corresponding processed variant:
+- _Static model_: Tested on 20% of the static dataset
+- _Dynamic model_: Tested on 20% of the dynamic dataset
+
+For full details, refer to the [Dataset Card](../data/README.md).
 
 #### Factors
 
