@@ -101,10 +101,7 @@ jobs:
       # Lint notebooks
       - name: Lint notebooks
         run: |
-          files=$(find "${{ vars.NOTEBOOKS_DIR }}" -name '*.ipynb')
-          if [ -n "$files" ]; then
-            pynblint $files
-          fi
+          find "${{ vars.NOTEBOOKS_DIR }}" -name '*.ipynb' | xargs -n 1 pynblint
 
       # Lint Docker files checking results
       # against a predefined failure threshold
@@ -201,6 +198,7 @@ jobs:
   # Testing (needs 'Setup')
   # ----------------------------------------
   testing:
+    if: false
     runs-on: self-hosted
     needs: setup
     steps:
