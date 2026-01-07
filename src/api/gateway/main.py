@@ -16,7 +16,7 @@ Functions:
         Decorator for standardizing API responses.
     gateway_api(payload: GatewayAPIInput) -> dict[str, Any]:
         The main endpoint that executes the cache eviction policy pipeline.
-    _index() -> dict[str, Any]:
+    _index(request: Request) -> dict[str, Any]:
         Provides a basic health check for the API.
 """
 
@@ -330,11 +330,15 @@ async def gateway_api(
 
 @app.get("/")
 @construct_api_response
-def _index() -> dict[str, Any]:
+def _index(request: Request) -> dict[str, Any]:
     """Basic health check for the API.
 
     This function represents a basic health check for the API
     status verification.
+
+    Args:
+        request (Request): FastAPI request object automatically
+                           injected by the framework.
 
     Returns:
         dict[str, Any]: A dictionary containing the HTTP status and a message
