@@ -16,7 +16,6 @@ source_datasets:
 - original
 tags:
 - synthetic
-- time-series
 - data-access-patterns
 - workload-simulation
 task_categories:
