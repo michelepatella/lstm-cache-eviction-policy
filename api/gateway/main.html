@@ -51,7 +51,7 @@ f: Callable[&hellip;, Awaitable[dict[str, Any]] | dict[str, Any]]
 Decorator for standardizing API responses.
 gateway_api(payload: GatewayAPIInput) -&gt; dict[str, Any]:
 The main endpoint that executes the cache eviction policy pipeline.
-_index() -&gt; dict[str, Any]:
+_index(request: Request) -&gt; dict[str, Any]:
 Provides a basic health check for the API.</p>
 </section>
 <section>

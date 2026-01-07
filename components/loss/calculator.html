@@ -37,19 +37,16 @@ el.replaceWith(d);
 </header>
 <section id="section-intro">
 <p>calculator.py</p>
-<p>Loss calculation utility module.</p>
-<p>This module provides the <code><a title="src.components.loss.calculator.calculate_loss" href="#src.components.loss.calculator.calculate_loss">calculate_loss()</a></code> function, which computes
-the loss between model outputs and targets using a provided PyTorch
-criterion. The function also handles cases where the criterion may be
-None.</p>
+<p>This module implements the custom loss calculation logic.</p>
+<p>It combines a standard criterion loss with a temporal weighting mechanism
+and a specific penalty term.</p>
 <h2 id="functions">Functions</h2>
 <p>calculate_loss(
 outputs: torch.Tensor,
 targets: torch.Tensor,
-criterion: torch.nn.Module
-) -&gt; torch.Tensor | None
-Calculates the loss between model outputs and targets. Returns
-None if the criterion is not provided.</p>
+criterion: torch.nn.Module,
+) -&gt; torch.Tensor | None:
+Computes the loss for a batch of predictions.</p>
 </section>
 <section>
 </section>
@@ -71,18 +68,20 @@ None if the criterion is not provided.</p>
     targets: torch.Tensor,
     criterion: torch.nn.Module,
 ) -&gt; torch.Tensor | None:
-    &#34;&#34;&#34;Calculate the loss for outputs and targets.
+    &#34;&#34;&#34;Computes a custom loss.
 
-    This function calculates the loss between model outputs
-    and targets using the provided criterion.
+    This function calculates a base loss using the provided criterion and
+    modifies it by applying temporal weights derived from the distance to
+    the next access of each key. It also adds a penalty term that
+    specifically targets low-probability assignments for imminent accesses.
 
     Args:
-        outputs (torch.Tensor): Model predictions.
-        targets (torch.Tensor): Ground truth targets.
-        criterion (torch.nn.Module): Criterion to use for loss calculation.
+        outputs (torch.Tensor): The model&#39;s raw output logits.
+        targets (torch.Tensor): The ground truth of the accessed keys.
+        criterion (torch.nn.Module): The base loss function.
 
     Returns:
-        torch.Tensor | None: Calculated loss (None if something went wrong).
+        torch.Tensor | None: The computed final loss.
 
     Raises:
         RuntimeError: If loss calculation fails:
@@ -90,17 +89,79 @@ None if the criterion is not provided.</p>
               shapes (TypeError, RuntimeError).
     &#34;&#34;&#34;
     try:
-        # Check whether criterion is not provided
         if criterion is None:
-            # Loss is not calculated (None)
-            loss = None
+            # None as loss if criterion is not provided
+            final_loss = None
         else:
-            # Calculate loss with
-            # provided criterion
-            loss = criterion(outputs, targets)
+            # Retrieve batch size and device
+            batch_size = len(targets)
+            device = targets.device
 
-        return loss
-    except TypeError as e:
+            # Compute standard loss as base
+            base_loss = criterion(outputs, targets)
+
+            # Mask of future key accesses having true elements
+            # where the same key appears later in the batch
+            mask = targets.unsqueeze(
+                TENSOR_BROADCAST_ROW_DIM,
+            ) == targets.unsqueeze(TENSOR_BROADCAST_COL_DIM)
+
+            # Initialize distances (to a large value)
+            # which will store steps to next future access per key
+            distances = torch.full(
+                (batch_size,),
+                batch_size + 1,
+                device=device,
+                dtype=torch.float,
+            )
+
+            # For each key, compute distances
+            # to first future key access
+            for i in range(batch_size):
+                # Get indices of future accesses for key i
+                future_accesses = torch.where(mask[i])[LIST_FIRST_IDX]
+                future_accesses = future_accesses[future_accesses &gt; i]
+
+                # If there is a future access, store its
+                # distance from current index
+                if len(future_accesses) &gt; 0:
+                    distances[i] = (
+                        future_accesses[LIST_FIRST_IDX] - i
+                    ).float()
+
+            # Calculate and normalize temporal weights
+            # which assign higher values to keys that will
+            # be accessed earlier than others
+            temporal_weights = 1.0 / torch.log1p(distances)
+            temporal_weights = temporal_weights / (
+                temporal_weights.mean() + EPSILON
+            )
+
+            # Select logits of the target class for each batch
+            # element and convert to probability via sigmoid
+            target_probs = (
+                torch.softmax(outputs, dim=TENSOR_BROADCAST_COL_DIM)
+                .gather(
+                    TENSOR_BROADCAST_COL_DIM,
+                    targets.unsqueeze(TENSOR_BROADCAST_COL_DIM),
+                )
+                .squeeze(TENSOR_BROADCAST_COL_DIM)
+                .clamp(min=EPSILON, max=1 - EPSILON)
+            )
+
+            # Penalize the model when assigning low
+            # probabilities to keys that will be accessed
+            # earlier than others
+            penalty = (
+                (1 - target_probs) * temporal_weights / temporal_weights.max()
+            ).mean()
+
+            # The final loss is given by weighting
+            # the base one with temporal weights, adding a penalty
+            final_loss = (base_loss * temporal_weights).mean() + penalty
+
+        return final_loss
+    except (TypeError, RuntimeError) as e:
         msg = &#34;Loss calculation failed&#34;
         error(
             msg,
@@ -126,22 +187,24 @@ None if the criterion is not provided.</p>
         )
         raise RuntimeError(msg) from e</code></pre>
 </details>
-<div class="desc"><p>Calculate the loss for outputs and targets.</p>
-<p>This function calculates the loss between model outputs
-and targets using the provided criterion.</p>
+<div class="desc"><p>Computes a custom loss.</p>
+<p>This function calculates a base loss using the provided criterion and
+modifies it by applying temporal weights derived from the distance to
+the next access of each key. It also adds a penalty term that
+specifically targets low-probability assignments for imminent accesses.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>outputs</code></strong> :&ensp;<code>torch.Tensor</code></dt>
-<dd>Model predictions.</dd>
+<dd>The model's raw output logits.</dd>
 <dt><strong><code>targets</code></strong> :&ensp;<code>torch.Tensor</code></dt>
-<dd>Ground truth targets.</dd>
+<dd>The ground truth of the accessed keys.</dd>
 <dt><strong><code>criterion</code></strong> :&ensp;<code>torch.nn.Module</code></dt>
-<dd>Criterion to use for loss calculation.</dd>
+<dd>The base loss function.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><code>torch.Tensor | None</code></dt>
-<dd>Calculated loss (None if something went wrong).</dd>
+<dd>The computed final loss.</dd>
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>

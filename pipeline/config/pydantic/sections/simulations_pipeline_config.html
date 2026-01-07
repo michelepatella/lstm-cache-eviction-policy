@@ -72,27 +72,24 @@ Aggregates all configuration settings for simulations.</p>
 
     Attributes:
         conf_weight (float): Weight applied to the confidence score
-                             in decision-making (in (0.0, 1.0]).
+                             in decision-making (in (0.0, 5.0]).
         conf_level (float): Minimum confidence level required
                             for certain decisions (in (0.0, 1.0]).
         excluded_keys (list[int]): List of keys to exclude from cache operations.
         mc_dropout_samples (int): Number of Monte Carlo Dropout samples
                                   to use for uncertainty estimation (&gt;= 1).
         num_evictions (int): Number of items to evict simultaneously (&gt;= 1).
-        prob_weight (float): Weight applied to the prediction probability
-                             score (in (0.0, 1.0]).
         rollout_horizon (int): Time horizon for autoregressive rollout
                                prediction (&gt;= 1).
         time_step_increment (float): Time increment used in autoregressive
                                      rollout (&gt; 0).
     &#34;&#34;&#34;
 
-    conf_weight: Annotated[float, Field(gt=0, le=1)]
+    conf_weight: Annotated[float, Field(gt=0.0, le=5.0)]
     conf_level: Annotated[float, Field(gt=0, le=1)]
     excluded_keys: list[int]
     mc_dropout_samples: Annotated[int, Field(ge=1)]
     num_evictions: Annotated[int, Field(ge=1)]
-    prob_weight: Annotated[float, Field(gt=0, le=1)]
     rollout_horizon: Annotated[int, Field(ge=1)]
     time_step_increment: Annotated[float, Field(gt=0)]</code></pre>
 </details>
@@ -101,7 +98,7 @@ Aggregates all configuration settings for simulations.</p>
 <dl>
 <dt><strong><code>conf_weight</code></strong> :&ensp;<code>float</code></dt>
 <dd>Weight applied to the confidence score
-in decision-making (in (0.0, 1.0]).</dd>
+in decision-making (in (0.0, 5.0]).</dd>
 <dt><strong><code>conf_level</code></strong> :&ensp;<code>float</code></dt>
 <dd>Minimum confidence level required
 for certain decisions (in (0.0, 1.0]).</dd>
@@ -112,9 +109,6 @@ for certain decisions (in (0.0, 1.0]).</dd>
 to use for uncertainty estimation (&gt;= 1).</dd>
 <dt><strong><code>num_evictions</code></strong> :&ensp;<code>int</code></dt>
 <dd>Number of items to evict simultaneously (&gt;= 1).</dd>
-<dt><strong><code>prob_weight</code></strong> :&ensp;<code>float</code></dt>
-<dd>Weight applied to the prediction probability
-score (in (0.0, 1.0]).</dd>
 <dt><strong><code>rollout_horizon</code></strong> :&ensp;<code>int</code></dt>
 <dd>Time horizon for autoregressive rollout
 prediction (&gt;= 1).</dd>
@@ -153,10 +147,6 @@ validated to form a valid model.</p>
 <div class="desc"></div>
 </dd>
 <dt id="src.pipeline.config.pydantic.sections.simulations_pipeline_config.SimulationsApiKwargsPipelineConfig.num_evictions"><code class="name">var <span class="ident">num_evictions</span> : int</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="src.pipeline.config.pydantic.sections.simulations_pipeline_config.SimulationsApiKwargsPipelineConfig.prob_weight"><code class="name">var <span class="ident">prob_weight</span> : float</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -306,7 +296,6 @@ validated to form a valid model.</p>
 <li><code><a title="src.pipeline.config.pydantic.sections.simulations_pipeline_config.SimulationsApiKwargsPipelineConfig.mc_dropout_samples" href="#src.pipeline.config.pydantic.sections.simulations_pipeline_config.SimulationsApiKwargsPipelineConfig.mc_dropout_samples">mc_dropout_samples</a></code></li>
 <li><code><a title="src.pipeline.config.pydantic.sections.simulations_pipeline_config.SimulationsApiKwargsPipelineConfig.model_config" href="#src.pipeline.config.pydantic.sections.simulations_pipeline_config.SimulationsApiKwargsPipelineConfig.model_config">model_config</a></code></li>
 <li><code><a title="src.pipeline.config.pydantic.sections.simulations_pipeline_config.SimulationsApiKwargsPipelineConfig.num_evictions" href="#src.pipeline.config.pydantic.sections.simulations_pipeline_config.SimulationsApiKwargsPipelineConfig.num_evictions">num_evictions</a></code></li>
-<li><code><a title="src.pipeline.config.pydantic.sections.simulations_pipeline_config.SimulationsApiKwargsPipelineConfig.prob_weight" href="#src.pipeline.config.pydantic.sections.simulations_pipeline_config.SimulationsApiKwargsPipelineConfig.prob_weight">prob_weight</a></code></li>
 <li><code><a title="src.pipeline.config.pydantic.sections.simulations_pipeline_config.SimulationsApiKwargsPipelineConfig.rollout_horizon" href="#src.pipeline.config.pydantic.sections.simulations_pipeline_config.SimulationsApiKwargsPipelineConfig.rollout_horizon">rollout_horizon</a></code></li>
 <li><code><a title="src.pipeline.config.pydantic.sections.simulations_pipeline_config.SimulationsApiKwargsPipelineConfig.time_step_increment" href="#src.pipeline.config.pydantic.sections.simulations_pipeline_config.SimulationsApiKwargsPipelineConfig.time_step_increment">time_step_increment</a></code></li>
 </ul>

@@ -147,8 +147,9 @@ Executes the cache simulation for the given cache and policy.</p>
 
             # If the requested key is not into the cache
             if not is_hit:
-                if policy == CACHE_LSTM_NAME:
-                    # Put the requested key into the LSTM cache
+                if policy == CACHE_LSTM_NAME or policy == CACHE_LR_NAME:
+                    # Put the requested key into the
+                    # LSTM/Logistic Regression cache
                     cache.put(
                         key,
                         current_time,
@@ -194,6 +195,7 @@ Executes the cache simulation for the given cache and policy.</p>
             tqdm_bar.set_postfix(
                 hit_rate=f&#34;{hit_rate:.2f}%&#34;,
                 miss_rate=f&#34;{miss_rate:.2f}%&#34;,
+                latency=f&#34;{cache_latency / TIME_MICROSECONDS_IN_MILLISECOND:.2f}ms&#34;,
             )
 
         info(

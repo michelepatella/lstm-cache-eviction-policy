@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>src.components.caches.implementations.lstm_cache API documentation</title>
-<meta name="description" content="lstm_cache.py …">
+<title>src.components.caches.implementations.lr_cache API documentation</title>
+<meta name="description" content="lr_cache.py …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -33,18 +33,17 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>src.components.caches.implementations.lstm_cache</code></h1>
+<h1 class="title">Module <code>src.components.caches.implementations.lr_cache</code></h1>
 </header>
 <section id="section-intro">
-<p>lstm_cache.py</p>
-<p>Module implementing an LSTM-based cache.</p>
-<p>This module provides the <code><a title="src.components.caches.implementations.lstm_cache.LSTMCache" href="#src.components.caches.implementations.lstm_cache.LSTMCache">LSTMCache</a></code> class, which manages key-value pairs in a
-cache using an LSTM eviction policy when the cache is full. It interacts with an
-external API for eviction decisions, tracks metrics via a logger, and handles
-expired keys automatically.</p>
+<p>lr_cache.py</p>
+<p>Module implementing a Logistic Regression-based cache.</p>
+<p>This module provides the <code><a title="src.components.caches.implementations.lr_cache.LRCache" href="#src.components.caches.implementations.lr_cache.LRCache">LRCache</a></code> class, which manages key-value pairs in a
+cache using a Logistic Regression-based eviction policy when the cache is full.</p>
 <h2 id="classes">Classes</h2>
-<p>LSTMCache(cache_class, metrics_logger, config):
-LSTM cache implementation supporting put, eviction, and key operations.</p>
+<p>LRCache(cache_class, metrics_logger, config):
+Logistic Regression cache implementation supporting put, eviction, and
+key operations.</p>
 </section>
 <section>
 </section>
@@ -55,8 +54,8 @@ LSTM cache implementation supporting put, eviction, and key operations.</p>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="src.components.caches.implementations.lstm_cache.LSTMCache"><code class="flex name class">
-<span>class <span class="ident">LSTMCache</span></span>
+<dt id="src.components.caches.implementations.lr_cache.LRCache"><code class="flex name class">
+<span>class <span class="ident">LRCache</span></span>
 <span>(</span><span>cache_class: Any,<br>metrics_logger: components.caches.utils.cache_metrics_logger.CacheMetricsLogger,<br>pipeline_config: pipeline.config.pydantic.pipeline_config.PipelineConfig)</span>
 </code></dt>
 <dd>
@@ -64,34 +63,27 @@ LSTM cache implementation supporting put, eviction, and key operations.</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class LSTMCache(BaseCache):
-    &#34;&#34;&#34;LSTM-based cache implementation.
+<pre><code class="python">class LRCache(BaseCache):
+    &#34;&#34;&#34;Logistic Regression-based cache implementation.
 
-    Evicts keys from the cache based on an LSTM
+    Evicts keys from the cache based on a Logistic Regression-based
     eviction policy when the cache is full.
-
-    Attributes:
-        api_endpoint (str): Endpoint of the API to used as
-                            eviction policy.
-        api_kwargs (dict): Keyword arguments used by the eviction
-                            policy API.
     &#34;&#34;&#34;
 
     def __init__(
-        self: &#34;LSTMCache&#34;,
+        self: &#34;LRCache&#34;,
         cache_class: Any,
         metrics_logger: CacheMetricsLogger,
         pipeline_config: PipelineConfig,
     ) -&gt; None:
-        &#34;&#34;&#34;Initialize the LSTM cache.
+        &#34;&#34;&#34;Initialize the Logistic Regression cache.
 
-        This function initializes the LSTM cache by
+        This function initializes the Logistic Regression cache by
         calling the BaseCache constructor.
 
         Args:
-            self (&#34;LSTMCache&#34;): Current class instance.
-            cache_class (Any): Underlying cache class
-                               to store items.
+            self (&#34;LRCache&#34;): Current class instance.
+            cache_class (Any): Underlying cache class to store items.
             metrics_logger (CacheMetricsLogger): Logger for cache events.
             pipeline_config (PipelineConfig): Configuration object.
 
@@ -101,35 +93,39 @@ LSTM cache implementation supporting put, eviction, and key operations.</p>
         # Cache class initialization
         super().__init__(cache_class, metrics_logger, pipeline_config)
 
-        # Set API endpoint and kwargs to use
-        self.api_endpoint = GATEWAY_API_FULL_URL
-        self.api_kwargs = pipeline_config.simulations.api_kwargs
+        # Determine the path to load model from
+        data_mode = pipeline_config.data.general.mode
+        if data_mode == DATA_STATIC_MODE:
+            model_save_path = MODEL_LR_TRAINED_STATIC_FILE_PATH
+        else:
+            model_save_path = MODEL_LR_TRAINED_DYNAMIC_FILE_PATH
+
+        # Load model
+        self.model = joblib.load(model_save_path)
 
         debug(
             &#34;Cache initialization executed&#34;,
             extra={
                 &#34;maxsize&#34;: self.maxsize,
-                &#34;api_kwargs&#34;: self.api_kwargs.__dict__,
-                &#34;context&#34;: &#34;LSTM cache&#34;,
+                &#34;context&#34;: &#34;LR Cache&#34;,
             },
         )
 
-    def evict_key(self: &#34;LSTMCache&#34;, key: int) -&gt; None:
+    def evict_key(self: &#34;LRCache&#34;, key: int) -&gt; None:
         &#34;&#34;&#34;Evict a key from the cache.
 
-        This function evicts a provided key
-        from the LSTM cache, along with its
-        expiration time.
+        This function evicts a provided key from the Logistic Regression
+        cache, along with its expiration time.
 
         Args:
-            self (&#34;LSTMCache&#34;): Current class instance.
+            self (&#34;LRCache&#34;): Current class instance.
             key (int): Key to remove from the cache.
 
         Returns:
             None
 
         Raises:
-            RuntimeError: If key eviction from LSTM cache fails:
+            RuntimeError: If key eviction from Logistic Regression cache fails:
                 * The key is unhashable (TypeError).
                 * Cache store or expiry dict is misconfigured (AttributeError).
         &#34;&#34;&#34;
@@ -139,7 +135,7 @@ LSTM cache implementation supporting put, eviction, and key operations.</p>
             self.store.pop(key, None)
             self.expiry.pop(key, None)
         except (TypeError, AttributeError) as e:
-            msg = &#34;Key eviction from LSTM cache failed&#34;
+            msg = &#34;Key eviction from Logistic Regression cache failed&#34;
             error(
                 msg,
                 extra={
@@ -151,19 +147,23 @@ LSTM cache implementation supporting put, eviction, and key operations.</p>
                     &#34;expiry_keys&#34;: list(self.expiry.keys())
                     if hasattr(self.expiry, &#34;keys&#34;)
                     else None,
-                    &#34;context&#34;: &#34;LSTM cache&#34;,
+                    &#34;context&#34;: &#34;LR Cache&#34;,
                 },
             )
             raise RuntimeError(msg) from e
 
-    def _put_key(self: &#34;LSTMCache&#34;, key: int, current_time: float) -&gt; None:
+    def _put_key(
+        self: &#34;LRCache&#34;,
+        key: int,
+        current_time: float,
+    ) -&gt; None:
         &#34;&#34;&#34;Put a key in the cache.
 
-        This function puts a key into the LSTM cache
+        This function puts a key into the Logistic Regression cache
         along with its expiration time.
 
         Args:
-            self (&#34;LSTMCache&#34;): Current class instance.
+            self (&#34;LRCache&#34;): Current class instance.
             key (int): Key to insert in the cache.
             current_time (float): Current time.
 
@@ -171,7 +171,7 @@ LSTM cache implementation supporting put, eviction, and key operations.</p>
             None
 
         Raises:
-            RuntimeError: If key insertion into LSTM cache fails:
+            RuntimeError: If key insertion into Logistic Regression cache fails:
                 * The key is unhashable (TypeError).
                 * Cache store or expiry dict is misconfigured (AttributeError).
         &#34;&#34;&#34;
@@ -184,7 +184,7 @@ LSTM cache implementation supporting put, eviction, and key operations.</p>
             # Track put event
             self.metrics_logger.log_put(key, current_time, self.ttl)
         except (TypeError, AttributeError) as e:
-            msg = &#34;Key insertion into LSTM cache failed&#34;
+            msg = &#34;Key insertion into Logistic Regression cache failed&#34;
             error(
                 msg,
                 extra={
@@ -197,28 +197,27 @@ LSTM cache implementation supporting put, eviction, and key operations.</p>
                     &#34;expiry_keys&#34;: list(self.expiry.keys())
                     if hasattr(self.expiry, &#34;keys&#34;)
                     else None,
-                    &#34;context&#34;: &#34;LSTM cache&#34;,
+                    &#34;context&#34;: &#34;LR Cache&#34;,
                 },
             )
             raise RuntimeError(msg) from e
 
     def put(
-        self: &#34;LSTMCache&#34;,
+        self: &#34;LRCache&#34;,
         key: int,
         current_time: float,
         current_idx: int,
         testing_set: pd.DataFrame,
         pipeline_config: PipelineConfig,
     ) -&gt; None:
-        &#34;&#34;&#34;Insert a key in the LSTM cache.
+        &#34;&#34;&#34;Insert a key in the Logistic Regression cache.
 
-        This function puts a key into the LSTM cache
-        along with its expiration time. If the cache is full,
-        extracts the last sequence of accesses and uses the
-        LSTM policy to decide which key to evict.
+        This function puts a key into the Logistic Regression cache
+        along with its expiration time. If the cache is full, a
+        Logistic Regression model is exploited for getting an eviction decision.
 
         Args:
-            self (&#34;LSTMCache&#34;): Current class instance.
+            self (&#34;LRCache&#34;): Current class instance.
             key (int): Key to insert.
             current_time (float): Current time.
             current_idx (int): Index of the current request.
@@ -232,7 +231,6 @@ LSTM cache implementation supporting put, eviction, and key operations.</p>
             RuntimeError: If key insertion/eviction fails:
                 * Key is unhashable or cache store/expiry dict
                   misconfigured (TypeError, AttributeError).
-                * API call fails (HTTPException).
         &#34;&#34;&#34;
         try:
             # Remove all expired keys
@@ -241,57 +239,63 @@ LSTM cache implementation supporting put, eviction, and key operations.</p>
 
             # Check whether the cache is full
             if key not in self.store and len(self.store) &gt;= self.maxsize:
-                # Get the sequence length
-                # of the LSTM model
-                seq_len = pipeline_config.model.sequence.length
+                if current_idx &gt;= self.model.seq_len:
+                    # Convert dataset to DataFrame
+                    testing_set = build_dataset(testing_set.data)
 
-                # Extract last accesses of
-                # sequence length * 2 (for each
-                # access a history of seq_len past accesses
-                # is needed for building features)
-                last_accesses = extract_last_rows_from_dataset(
-                    current_idx,
-                    seq_len + seq_len,
-                    testing_set.data,
-                )
+                    # Extract last (sequence length) accessed keys
+                    last_accesses = (
+                        testing_set.iloc[
+                            current_idx - self.model.seq_len : current_idx
+                        ][DATASET_COLUMN_REQUEST_NAME]
+                        .values.astype(str)
+                        .reshape(1, -1)
+                    )
 
-                # Check whether last accesses
-                # are not available
-                if last_accesses is None:
-                    # Eviction fallback policy: Random
-                    key_to_evict = random.choice(list(self.store.keys()))
+                    # Construct a DataFrame starting from
+                    # extracted accesses
+                    last_accesses_df = pd.DataFrame(
+                        last_accesses,
+                        columns=[
+                            f&#34;{DATASET_COLUMN_LR_PREVIOUS_REQUEST_PREFIX_NAME}{i}&#34;
+                            for i in range(1, self.model.seq_len + 1)
+                        ],
+                    )
+
+                    # One-hot encode the extracted sequence
+                    last_accesses_encoded = self.model.encoder.transform(
+                        last_accesses_df,
+                    ).toarray()
+
+                    # Extract current features
+                    current_features = (
+                        testing_set[DATASET_PROCESSED_FEATURE_COLUMNS]
+                        .iloc[[current_idx]]
+                        .values
+                    )
+
+                    # Construct the final features as the combination
+                    # of the encoded last accesses and the current features
+                    X = np.concatenate(
+                        [current_features, last_accesses_encoded],
+                        axis=TENSOR_FEATURES_DIM,
+                    )
+
+                    # For each key, predict the probability
+                    # of being used at the next step
+                    probs = self.model.model.predict_proba(X)[LIST_FIRST_IDX]
+
+                    # Key to evict as the one having the
+                    # lowest probability among those in the cache
+                    key_to_evict = min(
+                        list(self.store.keys()),
+                        key=lambda k: probs[
+                            int(k) - pipeline_config.data.general.keys.min
+                        ],
+                    )
                 else:
-                    # Protect the last accessed key and
-                    # the most frequently accessed one
-                    self.api_kwargs.excluded_keys = list(
-                        {
-                            self.last_accessed_key,
-                            max(
-                                self.key_access_counter,
-                                key=self.key_access_counter.get,
-                            ),
-                        },
-                    )
-
-                    # Call API to get the key to be evicted
-                    # from the cache
-                    response = requests.post(
-                        self.api_endpoint,
-                        json={
-                            API_PARAM_KEYS_IN_CACHE_NAME: list(
-                                self.store.keys(),
-                            ),
-                            API_PARAM_LAST_ACCESSES_NAME: last_accesses,
-                            API_PARAM_USER_API_KWARGS_NAME: self.api_kwargs.__dict__,
-                        },
-                    )
-
-                    # Extract data as response
-                    response = response.json()
-                    keys_to_evict = response[API_RESPONSE_FIELD_DATA_NAME][
-                        API_RESPONSE_FIELD_DATA_KEYS_TO_EVICT_NAME
-                    ]
-                    key_to_evict = keys_to_evict[LIST_FIRST_IDX]
+                    # No enough data available, random as fallback
+                    key_to_evict = random.choice(list(self.store.keys()))
 
                 # Evict key
                 self.evict_key(key_to_evict)
@@ -305,8 +309,8 @@ LSTM cache implementation supporting put, eviction, and key operations.</p>
             # Insert the key
             self._put_key(key, current_time)
 
-        except (TypeError, AttributeError, HTTPException) as e:
-            msg = &#34;Key insertion/eviction in/from LSTM cache failed&#34;
+        except (TypeError, AttributeError) as e:
+            msg = &#34;Key insertion/eviction to/from Logistic Regression cache failed&#34;
             error(
                 msg,
                 extra={
@@ -319,32 +323,22 @@ LSTM cache implementation supporting put, eviction, and key operations.</p>
                     &#34;expiry_keys&#34;: list(self.expiry.keys())
                     if hasattr(self.expiry, &#34;keys&#34;)
                     else None,
-                    &#34;context&#34;: &#34;LSTM cache&#34;,
+                    &#34;context&#34;: &#34;LR Cache&#34;,
                 },
             )
             raise RuntimeError(msg) from e</code></pre>
 </details>
-<div class="desc"><p>LSTM-based cache implementation.</p>
-<p>Evicts keys from the cache based on an LSTM
+<div class="desc"><p>Logistic Regression-based cache implementation.</p>
+<p>Evicts keys from the cache based on a Logistic Regression-based
 eviction policy when the cache is full.</p>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>api_endpoint</code></strong> :&ensp;<code>str</code></dt>
-<dd>Endpoint of the API to used as
-eviction policy.</dd>
-<dt><strong><code>api_kwargs</code></strong> :&ensp;<code>dict</code></dt>
-<dd>Keyword arguments used by the eviction
-policy API.</dd>
-</dl>
-<p>Initialize the LSTM cache.</p>
-<p>This function initializes the LSTM cache by
+<p>Initialize the Logistic Regression cache.</p>
+<p>This function initializes the Logistic Regression cache by
 calling the BaseCache constructor.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt>self ("LSTMCache"): Current class instance.</dt>
+<dt>self ("LRCache"): Current class instance.</dt>
 <dt><strong><code>cache_class</code></strong> :&ensp;<code>Any</code></dt>
-<dd>Underlying cache class
-to store items.</dd>
+<dd>Underlying cache class to store items.</dd>
 <dt><strong><code>metrics_logger</code></strong> :&ensp;<code>CacheMetricsLogger</code></dt>
 <dd>Logger for cache events.</dd>
 <dt><strong><code>pipeline_config</code></strong> :&ensp;<code>PipelineConfig</code></dt>
@@ -359,30 +353,29 @@ to store items.</dd>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="src.components.caches.implementations.lstm_cache.LSTMCache.evict_key"><code class="name flex">
-<span>def <span class="ident">evict_key</span></span>(<span>self: <a title="src.components.caches.implementations.lstm_cache.LSTMCache" href="#src.components.caches.implementations.lstm_cache.LSTMCache">LSTMCache</a>,<br>key: int) ‑> None</span>
+<dt id="src.components.caches.implementations.lr_cache.LRCache.evict_key"><code class="name flex">
+<span>def <span class="ident">evict_key</span></span>(<span>self: <a title="src.components.caches.implementations.lr_cache.LRCache" href="#src.components.caches.implementations.lr_cache.LRCache">LRCache</a>,<br>key: int) ‑> None</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def evict_key(self: &#34;LSTMCache&#34;, key: int) -&gt; None:
+<pre><code class="python">def evict_key(self: &#34;LRCache&#34;, key: int) -&gt; None:
     &#34;&#34;&#34;Evict a key from the cache.
 
-    This function evicts a provided key
-    from the LSTM cache, along with its
-    expiration time.
+    This function evicts a provided key from the Logistic Regression
+    cache, along with its expiration time.
 
     Args:
-        self (&#34;LSTMCache&#34;): Current class instance.
+        self (&#34;LRCache&#34;): Current class instance.
         key (int): Key to remove from the cache.
 
     Returns:
         None
 
     Raises:
-        RuntimeError: If key eviction from LSTM cache fails:
+        RuntimeError: If key eviction from Logistic Regression cache fails:
             * The key is unhashable (TypeError).
             * Cache store or expiry dict is misconfigured (AttributeError).
     &#34;&#34;&#34;
@@ -392,7 +385,7 @@ to store items.</dd>
         self.store.pop(key, None)
         self.expiry.pop(key, None)
     except (TypeError, AttributeError) as e:
-        msg = &#34;Key eviction from LSTM cache failed&#34;
+        msg = &#34;Key eviction from Logistic Regression cache failed&#34;
         error(
             msg,
             extra={
@@ -404,18 +397,17 @@ to store items.</dd>
                 &#34;expiry_keys&#34;: list(self.expiry.keys())
                 if hasattr(self.expiry, &#34;keys&#34;)
                 else None,
-                &#34;context&#34;: &#34;LSTM cache&#34;,
+                &#34;context&#34;: &#34;LR Cache&#34;,
             },
         )
         raise RuntimeError(msg) from e</code></pre>
 </details>
 <div class="desc"><p>Evict a key from the cache.</p>
-<p>This function evicts a provided key
-from the LSTM cache, along with its
-expiration time.</p>
+<p>This function evicts a provided key from the Logistic Regression
+cache, along with its expiration time.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt>self ("LSTMCache"): Current class instance.</dt>
+<dt>self ("LRCache"): Current class instance.</dt>
 <dt><strong><code>key</code></strong> :&ensp;<code>int</code></dt>
 <dd>Key to remove from the cache.</dd>
 </dl>
@@ -424,13 +416,13 @@ expiration time.</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code>RuntimeError</code></dt>
-<dd>If key eviction from LSTM cache fails:
+<dd>If key eviction from Logistic Regression cache fails:
 * The key is unhashable (TypeError).
 * Cache store or expiry dict is misconfigured (AttributeError).</dd>
 </dl></div>
 </dd>
-<dt id="src.components.caches.implementations.lstm_cache.LSTMCache.put"><code class="name flex">
-<span>def <span class="ident">put</span></span>(<span>self: <a title="src.components.caches.implementations.lstm_cache.LSTMCache" href="#src.components.caches.implementations.lstm_cache.LSTMCache">LSTMCache</a>,<br>key: int,<br>current_time: float,<br>current_idx: int,<br>testing_set: pandas.core.frame.DataFrame,<br>pipeline_config: pipeline.config.pydantic.pipeline_config.PipelineConfig) ‑> None</span>
+<dt id="src.components.caches.implementations.lr_cache.LRCache.put"><code class="name flex">
+<span>def <span class="ident">put</span></span>(<span>self: <a title="src.components.caches.implementations.lr_cache.LRCache" href="#src.components.caches.implementations.lr_cache.LRCache">LRCache</a>,<br>key: int,<br>current_time: float,<br>current_idx: int,<br>testing_set: pandas.core.frame.DataFrame,<br>pipeline_config: pipeline.config.pydantic.pipeline_config.PipelineConfig) ‑> None</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -438,22 +430,21 @@ expiration time.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def put(
-    self: &#34;LSTMCache&#34;,
+    self: &#34;LRCache&#34;,
     key: int,
     current_time: float,
     current_idx: int,
     testing_set: pd.DataFrame,
     pipeline_config: PipelineConfig,
 ) -&gt; None:
-    &#34;&#34;&#34;Insert a key in the LSTM cache.
+    &#34;&#34;&#34;Insert a key in the Logistic Regression cache.
 
-    This function puts a key into the LSTM cache
-    along with its expiration time. If the cache is full,
-    extracts the last sequence of accesses and uses the
-    LSTM policy to decide which key to evict.
+    This function puts a key into the Logistic Regression cache
+    along with its expiration time. If the cache is full, a
+    Logistic Regression model is exploited for getting an eviction decision.
 
     Args:
-        self (&#34;LSTMCache&#34;): Current class instance.
+        self (&#34;LRCache&#34;): Current class instance.
         key (int): Key to insert.
         current_time (float): Current time.
         current_idx (int): Index of the current request.
@@ -467,7 +458,6 @@ expiration time.</p>
         RuntimeError: If key insertion/eviction fails:
             * Key is unhashable or cache store/expiry dict
               misconfigured (TypeError, AttributeError).
-            * API call fails (HTTPException).
     &#34;&#34;&#34;
     try:
         # Remove all expired keys
@@ -476,57 +466,63 @@ expiration time.</p>
 
         # Check whether the cache is full
         if key not in self.store and len(self.store) &gt;= self.maxsize:
-            # Get the sequence length
-            # of the LSTM model
-            seq_len = pipeline_config.model.sequence.length
+            if current_idx &gt;= self.model.seq_len:
+                # Convert dataset to DataFrame
+                testing_set = build_dataset(testing_set.data)
 
-            # Extract last accesses of
-            # sequence length * 2 (for each
-            # access a history of seq_len past accesses
-            # is needed for building features)
-            last_accesses = extract_last_rows_from_dataset(
-                current_idx,
-                seq_len + seq_len,
-                testing_set.data,
-            )
+                # Extract last (sequence length) accessed keys
+                last_accesses = (
+                    testing_set.iloc[
+                        current_idx - self.model.seq_len : current_idx
+                    ][DATASET_COLUMN_REQUEST_NAME]
+                    .values.astype(str)
+                    .reshape(1, -1)
+                )
 
-            # Check whether last accesses
-            # are not available
-            if last_accesses is None:
-                # Eviction fallback policy: Random
-                key_to_evict = random.choice(list(self.store.keys()))
+                # Construct a DataFrame starting from
+                # extracted accesses
+                last_accesses_df = pd.DataFrame(
+                    last_accesses,
+                    columns=[
+                        f&#34;{DATASET_COLUMN_LR_PREVIOUS_REQUEST_PREFIX_NAME}{i}&#34;
+                        for i in range(1, self.model.seq_len + 1)
+                    ],
+                )
+
+                # One-hot encode the extracted sequence
+                last_accesses_encoded = self.model.encoder.transform(
+                    last_accesses_df,
+                ).toarray()
+
+                # Extract current features
+                current_features = (
+                    testing_set[DATASET_PROCESSED_FEATURE_COLUMNS]
+                    .iloc[[current_idx]]
+                    .values
+                )
+
+                # Construct the final features as the combination
+                # of the encoded last accesses and the current features
+                X = np.concatenate(
+                    [current_features, last_accesses_encoded],
+                    axis=TENSOR_FEATURES_DIM,
+                )
+
+                # For each key, predict the probability
+                # of being used at the next step
+                probs = self.model.model.predict_proba(X)[LIST_FIRST_IDX]
+
+                # Key to evict as the one having the
+                # lowest probability among those in the cache
+                key_to_evict = min(
+                    list(self.store.keys()),
+                    key=lambda k: probs[
+                        int(k) - pipeline_config.data.general.keys.min
+                    ],
+                )
             else:
-                # Protect the last accessed key and
-                # the most frequently accessed one
-                self.api_kwargs.excluded_keys = list(
-                    {
-                        self.last_accessed_key,
-                        max(
-                            self.key_access_counter,
-                            key=self.key_access_counter.get,
-                        ),
-                    },
-                )
-
-                # Call API to get the key to be evicted
-                # from the cache
-                response = requests.post(
-                    self.api_endpoint,
-                    json={
-                        API_PARAM_KEYS_IN_CACHE_NAME: list(
-                            self.store.keys(),
-                        ),
-                        API_PARAM_LAST_ACCESSES_NAME: last_accesses,
-                        API_PARAM_USER_API_KWARGS_NAME: self.api_kwargs.__dict__,
-                    },
-                )
-
-                # Extract data as response
-                response = response.json()
-                keys_to_evict = response[API_RESPONSE_FIELD_DATA_NAME][
-                    API_RESPONSE_FIELD_DATA_KEYS_TO_EVICT_NAME
-                ]
-                key_to_evict = keys_to_evict[LIST_FIRST_IDX]
+                # No enough data available, random as fallback
+                key_to_evict = random.choice(list(self.store.keys()))
 
             # Evict key
             self.evict_key(key_to_evict)
@@ -540,8 +536,8 @@ expiration time.</p>
         # Insert the key
         self._put_key(key, current_time)
 
-    except (TypeError, AttributeError, HTTPException) as e:
-        msg = &#34;Key insertion/eviction in/from LSTM cache failed&#34;
+    except (TypeError, AttributeError) as e:
+        msg = &#34;Key insertion/eviction to/from Logistic Regression cache failed&#34;
         error(
             msg,
             extra={
@@ -554,19 +550,18 @@ expiration time.</p>
                 &#34;expiry_keys&#34;: list(self.expiry.keys())
                 if hasattr(self.expiry, &#34;keys&#34;)
                 else None,
-                &#34;context&#34;: &#34;LSTM cache&#34;,
+                &#34;context&#34;: &#34;LR Cache&#34;,
             },
         )
         raise RuntimeError(msg) from e</code></pre>
 </details>
-<div class="desc"><p>Insert a key in the LSTM cache.</p>
-<p>This function puts a key into the LSTM cache
-along with its expiration time. If the cache is full,
-extracts the last sequence of accesses and uses the
-LSTM policy to decide which key to evict.</p>
+<div class="desc"><p>Insert a key in the Logistic Regression cache.</p>
+<p>This function puts a key into the Logistic Regression cache
+along with its expiration time. If the cache is full, a
+Logistic Regression model is exploited for getting an eviction decision.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt>self ("LSTMCache"): Current class instance.</dt>
+<dt>self ("LRCache"): Current class instance.</dt>
 <dt><strong><code>key</code></strong> :&ensp;<code>int</code></dt>
 <dd>Key to insert.</dd>
 <dt><strong><code>current_time</code></strong> :&ensp;<code>float</code></dt>
@@ -585,8 +580,7 @@ LSTM policy to decide which key to evict.</p>
 <dt><code>RuntimeError</code></dt>
 <dd>If key insertion/eviction fails:
 * Key is unhashable or cache store/expiry dict
-misconfigured (TypeError, AttributeError).
-* API call fails (HTTPException).</dd>
+misconfigured (TypeError, AttributeError).</dd>
 </dl></div>
 </dd>
 </dl>
@@ -607,10 +601,10 @@ misconfigured (TypeError, AttributeError).
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="src.components.caches.implementations.lstm_cache.LSTMCache" href="#src.components.caches.implementations.lstm_cache.LSTMCache">LSTMCache</a></code></h4>
+<h4><code><a title="src.components.caches.implementations.lr_cache.LRCache" href="#src.components.caches.implementations.lr_cache.LRCache">LRCache</a></code></h4>
 <ul class="">
-<li><code><a title="src.components.caches.implementations.lstm_cache.LSTMCache.evict_key" href="#src.components.caches.implementations.lstm_cache.LSTMCache.evict_key">evict_key</a></code></li>
-<li><code><a title="src.components.caches.implementations.lstm_cache.LSTMCache.put" href="#src.components.caches.implementations.lstm_cache.LSTMCache.put">put</a></code></li>
+<li><code><a title="src.components.caches.implementations.lr_cache.LRCache.evict_key" href="#src.components.caches.implementations.lr_cache.LRCache.evict_key">evict_key</a></code></li>
+<li><code><a title="src.components.caches.implementations.lr_cache.LRCache.put" href="#src.components.caches.implementations.lr_cache.LRCache.put">put</a></code></li>
 </ul>
 </li>
 </ul>

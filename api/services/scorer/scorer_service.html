@@ -100,7 +100,6 @@ logic to return a final score for each key, which dictates eviction priority.</p
                     &#34;outputs_num&#34;: len(request.outputs),
                     &#34;variances_num&#34;: len(request.variances),
                     &#34;conf_level&#34;: request.conf_level,
-                    &#34;prob_weight&#34;: request.prob_weight,
                     &#34;conf_weight&#34;: request.conf_weight,
                     &#34;context&#34;: &#34;Scorer service&#34;,
                 },
@@ -111,13 +110,11 @@ logic to return a final score for each key, which dictates eviction priority.</p
             outputs = [np.array(request.outputs)]
             variances = [np.array(request.variances)]
 
-            # Calculate confidence-aware
-            # probabilistic key scores
-            key_scores = calculate_prob_conf_item_scores(
+            # Calculate key scores
+            key_scores = calculate_survival_uncertainty_scores(
                 outputs,
                 variances,
                 request.conf_level,
-                request.prob_weight,
                 request.conf_weight,
             )
 
@@ -140,7 +137,6 @@ logic to return a final score for each key, which dictates eviction priority.</p
                     &#34;outputs_num&#34;: len(request.outputs),
                     &#34;variances_num&#34;: len(request.variances),
                     &#34;conf_level&#34;: request.conf_level,
-                    &#34;prob_weight&#34;: request.prob_weight,
                     &#34;conf_weight&#34;: request.conf_weight,
                     &#34;context&#34;: &#34;Scorer service&#34;,
                 },
@@ -197,7 +193,6 @@ calculated item scores.</p></div>
                 &#34;outputs_num&#34;: len(request.outputs),
                 &#34;variances_num&#34;: len(request.variances),
                 &#34;conf_level&#34;: request.conf_level,
-                &#34;prob_weight&#34;: request.prob_weight,
                 &#34;conf_weight&#34;: request.conf_weight,
                 &#34;context&#34;: &#34;Scorer service&#34;,
             },
@@ -208,13 +203,11 @@ calculated item scores.</p></div>
         outputs = [np.array(request.outputs)]
         variances = [np.array(request.variances)]
 
-        # Calculate confidence-aware
-        # probabilistic key scores
-        key_scores = calculate_prob_conf_item_scores(
+        # Calculate key scores
+        key_scores = calculate_survival_uncertainty_scores(
             outputs,
             variances,
             request.conf_level,
-            request.prob_weight,
             request.conf_weight,
         )
 
@@ -237,7 +230,6 @@ calculated item scores.</p></div>
                 &#34;outputs_num&#34;: len(request.outputs),
                 &#34;variances_num&#34;: len(request.variances),
                 &#34;conf_level&#34;: request.conf_level,
-                &#34;prob_weight&#34;: request.prob_weight,
                 &#34;conf_weight&#34;: request.conf_weight,
                 &#34;context&#34;: &#34;Scorer service&#34;,
             },

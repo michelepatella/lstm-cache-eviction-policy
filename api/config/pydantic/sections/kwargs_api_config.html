@@ -51,7 +51,7 @@ Configuration for integer kwargs with boundary checks.
 KwargFloatAPIConfig(BaseModel):
 Configuration for float kwargs with boundary checks.
 KwargConfLevelAPIConfig(BaseModel):
-Configuration for float kwargs constrained to be a probability/level.
+Configuration for float kwargs constrained to be a level.
 KwargListIntAPIConfig(BaseModel):
 Configuration for list-of-integer kwargs.
 KwargBoolAPIConfig(BaseModel):
@@ -125,16 +125,16 @@ validated to form a valid model.</p>
     &#34;&#34;&#34;Confidence level API kwarg configuration.
 
     Attributes:
-        value (float):  Confidence level value (0.0–1.0].
+        value (float):  Confidence level value (0.0–5.0].
     &#34;&#34;&#34;
 
-    value: Annotated[float, Field(gt=0.0, le=1.0)]</code></pre>
+    value: Annotated[float, Field(gt=0.0, le=5.0)]</code></pre>
 </details>
 <div class="desc"><p>Confidence level API kwarg configuration.</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>value</code></strong> :&ensp;<code>float</code></dt>
-<dd>Confidence level value (0.0–1.0].</dd>
+<dd>Confidence level value (0.0–5.0].</dd>
 </dl>
 <p>Create a new model by parsing and validating input data from keyword arguments.</p>
 <p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
@@ -327,7 +327,6 @@ validated to form a valid model.</p>
                                                    for feature progression.
         num_evictions (KwargIntAPIConfig): Number of keys to evict per step.
         excluded_keys (KwargListIntAPIConfig): Keys that should not be evicted.
-        prob_weight (KwargFloatAPIConfig): Weight applied to probability in key scoring.
         conf_weight (KwargFloatAPIConfig): Weight applied to confidence in key scoring.
     &#34;&#34;&#34;
 
@@ -338,7 +337,6 @@ validated to form a valid model.</p>
     num_evictions: KwargIntAPIConfig
     excluded_keys: KwargListIntAPIConfig
     unbiased_variance: KwargBoolAPIConfig
-    prob_weight: KwargFloatAPIConfig
     conf_weight: KwargFloatAPIConfig</code></pre>
 </details>
 <div class="desc"><p>Complete API kwargs configuration.</p>
@@ -360,8 +358,6 @@ for feature progression.</dd>
 <dd>Number of keys to evict per step.</dd>
 <dt><strong><code>excluded_keys</code></strong> :&ensp;<code><a title="src.api.config.pydantic.sections.kwargs_api_config.KwargListIntAPIConfig" href="#src.api.config.pydantic.sections.kwargs_api_config.KwargListIntAPIConfig">KwargListIntAPIConfig</a></code></dt>
 <dd>Keys that should not be evicted.</dd>
-<dt><strong><code>prob_weight</code></strong> :&ensp;<code><a title="src.api.config.pydantic.sections.kwargs_api_config.KwargFloatAPIConfig" href="#src.api.config.pydantic.sections.kwargs_api_config.KwargFloatAPIConfig">KwargFloatAPIConfig</a></code></dt>
-<dd>Weight applied to probability in key scoring.</dd>
 <dt><strong><code>conf_weight</code></strong> :&ensp;<code><a title="src.api.config.pydantic.sections.kwargs_api_config.KwargFloatAPIConfig" href="#src.api.config.pydantic.sections.kwargs_api_config.KwargFloatAPIConfig">KwargFloatAPIConfig</a></code></dt>
 <dd>Weight applied to confidence in key scoring.</dd>
 </dl>
@@ -396,10 +392,6 @@ validated to form a valid model.</p>
 <div class="desc"></div>
 </dd>
 <dt id="src.api.config.pydantic.sections.kwargs_api_config.KwargsAPIConfig.num_evictions"><code class="name">var <span class="ident">num_evictions</span> : <a title="src.api.config.pydantic.sections.kwargs_api_config.KwargIntAPIConfig" href="#src.api.config.pydantic.sections.kwargs_api_config.KwargIntAPIConfig">KwargIntAPIConfig</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="src.api.config.pydantic.sections.kwargs_api_config.KwargsAPIConfig.prob_weight"><code class="name">var <span class="ident">prob_weight</span> : <a title="src.api.config.pydantic.sections.kwargs_api_config.KwargFloatAPIConfig" href="#src.api.config.pydantic.sections.kwargs_api_config.KwargFloatAPIConfig">KwargFloatAPIConfig</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -478,7 +470,6 @@ validated to form a valid model.</p>
 <li><code><a title="src.api.config.pydantic.sections.kwargs_api_config.KwargsAPIConfig.mc_dropout_samples" href="#src.api.config.pydantic.sections.kwargs_api_config.KwargsAPIConfig.mc_dropout_samples">mc_dropout_samples</a></code></li>
 <li><code><a title="src.api.config.pydantic.sections.kwargs_api_config.KwargsAPIConfig.model_config" href="#src.api.config.pydantic.sections.kwargs_api_config.KwargsAPIConfig.model_config">model_config</a></code></li>
 <li><code><a title="src.api.config.pydantic.sections.kwargs_api_config.KwargsAPIConfig.num_evictions" href="#src.api.config.pydantic.sections.kwargs_api_config.KwargsAPIConfig.num_evictions">num_evictions</a></code></li>
-<li><code><a title="src.api.config.pydantic.sections.kwargs_api_config.KwargsAPIConfig.prob_weight" href="#src.api.config.pydantic.sections.kwargs_api_config.KwargsAPIConfig.prob_weight">prob_weight</a></code></li>
 <li><code><a title="src.api.config.pydantic.sections.kwargs_api_config.KwargsAPIConfig.rollout_horizon" href="#src.api.config.pydantic.sections.kwargs_api_config.KwargsAPIConfig.rollout_horizon">rollout_horizon</a></code></li>
 <li><code><a title="src.api.config.pydantic.sections.kwargs_api_config.KwargsAPIConfig.time_step_increment" href="#src.api.config.pydantic.sections.kwargs_api_config.KwargsAPIConfig.time_step_increment">time_step_increment</a></code></li>
 <li><code><a title="src.api.config.pydantic.sections.kwargs_api_config.KwargsAPIConfig.unbiased_variance" href="#src.api.config.pydantic.sections.kwargs_api_config.KwargsAPIConfig.unbiased_variance">unbiased_variance</a></code></li>

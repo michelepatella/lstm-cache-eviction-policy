@@ -133,7 +133,11 @@ using TSCV, and determines the optimal hyperparameter set.</p>
             )
             for params in params_combinations
         ]
-        results = ray.get(futures)
+        results = []
+        futures_pending = futures.copy()
+        for _ in tqdm(range(len(futures)), desc=GRID_SEARCH_DESC):
+            done, futures_pending = ray.wait(futures_pending, num_returns=1)
+            results.extend(ray.get(done))
 
         for idx, (params, avg_loss, fold_losses) in enumerate(
             results,

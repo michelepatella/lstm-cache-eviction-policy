@@ -39,8 +39,7 @@ el.replaceWith(d);
 <p>predictor_service.py</p>
 <p>This module implements the gRPC servicer for the Predictor Service.</p>
 <p>The Predictor Service is responsible for executing the loaded PyTorch model
-to generate outputs and associated uncertainty estimates (variances) for the
-cache key access probabilities.</p>
+to generate outputs and associated uncertainty estimates (variances).</p>
 <h2 id="classes">Classes</h2>
 <p>PredictorService: gRPC Servicer class implementing the Predict method.</p>
 </section>
@@ -73,7 +72,7 @@ cache key access probabilities.</p>
         request: pb2.PredictorServiceRequest,
         context: grpc.ServicerContext,
     ) -&gt; pb2.PredictorServiceResponse:
-        &#34;&#34;&#34;Generates future access probability predictions and variances.
+        &#34;&#34;&#34;Generates future access predictions and variances.
 
         This method receives features, keys, and hyperparameters via gRPC,
         converts them to tensors, moves them to the appropriate device,
@@ -184,7 +183,7 @@ rollout based on the input features.</p></div>
     request: pb2.PredictorServiceRequest,
     context: grpc.ServicerContext,
 ) -&gt; pb2.PredictorServiceResponse:
-    &#34;&#34;&#34;Generates future access probability predictions and variances.
+    &#34;&#34;&#34;Generates future access predictions and variances.
 
     This method receives features, keys, and hyperparameters via gRPC,
     converts them to tensors, moves them to the appropriate device,
@@ -273,7 +272,7 @@ rollout based on the input features.</p></div>
         context.abort(grpc.StatusCode.INTERNAL, str(e))
         return pb2.PredictorServiceResponse()</code></pre>
 </details>
-<div class="desc"><p>Generates future access probability predictions and variances.</p>
+<div class="desc"><p>Generates future access predictions and variances.</p>
 <p>This method receives features, keys, and hyperparameters via gRPC,
 converts them to tensors, moves them to the appropriate device,
 and runs the autoregressive prediction pipeline.</p>
