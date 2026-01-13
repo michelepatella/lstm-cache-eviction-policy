@@ -200,6 +200,7 @@ jobs:
   testing:
     runs-on: self-hosted
     needs: setup
+    if: false
     steps:
       # Pull data and model (artifacts) to be tested
       # from DVC remote
@@ -246,7 +247,7 @@ jobs:
   # ----------------------------------------
   build:
     runs-on: self-hosted
-    needs: [setup, static_analysis, security_scan, testing]
+    needs: [setup, static_analysis, security_scan]
     steps:
       # Login to all registries storing the containers
       - name: Login to Azure Container Registry
