@@ -1,24 +1,20 @@
 DVC_LOCK_PATH := dvc.lock
 DVC_FILES := "*.dvc"
-
 GIT_IGNORE_FILE := .gitignore
-
 VC_COMMIT_MESSAGE := "dvc: Update tracked files"
 
-PYCACHE_NAME := "__pycache__"
 
 
 # -------------------------------
-# Clean
+# Locust
 # -------------------------------
+locust_run:
+	docker run -it --rm \
+	  -e TARGET_HOST=${TARGET_HOST} \
+	  -e LOCUST_PORT=${LOCUST_PORT} \
+	  -p ${LOCUST_PORT}:${LOCUST_PORT} \
+	  ${LOCUST_IMAGE_NAME}
 
-# Clean pycache
-clean_pycache:
-	find . -type d -name $(PYCACHE_NAME) -exec rm -rf {} +
-
-# Clean DVC cache
-clean_dvc_cache:
-	dvc gc -a
 
 # -------------------------------
 # DVC
