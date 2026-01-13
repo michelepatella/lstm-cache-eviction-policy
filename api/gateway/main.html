@@ -40,8 +40,8 @@ el.replaceWith(d);
 <p>This module defines the central API Gateway for the cache eviction policy.</p>
 <p>It orchestrates the end-to-end inference pipeline by sequentially calling four
 distinct gRPC microservices: Featurizer, Predictor, Scorer, and Decider.
-It also includes a basic health check for the API and a decorator to standardize
-the response format.</p>
+The module also integrates Prometheus for real-time monitoring, and standardizes
+all responses through a dedicated decorator.</p>
 <h2 id="functions">Functions</h2>
 <p>lifespan(app: FastAPI):
 Context manager for API startup/shutdown tasks.
@@ -49,7 +49,7 @@ construct_api_response(
 f: Callable[&hellip;, Awaitable[dict[str, Any]] | dict[str, Any]]
 ) -&gt; Callable[&hellip;, Awaitable[dict[str, Any]]]:
 Decorator for standardizing API responses.
-gateway_api(payload: GatewayAPIInput) -&gt; dict[str, Any]:
+gateway_api(payload: GatewayAPIInput, request: Request) -&gt; dict[str, Any]:
 The main endpoint that executes the cache eviction policy pipeline.
 _index(request: Request) -&gt; dict[str, Any]:
 Provides a basic health check for the API.</p>
@@ -246,34 +246,48 @@ async def gateway_api(
         # ---------------------------------------------------------------
         # 1. Featurizer Service: Build features from raw data
         # ---------------------------------------------------------------
-        features, keys_seq, features_shape, keys_shape = (
-            call_featurizer_service(last_accesses)
-        )
+        with FEATURIZER_LATENCY_SECONDS.time():
+            features, keys_seq, features_shape, keys_shape = (
+                call_featurizer_service(last_accesses)
+            )
 
         # ---------------------------------------------------------------
         # 2. Predictor Service: Make confidence-aware model predictions
         # ---------------------------------------------------------------
-        outputs, variances = call_predictor_service(
-            features,
-            keys_seq,
-            features_shape,
-            keys_shape,
-            api_config,
-        )
+        with PREDICTOR_LATENCY_SECONDS.time():
+            outputs, variances = call_predictor_service(
+                features,
+                keys_seq,
+                features_shape,
+                keys_shape,
+                api_config,
+            )
 
         # ---------------------------------------------------------------
         # 3. Scorer Service: Calculate key scores based on model results
         # ---------------------------------------------------------------
-        key_scores = call_scorer_service(outputs, variances, api_config)
+        with SCORER_LATENCY_SECONDS.time():
+            key_scores = call_scorer_service(outputs, variances, api_config)
 
         # ---------------------------------------------------------------
         # 4. Decider Service: Determine key(s) to evict
         # ---------------------------------------------------------------
-        keys_to_evict = call_decider_service(
-            keys_in_cache,
-            key_scores,
-            api_config.kwargs.excluded_keys.value,
-            api_config.kwargs.num_evictions.value,
+        with DECIDER_LATENCY_SECONDS.time():
+            keys_to_evict = call_decider_service(
+                keys_in_cache,
+                key_scores,
+                api_config.kwargs.excluded_keys.value,
+                api_config.kwargs.num_evictions.value,
+            )
+
+        # Update custom Prometheus metrics
+        KEYS_EVICTED_TOT.inc(len(keys_to_evict))
+        KEYS_EVICTED_RATIO.set(len(keys_to_evict) / len(keys_in_cache))
+        KEYS_EXCLUDED_FROM_EVICTION_TOT.inc(
+            len(api_config.kwargs.excluded_keys.value),
+        )
+        KEYS_EXCLUDED_FROM_EVICTION_RATIO.set(
+            len(api_config.kwargs.excluded_keys.value) / len(keys_in_cache),
         )
 
         info(
