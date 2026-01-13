@@ -23,9 +23,6 @@ import numpy as np
 import ray
 
 from components.caches.implementations.lfu_cache import LFUCache
-from components.caches.implementations.lr_cache import (
-    LRCache,
-)
 from components.caches.implementations.lru_cache import LRUCache
 from components.caches.implementations.lstm_cache import LSTMCache
 from components.caches.utils.cache_metrics_logger import (
@@ -55,7 +52,6 @@ from components.visualization.hit_miss_rates_plotter import (
     plot_hit_miss_rate,
 )
 from const import (
-    CACHE_LR_NAME,
     CACHE_LSTM_NAME,
     DAGS_HUB_REPO_NAME,
     DAGS_HUB_REPO_OWNER,
@@ -147,11 +143,6 @@ def run_simulations() -> None:
                 pipeline_config,
             ),
             CACHE_LSTM_NAME: LSTMCache(
-                None,
-                CacheMetricsLogger(),
-                pipeline_config,
-            ),
-            CACHE_LR_NAME: LRCache(
                 None,
                 CacheMetricsLogger(),
                 pipeline_config,

@@ -237,21 +237,6 @@ MODEL_OPTIMIZATIONS_PRUNING_PARAMS = ("weight",)
 
 
 # ----------------------------
-# Model (Extra)
-# ----------------------------
-MODEL_LR_TRAINED_STATIC_FILE_PATH = (
-    PROJECT_ROOT / "models" / "extra" / "static" / "trained_static_lr_model.pt"
-)
-MODEL_LR_TRAINED_DYNAMIC_FILE_PATH = (
-    PROJECT_ROOT
-    / "models"
-    / "extra"
-    / "dynamic"
-    / "trained_dynamic_lr_model.pt"
-)
-
-
-# ----------------------------
 # Monte Carlo (MC) Dropout
 # ----------------------------
 MC_DROPOUT_FLAG_NAME = "mc_dropout"

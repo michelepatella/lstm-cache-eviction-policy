@@ -534,7 +534,6 @@ stages:
       - src/components/caches/implementations/lfu_cache.py
       - src/components/caches/implementations/lru_cache.py
       - src/components/caches/implementations/lstm_cache.py
-      - src/components/caches/implementations/lr_cache.py
       - src/components/caches/implementations/utils/base_cache.py
       - src/components/caches/implementations/utils/cache_cleaner.py
       - src/components/caches/implementations/utils/cache_size_calculator.py

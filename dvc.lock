@@ -31,7 +31,7 @@ stages:
       hash: md5
       md5: 02c4c66a533ccd7d60dbcf0a9978dc18
       size: 4935
-    - path: 
+    - path:
         src/components/data/patterns/access/variants/memory_fallback_generator.py
       hash: md5
       md5: 59da4400dadcd207d41605ccf27df009
@@ -60,7 +60,7 @@ stages:
       hash: md5
       md5: 69c45dd862a04455ae5deaf2d2a16175
       size: 2694
-    - path: 
+    - path:
         src/components/data/patterns/temporal/variants/periodic_calculator.py
       hash: md5
       md5: d395b55d88871a56109aba48be80056d
@@ -185,7 +185,7 @@ stages:
       hash: md5
       md5: 4bcb714183e68b0168f856768c2df3ca
       size: 3546
-    - path: 
+    - path:
         src/pipeline/config/pydantic/sections/early_stopping_pipeline_config.py
       hash: md5
       md5: 85ea207e4620eaf3c09923d8c01922e3
@@ -254,7 +254,7 @@ stages:
         data.synthetic.patterns.access.behavior.distortion.interval: 1
         data.synthetic.patterns.access.behavior.distortion.noise.max: 10
         data.synthetic.patterns.access.behavior.distortion.noise.min: 5
-        data.synthetic.patterns.access.behavior.distortion.offsets.correction: 
+        data.synthetic.patterns.access.behavior.distortion.offsets.correction:
           10
         data.synthetic.patterns.access.behavior.distortion.offsets.history: 15
         data.synthetic.patterns.access.behavior.memory.interval: 80
@@ -323,7 +323,7 @@ stages:
       hash: md5
       md5: 17aab1008705fe0726c64f0de7a4f398
       size: 5675
-    - path: 
+    - path:
         src/components/dataset/features/local/local_frequencies_calculator.py
       hash: md5
       md5: f7a4f6ade313d1f1032832497f7ce3cc
@@ -412,7 +412,7 @@ stages:
       hash: md5
       md5: 4bcb714183e68b0168f856768c2df3ca
       size: 3546
-    - path: 
+    - path:
         src/pipeline/config/pydantic/sections/early_stopping_pipeline_config.py
       hash: md5
       md5: 85ea207e4620eaf3c09923d8c01922e3
@@ -533,7 +533,7 @@ stages:
       hash: md5
       md5: b55a61859ea914c58c4fa1184992ee9f
       size: 3711
-    - path: 
+    - path:
         src/components/dataset/rows/calculations/effective_rows_calculator.py
       hash: md5
       md5: 047694161cb632377fe74bf73d6b8286
@@ -586,12 +586,12 @@ stages:
       hash: md5
       md5: 4cc1b11802797599ab0e82387071d934
       size: 5084
-    - path: 
+    - path:
         src/components/evaluation/model/metrics/calculations/class_report_calculator.py
       hash: md5
       md5: b92aa69c6cd102191b1835ecd37e674e
       size: 2920
-    - path: 
+    - path:
         src/components/evaluation/model/metrics/calculations/cohen_kappa_score_calculator.py
       hash: md5
       md5: 87c50fe0926478683a3ebf2e28508184
@@ -760,7 +760,7 @@ stages:
       hash: md5
       md5: 4bcb714183e68b0168f856768c2df3ca
       size: 3546
-    - path: 
+    - path:
         src/pipeline/config/pydantic/sections/early_stopping_pipeline_config.py
       hash: md5
       md5: 85ea207e4620eaf3c09923d8c01922e3
@@ -919,7 +919,7 @@ stages:
       hash: md5
       md5: b55a61859ea914c58c4fa1184992ee9f
       size: 3711
-    - path: 
+    - path:
         src/components/dataset/rows/calculations/effective_rows_calculator.py
       hash: md5
       md5: 047694161cb632377fe74bf73d6b8286
@@ -952,12 +952,12 @@ stages:
       hash: md5
       md5: 4cc1b11802797599ab0e82387071d934
       size: 5084
-    - path: 
+    - path:
         src/components/evaluation/model/metrics/calculations/class_report_calculator.py
       hash: md5
       md5: b92aa69c6cd102191b1835ecd37e674e
       size: 2920
-    - path: 
+    - path:
         src/components/evaluation/model/metrics/calculations/cohen_kappa_score_calculator.py
       hash: md5
       md5: 87c50fe0926478683a3ebf2e28508184
@@ -1106,7 +1106,7 @@ stages:
       hash: md5
       md5: 4bcb714183e68b0168f856768c2df3ca
       size: 3546
-    - path: 
+    - path:
         src/pipeline/config/pydantic/sections/early_stopping_pipeline_config.py
       hash: md5
       md5: 85ea207e4620eaf3c09923d8c01922e3
@@ -1256,7 +1256,7 @@ stages:
       hash: md5
       md5: b55a61859ea914c58c4fa1184992ee9f
       size: 3711
-    - path: 
+    - path:
         src/components/dataset/rows/calculations/effective_rows_calculator.py
       hash: md5
       md5: 047694161cb632377fe74bf73d6b8286
@@ -1285,12 +1285,12 @@ stages:
       hash: md5
       md5: 4cc1b11802797599ab0e82387071d934
       size: 5084
-    - path: 
+    - path:
         src/components/evaluation/model/metrics/calculations/class_report_calculator.py
       hash: md5
       md5: b92aa69c6cd102191b1835ecd37e674e
       size: 2920
-    - path: 
+    - path:
         src/components/evaluation/model/metrics/calculations/cohen_kappa_score_calculator.py
       hash: md5
       md5: 87c50fe0926478683a3ebf2e28508184
@@ -1411,7 +1411,7 @@ stages:
       hash: md5
       md5: 4bcb714183e68b0168f856768c2df3ca
       size: 3546
-    - path: 
+    - path:
         src/pipeline/config/pydantic/sections/early_stopping_pipeline_config.py
       hash: md5
       md5: 85ea207e4620eaf3c09923d8c01922e3
@@ -1504,12 +1504,12 @@ stages:
       hash: md5
       md5: 022e2e36717ee81390f8989ba8a4ec6d
       size: 3090
-    - path: 
+    - path:
         src/components/caches/implementations/items/evictions/least_frequent_item_evictor.py
       hash: md5
       md5: 9a22dea402cb382f8fde236f5b22f1b0
       size: 3977
-    - path: 
+    - path:
         src/components/caches/implementations/items/evictions/oldest_item_evictor.py
       hash: md5
       md5: 2b1443a9b9dca1159f8f099209a8b303
@@ -1538,10 +1538,6 @@ stages:
       hash: md5
       md5: 7571741f021dbafbe9377c6422087ec9
       size: 8597
-    - path: src/components/caches/implementations/lr_cache.py
-      hash: md5
-      md5: 9e8a4eb9de77090f354a61a4a914bb6f
-      size: 10753
     - path: src/components/caches/implementations/lru_cache.py
       hash: md5
       md5: f6d8fce00ef48040a41739f52a2f54dc
@@ -1610,7 +1606,7 @@ stages:
       hash: md5
       md5: b55a61859ea914c58c4fa1184992ee9f
       size: 3711
-    - path: 
+    - path:
         src/components/dataset/rows/calculations/effective_rows_calculator.py
       hash: md5
       md5: 047694161cb632377fe74bf73d6b8286
@@ -1635,17 +1631,17 @@ stages:
       hash: md5
       md5: 18383dc710b6daec186e8e7ec9ba311e
       size: 1593
-    - path: 
+    - path:
         src/components/evaluation/simulations/metrics/calculations/belady_min_calculator.py
       hash: md5
       md5: 4800d678ebecbebacc883b25b8604a2e
       size: 5067
-    - path: 
+    - path:
         src/components/evaluation/simulations/metrics/calculations/eviction_mistake_rate_calculator.py
       hash: md5
       md5: e4644bed75c4a126e662c01cb77c6f5a
       size: 4711
-    - path: 
+    - path:
         src/components/evaluation/simulations/metrics/calculations/hit_miss_rates_calculator.py
       hash: md5
       md5: 6cd99f9be508dde9293a92d2ca244de1
@@ -1734,7 +1730,7 @@ stages:
       hash: md5
       md5: 4bcb714183e68b0168f856768c2df3ca
       size: 3546
-    - path: 
+    - path:
         src/pipeline/config/pydantic/sections/early_stopping_pipeline_config.py
       hash: md5
       md5: 85ea207e4620eaf3c09923d8c01922e3

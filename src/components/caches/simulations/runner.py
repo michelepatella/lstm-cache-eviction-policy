@@ -40,7 +40,6 @@ from components.time.transforms.trig_decoder import (
     decode_time_trigonometrically,
 )
 from const import (
-    CACHE_LR_NAME,
     CACHE_LSTM_NAME,
     SIMULATIONS_METRICS_HIT_COUNTER_NAME,
     SIMULATIONS_METRICS_MISS_COUNTER_NAME,
@@ -129,9 +128,9 @@ def run_cache_simulation(
 
             # If the requested key is not into the cache
             if not is_hit:
-                if policy == CACHE_LSTM_NAME or policy == CACHE_LR_NAME:
+                if policy == CACHE_LSTM_NAME:
                     # Put the requested key into the
-                    # LSTM/Logistic Regression cache
+                    # LSTM cache
                     cache.put(
                         key,
                         current_time,
