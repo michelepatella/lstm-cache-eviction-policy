@@ -18,8 +18,6 @@ Functions:
         The main endpoint that executes the cache eviction policy pipeline.
     _index(request: Request) -> dict[str, Any]:
         Provides a basic health check for the API.
-    metrics() -> Response:
-        Exposes Prometheus metrics for monitoring.
 """
 
 import logging
@@ -31,13 +29,11 @@ from functools import wraps
 from http import HTTPStatus
 from typing import Any
 
-from fastapi import FastAPI, HTTPException, Request, Response, status
+from fastapi import FastAPI, HTTPException, Request, status
 from prometheus_client import (
-    CONTENT_TYPE_LATEST,
     Counter,
     Gauge,
     Histogram,
-    generate_latest,
 )
 from prometheus_fastapi_instrumentator import (
     Instrumentator,
@@ -160,7 +156,6 @@ async def lifespan(app: FastAPI):
            storing it.
         2. Initializes the global logging system, setting the level defined
            in the configuration and configuring the handler.
-        3. Instruments the FastAPI application for Prometheus metrics collection.
 
     Args:
         app (FastAPI): The FastAPI application instance.
@@ -180,15 +175,6 @@ async def lifespan(app: FastAPI):
     )
     logs_phase.set(LOGS_PHASE_API)
 
-    # -----------------------------------------------
-    # (Startup) 3. API instrumentation
-    # -----------------------------------------------
-    instrumentator.instrument(app).expose(
-        app,
-        include_in_schema=PROMETHEUS_INCLUDE_IN_SCHEMA,
-        should_gzip=PROMETHEUS_SHOULD_GZIP,
-    )
-
     yield
 
 
@@ -197,6 +183,13 @@ app = FastAPI(
     title=API_TITLE,
     description=API_DESCRIPTION,
     lifespan=lifespan,
+)
+
+# Setup Prometheus
+instrumentator.instrument(app).expose(
+    app,
+    include_in_schema=PROMETHEUS_INCLUDE_IN_SCHEMA,
+    should_gzip=PROMETHEUS_SHOULD_GZIP,
 )
 
 
@@ -456,17 +449,3 @@ async def _index(request: Request) -> dict[str, Any]:
         API_RESPONSE_FIELD_STATUS_CODE_NAME: HTTPStatus.OK,
         API_RESPONSE_FIELD_DATA_NAME: {},
     }
-
-
-@app.get(API_METRICS_ENDPOINT)
-def metrics() -> Response:
-    """Exposes global Prometheus metrics.
-
-    This endpoint aggregates both custom application metrics and standard
-    system metrics, providing them in the Prometheus text-based format.
-
-    Returns:
-        Response: A FastAPI Response object containing the plain-text metrics
-                  buffer with the appropriate Content-Type.
-    """
-    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
