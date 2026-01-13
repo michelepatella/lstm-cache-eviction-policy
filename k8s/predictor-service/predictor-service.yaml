@@ -81,12 +81,12 @@ spec:
             type: RuntimeDefault
         resources:
           requests:
-            cpu: "5m"
-            memory: "50Mi"
-            ephemeral-storage: "50Mi"
+            cpu: "100m"
+            memory: "256Mi"
+            ephemeral-storage: "100Mi"
           limits:
-            cpu: "50m"
-            memory: "250Mi"
+            cpu: "500m"
+            memory: "512Mi"
             ephemeral-storage: "500Mi"
       volumes:
       - name: predictor-service-secrets
