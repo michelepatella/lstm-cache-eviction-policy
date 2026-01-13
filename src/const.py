@@ -22,6 +22,8 @@ load_dotenv()
 API_RESPONSE_FIELD_DATA_NAME = "data"
 API_RESPONSE_FIELD_DATA_KEYS_TO_EVICT_NAME = "keys_to_evict"
 
+API_METRICS_ENDPOINT = "/metrics"
+
 
 # ----------------------------
 # Cache
