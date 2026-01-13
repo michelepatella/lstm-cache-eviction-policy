@@ -2,6 +2,8 @@ fastapi==0.124.2
 grpcio==1.76.0
 grpcio-tools==1.76.0
 numpy==1.26.4
+prometheus-client==0.21.1
+prometheus-fastapi-instrumentator==7.1.0
 protobuf==6.32.1
 pydantic==2.12.5
 PyYAML==6.0.3

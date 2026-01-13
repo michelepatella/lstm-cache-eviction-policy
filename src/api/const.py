@@ -83,6 +83,54 @@ PREDICTOR_SERVICE_CHANNEL = os.getenv(
 
 
 # ----------------------------
+# Prometheus
+# ----------------------------
+PROMETHEUS_KEYS_EVICTED_TOT_NAME = "keys_evicted_tot"
+PROMETHEUS_KEYS_EVICTED_TOT_DOC = "Total number of keys evicted per request"
+
+PROMETHEUS_KEYS_EVICTED_RATIO_NAME = "keys_evicted_ratio"
+PROMETHEUS_KEYS_EVICTED_RATIO_DOC = "Ratio of keys evicted per request"
+
+PROMETHEUS_KEYS_EXCLUDED_FROM_EVICTION_TOT_NAME = (
+    "keys_excluded_from_eviction_tot"
+)
+PROMETHEUS_KEYS_EXCLUDED_FROM_EVICTION_TOT_DOC = (
+    "Total number of keys excluded from eviction per request"
+)
+
+PROMETHEUS_KEYS_EXCLUDED_FROM_EVICTION_RATIO_NAME = (
+    "keys_excluded_from_eviction_ratio"
+)
+PROMETHEUS_KEYS_EXCLUDED_FROM_EVICTION_RATIO_DOC = (
+    "Ratio of keys excluded from eviction over total cache size"
+)
+
+PROMETHEUS_FEATURIZER_LATENCY_SECONDS_NAME = "featurizer_latency_seconds"
+PROMETHEUS_FEATURIZER_LATENCY_SECONDS_DOC = (
+    "Latency of Featurizer service in seconds"
+)
+
+PROMETHEUS_PREDICTOR_LATENCY_SECONDS_NAME = "predictor_latency_seconds"
+PROMETHEUS_PREDICTOR_LATENCY_SECONDS_DOC = (
+    "Latency of Predictor service in seconds"
+)
+
+PROMETHEUS_SCORER_LATENCY_SECONDS_NAME = "scorer_latency_seconds"
+PROMETHEUS_SCORER_LATENCY_SECONDS_DOC = "Latency of Scorer service in seconds"
+
+PROMETHEUS_DECIDER_LATENCY_SECONDS_NAME = "decider_latency_seconds"
+PROMETHEUS_DECIDER_LATENCY_SECONDS_DOC = (
+    "Latency of Decider service in seconds"
+)
+
+PROMETHEUS_SHOULD_IGNORE_UNTEMPLATED = True
+PROMETHEUS_SHOULD_INSTRUMENT_REQUESTS_IN_PROGRESS = True
+PROMETHEUS_IN_PROGRESS_LABELS = True
+
+PROMETHEUS_INCLUDE_IN_SCHEMA = False
+PROMETHEUS_SHOULD_GZIP = True
+
+# ----------------------------
 # Scorer service
 # ----------------------------
 SCORER_SERVICE_ENV_VAR_CHANNEL_NAME = "SCORER_SERVICE_CHANNEL"
