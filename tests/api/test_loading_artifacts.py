@@ -11,10 +11,13 @@ Functions:
         Verifies that the predictive model is correctly loaded and typed.
 """
 
+import pytest
+
 from api.services.predictor.predictor_service import model
 from components.model.lstm import LSTM
 
 
+@pytest.mark.api_loading_artifacts
 def test_api_loading_artifacts() -> None:
     """Verifies the correct loading and typing of the model artifact.
 

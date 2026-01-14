@@ -13,6 +13,7 @@ Functions:
 
 from http import HTTPMethod, HTTPStatus
 
+import pytest
 import requests
 
 from components.const import (
@@ -27,11 +28,12 @@ from const import (
     API_RESPONSE_FIELD_DATA_NAME,
     GATEWAY_API_FULL_URL,
 )
-from locust.helpers import get_random_api_input
+from load_test.helpers import get_random_api_input
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import DATASET_PROCESSED_TYPE
 
 
+@pytest.mark.api_prediction
 def test_api_prediction() -> None:
     """Validates the API prediction pipeline with a realistic input scenario.
 

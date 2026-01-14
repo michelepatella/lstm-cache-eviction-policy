@@ -4,15 +4,15 @@ FROM python:3.12-slim
 RUN useradd --create-home --shell /bin/bash locustuser
 
 # Set working directory
-WORKDIR /app/locust
+WORKDIR /app/load_test
 
 # Copy requirements and install dependencies
-COPY locust/requirements.txt ./requirements.txt
+COPY load_test/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Create necessary directories
 RUN mkdir -p \
-    /app/locust \
+    /app/load_test \
     /app/src/ \
     /app/src/components/assertions \
     /app/src/components/dataset/io \
@@ -26,8 +26,8 @@ RUN mkdir -p \
 
 # Copy all needed files
 COPY data/processed/ /app/data/processed/
-COPY locust/locustfile.py /app/locust/
-COPY locust/helpers.py /app/locust/
+COPY load_test/locustfile.py /app/load_test/
+COPY load_test/helpers.py /app/load_test/
 COPY src/components/assertions/choice_field_assertor.py /app/src/components/assertions/
 COPY src/components/assertions/min_max_assertor.py /app/src/components/assertions/
 COPY src/components/const.py /app/src/components/

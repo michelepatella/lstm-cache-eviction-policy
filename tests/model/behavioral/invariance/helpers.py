@@ -42,7 +42,6 @@ from components.const import (
 from pipeline.config.pydantic.pipeline_config import PipelineConfig
 from tests.config.pydantic.tests_config import TestsConfig
 from tests.const import (
-    MODEL_BEHAVIORAL_INVARIANCE_TESTS_FEATURE_PERTURBATIONS_PARAM_FEATURE_IDX_NAME,
     TORCH_TOP_K_LARGEST,
     TORCH_TOP_K_SMALLEST,
 )
@@ -83,7 +82,7 @@ def model_invariance_tests_setup() -> tuple[
 
 @pytest.mark.model_behavioral_invariance_feature_perturbation
 @pytest.mark.parametrize(
-    MODEL_BEHAVIORAL_INVARIANCE_TESTS_FEATURE_PERTURBATIONS_PARAM_FEATURE_IDX_NAME,
+    "feature_idx",
     range(len(DATASET_PROCESSED_FEATURE_COLUMNS)),
 )
 @pytest.mark.training

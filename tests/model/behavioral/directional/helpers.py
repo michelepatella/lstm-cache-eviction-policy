@@ -41,7 +41,6 @@ from tests.const import (
     DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MAX_VALUE,
     DATASET_COLUMN_LOCAL_FREQUENCY_RECENCY_MIN_VALUE,
     DATASET_PROCESSED_LOCAL_FEATURE_COLUMNS,
-    MODEL_BEHAVIORAL_DIRECTIONAL_TESTS_LOCAL_FEATURE_PERTURBATIONS_PARAM_FEATURE_NAME,
 )
 from tests.model.helpers import initialize_inference_environment
 
@@ -79,7 +78,7 @@ def model_directional_tests_setup() -> tuple[
 
 
 @pytest.mark.parametrize(
-    MODEL_BEHAVIORAL_DIRECTIONAL_TESTS_LOCAL_FEATURE_PERTURBATIONS_PARAM_FEATURE_NAME,
+    "feature",
     DATASET_PROCESSED_LOCAL_FEATURE_COLUMNS,
 )
 @pytest.mark.model_behavioral_directional_local_feature_perturbations
