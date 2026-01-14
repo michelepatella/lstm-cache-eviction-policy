@@ -79,8 +79,8 @@
             "uid": "afa304wwrxh4we"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "rate(http_request_size_bytes_sum{handler=\"/\", instance=\"10.244.0.137:8000\"}[24h]) / rate(http_request_size_bytes_count{handler=\"/\", instance=\"10.244.0.137:8000\"}[24h])",
+          "editorMode": "code",
+          "expr": "sum(rate(http_request_size_bytes_sum{handler=\"/\"}[24h])) \n/ \nsum(rate(http_request_size_bytes_count{handler=\"/\"}[24h]))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -95,8 +95,8 @@
             "uid": "afa304wwrxh4we"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "rate(http_request_size_bytes_sum{handler=\"/evict\"}[24h]) / rate(http_request_size_bytes_count{handler=\"/evict\", instance=\"10.244.0.137:8000\"}[24h])",
+          "editorMode": "code",
+          "expr": "sum(rate(http_request_size_bytes_sum{handler=\"/evict\"}[24h]))\n/\nsum(rate(http_request_size_bytes_count{handler=\"/evict\"}[24h]))",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -201,9 +201,9 @@
             "uid": "afa304wwrxh4we"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
+          "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by(method, status) (rate(http_requests_total{handler=\"/\", instance=\"10.244.0.137:8000\"}[24h]))",
+          "expr": "sum(rate(http_requests_total{handler=\"/\"}[24h]))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -219,9 +219,9 @@
             "uid": "afa304wwrxh4we"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
+          "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by(method, status) (rate(http_requests_total{handler=\"/evict\", instance=\"10.244.0.137:8000\"}[24h]))",
+          "expr": "sum(rate(http_requests_total{handler=\"/evict\"}[24h]))",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -414,7 +414,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "rate(http_response_size_bytes_sum{handler=\"/\", instance=\"10.244.0.137:8000\"}[24h]) / rate(http_response_size_bytes_count{handler=\"/\", instance=\"10.244.0.137:8000\"}[24h])",
+          "expr": "sum(rate(http_response_size_bytes_sum{handler=\"/\"}[24h])) \n/ \nsum(rate(http_response_size_bytes_count{handler=\"/\"}[24h]))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -429,8 +429,8 @@
             "uid": "afa304wwrxh4we"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "rate(http_response_size_bytes_sum{handler=\"/evict\"}[24h]) / rate(http_response_size_bytes_count{handler=\"/evict\", instance=\"10.244.0.137:8000\"}[24h])",
+          "editorMode": "code",
+          "expr": "sum(rate(http_response_size_bytes_sum{handler=\"/evict\"}[24h])) \n/ \nsum(rate(http_response_size_bytes_count{handler=\"/evict\"}[24h]))",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -531,5 +531,5 @@
   "timezone": "browser",
   "title": "General API Metrics",
   "uid": "bfa35rd4gifpcf",
-  "version": 44
+  "version": 47
 }

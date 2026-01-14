@@ -25,7 +25,7 @@
       "datasource": {
         "uid": "afa304wwrxh4we"
       },
-      "description": "Cumulative number of keys evicted by the API",
+      "description": "Cumulative number of keys evicted by the API over the last 24 hours",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -78,7 +78,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "keys_evicted_tot_total{instance=\"10.244.0.137:8000\"}",
+          "expr": "sum(increase(keys_evicted_tot_total[24h]))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -153,7 +153,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "avg_over_time(keys_evicted_ratio{instance=\"10.244.0.137:8000\"}[24h])",
+          "expr": "avg(avg_over_time(keys_evicted_ratio[24h])) ",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -224,7 +224,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum(increase(keys_evicted_tot_total{instance=\"10.244.0.137:8000\"}[24h]))\n/\nsum(increase(http_requests_total{handler=\"/evict\"}[24h]))",
+          "expr": "sum(increase(keys_evicted_tot_total[24h]))\n/\nsum(increase(http_requests_total{handler=\"/evict\"}[24h]))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -238,7 +238,7 @@
       "datasource": {
         "uid": "afa304wwrxh4we"
       },
-      "description": "Cumulative number of keys excluded from eviction by the API",
+      "description": "Cumulative number of keys excluded from eviction by the API over the last 24 hours",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -290,8 +290,8 @@
       "targets": [
         {
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "keys_excluded_from_eviction_tot_total{instance=\"10.244.0.137:8000\"}",
+          "editorMode": "code",
+          "expr": "sum(increase(keys_excluded_from_eviction_tot_total[24h]))\n/\nsum(increase(http_requests_total{handler=\"/evict\"}[24h]))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -366,7 +366,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "avg_over_time(keys_excluded_from_eviction_ratio{instance=\"10.244.0.137:8000\"}[24h])",
+          "expr": "avg(avg_over_time(keys_excluded_from_eviction_ratio[24h])) ",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -437,7 +437,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum(increase(keys_excluded_from_eviction_tot_total{instance=\"10.244.0.137:8000\"}[24h]))\n/\nsum(increase(http_requests_total{handler=\"/evict\"}[24h]))",
+          "expr": "sum(increase(keys_excluded_from_eviction_tot_total[24h]))\n/\nsum(increase(http_requests_total{handler=\"/evict\"}[24h]))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -463,5 +463,5 @@
   "timezone": "browser",
   "title": "Cache Eviction Metrics",
   "uid": "afa340mksnzlse",
-  "version": 49
+  "version": 52
 }
