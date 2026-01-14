@@ -267,18 +267,6 @@ L1_MAX_DISTANCE = 2.0
 
 
 # -----------------------------------
-# Model Behavioral Directional Tests
-# -----------------------------------
-MODEL_BEHAVIORAL_DIRECTIONAL_TESTS_LOCAL_FEATURE_PERTURBATIONS_PARAM_FEATURE_NAME = "feature"
-
-
-# -----------------------------------
-# Model Behavioral Invariance Tests
-# -----------------------------------
-MODEL_BEHAVIORAL_INVARIANCE_TESTS_FEATURE_PERTURBATIONS_PARAM_FEATURE_IDX_NAME = "feature_idx"
-
-
-# -----------------------------------
 # Model Performance Tests
 # -----------------------------------
 MODEL_PERFORMANCE_TESTS_SUITE_NAME = "Model Performance Tests"
@@ -313,12 +301,6 @@ MODEL_PERFORMANCE_TESTS_REAL_DATA_RESULTS_SAVE_PATH = (
 
 MODEL_PERFORMANCE_TESTS_ADD_INDEX_COLUMN = False
 MODEL_PERFORMANCE_TESTS_REMOVE_SEQ_LEN = True
-
-
-# -----------------------------------
-# Model Training Tests
-# -----------------------------------
-MODEL_TRAINING_TESTS_PORTABILITY_TEST_PARAM_DEVICE_TYPE_NAME = "device_type"
 
 
 # -----------------------------------

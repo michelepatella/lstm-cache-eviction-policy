@@ -87,9 +87,6 @@ from pipeline.const import DATASET_PROCESSED_TYPE
 from pipeline.steps.trainer import train_model
 from tests.config.configurator import prepare_tests_config
 from tests.config.pydantic.tests_config import TestsConfig
-from tests.const import (
-    MODEL_TRAINING_TESTS_PORTABILITY_TEST_PARAM_DEVICE_TYPE_NAME,
-)
 
 
 def initialize_model_training_tests() -> tuple[
@@ -216,7 +213,7 @@ def model_training_tests_setup() -> tuple[
 
 @pytest.mark.model_training_portability
 @pytest.mark.parametrize(
-    MODEL_TRAINING_TESTS_PORTABILITY_TEST_PARAM_DEVICE_TYPE_NAME,
+    "device_type",
     RESOURCES_DEVICE_NAMES,
 )
 @pytest.mark.training

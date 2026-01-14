@@ -13,6 +13,7 @@ Functions:
 
 from http import HTTPStatus
 
+import pytest
 import requests
 
 from components.const import (
@@ -23,6 +24,7 @@ from components.const import (
 from const import GATEWAY_API_FULL_URL
 
 
+@pytest.mark.api_empty_input
 def test_api_empty_input() -> None:
     """Tests the API with empty input fields.
 

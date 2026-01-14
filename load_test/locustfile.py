@@ -15,6 +15,7 @@ Classes:
 """
 
 from helpers import get_random_api_input
+from locust import HttpUser, task
 
 from components.const import (
     API_PARAM_KEYS_IN_CACHE_NAME,
@@ -24,7 +25,6 @@ from components.const import (
 from components.dataset.io.loader import load_dataset
 from components.dataset.io.locator import get_dataset_abs_path
 from const import GATEWAY_API_FULL_URL
-from locust import HttpUser, task
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import DATASET_PROCESSED_TYPE
 
