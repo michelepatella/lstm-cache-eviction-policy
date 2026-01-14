@@ -1,16 +1,22 @@
+include .env
+
 DVC_LOCK_PATH := dvc.lock
 DVC_FILES := "*.dvc"
 GIT_IGNORE_FILE := .gitignore
+LOCUST_PORT ?= ...
+LOCUST_IMAGE_NAME ?= ...
+GATEWAY_API_ENDPOINT_BASE_URL ?= ...
 VC_COMMIT_MESSAGE := "dvc: Update tracked files"
-
 
 
 # -------------------------------
 # Locust
 # -------------------------------
+
+# Run a Locust Docker container
 locust_run:
 	docker run -it --rm \
-	  -e TARGET_HOST=${TARGET_HOST} \
+	  -e TARGET_HOST=${GATEWAY_API_ENDPOINT_BASE_URL} \
 	  -e LOCUST_PORT=${LOCUST_PORT} \
 	  -p ${LOCUST_PORT}:${LOCUST_PORT} \
 	  ${LOCUST_IMAGE_NAME}
@@ -64,15 +70,3 @@ dvc_pipeline_stage_run_force:
 	dvc status
 	dvc push
 	git push
-
-# Show DVC pipeline
-dvc_pipeline_show:
-	dvc dag
-
-# Show metrics
-dvc_metrics_show:
-	dvc metrics show --json | jq
-
-# Show metric differences
-dvc_metrics_diff:
-	dvc metrics diff --json | jq
