@@ -16,6 +16,7 @@ markers = [
     "api_none_input: API None Input Test",
     "api_prediction: API Prediction Test",
     "api_wrong_input_type: API Wrong Input Type Test",
+    "code_calculate_class_weight_logic: Calculate Class Weight Logic Test",
     "code_calculate_local_frequencies: Calculate Local Frequencies Test",
     "code_calculate_local_recencies: Calculate Local Recencies Test",
     "code_early_stopping_logic: Early Stopping Logic Test",
