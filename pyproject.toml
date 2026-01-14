@@ -20,6 +20,7 @@ markers = [
     "code_calculate_local_frequencies: Calculate Local Frequencies Test",
     "code_calculate_local_recencies: Calculate Local Recencies Test",
     "code_early_stopping_logic: Early Stopping Logic Test",
+    "code_split_dataset_data_logic: Split Dataset Data Logic Test",
     "data_integrity_raw: Data Raw Integrity Tests with DeepChecks",
     "data_integrity_processed: Data Processed Integrity Tests with DeepChecks",
     "data_quality_raw: Data Raw Quality Tests with Great Expectations",
