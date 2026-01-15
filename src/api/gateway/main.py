@@ -405,8 +405,7 @@ async def gateway_api(
             },
         )
 
-        # Real-world data collection
-        # for model re-training
+        # Real-world data collection for model re-training
         info(
             "Real-world data collected",
             extra={
@@ -418,7 +417,10 @@ async def gateway_api(
                         "local_recency": float(f[3]),
                         "request": int(req),
                     }
-                    for f, req in zip(np.array(features).T, np.array(keys_seq))
+                    for f, req in zip(
+                        np.array(features).reshape(-1, features_shape[-1]),
+                        np.array(keys_seq).reshape(-1),
+                    )
                 ],
                 "context": "Real-world data",
             },
