@@ -1,3 +1,5 @@
+canary_tests:
+  traffic_threshold: 0.2
 resources:
   device:
     type: cpu
