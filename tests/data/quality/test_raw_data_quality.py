@@ -51,7 +51,7 @@ from tests.data.quality.helpers import (
 
 
 @pytest.mark.data_quality_raw
-@pytest.mark.data_exploration
+@pytest.mark.after_data_preparation
 def test_raw_data_quality() -> None:
     """Tests the quality and schema of the raw data.
 

@@ -24,7 +24,7 @@ from tests.model.helpers import initialize_inference_environment
 
 
 @pytest.mark.model_behavioral_invariance
-@pytest.mark.training
+@pytest.mark.after_model_training
 def test_model_invariance() -> None:
     """Runs the behavioral invariance test suite on the trained model.
 
@@ -66,3 +66,7 @@ def test_model_invariance() -> None:
     test_model_invariance_identity_preservation(
         (testing_loader, model, device, pipeline_config, tests_config),
     )
+
+
+if __name__ == "__main__":
+    test_model_invariance()

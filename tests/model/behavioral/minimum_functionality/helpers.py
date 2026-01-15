@@ -65,6 +65,8 @@ def model_minimum_functionality_tests_setup() -> tuple[
     return initialize_inference_environment()
 
 
+@pytest.mark.model_behavioral_minimum_functionality_on_sequence
+@pytest.mark.after_model_training
 def model_minimum_functionality_on_sequence(
     model_minimum_functionality_tests_setup: tuple,
     features_sequence: list[list[float]],

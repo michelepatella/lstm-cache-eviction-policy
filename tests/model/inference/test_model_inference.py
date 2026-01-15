@@ -23,7 +23,7 @@ from tests.model.inference.helpers import (
 
 
 @pytest.mark.model_inference
-@pytest.mark.testing
+@pytest.mark.after_model_training
 def test_model_inference() -> None:
     """Runs a suite of tests to validate the model's inference performance.
 

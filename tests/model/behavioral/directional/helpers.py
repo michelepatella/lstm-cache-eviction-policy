@@ -82,7 +82,7 @@ def model_directional_tests_setup() -> tuple[
     DATASET_PROCESSED_LOCAL_FEATURE_COLUMNS,
 )
 @pytest.mark.model_behavioral_directional_local_feature_perturbations
-@pytest.mark.training
+@pytest.mark.after_model_training
 def test_model_directional_local_feature_perturbations(
     model_directional_tests_setup: tuple,
     feature: str,

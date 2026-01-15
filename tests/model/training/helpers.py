@@ -216,7 +216,7 @@ def model_training_tests_setup() -> tuple[
     "device_type",
     RESOURCES_DEVICE_NAMES,
 )
-@pytest.mark.training
+@pytest.mark.after_model_training
 def test_model_training_portability(
     device_type: str,
     model_training_tests_setup: tuple,
@@ -273,7 +273,7 @@ def test_model_training_portability(
 
 @pytest.mark.slow
 @pytest.mark.model_training_end_to_end
-@pytest.mark.training
+@pytest.mark.after_model_training
 def test_model_training_end_to_end(model_training_tests_setup: tuple) -> None:
     """Tests the complete end-to-end model training pipeline execution.
 
@@ -302,7 +302,7 @@ def test_model_training_end_to_end(model_training_tests_setup: tuple) -> None:
 
 
 @pytest.mark.model_training_learnability
-@pytest.mark.training
+@pytest.mark.after_model_training
 def test_model_training_learnability(
     model_training_tests_setup: tuple,
 ) -> None:
@@ -363,7 +363,7 @@ def test_model_training_learnability(
 
 @pytest.mark.slow
 @pytest.mark.model_training_optimization_stability
-@pytest.mark.training
+@pytest.mark.after_model_training
 def test_model_training_optimization_stability(
     model_training_tests_setup: tuple,
 ) -> None:
@@ -411,7 +411,7 @@ def test_model_training_optimization_stability(
 
 
 @pytest.mark.model_training_output_integrity
-@pytest.mark.training
+@pytest.mark.after_model_training
 def test_model_training_output_integrity(
     model_training_tests_setup: tuple,
 ) -> None:

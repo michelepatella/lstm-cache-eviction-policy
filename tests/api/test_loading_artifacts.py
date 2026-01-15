@@ -33,3 +33,7 @@ def test_api_loading_artifacts() -> None:
 
     # Assert the model is of expected type
     assert isinstance(model, LSTM)
+
+
+if __name__ == "__main__":
+    test_api_loading_artifacts()

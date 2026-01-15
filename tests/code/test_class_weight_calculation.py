@@ -72,3 +72,7 @@ def test_calculate_class_weight_logic(
     # Assert that all class weight
     # elements are positive
     assert np.all(class_weight > 0)
+
+
+if __name__ == "__main__":
+    test_calculate_class_weight_logic()
