@@ -35,6 +35,7 @@ COPY src/api/config/pydantic/sections/kwargs_api_config.py /app/src/api/config/p
 COPY src/api/config/pydantic/sections/logs_api_config.py /app/src/api/config/pydantic/sections/logs_api_config.py
 COPY src/api/config/pydantic/sections/model_api_config.py /app/src/api/config/pydantic/sections/model_api_config.py
 COPY src/api/config/pydantic/sections/resources_api_config.py /app/src/api/config/pydantic/sections/resources_api_config.py
+COPY src/api/config/pydantic/sections/canary_tests_api_config.py /app/src/api/config/pydantic/sections/
 COPY src/api/const.py /app/src/api/const.py
 COPY src/api/services/decider/decider_service_pb2.py /app/src/api/services/decider/decider_service_pb2.py
 COPY src/api/services/decider/decider_service_pb2_grpc.py /app/src/api/services/decider/decider_service_pb2_grpc.py

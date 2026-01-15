@@ -99,6 +99,10 @@ MLFLOW_NESTED = True
 MLFLOW_MODEL_PRODUCTION_NAME = "LSTM_production"
 MLFLOW_MODEL_SIMULATION_NAME = "LSTM_simulation"
 
+MLFLOW_MODEL_TAG_STATE = "state"
+MLFLOW_MODEL_TAG_STATE_STAGING = "staging"
+MLFLOW_MODEL_TAG_STATE_PROD = "prod"
+
 
 # ----------------------------
 # Model

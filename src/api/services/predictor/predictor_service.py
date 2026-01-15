@@ -9,6 +9,8 @@ Classes:
     PredictorService: gRPC Servicer class implementing the Predict method.
 """
 
+import random
+
 import grpc
 import mlflow
 import torch
@@ -30,7 +32,10 @@ from components.logs.levels.error_logger import error
 from components.logs.levels.info_logger import info
 from components.yaml.io.loader import load_yaml
 from const import (
-    MLFLOW_MODEL_SIMULATION_NAME,
+    MLFLOW_MODEL_PRODUCTION_NAME,
+    MLFLOW_MODEL_TAG_STATE,
+    MLFLOW_MODEL_TAG_STATE_PROD,
+    MLFLOW_MODEL_TAG_STATE_STAGING,
 )
 
 # ----------------------------
@@ -39,6 +44,9 @@ from const import (
 # Load API configuration
 api_config_file = load_yaml(API_CONFIG_FILE_PATH)
 api_config = APIConfig(**api_config_file)
+
+# Canary tests' traffic threshold
+traffic_threshold = api_config.canary_tests.traffic_threshold
 
 # Prepare production model environment:
 # select device and set configured quantization engine
@@ -50,17 +58,41 @@ torch.backends.quantized.engine = (
 # Load the last version of the production model
 mlflow_client = mlflow.MlflowClient(tracking_uri=MLFLOW_TRACKING_URI)
 model_versions = mlflow_client.search_model_versions(
-    f"name='{MLFLOW_MODEL_SIMULATION_NAME}'",
+    f"name='{MLFLOW_MODEL_PRODUCTION_NAME}'",
 )
+prod_versions = [
+    v
+    for v in model_versions
+    if v.tags.get(MLFLOW_MODEL_TAG_STATE) == MLFLOW_MODEL_TAG_STATE_PROD
+]
 last_model_version = max(
-    (v for v in model_versions),
+    (v for v in prod_versions),
     key=lambda v: int(v.version),
     default=None,
 )
 if last_model_version is not None:
     model = mlflow.pytorch.load_model(
-        model_uri=f"models:/{MLFLOW_MODEL_SIMULATION_NAME}/{last_model_version.version}",
+        model_uri=f"models:/{MLFLOW_MODEL_PRODUCTION_NAME}/{last_model_version.version}",
     )
+
+# Load the last version of the staging model (if any)
+staging_versions = [
+    v
+    for v in model_versions
+    if v.tags.get(MLFLOW_MODEL_TAG_STATE) == MLFLOW_MODEL_TAG_STATE_STAGING
+]
+last_staging_version = max(
+    (v for v in staging_versions),
+    key=lambda v: int(v.version),
+    default=None,
+)
+
+if last_staging_version is not None:
+    staging_model = mlflow.pytorch.load_model(
+        model_uri=f"models:/{MLFLOW_MODEL_PRODUCTION_NAME}/{last_staging_version.version}",
+    )
+else:
+    staging_model = None
 
 
 class PredictorService(pb2_grpc.PredictorServiceServicer):
@@ -92,8 +124,9 @@ class PredictorService(pb2_grpc.PredictorServiceServicer):
 
         Returns:
             pb2.PredictorServiceResponse: A gRPC response containing the list of
-                                          predicted outputs and their associated
-                                          variances.
+                                          predicted outputs, their associated
+                                          variances, and a model tag indicating
+                                          the type of the model used.
         """
         try:
             info(
@@ -105,6 +138,17 @@ class PredictorService(pb2_grpc.PredictorServiceServicer):
                     "context": "Predictor service",
                 },
             )
+
+            # Select the model to use for canary tests
+            if (
+                staging_model is not None
+                and random.random() < traffic_threshold
+            ):
+                model_to_use = staging_model
+                model_tag = MLFLOW_MODEL_TAG_STATE_STAGING
+            else:
+                model_to_use = model
+                model_tag = MLFLOW_MODEL_TAG_STATE_PROD
 
             # Convert features and keys to tensors with
             # correct shape and move to device
@@ -121,7 +165,7 @@ class PredictorService(pb2_grpc.PredictorServiceServicer):
 
             # Compute autoregressive rollout
             all_outputs, all_variances = compute_autoregressive_rollout(
-                model,
+                model_to_use,
                 features_seq,
                 keys_seq,
                 device,
@@ -136,6 +180,7 @@ class PredictorService(pb2_grpc.PredictorServiceServicer):
                 extra={
                     "outputs_num": len(all_outputs),
                     "variances_num": len(all_variances),
+                    "model_tag": model_tag,
                     "context": "Predictor service",
                 },
             )
@@ -148,6 +193,7 @@ class PredictorService(pb2_grpc.PredictorServiceServicer):
                 variances=[
                     pb2.FloatList(values=v.tolist()) for v in all_variances
                 ],
+                model_tag=model_tag,
             )
 
         except Exception as e:

@@ -16,6 +16,9 @@ Classes:
 from box import Box
 from pydantic import BaseModel
 
+from api.config.pydantic.sections.canary_tests_api_config import (
+    CanaryTestsAPIConfig,
+)
 from api.config.pydantic.sections.kwargs_api_config import KwargsAPIConfig
 from api.config.pydantic.sections.logs_api_config import LogsAPIConfig
 from api.config.pydantic.sections.model_api_config import ModelAPIConfig
@@ -33,12 +36,14 @@ class APIConfig(BaseModel):
         kwargs (KwargsAPIConfig): API kwargs configuration.
         logs (LogsAPIConfig): Logs configuration for the API.
         model (ModelAPIConfig): Model configuration for the API.
+        canary_tests (CanaryTestsAPIConfig): Canary test configuration.
     """
 
     resources: ResourcesAPIConfig
     kwargs: KwargsAPIConfig
     logs: LogsAPIConfig
     model: ModelAPIConfig
+    canary_tests: CanaryTestsAPIConfig
 
     def merge_api_kwargs(
         self: "APIConfig",

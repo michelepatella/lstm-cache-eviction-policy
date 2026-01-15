@@ -55,6 +55,8 @@ from const import (
     LOGS_LOGGER_NAME,
     MLFLOW_MODEL_PRODUCTION_NAME,
     MLFLOW_MODEL_SIMULATION_NAME,
+    MLFLOW_MODEL_TAG_STATE,
+    MLFLOW_MODEL_TAG_STATE_STAGING,
     MLFLOW_NESTED,
 )
 from pipeline.config.configurator import prepare_pipeline_config
@@ -303,7 +305,16 @@ def train_model() -> None:
                 name=MLFLOW_MODEL_PRODUCTION_NAME
                 if data_mode == DATA_REAL_MODE
                 else MLFLOW_MODEL_SIMULATION_NAME,
-                tags={MLFLOW_MODEL_TAG_DATA_MODE: data_mode},
+                tags={
+                    MLFLOW_MODEL_TAG_DATA_MODE: data_mode,
+                    **(
+                        {
+                            MLFLOW_MODEL_TAG_STATE: MLFLOW_MODEL_TAG_STATE_STAGING,
+                        }
+                        if data_mode == DATA_REAL_MODE
+                        else {}
+                    ),
+                },
             )
 
     info(
