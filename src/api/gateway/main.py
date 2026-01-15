@@ -29,6 +29,7 @@ from functools import wraps
 from http import HTTPStatus
 from typing import Any
 
+import numpy as np
 from fastapi import FastAPI, HTTPException, Request, status
 from prometheus_client import (
     Counter,
@@ -409,7 +410,16 @@ async def gateway_api(
         info(
             "Real-world data collected",
             extra={
-                "last_accesses": last_accesses,
+                "data": [
+                    {
+                        "sin_time": float(f[0]),
+                        "cos_time": float(f[1]),
+                        "local_frequency": float(f[2]),
+                        "local_recency": float(f[3]),
+                        "request": int(req),
+                    }
+                    for f, req in zip(np.array(features).T, np.array(keys_seq))
+                ],
                 "context": "Real-world data",
             },
         )
