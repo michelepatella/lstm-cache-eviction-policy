@@ -89,3 +89,7 @@ def test_evict_score_based_items_logic(
     # Assert that the evicted keys match
     # the expected ones
     assert evicted == expected_evicted
+
+
+if __name__ == "__main__":
+    test_evict_score_based_items_logic()

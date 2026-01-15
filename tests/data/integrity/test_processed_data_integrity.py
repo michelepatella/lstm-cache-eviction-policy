@@ -36,7 +36,7 @@ from tests.helpers.dc_helpers import run_dc_suite
 
 
 @pytest.mark.data_integrity_processed
-@pytest.mark.after_data_processing
+@pytest.mark.after_data_preprocessing
 def test_processed_data_integrity() -> None:
     """Runs the Deepchecks test suite against the processed data.
 

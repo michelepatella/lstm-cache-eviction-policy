@@ -49,3 +49,7 @@ def test_api_wrong_input_type() -> None:
 
     # Assert API failed
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
+
+
+if __name__ == "__main__":
+    test_api_wrong_input_type()

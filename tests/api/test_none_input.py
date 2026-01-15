@@ -48,3 +48,7 @@ def test_api_none_input() -> None:
 
     # Assert API failed
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
+
+
+if __name__ == "__main__":
+    test_api_none_input()

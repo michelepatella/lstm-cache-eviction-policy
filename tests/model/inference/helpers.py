@@ -65,7 +65,7 @@ def model_testing_tests_setup() -> tuple[
 
 
 @pytest.mark.model_inference_avg_latency
-@pytest.mark.testing
+@pytest.mark.after_model_training
 def test_model_inference_avg_latency(model_testing_tests_setup: tuple) -> None:
     """Tests if the model's average inference latency is within the
     configured tolerance.
@@ -113,7 +113,7 @@ def test_model_inference_avg_latency(model_testing_tests_setup: tuple) -> None:
 
 
 @pytest.mark.model_inference_throughput
-@pytest.mark.testing
+@pytest.mark.after_model_training
 def test_model_inference_throughput(model_testing_tests_setup: tuple) -> None:
     """Tests if the model's throughput meets the minimum required value.
 

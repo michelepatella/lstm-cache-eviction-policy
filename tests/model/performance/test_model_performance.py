@@ -40,7 +40,7 @@ from tests.helpers.dc_helpers import (
 
 
 @pytest.mark.model_performance
-@pytest.mark.testing
+@pytest.mark.after_model_training
 def test_model_performance() -> None:
     """Runs the Deepchecks test suite against the trained model.
 

@@ -74,3 +74,7 @@ def test_early_stopping_logic(
     # Assert that early stopping triggers
     # when expected
     assert es.early_stop == expected_stop
+
+
+if __name__ == "__main__":
+    test_early_stopping_logic()

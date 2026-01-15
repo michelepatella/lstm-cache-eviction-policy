@@ -85,7 +85,7 @@ def model_invariance_tests_setup() -> tuple[
     "feature_idx",
     range(len(DATASET_PROCESSED_FEATURE_COLUMNS)),
 )
-@pytest.mark.training
+@pytest.mark.after_model_training
 def test_model_invariance_feature_perturbation(
     feature_idx: int,
     model_invariance_tests_setup: tuple,
@@ -204,7 +204,7 @@ def test_model_invariance_feature_perturbation(
 
 
 @pytest.mark.model_behavioral_invariance_identity
-@pytest.mark.training
+@pytest.mark.after_model_training
 def test_model_invariance_identity_preservation(
     model_invariance_tests_setup: tuple,
 ):

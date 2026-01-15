@@ -17,6 +17,7 @@ import dagshub
 import mlflow
 import numpy as np
 import pandas as pd
+import pytest
 
 from components.data.exploration.explorer import explore_data
 from components.data.requests.core.dynamic_generator import (
@@ -205,6 +206,28 @@ def prepare_data() -> None:
         mlflow.log_artifact(zipf_log_log_plot_save_path)
         mlflow.log_artifact(daily_profile_plot_save_path)
         mlflow.log_artifact(key_usage_heatmap_plot_save_path)
+
+        # Run after data preparation tests
+        try:
+            pytest.main(
+                [
+                    "-m",
+                    "after_data_preparation",
+                    "--tb=short",
+                    "-q",
+                ],
+            )
+        except SystemExit as e:
+            if e.code != 0:
+                msg = "After data preparation tests failed"
+                logging.exception(
+                    msg,
+                    extra={
+                        "exception": str(e),
+                        "context": "Data preparation",
+                    },
+                )
+                raise RuntimeError(msg) from e
 
     info(
         "Data preparation completed",

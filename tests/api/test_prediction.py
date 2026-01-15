@@ -79,3 +79,7 @@ def test_api_prediction() -> None:
     assert len(eviction_data) == api_kwargs.num_evictions
     for output in eviction_data:
         assert isinstance(output, int)
+
+
+if __name__ == "__main__":
+    test_api_prediction()

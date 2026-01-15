@@ -175,3 +175,9 @@ def test_calculate_local_recencies(
 
     # Assert that the result is of expected type
     assert isinstance(local_recencies, np.ndarray)
+
+
+if __name__ == "__main__":
+    test_encode_time_trigonometrically()
+    test_calculate_local_frequencies()
+    test_calculate_local_recencies()

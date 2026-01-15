@@ -11,6 +11,10 @@ convention = "google"
 [tool.pytest.ini_options]
 python_files = ["test_*.py"]
 markers = [
+    "after_data_preparation: Tests to run after data preparation in the pipeline",
+    "after_data_preprocessing: Tests to run after data preprocessing in the pipeline",
+    "after_data_splitting: Tests to run after data splitting in the pipeline",
+    "after_model_training: Tests to run after training in the pipeline",
     "api_empty_input: API Empty Input Test",
     "api_loading_artifacts: API Loading Artifacts Test",
     "api_none_input: API None Input Test",
@@ -34,6 +38,7 @@ markers = [
     "model_behavioral_directional: Model Behavioral Directional Tests",
     "model_behavioral_directional_local_feature_perturbations: Model Behavioral Directional Local Feature Perturbations Tests",
     "model_behavioral_minimum_functionality: Model Behavioral Minimum Functionality Tests",
+    "model_behavioral_minimum_functionality_on_sequence: Model Behavioral Minimum Functionality On Sequence Test",
     "model_inference: Model Inference Tests",
     "model_inference_avg_latency: Model Inference Avg Latency Test",
     "model_inference_throughput: Model Inference Throughput Test",
@@ -45,9 +50,4 @@ markers = [
     "model_training_output_integrity: Model Training Output Integrity Test",
     "model_training_portability: Model Training Portability Tests",
     "slow: Slow Tests",
-    "data_processing: Tests to run during data processing in the pipeline",
-    "data_exploration: Tests to run during data exploration in the pipeline",
-    "validation: Tests to run during validation in the pipeline",
-    "training: Tests to run during training in the pipeline",
-    "testing: Tests to run during testing in the pipeline",
 ]

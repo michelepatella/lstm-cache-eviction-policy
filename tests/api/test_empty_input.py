@@ -51,3 +51,7 @@ def test_api_empty_input() -> None:
     assert str(HTTPStatus.INTERNAL_SERVER_ERROR) in response.json().get(
         "message",
     )
+
+
+if __name__ == "__main__":
+    test_api_empty_input()

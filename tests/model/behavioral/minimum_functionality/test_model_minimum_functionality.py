@@ -20,7 +20,7 @@ from tests.model.helpers import initialize_inference_environment
 
 
 @pytest.mark.model_behavioral_minimum_functionality
-@pytest.mark.training
+@pytest.mark.after_model_training
 def test_model_minimum_functionality() -> None:
     """Performs minimum functionality tests.
 
@@ -109,3 +109,7 @@ def test_model_minimum_functionality() -> None:
         keys_sequence,
         expected_key,
     )
+
+
+if __name__ == "__main__":
+    test_model_minimum_functionality()

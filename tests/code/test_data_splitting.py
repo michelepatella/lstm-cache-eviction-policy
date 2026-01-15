@@ -80,3 +80,7 @@ def test_split_dataset_data_logic(
         else:
             # Assert if it actually started from the split index
             assert data.iloc[LIST_FIRST_IDX]["col"] == split_idx
+
+
+if __name__ == "__main__":
+    test_split_dataset_data_logic()
