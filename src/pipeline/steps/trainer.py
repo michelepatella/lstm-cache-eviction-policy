@@ -64,6 +64,8 @@ from pipeline.const import (
     LOGS_PHASE_TRAINING,
     MLFLOW_ARTIFACT_PATH,
     MLFLOW_MODEL_TAG_DATA_MODE,
+    MLFLOW_MODEL_TAG_STATE,
+    MLFLOW_MODEL_TAG_STATE_STAGING,
 )
 
 
@@ -303,7 +305,16 @@ def train_model() -> None:
                 name=MLFLOW_MODEL_PRODUCTION_NAME
                 if data_mode == DATA_REAL_MODE
                 else MLFLOW_MODEL_SIMULATION_NAME,
-                tags={MLFLOW_MODEL_TAG_DATA_MODE: data_mode},
+                tags={
+                    MLFLOW_MODEL_TAG_DATA_MODE: data_mode,
+                    **(
+                        {
+                            MLFLOW_MODEL_TAG_STATE: MLFLOW_MODEL_TAG_STATE_STAGING,
+                        }
+                        if data_mode == DATA_REAL_MODE
+                        else {}
+                    ),
+                },
             )
 
     info(
