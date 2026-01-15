@@ -126,8 +126,9 @@ class PredictorService(pb2_grpc.PredictorServiceServicer):
 
         Returns:
             pb2.PredictorServiceResponse: A gRPC response containing the list of
-                                          predicted outputs and their associated
-                                          variances.
+                                          predicted outputs, their associated
+                                          variances, and a model tag indicating
+                                          the type of the model used.
         """
         try:
             info(
@@ -146,8 +147,10 @@ class PredictorService(pb2_grpc.PredictorServiceServicer):
                 and random.random() < traffic_threshold
             ):
                 model_to_use = staging_model
+                model_tag = MLFLOW_MODEL_TAG_STATE_STAGING
             else:
                 model_to_use = model
+                model_tag = MLFLOW_MODEL_TAG_STATE_PROD
 
             # Convert features and keys to tensors with
             # correct shape and move to device
@@ -179,6 +182,7 @@ class PredictorService(pb2_grpc.PredictorServiceServicer):
                 extra={
                     "outputs_num": len(all_outputs),
                     "variances_num": len(all_variances),
+                    "model_tag": model_tag,
                     "context": "Predictor service",
                 },
             )
@@ -191,6 +195,7 @@ class PredictorService(pb2_grpc.PredictorServiceServicer):
                 variances=[
                     pb2.FloatList(values=v.tolist()) for v in all_variances
                 ],
+                model_tag=model_tag,
             )
 
         except Exception as e:

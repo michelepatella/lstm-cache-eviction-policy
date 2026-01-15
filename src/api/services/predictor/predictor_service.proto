@@ -20,6 +20,7 @@ message FloatList {
 message PredictorServiceResponse {
     repeated FloatList outputs = 1;
     repeated FloatList variances = 2;
+    string model_tag = 3;
 }
 
 service PredictorService {
