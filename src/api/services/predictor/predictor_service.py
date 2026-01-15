@@ -32,6 +32,7 @@ from components.yaml.io.loader import load_yaml
 from const import (
     MLFLOW_MODEL_SIMULATION_NAME,
 )
+from pipeline.const import MLFLOW_MODEL_TAG_STATE, MLFLOW_MODEL_TAG_STATE_PROD
 
 # ----------------------------
 # Setup
@@ -52,8 +53,13 @@ mlflow_client = mlflow.MlflowClient(tracking_uri=MLFLOW_TRACKING_URI)
 model_versions = mlflow_client.search_model_versions(
     f"name='{MLFLOW_MODEL_SIMULATION_NAME}'",
 )
+prod_versions = [
+    v
+    for v in model_versions
+    if v.tags.get(MLFLOW_MODEL_TAG_STATE) == MLFLOW_MODEL_TAG_STATE_PROD
+]
 last_model_version = max(
-    (v for v in model_versions),
+    (v for v in prod_versions),
     key=lambda v: int(v.version),
     default=None,
 )
