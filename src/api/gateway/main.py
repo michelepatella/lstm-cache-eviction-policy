@@ -404,6 +404,16 @@ async def gateway_api(
             },
         )
 
+        # Real-world data collection
+        # for model re-training
+        info(
+            "Real-world data collected",
+            extra={
+                "last_accesses": last_accesses,
+                "context": "Real-world data",
+            },
+        )
+
         # Final response to the client
         return {
             API_RESPONSE_FIELD_MESSAGE_NAME: HTTPStatus.OK.phrase,
