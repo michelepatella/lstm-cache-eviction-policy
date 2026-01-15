@@ -23,6 +23,7 @@ import mlflow
 import numpy as np
 import pytest
 
+from api.const import MLFLOW_TRACKING_URI
 from components.const import DATASET_PROCESSED_FEATURE_COLUMNS
 from components.data_loader.builder import build_data_loader
 from components.data_loader.initializer import initialize_data_loader
@@ -56,6 +57,7 @@ from const import (
     MLFLOW_MODEL_PRODUCTION_NAME,
     MLFLOW_MODEL_SIMULATION_NAME,
     MLFLOW_MODEL_TAG_STATE,
+    MLFLOW_MODEL_TAG_STATE_PROD,
     MLFLOW_MODEL_TAG_STATE_STAGING,
     MLFLOW_NESTED,
 )
@@ -205,11 +207,38 @@ def train_model() -> None:
         # Extract targets from training loader
         targets = extract_targets_from_data_loader(training_loader)
 
+        # Load a pretrained model if needed
+        model = None
+        if data_mode == DATA_REAL_MODE:
+            # Load the last version of the production model
+            mlflow_client = mlflow.MlflowClient(
+                tracking_uri=MLFLOW_TRACKING_URI,
+            )
+            model_versions = mlflow_client.search_model_versions(
+                f"name='{MLFLOW_MODEL_PRODUCTION_NAME}'",
+            )
+            prod_versions = [
+                v
+                for v in model_versions
+                if v.tags.get(MLFLOW_MODEL_TAG_STATE)
+                == MLFLOW_MODEL_TAG_STATE_PROD
+            ]
+            last_model_version = max(
+                (v for v in prod_versions),
+                key=lambda v: int(v.version),
+                default=None,
+            )
+            if last_model_version is not None:
+                model = mlflow.pytorch.load_model(
+                    model_uri=f"models:/{MLFLOW_MODEL_PRODUCTION_NAME}/{last_model_version.version}",
+                )
+
         # Model setup for training
         device, criterion, model = initialize_model_environment(
             targets,
             training_device,
             pipeline_config,
+            model=model,
             model_params=model_params,
         )
 
