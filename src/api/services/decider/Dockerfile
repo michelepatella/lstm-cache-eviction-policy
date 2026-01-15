@@ -32,6 +32,8 @@ COPY src/components/logs/levels/debug_logger.py /app/src/components/logs/levels/
 COPY src/components/logs/levels/error_logger.py /app/src/components/logs/levels/
 COPY src/components/logs/levels/info_logger.py /app/src/components/logs/levels/
 COPY src/components/logs/levels/utils/logger.py /app/src/components/logs/levels/utils/
+COPY src/components/json/io/loader.py /app/src/components/json/io/loader.py
+COPY src/components/json/io/saver.py /app/src/components/json/io/saver.py
 
 # Set PYTHONPATH
 ENV PYTHONPATH=/app/src
