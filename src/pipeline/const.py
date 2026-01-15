@@ -62,10 +62,6 @@ LOSS_REDUCTIONS = [None, "mean", "sum"]
 MLFLOW_ARTIFACT_PATH = "model"
 
 MLFLOW_MODEL_TAG_DATA_MODE = "data_mode"
-MLFLOW_MODEL_TAG_STATE = "state"
-MLFLOW_MODEL_TAG_STATE_STAGING = "staging"
-MLFLOW_MODEL_TAG_STATE_PROD = "prod"
-
 
 # ----------------------------
 # Model

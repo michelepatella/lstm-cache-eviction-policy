@@ -29,6 +29,7 @@ COPY src/api/services/featurizer/featurizer_service_pb2.py /app/src/api/services
 COPY src/api/services/featurizer/featurizer_service_pb2_grpc.py /app/src/api/services/featurizer/
 COPY src/api/const.py /app/src/api/
 COPY src/api/config/pydantic/api_config.py /app/src/api/config/pydantic/api_config.py
+COPY src/api/config/pydantic/sections/canary_tests_api_config.py /app/src/api/config/pydantic/sections/
 COPY src/api/config/pydantic/sections/kwargs_api_config.py /app/src/api/config/pydantic/sections/
 COPY src/api/config/pydantic/sections/logs_api_config.py /app/src/api/config/pydantic/sections/
 COPY src/api/config/pydantic/sections/model_api_config.py /app/src/api/config/pydantic/sections/

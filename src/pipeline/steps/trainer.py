@@ -55,6 +55,8 @@ from const import (
     LOGS_LOGGER_NAME,
     MLFLOW_MODEL_PRODUCTION_NAME,
     MLFLOW_MODEL_SIMULATION_NAME,
+    MLFLOW_MODEL_TAG_STATE,
+    MLFLOW_MODEL_TAG_STATE_STAGING,
     MLFLOW_NESTED,
 )
 from pipeline.config.configurator import prepare_pipeline_config
@@ -64,8 +66,6 @@ from pipeline.const import (
     LOGS_PHASE_TRAINING,
     MLFLOW_ARTIFACT_PATH,
     MLFLOW_MODEL_TAG_DATA_MODE,
-    MLFLOW_MODEL_TAG_STATE,
-    MLFLOW_MODEL_TAG_STATE_STAGING,
 )
 
 

@@ -33,8 +33,6 @@ from components.logs.levels.info_logger import info
 from components.yaml.io.loader import load_yaml
 from const import (
     MLFLOW_MODEL_PRODUCTION_NAME,
-)
-from pipeline.const import (
     MLFLOW_MODEL_TAG_STATE,
     MLFLOW_MODEL_TAG_STATE_PROD,
     MLFLOW_MODEL_TAG_STATE_STAGING,
