@@ -18,6 +18,7 @@ import logging
 import dagshub
 import mlflow
 import numpy as np
+import pytest
 from box import Box
 
 from components.data_loader.initializer import initialize_data_loader
@@ -110,6 +111,28 @@ def test_model() -> None:
             AccessLogsDataset,
             pipeline_config,
         )
+
+        # Run after data splitting tests
+        try:
+            pytest.main(
+                [
+                    "-m",
+                    "after_data_splitting",
+                    "--tb=short",
+                    "-q",
+                ],
+            )
+        except SystemExit as e:
+            if e.code != 0:
+                msg = "After data splitting tests failed"
+                logging.exception(
+                    msg,
+                    extra={
+                        "exception": str(e),
+                        "context": "Testing",
+                    },
+                )
+                raise RuntimeError(msg) from e
 
         # Trained model setup for testing
         device, criterion, model = initialize_best_model(

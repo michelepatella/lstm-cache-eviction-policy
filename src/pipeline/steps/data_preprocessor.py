@@ -19,6 +19,7 @@ import dagshub
 import mlflow
 import numpy as np
 import pandas as pd
+import pytest
 import ray
 
 from components.const import (
@@ -184,6 +185,28 @@ def preprocess_data() -> None:
             },
         )
         mlflow.log_artifact(dataset_processed_path)
+
+        # Run after data preprocessing tests
+        try:
+            pytest.main(
+                [
+                    "-m",
+                    "after_data_preprocessing",
+                    "--tb=short",
+                    "-q",
+                ],
+            )
+        except SystemExit as e:
+            if e.code != 0:
+                msg = "After data preprocessing tests failed"
+                logging.exception(
+                    msg,
+                    extra={
+                        "exception": str(e),
+                        "context": "Data preprocessing",
+                    },
+                )
+                raise RuntimeError(msg) from e
 
     info(
         "Data preprocessing completed",

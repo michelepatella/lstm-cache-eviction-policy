@@ -20,6 +20,7 @@ import logging
 import dagshub
 import mlflow
 import numpy as np
+import pytest
 import ray
 
 from components.caches.implementations.lfu_cache import LFUCache
@@ -158,6 +159,28 @@ def run_simulations() -> None:
             AccessLogsDataset,
             pipeline_config,
         )
+
+        # Run after data splitting tests
+        try:
+            pytest.main(
+                [
+                    "-m",
+                    "after_data_splitting",
+                    "--tb=short",
+                    "-q",
+                ],
+            )
+        except SystemExit as e:
+            if e.code != 0:
+                msg = "After data splitting tests failed"
+                logging.exception(
+                    msg,
+                    extra={
+                        "exception": str(e),
+                        "context": "Simulations",
+                    },
+                )
+                raise RuntimeError(msg) from e
 
         info(
             "Simulations started",

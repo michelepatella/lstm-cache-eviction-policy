@@ -20,6 +20,7 @@ import logging
 import dagshub
 import mlflow
 import numpy as np
+import pytest
 from box import Box
 
 from components.data_loader.initializer import initialize_data_loader
@@ -115,6 +116,28 @@ def validate_model() -> None:
             AccessLogsDataset,
             pipeline_config,
         )
+
+        # Run after data splitting tests
+        try:
+            pytest.main(
+                [
+                    "-m",
+                    "after_data_splitting",
+                    "--tb=short",
+                    "-q",
+                ],
+            )
+        except SystemExit as e:
+            if e.code != 0:
+                msg = "After data splitting tests failed"
+                logging.exception(
+                    msg,
+                    extra={
+                        "exception": str(e),
+                        "context": "Validation",
+                    },
+                )
+                raise RuntimeError(msg) from e
 
         # Get all parameter combinations
         params_combinations = get_parameters_combination(pipeline_config)

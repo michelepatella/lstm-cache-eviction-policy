@@ -21,6 +21,7 @@ import tempfile
 import dagshub
 import mlflow
 import numpy as np
+import pytest
 
 from components.const import DATASET_PROCESSED_FEATURE_COLUMNS
 from components.data_loader.builder import build_data_loader
@@ -164,6 +165,28 @@ def train_model() -> None:
             validation_split,
         )
 
+        # Run after data splitting tests
+        try:
+            pytest.main(
+                [
+                    "-m",
+                    "after_data_splitting",
+                    "--tb=short",
+                    "-q",
+                ],
+            )
+        except SystemExit as e:
+            if e.code != 0:
+                msg = "After data splitting tests failed"
+                logging.exception(
+                    msg,
+                    extra={
+                        "exception": str(e),
+                        "context": "Training",
+                    },
+                )
+                raise RuntimeError(msg) from e
+
         # Create a loader both for
         # training and validation sets
         training_loader = build_data_loader(
@@ -240,6 +263,28 @@ def train_model() -> None:
                 "epochs_run_num": num_epochs_run,
             },
         )
+
+        # Run after model training tests
+        try:
+            pytest.main(
+                [
+                    "-m",
+                    "after_model_training",
+                    "--tb=short",
+                    "-q",
+                ],
+            )
+        except SystemExit as e:
+            if e.code != 0:
+                msg = "After model training tests failed"
+                logging.exception(
+                    msg,
+                    extra={
+                        "exception": str(e),
+                        "context": "Training",
+                    },
+                )
+                raise RuntimeError(msg) from e
 
         # Log model and save it to registry
         with (
