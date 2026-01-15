@@ -14,7 +14,7 @@ Functions:
         features_shape: list[int],
         keys_shape: list[int],
         api_config: APIConfig,
-    ) -> tuple[list[list[float]], list[list[float]]]:
+    ) -> tuple[list[list[float]], list[list[float]], str]:
         Initiates the gRPC call to the Predictor Service for model inference.
 """
 
@@ -35,7 +35,7 @@ def call_predictor_service(
     features_shape: list[int],
     keys_shape: list[int],
     api_config: APIConfig,
-) -> tuple[list[list[float]], list[list[float]]]:
+) -> tuple[list[list[float]], list[list[float]], str]:
     """Initiates the gRPC call to the Predictor Service for model inference.
 
     This function opens a channel to the Predictor Service, serializes the
@@ -53,6 +53,7 @@ def call_predictor_service(
         tuple[list[list[float]], list[list[float]]]:
             - outputs: List of lists containing the predicted values.
             - variances: List of lists containing the associated variance values.
+            - model_tag: Type of model used by the predictor (production or staging).
 
     Raises:
         HTTPException: If a gRPC communication error occurs, converted into a 500
@@ -93,17 +94,19 @@ def call_predictor_service(
             # Prepare outputs to return
             outputs = [list(fl.values) for fl in response.outputs]
             variances = [list(fl.values) for fl in response.variances]
+            model_tag = response.model_tag
 
             debug(
                 "Predictor service call completed",
                 extra={
                     "outputs_num": len(outputs),
                     "variances_num": len(variances),
+                    "model_tag": model_tag,
                     "context": "Predictor service call",
                 },
             )
 
-            return outputs, variances
+            return outputs, variances, model_tag
     except grpc.RpcError as e:
         error(
             "Predictor service call failed",

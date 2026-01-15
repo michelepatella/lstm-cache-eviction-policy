@@ -48,6 +48,7 @@ from api.const import (
     API_DESCRIPTION,
     API_RESPONSE_FIELD_MESSAGE_NAME,
     API_RESPONSE_FIELD_METHOD_NAME,
+    API_RESPONSE_FIELD_MODEL_TAG,
     API_RESPONSE_FIELD_STATUS_CODE_NAME,
     API_RESPONSE_FIELD_TIMESTAMP_NAME,
     API_RESPONSE_FIELD_URL_NAME,
@@ -279,6 +280,10 @@ def construct_api_response(
             response[API_RESPONSE_FIELD_DATA_NAME] = result[
                 API_RESPONSE_FIELD_DATA_NAME
             ]
+        if API_RESPONSE_FIELD_MODEL_TAG in result:
+            response[API_RESPONSE_FIELD_MODEL_TAG] = result[
+                API_RESPONSE_FIELD_MODEL_TAG
+            ]
         return response
 
     return wrap
@@ -356,7 +361,7 @@ async def gateway_api(
         # 2. Predictor Service: Make confidence-aware model predictions
         # ---------------------------------------------------------------
         with PREDICTOR_LATENCY_SECONDS.time():
-            outputs, variances = call_predictor_service(
+            outputs, variances, model_tag = call_predictor_service(
                 features,
                 keys_seq,
                 features_shape,
@@ -403,6 +408,7 @@ async def gateway_api(
         return {
             API_RESPONSE_FIELD_MESSAGE_NAME: HTTPStatus.OK.phrase,
             API_RESPONSE_FIELD_STATUS_CODE_NAME: HTTPStatus.OK,
+            API_RESPONSE_FIELD_MODEL_TAG: model_tag,
             API_RESPONSE_FIELD_DATA_NAME: {
                 API_RESPONSE_FIELD_DATA_KEYS_TO_EVICT_NAME: keys_to_evict,
             },
