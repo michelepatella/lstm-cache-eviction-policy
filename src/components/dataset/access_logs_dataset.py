@@ -29,7 +29,7 @@ from components.const import (
     LOGS_GRAFANA_LOKI_LOGS_URL,
     LOGS_GRAFANA_LOKI_TOKEN,
     LOGS_GRAFANA_LOKI_USER_ID,
-    RETRAINING_CONFIG_FILE_PATH,
+    RETRAINING_CHECKPOINT_FILE_PATH,
     TIME_NANOSECONDS_IN_SECOND,
     TORCH_DTYPE_FEATURES,
     TORCH_DTYPE_TARGET,
@@ -198,7 +198,7 @@ class AccessLogsDataset(Dataset):
         # For external data
         else:
             # Load retraining config
-            retraining_config = load_json(RETRAINING_CONFIG_FILE_PATH)
+            retraining_checkpoint = load_json(RETRAINING_CHECKPOINT_FILE_PATH)
 
             # Get current timestamp in ns
             current_timestamp = int(
@@ -212,7 +212,7 @@ class AccessLogsDataset(Dataset):
                 auth=(LOGS_GRAFANA_LOKI_USER_ID, LOGS_GRAFANA_LOKI_TOKEN),
                 params={
                     "query": '{service_name="unknown_service"} | json | context="Real-world data"',
-                    "start": retraining_config.last_timestamp + 1,
+                    "start": retraining_checkpoint.last_timestamp + 1,
                     "end": current_timestamp,
                 },
             ).json()
@@ -253,8 +253,8 @@ class AccessLogsDataset(Dataset):
                     raise RuntimeError(msg) from e
 
             # Update retraining config
-            retraining_config.last_timestamp = current_timestamp
-            save_json(retraining_config, RETRAINING_CONFIG_FILE_PATH)
+            retraining_checkpoint.last_timestamp = current_timestamp
+            save_json(retraining_checkpoint, RETRAINING_CHECKPOINT_FILE_PATH)
 
         # Set data
         self.data = df.copy()

@@ -316,7 +316,7 @@ PLOT_HIT_MISS_RATES_SUBPLOTS = [
 # ----------------------------
 # Retraining
 # ----------------------------
-RETRAINING_CONFIG_FILE_PATH = PROJECT_ROOT / "retraining_config.json"
+RETRAINING_CHECKPOINT_FILE_PATH = PROJECT_ROOT / "retraining_checkpoint.json"
 
 
 # ----------------------------
