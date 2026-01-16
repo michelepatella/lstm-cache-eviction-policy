@@ -12,7 +12,12 @@ Classes:
         PyTorch-compatible dataset class for sequential access logs.
 """
 
+import json
+import logging
+from datetime import datetime, timezone
+
 import pandas as pd
+import requests
 import torch
 from torch.utils.data import Dataset
 
@@ -21,6 +26,11 @@ from components.const import (
     DATASET_PROCESSED_FEATURE_COLUMNS,
     DATASET_TARGET_COLUMN_SHIFT,
     LIST_LAST_IDX,
+    LOGS_GRAFANA_LOKI_LOGS_URL,
+    LOGS_GRAFANA_LOKI_TOKEN,
+    LOGS_GRAFANA_LOKI_USER_ID,
+    RETRAINING_CHECKPOINT_FILE_PATH,
+    TIME_NANOSECONDS_IN_SECOND,
     TORCH_DTYPE_FEATURES,
     TORCH_DTYPE_TARGET,
 )
@@ -39,9 +49,15 @@ from components.dataset.splits.data_splitter import split_dataset_data
 from components.dataset.splits.index.calculator import (
     calculate_dataset_split_index,
 )
+from components.json.io.loader import load_json
+from components.json.io.saver import save_json
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
-from const import DATASET_TRAINING_SPLIT_TYPE
+from const import (
+    DATA_EXTERNAL_MODE,
+    DATASET_COLUMN_REQUEST_NAME,
+    DATASET_TRAINING_SPLIT_TYPE,
+)
 from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 
@@ -168,14 +184,77 @@ class AccessLogsDataset(Dataset):
         data_mode = pipeline_config.data.general.mode
         training_split = pipeline_config.dataset.splits.training
 
-        # Retrieve path to load dataset from
-        dataset_path = get_dataset_abs_path(
-            dataset_type,
-            data_mode,
-        )
+        # For classical data
+        if data_mode != DATA_EXTERNAL_MODE:
+            # Retrieve path to load dataset from
+            dataset_path = get_dataset_abs_path(
+                dataset_type,
+                data_mode,
+            )
 
-        # Load the dataset
-        df = load_dataset(dataset_path)
+            # Load the dataset
+            df = load_dataset(dataset_path)
+
+        # For external data
+        else:
+            # Load retraining config
+            retraining_checkpoint = load_json(RETRAINING_CHECKPOINT_FILE_PATH)
+
+            # Get current timestamp in ns
+            current_timestamp = int(
+                datetime.now(timezone.utc).timestamp()
+                * TIME_NANOSECONDS_IN_SECOND,
+            )
+
+            # Query Loki logs
+            response = requests.get(
+                LOGS_GRAFANA_LOKI_LOGS_URL,
+                auth=(LOGS_GRAFANA_LOKI_USER_ID, LOGS_GRAFANA_LOKI_TOKEN),
+                params={
+                    "query": '{service_name="unknown_service"} | json | context="Real-world data"',
+                    "start": retraining_checkpoint.last_timestamp + 1,
+                    "end": current_timestamp,
+                },
+            ).json()
+
+            # Flatten data into records
+            df = pd.DataFrame(
+                [
+                    item
+                    for entry in response.get("data", {}).get("result", [])
+                    for row in entry["values"]
+                    for item in json.loads(row[LIST_LAST_IDX])["data"]
+                ],
+            )
+            shift_dataset_column(df, DATASET_COLUMN_REQUEST_NAME, 1)
+
+            # Run after data preprocessing tests
+            try:
+                import pytest
+
+                pytest.main(
+                    [
+                        "-m",
+                        "after_data_preprocessing",
+                        "--tb=short",
+                        "-q",
+                    ],
+                )
+            except SystemExit as e:
+                if e.code != 0:
+                    msg = "After data preprocessing tests failed"
+                    logging.exception(
+                        msg,
+                        extra={
+                            "exception": str(e),
+                            "context": "Retraining",
+                        },
+                    )
+                    raise RuntimeError(msg) from e
+
+            # Update retraining config
+            retraining_checkpoint.last_timestamp = current_timestamp
+            save_json(retraining_checkpoint, RETRAINING_CHECKPOINT_FILE_PATH)
 
         # Set data
         self.data = df.copy()

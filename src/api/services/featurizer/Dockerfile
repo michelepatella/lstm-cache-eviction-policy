@@ -48,6 +48,8 @@ COPY src/components/logs/levels/info_logger.py /app/src/components/logs/levels/
 COPY src/components/logs/levels/utils/logger.py /app/src/components/logs/levels/utils/
 COPY src/components/time/transforms/trig_encoder.py /app/src/components/time/transforms/
 COPY src/components/yaml/io/loader.py /app/src/components/yaml/io/
+COPY src/components/json/io/loader.py /app/src/components/json/io/loader.py
+COPY src/components/json/io/saver.py /app/src/components/json/io/saver.py
 COPY src/const.py /app/src/
 
 # Set PYTHONPATH

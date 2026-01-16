@@ -30,6 +30,8 @@ COPY src/components/logs/levels/debug_logger.py /app/src/components/logs/levels/
 COPY src/components/logs/levels/error_logger.py /app/src/components/logs/levels/
 COPY src/components/logs/levels/utils/logger.py /app/src/components/logs/levels/utils
 COPY src/components/math/confidence_interval_calculator.py /app/src/components/math/
+COPY src/components/json/io/loader.py /app/src/components/json/io/loader.py
+COPY src/components/json/io/saver.py /app/src/components/json/io/saver.py
 COPY src/const.py /app/src/
 
 # Set PYTHONPATH
