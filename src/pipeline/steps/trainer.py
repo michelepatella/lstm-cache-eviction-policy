@@ -51,10 +51,13 @@ from components.training.core.epochs_trainer import train_epochs
 from const import (
     DAGS_HUB_REPO_NAME,
     DAGS_HUB_REPO_OWNER,
+    DATA_EXTERNAL_MODE,
     DATA_REAL_MODE,
     DATASET_TRAINING_SPLIT_TYPE,
     LOGS_LOGGER_NAME,
+    MLFLOW_MODEL_PRODUCTION_FULL_NAME,
     MLFLOW_MODEL_PRODUCTION_NAME,
+    MLFLOW_MODEL_SIMULATION_FULL_NAME,
     MLFLOW_MODEL_SIMULATION_NAME,
     MLFLOW_MODEL_TAG_STATE,
     MLFLOW_MODEL_TAG_STATE_PROD,
@@ -209,13 +212,13 @@ def train_model() -> None:
 
         # Load a pretrained model if needed
         model = None
-        if data_mode == DATA_REAL_MODE:
-            # Load the last version of the production model
+        if data_mode == DATA_EXTERNAL_MODE:
+            # Load the last version of the production (full) model
             mlflow_client = mlflow.MlflowClient(
                 tracking_uri=MLFLOW_TRACKING_URI,
             )
             model_versions = mlflow_client.search_model_versions(
-                f"name='{MLFLOW_MODEL_PRODUCTION_NAME}'",
+                f"name='{MLFLOW_MODEL_PRODUCTION_FULL_NAME}'",
             )
             prod_versions = [
                 v
@@ -230,7 +233,7 @@ def train_model() -> None:
             )
             if last_model_version is not None:
                 model = mlflow.pytorch.load_model(
-                    model_uri=f"models:/{MLFLOW_MODEL_PRODUCTION_NAME}/{last_model_version.version}",
+                    model_uri=f"models:/{MLFLOW_MODEL_PRODUCTION_FULL_NAME}/{last_model_version.version}",
                 )
 
         # Model setup for training
@@ -273,6 +276,42 @@ def train_model() -> None:
             pipeline_config,
         )
         model.load_state_dict(best_model_weights)
+
+        # Log the full model and save it to registry
+        with (
+            tempfile.TemporaryDirectory() as MLFLOW_PYTORCH_SAVE_MODEL_TEMP_PATH
+        ):
+            mlflow.pytorch.save_model(
+                pytorch_model=model,
+                path=MLFLOW_PYTORCH_SAVE_MODEL_TEMP_PATH,
+            )
+            mlflow.log_artifacts(
+                local_dir=MLFLOW_PYTORCH_SAVE_MODEL_TEMP_PATH,
+                artifact_path=MLFLOW_ARTIFACT_PATH,
+            )
+            mlflow.register_model(
+                model_uri=f"runs:/{mlflow.active_run().info.run_id}/{MLFLOW_ARTIFACT_PATH}",
+                name=MLFLOW_MODEL_PRODUCTION_FULL_NAME
+                if data_mode == DATA_REAL_MODE
+                or data_mode == DATA_EXTERNAL_MODE
+                else MLFLOW_MODEL_SIMULATION_FULL_NAME,
+                tags={
+                    MLFLOW_MODEL_TAG_DATA_MODE: DATA_REAL_MODE
+                    if data_mode == DATA_REAL_MODE
+                    or data_mode == DATA_EXTERNAL_MODE
+                    else data_mode,
+                    **(
+                        {
+                            MLFLOW_MODEL_TAG_STATE: MLFLOW_MODEL_TAG_STATE_PROD
+                            if data_mode == DATA_REAL_MODE
+                            else MLFLOW_MODEL_TAG_STATE_STAGING,
+                        }
+                        if data_mode == DATA_REAL_MODE
+                        or data_mode == DATA_EXTERNAL_MODE
+                        else {}
+                    ),
+                },
+            )
 
         # Optimize trained model before saving
         # it, applying pruning and quantization before
@@ -333,14 +372,21 @@ def train_model() -> None:
                 model_uri=f"runs:/{mlflow.active_run().info.run_id}/{MLFLOW_ARTIFACT_PATH}",
                 name=MLFLOW_MODEL_PRODUCTION_NAME
                 if data_mode == DATA_REAL_MODE
+                or data_mode == DATA_EXTERNAL_MODE
                 else MLFLOW_MODEL_SIMULATION_NAME,
                 tags={
-                    MLFLOW_MODEL_TAG_DATA_MODE: data_mode,
+                    MLFLOW_MODEL_TAG_DATA_MODE: DATA_REAL_MODE
+                    if data_mode == DATA_REAL_MODE
+                    or data_mode == DATA_EXTERNAL_MODE
+                    else data_mode,
                     **(
                         {
-                            MLFLOW_MODEL_TAG_STATE: MLFLOW_MODEL_TAG_STATE_STAGING,
+                            MLFLOW_MODEL_TAG_STATE: MLFLOW_MODEL_TAG_STATE_STAGING
+                            if data_mode == DATA_EXTERNAL_MODE
+                            else MLFLOW_MODEL_TAG_STATE_PROD,
                         }
                         if data_mode == DATA_REAL_MODE
+                        or data_mode == DATA_EXTERNAL_MODE
                         else {}
                     ),
                 },
