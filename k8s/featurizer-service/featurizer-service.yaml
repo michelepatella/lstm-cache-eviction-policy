@@ -22,6 +22,8 @@ spec:
         app: featurizer-service
         role: featurizer-service
     spec:
+      nodeSelector:
+        kubernetes.io/arch: arm64
       automountServiceAccountToken: false
       securityContext:
         runAsUser: 10001

@@ -22,6 +22,8 @@ spec:
         app: predictor-service
         role: predictor-service
     spec:
+      nodeSelector:
+        kubernetes.io/arch: arm64
       automountServiceAccountToken: false
       securityContext:
         runAsUser: 10001
