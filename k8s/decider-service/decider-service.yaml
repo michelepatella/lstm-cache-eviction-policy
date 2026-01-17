@@ -19,6 +19,7 @@ spec:
       annotations:
         kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod
       labels:
+        cloud.google.com/compute-class: Scale-Out
         app: decider-service
         role: decider-service
     spec:
