@@ -44,13 +44,10 @@ jobs:
     steps:
       # Download the rendered k8s manifests
       # produced during CI
-      - name: Download rendered k8s manifests
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ vars.K8S_RENDERED_ARTIFACTS_NAME }}
-          path: ${{ vars.K8S_RENDERED_ARTIFACTS_DIR }}
-          run-id: ${{ github.event.workflow_run.id }}
-          github-token: ${{ secrets.GIT_HUB_TOKEN }}
+      - name: Load rendered k8s manifests from local runner storage
+        run: |
+          mkdir -p ${{ vars.K8S_RENDERED_ARTIFACTS_DIR }}
+          cp /home/runner/k8s_sharing/rendered.yaml ${{ vars.K8S_RENDERED_ARTIFACTS_DIR }}/${{ vars.K8S_RENDERED_FILE }}
 
       # Login to Google Cloud which hosts the API
       - name: Login to Google Cloud
@@ -139,6 +136,7 @@ jobs:
   # Deploy docs (needs 'Setup')
   # -----------------------------
   deploy_docs:
+    if: false
     runs-on: self-hosted
     needs: [setup, deploy_api]
     steps:
