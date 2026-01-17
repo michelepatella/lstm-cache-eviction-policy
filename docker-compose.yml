@@ -1,7 +1,6 @@
 services:
   api_gateway:
     image: ${CR_URL:-local}/api-gateway:${GITHUB_SHA:-latest}
-    platform: linux/amd64
     build:
       context: ./
       dockerfile: src/api/gateway/Dockerfile
@@ -25,7 +24,6 @@ services:
 
   featurizer_service:
     image: ${CR_URL:-local}/featurizer-service:${GITHUB_SHA:-latest}
-    platform: linux/amd64
     build:
       context: ./
       dockerfile: src/api/services/featurizer/Dockerfile
@@ -38,7 +36,6 @@ services:
 
   predictor_service:
     image: ${CR_URL:-local}/predictor-service:${GITHUB_SHA:-latest}
-    platform: linux/amd64
     build:
       context: ./
       dockerfile: src/api/services/predictor/Dockerfile
@@ -54,7 +51,6 @@ services:
 
   scorer_service:
     image: ${CR_URL:-local}/scorer-service:${GITHUB_SHA:-latest}
-    platform: linux/amd64
     build:
       context: ./
       dockerfile: src/api/services/scorer/Dockerfile
@@ -67,7 +63,6 @@ services:
 
   decider_service:
     image: ${CR_URL:-local}/decider-service:${GITHUB_SHA:-latest}
-    platform: linux/amd64
     build:
       context: ./
       dockerfile: src/api/services/decider/Dockerfile

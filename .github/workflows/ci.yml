@@ -180,7 +180,7 @@ jobs:
           for img_name in ${{ vars.DOCKER_SERVICES }}; do
             img_name_normalized=$(echo "$img_name" | tr '_' '-')
             full_img="${{ vars.CR_URL }}/$img_name_normalized:${{ github.sha }}"
-            DOCKER_DEFAULT_PLATFORM=linux/amd64 docker compose build "$img_name"
+            docker compose build "$img_name"
             trivy image \
               --exit-code ${{ vars.TRIVY_EXIT_CODE }} \
               --severity ${{ vars.TRIVY_SEVERITY }} \
@@ -248,8 +248,6 @@ jobs:
   # ----------------------------------------
   build:
     runs-on: self-hosted
-    env:
-      DOCKER_DEFAULT_PLATFORM: linux/amd64
     needs: [setup, static_analysis, security_scan]
     steps:
       # Login to all registries storing the containers
