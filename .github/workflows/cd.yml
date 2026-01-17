@@ -15,7 +15,7 @@ on:
 # - Setup:
 #     Checkout the repository on the current branch.
 # - Deploy API (needs 'Setup'):
-#     Deploy the API to k8s on Azure and test it (automatic
+#     Deploy the API to k8s on Google Cloud (GKE) and test it (automatic
 #     rollback if any of these two steps failed).
 # - Deploy docs (needs 'Setup'):
 #     Deploy documentation to GitHub Pages.
@@ -52,19 +52,24 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GIT_HUB_TOKEN }}
 
-      # Login to Azure which hosts the API
-      - name: Login to Azure
-        uses: azure/login@v2
+      # Login to Google Cloud which hosts the API
+      - name: Login to Google Cloud
+        uses: google-github-actions/auth@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      # Set the AKS context where the
+      # Set up Cloud SDK
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      # Set the GKE context where the
       # API is deployed
-      - name: Set AKS context
-        uses: azure/aks-set-context@v3
+      - name: Set GKE credentials
+        uses: google-github-actions/get-gke-credentials@v2
         with:
-          resource-group: ${{ secrets.AZURE_RESOURCE_GROUP }}
-          cluster-name: ${{ secrets.AKS_CLUSTER_NAME }}
+          cluster_name: ${{ vars.GKE_CLUSTER_NAME }}
+          location: ${{ vars.GCP_REGION }}
+          project_id: ${{ vars.GCP_PROJECT_ID }}
 
       # Deploy the API to k8s with automatic
       # rollback if any error occurred

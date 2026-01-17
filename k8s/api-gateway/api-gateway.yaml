@@ -18,9 +18,6 @@ spec:
     metadata:
       annotations:
         kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8000"
-        prometheus.io/path: "/metrics"
       labels:
         app: api-gateway
         role: api-gateway
@@ -33,7 +30,7 @@ spec:
         fsGroup: 2000
       containers:
       - name: api-gateway
-        image: lstmcacheevictionpolicy.azurecr.io/api-gateway:PLACEHOLDER_SHA
+        image: europe-west8-docker.pkg.dev/lstm-cache-eviction-policy/lstm-cache-eviction-policy-cr/api-gateway:PLACEHOLDER_SHA
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
@@ -75,19 +72,17 @@ spec:
             type: RuntimeDefault
         resources:
           requests:
-            cpu: "100m"
-            memory: "256Mi"
+            cpu: "250m"
+            memory: "512Mi"
             ephemeral-storage: "100Mi"
           limits:
-            cpu: "500m"
+            cpu: "250m"
             memory: "512Mi"
-            ephemeral-storage: "500Mi"
+            ephemeral-storage: "100Mi"
       volumes:
       - name: api-gateway-secrets
         secret:
           secretName: api-gateway-secrets
-      imagePullSecrets:
-        - name: acr-secret
 ---
 apiVersion: v1
 kind: Service

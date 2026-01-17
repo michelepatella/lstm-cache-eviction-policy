@@ -21,8 +21,12 @@ WORKDIR /home/runner
 # Install Docker
 RUN curl -fsSL https://get.docker.com | sh
 
-# Install Azure CLI
-RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+# Install Google Cloud SDK
+RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | \
+    tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
+    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | \
+    gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && \
+    apt-get update -y && apt-get install google-cloud-cli google-cloud-cli-gke-gcloud-auth-plugin -y
 
 # Install kubectl
 ENV KUBECTL_VERSION=1.28.0
@@ -57,7 +61,7 @@ RUN curl -sLo trivy.tar.gz https://github.com/aquasecurity/trivy/releases/downlo
 
 # Install yq
 ENV YQ_VERSION=4.45.1
-RUN wget https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64 -O /usr/local/bin/yq \
+RUN wget https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_arm64 -O /usr/local/bin/yq \
     && chmod +x /usr/local/bin/yq
 
 # Install GitHub Actions Runner

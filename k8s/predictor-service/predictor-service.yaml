@@ -30,7 +30,7 @@ spec:
         fsGroup: 2000
       containers:
       - name: predictor-service
-        image: lstmcacheevictionpolicy.azurecr.io/predictor-service:PLACEHOLDER_SHA
+        image: europe-west8-docker.pkg.dev/lstm-cache-eviction-policy/lstm-cache-eviction-policy-cr/predictor-service:PLACEHOLDER_SHA
         imagePullPolicy: Always
         ports:
         - containerPort: 8002
@@ -85,17 +85,15 @@ spec:
             memory: "1Gi"
             ephemeral-storage: "100Mi"
           limits:
-            cpu: "2"
-            memory: "2Gi"
-            ephemeral-storage: "500Mi"
+            cpu: "500m"
+            memory: "1Gi"
+            ephemeral-storage: "100Mi"
       volumes:
       - name: predictor-service-secrets
         secret:
           secretName: predictor-service-secrets
       - name: tmp
         emptyDir: { }
-      imagePullSecrets:
-        - name: acr-secret
 ---
 apiVersion: v1
 kind: Service

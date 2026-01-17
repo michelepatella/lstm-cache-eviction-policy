@@ -30,7 +30,7 @@ spec:
         fsGroup: 2000
       containers:
       - name: decider-service
-        image: lstmcacheevictionpolicy.azurecr.io/decider-service:PLACEHOLDER_SHA
+        image: europe-west8-docker.pkg.dev/lstm-cache-eviction-policy/lstm-cache-eviction-policy-cr/decider-service:PLACEHOLDER_SHA
         imagePullPolicy: Always
         ports:
         - containerPort: 8004
@@ -66,15 +66,13 @@ spec:
             type: RuntimeDefault
         resources:
           requests:
-            cpu: "100m"
-            memory: "256Mi"
+            cpu: "250m"
+            memory: "512Mi"
             ephemeral-storage: "100Mi"
           limits:
-            cpu: "500m"
+            cpu: "250m"
             memory: "512Mi"
-            ephemeral-storage: "500Mi"
-      imagePullSecrets:
-        - name: acr-secret
+            ephemeral-storage: "100Mi"
 ---
 apiVersion: v1
 kind: Service

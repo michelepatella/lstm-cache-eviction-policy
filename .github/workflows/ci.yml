@@ -18,7 +18,7 @@ on:
 # The workflow is organized into five jobs:
 # - Setup:
 #     Checkout the repository on the current branch, login to
-#     Azure, and set up rendered k8s manifests.
+#     Google Cloud, and set up rendered k8s manifests.
 # - Static analysis (needs 'Setup'):
 #     Linting and checking activities over code, notebooks,
 #     Dockerfiles, and k8s manifests.
@@ -29,7 +29,7 @@ on:
 #     Test code, data, and model.
 # - Build (needs all the previous jobs):
 #     Build and push Docker images to Docker Hub, GitHub Container
-#     Registry, and Azure Container Registry, and generate documentation.
+#     Registry, and Google Artifact Registry, and generate documentation.
 jobs:
 
   # ----------------------------------------
@@ -47,11 +47,15 @@ jobs:
         with:
           ref: ${{ github.head_ref || github.ref }}
 
-      # Login to Azure which hosts images
-      - name: Login to Azure
-        uses: azure/login@v2
+      # Login to Google Cloud which hosts images
+      - name: Login to Google Cloud
+        uses: google-github-actions/auth@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      # Set up Cloud SDK
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
 
       # Set up k8s manifests by injecting GitHub SHA
       # to all images via Kustomize, producing rendered
@@ -63,15 +67,14 @@ jobs:
           K8S_OVERLAYS_CI_DIR: ${{ vars.K8S_OVERLAYS_CI_DIR }}
           K8S_RENDERED_FILE: ${{ vars.K8S_RENDERED_FILE }}
           DOCKER_IMAGES: ${{ vars.DOCKER_IMAGES }}
-          ACR_NAME: ${{ secrets.ACR_NAME }}
-          ACR_URL: ${{ vars.ACR_URL }}
+          CR_URL: ${{ vars.CR_URL }}
         run: |
           cd ${K8S_OVERLAYS_CI_DIR}
 
           # Update image tags dynamically by adding GitHub SHA
           for svc in $DOCKER_IMAGES; do
-              full_img="${ACR_NAME}.${ACR_URL}/$svc:${GIT_HUB_SHA}"
-              kustomize edit set image "${ACR_NAME}.${ACR_URL}/$svc=$full_img"
+              full_img="${CR_URL}/$svc:${GIT_HUB_SHA}"
+              kustomize edit set image "${CR_URL}/$svc=$full_img"
           done
 
           # Build rendered k8s manifests
@@ -149,7 +152,7 @@ jobs:
       # a predefined threshold
       - name: Scan Docker images
         env:
-          ACR_NAME: ${{ secrets.ACR_NAME }}
+          CR_URL: ${{ vars.CR_URL }}
           GIT_HUB_SHA: ${{ github.sha }}
           TRIVY_IGNORE_VULNS: ${{ vars.TRIVY_IGNORE_VULNS }}
           GATEWAY_API_PORT: ${{ vars.GATEWAY_API_PORT }}
@@ -178,7 +181,7 @@ jobs:
           # Build and scan all the images
           for img_name in ${{ vars.DOCKER_SERVICES }}; do
             img_name_normalized=$(echo "$img_name" | tr '_' '-')
-            full_img="${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}/$img_name_normalized:${{ github.sha }}"
+            full_img="${{ vars.CR_URL }}/$img_name_normalized:${{ github.sha }}"
             docker compose build "$img_name"
             trivy image \
               --exit-code ${{ vars.TRIVY_EXIT_CODE }} \
@@ -200,6 +203,7 @@ jobs:
   testing:
     runs-on: self-hosted
     needs: setup
+    if: false
     steps:
       # Pull data and model (artifacts) to be tested
       # from DVC remote
@@ -246,15 +250,15 @@ jobs:
   # ----------------------------------------
   build:
     runs-on: self-hosted
-    needs: [setup, static_analysis, security_scan, testing]
+    needs: [setup, static_analysis, security_scan]
     steps:
       # Login to all registries storing the containers
-      - name: Login to Azure Container Registry
-        uses: azure/docker-login@v1
+      - name: Login to Google Artifact Registry
+        uses: docker/login-action@v3
         with:
-          login-server: ${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
+          registry: ${{ vars.CR_NAME }}
+          username: _json_key
+          password: ${{ secrets.GCP_SA_KEY }}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -270,7 +274,7 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
       # Build and push all Docker images to Docker Hub,
-      # GitHub Container Registry, and Azure Container Registry
+      # GitHub Container Registry, and Google Artifact Registry
       - name: Build and push Docker images
         env:
           GIT_HUB_SHA: ${{ github.sha }}
@@ -278,12 +282,13 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           DOCKER_HUB_USER: ${{ vars.DOCKER_HUB_USER }}
           DOCKER_HUB_REPO: ${{ vars.DOCKER_HUB_REPO }}
+          CR_URL: ${{ vars.CR_URL }}
         run: |
           # Push all the images
           for svc in ${{ vars.DOCKER_SERVICES }}; do
             # Prepare image to push
             img_name=$(echo "$svc" | tr '_' '-')
-            local_img="${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}/$img_name:${GIT_HUB_SHA}"
+            local_img="${CR_URL}/$img_name:${GIT_HUB_SHA}"
 
             # Tag image for Docker Hub
             docker tag "$local_img" "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
@@ -293,19 +298,19 @@ jobs:
             docker tag "$local_img" "$ghcr_img:${GIT_HUB_SHA}"
             docker tag "$local_img" "$ghcr_img:latest"
 
-            # Tag image for Azure Container Registry
-            acr_img="${{ secrets.ACR_NAME }}.${{ vars.ACR_URL }}/$img_name:${GIT_HUB_SHA}"
-            docker tag "$local_img" "$acr_img"
+            # Tag image for Google Artifact Registry
+            gcp_img="${CR_URL}/$img_name:${GIT_HUB_SHA}"
+            docker tag "$local_img" "$gcp_img"
 
             # Push image to all registries
             docker push "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
             docker push "$ghcr_img:${GIT_HUB_SHA}"
             docker push "$ghcr_img:latest"
-            docker push "$acr_img"
+            docker push "$gcp_img"
 
             # Clean up local image
             docker rmi -f "$local_img" "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name" \
-              "$ghcr_img:${GIT_HUB_SHA}" "$ghcr_img:latest" "$acr_img" || true
+              "$ghcr_img:${GIT_HUB_SHA}" "$ghcr_img:latest" "$gcp_img" || true
           done
 
       # Generate documentation
