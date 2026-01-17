@@ -293,11 +293,16 @@ jobs:
             local_img="${CR_URL}/$img_name:${GIT_HUB_SHA}"
 
             # Build image
+            if [ "$img_name" = "api-gateway" ]; then
+              DOCKERFILE_PATH="src/api/gateway/Dockerfile"
+            else
+              DOCKERFILE_PATH="src/api/services/$img_name/Dockerfile"
+            fi
             docker buildx build \
               --platform linux/amd64 \
               -t "$local_img" \
               --load \
-              -f src/api/services/$img_name/Dockerfile .
+              -f "$DOCKERFILE_PATH" .
 
             # Tag image for Docker Hub
             docker tag "$local_img" "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
