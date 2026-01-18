@@ -7,6 +7,16 @@ services:
       - prometheus_data:/prometheus
     ports:
       - "${PROMETHEUS_PORT}:${PROMETHEUS_PORT}"
+    depends_on:
+      - alertmanager
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    volumes:
+      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+    ports:
+      - "${ALERT_MANAGER_PORT}:${ALERT_MANAGER_PORT}"
 
   grafana:
     image: grafana/grafana:latest
