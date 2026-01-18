@@ -17,5 +17,10 @@ images:
   - name: europe-west4-docker.pkg.dev/lstm-cache-eviction-policy/lstm-cache-eviction-policy-cr/scorer-service
     newTag: PLACEHOLDER_SHA
 
-commonLabels:
-  cloud.google.com/compute-class: Scale-Out
+patches:
+  - target:
+      kind: Deployment
+    patch: |-
+      - op: add
+        path: /spec/template/metadata/labels/cloud.google.com~1compute-class
+        value: Scale-Out
