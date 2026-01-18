@@ -1,0 +1,65 @@
+groups:
+  - name: api_alerts
+    rules:
+      - alert: HighAPILatency
+        expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le)) > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Total API latency (p95) > 5s"
+      - alert: LowHTTPSuccessRate
+        expr: 100 * (1 - sum(rate(http_requests_total{status=~"2.."}[5m])) / sum(rate(http_requests_total[5m]))) > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "HTTP Success Rate (%) < 95%"
+
+  - name: service_alerts
+    rules:
+      - alert: FeaturizerHighLatency
+        expr: histogram_quantile(0.95, sum(rate(featurizer_latency_seconds_bucket[5m])) by (le)) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Featurizer latency (p95) > 1s"
+      - alert: PredictorHighLatency
+        expr: histogram_quantile(0.95, sum(rate(predictor_latency_seconds_bucket[5m])) by (le)) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Predictor latency (p95) > 2s"
+      - alert: ScorerHighLatency
+        expr: histogram_quantile(0.95, sum(rate(scorer_latency_seconds_bucket[5m])) by (le)) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Scorer latency (p95) > 1s"
+      - alert: DeciderHighLatency
+        expr: histogram_quantile(0.95, sum(rate(decider_latency_seconds_bucket[5m])) by (le)) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Decider latency (p95) > 1s"
+
+  - name: infra_alerts
+    rules:
+      - alert: HighCPUUsage
+        expr: 100 * (1 - sum(node_cpu_seconds_total{mode="idle"}) / sum(node_cpu_seconds_total)) > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Cluster CPU Usage (%) > 85%"
+      - alert: HighMemoryUsage
+        expr: 100 * (1 - sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes)) > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Cluster Memory Usage (%) > 85%"
