@@ -6,13 +6,13 @@ resources:
   - ../../scorer-service
 
 images:
-  - name: europe-west8-docker.pkg.dev/lstm-cache-eviction-policy/lstm-cache-eviction-policy-cr/api-gateway
+  - name: europe-west4-docker.pkg.dev/lstm-cache-eviction-policy/lstm-cache-eviction-policy-cr/api-gateway
     newTag: PLACEHOLDER_SHA
-  - name: europe-west8-docker.pkg.dev/lstm-cache-eviction-policy/lstm-cache-eviction-policy-cr/decider-service
+  - name: europe-west4-docker.pkg.dev/lstm-cache-eviction-policy/lstm-cache-eviction-policy-cr/decider-service
     newTag: PLACEHOLDER_SHA
-  - name: europe-west8-docker.pkg.dev/lstm-cache-eviction-policy/lstm-cache-eviction-policy-cr/featurizer-service
+  - name: europe-west4-docker.pkg.dev/lstm-cache-eviction-policy/lstm-cache-eviction-policy-cr/featurizer-service
     newTag: PLACEHOLDER_SHA
-  - name: europe-west8-docker.pkg.dev/lstm-cache-eviction-policy/lstm-cache-eviction-policy-cr/predictor-service
+  - name: europe-west4-docker.pkg.dev/lstm-cache-eviction-policy/lstm-cache-eviction-policy-cr/predictor-service
     newTag: PLACEHOLDER_SHA
-  - name: europe-west8-docker.pkg.dev/lstm-cache-eviction-policy/lstm-cache-eviction-policy-cr/scorer-service
+  - name: europe-west4-docker.pkg.dev/lstm-cache-eviction-policy/lstm-cache-eviction-policy-cr/scorer-service
     newTag: PLACEHOLDER_SHA

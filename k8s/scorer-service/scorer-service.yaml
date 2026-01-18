@@ -19,9 +19,12 @@ spec:
       annotations:
         kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod
       labels:
+        cloud.google.com/compute-class: Scale-Out
         app: scorer-service
         role: scorer-service
     spec:
+      nodeSelector:
+        kubernetes.io/arch: arm64
       automountServiceAccountToken: false
       securityContext:
         runAsUser: 10001
@@ -30,7 +33,7 @@ spec:
         fsGroup: 2000
       containers:
       - name: scorer-service
-        image: europe-west8-docker.pkg.dev/lstm-cache-eviction-policy/lstm-cache-eviction-policy-cr/scorer-service:PLACEHOLDER_SHA
+        image: europe-west4-docker.pkg.dev/lstm-cache-eviction-policy/lstm-cache-eviction-policy-cr/scorer-service:PLACEHOLDER_SHA
         imagePullPolicy: Always
         ports:
         - containerPort: 8003
