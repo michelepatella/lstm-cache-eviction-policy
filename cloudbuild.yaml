@@ -3,14 +3,19 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-f', 'src/api/gateway/Dockerfile', '-t', '${_CR_URL}/api-gateway:${_GIT_HUB_SHA}', '.']
+    waitFor: ['-']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-f', 'src/api/services/decider/Dockerfile', '-t', '${_CR_URL}/decider-service:${_GIT_HUB_SHA}', '.']
+    waitFor: ['-']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-f', 'src/api/services/featurizer/Dockerfile', '-t', '${_CR_URL}/featurizer-service:${_GIT_HUB_SHA}', '.']
+    waitFor: ['-']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-f', 'src/api/services/predictor/Dockerfile', '-t', '${_CR_URL}/predictor-service:${_GIT_HUB_SHA}', '.']
+    waitFor: ['-']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-f', 'src/api/services/scorer/Dockerfile', '-t', '${_CR_URL}/scorer-service:${_GIT_HUB_SHA}', '.']
+    waitFor: ['-']
 
 images:
   - '${_CR_URL}/api-gateway:${_GIT_HUB_SHA}'
@@ -21,3 +26,4 @@ images:
 
 options:
   logging: CLOUD_LOGGING_ONLY
+  machineType: 'E2_HIGHCPU_8'

@@ -291,23 +291,23 @@ jobs:
           for svc in ${{ vars.DOCKER_SERVICES }}; do
             img_name=$(echo "$svc" | tr '_' '-')
             gcp_img="${CR_URL}/$img_name:${GIT_HUB_SHA}"
-      
+                    
             # Pull image from Google Registry
-            docker pull "$gcp_img"
-      
+            docker pull --platform linux/amd64 "$gcp_img"
+          
             # Tag for Docker Hub
             docker tag "$gcp_img" "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
-      
+          
             # Tag for GitHub Container Registry
             ghcr_img="${GIT_HUB_REGISTRY}/${GITHUB_REPOSITORY}/$img_name"
             docker tag "$gcp_img" "$ghcr_img:${GIT_HUB_SHA}"
             docker tag "$gcp_img" "$ghcr_img:latest"
-      
+          
             # Push to other registries
             docker push "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
             docker push "$ghcr_img:${GIT_HUB_SHA}"
             docker push "$ghcr_img:latest"
-      
+          
             # Clean up
             docker rmi "$gcp_img" "$ghcr_img:${GIT_HUB_SHA}" "$ghcr_img:latest" || true
           done
