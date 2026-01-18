@@ -19,12 +19,12 @@ spec:
       annotations:
         kube-score/ignore: pod-networkpolicy,networkpolicy-targets-pod
       labels:
-        cloud.google.com/compute-class: Scale-Out
         app: scorer-service
         role: scorer-service
     spec:
       nodeSelector:
         kubernetes.io/arch: arm64
+        cloud.google.com/compute-class: Scale-Out
       automountServiceAccountToken: false
       securityContext:
         runAsUser: 10001
