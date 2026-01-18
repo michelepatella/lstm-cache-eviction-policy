@@ -22,9 +22,6 @@ spec:
         app: api-gateway
         role: api-gateway
     spec:
-      nodeSelector:
-        kubernetes.io/arch: arm64
-        cloud.google.com/compute-class: Scale-Out
       automountServiceAccountToken: false
       securityContext:
         runAsUser: 10001

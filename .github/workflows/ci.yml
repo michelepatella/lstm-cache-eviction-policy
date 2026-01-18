@@ -271,9 +271,14 @@ jobs:
           username: ${{ vars.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-      # Build and push all Docker images to Docker Hub,
-      # GitHub Container Registry, and Google Artifact Registry
-      - name: Build and push Docker images
+      # Build images remotely via Cloud Build to save local resources
+      - name: Build Docker images via Google Cloud Build
+        run: |
+          gcloud builds submit --config ${{ vars.CLOUD_BUILD_FILE_PATH }} \
+            --substitutions=_CR_URL=${{ vars.CR_URL }},_GIT_HUB_SHA=${{ github.sha }} .
+
+      # Pull from Google Registry and push to other registries
+      - name: Distribute Docker images to other registries
         env:
           GIT_HUB_SHA: ${{ github.sha }}
           GIT_HUB_REGISTRY: ${{ vars.GIT_HUB_REGISTRY }}
@@ -282,33 +287,28 @@ jobs:
           DOCKER_HUB_REPO: ${{ vars.DOCKER_HUB_REPO }}
           CR_URL: ${{ vars.CR_URL }}
         run: |
-          # Push all the images
           for svc in ${{ vars.DOCKER_SERVICES }}; do
-            # Prepare image to push
             img_name=$(echo "$svc" | tr '_' '-')
-            local_img="${CR_URL}/$img_name:${GIT_HUB_SHA}"
-
-            # Tag image for Docker Hub
-            docker tag "$local_img" "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
-
-            # Tag image for GitHub Container Registry
-            ghcr_img="${GIT_HUB_REGISTRY}/${GITHUB_REPOSITORY}/$img_name"
-            docker tag "$local_img" "$ghcr_img:${GIT_HUB_SHA}"
-            docker tag "$local_img" "$ghcr_img:latest"
-
-            # Tag image for Google Artifact Registry
             gcp_img="${CR_URL}/$img_name:${GIT_HUB_SHA}"
-            docker tag "$local_img" "$gcp_img"
-
-            # Push image to all registries
+      
+            # Pull image from Google Registry
+            docker pull "$gcp_img"
+      
+            # Tag for Docker Hub
+            docker tag "$gcp_img" "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
+      
+            # Tag for GitHub Container Registry
+            ghcr_img="${GIT_HUB_REGISTRY}/${GITHUB_REPOSITORY}/$img_name"
+            docker tag "$gcp_img" "$ghcr_img:${GIT_HUB_SHA}"
+            docker tag "$gcp_img" "$ghcr_img:latest"
+      
+            # Push to other registries
             docker push "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
             docker push "$ghcr_img:${GIT_HUB_SHA}"
             docker push "$ghcr_img:latest"
-            docker push "$gcp_img"
-
-            # Clean up local image
-            docker rmi -f "$local_img" "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name" \
-              "$ghcr_img:${GIT_HUB_SHA}" "$ghcr_img:latest" "$gcp_img" || true
+      
+            # Clean up
+            docker rmi "$gcp_img" "$ghcr_img:${GIT_HUB_SHA}" "$ghcr_img:latest" || true
           done
 
       # Generate documentation

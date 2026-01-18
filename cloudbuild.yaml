@@ -1,0 +1,23 @@
+# Google Cloud Build configuration:
+# Build and push Docker images to Google Artifact Registry
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', '${_CR_URL}/api-gateway:${_GIT_HUB_SHA}', 'src/api/gateway']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', '${_CR_URL}/decider-service:${_GIT_HUB_SHA}', 'src/api/services/decider']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', '${_CR_URL}/featurizer-service:${_GIT_HUB_SHA}', 'src/api/services/featurizer']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', '${_CR_URL}/predictor-service:${_GIT_HUB_SHA}', 'src/api/services/predictor']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', '${_CR_URL}/scorer-service:${_GIT_HUB_SHA}', 'src/api/services/scorer']
+
+images:
+  - '${_CR_URL}/api-gateway:${_GIT_HUB_SHA}'
+  - '${_CR_URL}/decider-service:${_GIT_HUB_SHA}'
+  - '${_CR_URL}/featurizer-service:${_GIT_HUB_SHA}'
+  - '${_CR_URL}/predictor-service:${_GIT_HUB_SHA}'
+  - '${_CR_URL}/scorer-service:${_GIT_HUB_SHA}'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
