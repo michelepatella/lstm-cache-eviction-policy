@@ -292,24 +292,25 @@ jobs:
             img_name=$(echo "$svc" | tr '_' '-')
             gcp_img="${CR_URL}/$img_name:${GIT_HUB_SHA}"
                     
-            # Pull image from Google Registry
+            # Pull image from Google Registry forcing AMD64
             docker pull --platform linux/amd64 "$gcp_img"
           
-            # Tag for Docker Hub
-            docker tag "$gcp_img" "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
-          
-            # Tag for GitHub Container Registry
+            # Create unique local tags to break the manifest link
+            hub_img="$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
             ghcr_img="${GIT_HUB_REGISTRY}/${GITHUB_REPOSITORY}/$img_name"
+
+            # Tagging
+            docker tag "$gcp_img" "$hub_img"
             docker tag "$gcp_img" "$ghcr_img:${GIT_HUB_SHA}"
             docker tag "$gcp_img" "$ghcr_img:latest"
           
             # Push to other registries
-            docker push "$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
+            docker push "$hub_img"
             docker push "$ghcr_img:${GIT_HUB_SHA}"
             docker push "$ghcr_img:latest"
           
             # Clean up
-            docker rmi "$gcp_img" "$ghcr_img:${GIT_HUB_SHA}" "$ghcr_img:latest" || true
+            docker rmi "$gcp_img" "$hub_img" "$ghcr_img:${GIT_HUB_SHA}" "$ghcr_img:latest" || true
           done
 
       # Generate documentation
