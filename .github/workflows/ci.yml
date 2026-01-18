@@ -271,10 +271,11 @@ jobs:
           username: ${{ vars.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-      # Build images remotely via Cloud Build to save local resources
+      # Build images remotely via Cloud Build
       - name: Build Docker images via Google Cloud Build
         run: |
           gcloud builds submit --config ${{ vars.CLOUD_BUILD_FILE_PATH }} \
+            --project=${{ vars.GCP_PROJECT_ID }} \
             --substitutions=_CR_URL=${{ vars.CR_URL }},_GIT_HUB_SHA=${{ github.sha }} .
 
       # Pull from Google Registry and push to other registries
