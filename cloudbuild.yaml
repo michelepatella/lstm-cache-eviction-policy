@@ -2,15 +2,15 @@
 # Build and push Docker images to Google Artifact Registry
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', '${_CR_URL}/api-gateway:${_GIT_HUB_SHA}', 'src/api/gateway']
+    args: ['build', '-f', 'src/api/gateway/Dockerfile', '-t', '${_CR_URL}/api-gateway:${_GIT_HUB_SHA}', '.']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', '${_CR_URL}/decider-service:${_GIT_HUB_SHA}', 'src/api/services/decider']
+    args: ['build', '-f', 'src/api/services/decider/Dockerfile', '-t', '${_CR_URL}/decider-service:${_GIT_HUB_SHA}', '.']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', '${_CR_URL}/featurizer-service:${_GIT_HUB_SHA}', 'src/api/services/featurizer']
+    args: ['build', '-f', 'src/api/services/featurizer/Dockerfile', '-t', '${_CR_URL}/featurizer-service:${_GIT_HUB_SHA}', '.']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', '${_CR_URL}/predictor-service:${_GIT_HUB_SHA}', 'src/api/services/predictor']
+    args: ['build', '-f', 'src/api/services/predictor/Dockerfile', '-t', '${_CR_URL}/predictor-service:${_GIT_HUB_SHA}', '.']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', '${_CR_URL}/scorer-service:${_GIT_HUB_SHA}', 'src/api/services/scorer']
+    args: ['build', '-f', 'src/api/services/scorer/Dockerfile', '-t', '${_CR_URL}/scorer-service:${_GIT_HUB_SHA}', '.']
 
 images:
   - '${_CR_URL}/api-gateway:${_GIT_HUB_SHA}'
