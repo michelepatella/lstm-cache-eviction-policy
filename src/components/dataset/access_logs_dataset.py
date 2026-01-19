@@ -255,7 +255,7 @@ class AccessLogsDataset(Dataset):
                     raise RuntimeError(msg) from e
 
             # Save dataset
-            save_dataset(df, DATASET_REAL_PROCESSED_FILE_PATH)
+            save_dataset(df, DATASET_REAL_PROCESSED_FILE_PATH, append=True)
 
             # Update retraining config
             retraining_checkpoint.last_timestamp = current_timestamp
