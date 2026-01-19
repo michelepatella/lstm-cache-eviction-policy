@@ -287,6 +287,21 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           DOCKER_HUB_USER: ${{ vars.DOCKER_HUB_USER }}
           DOCKER_HUB_REPO: ${{ vars.DOCKER_HUB_REPO }}
+          GATEWAY_API_PORT: ${{ vars.GATEWAY_API_PORT }}
+          DECIDER_SERVICE_PORT: ${{ vars.DECIDER_SERVICE_PORT }}
+          DECIDER_SERVICE_CHANNEL: ${{ vars.DECIDER_SERVICE_CHANNEL }}
+          FEATURIZER_SERVICE_PORT: ${{ vars.FEATURIZER_SERVICE_PORT }}
+          FEATURIZER_SERVICE_CHANNEL: ${{ vars.FEATURIZER_SERVICE_CHANNEL }}
+          PREDICTOR_SERVICE_PORT: ${{ vars.PREDICTOR_SERVICE_PORT }}
+          PREDICTOR_SERVICE_CHANNEL: ${{ vars.PREDICTOR_SERVICE_CHANNEL }}
+          SCORER_SERVICE_PORT: ${{ vars.SCORER_SERVICE_PORT }}
+          SCORER_SERVICE_CHANNEL: ${{ vars.SCORER_SERVICE_CHANNEL }}
+          GRAFANA_LOKI_URL: ${{ vars.GRAFANA_LOKI_URL }}
+          GRAFANA_LOKI_USER_ID: ${{ vars.GRAFANA_LOKI_USER_ID }}
+          GRAFANA_LOKI_TOKEN: ${{ vars.GRAFANA_LOKI_TOKEN }}
+          MLFLOW_TRACKING_URI: ${{ vars.MLFLOW_TRACKING_URI }}
+          DAGS_HUB_REPO_OWNER: ${{ vars.DAGS_HUB_REPO_OWNER }}
+          DAGS_HUB_TOKEN: ${{ vars.DAGS_HUB_TOKEN }}
         run: |
           for svc in ${{ vars.DOCKER_SERVICES }}; do
             img_name=$(echo "$svc" | tr '_' '-')
