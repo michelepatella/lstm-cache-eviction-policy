@@ -24,7 +24,9 @@ on:
 #     - Set environment variables:
 #         Load and set environment variables required.
 #     - Retrain model:
-#         Retrain the model.
+#         Retrain the model on new data.
+#     - Upload test reports:
+#         Upload test reports as artifact.
 jobs:
 
   # ----------------------------------------
@@ -58,3 +60,11 @@ jobs:
       - name: Retrain model
         run: |
           make dvc_pipeline_stage_run STAGE_NAME=training
+
+      # Upload test reports as artifact
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ vars.TEST_REPORT_ARTIFACTS_NAME }}
+          path: ${{ vars.TEST_REPORTS_DIR }}

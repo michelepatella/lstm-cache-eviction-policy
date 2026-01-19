@@ -230,6 +230,9 @@ class AccessLogsDataset(Dataset):
             )
             shift_dataset_column(df, DATASET_COLUMN_REQUEST_NAME, 1)
 
+            # Save dataset
+            save_dataset(df, DATASET_REAL_PROCESSED_FILE_PATH, append=True)
+
             # Run after data preprocessing tests
             try:
                 import pytest
@@ -253,9 +256,6 @@ class AccessLogsDataset(Dataset):
                         },
                     )
                     raise RuntimeError(msg) from e
-
-            # Save dataset
-            save_dataset(df, DATASET_REAL_PROCESSED_FILE_PATH, append=True)
 
             # Update retraining config
             retraining_checkpoint.last_timestamp = current_timestamp

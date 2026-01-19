@@ -1,8 +1,12 @@
+alibi-detect==0.13.0
 cachetools==6.2.2
 dagshub==0.6.3
+deepchecks==0.19.1
 fastapi==0.124.2
+great_expectations==1.8.1
 grpcio==1.76.0
 grpcio-tools==1.76.0
+locust==2.43.0
 matplotlib==3.10.6
 mlflow==3.4.0
 numpy==1.26.4
@@ -12,6 +16,7 @@ prometheus-fastapi-instrumentator==7.1.0
 protobuf==6.32.1
 pydantic==2.12.5
 PyYAML==6.0.3
+pytest==9.0.1
 python-box==7.3.2
 python-dotenv==1.1.0
 ray==2.52.1
