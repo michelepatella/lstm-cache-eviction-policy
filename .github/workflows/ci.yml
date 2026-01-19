@@ -278,46 +278,40 @@ jobs:
             --project=${{ vars.GCP_PROJECT_ID }} \
             --substitutions=_CR_URL=${{ vars.CR_URL }},_GIT_HUB_SHA=${{ github.sha }} .
 
-      # Pull from Google Registry and push to other registries
-      - name: Distribute Docker images to other registries
+      # Distribute images to other registries
+      # (Docker Registry and GitHub Registry)
+      - name: Distribute images to other registries
         env:
           GIT_HUB_SHA: ${{ github.sha }}
           GIT_HUB_REGISTRY: ${{ vars.GIT_HUB_REGISTRY }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           DOCKER_HUB_USER: ${{ vars.DOCKER_HUB_USER }}
           DOCKER_HUB_REPO: ${{ vars.DOCKER_HUB_REPO }}
-          CR_URL: ${{ vars.CR_URL }}
         run: |
           for svc in ${{ vars.DOCKER_SERVICES }}; do
             img_name=$(echo "$svc" | tr '_' '-')
-            gcp_img="${CR_URL}/$img_name:${GIT_HUB_SHA}"
-                    
-            # Pull image from Google Registry forcing AMD64
-            docker pull --platform linux/amd64 "$gcp_img"
-            
-            # Get image id of the pulled AMD64 image
-            IMAGE_ID=$(docker images --no-trunc --quiet "$gcp_img" | head -n 1)
-          
-            # Create unique local tags to break the manifest link
+
+            # Build images
+            docker compose build "$svc"
+            local_img="${{ vars.CR_URL }}/$img_name:${GIT_HUB_SHA}"
+
             hub_img="$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
             ghcr_img="${GIT_HUB_REGISTRY}/${GITHUB_REPOSITORY}/$img_name"
-
-            # Tagging
-            docker tag "$IMAGE_ID" "$hub_img"
-            docker tag "$IMAGE_ID" "$ghcr_img:${GIT_HUB_SHA}"
-            docker tag "$IMAGE_ID" "$ghcr_img:latest"
-          
-            # Push to other registries
+            
+            # Tag images
+            docker tag "$local_img" "$hub_img"
+            docker tag "$local_img" "$ghcr_img:${GIT_HUB_SHA}"
+            docker tag "$local_img" "$ghcr_img:latest"
+            
+            # Push images
             docker push "$hub_img"
             docker push "$ghcr_img:${GIT_HUB_SHA}"
             docker push "$ghcr_img:latest"
-          
-            # Clean up
-            docker rmi "$gcp_img" "$hub_img" "$ghcr_img:${GIT_HUB_SHA}" "$ghcr_img:latest" || true
           done
 
       # Generate documentation
       - name: Build docs
+        if: false
         run: |
           PYTHONPATH=$(pwd)/${{ vars.SRC_DIR }} pdoc --html ${{ vars.SRC_DIR }}/ \
           --output-dir ${{ vars.DOCS_OUTPUT_DIR }} --force
