@@ -294,16 +294,18 @@ jobs:
                     
             # Pull image from Google Registry forcing AMD64
             docker pull --platform linux/amd64 "$gcp_img"
-            docker save "$gcp_img" | docker load
+            
+            # Get image id of the pulled AMD64 image
+            IMAGE_ID=$(docker images --no-trunc --quiet "$gcp_img" | head -n 1)
           
             # Create unique local tags to break the manifest link
             hub_img="$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
             ghcr_img="${GIT_HUB_REGISTRY}/${GITHUB_REPOSITORY}/$img_name"
 
             # Tagging
-            docker tag "$gcp_img" "$hub_img"
-            docker tag "$gcp_img" "$ghcr_img:${GIT_HUB_SHA}"
-            docker tag "$gcp_img" "$ghcr_img:latest"
+            docker tag "$IMAGE_ID" "$hub_img"
+            docker tag "$IMAGE_ID" "$ghcr_img:${GIT_HUB_SHA}"
+            docker tag "$IMAGE_ID" "$ghcr_img:latest"
           
             # Push to other registries
             docker push "$hub_img"
