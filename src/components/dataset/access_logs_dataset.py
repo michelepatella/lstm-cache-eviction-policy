@@ -24,6 +24,7 @@ from torch.utils.data import Dataset
 from components.const import (
     DATASET_PROCESSED_COLUMNS,
     DATASET_PROCESSED_FEATURE_COLUMNS,
+    DATASET_REAL_PROCESSED_FILE_PATH,
     DATASET_TARGET_COLUMN_SHIFT,
     LIST_LAST_IDX,
     LOGS_GRAFANA_LOKI_LOGS_URL,
@@ -39,6 +40,7 @@ from components.dataset.columns.shifter import (
 )
 from components.dataset.io.loader import load_dataset
 from components.dataset.io.locator import get_dataset_abs_path
+from components.dataset.io.saver import save_dataset
 from components.dataset.rows.calculations.effective_rows_calculator import (
     calculate_effective_dataset_rows,
 )
@@ -251,6 +253,9 @@ class AccessLogsDataset(Dataset):
                         },
                     )
                     raise RuntimeError(msg) from e
+
+            # Save dataset
+            save_dataset(df, DATASET_REAL_PROCESSED_FILE_PATH)
 
             # Update retraining config
             retraining_checkpoint.last_timestamp = current_timestamp
