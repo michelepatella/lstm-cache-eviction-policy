@@ -1,6 +1,6 @@
-# Continuous Training (CT): Automate model retraining ensuring
-# that the ML model stays up-to-date
-name: Continuous Training (CT)
+# Drift Detection: Check for any drift and trigger
+# Continuous Training (CT) if needed
+name: Drift Detection
 
 # Kill the current workflow if a
 # new one is triggered
@@ -8,29 +8,28 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Run the workflow on demand, every
-# monday at 3 a.m., or if triggered by drift detection
+# Run the workflow on demand and every day at midnight
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 3 * * 1'
-  repository_dispatch:
-    types: [continuous-training-trigger]
+    - cron: '0 0 * * *'
 
 # The workflow is organized into a single job:
-# - Retraining:
+# - Detect drift:
 #     - Checkout repository:
 #         Checkout the repository on the current branch.
 #     - Set environment variables:
 #         Load and set environment variables required.
-#     - Retrain model:
-#         Retrain the model.
+#     - Detect drift:
+#         Run the drift detection script.
+#     - Trigger CT workflow:
+#         Trigger the Continuous Training workflow if drift is detected.
 jobs:
 
   # ----------------------------------------
-  # Retraining
+  # Detect drift
   # ----------------------------------------
-  retraining:
+  drift_detection:
     runs-on: self-hosted
     steps:
       # Checkout the repository on
@@ -54,7 +53,17 @@ jobs:
           GRAFANA_LOKI_LOGS_URL: ${{ vars.GRAFANA_LOKI_LOGS_URL }}
         run: echo "Environment variables set"
 
-      # Retrain model
-      - name: Retrain model
+      # Check for any drift
+      - name: Detect drift
+        id: drift
         run: |
-          make dvc_pipeline_stage_run STAGE_NAME=training
+          RESULT=$(python "${{ vars.DRIFT_DETECTION_SCRIPT_PATH }}")
+          echo "DRIFT=$RESULT" >> $GITHUB_ENV
+
+      # Trigger Continuous Training workflow if drift detected
+      - name: Trigger CT workflow
+        if: env.DRIFT == 'true'
+        uses: peter-evans/repository-dispatch@v4
+        with:
+          event-type: continuous-training-trigger
+          client-payload: '{"ref":"main"}'
