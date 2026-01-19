@@ -278,7 +278,8 @@ jobs:
             --project=${{ vars.GCP_PROJECT_ID }} \
             --substitutions=_CR_URL=${{ vars.CR_URL }},_GIT_HUB_SHA=${{ github.sha }} .
 
-      # Pull from Google Registry and push to other registries
+      # Build and distribute images to other registries
+      # (Docker Registry and GitHub Registry)
       - name: Distribute Docker images to other registries
         env:
           GIT_HUB_SHA: ${{ github.sha }}
@@ -290,27 +291,27 @@ jobs:
         run: |
           for svc in ${{ vars.DOCKER_SERVICES }}; do
             img_name=$(echo "$svc" | tr '_' '-')
-            gcp_img="${CR_URL}/$img_name:${GIT_HUB_SHA}"
-                    
-            # Pull image from Google Registry forcing AMD64
-            docker pull --platform linux/amd64 "$gcp_img"
-          
-            # Create unique local tags to break the manifest link
+            local_img="$img_name:local"
+      
+            # Build image locally forcing AMD64
+            docker build -t "$local_img" "src/$svc"
+      
+            # Create tags for other registries
             hub_img="$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
             ghcr_img="${GIT_HUB_REGISTRY}/${GITHUB_REPOSITORY}/$img_name"
-
+      
             # Tagging
-            docker tag "$gcp_img" "$hub_img"
-            docker tag "$gcp_img" "$ghcr_img:${GIT_HUB_SHA}"
-            docker tag "$gcp_img" "$ghcr_img:latest"
-          
+            docker tag "$local_img" "$hub_img"
+            docker tag "$local_img" "$ghcr_img:${GIT_HUB_SHA}"
+            docker tag "$local_img" "$ghcr_img:latest"
+      
             # Push to other registries
             docker push "$hub_img"
             docker push "$ghcr_img:${GIT_HUB_SHA}"
             docker push "$ghcr_img:latest"
-          
+      
             # Clean up
-            docker rmi "$gcp_img" "$hub_img" "$ghcr_img:${GIT_HUB_SHA}" "$ghcr_img:latest" || true
+            docker rmi "$local_img" "$hub_img" "$ghcr_img:${GIT_HUB_SHA}" "$ghcr_img:latest" || true
           done
 
       # Generate documentation
