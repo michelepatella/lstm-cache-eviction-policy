@@ -1,5 +1,6 @@
-# Drift Detection: Check for any drift and trigger
-# Continuous Training (CT) if needed
+# Drift Detection: Check for any data, target,
+# and prediction drift and send an alert if any
+# drift detected
 name: Drift Detection
 
 # Kill the current workflow if a
@@ -24,8 +25,8 @@ on:
 #         Run the drift detection script.
 #     - Upload drift reports:
 #         Upload drift reports as artifact.
-#     - Trigger Continuous Training (CT) workflow:
-#         Trigger the Continuous Training (CT) workflow if drift is detected.
+#     - Trigger drift alert
+#         Trigger a drift alert if any drift detected
 jobs:
 
   # ----------------------------------------
@@ -70,10 +71,8 @@ jobs:
           name: ${{ vars.DRIFT_REPORT_ARTIFACTS_NAME }}
           path: ${{ vars.DRIFT_REPORTS_DIR }}
 
-      # Trigger Continuous Training (CT) workflow if drift detected
-      - name: Trigger Continuous Training (CT) workflow
-        if: env.DRIFT == 'true'
-        uses: peter-evans/repository-dispatch@v4
-        with:
-          event-type: continuous-training-trigger
-          client-payload: '{"ref":"main"}'
+      # Trigger a drift alert if any drift detected
+      - name: Trigger drift alert
+        if: env.DRIFT == 'True'
+        run: |
+          echo "::error file=drift_detector.py,line=1,col=1::Drift detected, please check drift reports."

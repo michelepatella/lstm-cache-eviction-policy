@@ -3,8 +3,7 @@
 This module implements target drift detection using the Chi-Square test.
 
 It monitors shifts in the distribution of the target variable (labels) between
-historical reference data and new production data. Detecting target drift is
-crucial for identifying changes in the underlying process being modeled.
+historical reference data and new production data.
 
 Functions:
     detect_target_drift(

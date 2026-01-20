@@ -8,14 +8,12 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Run the workflow on demand, every
-# monday at 3 a.m., or if triggered by drift detection
+# Run the workflow on demand and every
+# Monday at 3 a.m.
 on:
   workflow_dispatch:
   schedule:
     - cron: '0 3 * * 1'
-  repository_dispatch:
-    types: [continuous-training-trigger]
 
 # The workflow is organized into a single job:
 # - Retraining:
