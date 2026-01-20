@@ -265,7 +265,8 @@ class AccessLogsDataset(Dataset):
         self.data = df.copy()
 
         # Split the dataset
-        self._split_dataset(split_type, training_split)
+        if split_type is not None:
+            self._split_dataset(split_type, training_split)
 
         # Set the fields of the dataset
         self._set_fields(pipeline_config)
