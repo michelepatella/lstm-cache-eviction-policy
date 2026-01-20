@@ -112,6 +112,14 @@ DATASET_APPEND = False
 
 
 # ----------------------------
+# Drift Detection
+# ----------------------------
+DRIFT_DETECTION_RESULT_FIELD_IS_DRIFT_NAME = "is_drift"
+DRIFT_DETECTION_RESULT_FIELD_P_VAL_NAME = "p_val"
+DRIFT_DETECTION_RESULT_FIELD_DISTANCE_NAME = "distance"
+
+
+# ----------------------------
 # Early Stopping
 # ----------------------------
 EARLY_STOPPING_TRIGGERED = True
