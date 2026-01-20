@@ -36,8 +36,7 @@ from components.const import (
     DRIFT_DETECTION_RESULT_FIELD_DISTANCE_NAME,
     DRIFT_DETECTION_RESULT_FIELD_IS_DRIFT_NAME,
     DRIFT_DETECTION_RESULT_FIELD_P_VAL_NAME,
-    LIST_FIRST_IDX,
-    TENSOR_FEATURES_DIM,
+    TENSOR_CLASS_DIM,
 )
 from components.device.mover import move_to_device
 from components.json.io.saver import save_json
@@ -59,15 +58,21 @@ def _collect_model_predictions(
         np.ndarray: A numpy array containing the class indices predicted by the model.
     """
     preds = []
+    model.eval()
     with torch.no_grad():
         for batch in dataloader:
-            if isinstance(batch, (list, tuple)):
-                x = batch[LIST_FIRST_IDX]
-            else:
-                x = batch
-            x = move_to_device(x, device)
-            outputs = model(x)
-            y_hat = torch.argmax(outputs, dim=TENSOR_FEATURES_DIM)
+            # Extract batch components
+            x_features, x_keys, _ = batch
+
+            # Move tensors to device
+            x_features = move_to_device(x_features, device)
+            x_keys = move_to_device(x_keys, device)
+
+            # Make prediction
+            outputs = model(x_features, x_keys)
+
+            # Extract and save prediction
+            y_hat = torch.argmax(outputs, dim=TENSOR_CLASS_DIM)
             preds.append(y_hat.cpu())
     return torch.cat(preds).numpy()
 
