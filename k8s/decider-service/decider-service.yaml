@@ -66,12 +66,12 @@ spec:
             type: RuntimeDefault
         resources:
           requests:
-            cpu: "100m"
-            memory: "128Mi"
+            cpu: "250m"
+            memory: "512Mi"
             ephemeral-storage: "100Mi"
           limits:
-            cpu: "100m"
-            memory: "128Mi"
+            cpu: "250m"
+            memory: "512Mi"
             ephemeral-storage: "100Mi"
 ---
 apiVersion: v1
