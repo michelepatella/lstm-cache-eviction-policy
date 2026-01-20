@@ -17,6 +17,7 @@ Functions:
 
 import logging
 import tempfile
+from datetime import datetime, timezone
 
 import dagshub
 import mlflow
@@ -24,7 +25,11 @@ import numpy as np
 import pytest
 
 from api.const import MLFLOW_TRACKING_URI
-from components.const import DATASET_PROCESSED_FEATURE_COLUMNS
+from components.const import (
+    DATASET_PROCESSED_FEATURE_COLUMNS,
+    RETRAINING_CHECKPOINT_FILE_PATH,
+    TIME_NANOSECONDS_IN_SECOND,
+)
 from components.data_loader.builder import build_data_loader
 from components.data_loader.initializer import initialize_data_loader
 from components.data_loader.targets.extractor import (
@@ -34,6 +39,8 @@ from components.dataset.access_logs_dataset import AccessLogsDataset
 from components.dataset.splits.training_validation_splitter import (
     split_training_validation_sets,
 )
+from components.json.io.loader import load_json
+from components.json.io.saver import save_json
 from components.logs.handlers.grafana_loki_handler import GrafanaLokiHandler
 from components.logs.initializer import initialize_logs, logs_phase
 from components.logs.levels.info_logger import info
@@ -265,6 +272,15 @@ def train_model() -> None:
             logs_phase.get(),
             pipeline_config,
         )
+
+        # Update retraining config
+        retraining_checkpoint = load_json(RETRAINING_CHECKPOINT_FILE_PATH)
+        current_timestamp = int(
+            datetime.now(timezone.utc).timestamp()
+            * TIME_NANOSECONDS_IN_SECOND,
+        )
+        retraining_checkpoint.last_timestamp = current_timestamp
+        save_json(retraining_checkpoint, RETRAINING_CHECKPOINT_FILE_PATH)
 
         # Re-built model with best weights found
         model = build_model(

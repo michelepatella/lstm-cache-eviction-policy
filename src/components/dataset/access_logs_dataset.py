@@ -52,7 +52,6 @@ from components.dataset.splits.index.calculator import (
     calculate_dataset_split_index,
 )
 from components.json.io.loader import load_json
-from components.json.io.saver import save_json
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from const import (
@@ -256,10 +255,6 @@ class AccessLogsDataset(Dataset):
                         },
                     )
                     raise RuntimeError(msg) from e
-
-            # Update retraining config
-            retraining_checkpoint.last_timestamp = current_timestamp
-            save_json(retraining_checkpoint, RETRAINING_CHECKPOINT_FILE_PATH)
 
         # Set data
         self.data = df.copy()
