@@ -81,11 +81,11 @@ spec:
             type: RuntimeDefault
         resources:
           requests:
-            cpu: "250m"
+            cpu: "1000m"
             memory: "768Mi"
             ephemeral-storage: "100Mi"
           limits:
-            cpu: "500m"
+            cpu: "2000m"
             memory: "1Gi"
             ephemeral-storage: "100Mi"
       volumes:
