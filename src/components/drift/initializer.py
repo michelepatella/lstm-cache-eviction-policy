@@ -13,6 +13,7 @@ Functions:
         DataFrame,
         DataLoader,
         DataLoader,
+        int,
         Module | Tensor,
         device
     ]
@@ -63,6 +64,7 @@ def initialize_drift_detection() -> tuple[
     DataFrame,
     DataLoader,
     DataLoader,
+    int,
     Module | Tensor,
     device,
 ]:
@@ -78,6 +80,7 @@ def initialize_drift_detection() -> tuple[
             DataFrame,
             DataLoader,
             DataLoader,
+            int,
             Module | Tensor,
             device
         ]:
@@ -85,6 +88,7 @@ def initialize_drift_detection() -> tuple[
             - hist_df: DataFrame containing historical reference data.
             - new_dataloader: DataLoader for the new production data.
             - hist_dataloader: DataLoader for the historical reference data.
+            - min_samples: Minimum number of samples to run retraining.
             - model: The PyTorch model loaded from MLflow (production version).
             - device: The computing device selected for operations.
     """
@@ -176,4 +180,12 @@ def initialize_drift_detection() -> tuple[
     # Set model to evaluation mode
     set_model_mode(model, MODEL_EVAL_MODE)
 
-    return new_df, hist_df, new_dataloader, hist_dataloader, model, device
+    return (
+        new_df,
+        hist_df,
+        new_dataloader,
+        hist_dataloader,
+        pipeline_config.training.samples.min,
+        model,
+        device,
+    )

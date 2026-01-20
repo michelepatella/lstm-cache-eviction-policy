@@ -172,6 +172,10 @@ def train_model() -> None:
             pipeline_config,
         )
 
+        # Check if enough data is available
+        if len(training_set) < pipeline_config.training.samples.min:
+            return
+
         # Split training set into training
         # and validation sets
         training_set, validation_set = split_training_validation_sets(

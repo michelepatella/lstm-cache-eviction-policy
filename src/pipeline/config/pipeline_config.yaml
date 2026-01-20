@@ -148,6 +148,8 @@ simulations:
     ttl: 100000
 training:
   epochs: 5
+  samples:
+    min: 1000
 validation:
   time_series_cv:
     folds: 5

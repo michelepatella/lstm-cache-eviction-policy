@@ -47,9 +47,22 @@ def detect_drift() -> bool:
     # ----------------------------
     # Setup
     # ----------------------------
-    (new_df, hist_df, new_dataloader, hist_dataloader, model, device) = (
-        initialize_drift_detection()
-    )
+    (
+        new_df,
+        hist_df,
+        new_dataloader,
+        hist_dataloader,
+        min_samples,
+        model,
+        device,
+    ) = initialize_drift_detection()
+
+    # ----------------------------
+    # Preconditions
+    # ----------------------------
+    # Check if enough data is available
+    if len(new_df) < min_samples:
+        return False
 
     # ----------------------------
     # Univariate Drift Detection

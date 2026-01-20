@@ -229,6 +229,10 @@ class AccessLogsDataset(Dataset):
             )
             shift_dataset_column(df, DATASET_COLUMN_REQUEST_NAME, 1)
 
+            # Check if enough data is available
+            if len(df) < pipeline_config.training.samples.min:
+                return
+
             # Save dataset
             save_dataset(df, DATASET_REAL_PROCESSED_FILE_PATH, append=True)
 
