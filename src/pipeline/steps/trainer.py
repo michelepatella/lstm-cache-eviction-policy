@@ -297,6 +297,31 @@ def train_model() -> None:
         )
         model.load_state_dict(best_model_weights)
 
+        # Save the best model trained (not optimized)
+        save_model(model, model_path)
+
+        # Run after model training tests
+        try:
+            pytest.main(
+                [
+                    "-m",
+                    "after_model_training",
+                    "--tb=short",
+                    "-q",
+                ],
+            )
+        except SystemExit as e:
+            if e.code != 0:
+                msg = "After model training tests failed"
+                logging.exception(
+                    msg,
+                    extra={
+                        "exception": str(e),
+                        "context": "Training",
+                    },
+                )
+                raise RuntimeError(msg) from e
+
         # Log the full model and save it to registry
         with (
             tempfile.TemporaryDirectory() as MLFLOW_PYTORCH_SAVE_MODEL_TEMP_PATH
@@ -338,7 +363,7 @@ def train_model() -> None:
         model = prune_model(model, pruning_amount)
         model = quantize_model(model, quantization_dtype, quantization_engine)
 
-        # Save the best model trained
+        # Save the best model trained (optimized)
         save_model(model, model_path)
 
         # Experiment tracking
@@ -353,28 +378,6 @@ def train_model() -> None:
                 "epochs_run_num": num_epochs_run,
             },
         )
-
-        # Run after model training tests
-        try:
-            pytest.main(
-                [
-                    "-m",
-                    "after_model_training",
-                    "--tb=short",
-                    "-q",
-                ],
-            )
-        except SystemExit as e:
-            if e.code != 0:
-                msg = "After model training tests failed"
-                logging.exception(
-                    msg,
-                    extra={
-                        "exception": str(e),
-                        "context": "Training",
-                    },
-                )
-                raise RuntimeError(msg) from e
 
         # Log model and save it to registry
         with (
