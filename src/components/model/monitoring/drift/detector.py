@@ -52,9 +52,11 @@ def detect_drift() -> bool:
     (
         new_df,
         hist_df,
+        _,
+        _,
         new_dataloader,
         hist_dataloader,
-        min_samples,
+        pipeline_config,
         model,
         device,
     ) = initialize_model_monitoring()
@@ -63,7 +65,7 @@ def detect_drift() -> bool:
     # Preconditions
     # ----------------------------
     # Check if enough data is available
-    if len(new_df) < min_samples:
+    if len(new_df) < pipeline_config.training.samples.min:
         return False
 
     # ----------------------------
