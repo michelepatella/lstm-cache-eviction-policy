@@ -1,0 +1,77 @@
+# Model Performance Monitoring: Run performance checks on
+# production model and send an alert if any test fails
+name: Model Performance Monitoring
+
+# Kill the current workflow if a
+# new one is triggered
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# The workflow is run manually or daily at midnight
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+# The workflow is organized into a single job:
+# - Model performance monitoring:
+#     - Checkout repository:
+#         Checkout the repository on the current branch.
+#     - Set environment variables:
+#         Load and set environment variables required.
+#     - Monitor model performance:
+#         Run the model performance monitoring script.
+#     - Upload model performance report:
+#         Upload model performance report as artifact.
+#     - Trigger model performance alert
+#         Trigger a model performance alert if any regression detected
+jobs:
+
+  # ----------------------------------------
+  # Model performance monitoring
+  # ----------------------------------------
+  model_performance_monitoring:
+    runs-on: self-hosted
+    steps:
+      # Checkout the repository on
+      # the current branch
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+
+      # Set environment variables needed
+      - name: Set environment variables
+        env:
+          DAGS_HUB_TOKEN: ${{ secrets.DAGS_HUB_TOKEN }}
+          GRAFANA_LOKI_USER_ID: ${{ secrets.GRAFANA_LOKI_USER_ID }}
+          GRAFANA_LOKI_TOKEN: ${{ secrets.GRAFANA_LOKI_TOKEN }}
+          MLFLOW_TRACKING_URI: ${{ vars.MLFLOW_TRACKING_URI }}
+          TRAINING_DDP_MASTER_BASE_URL: ${{ vars.TRAINING_DDP_MASTER_BASE_URL }}
+          DAGS_HUB_REPO: ${{ vars.DAGS_HUB_REPO }}
+          DAGS_HUB_REPO_OWNER: ${{ vars.DAGS_HUB_REPO_OWNER }}
+          GRAFANA_LOKI_URL: ${{ vars.GRAFANA_LOKI_URL }}
+          GRAFANA_LOKI_LOGS_URL: ${{ vars.GRAFANA_LOKI_LOGS_URL }}
+        run: echo "Environment variables set"
+
+      # Check for any model performance regression
+      - name: Monitor model performance
+        id: performance_regression
+        run: |
+          RESULT=$(python "${{ vars.MODEL_PERFORMANCE_MONITORING_SCRIPT_PATH }}")
+          echo "PERFORMANCE=$RESULT" >> $GITHUB_ENV
+
+      # Upload performance monitoring report as artifact
+      - name: Upload model performance report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ vars.MODEL_PERFORMANCE_MONITORING_REPORT_ARTIFACTS_NAME }}
+          path: ${{ vars.MODEL_PERFORMANCE_MONITORING_SCRIPT_PATH }}
+
+      # Trigger alert if any model performance test fails
+      - name: Trigger model performance alert
+        if: env.PERFORMANCE_REGRESSION == 'True'
+        run: |
+          echo "::error file=model_performance_monitor.py,line=1,col=1::Model performance regression detected, please check model performance reports."

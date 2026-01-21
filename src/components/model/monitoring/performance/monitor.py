@@ -67,12 +67,12 @@ def monitor_model_performance() -> bool:
     # Create a DeepChecks dataset starting
     # from new data collected
     dc_new_dataset = create_dc_dataset(
-        new_df.data,
+        new_dataset.data,
         seq_len=pipeline_config.model.sequence.length,
         index_name=None,
     )
     dc_hist_dataset = create_dc_dataset(
-        hist_df.data,
+        hist_dataset.data,
         seq_len=pipeline_config.model.sequence.length,
         index_name=None,
     )
@@ -81,8 +81,8 @@ def monitor_model_performance() -> bool:
     # Preconditions
     # ----------------------------
     # Check if enough data is available
-    if len(new_df) < pipeline_config.training.samples.min:
-        return True
+    if len(new_dataset.data) < pipeline_config.training.samples.min:
+        return False
 
     # ----------------------------
     # Suite building
@@ -147,9 +147,9 @@ def monitor_model_performance() -> bool:
             y_proba_test=y_proba_new,
         )
     except AssertionError:
-        return False
+        return True
 
-    return True
+    return False
 
 
 if __name__ == "__main__":
