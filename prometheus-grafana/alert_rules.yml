@@ -2,7 +2,7 @@ groups:
   - name: api_alerts
     rules:
       - alert: HighAPILatency
-        expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le)) > 5
+        expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le)) > 3
         for: 5m
         labels:
           severity: warning
@@ -19,28 +19,28 @@ groups:
   - name: service_alerts
     rules:
       - alert: FeaturizerHighLatency
-        expr: histogram_quantile(0.95, sum(rate(featurizer_latency_seconds_bucket[5m])) by (le)) > 1
+        expr: histogram_quantile(0.95, sum(rate(featurizer_latency_seconds_bucket[5m])) by (le)) > 0.5
         for: 5m
         labels:
           severity: warning
         annotations:
           summary: "Featurizer latency (p95) > 1s"
       - alert: PredictorHighLatency
-        expr: histogram_quantile(0.95, sum(rate(predictor_latency_seconds_bucket[5m])) by (le)) > 2
+        expr: histogram_quantile(0.95, sum(rate(predictor_latency_seconds_bucket[5m])) by (le)) > 1.5
         for: 5m
         labels:
           severity: warning
         annotations:
           summary: "Predictor latency (p95) > 2s"
       - alert: ScorerHighLatency
-        expr: histogram_quantile(0.95, sum(rate(scorer_latency_seconds_bucket[5m])) by (le)) > 1
+        expr: histogram_quantile(0.95, sum(rate(scorer_latency_seconds_bucket[5m])) by (le)) > 0.5
         for: 5m
         labels:
           severity: warning
         annotations:
           summary: "Scorer latency (p95) > 1s"
       - alert: DeciderHighLatency
-        expr: histogram_quantile(0.95, sum(rate(decider_latency_seconds_bucket[5m])) by (le)) > 1
+        expr: histogram_quantile(0.95, sum(rate(decider_latency_seconds_bucket[5m])) by (le)) > 0.5
         for: 5m
         labels:
           severity: warning
