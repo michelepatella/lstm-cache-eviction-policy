@@ -1,6 +1,7 @@
-# Continuous Training (CT): Automate model retraining ensuring
-# that the ML model stays up-to-date
-name: Continuous Training (CT)
+# Drift Detection: Check for any data, target,
+# and prediction drift and send an alert if any
+# drift detected
+name: Drift Detection
 
 # Kill the current workflow if a
 # new one is triggered
@@ -8,29 +9,30 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Run the workflow on demand and every
-# Monday at 3 a.m.
+# Run the workflow on demand and every day at midnight
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 3 * * 1'
+    - cron: '0 0 * * *'
 
 # The workflow is organized into a single job:
-# - Retraining:
+# - Detect drift:
 #     - Checkout repository:
 #         Checkout the repository on the current branch.
 #     - Set environment variables:
 #         Load and set environment variables required.
-#     - Retrain model:
-#         Retrain the model on new data.
-#     - Upload test reports:
-#         Upload test reports as artifact.
+#     - Detect drift:
+#         Run the drift detection script.
+#     - Upload drift reports:
+#         Upload drift reports as artifact.
+#     - Trigger drift alert
+#         Trigger a drift alert if any drift detected
 jobs:
 
   # ----------------------------------------
-  # Retraining
+  # Detect drift
   # ----------------------------------------
-  retraining:
+  drift_detection:
     runs-on: self-hosted
     steps:
       # Checkout the repository on
@@ -54,15 +56,23 @@ jobs:
           GRAFANA_LOKI_LOGS_URL: ${{ vars.GRAFANA_LOKI_LOGS_URL }}
         run: echo "Environment variables set"
 
-      # Retrain model
-      - name: Retrain model
+      # Check for any drift
+      - name: Detect drift
+        id: drift
         run: |
-          make dvc_pipeline_stage_run STAGE_NAME=training
+          RESULT=$(python "${{ vars.DRIFT_DETECTION_SCRIPT_PATH }}")
+          echo "DRIFT=$RESULT" >> $GITHUB_ENV
 
-      # Upload test reports as artifact
-      - name: Upload test reports
+      # Upload drift reports as artifact
+      - name: Upload drift reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ vars.TEST_REPORT_ARTIFACTS_NAME }}
-          path: ${{ vars.TEST_REPORTS_DIR }}
+          name: ${{ vars.DRIFT_REPORT_ARTIFACTS_NAME }}
+          path: ${{ vars.DRIFT_REPORTS_DIR }}
+
+      # Trigger a drift alert if any drift detected
+      - name: Trigger drift alert
+        if: env.DRIFT == 'True'
+        run: |
+          echo "::error file=drift_detector.py,line=1,col=1::Drift detected, please check drift reports."

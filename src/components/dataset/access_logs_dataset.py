@@ -24,6 +24,7 @@ from torch.utils.data import Dataset
 from components.const import (
     DATASET_PROCESSED_COLUMNS,
     DATASET_PROCESSED_FEATURE_COLUMNS,
+    DATASET_REAL_PROCESSED_FILE_PATH,
     DATASET_TARGET_COLUMN_SHIFT,
     LIST_LAST_IDX,
     LOGS_GRAFANA_LOKI_LOGS_URL,
@@ -39,6 +40,7 @@ from components.dataset.columns.shifter import (
 )
 from components.dataset.io.loader import load_dataset
 from components.dataset.io.locator import get_dataset_abs_path
+from components.dataset.io.saver import save_dataset
 from components.dataset.rows.calculations.effective_rows_calculator import (
     calculate_effective_dataset_rows,
 )
@@ -50,7 +52,6 @@ from components.dataset.splits.index.calculator import (
     calculate_dataset_split_index,
 )
 from components.json.io.loader import load_json
-from components.json.io.saver import save_json
 from components.logs.levels.debug_logger import debug
 from components.logs.levels.error_logger import error
 from const import (
@@ -228,6 +229,13 @@ class AccessLogsDataset(Dataset):
             )
             shift_dataset_column(df, DATASET_COLUMN_REQUEST_NAME, 1)
 
+            # Check if enough data is available
+            if len(df) < pipeline_config.training.samples.min:
+                return
+
+            # Save dataset
+            save_dataset(df, DATASET_REAL_PROCESSED_FILE_PATH, append=True)
+
             # Run after data preprocessing tests
             try:
                 import pytest
@@ -252,15 +260,12 @@ class AccessLogsDataset(Dataset):
                     )
                     raise RuntimeError(msg) from e
 
-            # Update retraining config
-            retraining_checkpoint.last_timestamp = current_timestamp
-            save_json(retraining_checkpoint, RETRAINING_CHECKPOINT_FILE_PATH)
-
         # Set data
         self.data = df.copy()
 
         # Split the dataset
-        self._split_dataset(split_type, training_split)
+        if split_type is not None:
+            self._split_dataset(split_type, training_split)
 
         # Set the fields of the dataset
         self._set_fields(pipeline_config)

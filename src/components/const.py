@@ -108,6 +108,28 @@ DATASET_MISSING_VALUES_REMOVAL_DROPNA_AXIS = 0
 DATASET_TARGET_COLUMN_SHIFT = -1
 
 DATASET_INDEX = False
+DATASET_APPEND = False
+
+
+# ----------------------------
+# Drift Detection
+# ----------------------------
+DRIFT_DETECTION_RESULT_FIELD_IS_DRIFT_NAME = "is_drift"
+DRIFT_DETECTION_RESULT_FIELD_P_VAL_NAME = "p_val"
+DRIFT_DETECTION_RESULT_FIELD_DISTANCE_NAME = "distance"
+
+DRIFT_DETECTION_UNIVARIATE_RESULT_PATH = (
+    PROJECT_ROOT / "reports" / "drift" / "univariate_drift_report.json"
+)
+DRIFT_DETECTION_MULTIVARIATE_RESULT_PATH = (
+    PROJECT_ROOT / "reports" / "drift" / "multivariate_drift_report.json"
+)
+DRIFT_DETECTION_TARGET_RESULT_PATH = (
+    PROJECT_ROOT / "reports" / "drift" / "target_drift_report.json"
+)
+DRIFT_DETECTION_PREDICTION_RESULT_PATH = (
+    PROJECT_ROOT / "reports" / "drift" / "prediction_drift_report.json"
+)
 
 
 # ----------------------------
