@@ -1,14 +1,13 @@
 """initializer.py
 
-Module responsible for initializing the environment required for drift detection.
+Module responsible for initializing the environment required for model monitoring.
 
 This module handles the retrieval of new production data from Grafana Loki, loads
 historical reference data, and sets up the necessary PyTorch components (model,
-data loaders, device) to perform drift analysis comparing current production data
-against training data.
+data loaders, device) to perform model monitoring.
 
 Functions:
-    initialize_drift_detection() -> tuple[
+    initialize_model_monitoring() -> tuple[
         DataFrame,
         DataFrame,
         DataLoader,
@@ -17,7 +16,7 @@ Functions:
         Module | Tensor,
         device
     ]
-        Prepares datasets, loaders, and the production model for drift checking.
+        Prepares datasets, loaders, and the production model for model monitoring.
 """
 
 import json
@@ -59,7 +58,7 @@ from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import DATASET_PROCESSED_TYPE
 
 
-def initialize_drift_detection() -> tuple[
+def initialize_model_monitoring() -> tuple[
     DataFrame,
     DataFrame,
     DataLoader,
@@ -68,7 +67,7 @@ def initialize_drift_detection() -> tuple[
     Module | Tensor,
     device,
 ]:
-    """Initializes the environment and data for drift detection.
+    """Initializes the environment and data for model monitoring.
 
     This function orchestrates the data retrieval and system setup phase by
     gathering and preparing production data, loading historical dataset,

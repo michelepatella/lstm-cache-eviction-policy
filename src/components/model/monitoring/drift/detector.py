@@ -14,17 +14,19 @@ Functions:
 """
 
 from components.const import DRIFT_DETECTION_RESULT_FIELD_IS_DRIFT_NAME
-from components.drift.initializer import initialize_drift_detection
-from components.drift.variants.multivariate_drift_detector import (
+from components.model.monitoring.drift.variants.multivariate_drift_detector import (
     detect_multivariate_drift,
 )
-from components.drift.variants.prediction_drift_detector import (
+from components.model.monitoring.drift.variants.prediction_drift_detector import (
     detect_prediction_drift,
 )
-from components.drift.variants.target_drift_detector import detect_target_drift
-from components.drift.variants.univariate_drift_detector import (
+from components.model.monitoring.drift.variants.target_drift_detector import (
+    detect_target_drift,
+)
+from components.model.monitoring.drift.variants.univariate_drift_detector import (
     detect_univariate_drift,
 )
+from components.model.monitoring.initializer import initialize_model_monitoring
 
 
 def detect_drift() -> bool:
@@ -55,7 +57,7 @@ def detect_drift() -> bool:
         min_samples,
         model,
         device,
-    ) = initialize_drift_detection()
+    ) = initialize_model_monitoring()
 
     # ----------------------------
     # Preconditions
