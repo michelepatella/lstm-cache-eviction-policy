@@ -9,7 +9,7 @@ given batch size and shuffle configuration.
 Functions:
     initialize_data_loader(
         dataset_type: str,
-        split_type: str,
+        split_type: str | None,
         batch_size: int,
         shuffle: bool,
         dataset_class: Type[AccessLogsDataset],
@@ -28,7 +28,7 @@ from pipeline.config.pydantic.pipeline_config import PipelineConfig
 
 def initialize_data_loader(
     dataset_type: str,
-    split_type: str,
+    split_type: str | None,
     batch_size: int,
     shuffle: bool,
     dataset_class: type[AccessLogsDataset],
@@ -42,7 +42,7 @@ def initialize_data_loader(
 
     Args:
         dataset_type (str): Type of the dataset requested.
-        split_type (str): Type of split to apply.
+        split_type (str | None): Type of split to apply.
         batch_size (int): Batch size for the data loader to create.
         shuffle (bool): Whether to apply shuffle to the data loader to create.
         dataset_class (type[AccessLogsDataset]): Dataset class to instantiate.
