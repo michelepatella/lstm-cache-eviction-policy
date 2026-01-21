@@ -259,6 +259,14 @@ MODEL_LOADING_WEIGHTS_ONLY = False
 
 MODEL_OPTIMIZATIONS_PRUNING_PARAMS = ("weight",)
 
+MODEL_PERFORMANCE_MONITORING_RESULTS_FILE_PATH = (
+    PROJECT_ROOT
+    / "reports"
+    / "monitoring"
+    / "performance"
+    / "model_performance_results.html"
+)
+
 
 # ----------------------------
 # Monte Carlo (MC) Dropout

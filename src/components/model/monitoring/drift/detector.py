@@ -14,17 +14,19 @@ Functions:
 """
 
 from components.const import DRIFT_DETECTION_RESULT_FIELD_IS_DRIFT_NAME
-from components.drift.initializer import initialize_drift_detection
-from components.drift.variants.multivariate_drift_detector import (
+from components.model.monitoring.drift.variants.multivariate_drift_detector import (
     detect_multivariate_drift,
 )
-from components.drift.variants.prediction_drift_detector import (
+from components.model.monitoring.drift.variants.prediction_drift_detector import (
     detect_prediction_drift,
 )
-from components.drift.variants.target_drift_detector import detect_target_drift
-from components.drift.variants.univariate_drift_detector import (
+from components.model.monitoring.drift.variants.target_drift_detector import (
+    detect_target_drift,
+)
+from components.model.monitoring.drift.variants.univariate_drift_detector import (
     detect_univariate_drift,
 )
+from components.model.monitoring.initializer import initialize_model_monitoring
 
 
 def detect_drift() -> bool:
@@ -50,18 +52,21 @@ def detect_drift() -> bool:
     (
         new_df,
         hist_df,
+        _,
+        _,
         new_dataloader,
         hist_dataloader,
-        min_samples,
+        pipeline_config,
+        _,
         model,
         device,
-    ) = initialize_drift_detection()
+    ) = initialize_model_monitoring()
 
     # ----------------------------
     # Preconditions
     # ----------------------------
     # Check if enough data is available
-    if len(new_df) < min_samples:
+    if len(new_df) < pipeline_config.training.samples.min:
         return False
 
     # ----------------------------

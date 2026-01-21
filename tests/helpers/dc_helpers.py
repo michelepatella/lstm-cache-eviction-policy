@@ -32,6 +32,9 @@ Functions:
         training_set: AccessLogsDataset,
         testing_set: AccessLogsDataset,
         pipeline_config: PipelineConfig,
+        training_loader: DataLoader = None,
+        testing_loader: DataLoader = None,
+        model: Module = None,
     ) -> tuple[ndarray, ndarray, ndarray, ndarray]
         Initializes the model and computes class predictions and probabilities
         for both training and testing sets.
@@ -58,6 +61,8 @@ import pandas as pd
 import torch
 from deepchecks import Dataset, Suite
 from numpy import ndarray
+from torch.nn import Module
+from torch.utils.data import DataLoader
 
 from components.const import TENSOR_BATCH_DIM, TENSOR_CLASS_DIM
 from components.data_loader.builder import build_data_loader
@@ -250,6 +255,9 @@ def compute_dc_model_predictions(
     training_set: AccessLogsDataset,
     testing_set: AccessLogsDataset,
     pipeline_config: PipelineConfig,
+    training_loader: DataLoader = None,
+    testing_loader: DataLoader = None,
+    model: Module = None,
 ) -> tuple[ndarray, ndarray, ndarray, ndarray]:
     """Initializes the best model and computes predictions/probabilities
      for DeepChecks.
@@ -265,6 +273,9 @@ def compute_dc_model_predictions(
         training_set (AccessLogsDataset): The training dataset.
         testing_set (AccessLogsDataset): The testing dataset.
         pipeline_config (PipelineConfig): The pipeline configuration object.
+        training_loader (DataLoader): The training data loader.
+        testing_loader (DataLoader): The testing data loader.
+        model (Module): The PyTorch model to run inference on.
 
     Returns:
         tuple[ndarray, ndarray, ndarray, ndarray]:
@@ -291,23 +302,27 @@ def compute_dc_model_predictions(
     )
 
     # Prepare data loaders
-    training_loader = build_data_loader(
-        training_set,
-        training_batch_size,
-    )
-    testing_loader = build_data_loader(
-        testing_set,
-        testing_batch_size,
-    )
+    if training_loader is None:
+        training_loader = build_data_loader(
+            training_set,
+            training_batch_size,
+        )
+    if testing_loader is None:
+        testing_loader = build_data_loader(
+            testing_set,
+            testing_batch_size,
+        )
 
     # Initialize best model environment
     # both for training and testing sets
-    training_device, training_criterion, model = initialize_best_model(
-        data_mode,
-        training_device_type,
-        pipeline_config,
-        training_loader,
-        qengine=qengine,
+    training_device, training_criterion, initialized_model = (
+        initialize_best_model(
+            data_mode,
+            training_device_type,
+            pipeline_config,
+            training_loader,
+            qengine=qengine,
+        )
     )
     testing_device, testing_criterion, _ = initialize_best_model(
         data_mode,
@@ -316,6 +331,9 @@ def compute_dc_model_predictions(
         testing_loader,
         qengine=qengine,
     )
+
+    if model is None:
+        model = initialized_model
 
     # Evaluate model both on training and
     # testing sets

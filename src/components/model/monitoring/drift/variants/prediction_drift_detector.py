@@ -7,12 +7,6 @@ comparing predictions made on a historical baseline dataset against those made
 on new production data.
 
 Functions:
-    _collect_model_predictions(
-        model: Module,
-        dataloader: DataLoader,
-        device: torch.device
-    ) -> np.ndarray:
-        Helper to perform inference and collect all predicted labels.
     detect_prediction_drift(
         new_dataloader: DataLoader,
         hist_dataloader: DataLoader,
@@ -24,7 +18,6 @@ Functions:
 
 from typing import Any
 
-import numpy as np
 import torch
 from alibi_detect.cd import ChiSquareDrift
 from box import Box
@@ -36,45 +29,11 @@ from components.const import (
     DRIFT_DETECTION_RESULT_FIELD_DISTANCE_NAME,
     DRIFT_DETECTION_RESULT_FIELD_IS_DRIFT_NAME,
     DRIFT_DETECTION_RESULT_FIELD_P_VAL_NAME,
-    TENSOR_CLASS_DIM,
 )
-from components.device.mover import move_to_device
 from components.json.io.saver import save_json
-
-
-def _collect_model_predictions(
-    model: Module,
-    dataloader: DataLoader,
-    device: torch.device,
-) -> np.ndarray:
-    """Performs inference on a dataset and collects predictions.
-
-    Args:
-        model (Module): The PyTorch model used for inference.
-        dataloader (DataLoader): The DataLoader containing the input data.
-        device (torch.device): The device to run inference on.
-
-    Returns:
-        np.ndarray: A numpy array containing the class indices predicted by the model.
-    """
-    preds = []
-    model.eval()
-    with torch.no_grad():
-        for batch in dataloader:
-            # Extract batch components
-            x_features, x_keys, _ = batch
-
-            # Move tensors to device
-            x_features = move_to_device(x_features, device)
-            x_keys = move_to_device(x_keys, device)
-
-            # Make prediction
-            outputs = model(x_features, x_keys)
-
-            # Extract and save prediction
-            y_hat = torch.argmax(outputs, dim=TENSOR_CLASS_DIM)
-            preds.append(y_hat.cpu())
-    return torch.cat(preds).numpy()
+from components.model.monitoring.utils.predictions_collector import (
+    collect_model_predictions,
+)
 
 
 def detect_prediction_drift(
@@ -104,12 +63,12 @@ def detect_prediction_drift(
     if model is not None:
         # Collect model predictions both
         # on new and historical data
-        new_preds = _collect_model_predictions(
+        new_preds = collect_model_predictions(
             model,
             new_dataloader,
             device,
         )
-        hist_preds = _collect_model_predictions(
+        hist_preds = collect_model_predictions(
             model,
             hist_dataloader,
             device,

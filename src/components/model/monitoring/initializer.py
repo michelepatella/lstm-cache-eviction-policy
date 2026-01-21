@@ -1,23 +1,25 @@
 """initializer.py
 
-Module responsible for initializing the environment required for drift detection.
+Module responsible for initializing the environment required for model monitoring.
 
 This module handles the retrieval of new production data from Grafana Loki, loads
 historical reference data, and sets up the necessary PyTorch components (model,
-data loaders, device) to perform drift analysis comparing current production data
-against training data.
+data loaders, device) to perform model monitoring.
 
 Functions:
-    initialize_drift_detection() -> tuple[
+    initialize_model_monitoring() -> tuple[
         DataFrame,
         DataFrame,
+        AccessLogsDataset,
+        AccessLogsDataset,
         DataLoader,
         DataLoader,
-        int,
+        PipelineConfig,
+        TestsConfig,
         Module | Tensor,
-        device
+        device,
     ]
-        Prepares datasets, loaders, and the production model for drift checking.
+        Prepares datasets, loaders, and the production model for model monitoring.
 """
 
 import json
@@ -56,19 +58,25 @@ from const import (
     MLFLOW_MODEL_TAG_STATE_PROD,
 )
 from pipeline.config.configurator import prepare_pipeline_config
+from pipeline.config.pydantic.pipeline_config import PipelineConfig
 from pipeline.const import DATASET_PROCESSED_TYPE
+from tests.config.configurator import prepare_tests_config
+from tests.config.pydantic.tests_config import TestsConfig
 
 
-def initialize_drift_detection() -> tuple[
+def initialize_model_monitoring() -> tuple[
     DataFrame,
     DataFrame,
+    AccessLogsDataset,
+    AccessLogsDataset,
     DataLoader,
     DataLoader,
-    int,
+    PipelineConfig,
+    TestsConfig,
     Module | Tensor,
     device,
 ]:
-    """Initializes the environment and data for drift detection.
+    """Initializes the environment and data for model monitoring.
 
     This function orchestrates the data retrieval and system setup phase by
     gathering and preparing production data, loading historical dataset,
@@ -78,22 +86,29 @@ def initialize_drift_detection() -> tuple[
         tuple[
             DataFrame,
             DataFrame,
+            AccessLogsDataset,
+            AccessLogsDataset,
             DataLoader,
             DataLoader,
-            int,
+            PipelineConfig,
+            TestsConfig,
             Module | Tensor,
-            device
+            device,
         ]:
             - new_df: DataFrame containing recent production data fetched from Loki.
             - hist_df: DataFrame containing historical reference data.
+            - new_dataset: AccessLogsDataset for new data.
+            - new_dataset: AccessLogsDataset for historical data.
             - new_dataloader: DataLoader for the new production data.
             - hist_dataloader: DataLoader for the historical reference data.
-            - min_samples: Minimum number of samples to run retraining.
+            - pipeline_config: Pipeline configuration object.
+            - tests_config: Tests configuration object.
             - model: The PyTorch model loaded from MLflow (production version).
             - device: The computing device selected for operations.
     """
-    # Prepare pipeline configuration
+    # Prepare pipeline and tests configuration
     pipeline_config = prepare_pipeline_config()
+    tests_config = prepare_tests_config()
 
     # Load retraining checkpoint
     retraining_checkpoint = load_json(RETRAINING_CHECKPOINT_FILE_PATH)
@@ -128,7 +143,7 @@ def initialize_drift_detection() -> tuple[
     hist_df = load_dataset(DATASET_REAL_PROCESSED_FILE_PATH)
 
     # Prepare new and historical data loaders
-    _, new_dataloader = initialize_data_loader(
+    new_dataset, new_dataloader = initialize_data_loader(
         DATASET_PROCESSED_TYPE,
         None,
         pipeline_config.data_loader.testing.batch_size,
@@ -136,7 +151,7 @@ def initialize_drift_detection() -> tuple[
         AccessLogsDataset,
         pipeline_config,
     )
-    _, hist_dataloader = initialize_data_loader(
+    hist_dataset, hist_dataloader = initialize_data_loader(
         DATASET_PROCESSED_TYPE,
         None,
         pipeline_config.data_loader.testing.batch_size,
@@ -183,9 +198,12 @@ def initialize_drift_detection() -> tuple[
     return (
         new_df,
         hist_df,
+        new_dataset,
+        hist_dataset,
         new_dataloader,
         hist_dataloader,
-        pipeline_config.training.samples.min,
+        pipeline_config,
+        tests_config,
         model,
         device,
     )
