@@ -82,11 +82,12 @@ jobs:
           kustomize build ${K8S_OVERLAYS_CI_DIR} > ${K8S_RENDERED_FILE}
           echo "rendered_file=${K8S_RENDERED_FILE}" >> $GITHUB_OUTPUT
 
-      # Save rendered k8s manifests locally
-      - name: Save rendered k8s manifest
-        run: |
-          mkdir -p /home/runner/k8s_sharing
-          cp ${{ vars.K8S_RENDERED_FILE }} /home/runner/k8s_sharing/rendered.yaml
+      # Upload setup, rendered k8s manifests as artifact
+      - name: Upload rendered k8s manifests
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ vars.K8S_RENDERED_ARTIFACTS_NAME }}
+          path: ${{ vars.K8S_RENDERED_FILE }}
 
   # ----------------------------------------
   # Static Analysis (needs 'Setup')
@@ -201,7 +202,6 @@ jobs:
   testing:
     runs-on: self-hosted
     needs: setup
-    if: false
     steps:
       # Pull data and model (artifacts) to be tested
       # from DVC remote
@@ -248,7 +248,7 @@ jobs:
   # ----------------------------------------
   build:
     runs-on: self-hosted
-    needs: [setup, static_analysis, security_scan]
+    needs: [setup, static_analysis, security_scan, testing]
     steps:
       # Login to all registries storing the containers
       - name: Login to Google Artifact Registry
@@ -326,14 +326,12 @@ jobs:
 
       # Generate documentation
       - name: Build docs
-        if: false
         run: |
           PYTHONPATH=$(pwd)/${{ vars.SRC_DIR }} pdoc --html ${{ vars.SRC_DIR }}/ \
           --output-dir ${{ vars.DOCS_OUTPUT_DIR }} --force
 
       # Upload documentation generated as artifact
       - name: Upload docs
-        if: false
         uses: actions/upload-artifact@v4
         with:
           name: ${{ vars.DOCS_ARTIFACTS_NAME }}
