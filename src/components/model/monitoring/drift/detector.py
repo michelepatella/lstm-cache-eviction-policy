@@ -57,6 +57,7 @@ def detect_drift() -> bool:
         new_dataloader,
         hist_dataloader,
         pipeline_config,
+        _,
         model,
         device,
     ) = initialize_model_monitoring()

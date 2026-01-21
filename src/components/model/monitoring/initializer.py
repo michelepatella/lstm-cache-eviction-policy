@@ -15,6 +15,7 @@ Functions:
         DataLoader,
         DataLoader,
         PipelineConfig,
+        TestsConfig,
         Module | Tensor,
         device,
     ]
@@ -59,6 +60,8 @@ from const import (
 from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.config.pydantic.pipeline_config import PipelineConfig
 from pipeline.const import DATASET_PROCESSED_TYPE
+from tests.config.configurator import prepare_tests_config
+from tests.config.pydantic.tests_config import TestsConfig
 
 
 def initialize_model_monitoring() -> tuple[
@@ -69,6 +72,7 @@ def initialize_model_monitoring() -> tuple[
     DataLoader,
     DataLoader,
     PipelineConfig,
+    TestsConfig,
     Module | Tensor,
     device,
 ]:
@@ -87,6 +91,7 @@ def initialize_model_monitoring() -> tuple[
             DataLoader,
             DataLoader,
             PipelineConfig,
+            TestsConfig,
             Module | Tensor,
             device,
         ]:
@@ -97,11 +102,13 @@ def initialize_model_monitoring() -> tuple[
             - new_dataloader: DataLoader for the new production data.
             - hist_dataloader: DataLoader for the historical reference data.
             - pipeline_config: Pipeline configuration object.
+            - tests_config: Tests configuration object.
             - model: The PyTorch model loaded from MLflow (production version).
             - device: The computing device selected for operations.
     """
-    # Prepare pipeline configuration
+    # Prepare pipeline and tests configuration
     pipeline_config = prepare_pipeline_config()
+    tests_config = prepare_tests_config()
 
     # Load retraining checkpoint
     retraining_checkpoint = load_json(RETRAINING_CHECKPOINT_FILE_PATH)
@@ -196,6 +203,7 @@ def initialize_model_monitoring() -> tuple[
         new_dataloader,
         hist_dataloader,
         pipeline_config,
+        tests_config,
         model,
         device,
     )
