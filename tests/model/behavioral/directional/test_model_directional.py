@@ -22,6 +22,7 @@ from tests.const import DATASET_PROCESSED_LOCAL_FEATURE_COLUMNS
 from tests.model.helpers import initialize_inference_environment
 
 
+@pytest.mark.slow
 @pytest.mark.model_behavioral_directional
 @pytest.mark.after_model_training
 def test_model_directional() -> None:

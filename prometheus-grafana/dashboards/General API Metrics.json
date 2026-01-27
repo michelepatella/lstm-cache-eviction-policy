@@ -26,7 +26,7 @@
         "type": "prometheus",
         "uid": "afa304wwrxh4we"
       },
-      "description": "Average HTTP request size (bytes) for both healthcheck and eviction endpoints over the last 24 hours",
+      "description": "Average HTTP request size (bytes) for both healthcheck and eviction endpoints over the last 5 minutes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -80,7 +80,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "sum(rate(http_request_size_bytes_sum{handler=\"/\"}[24h])) \n/ \nsum(rate(http_request_size_bytes_count{handler=\"/\"}[24h]))",
+          "expr": "sum(rate(http_request_size_bytes_sum{handler=\"/\"}[5m])) \n/ \nsum(rate(http_request_size_bytes_count{handler=\"/\"}[5m]))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -96,7 +96,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "sum(rate(http_request_size_bytes_sum{handler=\"/evict\"}[24h]))\n/\nsum(rate(http_request_size_bytes_count{handler=\"/evict\"}[24h]))",
+          "expr": "sum(rate(http_request_size_bytes_sum{handler=\"/evict\"}[5m]))\n/\nsum(rate(http_request_size_bytes_count{handler=\"/evict\"}[5m]))",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -116,7 +116,7 @@
         "type": "prometheus",
         "uid": "afa304wwrxh4we"
       },
-      "description": "Number of HTTP requests per second (req/s) for both healthcheck and eviction endpoints over the last 24 hours",
+      "description": "Number of HTTP requests per second (req/s) for both healthcheck and eviction endpoints over the last 5 minutes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -203,7 +203,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(rate(http_requests_total{handler=\"/\"}[24h]))",
+          "expr": "sum(rate(http_requests_total{handler=\"/\"}[5m]))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -221,7 +221,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(rate(http_requests_total{handler=\"/evict\"}[24h]))",
+          "expr": "sum(rate(http_requests_total{handler=\"/evict\"}[5m]))",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -242,7 +242,7 @@
         "type": "prometheus",
         "uid": "afa304wwrxh4we"
       },
-      "description": "95th percentile of HTTP request duration (seconds) for both healthcheck and eviction endpoints over the last 24 hours",
+      "description": "95th percentile of HTTP request duration (seconds) for both healthcheck and eviction endpoints over the last 5 minutes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -329,7 +329,7 @@
             "uid": "afa304wwrxh4we"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{handler=\"/\"}[24h])) by (le, handler, method))",
+          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{handler=\"/\"}[5m])) by (le, handler, method))",
           "instant": false,
           "interval": "",
           "legendFormat": "Healthcheck",
@@ -342,7 +342,7 @@
             "uid": "afa304wwrxh4we"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{handler=\"/evict\"}[24h])) by (le, handler, method))",
+          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{handler=\"/evict\"}[5m])) by (le, handler, method))",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -360,7 +360,7 @@
         "type": "prometheus",
         "uid": "afa304wwrxh4we"
       },
-      "description": "Average HTTP response size (bytes) for both healthcheck and eviction endpoints over the last 24 hours",
+      "description": "Average HTTP response size (bytes) for both healthcheck and eviction endpoints over the last 5 minutes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -414,7 +414,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "sum(rate(http_response_size_bytes_sum{handler=\"/\"}[24h])) \n/ \nsum(rate(http_response_size_bytes_count{handler=\"/\"}[24h]))",
+          "expr": "sum(rate(http_response_size_bytes_sum{handler=\"/\"}[5m])) \n/ \nsum(rate(http_response_size_bytes_count{handler=\"/\"}[5m]))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -430,7 +430,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "sum(rate(http_response_size_bytes_sum{handler=\"/evict\"}[24h])) \n/ \nsum(rate(http_response_size_bytes_count{handler=\"/evict\"}[24h]))",
+          "expr": "sum(rate(http_response_size_bytes_sum{handler=\"/evict\"}[5m])) \n/ \nsum(rate(http_response_size_bytes_count{handler=\"/evict\"}[5m]))",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -450,7 +450,7 @@
         "type": "prometheus",
         "uid": "afa304wwrxh4we"
       },
-      "description": "Percentage of HTTP requests returning 2xx responses over total requests in the last 24 hours",
+      "description": "Percentage of HTTP requests returning 2xx responses over total requests in the last 5 minutes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -505,7 +505,7 @@
             "uid": "afa304wwrxh4we"
           },
           "editorMode": "code",
-          "expr": "100 * sum(rate(http_requests_total{status=~\"2..\"}[24h])) \n    / sum(rate(http_requests_total[24h])) or vector(0)",
+          "expr": "100 * sum(rate(http_requests_total{status=~\"2..\"}[5m])) \n    / sum(rate(http_requests_total[5m])) or vector(0)",
           "instant": false,
           "legendFormat": "__auto",
           "range": true,

@@ -23,6 +23,7 @@ from tests.model.behavioral.invariance.helpers import (
 from tests.model.helpers import initialize_inference_environment
 
 
+@pytest.mark.slow
 @pytest.mark.model_behavioral_invariance
 @pytest.mark.after_model_training
 def test_model_invariance() -> None:

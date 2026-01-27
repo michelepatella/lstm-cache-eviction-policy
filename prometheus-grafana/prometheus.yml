@@ -4,7 +4,7 @@ global:
 scrape_configs:
   - job_name: 'lstm-cache-eviction-policy-api'
     static_configs:
-      - targets: ['http://34.147.98.233:80']
+      - targets: ['34.147.98.233:80']
 
 rule_files:
   - "alert_rules.yml"

@@ -39,6 +39,7 @@ from tests.helpers.dc_helpers import (
 )
 
 
+@pytest.mark.slow
 @pytest.mark.model_performance
 @pytest.mark.after_model_training
 def test_model_performance() -> None:

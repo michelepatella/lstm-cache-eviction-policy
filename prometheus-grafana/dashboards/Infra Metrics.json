@@ -26,7 +26,7 @@
         "type": "prometheus",
         "uid": "afa304wwrxh4we"
       },
-      "description": "Percentage of CPU used across all nodes in the cluster",
+      "description": "Percentage of CPU used by the API",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -111,7 +111,7 @@
             "uid": "afa304wwrxh4we"
           },
           "editorMode": "code",
-          "expr": "100 * (1 - sum(node_cpu_seconds_total{mode=\"idle\"}) / sum(node_cpu_seconds_total))",
+          "expr": "rate(process_cpu_seconds_total[1m]) * 100",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -120,7 +120,7 @@
           "refId": "A"
         }
       ],
-      "title": "Cluster CPU Usage (%)",
+      "title": "API CPU Usage (%)",
       "transparent": true,
       "type": "timeseries"
     },
@@ -129,7 +129,7 @@
         "type": "prometheus",
         "uid": "afa304wwrxh4we"
       },
-      "description": "Percentage of memory used across all nodes in the cluster",
+      "description": "Current physical RAM allocated by the API",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -182,7 +182,7 @@
               }
             ]
           },
-          "unit": "percent"
+          "unit": "decbytes"
         },
         "overrides": []
       },
@@ -214,7 +214,7 @@
             "uid": "afa304wwrxh4we"
           },
           "editorMode": "code",
-          "expr": "100 * (1 - sum(node_memory_memavailable_bytes) / sum(node_memory_memtotal_bytes))",
+          "expr": "process_resident_memory_bytes\n\n",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -223,7 +223,7 @@
           "refId": "A"
         }
       ],
-      "title": "Cluster Memory Usage (%)",
+      "title": "API Memory Usage",
       "transparent": true,
       "type": "timeseries"
     }
