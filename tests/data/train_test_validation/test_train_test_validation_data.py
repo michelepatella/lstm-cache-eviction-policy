@@ -39,6 +39,7 @@ from tests.const import (
 from tests.helpers.dc_helpers import initialize_dc_tests, run_dc_suite
 
 
+@pytest.mark.slow
 @pytest.mark.data_train_test_validation
 @pytest.mark.after_data_splitting
 def test_train_test_validation_data() -> None:

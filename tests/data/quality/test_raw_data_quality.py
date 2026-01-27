@@ -50,6 +50,7 @@ from tests.data.quality.helpers import (
 )
 
 
+@pytest.mark.slow
 @pytest.mark.data_quality_raw
 @pytest.mark.after_data_preparation
 def test_raw_data_quality() -> None:

@@ -57,6 +57,7 @@ from tests.data.quality.helpers import (
 )
 
 
+@pytest.mark.slow
 @pytest.mark.data_quality_processed
 @pytest.mark.after_data_preprocessing
 def test_processed_data_quality() -> None:
