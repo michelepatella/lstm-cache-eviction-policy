@@ -25,7 +25,7 @@
       "datasource": {
         "uid": "afa304wwrxh4we"
       },
-      "description": "Cumulative number of keys evicted by the API over the last 24 hours",
+      "description": "Cumulative number of keys evicted by the API over the last 5 minutes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -78,7 +78,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "sum(increase(keys_evicted_tot_total[24h]))",
+          "expr": "sum(increase(keys_evicted_tot_total[5m]))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -96,7 +96,7 @@
         "type": "prometheus",
         "uid": "afa304wwrxh4we"
       },
-      "description": "Average proportion of cache keys evicted per request relative to total cache size over the last 24 hours",
+      "description": "Average proportion of cache keys evicted per request relative to total cache size over the last 5 minutes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -153,7 +153,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "avg(avg_over_time(keys_evicted_ratio[24h])) ",
+          "expr": "avg(avg_over_time(keys_evicted_ratio[5m])) ",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -172,7 +172,7 @@
       "datasource": {
         "uid": "afa304wwrxh4we"
       },
-      "description": "Average number of keys evicted per API request over the last 24 hours",
+      "description": "Average number of keys evicted per API request over the last 5 minutes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -224,7 +224,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum(increase(keys_evicted_tot_total[24h]))\n/\nsum(increase(http_requests_total{handler=\"/evict\"}[24h]))",
+          "expr": "sum(increase(keys_evicted_tot_total[5m]))\n/\nsum(increase(http_requests_total{handler=\"/evict\"}[5m]))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -238,7 +238,7 @@
       "datasource": {
         "uid": "afa304wwrxh4we"
       },
-      "description": "Cumulative number of keys excluded from eviction by the API over the last 24 hours",
+      "description": "Cumulative number of keys excluded from eviction by the API over the last 5 minutes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -291,7 +291,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "sum(increase(keys_excluded_from_eviction_tot_total[24h]))\n/\nsum(increase(http_requests_total{handler=\"/evict\"}[24h]))",
+          "expr": "sum(increase(keys_excluded_from_eviction_tot_total[5m]))\n/\nsum(increase(http_requests_total{handler=\"/evict\"}[5m]))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -309,7 +309,7 @@
         "type": "prometheus",
         "uid": "afa304wwrxh4we"
       },
-      "description": "Average proportion of cache keys excluded from eviction relative to total cache size over the last 24 hours",
+      "description": "Average proportion of cache keys excluded from eviction relative to total cache size over the last 5 minutes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -366,7 +366,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "avg(avg_over_time(keys_excluded_from_eviction_ratio[24h])) ",
+          "expr": "avg(avg_over_time(keys_excluded_from_eviction_ratio[5m])) ",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -385,7 +385,7 @@
       "datasource": {
         "uid": "afa304wwrxh4we"
       },
-      "description": "Average number of cache keys excluded from eviction per request over the last 24 hours",
+      "description": "Average number of cache keys excluded from eviction per request over the last 5 minutes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -437,7 +437,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum(increase(keys_excluded_from_eviction_tot_total[24h]))\n/\nsum(increase(http_requests_total{handler=\"/evict\"}[24h]))",
+          "expr": "sum(increase(keys_excluded_from_eviction_tot_total[5m]))\n/\nsum(increase(http_requests_total{handler=\"/evict\"}[5m]))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"

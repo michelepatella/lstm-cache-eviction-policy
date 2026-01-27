@@ -32,6 +32,7 @@ from pipeline.const import DATASET_PROCESSED_TYPE
 pipeline_config = prepare_pipeline_config()
 data_mode = pipeline_config.data.general.mode
 seq_len = pipeline_config.model.sequence.length
+api_kawargs = pipeline_config.simulations.api_kwargs
 
 # Load processed dataset
 dataset_abs_path = get_dataset_abs_path(DATASET_PROCESSED_TYPE, data_mode)
@@ -71,7 +72,7 @@ class DataEvictionUser(HttpUser):
             json={
                 API_PARAM_KEYS_IN_CACHE_NAME: keys_in_cache,
                 API_PARAM_LAST_ACCESSES_NAME: last_accesses,
-                API_PARAM_USER_API_KWARGS_NAME: {},
+                API_PARAM_USER_API_KWARGS_NAME: api_kawargs.__dict__,
             },
         )
 

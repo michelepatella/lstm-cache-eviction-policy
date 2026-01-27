@@ -301,6 +301,7 @@ def test_model_training_end_to_end(model_training_tests_setup: tuple) -> None:
     assert os.path.exists(model_path)
 
 
+@pytest.mark.slow
 @pytest.mark.model_training_learnability
 @pytest.mark.after_model_training
 def test_model_training_learnability(

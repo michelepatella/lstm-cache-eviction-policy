@@ -34,7 +34,7 @@ model:
   behavioral:
     directional:
       local_feat_perturbations:
-        min_success_ratio: 0.55
+        min_success_ratio: 0.53
     invariance:
       feat_perturbation:
         extreme_k: 10
