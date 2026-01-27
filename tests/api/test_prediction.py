@@ -33,6 +33,7 @@ from pipeline.config.configurator import prepare_pipeline_config
 from pipeline.const import DATASET_PROCESSED_TYPE
 
 
+@pytest.mark.slow
 @pytest.mark.api_prediction
 def test_api_prediction() -> None:
     """Validates the API prediction pipeline with a realistic input scenario.
