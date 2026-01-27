@@ -15,6 +15,34 @@ on:
   push:
     branches: [main]
 
+# Define environment variables
+env:
+  TRAINING_DDP_MASTER_BASE_URL: tcp://127.0.0.1
+  GATEWAY_API_PORT: 8000
+  GATEWAY_API_ENDPOINT_BASE_URL: http://34.147.98.233:80
+  FEATURIZER_SERVICE_PORT: 8001
+  FEATURIZER_SERVICE_CHANNEL: featurizer_service:8001
+  PREDICTOR_SERVICE_PORT: 8002
+  PREDICTOR_SERVICE_CHANNEL: predictor_service:8002
+  SCORER_SERVICE_PORT: 8003
+  SCORER_SERVICE_CHANNEL: scorer_service:8003
+  DECIDER_SERVICE_PORT: 8004
+  DECIDER_SERVICE_CHANNEL: decider_service:8004
+  DOCKER_HUB_USER: michelepatella
+  DOCKER_HUB_REPO: lstm-cache-eviction-policy
+  GIT_HUB_USER: michelepatella
+  GIT_HUB_REPO: lstm-cache-eviction-policy
+  GIT_HUB_REGISTRY: ghcr.io
+  DAGS_HUB_REPO: lstm-cache-eviction-policy
+  DAGS_HUB_REPO_OWNER: michelepatella
+  DAGS_HUB_TOKEN: ${{ secrets.DAGS_HUB_TOKEN }}
+  MLFLOW_TRACKING_URI: https://dagshub.com/michelepatella/lstm-cache-eviction-policy.mlflow/
+  GRAFANA_LOKI_URL: https://logs-prod-039.grafana.net/loki/api/v1/push
+  GRAFANA_LOKI_LOGS_URL: https://logs-prod-039.grafana.net/loki/api/v1/query_range
+  GRAFANA_LOKI_USER_ID: 1389882
+  GRAFANA_LOKI_TOKEN: ${{ secrets.GRAFANA_LOKI_TOKEN }}
+  GRAFANA_PORT: 3000
+
 # The workflow is organized into five jobs:
 # - Setup:
 #     Checkout the repository on the current branch, login to
@@ -312,12 +340,12 @@ jobs:
 
             hub_img="$DOCKER_HUB_USER/$DOCKER_HUB_REPO:$img_name"
             ghcr_img="${GIT_HUB_REGISTRY}/${GITHUB_REPOSITORY}/$img_name"
-            
+
             # Tag images
             docker tag "$local_img" "$hub_img"
             docker tag "$local_img" "$ghcr_img:${GIT_HUB_SHA}"
             docker tag "$local_img" "$ghcr_img:latest"
-            
+
             # Push images
             docker push "$hub_img"
             docker push "$ghcr_img:${GIT_HUB_SHA}"
