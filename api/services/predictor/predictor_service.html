@@ -89,8 +89,9 @@ to generate outputs and associated uncertainty estimates (variances).</p>
 
         Returns:
             pb2.PredictorServiceResponse: A gRPC response containing the list of
-                                          predicted outputs and their associated
-                                          variances.
+                                          predicted outputs, their associated
+                                          variances, and a model tag indicating
+                                          the type of the model used.
         &#34;&#34;&#34;
         try:
             info(
@@ -102,6 +103,17 @@ to generate outputs and associated uncertainty estimates (variances).</p>
                     &#34;context&#34;: &#34;Predictor service&#34;,
                 },
             )
+
+            # Select the model to use for canary tests
+            if (
+                staging_model is not None
+                and random.random() &lt; traffic_threshold
+            ):
+                model_to_use = staging_model
+                model_tag = MLFLOW_MODEL_TAG_STATE_STAGING
+            else:
+                model_to_use = model
+                model_tag = MLFLOW_MODEL_TAG_STATE_PROD
 
             # Convert features and keys to tensors with
             # correct shape and move to device
@@ -118,7 +130,7 @@ to generate outputs and associated uncertainty estimates (variances).</p>
 
             # Compute autoregressive rollout
             all_outputs, all_variances = compute_autoregressive_rollout(
-                model,
+                model_to_use,
                 features_seq,
                 keys_seq,
                 device,
@@ -133,6 +145,7 @@ to generate outputs and associated uncertainty estimates (variances).</p>
                 extra={
                     &#34;outputs_num&#34;: len(all_outputs),
                     &#34;variances_num&#34;: len(all_variances),
+                    &#34;model_tag&#34;: model_tag,
                     &#34;context&#34;: &#34;Predictor service&#34;,
                 },
             )
@@ -145,6 +158,7 @@ to generate outputs and associated uncertainty estimates (variances).</p>
                 variances=[
                     pb2.FloatList(values=v.tolist()) for v in all_variances
                 ],
+                model_tag=model_tag,
             )
 
         except Exception as e:
@@ -200,8 +214,9 @@ rollout based on the input features.</p></div>
 
     Returns:
         pb2.PredictorServiceResponse: A gRPC response containing the list of
-                                      predicted outputs and their associated
-                                      variances.
+                                      predicted outputs, their associated
+                                      variances, and a model tag indicating
+                                      the type of the model used.
     &#34;&#34;&#34;
     try:
         info(
@@ -213,6 +228,17 @@ rollout based on the input features.</p></div>
                 &#34;context&#34;: &#34;Predictor service&#34;,
             },
         )
+
+        # Select the model to use for canary tests
+        if (
+            staging_model is not None
+            and random.random() &lt; traffic_threshold
+        ):
+            model_to_use = staging_model
+            model_tag = MLFLOW_MODEL_TAG_STATE_STAGING
+        else:
+            model_to_use = model
+            model_tag = MLFLOW_MODEL_TAG_STATE_PROD
 
         # Convert features and keys to tensors with
         # correct shape and move to device
@@ -229,7 +255,7 @@ rollout based on the input features.</p></div>
 
         # Compute autoregressive rollout
         all_outputs, all_variances = compute_autoregressive_rollout(
-            model,
+            model_to_use,
             features_seq,
             keys_seq,
             device,
@@ -244,6 +270,7 @@ rollout based on the input features.</p></div>
             extra={
                 &#34;outputs_num&#34;: len(all_outputs),
                 &#34;variances_num&#34;: len(all_variances),
+                &#34;model_tag&#34;: model_tag,
                 &#34;context&#34;: &#34;Predictor service&#34;,
             },
         )
@@ -256,6 +283,7 @@ rollout based on the input features.</p></div>
             variances=[
                 pb2.FloatList(values=v.tolist()) for v in all_variances
             ],
+            model_tag=model_tag,
         )
 
     except Exception as e:
@@ -293,8 +321,9 @@ of failure.</dd>
 <dl>
 <dt><code>pb2.PredictorServiceResponse</code></dt>
 <dd>A gRPC response containing the list of
-predicted outputs and their associated
-variances.</dd>
+predicted outputs, their associated
+variances, and a model tag indicating
+the type of the model used.</dd>
 </dl></div>
 </dd>
 </dl>

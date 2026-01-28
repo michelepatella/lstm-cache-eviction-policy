@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>src.components.model API documentation</title>
-<meta name="description" content="">
+<title>src.components.model.monitoring.drift.variants.multivariate_drift_detector API documentation</title>
+<meta name="description" content="multivariate_drift_detector.py …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -33,50 +33,99 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Namespace <code>src.components.model</code></h1>
+<h1 class="title">Module <code>src.components.model.monitoring.drift.variants.multivariate_drift_detector</code></h1>
 </header>
 <section id="section-intro">
+<p>multivariate_drift_detector.py</p>
+<p>This module implements multivariate drift detection using the Kolmogorov-Smirnov test.</p>
+<p>It analyzes the joint distribution of all processed features to identify shifts
+between historical reference data and new production data. The detection results
+are stored as a JSON file.</p>
+<h2 id="functions">Functions</h2>
+<p>detect_multivariate_drift(
+new_df: pd.DataFrame,
+hist_df: pd.DataFrame
+) -&gt; dict[str, Any]:
+Performs multivariate KS tests across all features and returns drift results.</p>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt><code class="name"><a title="src.components.model.best" href="best/index.html">src.components.model.best</a></code></dt>
+<dt id="src.components.model.monitoring.drift.variants.multivariate_drift_detector.detect_multivariate_drift"><code class="name flex">
+<span>def <span class="ident">detect_multivariate_drift</span></span>(<span>new_df: pandas.core.frame.DataFrame, hist_df: pandas.core.frame.DataFrame) ‑> dict[str, typing.Any]</span>
+</code></dt>
 <dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.builder" href="builder.html">src.components.model.builder</a></code></dt>
-<dd>
-<div class="desc"><p>builder.py …</p></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.environment" href="environment/index.html">src.components.model.environment</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.io" href="io/index.html">src.components.model.io</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.lstm" href="lstm.html">src.components.model.lstm</a></code></dt>
-<dd>
-<div class="desc"><p>lstm.py …</p></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.mode" href="mode/index.html">src.components.model.mode</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.monitoring" href="monitoring/index.html">src.components.model.monitoring</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.optimizations" href="optimizations/index.html">src.components.model.optimizations</a></code></dt>
-<dd>
-<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def detect_multivariate_drift(
+    new_df: pd.DataFrame,
+    hist_df: pd.DataFrame,
+) -&gt; dict[str, Any]:
+    &#34;&#34;&#34;Detects multivariate drift across all features using the Kolmogorov-Smirnov test.
+
+    This method creates a multivariate detector based on historical data and
+    predicts drift on the latest production data. It aggregates p-values and
+    distances for the entire feature set and saves the results to a JSON file.
+
+    Args:
+        new_df (pd.DataFrame): DataFrame containing the latest production data.
+        hist_df (pd.DataFrame): DataFrame containing the historical reference data.
+
+    Returns:
+        dict[str, Any]: A dictionary containing the global drift status,
+                        a list of p-values, and a list of distances for each feature.
+    &#34;&#34;&#34;
+    # Create multivariate drift detector (Kolmogorov-Smirnov test)
+    # on historical data
+    ks_multivariate_detector = KSDrift(
+        hist_df[DATASET_PROCESSED_FEATURE_COLUMNS].to_numpy(),
+    )
+
+    # Use multivariate KS detector on new data
+    pred = Box(
+        ks_multivariate_detector.predict(
+            new_df[DATASET_PROCESSED_FEATURE_COLUMNS].to_numpy(),
+        ),
+    )
+
+    # Save multivariate drift result
+    multivariate_drift_results = {
+        DRIFT_DETECTION_RESULT_FIELD_IS_DRIFT_NAME: int(pred.data.is_drift),
+        DRIFT_DETECTION_RESULT_FIELD_P_VAL_NAME: pred.data.p_val.tolist(),
+        DRIFT_DETECTION_RESULT_FIELD_DISTANCE_NAME: pred.data.distance.tolist(),
+    }
+    save_json(
+        multivariate_drift_results,
+        DRIFT_DETECTION_MULTIVARIATE_RESULT_PATH,
+    )
+
+    return multivariate_drift_results</code></pre>
+</details>
+<div class="desc"><p>Detects multivariate drift across all features using the Kolmogorov-Smirnov test.</p>
+<p>This method creates a multivariate detector based on historical data and
+predicts drift on the latest production data. It aggregates p-values and
+distances for the entire feature set and saves the results to a JSON file.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>new_df</code></strong> :&ensp;<code>pd.DataFrame</code></dt>
+<dd>DataFrame containing the latest production data.</dd>
+<dt><strong><code>hist_df</code></strong> :&ensp;<code>pd.DataFrame</code></dt>
+<dd>DataFrame containing the historical reference data.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict[str, Any]</code></dt>
+<dd>A dictionary containing the global drift status,
+a list of p-values, and a list of distances for each feature.</dd>
+</dl></div>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
 </section>
 <section>
 </section>
@@ -88,19 +137,12 @@ el.replaceWith(d);
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="src.components" href="../index.html">src.components</a></code></li>
+<li><code><a title="src.components.model.monitoring.drift.variants" href="index.html">src.components.model.monitoring.drift.variants</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
-<ul>
-<li><code><a title="src.components.model.best" href="best/index.html">src.components.model.best</a></code></li>
-<li><code><a title="src.components.model.builder" href="builder.html">src.components.model.builder</a></code></li>
-<li><code><a title="src.components.model.environment" href="environment/index.html">src.components.model.environment</a></code></li>
-<li><code><a title="src.components.model.io" href="io/index.html">src.components.model.io</a></code></li>
-<li><code><a title="src.components.model.lstm" href="lstm.html">src.components.model.lstm</a></code></li>
-<li><code><a title="src.components.model.mode" href="mode/index.html">src.components.model.mode</a></code></li>
-<li><code><a title="src.components.model.monitoring" href="monitoring/index.html">src.components.model.monitoring</a></code></li>
-<li><code><a title="src.components.model.optimizations" href="optimizations/index.html">src.components.model.optimizations</a></code></li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="src.components.model.monitoring.drift.variants.multivariate_drift_detector.detect_multivariate_drift" href="#src.components.model.monitoring.drift.variants.multivariate_drift_detector.detect_multivariate_drift">detect_multivariate_drift</a></code></li>
 </ul>
 </li>
 </ul>

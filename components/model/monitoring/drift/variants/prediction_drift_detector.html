@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>src.components.model API documentation</title>
-<meta name="description" content="">
+<title>src.components.model.monitoring.drift.variants.prediction_drift_detector API documentation</title>
+<meta name="description" content="prediction_drift_detector.py …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -33,50 +33,125 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Namespace <code>src.components.model</code></h1>
+<h1 class="title">Module <code>src.components.model.monitoring.drift.variants.prediction_drift_detector</code></h1>
 </header>
 <section id="section-intro">
+<p>prediction_drift_detector.py</p>
+<p>This module implements prediction drift detection using the Chi-Square test.</p>
+<p>It monitors shifts in the distribution of the model's output (predictions) by
+comparing predictions made on a historical baseline dataset against those made
+on new production data.</p>
+<h2 id="functions">Functions</h2>
+<p>detect_prediction_drift(
+new_dataloader: DataLoader,
+hist_dataloader: DataLoader,
+model: Module,
+device: torch.device
+) -&gt; dict[str, Any]:
+Performs a Chi-Square test on model predictions and returns drift results.</p>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt><code class="name"><a title="src.components.model.best" href="best/index.html">src.components.model.best</a></code></dt>
+<dt id="src.components.model.monitoring.drift.variants.prediction_drift_detector.detect_prediction_drift"><code class="name flex">
+<span>def <span class="ident">detect_prediction_drift</span></span>(<span>new_dataloader: torch.utils.data.dataloader.DataLoader,<br>hist_dataloader: torch.utils.data.dataloader.DataLoader,<br>model: torch.nn.modules.module.Module,<br>device: torch.device) ‑> dict[str, typing.Any]</span>
+</code></dt>
 <dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.builder" href="builder.html">src.components.model.builder</a></code></dt>
-<dd>
-<div class="desc"><p>builder.py …</p></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.environment" href="environment/index.html">src.components.model.environment</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.io" href="io/index.html">src.components.model.io</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.lstm" href="lstm.html">src.components.model.lstm</a></code></dt>
-<dd>
-<div class="desc"><p>lstm.py …</p></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.mode" href="mode/index.html">src.components.model.mode</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.monitoring" href="monitoring/index.html">src.components.model.monitoring</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.optimizations" href="optimizations/index.html">src.components.model.optimizations</a></code></dt>
-<dd>
-<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def detect_prediction_drift(
+    new_dataloader: DataLoader,
+    hist_dataloader: DataLoader,
+    model: Module,
+    device: torch.device,
+) -&gt; dict[str, Any]:
+    &#34;&#34;&#34;Detects drift in model predictions using the Chi-Square test.
+
+    This method generates predictions for both historical and new datasets,
+    compares their categorical distributions using a Chi-Square test, and
+    determines if a significant shift in model behavior has occurred.
+    Results are saved to a JSON file.
+
+    Args:
+        new_dataloader (DataLoader): DataLoader for the latest production data.
+        hist_dataloader (DataLoader): DataLoader for the historical reference data.
+        model (Module): The production model to evaluate.
+        device (torch.device): The device selected for computation.
+
+    Returns:
+        dict[str, Any]: A dictionary containing the drift status, p-value,
+                        and distance for the predictions.
+    &#34;&#34;&#34;
+    prediction_drift_results = {}
+    if model is not None:
+        # Collect model predictions both
+        # on new and historical data
+        new_preds = collect_model_predictions(
+            model,
+            new_dataloader,
+            device,
+        )
+        hist_preds = collect_model_predictions(
+            model,
+            hist_dataloader,
+            device,
+        )
+
+        # Create Chi-Square as prediction drift detector
+        # on historical predictions
+        prediction_drift_detector = ChiSquareDrift(hist_preds)
+
+        # Use Chi-Square on new predictions
+        pred = Box(
+            prediction_drift_detector.predict(new_preds),
+        )
+
+        # Save prediction drift results
+        prediction_drift_results = {
+            DRIFT_DETECTION_RESULT_FIELD_IS_DRIFT_NAME: int(
+                pred.data.is_drift,
+            ),
+            DRIFT_DETECTION_RESULT_FIELD_P_VAL_NAME: float(pred.data.p_val),
+            DRIFT_DETECTION_RESULT_FIELD_DISTANCE_NAME: float(
+                pred.data.distance,
+            ),
+        }
+
+    # Save overall results
+    save_json(prediction_drift_results, DRIFT_DETECTION_PREDICTION_RESULT_PATH)
+
+    return prediction_drift_results</code></pre>
+</details>
+<div class="desc"><p>Detects drift in model predictions using the Chi-Square test.</p>
+<p>This method generates predictions for both historical and new datasets,
+compares their categorical distributions using a Chi-Square test, and
+determines if a significant shift in model behavior has occurred.
+Results are saved to a JSON file.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>new_dataloader</code></strong> :&ensp;<code>DataLoader</code></dt>
+<dd>DataLoader for the latest production data.</dd>
+<dt><strong><code>hist_dataloader</code></strong> :&ensp;<code>DataLoader</code></dt>
+<dd>DataLoader for the historical reference data.</dd>
+<dt><strong><code>model</code></strong> :&ensp;<code>Module</code></dt>
+<dd>The production model to evaluate.</dd>
+<dt><strong><code>device</code></strong> :&ensp;<code>torch.device</code></dt>
+<dd>The device selected for computation.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict[str, Any]</code></dt>
+<dd>A dictionary containing the drift status, p-value,
+and distance for the predictions.</dd>
+</dl></div>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
 </section>
 <section>
 </section>
@@ -88,19 +163,12 @@ el.replaceWith(d);
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="src.components" href="../index.html">src.components</a></code></li>
+<li><code><a title="src.components.model.monitoring.drift.variants" href="index.html">src.components.model.monitoring.drift.variants</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
-<ul>
-<li><code><a title="src.components.model.best" href="best/index.html">src.components.model.best</a></code></li>
-<li><code><a title="src.components.model.builder" href="builder.html">src.components.model.builder</a></code></li>
-<li><code><a title="src.components.model.environment" href="environment/index.html">src.components.model.environment</a></code></li>
-<li><code><a title="src.components.model.io" href="io/index.html">src.components.model.io</a></code></li>
-<li><code><a title="src.components.model.lstm" href="lstm.html">src.components.model.lstm</a></code></li>
-<li><code><a title="src.components.model.mode" href="mode/index.html">src.components.model.mode</a></code></li>
-<li><code><a title="src.components.model.monitoring" href="monitoring/index.html">src.components.model.monitoring</a></code></li>
-<li><code><a title="src.components.model.optimizations" href="optimizations/index.html">src.components.model.optimizations</a></code></li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="src.components.model.monitoring.drift.variants.prediction_drift_detector.detect_prediction_drift" href="#src.components.model.monitoring.drift.variants.prediction_drift_detector.detect_prediction_drift">detect_prediction_drift</a></code></li>
 </ul>
 </li>
 </ul>

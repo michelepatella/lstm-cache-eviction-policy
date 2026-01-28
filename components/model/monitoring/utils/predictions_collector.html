@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>src.components.model API documentation</title>
-<meta name="description" content="">
+<title>src.components.model.monitoring.utils.predictions_collector API documentation</title>
+<meta name="description" content="predictions_collector.py …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -33,50 +33,88 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Namespace <code>src.components.model</code></h1>
+<h1 class="title">Module <code>src.components.model.monitoring.utils.predictions_collector</code></h1>
 </header>
 <section id="section-intro">
+<p>predictions_collector.py</p>
+<p>This module provides utility functions for performing batch inference and
+aggregating model outputs.</p>
+<p>It specifically handles the extraction of predicted class indices from a
+PyTorch model using a provided DataLoader and computing device.</p>
+<h2 id="functions">Functions</h2>
+<p>collect_model_predictions(
+model: Module,
+dataloader: DataLoader,
+device: torch.device
+) -&gt; np.ndarray:
+Iterates through a DataLoader to perform inference and return an array of predictions.</p>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt><code class="name"><a title="src.components.model.best" href="best/index.html">src.components.model.best</a></code></dt>
+<dt id="src.components.model.monitoring.utils.predictions_collector.collect_model_predictions"><code class="name flex">
+<span>def <span class="ident">collect_model_predictions</span></span>(<span>model: torch.nn.modules.module.Module,<br>dataloader: torch.utils.data.dataloader.DataLoader,<br>device: torch.device) ‑> numpy.ndarray</span>
+</code></dt>
 <dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.builder" href="builder.html">src.components.model.builder</a></code></dt>
-<dd>
-<div class="desc"><p>builder.py …</p></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.environment" href="environment/index.html">src.components.model.environment</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.io" href="io/index.html">src.components.model.io</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.lstm" href="lstm.html">src.components.model.lstm</a></code></dt>
-<dd>
-<div class="desc"><p>lstm.py …</p></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.mode" href="mode/index.html">src.components.model.mode</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.monitoring" href="monitoring/index.html">src.components.model.monitoring</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.optimizations" href="optimizations/index.html">src.components.model.optimizations</a></code></dt>
-<dd>
-<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def collect_model_predictions(
+    model: Module,
+    dataloader: DataLoader,
+    device: torch.device,
+) -&gt; np.ndarray:
+    &#34;&#34;&#34;Performs inference on a dataset and collects predictions.
+
+    Args:
+        model (Module): The PyTorch model used for inference.
+        dataloader (DataLoader): The DataLoader containing the input data.
+        device (torch.device): The device to run inference on.
+
+    Returns:
+        np.ndarray: A numpy array containing the class indices predicted by the model.
+    &#34;&#34;&#34;
+    preds = []
+    model.eval()
+    with torch.no_grad():
+        for batch in dataloader:
+            # Extract batch components
+            x_features, x_keys, _ = batch
+
+            # Move tensors to device
+            x_features = move_to_device(x_features, device)
+            x_keys = move_to_device(x_keys, device)
+
+            # Make prediction
+            outputs = model(x_features, x_keys)
+
+            # Extract and save prediction
+            y_hat = torch.argmax(outputs, dim=TENSOR_CLASS_DIM)
+            preds.append(y_hat.cpu())
+    return torch.cat(preds).numpy()</code></pre>
+</details>
+<div class="desc"><p>Performs inference on a dataset and collects predictions.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>model</code></strong> :&ensp;<code>Module</code></dt>
+<dd>The PyTorch model used for inference.</dd>
+<dt><strong><code>dataloader</code></strong> :&ensp;<code>DataLoader</code></dt>
+<dd>The DataLoader containing the input data.</dd>
+<dt><strong><code>device</code></strong> :&ensp;<code>torch.device</code></dt>
+<dd>The device to run inference on.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>np.ndarray</code></dt>
+<dd>A numpy array containing the class indices predicted by the model.</dd>
+</dl></div>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
 </section>
 <section>
 </section>
@@ -88,19 +126,12 @@ el.replaceWith(d);
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="src.components" href="../index.html">src.components</a></code></li>
+<li><code><a title="src.components.model.monitoring.utils" href="index.html">src.components.model.monitoring.utils</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
-<ul>
-<li><code><a title="src.components.model.best" href="best/index.html">src.components.model.best</a></code></li>
-<li><code><a title="src.components.model.builder" href="builder.html">src.components.model.builder</a></code></li>
-<li><code><a title="src.components.model.environment" href="environment/index.html">src.components.model.environment</a></code></li>
-<li><code><a title="src.components.model.io" href="io/index.html">src.components.model.io</a></code></li>
-<li><code><a title="src.components.model.lstm" href="lstm.html">src.components.model.lstm</a></code></li>
-<li><code><a title="src.components.model.mode" href="mode/index.html">src.components.model.mode</a></code></li>
-<li><code><a title="src.components.model.monitoring" href="monitoring/index.html">src.components.model.monitoring</a></code></li>
-<li><code><a title="src.components.model.optimizations" href="optimizations/index.html">src.components.model.optimizations</a></code></li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="src.components.model.monitoring.utils.predictions_collector.collect_model_predictions" href="#src.components.model.monitoring.utils.predictions_collector.collect_model_predictions">collect_model_predictions</a></code></li>
 </ul>
 </li>
 </ul>

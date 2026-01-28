@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>src.components.dataset.io.saver API documentation</title>
-<meta name="description" content="saver.py …">
+<title>src.components.model.monitoring.performance.monitor API documentation</title>
+<meta name="description" content="monitor.py …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -33,22 +33,18 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>src.components.dataset.io.saver</code></h1>
+<h1 class="title">Module <code>src.components.model.monitoring.performance.monitor</code></h1>
 </header>
 <section id="section-intro">
-<p>saver.py</p>
-<p>Utility module for saving Pandas DataFrames to CSV.</p>
-<p>This module provides the <code><a title="src.components.dataset.io.saver.save_dataset" href="#src.components.dataset.io.saver.save_dataset">save_dataset()</a></code> function, which saves a given
-Pandas DataFrame to a CSV file at a specified path, optionally including
-the DataFrame index.</p>
+<p>monitor.py</p>
+<p>This module orchestrates the performance monitoring of the production model.</p>
+<p>It utilizes the Deepchecks library to run a suite of tests comparing the
+performance of the model on new production data versus historical reference
+data. It includes checks for baseline comparisons and train-test performance
+degradation to ensure the model maintains its predictive quality in production.</p>
 <h2 id="functions">Functions</h2>
-<p>save_dataset(
-df: pd.DataFrame,
-path: str,
-index: bool = DATASET_INDEX,
-append: bool = DATASET_APPEND
-) -&gt; None
-Saves the DataFrame to a CSV file and logs the operation.</p>
+<p>monitor_model_performance() -&gt; bool:
+Orchestrates the setup, inference, and execution of Deepchecks performance suites.</p>
 </section>
 <section>
 </section>
@@ -57,118 +53,161 @@ Saves the DataFrame to a CSV file and logs the operation.</p>
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="src.components.dataset.io.saver.save_dataset"><code class="name flex">
-<span>def <span class="ident">save_dataset</span></span>(<span>df: pandas.core.frame.DataFrame,<br>path: str,<br>index: bool = False,<br>append: bool = False) ‑> None</span>
+<dt id="src.components.model.monitoring.performance.monitor.monitor_model_performance"><code class="name flex">
+<span>def <span class="ident">monitor_model_performance</span></span>(<span>) ‑> bool</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def save_dataset(
-    df: pd.DataFrame,
-    path: str,
-    index: bool = DATASET_INDEX,
-    append: bool = DATASET_APPEND,
-) -&gt; None:
-    &#34;&#34;&#34;Save Pandas dataframe.
+<pre><code class="python">def monitor_model_performance() -&gt; bool:
+    &#34;&#34;&#34;Executes the model performance monitoring suite.
 
-    This function saves Pandas dataframe
-    to CSV dataset at specified path.
-
-    Args:
-        df (pd.DataFrame): Pandas dataframe to be saved.
-        path (str): Path to save dataset to.
-        index (bool): If True, save dataset index. Otherwise, don&#39;t.
-        append (bool): If True, append the new dataset to an old one. Otherwise, don&#39;t.
+    This method performs the following operational steps:
+    1.  Setup: Initializes the monitoring environment, loading datasets,
+        configurations, and the production model.
+    2.  Dataset preparation: Converts raw dataframes into Deepchecks-compatible
+        Dataset objects.
+    3.  Preconditions: Validates if the volume of new data meets the minimum
+        threshold required for statistically significant testing.
+    4.  Suite construction: Builds a Deepchecks Suite with conditions for
+        baseline gain, absolute test performance, and relative degradation.
+    5.  Inference: Computes predictions and probabilities for both sets.
+    6.  Suite execution: Runs the suite and saves the results to a JSON file.
 
     Returns:
-        None
-
-    Raises:
-        RuntimeError: If saving the dataset fails:
-            * File cannot be written due to I/O error (OSError).
+        bool: True if the performance checks pass or if there is insufficient
+              data to run (defaulting to safe), False if any performance
+              assertion in the suite fails.
     &#34;&#34;&#34;
+    # ----------------------------
+    # Setup
+    # ----------------------------
+    (
+        new_df,
+        hist_df,
+        new_dataset,
+        hist_dataset,
+        new_dataloader,
+        hist_dataloader,
+        pipeline_config,
+        tests_config,
+        model,
+        device,
+    ) = initialize_model_monitoring()
+
+    # Create a DeepChecks dataset starting
+    # from new data collected
+    dc_new_dataset = create_dc_dataset(
+        new_dataset.data,
+        seq_len=pipeline_config.model.sequence.length,
+        index_name=None,
+    )
+    dc_hist_dataset = create_dc_dataset(
+        hist_dataset.data,
+        seq_len=pipeline_config.model.sequence.length,
+        index_name=None,
+    )
+
+    # ----------------------------
+    # Preconditions
+    # ----------------------------
+    # Check if enough data is available
+    if len(new_dataset.data) &lt; pipeline_config.training.samples.min:
+        return False
+
+    # ----------------------------
+    # Suite building
+    # ASSUMPTION:
+    #   Historical data represents
+    #   the training set while new
+    #   collected data represents
+    #   the testing set.
+    # ----------------------------
+    # Create a suite of model tests
+    suite = Suite(
+        MODEL_PERFORMANCE_TESTS_SUITE_NAME,
+        SimpleModelComparison(
+            strategy=tests_config.model.performance.baseline_comp.strategy,
+            scorers=tests_config.model.performance.baseline_comp.scorers,
+        ).add_condition_gain_greater_than(
+            min_allowed_gain=tests_config.model.performance.baseline_comp.min_gain,
+        ),
+        TrainTestPerformance(
+            scorers=tests_config.model.performance.train_test.scorers,
+        ).add_condition_test_performance_greater_than(
+            min_score=tests_config.model.performance.train_test.test_min_score,
+        ),
+        TrainTestPerformance(
+            scorers=tests_config.model.performance.train_test.scorers,
+        ).add_condition_train_test_relative_degradation_less_than(
+            threshold=tests_config.model.performance.train_test.max_degradation,
+        ),
+    )
+
+    # ----------------------------
+    # Inference
+    # ----------------------------
+    # Get both new and historical predictions
+    # and probabilities to run DeepChecks tests
+    # suite on
+    y_pred_hist, y_pred_new, y_proba_hist, y_proba_new = (
+        compute_dc_model_predictions(
+            new_dataset,
+            hist_dataset,
+            pipeline_config,
+            training_loader=hist_dataloader,
+            testing_loader=new_dataloader,
+            model=model,
+        )
+    )
+
+    # ----------------------------
+    # Suite running
+    # ----------------------------
+    # Run the suite over the training and
+    # testing sets as well as the model
     try:
-        debug(
-            &#34;Dataset saving started&#34;,
-            extra={
-                &#34;path&#34;: str(path),
-                &#34;save_index&#34;: index,
-                &#34;append&#34;: append,
-                &#34;rows_num&#34;: len(df) if hasattr(df, &#34;__len__&#34;) else None,
-                &#34;column_num&#34;: (
-                    len(df.columns) if hasattr(df, &#34;columns&#34;) else None
-                ),
-                &#34;context&#34;: &#34;Dataset saving&#34;,
-            },
+        run_dc_suite(
+            dc_hist_dataset,
+            suite,
+            str(MODEL_PERFORMANCE_MONITORING_RESULTS_FILE_PATH),
+            dc_testing_set=dc_new_dataset,
+            y_pred_train=y_pred_hist,
+            y_pred_test=y_pred_new,
+            y_proba_train=y_proba_hist,
+            y_proba_test=y_proba_new,
         )
+    except AssertionError:
+        return True
 
-        # Decide mode and header
-        if append:
-            mode = &#34;a&#34;
-            header = False
-        else:
-            mode = &#34;w&#34;
-            header = True
-
-        # Convert Pandas dataframe
-        # to CSV file, and save it to
-        # given path
-        df.to_csv(path, index=index, mode=mode, header=header)
-
-        debug(
-            &#34;Dataset saving completed&#34;,
-            extra={
-                &#34;path&#34;: str(path),
-                &#34;save_index&#34;: index,
-                &#34;append&#34;: append,
-                &#34;rows_num&#34;: len(df) if hasattr(df, &#34;__len__&#34;) else None,
-                &#34;columns_num&#34;: (
-                    len(df.columns) if hasattr(df, &#34;columns&#34;) else None
-                ),
-                &#34;context&#34;: &#34;Dataset saving&#34;,
-            },
-        )
-    except OSError as e:
-        msg = &#34;Dataset saving failed&#34;
-        error(
-            msg,
-            extra={
-                &#34;exception&#34;: str(e),
-                &#34;path&#34;: str(path),
-                &#34;save_index&#34;: index,
-                &#34;append&#34;: append,
-                &#34;rows_num&#34;: len(df) if hasattr(df, &#34;__len__&#34;) else None,
-                &#34;columns_num&#34;: (
-                    len(df.columns) if hasattr(df, &#34;columns&#34;) else None
-                ),
-                &#34;context&#34;: &#34;Dataset saving&#34;,
-            },
-        )
-        raise RuntimeError(msg) from e</code></pre>
+    return False</code></pre>
 </details>
-<div class="desc"><p>Save Pandas dataframe.</p>
-<p>This function saves Pandas dataframe
-to CSV dataset at specified path.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>df</code></strong> :&ensp;<code>pd.DataFrame</code></dt>
-<dd>Pandas dataframe to be saved.</dd>
-<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
-<dd>Path to save dataset to.</dd>
-<dt><strong><code>index</code></strong> :&ensp;<code>bool</code></dt>
-<dd>If True, save dataset index. Otherwise, don't.</dd>
-<dt><strong><code>append</code></strong> :&ensp;<code>bool</code></dt>
-<dd>If True, append the new dataset to an old one. Otherwise, don't.</dd>
-</dl>
+<div class="desc"><p>Executes the model performance monitoring suite.</p>
+<p>This method performs the following operational steps:
+1.
+Setup: Initializes the monitoring environment, loading datasets,
+configurations, and the production model.
+2.
+Dataset preparation: Converts raw dataframes into Deepchecks-compatible
+Dataset objects.
+3.
+Preconditions: Validates if the volume of new data meets the minimum
+threshold required for statistically significant testing.
+4.
+Suite construction: Builds a Deepchecks Suite with conditions for
+baseline gain, absolute test performance, and relative degradation.
+5.
+Inference: Computes predictions and probabilities for both sets.
+6.
+Suite execution: Runs the suite and saves the results to a JSON file.</p>
 <h2 id="returns">Returns</h2>
-<p>None</p>
-<h2 id="raises">Raises</h2>
 <dl>
-<dt><code>RuntimeError</code></dt>
-<dd>If saving the dataset fails:
-* File cannot be written due to I/O error (OSError).</dd>
+<dt><code>bool</code></dt>
+<dd>True if the performance checks pass or if there is insufficient
+data to run (defaulting to safe), False if any performance
+assertion in the suite fails.</dd>
 </dl></div>
 </dd>
 </dl>
@@ -183,12 +222,12 @@ to CSV dataset at specified path.</p>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="src.components.dataset.io" href="index.html">src.components.dataset.io</a></code></li>
+<li><code><a title="src.components.model.monitoring.performance" href="index.html">src.components.model.monitoring.performance</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="src.components.dataset.io.saver.save_dataset" href="#src.components.dataset.io.saver.save_dataset">save_dataset</a></code></li>
+<li><code><a title="src.components.model.monitoring.performance.monitor.monitor_model_performance" href="#src.components.model.monitoring.performance.monitor.monitor_model_performance">monitor_model_performance</a></code></li>
 </ul>
 </li>
 </ul>

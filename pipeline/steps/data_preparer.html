@@ -213,6 +213,28 @@ Main function to execute the data preparation pipeline step.</p>
         mlflow.log_artifact(daily_profile_plot_save_path)
         mlflow.log_artifact(key_usage_heatmap_plot_save_path)
 
+        # Run after data preparation tests
+        try:
+            pytest.main(
+                [
+                    &#34;-m&#34;,
+                    &#34;after_data_preparation&#34;,
+                    &#34;--tb=short&#34;,
+                    &#34;-q&#34;,
+                ],
+            )
+        except SystemExit as e:
+            if e.code != 0:
+                msg = &#34;After data preparation tests failed&#34;
+                logging.exception(
+                    msg,
+                    extra={
+                        &#34;exception&#34;: str(e),
+                        &#34;context&#34;: &#34;Data preparation&#34;,
+                    },
+                )
+                raise RuntimeError(msg) from e
+
     info(
         &#34;Data preparation completed&#34;,
         extra={

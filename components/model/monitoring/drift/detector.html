@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>src.components.model API documentation</title>
-<meta name="description" content="">
+<title>src.components.model.monitoring.drift.detector API documentation</title>
+<meta name="description" content="detector.py …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -33,50 +33,142 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Namespace <code>src.components.model</code></h1>
+<h1 class="title">Module <code>src.components.model.monitoring.drift.detector</code></h1>
 </header>
 <section id="section-intro">
+<p>detector.py</p>
+<p>Module responsible for orchestrating the whole drift detection workflow.</p>
+<p>This module provides the <code><a title="src.components.model.monitoring.drift.detector.detect_drift" href="#src.components.model.monitoring.drift.detector.detect_drift">detect_drift()</a></code> function, which acts as the main entry
+point for monitoring data stability. It coordinates the execution of specialized
+drift detectors (univariate, multivariate, target, and prediction), aggregates
+their results, and returns a boolean flag indicating whether any form of drift
+has been detected.</p>
+<h2 id="functions">Functions</h2>
+<p>detect_drift() -&gt; bool:
+Orchestrates specialized drift checks and returns the final detection status.</p>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt><code class="name"><a title="src.components.model.best" href="best/index.html">src.components.model.best</a></code></dt>
+<dt id="src.components.model.monitoring.drift.detector.detect_drift"><code class="name flex">
+<span>def <span class="ident">detect_drift</span></span>(<span>) ‑> bool</span>
+</code></dt>
 <dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.builder" href="builder.html">src.components.model.builder</a></code></dt>
-<dd>
-<div class="desc"><p>builder.py …</p></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.environment" href="environment/index.html">src.components.model.environment</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.io" href="io/index.html">src.components.model.io</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.lstm" href="lstm.html">src.components.model.lstm</a></code></dt>
-<dd>
-<div class="desc"><p>lstm.py …</p></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.mode" href="mode/index.html">src.components.model.mode</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.monitoring" href="monitoring/index.html">src.components.model.monitoring</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.optimizations" href="optimizations/index.html">src.components.model.optimizations</a></code></dt>
-<dd>
-<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def detect_drift() -&gt; bool:
+    &#34;&#34;&#34;Orchestrates the detection of data, target, and prediction drift.
+
+    This function performs the following steps:
+    1.  Setup: Initializes the drift detection environment, retrieving new
+        production data (DataFrame and DataLoader), historical reference data,
+        and the current production model.
+    2.  Univariate Drift: Checks for distribution shifts in individual features.
+    3.  Multivariate Drift: Checks for shifts in the joint distribution of features.
+    4.  Target Drift: Checks for shifts in the ground truth labels.
+    5.  Prediction Drift: Checks for shifts in the model&#39;s output distribution.
+    6.  Final Checking: Evaluates all results and returns True if any specific
+        detector signals that drift has occurred.
+
+    Returns:
+        bool: True if any form of drift is detected, False otherwise.
+    &#34;&#34;&#34;
+    # ----------------------------
+    # Setup
+    # ----------------------------
+    (
+        new_df,
+        hist_df,
+        _,
+        _,
+        new_dataloader,
+        hist_dataloader,
+        pipeline_config,
+        _,
+        model,
+        device,
+    ) = initialize_model_monitoring()
+
+    # ----------------------------
+    # Preconditions
+    # ----------------------------
+    # Check if enough data is available
+    if len(new_df) &lt; pipeline_config.training.samples.min:
+        return False
+
+    # ----------------------------
+    # Univariate Drift Detection
+    # ----------------------------
+    univariate_drift_results = detect_univariate_drift(new_df, hist_df)
+
+    # ----------------------------
+    # Multivariate Drift Detection
+    # ----------------------------
+    multivariate_drift_results = detect_multivariate_drift(new_df, hist_df)
+
+    # ----------------------------
+    # Target Drift Detection
+    # ----------------------------
+    target_drift_results = detect_target_drift(new_df, hist_df)
+
+    # ----------------------------
+    # Prediction Drift Detection
+    # ----------------------------
+    prediction_drift_results = detect_prediction_drift(
+        new_dataloader,
+        hist_dataloader,
+        model,
+        device,
+    )
+
+    # ----------------------------
+    # Final Checking
+    # ----------------------------
+    # Return True if any drift detected, False otherwise
+    if (
+        any(
+            res[DRIFT_DETECTION_RESULT_FIELD_IS_DRIFT_NAME]
+            for res in univariate_drift_results.values()
+        )
+        or multivariate_drift_results[
+            DRIFT_DETECTION_RESULT_FIELD_IS_DRIFT_NAME
+        ]
+        or target_drift_results[DRIFT_DETECTION_RESULT_FIELD_IS_DRIFT_NAME]
+        or prediction_drift_results[DRIFT_DETECTION_RESULT_FIELD_IS_DRIFT_NAME]
+    ):
+        return True
+    return False</code></pre>
+</details>
+<div class="desc"><p>Orchestrates the detection of data, target, and prediction drift.</p>
+<p>This function performs the following steps:
+1.
+Setup: Initializes the drift detection environment, retrieving new
+production data (DataFrame and DataLoader), historical reference data,
+and the current production model.
+2.
+Univariate Drift: Checks for distribution shifts in individual features.
+3.
+Multivariate Drift: Checks for shifts in the joint distribution of features.
+4.
+Target Drift: Checks for shifts in the ground truth labels.
+5.
+Prediction Drift: Checks for shifts in the model's output distribution.
+6.
+Final Checking: Evaluates all results and returns True if any specific
+detector signals that drift has occurred.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if any form of drift is detected, False otherwise.</dd>
+</dl></div>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
 </section>
 <section>
 </section>
@@ -88,19 +180,12 @@ el.replaceWith(d);
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="src.components" href="../index.html">src.components</a></code></li>
+<li><code><a title="src.components.model.monitoring.drift" href="index.html">src.components.model.monitoring.drift</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
-<ul>
-<li><code><a title="src.components.model.best" href="best/index.html">src.components.model.best</a></code></li>
-<li><code><a title="src.components.model.builder" href="builder.html">src.components.model.builder</a></code></li>
-<li><code><a title="src.components.model.environment" href="environment/index.html">src.components.model.environment</a></code></li>
-<li><code><a title="src.components.model.io" href="io/index.html">src.components.model.io</a></code></li>
-<li><code><a title="src.components.model.lstm" href="lstm.html">src.components.model.lstm</a></code></li>
-<li><code><a title="src.components.model.mode" href="mode/index.html">src.components.model.mode</a></code></li>
-<li><code><a title="src.components.model.monitoring" href="monitoring/index.html">src.components.model.monitoring</a></code></li>
-<li><code><a title="src.components.model.optimizations" href="optimizations/index.html">src.components.model.optimizations</a></code></li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="src.components.model.monitoring.drift.detector.detect_drift" href="#src.components.model.monitoring.drift.detector.detect_drift">detect_drift</a></code></li>
 </ul>
 </li>
 </ul>

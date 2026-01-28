@@ -40,7 +40,9 @@ el.replaceWith(d);
 <p>Configuration section for the training phase.</p>
 <h2 id="classes">Classes</h2>
 <p>TrainingEpochsPipelineConfig(BaseModel):
-Configuration for the training phase.</p>
+Configuration for the training phase.
+TrainingSamplesPipelineConfig(BaseModel):
+Configuration for the training samples.</p>
 </section>
 <section>
 </section>
@@ -67,7 +69,8 @@ Configuration for the training phase.</p>
         epochs (int): Number of training epochs (&gt; 0).
     &#34;&#34;&#34;
 
-    epochs: Annotated[int, Field(gt=0)]</code></pre>
+    epochs: Annotated[int, Field(gt=0)]
+    samples: TrainingSamplesPipelineConfig</code></pre>
 </details>
 <div class="desc"><p>Training configuration.</p>
 <h2 id="attributes">Attributes</h2>
@@ -93,6 +96,54 @@ validated to form a valid model.</p>
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="src.pipeline.config.pydantic.sections.training_pipeline_config.TrainingPipelineConfig.samples"><code class="name">var <span class="ident">samples</span> : <a title="src.pipeline.config.pydantic.sections.training_pipeline_config.TrainingSamplesPipelineConfig" href="#src.pipeline.config.pydantic.sections.training_pipeline_config.TrainingSamplesPipelineConfig">TrainingSamplesPipelineConfig</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.training_pipeline_config.TrainingSamplesPipelineConfig"><code class="flex name class">
+<span>class <span class="ident">TrainingSamplesPipelineConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TrainingSamplesPipelineConfig(BaseModel):
+    &#34;&#34;&#34;Training samples configuration.
+
+    Attributes:
+        min (int): Minimum number of samples for training process.
+    &#34;&#34;&#34;
+
+    min: Annotated[int, Field(gt=0)]</code></pre>
+</details>
+<div class="desc"><p>Training samples configuration.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>min</code></strong> :&ensp;<code>int</code></dt>
+<dd>Minimum number of samples for training process.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.pipeline.config.pydantic.sections.training_pipeline_config.TrainingSamplesPipelineConfig.min"><code class="name">var <span class="ident">min</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.pipeline.config.pydantic.sections.training_pipeline_config.TrainingSamplesPipelineConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -115,6 +166,14 @@ validated to form a valid model.</p>
 <ul class="">
 <li><code><a title="src.pipeline.config.pydantic.sections.training_pipeline_config.TrainingPipelineConfig.epochs" href="#src.pipeline.config.pydantic.sections.training_pipeline_config.TrainingPipelineConfig.epochs">epochs</a></code></li>
 <li><code><a title="src.pipeline.config.pydantic.sections.training_pipeline_config.TrainingPipelineConfig.model_config" href="#src.pipeline.config.pydantic.sections.training_pipeline_config.TrainingPipelineConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.training_pipeline_config.TrainingPipelineConfig.samples" href="#src.pipeline.config.pydantic.sections.training_pipeline_config.TrainingPipelineConfig.samples">samples</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.pipeline.config.pydantic.sections.training_pipeline_config.TrainingSamplesPipelineConfig" href="#src.pipeline.config.pydantic.sections.training_pipeline_config.TrainingSamplesPipelineConfig">TrainingSamplesPipelineConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.pipeline.config.pydantic.sections.training_pipeline_config.TrainingSamplesPipelineConfig.min" href="#src.pipeline.config.pydantic.sections.training_pipeline_config.TrainingSamplesPipelineConfig.min">min</a></code></li>
+<li><code><a title="src.pipeline.config.pydantic.sections.training_pipeline_config.TrainingSamplesPipelineConfig.model_config" href="#src.pipeline.config.pydantic.sections.training_pipeline_config.TrainingSamplesPipelineConfig.model_config">model_config</a></code></li>
 </ul>
 </li>
 </ul>

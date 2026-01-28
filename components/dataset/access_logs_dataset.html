@@ -187,20 +187,87 @@ PyTorch-compatible dataset class for sequential access logs.</p>
         data_mode = pipeline_config.data.general.mode
         training_split = pipeline_config.dataset.splits.training
 
-        # Retrieve path to load dataset from
-        dataset_path = get_dataset_abs_path(
-            dataset_type,
-            data_mode,
-        )
+        # For classical data
+        if data_mode != DATA_EXTERNAL_MODE:
+            # Retrieve path to load dataset from
+            dataset_path = get_dataset_abs_path(
+                dataset_type,
+                data_mode,
+            )
 
-        # Load the dataset
-        df = load_dataset(dataset_path)
+            # Load the dataset
+            df = load_dataset(dataset_path)
+
+        # For external data
+        else:
+            # Load retraining config
+            retraining_checkpoint = load_json(RETRAINING_CHECKPOINT_FILE_PATH)
+
+            # Get current timestamp in ns
+            current_timestamp = int(
+                datetime.now(timezone.utc).timestamp()
+                * TIME_NANOSECONDS_IN_SECOND,
+            )
+
+            # Query Loki logs
+            response = requests.get(
+                LOGS_GRAFANA_LOKI_LOGS_URL,
+                auth=(LOGS_GRAFANA_LOKI_USER_ID, LOGS_GRAFANA_LOKI_TOKEN),
+                params={
+                    &#34;query&#34;: &#39;{service_name=&#34;unknown_service&#34;} | json | context=&#34;Real-world data&#34;&#39;,
+                    &#34;start&#34;: retraining_checkpoint.last_timestamp + 1,
+                    &#34;end&#34;: current_timestamp,
+                },
+            ).json()
+
+            # Flatten data into records
+            df = pd.DataFrame(
+                [
+                    item
+                    for entry in response.get(&#34;data&#34;, {}).get(&#34;result&#34;, [])
+                    for row in entry[&#34;values&#34;]
+                    for item in json.loads(row[LIST_LAST_IDX])[&#34;data&#34;]
+                ],
+            )
+            shift_dataset_column(df, DATASET_COLUMN_REQUEST_NAME, 1)
+
+            # Check if enough data is available
+            if len(df) &lt; pipeline_config.training.samples.min:
+                return
+
+            # Save dataset
+            save_dataset(df, DATASET_REAL_PROCESSED_FILE_PATH, append=True)
+
+            # Run after data preprocessing tests
+            try:
+                import pytest
+
+                pytest.main(
+                    [
+                        &#34;-m&#34;,
+                        &#34;after_data_preprocessing&#34;,
+                        &#34;--tb=short&#34;,
+                        &#34;-q&#34;,
+                    ],
+                )
+            except SystemExit as e:
+                if e.code != 0:
+                    msg = &#34;After data preprocessing tests failed&#34;
+                    logging.exception(
+                        msg,
+                        extra={
+                            &#34;exception&#34;: str(e),
+                            &#34;context&#34;: &#34;Retraining&#34;,
+                        },
+                    )
+                    raise RuntimeError(msg) from e
 
         # Set data
         self.data = df.copy()
 
         # Split the dataset
-        self._split_dataset(split_type, training_split)
+        if split_type is not None:
+            self._split_dataset(split_type, training_split)
 
         # Set the fields of the dataset
         self._set_fields(pipeline_config)

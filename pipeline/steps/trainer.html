@@ -155,12 +155,38 @@ saving the final, optimized model.</p>
             pipeline_config,
         )
 
+        # Check if enough data is available
+        if len(training_set) &lt; pipeline_config.training.samples.min:
+            return
+
         # Split training set into training
         # and validation sets
         training_set, validation_set = split_training_validation_sets(
             training_set,
             validation_split,
         )
+
+        # Run after data splitting tests
+        try:
+            pytest.main(
+                [
+                    &#34;-m&#34;,
+                    &#34;after_data_splitting&#34;,
+                    &#34;--tb=short&#34;,
+                    &#34;-q&#34;,
+                ],
+            )
+        except SystemExit as e:
+            if e.code != 0:
+                msg = &#34;After data splitting tests failed&#34;
+                logging.exception(
+                    msg,
+                    extra={
+                        &#34;exception&#34;: str(e),
+                        &#34;context&#34;: &#34;Training&#34;,
+                    },
+                )
+                raise RuntimeError(msg) from e
 
         # Create a loader both for
         # training and validation sets
@@ -178,11 +204,38 @@ saving the final, optimized model.</p>
         # Extract targets from training loader
         targets = extract_targets_from_data_loader(training_loader)
 
+        # Load a pretrained model if needed
+        model = None
+        if data_mode == DATA_EXTERNAL_MODE:
+            # Load the last version of the production (full) model
+            mlflow_client = mlflow.MlflowClient(
+                tracking_uri=MLFLOW_TRACKING_URI,
+            )
+            model_versions = mlflow_client.search_model_versions(
+                f&#34;name=&#39;{MLFLOW_MODEL_PRODUCTION_FULL_NAME}&#39;&#34;,
+            )
+            prod_versions = [
+                v
+                for v in model_versions
+                if v.tags.get(MLFLOW_MODEL_TAG_STATE)
+                == MLFLOW_MODEL_TAG_STATE_PROD
+            ]
+            last_model_version = max(
+                (v for v in prod_versions),
+                key=lambda v: int(v.version),
+                default=None,
+            )
+            if last_model_version is not None:
+                model = mlflow.pytorch.load_model(
+                    model_uri=f&#34;models:/{MLFLOW_MODEL_PRODUCTION_FULL_NAME}/{last_model_version.version}&#34;,
+                )
+
         # Model setup for training
         device, criterion, model = initialize_model_environment(
             targets,
             training_device,
             pipeline_config,
+            model=model,
             model_params=model_params,
         )
 
@@ -207,6 +260,15 @@ saving the final, optimized model.</p>
             pipeline_config,
         )
 
+        # Update retraining config
+        retraining_checkpoint = load_json(RETRAINING_CHECKPOINT_FILE_PATH)
+        current_timestamp = int(
+            datetime.now(timezone.utc).timestamp()
+            * TIME_NANOSECONDS_IN_SECOND,
+        )
+        retraining_checkpoint.last_timestamp = current_timestamp
+        save_json(retraining_checkpoint, RETRAINING_CHECKPOINT_FILE_PATH)
+
         # Re-built model with best weights found
         model = build_model(
             model_params.__dict__,
@@ -218,12 +280,73 @@ saving the final, optimized model.</p>
         )
         model.load_state_dict(best_model_weights)
 
+        # Save the best model trained (not optimized)
+        save_model(model, model_path)
+
+        # Run after model training tests
+        try:
+            pytest.main(
+                [
+                    &#34;-m&#34;,
+                    &#34;after_model_training&#34;,
+                    &#34;--tb=short&#34;,
+                    &#34;-q&#34;,
+                ],
+            )
+        except SystemExit as e:
+            if e.code != 0:
+                msg = &#34;After model training tests failed&#34;
+                logging.exception(
+                    msg,
+                    extra={
+                        &#34;exception&#34;: str(e),
+                        &#34;context&#34;: &#34;Training&#34;,
+                    },
+                )
+                raise RuntimeError(msg) from e
+
+        # Log the full model and save it to registry
+        with (
+            tempfile.TemporaryDirectory() as MLFLOW_PYTORCH_SAVE_MODEL_TEMP_PATH
+        ):
+            mlflow.pytorch.save_model(
+                pytorch_model=model,
+                path=MLFLOW_PYTORCH_SAVE_MODEL_TEMP_PATH,
+            )
+            mlflow.log_artifacts(
+                local_dir=MLFLOW_PYTORCH_SAVE_MODEL_TEMP_PATH,
+                artifact_path=MLFLOW_ARTIFACT_PATH,
+            )
+            mlflow.register_model(
+                model_uri=f&#34;runs:/{mlflow.active_run().info.run_id}/{MLFLOW_ARTIFACT_PATH}&#34;,
+                name=MLFLOW_MODEL_PRODUCTION_FULL_NAME
+                if data_mode == DATA_REAL_MODE
+                or data_mode == DATA_EXTERNAL_MODE
+                else MLFLOW_MODEL_SIMULATION_FULL_NAME,
+                tags={
+                    MLFLOW_MODEL_TAG_DATA_MODE: DATA_REAL_MODE
+                    if data_mode == DATA_REAL_MODE
+                    or data_mode == DATA_EXTERNAL_MODE
+                    else data_mode,
+                    **(
+                        {
+                            MLFLOW_MODEL_TAG_STATE: MLFLOW_MODEL_TAG_STATE_PROD
+                            if data_mode == DATA_REAL_MODE
+                            else MLFLOW_MODEL_TAG_STATE_STAGING,
+                        }
+                        if data_mode == DATA_REAL_MODE
+                        or data_mode == DATA_EXTERNAL_MODE
+                        else {}
+                    ),
+                },
+            )
+
         # Optimize trained model before saving
         # it, applying pruning and quantization before
         model = prune_model(model, pruning_amount)
         model = quantize_model(model, quantization_dtype, quantization_engine)
 
-        # Save the best model trained
+        # Save the best model trained (optimized)
         save_model(model, model_path)
 
         # Experiment tracking
@@ -255,8 +378,24 @@ saving the final, optimized model.</p>
                 model_uri=f&#34;runs:/{mlflow.active_run().info.run_id}/{MLFLOW_ARTIFACT_PATH}&#34;,
                 name=MLFLOW_MODEL_PRODUCTION_NAME
                 if data_mode == DATA_REAL_MODE
+                or data_mode == DATA_EXTERNAL_MODE
                 else MLFLOW_MODEL_SIMULATION_NAME,
-                tags={MLFLOW_MODEL_TAG_DATA_MODE: data_mode},
+                tags={
+                    MLFLOW_MODEL_TAG_DATA_MODE: DATA_REAL_MODE
+                    if data_mode == DATA_REAL_MODE
+                    or data_mode == DATA_EXTERNAL_MODE
+                    else data_mode,
+                    **(
+                        {
+                            MLFLOW_MODEL_TAG_STATE: MLFLOW_MODEL_TAG_STATE_STAGING
+                            if data_mode == DATA_EXTERNAL_MODE
+                            else MLFLOW_MODEL_TAG_STATE_PROD,
+                        }
+                        if data_mode == DATA_REAL_MODE
+                        or data_mode == DATA_EXTERNAL_MODE
+                        else {}
+                    ),
+                },
             )
 
     info(

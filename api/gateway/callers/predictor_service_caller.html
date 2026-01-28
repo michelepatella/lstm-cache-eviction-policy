@@ -49,7 +49,7 @@ keys_seq: list[int],
 features_shape: list[int],
 keys_shape: list[int],
 api_config: APIConfig,
-) -&gt; tuple[list[list[float]], list[list[float]]]:
+) -&gt; tuple[list[list[float]], list[list[float]], str]:
 Initiates the gRPC call to the Predictor Service for model inference.</p>
 </section>
 <section>
@@ -60,7 +60,7 @@ Initiates the gRPC call to the Predictor Service for model inference.</p>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="src.api.gateway.callers.predictor_service_caller.call_predictor_service"><code class="name flex">
-<span>def <span class="ident">call_predictor_service</span></span>(<span>features: list[float],<br>keys_seq: list[int],<br>features_shape: list[int],<br>keys_shape: list[int],<br>api_config: api.config.pydantic.api_config.APIConfig) ‑> tuple[list[list[float]], list[list[float]]]</span>
+<span>def <span class="ident">call_predictor_service</span></span>(<span>features: list[float],<br>keys_seq: list[int],<br>features_shape: list[int],<br>keys_shape: list[int],<br>api_config: api.config.pydantic.api_config.APIConfig) ‑> tuple[list[list[float]], list[list[float]], str]</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -73,7 +73,7 @@ Initiates the gRPC call to the Predictor Service for model inference.</p>
     features_shape: list[int],
     keys_shape: list[int],
     api_config: APIConfig,
-) -&gt; tuple[list[list[float]], list[list[float]]]:
+) -&gt; tuple[list[list[float]], list[list[float]], str]:
     &#34;&#34;&#34;Initiates the gRPC call to the Predictor Service for model inference.
 
     This function opens a channel to the Predictor Service, serializes the
@@ -91,6 +91,7 @@ Initiates the gRPC call to the Predictor Service for model inference.</p>
         tuple[list[list[float]], list[list[float]]]:
             - outputs: List of lists containing the predicted values.
             - variances: List of lists containing the associated variance values.
+            - model_tag: Type of model used by the predictor (production or staging).
 
     Raises:
         HTTPException: If a gRPC communication error occurs, converted into a 500
@@ -131,17 +132,19 @@ Initiates the gRPC call to the Predictor Service for model inference.</p>
             # Prepare outputs to return
             outputs = [list(fl.values) for fl in response.outputs]
             variances = [list(fl.values) for fl in response.variances]
+            model_tag = response.model_tag
 
             debug(
                 &#34;Predictor service call completed&#34;,
                 extra={
                     &#34;outputs_num&#34;: len(outputs),
                     &#34;variances_num&#34;: len(variances),
+                    &#34;model_tag&#34;: model_tag,
                     &#34;context&#34;: &#34;Predictor service call&#34;,
                 },
             )
 
-            return outputs, variances
+            return outputs, variances, model_tag
     except grpc.RpcError as e:
         error(
             &#34;Predictor service call failed&#34;,
@@ -183,7 +186,8 @@ and calls the remote gRPC prediction method.</p>
 <h2 id="returns">Returns</h2>
 <p>tuple[list[list[float]], list[list[float]]]:
 - outputs: List of lists containing the predicted values.
-- variances: List of lists containing the associated variance values.</p>
+- variances: List of lists containing the associated variance values.
+- model_tag: Type of model used by the predictor (production or staging).</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code>HTTPException</code></dt>

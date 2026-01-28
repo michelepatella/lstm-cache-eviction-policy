@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>src.components.model API documentation</title>
-<meta name="description" content="">
+<title>src.api.config.pydantic.sections.canary_tests_api_config API documentation</title>
+<meta name="description" content="canary_tests_api_config.py …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -33,52 +33,73 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Namespace <code>src.components.model</code></h1>
+<h1 class="title">Module <code>src.api.config.pydantic.sections.canary_tests_api_config</code></h1>
 </header>
 <section id="section-intro">
+<p>canary_tests_api_config.py</p>
+<p>Module defining Pydantic schemas for configuring canary tests.</p>
+<p>These schemas ensure that canary test parameters are properly validated
+and typed.</p>
+<h2 id="classes">Classes</h2>
+<p>CanaryTestsAPIConfig(BaseModel):
+Configuration schema for controlling canary test behavior.</p>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt><code class="name"><a title="src.components.model.best" href="best/index.html">src.components.model.best</a></code></dt>
+<dt id="src.api.config.pydantic.sections.canary_tests_api_config.CanaryTestsAPIConfig"><code class="flex name class">
+<span>class <span class="ident">CanaryTestsAPIConfig</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CanaryTestsAPIConfig(BaseModel):
+    &#34;&#34;&#34;Canary tests configuration.
+
+    Attributes:
+        traffic_threshold (float): Fraction of traffic to route to the
+                                   staging model.
+    &#34;&#34;&#34;
+
+    traffic_threshold: Annotated[float, Field(ge=0.0, le=1.0)]</code></pre>
+</details>
+<div class="desc"><p>Canary tests configuration.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>traffic_threshold</code></strong> :&ensp;<code>float</code></dt>
+<dd>Fraction of traffic to route to the
+staging model.</dd>
+</dl>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>self</code> is explicitly positional-only to allow <code>self</code> as a field name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="src.api.config.pydantic.sections.canary_tests_api_config.CanaryTestsAPIConfig.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt><code class="name"><a title="src.components.model.builder" href="builder.html">src.components.model.builder</a></code></dt>
-<dd>
-<div class="desc"><p>builder.py …</p></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.environment" href="environment/index.html">src.components.model.environment</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.io" href="io/index.html">src.components.model.io</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.lstm" href="lstm.html">src.components.model.lstm</a></code></dt>
-<dd>
-<div class="desc"><p>lstm.py …</p></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.mode" href="mode/index.html">src.components.model.mode</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.monitoring" href="monitoring/index.html">src.components.model.monitoring</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.components.model.optimizations" href="optimizations/index.html">src.components.model.optimizations</a></code></dt>
+<dt id="src.api.config.pydantic.sections.canary_tests_api_config.CanaryTestsAPIConfig.traffic_threshold"><code class="name">var <span class="ident">traffic_threshold</span> : float</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -88,19 +109,18 @@ el.replaceWith(d);
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="src.components" href="../index.html">src.components</a></code></li>
+<li><code><a title="src.api.config.pydantic.sections" href="index.html">src.api.config.pydantic.sections</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
-<li><code><a title="src.components.model.best" href="best/index.html">src.components.model.best</a></code></li>
-<li><code><a title="src.components.model.builder" href="builder.html">src.components.model.builder</a></code></li>
-<li><code><a title="src.components.model.environment" href="environment/index.html">src.components.model.environment</a></code></li>
-<li><code><a title="src.components.model.io" href="io/index.html">src.components.model.io</a></code></li>
-<li><code><a title="src.components.model.lstm" href="lstm.html">src.components.model.lstm</a></code></li>
-<li><code><a title="src.components.model.mode" href="mode/index.html">src.components.model.mode</a></code></li>
-<li><code><a title="src.components.model.monitoring" href="monitoring/index.html">src.components.model.monitoring</a></code></li>
-<li><code><a title="src.components.model.optimizations" href="optimizations/index.html">src.components.model.optimizations</a></code></li>
+<li>
+<h4><code><a title="src.api.config.pydantic.sections.canary_tests_api_config.CanaryTestsAPIConfig" href="#src.api.config.pydantic.sections.canary_tests_api_config.CanaryTestsAPIConfig">CanaryTestsAPIConfig</a></code></h4>
+<ul class="">
+<li><code><a title="src.api.config.pydantic.sections.canary_tests_api_config.CanaryTestsAPIConfig.model_config" href="#src.api.config.pydantic.sections.canary_tests_api_config.CanaryTestsAPIConfig.model_config">model_config</a></code></li>
+<li><code><a title="src.api.config.pydantic.sections.canary_tests_api_config.CanaryTestsAPIConfig.traffic_threshold" href="#src.api.config.pydantic.sections.canary_tests_api_config.CanaryTestsAPIConfig.traffic_threshold">traffic_threshold</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

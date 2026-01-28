@@ -155,6 +155,10 @@ Provides a basic health check for the API.</p>
             response[API_RESPONSE_FIELD_DATA_NAME] = result[
                 API_RESPONSE_FIELD_DATA_NAME
             ]
+        if API_RESPONSE_FIELD_MODEL_TAG in result:
+            response[API_RESPONSE_FIELD_MODEL_TAG] = result[
+                API_RESPONSE_FIELD_MODEL_TAG
+            ]
         return response
 
     return wrap</code></pre>
@@ -255,7 +259,7 @@ async def gateway_api(
         # 2. Predictor Service: Make confidence-aware model predictions
         # ---------------------------------------------------------------
         with PREDICTOR_LATENCY_SECONDS.time():
-            outputs, variances = call_predictor_service(
+            outputs, variances, model_tag = call_predictor_service(
                 features,
                 keys_seq,
                 features_shape,
@@ -298,10 +302,32 @@ async def gateway_api(
             },
         )
 
+        # Real-world data collection for model re-training
+        info(
+            &#34;Real-world data collected&#34;,
+            extra={
+                &#34;data&#34;: [
+                    {
+                        &#34;sin_time&#34;: float(f[0]),
+                        &#34;cos_time&#34;: float(f[1]),
+                        &#34;local_frequency&#34;: float(f[2]),
+                        &#34;local_recency&#34;: float(f[3]),
+                        &#34;request&#34;: int(req),
+                    }
+                    for f, req in zip(
+                        np.array(features).reshape(-1, features_shape[-1]),
+                        np.array(keys_seq).reshape(-1),
+                    )
+                ],
+                &#34;context&#34;: &#34;Real-world data&#34;,
+            },
+        )
+
         # Final response to the client
         return {
             API_RESPONSE_FIELD_MESSAGE_NAME: HTTPStatus.OK.phrase,
             API_RESPONSE_FIELD_STATUS_CODE_NAME: HTTPStatus.OK,
+            API_RESPONSE_FIELD_MODEL_TAG: model_tag,
             API_RESPONSE_FIELD_DATA_NAME: {
                 API_RESPONSE_FIELD_DATA_KEYS_TO_EVICT_NAME: keys_to_evict,
             },

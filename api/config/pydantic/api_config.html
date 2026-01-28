@@ -73,12 +73,14 @@ for user-provided kwargs.</p>
         kwargs (KwargsAPIConfig): API kwargs configuration.
         logs (LogsAPIConfig): Logs configuration for the API.
         model (ModelAPIConfig): Model configuration for the API.
+        canary_tests (CanaryTestsAPIConfig): Canary test configuration.
     &#34;&#34;&#34;
 
     resources: ResourcesAPIConfig
     kwargs: KwargsAPIConfig
     logs: LogsAPIConfig
     model: ModelAPIConfig
+    canary_tests: CanaryTestsAPIConfig
 
     def merge_api_kwargs(
         self: &#34;APIConfig&#34;,
@@ -132,6 +134,8 @@ for user-provided kwargs.</p>
 <dd>Logs configuration for the API.</dd>
 <dt><strong><code>model</code></strong> :&ensp;<code>ModelAPIConfig</code></dt>
 <dd>Model configuration for the API.</dd>
+<dt><strong><code>canary_tests</code></strong> :&ensp;<code>CanaryTestsAPIConfig</code></dt>
+<dd>Canary test configuration.</dd>
 </dl>
 <p>Create a new model by parsing and validating input data from keyword arguments.</p>
 <p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
@@ -143,6 +147,10 @@ validated to form a valid model.</p>
 </ul>
 <h3>Class variables</h3>
 <dl>
+<dt id="src.api.config.pydantic.api_config.APIConfig.canary_tests"><code class="name">var <span class="ident">canary_tests</span> : api.config.pydantic.sections.canary_tests_api_config.CanaryTestsAPIConfig</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="src.api.config.pydantic.api_config.APIConfig.kwargs"><code class="name">var <span class="ident">kwargs</span> : api.config.pydantic.sections.kwargs_api_config.KwargsAPIConfig</code></dt>
 <dd>
 <div class="desc"></div>
@@ -251,6 +259,7 @@ User-provided kwargs.</p>
 <li>
 <h4><code><a title="src.api.config.pydantic.api_config.APIConfig" href="#src.api.config.pydantic.api_config.APIConfig">APIConfig</a></code></h4>
 <ul class="two-column">
+<li><code><a title="src.api.config.pydantic.api_config.APIConfig.canary_tests" href="#src.api.config.pydantic.api_config.APIConfig.canary_tests">canary_tests</a></code></li>
 <li><code><a title="src.api.config.pydantic.api_config.APIConfig.kwargs" href="#src.api.config.pydantic.api_config.APIConfig.kwargs">kwargs</a></code></li>
 <li><code><a title="src.api.config.pydantic.api_config.APIConfig.logs" href="#src.api.config.pydantic.api_config.APIConfig.logs">logs</a></code></li>
 <li><code><a title="src.api.config.pydantic.api_config.APIConfig.merge_api_kwargs" href="#src.api.config.pydantic.api_config.APIConfig.merge_api_kwargs">merge_api_kwargs</a></code></li>
