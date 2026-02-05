@@ -2,4 +2,4 @@ grpcio==1.76.0
 grpcio-tools==1.76.0
 python-box==7.3.2
 python-dotenv==1.1.0
-protobuf==6.32.1
+protobuf==6.33.5

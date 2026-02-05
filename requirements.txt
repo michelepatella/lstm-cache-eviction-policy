@@ -13,7 +13,7 @@ numpy==1.26.4
 pandas==2.3.2
 prometheus-client==0.21.1
 prometheus-fastapi-instrumentator==7.1.0
-protobuf==6.32.1
+protobuf==6.33.5
 pydantic==2.12.5
 PyYAML==6.0.3
 pytest==9.0.1

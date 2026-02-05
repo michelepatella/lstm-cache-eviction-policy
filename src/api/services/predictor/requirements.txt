@@ -2,7 +2,7 @@ grpcio==1.76.0
 grpcio-tools==1.76.0
 mlflow==3.4.0
 numpy==1.26.4
-protobuf==6.32.1
+protobuf==6.33.5
 pydantic==2.12.5
 PyYAML==6.0.3
 python-box==7.3.2
