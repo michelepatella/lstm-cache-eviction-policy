@@ -479,4 +479,4 @@ Michele Patella
 
 ## Model Card Contact
 
-m.patella9@studenti.uniba.it
+[N/A]
