@@ -11,8 +11,8 @@ concurrency:
 # The workflow is run manually or daily at midnight
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * *'
+  #schedule:
+  #  - cron: '0 0 * * *'
 
 # The workflow is organized into a single job:
 # - Model performance monitoring:
