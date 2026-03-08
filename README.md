@@ -1,3 +1,4 @@
+<!-- TOP -->
 <a id="readme-top"></a>
 
 <!-- HEADER -->
@@ -13,9 +14,9 @@
     <br/>
     <a href="https://dagshub.com/michelepatella/lstm-cache-eviction-policy">DagsHub Project</a>
     &middot;
-    <a href="https://michelepatella.gitbook.io/lstm-cache-eviction-policy-documentation">MLOps Docs</a>
+    <a href="https://michelepatella.gitbook.io/lstm-cache-eviction-policy-documentation">Official Docs</a>
     &middot;
-    <a href="https://michelepatella.github.io/lstm-cache-eviction-policy/">Code Docs</a>
+    <a href="https://michelepatella.github.io/lstm-cache-eviction-policy/">Code Reference</a>
   </p>
 
   <!-- BADGES -->
@@ -25,7 +26,7 @@
 
 <br/>
 
-<!-- THE PROBLEM -->
+<!-- 'THE PROBLEM' SECTION -->
 ## The Problem
 **Traditional cache eviction policies** rely only on past access patterns and cannot anticipate future demand.  
 → _Inefficient resource utilization_  
@@ -39,30 +40,42 @@
 
 <p align="right"><a href="#readme-top">Top ↑</a></p>
 
-<!-- KEY FEATURES -->
+<!-- 'KEY FEATURES' SECTION -->
 ## Key Features
 
 ### Core
 - **Adaptive eviction** with autoregressive, multi-step LSTM capturing future data access patterns.
-- **Uncertainty-aware scoring** protecting high-uncertainty items using Monte Carlo dropout.
-- **Temporal-aware loss** prioritizing imminent-key predictions to minimize cache misses.
-- **Feature engineering** with cyclical time encoding and local recency/frequency for temporal locality.
-- **Data item embeddings** capturing sequential patterns and latent relationships.
-- **Optimized inference** via 8-bit quantization and 20% weight pruning for faster CPU execution.
+- **Uncertainty-aware scoring** protecting high-uncertainty data items using Monte Carlo dropout.
 - **Modular architecture** separating featurization, prediction, scoring, and eviction logic.
+- **Feature engineering** with cyclical time encoding and local recency/frequency for temporal locality.
+- **Temporal-aware loss** prioritizing imminent-key predictions to minimize cache misses.
+- **Optimized training** with hyperparameter search, early stopping, and parallel execution via Ray and PyTorch DDP.
+- **Optimized inference** via 8-bit quantization and 20% weight pruning for faster CPU execution.
 
 ### MLOps
 
+#### Inception
+- **ML requirements engineering** defining data, performance, and quality requirements.
+- **AI governance self-assessment** to classify the system under the EU AI Act.
+- **System specification** through ML Canvas to formalize objectives, stakeholders, and system constraints.
+
+#### Reproducibility
+- **Code versioning** with Git using a Git Flow-like branching strategy and pull requests-based integration.
+- **Reproducible ML pipeline** defined with DVC for tracking pipeline stages.
+- **Data and model versioning** with DVC to keep large artifacts outside Git.
+- **Experiment tracking** with MLflow, logging parameters, metrics, and artifacts.
+- **Model lifecycle management** through MLflow Model Registry, versioning and organizing production and staging models.
+
 <p align="right"><a href="#readme-top">Top ↑</a></p>
 
-<!-- SYSTEM ARCHITECTURE -->
+<!-- 'SYSTEM ARCHITECTURE' SECTION -->
 ## System Architecture
 
 Show and describe the system architecture.
 
 <p align="right"><a href="#readme-top">Top ↑</a></p>
 
-<!-- IMPACT -->
+<!-- 'IMPACT' SECTION -->
 ## Impact
 
 Summarize results achieved by the proposed solution.
