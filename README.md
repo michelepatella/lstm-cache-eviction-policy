@@ -12,7 +12,9 @@
     A microservice API implementing a production-grade cache eviction policy powered by deep learning.
     <br/>
     <br/>
-    <a href="https://dagshub.com/michelepatella/lstm-cache-eviction-policy">DagsHub Project</a>
+    <a href="https://github.com/michelepatella/lstm-cache-eviction-policy">GitHub</a>
+    &middot;
+    <a href="https://dagshub.com/michelepatella/lstm-cache-eviction-policy">DagsHub</a>
     &middot;
     <a href="https://michelepatella.gitbook.io/lstm-cache-eviction-policy-documentation">Official Docs</a>
     &middot;
@@ -26,22 +28,28 @@
 
 <br/>
 
-<!-- 'THE PROBLEM' SECTION -->
-## The Problem
-**Traditional cache eviction policies** rely only on past access patterns and cannot anticipate future demand.  
+<!-- 'MOTIVATION & IMPACT' SECTION -->
+## Motivation & Impact
+**Limitations of Traditional Policies**  
+Traditional cache eviction policies (e.g., LRU, LFU) rely only on past access patterns and cannot anticipate future demand.  
 → _Inefficient resource utilization_  
 → _Increased infrastructure and operational costs_  
 → _Degraded system performance and user experience_
 
-**Machine/deep learning-based cache eviction policies** ignore model uncertainty.  
-→ _Unreliable decisions_  
+**Limitations of Machine Learning-Based Policies**  
+Machine learning-based policies provide predictive power but ignore model uncertainty.  
+→ _Unreliable eviction decisions_  
 
-**This project** addresses these limitations by introducing an uncertainty-aware, deep learning–driven cache eviction strategy.
+**The Proposed Solution**  
+This project introduces an uncertainty-aware, deep learning–driven cache eviction strategy, achieving:  
+* **+14%** hit rate vs. LRU
+* **+6%** hit rate vs. LFU
+* **+1%** hit rate vs. uncertainty-unaware policy
 
 <p align="right"><a href="#readme-top">Top ↑</a></p>
 
-<!-- 'KEY FEATURES' SECTION -->
-## Key Features
+<!-- 'FEATURES' SECTION -->
+## Features
 
 <!-- 'CORE' SUBSECTION -->
 ### Core
@@ -50,7 +58,7 @@
 - **Modular architecture** separating featurization, prediction, scoring, and eviction logic.
 - **Feature engineering** with cyclical time encoding and local recency/frequency for temporal locality.
 - **Temporal-aware loss** prioritizing imminent-key predictions to minimize cache misses.
-- **Optimized training** with hyperparameter search, early stopping, and parallel execution via Ray and PyTorch DDP.
+- **Efficient training** with hyperparameter search, early stopping, and parallel execution via Ray and PyTorch DDP.
 - **Optimized inference** via 8-bit quantization and 20% weight pruning for faster CPU execution.
 
 <!-- 'MLOPS' SUBSECTION -->
@@ -84,27 +92,13 @@
 <!-- 'API' SUBSECTION -->
 #### API
 
-- **Deep learning microservice API** exposing RESTful endpoints and incapsulating the full ML pipeline.
+- **Deep learning microservice API** exposing RESTful endpoints and incapsulating the full ML pipeline using FastAPI.
 - **API Gateway** orchestrating gRPC microservices with request validation, configuration, standardized responses, and monitoring.
 - **Featurizer Service**: transforms raw inputs into model-ready tensors with consistent feature engineering (temporal and locality features).
 - **Predictor Service**: performs confidence-aware autoregressive rollouts, loading prod/staging models from MLflow, applying MC Dropout for uncertainty, and supporting canary deployments.
 - **Scorer Service** computing hybrid survival- and uncertainty-aware scores for eviction decisions.
 - **Decider Service** applying operational constraints and selecting top-K eviction candidates based on scores.
 - **Documented artifacts** Model Card and Dataset Card provide reproducible, educational, and controlled references for models and synthetic datasets.
-
-<p align="right"><a href="#readme-top">Top ↑</a></p>
-
-<!-- 'SYSTEM ARCHITECTURE' SECTION -->
-## System Architecture
-
-Show and describe the system architecture.
-
-<p align="right"><a href="#readme-top">Top ↑</a></p>
-
-<!-- 'IMPACT' SECTION -->
-## Impact
-
-Summarize results achieved by the proposed solution.
 
 <p align="right"><a href="#readme-top">Top ↑</a></p>
 
