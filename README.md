@@ -43,6 +43,7 @@
 <!-- 'KEY FEATURES' SECTION -->
 ## Key Features
 
+<!-- 'CORE' SUBSECTION -->
 ### Core
 - **Adaptive eviction** with autoregressive, multi-step LSTM capturing future data access patterns.
 - **Uncertainty-aware scoring** protecting high-uncertainty data items using Monte Carlo dropout.
@@ -52,19 +53,44 @@
 - **Optimized training** with hyperparameter search, early stopping, and parallel execution via Ray and PyTorch DDP.
 - **Optimized inference** via 8-bit quantization and 20% weight pruning for faster CPU execution.
 
+<!-- 'MLOPS' SUBSECTION -->
 ### MLOps
 
+<!-- 'INCEPTION' SUBSECTION -->
 #### Inception
 - **ML requirements engineering** defining data, performance, and quality requirements.
 - **AI governance self-assessment** to classify the system under the EU AI Act.
 - **System specification** through ML Canvas to formalize objectives, stakeholders, and system constraints.
 
+<!-- 'REPRODUCIBILITY' SUBSECTION -->
 #### Reproducibility
 - **Code versioning** with Git using a Git Flow-like branching strategy and pull requests-based integration.
 - **Reproducible ML pipeline** defined with DVC for tracking pipeline stages.
 - **Data and model versioning** with DVC to keep large artifacts outside Git.
 - **Experiment tracking** with MLflow, logging parameters, metrics, and artifacts.
 - **Model lifecycle management** through MLflow Model Registry, versioning and organizing production and staging models.
+
+<!-- 'QUALITY ASSURANCE' SUBSECTION -->
+#### Quality Assurance
+
+- **Static analysis** enforcing code quality, formatting, and security via automated linters and vulnerability scanners.
+- **Pre-commit checks** preventing secret leakage, enforcing repository hygiene, and standardizing formatting.
+- **Comprehensive testing** of code, data, model, and API with unit, integration, system, and acceptance tests using pytest, Great Expectactions, and DeepChecks.
+- **Data validation pipeline** ensuring dataset integrity and quality.
+- **ML model testing suite** including training, inference, performance, and behavioral tests.
+- **API reliability testing** validating robustness, artifact integrity, and full end-to-end prediction flows.
+- **Production-safe deployment** with online canary testing and KPIs monitoring for models.
+
+<!-- 'API' SUBSECTION -->
+#### API
+
+- **Deep learning microservice API** exposing RESTful endpoints and incapsulating the full ML pipeline.
+- **API Gateway** orchestrating gRPC microservices with request validation, configuration, standardized responses, and monitoring.
+- **Featurizer Service**: transforms raw inputs into model-ready tensors with consistent feature engineering (temporal and locality features).
+- **Predictor Service**: performs confidence-aware autoregressive rollouts, loading prod/staging models from MLflow, applying MC Dropout for uncertainty, and supporting canary deployments.
+- **Scorer Service** computing hybrid survival- and uncertainty-aware scores for eviction decisions.
+- **Decider Service** applying operational constraints and selecting top-K eviction candidates based on scores.
+- **Documented artifacts** Model Card and Dataset Card provide reproducible, educational, and controlled references for models and synthetic datasets.
 
 <p align="right"><a href="#readme-top">Top ↑</a></p>
 
