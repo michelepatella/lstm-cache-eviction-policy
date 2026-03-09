@@ -36,8 +36,8 @@ Traditional cache eviction policies (e.g., LRU, LFU) rely only on past access pa
 → _Increased infrastructure and operational costs_  
 → _Degraded system performance and user experience_
 
-**Limitations of Machine Learning-Based Policies**  
-Machine learning-based policies provide predictive power but ignore model uncertainty.  
+**Limitations of ML-Based Policies**  
+ML-based policies provide predictive power but ignore model uncertainty.  
 → _Unreliable eviction decisions_  
 
 **The Proposed Solution**  
@@ -65,50 +65,43 @@ This project introduces an uncertainty-aware, deep learning–driven cache evict
 ### MLOps
 
 <!-- 'INCEPTION' SUBSECTION -->
-#### Inception
-- **ML requirements engineering** defining data, performance, and quality requirements.
-- **AI governance self-assessment** to classify the system under the EU AI Act.
-- **System specification** through ML Canvas to formalize objectives, stakeholders, and system constraints.
+**Inception**
+- **ML requirements** defining data, performance, and quality constraints.
+- **AI governance self-assessment** classifying the system under the EU AI Act.
+- **ML Canvas specification** formalizing objectives, stakeholders, and system constraints.
 
 <!-- 'REPRODUCIBILITY' SUBSECTION -->
-#### Reproducibility
-- **Code versioning** with Git using a Git Flow-like branching strategy and pull requests-based integration.
-- **Reproducible ML pipeline** defined with DVC for tracking pipeline stages.
-- **Data and model versioning** with DVC to keep large artifacts outside Git.
-- **Experiment tracking** with MLflow, logging parameters, metrics, and artifacts.
-- **Model lifecycle management** through MLflow Model Registry, versioning and organizing production and staging models.
+**Reproducibility**
+- **Code versioning** with Git using a Git Flow-like branching strategy.  
+- **Data and pipeline management** with DVC for reproducible pipelines and large artifact tracking.  
+- **Experiment and model lifecycle management** with MLflow, including experiment tracking and model registry.
 
 <!-- 'QUALITY ASSURANCE' SUBSECTION -->
-#### Quality Assurance
-
-- **Static analysis** enforcing code quality, formatting, and security via automated linters and vulnerability scanners.
-- **Pre-commit checks** preventing secret leakage, enforcing repository hygiene, and standardizing formatting.
-- **Comprehensive testing** of code, data, model, and API with unit, integration, system, and acceptance tests using pytest, Great Expectactions, and DeepChecks.
-- **Data validation pipeline** ensuring dataset integrity and quality.
-- **ML model testing suite** including training, inference, performance, and behavioral tests.
-- **API reliability testing** validating robustness, artifact integrity, and full end-to-end prediction flows.
-- **Production-safe deployment** with online canary testing and KPIs monitoring for models.
+**Quality Assurance**
+- **Static analysis and pre-commit checks** enforcing code quality, security, formatting, and repository hygiene.  
+- **Comprehensive testing** of code, data, models, and API with unit, integration, system, acceptance, and behavioral tests using pytest, Great Expectations, and DeepChecks. 
+- **Production-safe deployment** with online canary testing and KPIs monitoring.
 
 <!-- 'API' SUBSECTION -->
-#### API
-
-- **Deep learning microservice API** exposing RESTful endpoints and incapsulating the full ML pipeline using FastAPI.
-- **API Gateway** orchestrating gRPC microservices with request validation (Pydantic), configuration, standardized responses, and monitoring.
-- **Featurizer Service** transforming raw data into model-ready tensors with feature engineering.
-- **Predictor Service** managing model versions and executing confidence-aware autoregression with online canary testing.
-- **Scorer Service** computing hybrid survival- and uncertainty-aware scores for data items based on predictions and uncertainties.
-- **Decider Service** applying operational constraints and selecting top-K eviction candidates based on scores.
-- **Documented artifacts** with model and dataset cards, plus OpenAPI specification.
+**API**
+- **Deep learning microservice API** exposing RESTful endpoints and incapsulating the full ML pipeline via FastAPI.
+- **API Gateway** orchestrating gRPC services with request validation, configuration, standardized responses, and monitoring.  
+- **Featurizer, Predictor, Scorer, and Decider services** handling feature engineering, confidence-aware predictions, hybrid scoring, and top-K eviction selection.  
+- **Documented artifacts** including model and dataset cards, plus OpenAPI specification.
 
 <!-- 'DEPLOYMENT' SUBSECTION -->
-#### Deployment
+**Deployment**
+- **Containerization and compose** packaging microservices into isolated Docker containers and orchestrating them.  
+- **Kubernetes and cloud deployment** orchestrating containers on a managed Google Cloud Kubernetes cluster with Artifact Registry.  
+- **CI pipeline** automating static analysis, security scans, testing, multi-registry container builds, and docs generation. 
+- **CD pipeline** deploying API with rollout validation, API tests, automated rollback, and docs publishing.
 
-- **Containerization** packaging each microservice into Docker containers with isolated dependencies.  
-- **Docker Compose orchestration** defining and running all containers together.  
-- **Kubernetes deployment** orchestrating containers in a production cluster with secure manifests.  
-- **Cloud infrastructure** leveraging a managed Google Cloud Autopilot Kubernetes cluster and Artifact Registry for hosting.  
-- **CI pipeline automation** building, testing, scanning, and publishing Docker images via GitHub Actions.  
-- **CD workflow** deploying API and documentation to Kubernetes with automated rollout validation and rollback on failure.
+<!-- 'MONITORING' SUBSECTION -->
+**Monitoring**
+- **Availability monitoring** with global health checks and incident alerting via Better Uptime.
+- **Load testing** simulating realistic traffic and failures with distributed Locust.
+- **Observability stack** collecting metrics with Prometheus, alerting through Alertmanager, and visualized via Grafana.
+- **Performance monitoring** detecting drifts and model degradation with Alibi Detect and Deepchecks pipelines.
 
 <p align="right"><a href="#readme-top">Top ↑</a></p>
 
