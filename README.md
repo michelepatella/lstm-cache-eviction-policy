@@ -93,12 +93,22 @@ This project introduces an uncertainty-aware, deep learning–driven cache evict
 #### API
 
 - **Deep learning microservice API** exposing RESTful endpoints and incapsulating the full ML pipeline using FastAPI.
-- **API Gateway** orchestrating gRPC microservices with request validation, configuration, standardized responses, and monitoring.
-- **Featurizer Service**: transforms raw inputs into model-ready tensors with consistent feature engineering (temporal and locality features).
-- **Predictor Service**: performs confidence-aware autoregressive rollouts, loading prod/staging models from MLflow, applying MC Dropout for uncertainty, and supporting canary deployments.
-- **Scorer Service** computing hybrid survival- and uncertainty-aware scores for eviction decisions.
+- **API Gateway** orchestrating gRPC microservices with request validation (Pydantic), configuration, standardized responses, and monitoring.
+- **Featurizer Service** transforming raw data into model-ready tensors with feature engineering.
+- **Predictor Service** managing model versions and executing confidence-aware autoregression with online canary testing.
+- **Scorer Service** computing hybrid survival- and uncertainty-aware scores for data items based on predictions and uncertainties.
 - **Decider Service** applying operational constraints and selecting top-K eviction candidates based on scores.
-- **Documented artifacts** Model Card and Dataset Card provide reproducible, educational, and controlled references for models and synthetic datasets.
+- **Documented artifacts** with model and dataset cards, plus OpenAPI specification.
+
+<!-- 'DEPLOYMENT' SUBSECTION -->
+#### Deployment
+
+- **Containerization** packaging each microservice into Docker containers with isolated dependencies.  
+- **Docker Compose orchestration** defining and running all containers together.  
+- **Kubernetes deployment** orchestrating containers in a production cluster with secure manifests.  
+- **Cloud infrastructure** leveraging a managed Google Cloud Autopilot Kubernetes cluster and Artifact Registry for hosting.  
+- **CI pipeline automation** building, testing, scanning, and publishing Docker images via GitHub Actions.  
+- **CD workflow** deploying API and documentation to Kubernetes with automated rollout validation and rollback on failure.
 
 <p align="right"><a href="#readme-top">Top ↑</a></p>
 
