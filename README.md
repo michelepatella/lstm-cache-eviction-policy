@@ -48,6 +48,15 @@ This project introduces an uncertainty-aware, deep learning-driven cache evictio
 
 <p align="right"><a href="#readme-top">Top ↑</a></p>
 
+<!-- 'HOW IT WORKS' SECTION -->
+## How It Works
+
+<img width="3252" height="1572" alt="Welcome to FigJam" src="https://github.com/user-attachments/assets/2e983f7e-ccfe-4119-9ccc-60729bb9c6df" />
+
+*Credits: Icons appearing in the figure above were created by Freepik and littleicon, available on [Flaticon](https://www.flaticon.com).*
+
+<p align="right"><a href="#readme-top">Top ↑</a></p>
+
 <!-- 'FEATURES' SECTION -->
 ## Features
 
@@ -80,7 +89,7 @@ This project introduces an uncertainty-aware, deep learning-driven cache evictio
 
 <p align="right"><a href="#readme-top">Top ↑</a></p>
 
-<!-- LICENSE -->
+<!-- 'LICENSE'SECTION  -->
 ## License
 [MIT License](https://github.com/michelepatella/lstm-cache-eviction-policy/blob/main/LICENSE)
 
