@@ -1,7 +1,7 @@
 ```text
 .
-├── LICENSE.md                           <- Project License
 ├── PROJECT_STRUCTURE.md                 <- This file
+├── LICENSE.md                           <- Project License
 ├── README.md                            <- Project overview
 ├── .dvc                                 <- DVC metadata and cache
 ├── .github                              <- GitHub workflows
