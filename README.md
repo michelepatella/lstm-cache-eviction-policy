@@ -30,10 +30,22 @@
   <img width="3019" height="1340" alt="image" src="https://github.com/user-attachments/assets/7dec855d-c673-482b-98a2-b056bfe60d38" />
   <p align="center">
   Integration of the LSTM cache eviction policy within a standard cache-aside architecture, separating the synchronous critical path (orange) from the asynchronous path (blue). <br>
-  <em>(Credits: Icons appearing in the figure above were created by Freepik and littleicon, available on https://www.flaticon.com.)</em>
   </p>
 </div>
 
+<!-- TABLE OF CONTENT -->
+<details>
+  <summary><strong>Table of Contents</strong></summary>
+
+- [Motivation & Impact](#motivation--impact)
+- [Features](#features)
+  - [ML Core](#ml-core)
+  - [MLOps](#mlops)
+- [Tech Stack](#tech-stack)
+- [Credits](#credits)
+- [License](#license)
+
+</details>
 
 <br/>
 
@@ -83,13 +95,37 @@ This project introduces a **deep learning-based, uncertainty-aware cache evictio
 <!-- TECH STACK -->
 ## Tech Stack
 
-* First technology
-* Second technology
-* ...
+* **Language**: Python 3.12+
+* **ML & Data**: PyTorch, Scikit-learn, Ray, NumPy, Pandas, Pydantic
+* **Reproducibility**: Git, DVC (with S3-compatible remote storage), MLflow, DagsHub
+* **Quality Assurance**:
+  * **Integrity & Workflow**: pre-commit, nbstripout
+  * **Quality & Formatting**: Pylint, Pynblint, Hadolint, Ruff, kube-score
+  * **Security**: Bandit, pip-audit, Trivy, Checkov
+  * **Testing**: Pytest, Deepchecks, Great Expectations
+* **API**: FastAPI, Uvicorn, gRPC
+* **Deployment**:
+  * **Containerization**: Docker, Docker Compose
+  * **Orchestration**: Kubernetes
+  * **Cloud Infrastructure**: Google Cloud Platform
+  * **Infrastructure as Code**: Terraform, Kustomize
+  * **CI/CD**: GitHub Actions
+  * **Container Registries**: Google Artifact Registry, Docker Hub, GitHub Container Registry
+* **Monitoring**:
+  * **Resource-Level**: Better Uptime, Locust, Prometheus, Alertmanager, Grafana
+  * **Performance-Level**: Alibi Detect, Deepchecks
+* **Logging**: Grafana Loki, Structlog
+* **Docs**: GitBook, pdoc, GitHub Pages, OpenAPI
 
 <p align="right"><a href="#readme-top">Top ↑</a></p>
 
-<!-- 'LICENSE'SECTION  -->
+<!-- 'CREDITS' SECTION  -->
+## Credits
+Icons appearing in the figure above were created by Freepik and littleicon, available on https://www.flaticon.com.
+
+<p align="right"><a href="#readme-top">Top ↑</a></p>
+
+<!-- 'LICENSE' SECTION  -->
 ## License
 [MIT License](https://github.com/michelepatella/lstm-cache-eviction-policy/blob/main/LICENSE)
 
