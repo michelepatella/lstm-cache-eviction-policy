@@ -9,7 +9,7 @@
 
   <!-- DESCRIPTION AND LINKS -->
   <p align="center">
-    Deep learning-driven, uncertainty-aware cache eviction policy deployed as a production-grade microservice API with full MLOps pipeline.
+    Deep learning-driven cache eviction policy using LSTM forecasting and uncertainty estimation, deployed as a production microservice with a full MLOps pipeline.
     <br/>
     <br/>
     <a href="https://github.com/michelepatella/lstm-cache-eviction-policy">GitHub</a>
@@ -26,34 +26,34 @@
   ![Coverage](https://img.shields.io/badge/Coverage-72%25-yellow?style=for-the-badge&logo=pytest&logoColor=white)
 </div>
 
+<div align="center">
+  <img width="3019" height="1340" alt="image" src="https://github.com/user-attachments/assets/7dec855d-c673-482b-98a2-b056bfe60d38" />
+  <p align="center">
+  Integration of the LSTM cache eviction policy within a standard cache-aside architecture, separating the synchronous critical path (orange) from the asynchronous path (blue). <br>
+  <em>(Credits: Icons appearing in the figure above were created by Freepik and littleicon, available on https://www.flaticon.com.)</em>
+  </p>
+</div>
+
+
 <br/>
 
 <!-- 'MOTIVATION & IMPACT' SECTION -->
 ## Motivation & Impact
 **Limitations of Traditional Policies**  
-Traditional cache eviction policies (e.g., LRU, LFU) rely only on past access patterns and cannot anticipate future demand.  
+Traditional cache eviction policies such as LRU and LFU rely only on past access patterns and cannot anticipate future demand.  
 → _**Inefficient** resource utilization_  
-→ _**Increased** infrastructure and operational costs_  
-→ _**Degraded** system performance and user experience_
+→ _**Higher** infrastructure costs_  
+→ _**Degraded** system performance_
 
 **Limitations of ML-Based Policies**  
-ML-based policies provide predictive power but ignore model uncertainty.  
+ML-based policies can predict access patterns but typically ignore model uncertainty.  
 → _**Unreliable** eviction decisions_  
 
 **The Proposed Solution**  
-This project introduces an uncertainty-aware, deep learning-driven cache eviction strategy, achieving:  
-* **+14%** hit rate vs. LRU
-* **+6%** hit rate vs. LFU
-* **+1%** hit rate vs. uncertainty-unaware policy
-
-<p align="right"><a href="#readme-top">Top ↑</a></p>
-
-<!-- 'HOW IT WORKS' SECTION -->
-## How It Works
-
-<img width="3252" height="1572" alt="Welcome to FigJam" src="https://github.com/user-attachments/assets/2e983f7e-ccfe-4119-9ccc-60729bb9c6df" />
-
-*Credits: Icons appearing in the figure above were created by Freepik and littleicon, available on [Flaticon](https://www.flaticon.com).*
+This project introduces a **deep learning-based, uncertainty-aware cache eviction policy**, achieving:  
+* **+14%** hit rate vs LRU
+* **+6%** hit rate vs LFU
+* **+1%** hit rate vs uncertainty-unaware policy
 
 <p align="right"><a href="#readme-top">Top ↑</a></p>
 
