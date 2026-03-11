@@ -33,6 +33,8 @@
   </p>
 </div>
 
+<br/>
+
 <!-- TABLE OF CONTENT -->
 <details>
   <summary><strong>Table of Contents</strong></summary>
