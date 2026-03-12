@@ -67,7 +67,7 @@ ML-based policies can predict access patterns but typically ignore model uncerta
 This project introduces a **deep learning-based, uncertainty-aware cache eviction policy**, achieving:  
 * **+14%** hit rate vs LRU
 * **+6%** hit rate vs LFU
-* **+1%** hit rate vs uncertainty-unaware policy
+* **+0.6%** hit rate vs uncertainty-unaware policy
 
 <p align="right"><a href="#readme-top">Top ↑</a></p>
 
